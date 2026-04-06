@@ -28,7 +28,7 @@
     "@netlify/plugin-nextjs": "^5.15.9",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "20.12.12",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.170.0",

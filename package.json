@@ -1,6 +1,12 @@
 {
   "name": "tenegta-monorepo",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "overrides": {
+    "@types/node": "20.12.12"
+  },
   "workspaces": ["site"],
   "scripts": {
     "build": "npm run build -w tenegta-website",
