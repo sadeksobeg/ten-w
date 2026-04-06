@@ -1,8 +1,9 @@
-# Use this folder as the deploy root for: Deploy manually → drag site/ or site.zip
-# After extract: /opt/build/repo/package.json and netlify.toml must sit together.
+# Git monorepo: build runs from repo root (`npm run build` → workspace), output is site/.next
+# If you deploy ONLY the contents of site/ as the repo root (manual zip), use publish = ".next"
+# and command = "npm run build" — see netlify-deploy-bundle/netlify.toml
 [build]
   command = "npm run build"
-  publish = ".next"
+  publish = "site/.next"
 
 [build.environment]
   NODE_VERSION = "20"
