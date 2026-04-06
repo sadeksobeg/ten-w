@@ -1,0 +1,11 @@
+# Monorepo root: npm workspaces build outputs under site/.next
+# For manual upload of site/ only, use site/netlify.toml inside the zip.
+[build]
+  command = "npm run build"
+  publish = "site/.next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

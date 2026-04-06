@@ -1,0 +1,1 @@
+The home hero Lottie is bundled as data/hero-lottie.json (imported in components/home/HeroLottie.tsx) to avoid extra HTTP requests and 404s. Replace that file with your own Lottie export from After Effects / LottieFiles.

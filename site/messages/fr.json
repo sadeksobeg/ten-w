@@ -1,0 +1,714 @@
+{
+  "Nav": {
+    "home": "Home",
+    "about": "About",
+    "solutions": "Solutions",
+    "projects": "Projects",
+    "pilots": "Labs",
+    "techStack": "Tech stack",
+    "team": "Team",
+    "investors": "Investors",
+    "blog": "Blog",
+    "contact": "Contact",
+    "legal": "Legal",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language"
+  },
+  "Footer": {
+    "rights": "All rights reserved.",
+    "privacy": "Privacy policy",
+    "terms": "Terms & conditions",
+    "tagline": "T.E.N.E.G.T.A conçoit des systèmes intelligents et sécurisés qui aident les organisations à gagner en efficacité et en clarté décisionnelle.",
+    "caseStudies": "Case studies",
+    "engagement": "Engagement",
+    "whyUs": "Why us"
+  },
+  "HomePage": {
+    "meta": {
+      "title": "T.E.N.E.G.T.A – Systèmes intelligents déployables pour les entreprises",
+      "description": "Conception et réalisation en IA, cybersécurité et développement système — de l’idée à l’exploitation."
+    },
+    "hero": {
+      "title": "Des systèmes intelligents qui créent une valeur réelle pour les organisations",
+      "rotate1": "Du pilote à la production — une livraison mesurable.",
+      "rotate2": "IA et pipelines de données branchés sur l’exploitation réelle.",
+      "rotate3": "Architecture security-by-design — pas de rustines en fin de chaîne.",
+      "rotate4": "Un programme cohérent : IA, cyber, logiciel et infrastructure.",
+      "subtitle": "Nous concevons et déployons des solutions en intelligence artificielle, cybersécurité et développement de systèmes — du concept à l’exploitation.",
+      "lead": "T.E.N.E.G.T.A est une entreprise technologique axée sur des systèmes déployables et mesurables, qui aident à gagner en efficacité, réduire les risques et accélérer la décision.",
+      "ctaPrimary": "Découvrir comment nous construisons les systèmes",
+      "ctaSecondary": "Réserver une consultation"
+    },
+    "services": {
+      "title": "Nos domaines d’intervention",
+      "valueProposition": "Nous n’offrons pas seulement des idées : nous bâtissons des solutions concrètes, évolutives et exploitables.",
+      "ai": { "title": "Intelligence artificielle", "desc": "Nous transformons les données en décisions plus claires, avec des modèles de prédiction, de classification et d’automatisation." },
+      "security": { "title": "Cybersécurité", "desc": "Nous protégeons les systèmes et les données par une conception sûre, une supervision attentive et des contrôles préventifs." },
+      "software": { "title": "Systèmes logiciels", "desc": "Nous construisons plateformes et applications sur mesure pour piloter l’activité et unir équipes et données." },
+      "infra": { "title": "Infrastructure numérique", "desc": "Nous mettons en place l’empilement opérationnel : bases de données, intégrations, déploiement et supervision." }
+    },
+    "featured": {
+      "title": "Projets en avant",
+      "viewAll": "Tous les projets"
+    },
+    "cta": {
+      "title": "Un projet ou un pilote ?",
+      "subtitle": "Décrivez vos objectifs — nous répondons les jours ouvrés.",
+      "button": "Réserver une consultation"
+    }
+  },
+  "AboutPage": {
+    "meta": {
+      "title": "À propos – T.E.N.E.G.T.A",
+      "description": "Entreprise technologique spécialisée dans les systèmes intelligents et sécurisés — avec une livraison claire et mesurable."
+    },
+    "hero": { "title": "À propos" },
+    "intro": {
+      "p1": "T.E.N.E.G.T.A est une entreprise technologique spécialisée dans la conception de systèmes intelligents et sécurisés.",
+      "p2": "Nous combinons rigueur d’ingénierie, compréhension du terrain et mise en œuvre numérique de façon claire et mesurable.",
+      "p3": "Nous accompagnons les organisations qui veulent améliorer la performance, structurer les processus et protéger les données — avec des solutions sur mesure, pas des modèles génériques."
+    },
+    "valuesStatement": "Nous croyons qu’une bonne technologie ne se contente pas d’impressionner : elle produit un impact clair et durable."
+  },
+  "SolutionsPage": {
+    "meta": {
+      "title": "Solutions – IA, cybersécurité, logiciels et infrastructure | T.E.N.E.G.T.A",
+      "description": "IA, cybersécurité, logiciels sur mesure et infrastructure numérique de niveau entreprise — livrés comme un programme cohérent pour des organisations dans le monde entier."
+    },
+    "hero": {
+      "eyebrow": "Ingénierie système pour entreprises",
+      "title": "Des solutions conçues pour la montée en charge",
+      "subtitle": "Intelligence artificielle, cybersécurité, logiciels et infrastructure — pensés comme un seul programme de livraison, pas comme des initiatives isolées.",
+      "lead": "Nous accompagnons des équipes dans plusieurs régions pour architecturer, déployer et exploiter des systèmes qui respectent la résidence des données, les référentiels de sécurité et votre réalité opérationnelle."
+    },
+    "stats": {
+      "s1": "Patterns de livraison multi-secteurs",
+      "s2": "Ingénierie « security-by-design »",
+      "s3": "Résultats mesurables et SLA"
+    },
+    "pillarsHead": {
+      "title": "Quatre piliers de capacité",
+      "subtitle": "Principes d’architecture partagés, documentation et transfert — pour que votre organisation maîtrise la feuille de route en toute confiance.",
+      "simHint": "Ouvrez un pilier pour lancer une simulation interactive immersive dédiée.",
+      "openSim": "Lancer la simulation →"
+    },
+    "ai": {
+      "title": "Intelligence artificielle et analytique",
+      "body": "Des signaux aux modèles — prédiction, classification et automatisation ancrées dans vos données opérationnelles.",
+      "b1": "Analytique et prévision lorsque la qualité des données permet des décisions fiables",
+      "b2": "Workflows ML reproductibles avec évaluation, surveillance et dérive",
+      "b3": "Contrôle humain dans la boucle pour les décisions sensibles ou réglementées"
+    },
+    "cyber": {
+      "title": "Cybersécurité et résilience",
+      "body": "Protéger identités, réseaux et charges de travail avec des contrôles en couches et des opérations observables.",
+      "b1": "Conception informée par la menace et alignée sur les référentiels modernes",
+      "b2": "Détection, corrélation et réponse adaptées à votre SOC et à vos outils",
+      "b3": "Durcissement continu — pas une simple checklist d’audit ponctuelle"
+    },
+    "software": {
+      "title": "Logiciels et plateformes d’intégration",
+      "body": "Applications sur mesure et intégrations qui relient personnes, données et processus sur votre paysage applicatif.",
+      "b1": "Intégration API-first avec les systèmes déjà en place",
+      "b2": "Expériences par rôle pour opérateurs, analystes et direction",
+      "b3": "Discipline de release : préproduction, retour arrière et observabilité en production"
+    },
+    "infra": {
+      "title": "Infrastructure numérique et opérations",
+      "body": "Le socle qui rend les solutions fiables : données, connectivité, déploiement et exploitation au quotidien.",
+      "b1": "Modèles cloud et hybrides adaptés à vos contraintes et régions",
+      "b2": "Infrastructure as code et environnements reproductibles",
+      "b3": "Supervision, SLO et runbooks que vos équipes peuvent exécuter sans dépendance fournisseur"
+    },
+    "global": {
+      "title": "Pensé pour les opérations internationales",
+      "lead": "Que vous opériez dans une ou plusieurs zones géographiques, nous alignons architecture et livraison sur les exigences locales, les fournisseurs d’identité et la réalité réseau.",
+      "p1": "Intégration d’abord : étendre l’existant plutôt que tout refondre sans nécessité.",
+      "p2": "Jalons, critères d’acceptation et documentation adaptés aux achats, à l’IT et aux métiers.",
+      "p3": "Un modèle de livraison qui supporte les équipes distribuées, les environnements hybrides et le déploiement par phases."
+    },
+    "intelligentSystems": {
+      "title": "Comment nous construisons des systèmes intelligents",
+      "subtitle": "Un seul chemin d’ingénierie des données à l’action opérateur — adapté à votre secteur, stack et profil de risque.",
+      "link": "Voir le blueprint de livraison"
+    },
+    "cta": {
+      "title": "Parlons de votre prochaine initiative",
+      "subtitle": "Partagez objectifs, calendrier et contraintes — nous proposerons une approche par phases avec des résultats clairs.",
+      "button": "Réserver une consultation"
+    }
+  },
+  "SolutionPillarSim": {
+    "common": {
+      "back": "Retour aux solutions",
+      "cta": "Parler de cette capacité",
+      "disclaimer": "Simulation illustrative en temps réel — pas de télémétrie de production.",
+      "explainerLabel": "Ce que montre cette animation"
+    },
+    "ai": {
+      "meta": {
+        "title": "Simulation IA & analytique | T.E.N.E.G.T.A",
+        "description": "Champ neural interactif : cœur d’inférence, chemins de signal, cohérence — expérience illustrative."
+      },
+      "title": "Intelligence artificielle et analytique",
+      "subtitle": "Voyez les signaux converger vers un cœur d’inférence — une vue stylisée d’une livraison centrée modèle.",
+      "body": "En production nous connectons workflows ML reproductibles, supervision et boucles humaines à votre patrimoine données — cette scène dramatise le flux pour la narration uniquement.",
+      "kpi1": "Cœur d’inférence",
+      "kpi2": "Chemins synaptiques",
+      "kpi3": "Cohérence du signal",
+      "simpleExplainer": "En termes simples : à gauche entrent les données (comme une « empreinte » colorée), au centre brillant le modèle fait son travail, et à droite les barres ressemblent à des scores ou réponses possibles. Les points en mouvement montrent l’information qui chemine. Les chiffres sont une démo illustrative — pas de vraies mesures de vos systèmes.",
+      "hud": {
+        "confidence": "Confiance",
+        "tokensPerSec": "Jetons/s",
+        "trainLoss": "Perte d’entraînement",
+        "pipeline": "Pipeline signal",
+        "layerIn": "Entrée",
+        "layerHidden": "Couches cachées",
+        "layerOut": "Sortie",
+        "caption": "Embeddings → pile → tête"
+      }
+    },
+    "cyber": {
+      "meta": {
+        "title": "Simulation radar cybersécurité | T.E.N.E.G.T.A",
+        "description": "Radar façon SOC : balayage, blips menace, neutralisation — expérience illustrative."
+      },
+      "title": "Cybersécurité et résilience",
+      "subtitle": "Une métaphore radar vivante — les menaces apparaissent, le balayage intersecte, l’état devient « traité ».",
+      "body": "Les programmes réels combinent détection, corrélation et playbooks SOC — la démo est une abstraction cinématique, pas un flux temps réel.",
+      "kpi1": "Balayage actif",
+      "kpi2": "Menace → traité",
+      "kpi3": "Bouclier",
+      "simpleExplainer": "En termes simples : ce radar illustre la surveillance sécurité. Les points rouges sont comme des alertes ; quand le balayage vert passe dessus, ils deviennent verts pour dire « traité ». Les lignes du bas sont des messages fictifs pour l’effet visuel. Ce n’est pas une vue réelle de votre réseau.",
+      "hud": {
+        "activeThreats": "Actives",
+        "neutralized": "Neutralisées",
+        "sweepRpm": "Balayage",
+        "compass": "Radar SOC",
+        "log1": "[ALERTE] Empreinte TLS anormale — compartiment A",
+        "log2": "[INFO] Règle corrélation #204 correspondante",
+        "log3": "[OK] Playbook PR-12 terminé",
+        "log4": "[AVERT] Pic trafic est-ouest 14 %",
+        "log5": "[OK] Flux IOC synchronisé",
+        "log6": "[ALERTE] Mouvement latéral — file triage"
+      }
+    },
+    "software": {
+      "meta": {
+        "title": "Simulation mesh logiciel | T.E.N.E.G.T.A",
+        "description": "Modules, chemins API, jetons de synchro — expérience illustrative."
+      },
+      "title": "Logiciels et intégration",
+      "subtitle": "Les modules négocient sur des courbes — métaphore d’intégration API-first et releases maîtrisées.",
+      "body": "Nous livrons des plateformes intégration-first avec préprod, observabilité et retour arrière — l’animation met l’accent sur la connectivité, pas votre architecture réelle.",
+      "kpi1": "Mesh API",
+      "kpi2": "Jetons de synchro",
+      "kpi3": "Santé des modules",
+      "simpleExplainer": "En termes simples : chaque boîte est une partie d’application (API, service, etc.). La grande boîte centrale joue le rôle de passerelle. Les courbes sont des échanges ; les points or et cyan montrent requêtes et réponses. Le point vert signifie « ce composant répond ». C’est une image de coopération entre systèmes, pas votre architecture réelle.",
+      "hud": {
+        "p99": "Latence p99",
+        "rps": "Req/s",
+        "healthy": "Services sains",
+        "queue": "Profondeur file",
+        "mesh": "Service mesh"
+      }
+    },
+    "infra": {
+      "meta": {
+        "title": "Simulation trafic infrastructure | T.E.N.E.G.T.A",
+        "description": "Charge par région, backbone, flux de bits — expérience illustrative."
+      },
+      "title": "Infrastructure numérique et opérations",
+      "subtitle": "Des voies régionales pulsent pendant que les bits traversent l’épine dorsale — une vue opérationnelle stylisée.",
+      "body": "L’exploitation couvre IaC, hybride, SLO et runbooks — cette visualisation est un art motion illustratif, pas des données de monitoring.",
+      "kpi1": "Charge régionale",
+      "kpi2": "Backbone",
+      "kpi3": "Flux de bits",
+      "simpleExplainer": "En termes simples : chaque ligne horizontale est une région ou une voie. La barre colorée indique à quel point elle est chargée. La ligne verticale centrale est l’épine dorsale — comme une autoroute — et les traits lumineux sont des paquets de données. Les temps et totaux sont des exemples fictifs pour l’idée, pas du monitoring réel.",
+      "hud": {
+        "throughput": "Débit",
+        "slo": "Santé SLO",
+        "backbone": "Backbone",
+        "crossLatency": "Inter-régions"
+      }
+    }
+  },
+  "IntelligentSystemsPage": {
+    "meta": {
+      "title": "Comment nous construisons des systèmes intelligents – T.E.N.E.G.T.A",
+      "description": "Des données aux modèles et tableaux opérateurs — ingénierie mesurable sur les secteurs."
+    },
+    "hero": {
+      "title": "Comment nous construisons des systèmes intelligents",
+      "subtitle": "Nous concevons et livrons des stacks intégrées : données, modèles, interfaces et guides d’exploitation alignés sur vos objectifs — pas seulement des slides.",
+      "ctaDemo": "Try the interactive demo",
+      "ctaContact": "Start a conversation",
+      "ctaProjects": "View case studies"
+    },
+    "flow": {
+      "title": "How data becomes action",
+      "caption": "A generic delivery path; industries differ, but engineering discipline stays consistent."
+    },
+    "demo": {
+      "title": "Illustrative dashboard (sample)",
+      "caption": "Numbers below are fictional examples — for storytelling only, not a guarantee of results."
+    },
+    "useCases": {
+      "title": "Where this pattern applies",
+      "one": {
+        "title": "Operations & service delivery",
+        "body": "Unify telemetry, tickets, and SLAs with predictive load and staffing views."
+      },
+      "two": {
+        "title": "Security & compliance",
+        "body": "Correlate signals, prioritize incidents, and automate playbooks."
+      },
+      "three": {
+        "title": "Field & industrial environments",
+        "body": "Connect sensors and production data to quality, maintenance, and safety KPIs."
+      }
+    },
+    "bottomCta": {
+      "title": "Ready for a pilot or production rollout?",
+      "subtitle": "Share your constraints and timelines — we propose a phased path.",
+      "primary": "Request a pilot",
+      "secondary": "Book consultation"
+    }
+  },
+  "SystemFlow": {
+    "ariaLabel": "Delivery flow from sensors and data to AI models, dashboard, and operator",
+    "steps": {
+      "sensors": "Signals & data",
+      "ingest": "Ingest & store",
+      "models": "Models & rules",
+      "dashboard": "Dashboards",
+      "operator": "Operators & actions"
+    }
+  },
+  "DemoKpiStrip": {
+    "disclaimer": "Illustrative sample — not live data.",
+    "kpi1": { "label": "Signal health", "value": "98%" },
+    "kpi2": { "label": "Latency (p95)", "value": "120ms" },
+    "kpi3": { "label": "Open alerts", "value": "3" },
+    "alert": {
+      "title": "Threshold",
+      "body": "Anomaly score on stream #7 exceeded policy — review recommended."
+    },
+    "chartLabel": "Throughput (sample)"
+  },
+  "DemoExplorePage": {
+    "meta": {
+      "title": "Démo interactive – T.E.N.E.G.T.A",
+      "description": "Choisissez un secteur ou un scénario, puis voyez comment les données deviennent recommandations, tableaux et décisions — à titre illustratif."
+    },
+    "hero": {
+      "title": "Démo interactive",
+      "subtitle": "Choisissez le secteur ou le scénario qui vous correspond, puis voyez comment les données se transforment en recommandations, tableaux de bord et décisions opérationnelles.",
+      "note": "Cette démo est illustrative — pour visualiser le système avant réalisation. Ce n’est pas un conseil professionnel ni une garantie de résultat."
+    },
+    "intro": "These scenarios are labels for storytelling — they do not limit the industries we serve.",
+    "scenarioLabel": "Scenario",
+    "scenarios": {
+      "ops": "Operations & SLAs",
+      "security": "Security & SOC",
+      "production": "Production & quality",
+      "precisionAg": "Precision field / sensing",
+      "services": "Customer service & triage"
+    },
+    "dataHintLabel": "Data context (short)",
+    "dataHintPlaceholder": "e.g. logs from 12 services, MES tags, ticket volume…",
+    "goalHintLabel": "Goal (short)",
+    "goalHintPlaceholder": "e.g. cut MTTR, reduce scrap, forecast demand…",
+    "runButton": "Generate illustrative recommendation",
+    "outputTitle": "Illustrative recommendation",
+    "disclaimer": "Not professional advice or a guaranteed outcome — for demo purposes only.",
+    "linkHowWeBuild": "How we build systems",
+    "linkContact": "Talk to our team",
+    "reportTitle": "Get a detailed follow-up",
+    "reportSubtitle": "Share your email and we will send context and next steps — no PDF is generated automatically on this site.",
+    "reportName": "Name",
+    "reportEmail": "Email",
+    "reportCompany": "Company (optional)",
+    "reportSubmit": "Request follow-up",
+    "reportSending": "Sending…",
+    "reportSuccess": "Thank you — we will follow up by email.",
+    "reportError": "Could not send. Try again or use the contact page.",
+    "reportRateLimited": "Too many requests. Please wait and try again."
+  },
+  "PilotsShowcasePage": {
+    "meta": {
+      "title": "Showcase – labs & pilots",
+      "description": "Video and narrative about our pilots and product directions — multi-sector."
+    },
+    "hero": {
+      "title": "Showcase",
+      "subtitle": "A short view of our work in the field — from pilots to production-ready systems."
+    },
+    "videoTitle": "Company showcase video",
+    "videoPlaceholder": "Video will appear here when NEXT_PUBLIC_SHOWCASE_VIDEO_URL is set (YouTube or Vimeo link).",
+    "videoHint": "Paste a public YouTube watch URL in your environment variables.",
+    "ctaPrimary": "Discuss a pilot",
+    "ctaSecondary": "View intelligent systems"
+  },
+  "ContactPage": {
+    "meta": {
+      "title": "Contact – T.E.N.E.G.T.A",
+      "description": "Projet, pilote ou idée à transformer en système — nous répondons les jours ouvrés."
+    },
+    "hero": {
+      "title": "Contactez-nous",
+      "body": "Si vous avez un projet, un pilote ou une idée à transformer en système concret, nous serons heureux d’ouvrir la discussion.",
+      "subtitle": "Nous répondons les jours ouvrés (souvent sous 1 à 2 jours).",
+      "slaNote": "Pour les sujets de sécurité urgents, indiquez « urgent » dans le message."
+    },
+    "phoneLabel": "Téléphone",
+    "phoneRaw": "+963953562654",
+    "phoneDisplay": "+963 953 562 654",
+    "addressLine": "Salmieh — en face du complexe médical Ibn al-Nafis",
+    "regionalNote": "Global inquiries welcome — include your time zone for scheduling.",
+    "formHeading": "Contact form",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "message": "Message",
+      "submit": "Send",
+      "sending": "Sending…",
+      "success": "Message sent successfully.",
+      "error": "Could not send. Please try again later.",
+      "rateLimited": "Too many requests from this network. Please wait and try again.",
+      "validation": {
+        "email": "Please enter a valid email",
+        "required": "This field is required"
+      },
+      "honeypot": "Leave this field empty"
+    },
+    "whatsapp": "WhatsApp",
+    "address": "Address",
+    "hours": "Business hours"
+  },
+  "ProjectsPage": {
+    "meta": {
+      "title": "T.E.N.E.G.T.A projects – Success stories",
+      "description": "AI, security, and systems delivery across industries."
+    },
+    "hero": { "title": "Projects", "subtitle": "Challenge, solution, measurable outcomes." },
+    "readMore": "Details",
+    "challenge": "Challenge",
+    "solution": "Solution",
+    "results": "Results"
+  },
+  "PilotsPage": {
+    "meta": {
+      "title": "Laboratoires et pilotes – T.E.N.E.G.T.A",
+      "description": "Tester les idées dans des environnements réels limités avant généralisation — réduire les risques et valider les hypothèses."
+    },
+    "hero": {
+      "title": "Laboratoires et pilotes",
+      "subtitle": "Nous testons les idées dans des environnements réels et limités avant généralisation. Cette phase réduit les risques, affine les hypothèses et transforme le concept en système évolutif."
+    },
+    "body": "Nous travaillons avec des partenaires terrain et des équipes produit sur des expérimentations où les résultats sont mesurés avant passage à l’échelle. Contactez-nous pour un pilote adapté à votre contexte.",
+    "showcaseLink": "Voir la vitrine pilotes",
+    "cta": { "title": "Rejoindre comme partenaire pilote", "button": "Demander un pilote" }
+  },
+  "TechPage": {
+    "meta": {
+      "title": "Technologies & ingénierie – T.E.N.E.G.T.A",
+      "description": "Outils de niveau entreprise, observabilité et pratiques d’ingénierie derrière nos systèmes intelligents."
+    },
+    "hero": {
+      "kicker": "Excellence d’ingénierie",
+      "title": "Une technologie qui évolue avec votre ambition",
+      "subtitle": "Un socle moderne et conscient de la sécurité couvrant les couches d’expérience, l’IA/ML, les plateformes data et l’exploitation cloud-native — choisi pour la fiabilité, l’auditabilité et la maintenabilité en production réelle.",
+      "badge1": "Cloud-native",
+      "badge2": "Observable",
+      "badge3": "Security by design"
+    },
+    "scrollHint": "Explorer",
+    "stackSectionTitle": "Stack & outillage",
+    "stackSectionSubtitle": "Technologies représentatives utilisées dans des programmes enterprise ; les choix finaux suivent votre contexte de conformité, la résidence des données et l’architecture cible.",
+    "pillars": {
+      "p1": {
+        "title": "Fiabilité & performance",
+        "body": "Nous concevons pour des SLO mesurables : services résilients, cache là où c’est pertinent, et budgets de charge qui tiennent le pic — pas seulement des benchmarks de démo."
+      },
+      "p2": {
+        "title": "Sécurité & confiance",
+        "body": "Accès moindre privilège, pipelines de livraison durcis et changements traçables. La sécurité est intégrée à la construction et à l’exploitation — pas ajoutée en fin de chaîne."
+      },
+      "p3": {
+        "title": "Observabilité & exploitation",
+        "body": "Métriques, logs et traces reliés à des tableaux de bord et runbooks actionnables — pour détecter, trier et récupérer avec clarté sous pression."
+      },
+      "p4": {
+        "title": "Portabilité & évolution",
+        "body": "Nous privilégions les interfaces ouvertes et l’automatisation pour que votre patrimoine évolue sans verrouillage inutile — des pilotes à la production à grande échelle."
+      }
+    },
+    "platform": {
+      "title": "Une vision plateforme, pas un catalogue d’outils",
+      "body": "Les outils changent ; la discipline reste. Nous alignons les choix technologiques sur des résultats mesurables — décisions plus rapides, risque opérationnel réduit, et systèmes que vos équipes peuvent exploiter en confiance."
+    }
+  },
+  "TeamPage": {
+    "meta": {
+      "title": "Notre équipe – T.E.N.E.G.T.A",
+      "description": "Sadek Al-Atr — ingénieur IA, expert cybersécurité et directeur de l’entreprise."
+    },
+    "hero": {
+      "title": "Notre équipe",
+      "subtitle": "T.E.N.E.G.T.A est portée par Sadek Al-Atr — ingénieur IA, expert cybersécurité et directeur — qui pilote la direction technique, sécurité et stratégique."
+    }
+  },
+  "InvestorsPage": {
+    "meta": {
+      "title": "Investisseurs & partenariats – T.E.N.E.G.T.A",
+      "description": "Narratif institutionnel : thèse de marché, gouvernance et relations investisseurs pour T.E.N.E.G.T.A."
+    },
+    "hero": {
+      "kicker": "Relations investisseurs",
+      "title": "Construire des systèmes intelligents pour la décennie entreprise",
+      "subtitle": "T.E.N.E.G.T.A conçoit et livre des plateformes IA, cybersécurité et intégration d’abord, avec une discipline d’ingénierie — du pilote à la production. Cette page résume notre vision de la création de valeur, du risque et des partenariats durables."
+    },
+    "thesis": {
+      "title": "Thèse d’investissement",
+      "body": "Les entreprises convergent vers des opérations centrées sur les données, des décisions assistées par l’IA et des modèles de sécurité zero trust. T.E.N.E.G.T.A se situe à cette intersection : nous livrons des systèmes déployables — pas des slides — avec KPI mesurables, déploiements par étapes et runbooks prêts pour l’exploitation.\n\nNotre différenciation est l’exécution : livraison reproductible, observabilité par défaut, et architectures qui respectent les environnements hybrides et les contraintes réglementaires."
+    },
+    "opportunity": {
+      "title": "Opportunité de marché",
+      "body": "Les budgets de transformation numérique passent de projets IT génériques à des programmes liés aux résultats : opérations prédictives, analyses de sécurité et automatisation qui réduisent coût ou risque de façon démontrable.\n\nNous intervenons là où la complexité est élevée et le verrouillage fournisseur coûteux — avec une alternative pilotée par l’ingénierie, alignée sur la gouvernance client et la résidence des données."
+    },
+    "model": {
+      "title": "Modèle économique (vue d’ensemble)",
+      "body": "Le chiffre d’affaires repose sur des prestations professionnelles cadrées, une livraison de projet par jalons et des contrats de support long terme liés à l’évolution des systèmes. Les engagements sont structurés avec critères d’acceptation, documentation et transfert clairs — réduisant l’ambiguïté d’exécution pour clients et contreparties.\n\nNous privilégions des marges de livraison durables à une croissance non différenciée ; la croissance suit des résultats référençables et des extensions répétées au sein des comptes."
+    },
+    "governance": {
+      "title": "Gouvernance, transparence & risque",
+      "body": "Nous maintenons des limites contractuelles claires, une propriété intellectuelle explicite et des bases de sécurité adaptées aux achats enterprise. Notre processus d’ingénierie met l’accent sur les pistes d’audit (versioning, journaux de changement, preuves de test) et la transparence opérationnelle via l’observabilité.\n\nLes éléments prospectifs sur ce site sont illustratifs ; ils ne constituent pas une garantie de performance future. Toute décision d’investissement exige une diligence indépendante et des accords contraignants."
+    },
+    "ir": {
+      "title": "Demandes investisseurs & partenariats",
+      "body": "Pour investisseurs institutionnels qualifiés, partenaires stratégiques et discussions d’alliance structurées, nous proposons un point d’entrée unique. Partagez votre mandat, calendrier et contraintes — nous répondons avec les supports et prochaines étapes appropriés, sous réserve d’adéquation mutuelle et de confidentialité."
+    },
+    "cta": "Contacter les relations investisseurs",
+    "disclaimer": "Ce site ne constitue pas une offre de vente ni une sollicitation d’achat de titres. Les informations sont à titre de communication corporate générale et peuvent changer sans préavis. Les exemples de projets passés ne préjugent pas des résultats futurs."
+  },
+  "BlogPage": {
+    "meta": {
+      "title": "Blog – Technical news",
+      "description": "News and articles on AI, security, and systems."
+    },
+    "hero": { "title": "Blog & news", "subtitle": "Technical insights and updates." },
+    "read": "Read more",
+    "relatedTitle": "Continue exploring",
+    "relatedSolutionsHub": "Solutions & capacités",
+    "relatedDemo": "Interactive demo",
+    "relatedIntelligentSystems": "Comment nous construisons des systèmes intelligents"
+  },
+  "LegalPage": {
+    "meta": {
+      "title": "Terms & policies – T.E.N.E.G.T.A",
+      "description": "Terms, conditions, and privacy in Arabic and English."
+    },
+    "hero": { "title": "Legal", "subtitle": "Transparency and data protection." }
+  },
+  "CookieConsent": {
+    "ariaLabel": "Cookie preferences",
+    "message": "We use optional analytics cookies to understand traffic and improve the site. Essential cookies are always on. You can accept analytics or continue with essential cookies only.",
+    "privacyLink": "Privacy policy",
+    "essentialOnly": "Essential only",
+    "acceptAnalytics": "Accept analytics"
+  },
+  "PrivacyPage": {
+    "meta": {
+      "title": "Privacy policy – T.E.N.E.G.T.A",
+      "description": "How T.E.N.E.G.T.A collects, uses, and protects personal data."
+    },
+    "title": "Privacy policy",
+    "lastUpdated": "Last updated: April 2026",
+    "intro": "This policy describes how T.E.N.E.G.T.A (“we”, “us”) handles personal information when you use our website and request information about our AI systems and services. It is provided for transparency; it does not replace legal advice for your jurisdiction.",
+    "sections": {
+      "controller": {
+        "title": "Data controller",
+        "body": "The operator of this website and primary contact for privacy matters is T.E.N.E.G.T.A. For requests, use the contact details in the Contact section below."
+      },
+      "collect": {
+        "title": "Information we collect",
+        "body": "We may collect: (1) identifiers and contact details you submit via forms (name, email, company, message); (2) technical data such as IP address, browser type, and approximate location derived from IP; (3) usage data if you consent to analytics cookies."
+      },
+      "purposes": {
+        "title": "Purposes of processing",
+        "body": "We use your data to respond to inquiries, operate and secure the website, improve content and UX, and—if you consent—to measure traffic with analytics tools."
+      },
+      "legalBasis": {
+        "title": "Legal basis (EEA/UK visitors)",
+        "body": "Where GDPR applies: contract or pre-contract steps for inquiries you initiate; legitimate interests in site security and improvement; consent for non-essential cookies and analytics when required."
+      },
+      "cookies": {
+        "title": "Cookies and similar technologies",
+        "body": "Essential cookies may be needed for basic functionality. Analytics cookies (e.g. Google Analytics) load only after you accept via our banner, where configured. You can change your mind by clearing site data or contacting us."
+      },
+      "retention": {
+        "title": "Retention",
+        "body": "Contact submissions are kept only as long as needed to handle your request and for a limited backup period, unless a longer period is required by law."
+      },
+      "rights": {
+        "title": "Your rights",
+        "body": "Depending on your region, you may have rights to access, rectify, delete, restrict, or object to processing, and to lodge a complaint with a supervisory authority. Contact us to exercise these rights."
+      },
+      "transfers": {
+        "title": "International transfers",
+        "body": "If we use providers outside your country, we rely on appropriate safeguards (such as standard contractual clauses) where required."
+      },
+      "children": {
+        "title": "Children",
+        "body": "Our services are directed at businesses and professionals. The site is not intended for children under 16."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "For privacy questions, use the details on our Contact page or the legal email published there."
+      },
+      "changes": {
+        "title": "Changes",
+        "body": "We may update this policy; the “Last updated” date will change. Continued use after changes constitutes acceptance where permitted by law."
+      }
+    }
+  },
+  "TermsPage": {
+    "meta": {
+      "title": "Terms & conditions – T.E.N.E.G.T.A",
+      "description": "Terms of use for the T.E.N.E.G.T.A website."
+    },
+    "title": "Terms & conditions",
+    "lastUpdated": "Last updated: April 2026",
+    "intro": "By accessing this website you agree to these terms. If you do not agree, do not use the site. T.E.N.E.G.T.A builds and delivers AI and software systems; website content is informational unless you enter a separate agreement.",
+    "sections": {
+      "acceptance": {
+        "title": "Acceptance",
+        "body": "These terms apply to all visitors. We may update them; check the Last updated date. Some services may have additional written terms."
+      },
+      "services": {
+        "title": "Website vs services",
+        "body": "The site describes capabilities and illustrative examples. Demos, case studies, and metrics may be simplified or indicative. Binding scope, fees, and deliverables are set only in a signed statement of work or contract."
+      },
+      "acceptableUse": {
+        "title": "Acceptable use",
+        "body": "You must not misuse the site: no unlawful activity, no attempt to breach security, no automated scraping that harms performance, and no submission of malicious content through forms."
+      },
+      "ip": {
+        "title": "Intellectual property",
+        "body": "Branding, text, layout, and media on this site are owned by T.E.N.E.G.T.A or licensors. You may not copy or redistribute except as allowed by law or with our permission."
+      },
+      "disclaimer": {
+        "title": "Disclaimers",
+        "body": "The site is provided “as is”. Interactive demos and examples are not professional, financial, medical, or agronomic advice. Past or illustrative outcomes are not guarantees of future results."
+      },
+      "limitation": {
+        "title": "Limitation of liability",
+        "body": "To the maximum extent permitted by law, T.E.N.E.G.T.A is not liable for indirect or consequential damages arising from use of the site. Total liability for site-related claims is limited where the law allows."
+      },
+      "privacyLink": {
+        "title": "Privacy",
+        "body": "Personal data is processed as described in our Privacy policy."
+      },
+      "law": {
+        "title": "Governing law",
+        "body": "These terms are governed by the laws applicable to T.E.N.E.G.T.A’s place of establishment, without regard to conflict-of-law rules, unless mandatory consumer protections in your country say otherwise."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "For legal notices related to these terms, use the contact information on the Contact page."
+      },
+      "changes": {
+        "title": "Changes",
+        "body": "We may update these terms. Material changes will be reflected by updating the Last updated date."
+      }
+    }
+  },
+  "EngagementPage": {
+    "meta": {
+      "title": "Modèles d’engagement – Pilote, projet, support | T.E.N.E.G.T.A",
+      "description": "Pilotes ciblés, livraison de projet ou accompagnement long terme — périmètre clair avec votre équipe."
+    },
+    "title": "Modèles d’engagement",
+    "subtitle": "Choisissez le modèle adapté au périmètre, au risque et à votre capacité interne.",
+    "pricingNote": "Les investissements se discutent selon le périmètre — contactez-nous pour une proposition sur mesure.",
+    "pilot": {
+      "title": "Programme pilote",
+      "duration": "Phase courte et bornée pour tester l’idée et mesurer la valeur avant extension.",
+      "b1": "Essai initial",
+      "b2": "Preuve de valeur",
+      "b3": "Environnement à périmètre limité",
+      "ctaLabel": "Parler d’un pilote"
+    },
+    "project": {
+      "title": "Livraison de projet",
+      "duration": "Réalisation complète de l’analyse à la livraison, avec phases claires et documentation.",
+      "b1": "Projets définis",
+      "b2": "Nouveaux systèmes",
+      "b3": "Intégrations sur mesure",
+      "ctaLabel": "Discuter d’un projet"
+    },
+    "retainer": {
+      "title": "Support et continuité",
+      "duration": "Partenariat long terme : amélioration, supervision et évolution progressive.",
+      "b1": "Organisations en évolution continue",
+      "b2": "Équipes opérations et technologie",
+      "b3": "Amélioration progressive des indicateurs et services",
+      "ctaLabel": "Parler d’un accord de support"
+    }
+  },
+  "CaseStudiesPage": {
+    "meta": {
+      "title": "Études de cas – T.E.N.E.G.T.A",
+      "description": "Exemples courts : problème, approche, résultat — pour discussion, pas une garantie sans accord."
+    },
+    "title": "Études de cas",
+    "subtitle": "Problème, approche et résultat — synthèse pour discussion.",
+    "readStudy": "Read study",
+    "backToList": "All case studies",
+    "problem": "Problem",
+    "approach": "Approach",
+    "architecture": "Architecture",
+    "results": "Results",
+    "ctaDiscuss": "Discuss a similar engagement",
+    "ctaDemo": "Try the interactive demo",
+    "detailDisclaimer": "These case studies are illustrative summaries for discussion. They are not guarantees of results for your organization unless confirmed in a separate agreement."
+  },
+  "WhyUsPage": {
+    "meta": {
+      "title": "Pourquoi T.E.N.E.G.T.A ?",
+      "description": "Nous partons du vrai problème, concevons après avoir compris le contexte et les objectifs, puis livrons par étapes mesurables."
+    },
+    "title": "Pourquoi T.E.N.E.G.T.A ?",
+    "intro": "Parce que nous partons du problème réel — pas de l’apparence.",
+    "intro2": "Nous concevons la solution après avoir compris l’environnement, les utilisateurs et l’objectif opérationnel — puis nous bâtissons le système selon les besoins réels.",
+    "points": {
+      "p1": "Des solutions adaptées à chaque situation",
+      "p2": "Une livraison claire en phases mesurables",
+      "p3": "Une forte attention à la sécurité et à la fiabilité",
+      "p4": "Capacité d’intégration avec les systèmes existants",
+      "p5": "Accompagnement après la mise en service"
+    },
+    "process": {
+      "title": "Comment nous travaillons",
+      "s1": "Étude de l’environnement et des besoins",
+      "s2": "Définition des objectifs et indicateurs",
+      "s3": "Conception de la solution adaptée",
+      "s4": "Réalisation et validation",
+      "s5": "Amélioration continue et support",
+      "summary": "Chaque étape est liée à un résultat opérationnel clair — pas seulement à des livrables formels."
+    },
+    "whyNow": {
+      "title": "Pourquoi maintenant ?",
+      "body": "Les organisations qui unifient les données, automatisent la décision de façon responsable et sécurisent leurs systèmes vont plus vite et sont plus compétitives. La transformation numérique n’est plus une option : c’est une nécessité opérationnelle et stratégique."
+    },
+    "ctaContact": "Contact",
+    "ctaEngagement": "Modèles d’engagement"
+  },
+  "Common": {
+    "learnMore": "Learn more",
+    "backHome": "Home"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "tenegta-monorepo",
+  "private": true,
+  "workspaces": ["site"],
+  "scripts": {
+    "build": "npm run build -w tenegta-website",
+    "dev": "npm run dev -w tenegta-website",
+    "start": "npm run start -w tenegta-website",
+    "lint": "npm run lint -w tenegta-website",
+    "deploy:netlify": "npm run build && npx --yes netlify-cli deploy --prod"
+  }
+}

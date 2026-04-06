@@ -1,0 +1,10 @@
+# Copy into site/ root for manual zip deploy, or use root netlify.toml from repo root for Git.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

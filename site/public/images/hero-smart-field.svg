@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Smart agriculture abstract">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="50%" stop-color="#121212"/>
+      <stop offset="100%" stop-color="#2a2418"/>
+    </linearGradient>
+    <radialGradient id="n1" cx="30%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#c9a061" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#c9a061" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="n2" cx="70%" cy="55%" r="45%">
+      <stop offset="0%" stop-color="#ffd700" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffd700" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#g)"/>
+  <rect width="1200" height="900" fill="url(#n1)"/>
+  <rect width="1200" height="900" fill="url(#n2)"/>
+  <g fill="none" stroke="#c9a061" stroke-opacity="0.35" stroke-width="1.2">
+    <path d="M80 620 C 260 520, 420 720, 600 620 S 940 520, 1120 640"/>
+    <path d="M100 680 C 300 560, 500 760, 700 660 S 980 560, 1100 700"/>
+  </g>
+  <g fill="#c9a061">
+    <circle cx="220" cy="560" r="4" opacity="0.9"/>
+    <circle cx="480" cy="600" r="3" opacity="0.75"/>
+    <circle cx="760" cy="540" r="4" opacity="0.85"/>
+    <circle cx="980" cy="620" r="3" opacity="0.7"/>
+  </g>
+  <g fill="#ffd700" opacity="0.55">
+    <circle cx="360" cy="480" r="2.5"/>
+    <circle cx="620" cy="500" r="2"/>
+    <circle cx="900" cy="470" r="2.5"/>
+  </g>
+</svg>

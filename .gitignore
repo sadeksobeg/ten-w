@@ -1,0 +1,13 @@
+# Workspace
+node_modules/
+
+# Next (site app)
+site/.next/
+site/out/
+site/node_modules/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+*.log
