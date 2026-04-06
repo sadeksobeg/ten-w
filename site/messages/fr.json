@@ -376,17 +376,23 @@
       "submit": "Send",
       "sending": "Sending…",
       "success": "Message sent successfully.",
+      "successTitle": "Merci — nous avons bien reçu votre message",
+      "successSubtitle": "Nous répondrons les jours ouvrés. Vérifiez votre boîte (et les indésirables).",
+      "sendAnother": "Envoyer un autre message",
       "error": "Could not send. Please try again later.",
       "rateLimited": "Too many requests from this network. Please wait and try again.",
       "validation": {
         "email": "Please enter a valid email",
-        "required": "This field is required"
+        "required": "This field is required",
+        "messageMin": "Le message doit contenir au moins 5 caractères.",
+        "checkFields": "Vérifiez les champs (e-mail, longueur du message, etc.)."
       },
       "honeypot": "Leave this field empty"
     },
     "whatsapp": "WhatsApp",
     "address": "Address",
-    "hours": "Business hours"
+    "hours": "Heures d’ouverture",
+    "hoursLine": "Dim–jeu, heures ouvrables"
   },
   "ProjectsPage": {
     "meta": {

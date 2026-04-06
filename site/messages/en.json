@@ -376,17 +376,23 @@
       "submit": "Send",
       "sending": "Sending…",
       "success": "Message sent successfully.",
+      "successTitle": "Thank you — we received your message",
+      "successSubtitle": "We’ll reply on business days. Check your inbox (and spam) for our note.",
+      "sendAnother": "Send another message",
       "error": "Could not send. Please try again later.",
       "rateLimited": "Too many requests from this network. Please wait and try again.",
       "validation": {
         "email": "Please enter a valid email",
-        "required": "This field is required"
+        "required": "This field is required",
+        "messageMin": "Message must be at least 5 characters.",
+        "checkFields": "Check the fields (email, message length, etc.)."
       },
       "honeypot": "Leave this field empty"
     },
     "whatsapp": "WhatsApp",
     "address": "Address",
-    "hours": "Business hours"
+    "hours": "Business hours",
+    "hoursLine": "Sun–Thu, business hours"
   },
   "ProjectsPage": {
     "meta": {

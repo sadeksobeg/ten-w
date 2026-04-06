@@ -1,9 +1,9 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactPhoneLink } from "@/components/contact/ContactPhoneLink";
 import { Section } from "@/components/ui/Section";
 import type { Locale } from "@/i18n/routing";
-import { getSiteUrl } from "@/lib/site";
 import { buildAlternates } from "@/lib/metadata-helpers";
 
 type Props = {
@@ -30,6 +30,11 @@ export default async function ContactPage({ params, searchParams }: Props) {
   const waHref = wa
     ? `https://wa.me/${wa.replace(/\+/g, "")}`
     : null;
+
+  const phoneRaw =
+    process.env.NEXT_PUBLIC_CONTACT_PHONE_RAW?.trim() || t("phoneRaw");
+  const phoneDisplay =
+    process.env.NEXT_PUBLIC_CONTACT_PHONE_DISPLAY?.trim() || t("phoneDisplay");
 
   return (
     <>
@@ -62,21 +67,12 @@ export default async function ContactPage({ params, searchParams }: Props) {
             <div>
               <h3 className="text-sm font-semibold text-gold">{t("phoneLabel")}</h3>
               <p className="mt-2">
-                <a
-                  href={`tel:${t("phoneRaw")}`}
-                  className="font-medium text-foreground underline-offset-4 hover:underline"
-                >
-                  {t("phoneDisplay")}
-                </a>
+                <ContactPhoneLink tel={phoneRaw} display={phoneDisplay} />
               </p>
             </div>
             <div>
               <h3 className="text-sm font-semibold text-gold">{t("hours")}</h3>
-              <p className="mt-2">
-                {locale === "ar"
-                  ? "الأحد–الخميس، ساعات العمل الرسمية"
-                  : "Sun–Thu, business hours"}
-              </p>
+              <p className="mt-2">{t("hoursLine")}</p>
             </div>
             {waHref ? (
               <a
@@ -88,9 +84,6 @@ export default async function ContactPage({ params, searchParams }: Props) {
                 {t("whatsapp")}
               </a>
             ) : null}
-            <p className="text-xs">
-              {getSiteUrl().origin}
-            </p>
           </div>
         </div>
       </Section>
