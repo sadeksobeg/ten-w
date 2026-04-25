@@ -32,11 +32,11 @@ export default async function InvestorsPage({ params }: Props) {
 
   return (
     <>
-      <Section className="border-b border-white/10 pb-14 pt-10 md:pb-16 md:pt-12">
+      <Section className="border-b border-white/10 pb-10 pt-8 sm:pb-14 sm:pt-10 md:pb-16 md:pt-12">
         <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-gold/85">
           {t("hero.kicker")}
         </p>
-        <h1 className="mt-3 font-[family-name:var(--font-cairo)] text-3xl font-bold md:text-4xl lg:text-[2.75rem] lg:leading-tight">
+        <h1 className="mt-3 font-[family-name:var(--font-cairo)] text-2xl font-bold sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-tight">
           {t("hero.title")}
         </h1>
         <p className="mt-4 max-w-3xl text-base text-muted md:text-lg">{t("hero.subtitle")}</p>

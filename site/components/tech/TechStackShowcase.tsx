@@ -204,6 +204,45 @@ export function TechStackShowcase({ items }: Props) {
         </div>
       </Section>
 
+      <Section className="border-t border-white/10 py-16 md:py-20">
+        <div className="mx-auto max-w-7xl">
+          <motion.h2
+            initial={reduced ? false : { opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+            className="font-[family-name:var(--font-cairo)] text-2xl font-bold md:text-3xl"
+          >
+            {t("standards.title")}
+          </motion.h2>
+          <p className="mt-3 max-w-3xl text-muted">{t("standards.subtitle")}</p>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {(["s1", "s2", "s3", "s4"] as const).map((sk, i) => (
+              <motion.div
+                key={sk}
+                initial={reduced ? false : { opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06, duration: 0.42 }}
+              >
+                <Card className="h-full border-white/12 bg-surface/50 p-5 backdrop-blur-sm sm:p-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold/85">
+                    {t(`standards.${sk}.eyebrow`)}
+                  </p>
+                  <h3 className="mt-3 text-base font-semibold text-foreground">
+                    {t(`standards.${sk}.title`)}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    {t(`standards.${sk}.body`)}
+                  </p>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
       <Section className="border-t border-white/10 bg-surface/35 py-16 md:py-20">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:gap-14">
           {(["p1", "p2", "p3", "p4"] as const).map((pk, i) => (

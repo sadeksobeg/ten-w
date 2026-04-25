@@ -9,6 +9,7 @@
     "team": "Team",
     "investors": "Investors",
     "blog": "Blog",
+    "growth": "Growth Engine",
     "contact": "Contact",
     "legal": "Legal",
     "openMenu": "Open menu",
@@ -339,15 +340,50 @@
   "PilotsShowcasePage": {
     "meta": {
       "title": "Showcase – labs & pilots",
-      "description": "Video and narrative about our pilots and product directions — multi-sector."
+      "description": "A showcase of what we deliver in labs and pilots — without relying on video."
     },
     "hero": {
       "title": "Showcase",
       "subtitle": "A short view of our work in the field — from pilots to production-ready systems."
     },
-    "videoTitle": "Company showcase video",
-    "videoPlaceholder": "Video will appear here when NEXT_PUBLIC_SHOWCASE_VIDEO_URL is set (YouTube or Vimeo link).",
-    "videoHint": "Paste a public YouTube watch URL in your environment variables.",
+    "reel": {
+      "eyebrow": "Pilot reel (illustrative)",
+      "title": "From signals to decisions — what a pilot looks like",
+      "subtitle": "A short, cinematic abstraction of how we take real operational signals, unify them, then ship dashboards, models, and runbooks your team can operate.",
+      "kpi1": { "label": "Timebox", "value": "2–6 weeks" },
+      "kpi2": { "label": "Scope", "value": "1–2 use cases" },
+      "kpi3": { "label": "Outcome", "value": "Measured" },
+      "cards": {
+        "c1": { "title": "Discovery", "body": "Align on constraints, data, users, and acceptance criteria. No vague scope." },
+        "c2": { "title": "Build", "body": "Integrations, pipeline, prototypes, and controls — wired into your environment." },
+        "c3": { "title": "Operate", "body": "Dashboards, runbooks, and handover so your team can own the next iteration." }
+      },
+      "disclaimer": "Visuals and numbers are illustrative examples — not production telemetry and not a guarantee of outcomes."
+    },
+    "sections": {
+      "what": {
+        "title": "What we test in a pilot",
+        "body": "A pilot is not a demo. It is a bounded delivery phase with metrics and acceptance criteria.",
+        "b1": "One operational workflow with clear inputs/outputs (tickets, alerts, field signals, etc.)",
+        "b2": "Data readiness and quality gates (what we trust vs what we fix)",
+        "b3": "Security baseline: identity, access, audit trail, and production-safe practices"
+      },
+      "deliver": {
+        "title": "What you receive",
+        "body": "You receive usable artifacts — not slides — so the program can continue into production.",
+        "b1": "Dashboards + KPI definitions (what success means)",
+        "b2": "A working pipeline + reproducible environments",
+        "b3": "Runbooks + handover notes for day-two operations"
+      },
+      "samples": {
+        "title": "Sample pilot stories (multi-sector)",
+        "body": "Examples of the kinds of pilots we run — adapted to context, data residency, and operational reality.",
+        "c1": { "title": "Security & SOC", "body": "Correlate alerts, reduce noise, and ship playbooks for faster containment." },
+        "c2": { "title": "Operations & SLAs", "body": "Unify telemetry and tickets with a view that predicts load and staffing needs." },
+        "c3": { "title": "Field & sensing", "body": "Connect sensors to actionable thresholds and seasonal forecasting dashboards." },
+        "disclaimer": "Examples are illustrative and generalized; final scope follows your constraints and agreement."
+      }
+    },
     "ctaPrimary": "Discuss a pilot",
     "ctaSecondary": "View intelligent systems"
   },
@@ -421,19 +457,43 @@
   "TechPage": {
     "meta": {
       "title": "Technology & engineering stack – T.E.N.E.G.T.A",
-      "description": "Enterprise-grade tools, observability, and engineering practices behind our intelligent systems."
+      "description": "A practical engineering standard: security baselines, observability, reproducible delivery, and a stack chosen for production."
     },
     "hero": {
       "kicker": "Engineering excellence",
       "title": "Technology that scales with your ambition",
-      "subtitle": "A modern, security-aware stack spanning experience layers, AI/ML, data platforms, and cloud-native operations — selected for reliability, auditability, and maintainability in real production environments.",
+      "subtitle": "We ship production systems with measurable SLOs, security baselines, and operator-ready runbooks — using a modern stack chosen for reliability, auditability, and long-term maintainability.",
       "badge1": "Cloud-native",
       "badge2": "Observable",
       "badge3": "Security-minded"
     },
     "scrollHint": "Explore",
     "stackSectionTitle": "Stack & tooling",
-    "stackSectionSubtitle": "Representative technologies used in enterprise-grade programs; final choices follow your compliance context, data residency, and target architecture.",
+    "stackSectionSubtitle": "Representative technologies used in enterprise-grade programs. Final selections follow your compliance constraints, data residency, and target architecture.",
+    "standards": {
+      "title": "Engineering standards we ship with",
+      "subtitle": "Tooling matters — but standards matter more. These are the practices we apply to reduce risk and keep delivery predictable.",
+      "s1": {
+        "eyebrow": "Security baseline",
+        "title": "Identity, least privilege, audit trails",
+        "body": "Clear access boundaries, hardened delivery pipelines, and change traceability suitable for enterprise procurement."
+      },
+      "s2": {
+        "eyebrow": "Observability",
+        "title": "Metrics, logs, traces → actions",
+        "body": "Dashboards and runbooks that operators can execute: alerting, triage, and recovery — not just pretty charts."
+      },
+      "s3": {
+        "eyebrow": "Delivery discipline",
+        "title": "Reproducible builds and rollbacks",
+        "body": "Staging, canary/gradual release when needed, and rollback paths with evidence and acceptance criteria."
+      },
+      "s4": {
+        "eyebrow": "Data & governance",
+        "title": "Definitions you can trust",
+        "body": "Data contracts, quality gates, and governance so analytics and ML programs remain auditable and stable over time."
+      }
+    },
     "pillars": {
       "p1": {
         "title": "Reliability & performance",
@@ -712,6 +772,523 @@
     },
     "ctaContact": "Contact us",
     "ctaEngagement": "Engagement models"
+  },
+  "Growth": {
+    "signOut": "Sign out",
+    "nextLevel": "Next: {name} at {n} closed deals",
+    "maxLevel": "You are at the top level path — keep compounding performance.",
+    "xpLine": "XP: {n}",
+    "networkRefWithCode": "Ref: {code}",
+    "motivation": {
+      "defaultPrimary": "Keep closing—every deal compounds rank, XP, and payouts.",
+      "dealsToNextLevel": "{n} closed deals to go until your next level milestone.",
+      "topWeekly": "You are #{rank} on the weekly leaderboard—elite momentum.",
+      "streakHot": "{n}-day activity streak—keep the chain alive.",
+      "percentileStrong": "You are ahead of {p}% of partners by lifetime closed deals.",
+      "percentileLine": "Ahead of {p}% of partners overall.",
+      "weeklyRankLine": "Weekly rank #{rank} of {total} partners ({closed} closes this week)."
+    },
+    "heroClient": {
+      "pillBrand": "T.E.N.E.G.T.A Growth Engine",
+      "pillSubtitle": "Partner Command Center",
+      "tagline": "You are not “selling services” in the traditional sense — you are building income, rank, and reputation inside a system designed to compound.",
+      "totalEarnings": "Total earnings",
+      "activeDeals": "Active deals",
+      "progress": "Progress",
+      "progressDeals": "{current} / {target} closed deals",
+      "weeklyRankLabel": "Rank this week",
+      "weeklyRankSub": "{closed} closes · {total} partners"
+    },
+    "hero": {
+      "addLead": "Add new lead",
+      "addLeadHint": "Creates a pending deal tied to you. Admin closes it to trigger commissions, XP, and badges.",
+      "referral": "Your referral code"
+    },
+    "lead": {
+      "product": "Product",
+      "client": "Client / label",
+      "clientPh": "e.g. Dr. Ali Clinic",
+      "notes": "Notes",
+      "notesPh": "Optional context"
+    },
+    "deals": {
+      "title": "My deals",
+      "empty": "No deals yet — add your first lead.",
+      "noClient": "No client label",
+      "closed": "closed",
+      "pending": "pending",
+      "status": {
+        "pending": "Pending",
+        "closed": "Closed",
+        "lost": "Lost"
+      }
+    },
+    "network": {
+      "title": "My network",
+      "empty": "No partners under you yet. Share your referral code."
+    },
+    "earnings": {
+      "title": "Earnings",
+      "empty": "No commissions yet. Close a deal to generate ledger entries.",
+      "bonus": "Bonus / adjustment",
+      "tier": "Tier {tier}",
+      "withdrawAmount": "Withdraw amount (USD)",
+      "method": "Payout method",
+      "methodPh": "Bank / wallet notes",
+      "request": "Request payout"
+    },
+    "leaderboard": {
+      "title": "Weekly leaderboard",
+      "empty": "No closes in the last 7 days yet.",
+      "anon": "Partner",
+      "monthlyTitle": "Last 30 days",
+      "monthlyEmpty": "No closes in the last 30 days yet.",
+      "monthlyYou": "Your 30-day rank: #{rank} ({closed} closes)"
+    },
+    "streak": {
+      "title": "Daily streak",
+      "current": "Current: {n} days",
+      "longest": "Best: {n} days",
+      "hint": "Streak updates when you visit the dashboard."
+    },
+    "missions": {
+      "title": "Daily missions",
+      "empty": "No missions configured yet.",
+      "progress": "{current} / {target}",
+      "done": "Completed today"
+    },
+    "activity": {
+      "title": "Live momentum",
+      "empty": "No recent events yet."
+    },
+    "badges": {
+      "title": "Badges",
+      "empty": "No badges yet — close deals and grow your network.",
+      "hiddenTag": "hidden",
+      "unlockTitle": "BADGE UNLOCKED",
+      "unlockSubtitle": "Key: {key}",
+      "unlockCta": "Continue"
+    },
+    "kit": {
+      "title": "Marketing kit",
+      "record": "Record kit engagement (+AI Seller progress)",
+      "audience": "Target audience",
+      "pain": "Pain points",
+      "solution": "Solution",
+      "script": "Script",
+      "noKit": "No marketing kit configured for this product yet.",
+      "icpTitle": "Ideal customer (ICP)",
+      "icpBusiness": "Business type",
+      "icpTeam": "Team size",
+      "icpAge": "Decision-maker age band",
+      "tabs": {
+        "overview": "ICP & story",
+        "scripts": "Scripts",
+        "objections": "Objections",
+        "legacy": "Legacy script"
+      },
+      "scriptLabels": {
+        "direct": "Direct pitch",
+        "consultative": "Consultative",
+        "whatsapp": "WhatsApp opener",
+        "call": "Call opener"
+      },
+      "noObjections": "No objection handlers configured yet.",
+      "legacyScript": "Original single script",
+      "openPlaybook": "Open full playbook",
+      "playbook": {
+        "headline": "Interactive marketing command page",
+        "subline": "Everything a marketer needs: contract framing, product value, talk tracks, objections, and execution checklist.",
+        "supportingTitle": "Supporting market notes",
+        "back": "Back to dashboard",
+        "tabs": {
+          "contract": "Contract & value",
+          "talk": "How to talk",
+          "objections": "Objection lab",
+          "checklist": "Execution checklist"
+        },
+        "contract": {
+          "price": "Contract value",
+          "commission": "Base commission",
+          "value": "Positioning",
+          "valueLine": "Pitch this product as a measurable outcome package, not a one-off service.",
+          "notesTitle": "Contract notes",
+          "note1": "Start with business impact and tie each feature to money, time, or conversion.",
+          "note2": "Set one clear next step before ending the call (audit, demo, or proposal date).",
+          "note3": "Anchor value first, then discuss price with rollout scope and timeline."
+        },
+        "talk": {
+          "tone": "Conversation mode",
+          "clientState": "Buyer concern",
+          "stateTrust": "Needs trust and proof",
+          "stateCost": "Price sensitive",
+          "stateSpeed": "Wants speed",
+          "generatedScript": "Adaptive script",
+          "noScript": "No script is configured for this mode yet.",
+          "focusPrefix": "Focus line",
+          "focusTrust": "Use proof, similar cases, and clear expected outcomes.",
+          "focusCost": "Emphasize ROI, timeline efficiency, and payback speed.",
+          "focusSpeed": "Highlight deployment speed and immediate operational wins."
+        },
+        "checklist": {
+          "title": "Pre-close checklist",
+          "fit": "Confirmed ICP fit and decision owner",
+          "pain": "Mapped top 2 pain points to product capabilities",
+          "timeline": "Aligned implementation timeline and urgency",
+          "nextStep": "Locked one explicit next step with date",
+          "followup": "Prepared follow-up message and objection fallback",
+          "hint": "Keep one dominant message: outcome first, action second, details third."
+        }
+      }
+    },
+    "insights": {
+      "label": "Intelligence",
+      "dotAria": "Slide {n}",
+      "slides": {
+        "followUpLoad": "You have {n} pending deals — short follow-ups this week usually lift conversion.",
+        "streakProtect": "{n}-day streak: consistency compounds — protect the chain with one daily move.",
+        "rankClimb": "Weekly rank #{rank} of {total} — one more close can jump you several spots mid-week.",
+        "pipelineClean": "Clean pipeline: no pending friction — time to refill with net-new leads.",
+        "defaultMomentum": "Momentum is narrative: closes, visibility, and cadence — keep all three in motion."
+      }
+    },
+    "journey": {
+      "title": "Deal journey",
+      "steps": {
+        "lead": "Lead",
+        "contacted": "Contacted",
+        "negotiation": "Negotiation",
+        "closed": "Closed",
+        "paid": "Paid"
+      },
+      "lost": "Deal stopped — capture the lesson and re-aim."
+    },
+    "chat": {
+      "back": "Back to dashboard",
+      "nav": "Support chat",
+      "threadTitle": "Conversation",
+      "empty": "No messages yet — write the first line.",
+      "placeholder": "Message…",
+      "send": "Send",
+      "sendError": "Could not send. Try again.",
+      "adminTag": "Admin",
+      "partnerTag": "Team",
+      "message": {
+        "kindBonus": "Bonus",
+        "kindBadge": "Badge",
+        "kindSystem": "System",
+        "kindWarning": "Alert",
+        "kindAction": "Action"
+      },
+      "inline": {
+        "pushClose": "Push to close",
+        "offerBoost": "Offer boost",
+        "askUpdate": "Ask update",
+        "commissionPlan": "Commission plan"
+      },
+      "timelineDay": "{date}",
+      "timelineToday": "Today",
+      "timelineEvent": "Event",
+      "suggestedActions": "Suggested",
+      "microActionOk": "Done",
+      "microImpactOk": "Sent — modeled close lift ≈ +{n}%",
+      "microCommitOk": "Action logged — committed path",
+      "intelligence": {
+        "contextTitle": "Economic context",
+        "decisionTitle": "Decision radar",
+        "primarySignalLabel": "Primary signal",
+        "primaryCloseNow": "CLOSE NOW",
+        "primaryRescueNow": "RESCUE PIPELINE",
+        "primaryUnblockNow": "UNBLOCK NOW",
+        "primarySteadyNow": "HOLD STEADY",
+        "systemDirective": "System directive",
+        "directive_push_close": "Lock one decisive close step — deadline + next signature.",
+        "directive_offer_bonus": "Authorize a performance bonus now to remove last-mile friction.",
+        "directive_ask_update": "Demand a blocker update with a clear 24h reply window.",
+        "directive_commission_nudge": "Re-state commission so payout expectation unlocks momentum.",
+        "directiveImpactHint": "If executed: illustrative impact ≈ +{n}% close probability",
+        "commitPathLabel": "Confirmed action path",
+        "commitLockedBadge": "Recommended action locked",
+        "commitAction_push_close": "Push close now — one deadline + next signature.",
+        "commitAction_offer_bonus": "Give a ~$50 performance bonus now",
+        "commitAction_ask_update": "Demand a blocker update — 24h reply window",
+        "commitAction_commission_nudge": "Re-state commission path now",
+        "probShiftLabel": "Modeled probability shift",
+        "probShiftModeled": "Illustrative shift for this intervention — not a live forecast.",
+        "expectedOutcomeTitle": "Expected outcome",
+        "expectedOutcomeCloseMin": "Deal likely closes within ~{m} min if cadence holds",
+        "expectedOutcomeHint": "Heuristic from score + state — not a guarantee.",
+        "riskRibbonHigh": "High risk pipeline",
+        "riskRibbonMedium": "Medium risk — tighten cadence",
+        "riskRibbonLow": "Pipeline stable",
+        "earnedLabel": "Earned",
+        "activeDealTitle": "Active deal",
+        "noFocusDeal": "No pending deal in focus — link a deal or wait for pipeline.",
+        "closeProbability": "Close probability",
+        "stageLead": "Lead",
+        "stageNegotiation": "Negotiation",
+        "stageWon": "Closed",
+        "stageLost": "Lost",
+        "insightTitle": "System insight",
+        "insightRescue": "Rescue mode: reduce pendings with explicit dates before incentives.",
+        "insightPushClose": "Momentum is high — push a single next step and optional micro-bonus.",
+        "insightMomentum": "Streak is hot — stack a crisp recap + deadline to convert.",
+        "insightFollowUp": "Solid window — ask for blockers and confirm the close window.",
+        "insightSteady": "Steady state — keep rhythm; log next touchpoint.",
+        "patternTitle": "Behavior signal",
+        "patternCloser": "Pattern: strong closer — rewards after decisive pushes land well.",
+        "patternHeavyPipeline": "Pattern: heavy pending load — shorter cycles beat big pushes.",
+        "patternNeutral": "Pattern: neutral — standard playbook applies.",
+        "increaseCommission": "Commission plan",
+        "filterClosing": "Closing now",
+        "filterNew": "New",
+        "inboxProb": "{n}% close",
+        "statPending": "Pending",
+        "cmdStateClosingTitle": "Closing window active",
+        "cmdStateClosingSub": "Strong close signal — drive one decisive next step.",
+        "cmdStateRescueTitle": "Rescue the pipeline",
+        "cmdStateRescueSub": "High risk load — dates and clarity before bigger incentives.",
+        "cmdStateStaleTitle": "Momentum cooling",
+        "cmdStateStaleSub": "Score dropped from age or drag — unblock the deal explicitly.",
+        "cmdStateSteadyTitle": "Steady state",
+        "cmdStateSteadySub": "No extreme signal — keep rhythm and logging.",
+        "probFactorsTitle": "Score drivers",
+        "detailsToggle": "More metrics & links",
+        "factorUp": "+",
+        "factorDown": "−",
+        "factorNeutral": "·",
+        "probFactors": {
+          "dealValue": "Deal size",
+          "streak": "Streak / cadence",
+          "conversion": "Win rate",
+          "recency": "Freshness vs stall"
+        },
+        "momentumRising": "Momentum rising",
+        "momentumStable": "Momentum stable",
+        "momentumDropping": "Momentum dropping",
+        "suggestPushCloseHi": "Push close (high impact)",
+        "suggestOfferBoostHi": "Offer boost angle",
+        "suggestAskUpdateHi": "Ask for update",
+        "suggestCommissionHi": "Commission plan",
+        "suggestUnblockHi": "Unblock pipeline",
+        "suggestionsMore": "More actions",
+        "empty": "Select a conversation to see partner intelligence.",
+        "loading": "Loading insights…",
+        "error": "Could not load partner context.",
+        "refresh": "Refresh",
+        "level": "Level",
+        "xp": "XP",
+        "earnings": "Lifetime earnings",
+        "conversion": "Win rate",
+        "risk": "Pipeline risk",
+        "riskReason": {
+          "riskOk": "Pipeline looks balanced for follow-ups.",
+          "riskHighPending": "Many pending deals with no streak — risk of stall.",
+          "riskMediumFollowUp": "Several pendings and low streak — schedule a nudge."
+        },
+        "dealsLine": "{closed} closed · {pending} pending · streak {streak}d",
+        "closedLabel": "{n} closes",
+        "linkedDeal": "Linked deal",
+        "noDeal": "No link",
+        "saveLink": "Save",
+        "priority": "Priority",
+        "priorityHigh": "High",
+        "priorityNormal": "Normal",
+        "priorityLow": "Low",
+        "actionsTitle": "Quick actions",
+        "amountUsd": "Amount (USD)",
+        "giveBonus": "Give bonus",
+        "grantBadge": "Grant badge",
+        "noBadges": "No admin badges",
+        "suggestClose": "Push to close",
+        "suggestBonus": "Offer boost angle",
+        "suggestUpdate": "Ask for update",
+        "activeDeals": "Recent deals",
+        "quickBusy": "Working…",
+        "filterAll": "All",
+        "filterOpen": "Open",
+        "segmentHigh": "High value",
+        "segmentAtRisk": "At risk",
+        "segmentStandard": "Standard",
+        "linkedPill": "Deal"
+      },
+      "admin": {
+        "pageTitle": "Partner inbox",
+        "timeToAct": "Time to act: {m} min",
+        "windowClosing": "Window closing soon",
+        "inbox": "Inbox",
+        "open": "Open",
+        "resolved": "Resolved",
+        "resolve": "Resolve",
+        "pick": "Select a thread"
+      }
+    },
+    "admin": {
+      "enter": "Admin",
+      "nav": {
+        "overview": "Overview",
+        "deals": "Deals",
+        "products": "Products",
+        "badges": "Badges",
+        "levels": "Levels",
+        "tiers": "Commission tiers",
+        "rewards": "Monthly rewards",
+        "insights": "Insights",
+        "overrides": "Partner overrides",
+        "bonuses": "Manual bonuses",
+        "partnerDashboard": "Partner dashboard",
+        "demo": "Cinematic demo",
+        "chat": "Inbox"
+      },
+      "demo": {
+        "pageTitle": "Cinematic demo mode",
+        "pageLead": "Investor-grade walkthrough: scripted revenue beats, network pulse, and intelligence — without touching production data.",
+        "launch": "Launch demo experience",
+        "close": "Exit demo",
+        "speed": "Playback speed",
+        "liveFeed": "Live feed",
+        "storyChat": "Decision timeline",
+        "storyChatEmpty": "Story beats will appear here as the demo runs.",
+        "metrics": "Simulated metrics",
+        "volume": "Deal volume",
+        "commission": "Commission (you)",
+        "rank": "Weekly rank",
+        "network": "Network nodes",
+        "prediction": "Month projection",
+        "networkMap": "Network pulse",
+        "dealJourney": "Deal journey",
+        "reducedTitle": "Reduced motion",
+        "reducedBody": "Every beat is summarized below. Use “Next beat” to advance manually.",
+        "nextBeat": "Next beat",
+        "replay": "Replay",
+        "loading": "Starting session…",
+        "chapter": "Chapter",
+        "hookLine": "Growth Intelligence",
+        "dealStage0": "Lead",
+        "dealStage1": "Contacted",
+        "dealStage2": "Negotiation",
+        "dealStage3": "Closed",
+        "dealStage4": "Paid",
+        "revealAll": "Reveal all beats",
+        "startError": "Could not start the demo. Check your connection and try again.",
+        "variantLabel": "Script path",
+        "variantAlpha": "Signal · North",
+        "variantBeta": "Signal · Coast",
+        "variantGamma": "Signal · Desert",
+        "soundOn": "Sound on",
+        "soundOff": "Sound off",
+        "sseReplay": "SSE replay (DB)",
+        "sseReplayGo": "Replay from database (SSE)"
+      },
+      "overviewTitle": "Admin overview",
+      "users": "Users",
+      "partners": "Partner profiles",
+      "dealsClosed": "Closed deals",
+      "pendingDeals": "Pending deals",
+      "ledgerSum": "Commission ledger (sum)",
+      "dealsPage": {
+        "title": "Deal operations",
+        "partnerEmail": "Partner email",
+        "partner": "Partner",
+        "product": "Product",
+        "status": "Status",
+        "close": "Close & pay commissions",
+        "createTitle": "Create pending deal",
+        "createSubmit": "Create",
+        "clientLabel": "Client label"
+      },
+      "productsPage": {
+        "title": "Products & commissions",
+        "save": "Save",
+        "priceUsd": "Price (USD)",
+        "commissionUsd": "Commission base (USD)",
+        "kitJson": "Marketing kit (JSON)",
+        "kitSave": "Save kit JSON"
+      },
+      "badgesPage": {
+        "title": "Assign admin badge",
+        "email": "User email",
+        "submit": "Grant badge",
+        "badgeKey": "Badge key",
+        "revokeTitle": "Revoke badge",
+        "revokeHint": "Removes any badge (including auto badges) from the user.",
+        "revokeSubmit": "Revoke",
+        "revokeBadgeKey": "Badge key"
+      },
+      "rewardsPage": {
+        "title": "Leaderboard rewards",
+        "hint": "Applies configured monthly cash bonuses to top partners (idempotent for the current UTC month).",
+        "submit": "Run monthly bonus pass"
+      },
+      "insightsPage": {
+        "title": "Operational insights",
+        "inactiveTitle": "Partners inactive (no closed deal in 30 days)",
+        "conversionTitle": "Deal funnel",
+        "pending": "Pending",
+        "closed": "Closed",
+        "lost": "Lost",
+        "winRate": "Win rate (closed / (closed+lost))"
+      },
+      "overridesPage": {
+        "title": "Partner commission overrides",
+        "hint": "Leave product slug empty for a global override. Values apply on the next deal close.",
+        "email": "Partner email",
+        "slug": "Product slug (optional)",
+        "commissionUsd": "Commission base (USD)",
+        "note": "Note",
+        "submit": "Save override"
+      },
+      "bonusesPage": {
+        "title": "Manual bonuses",
+        "hint": "Credits a tier-0 ledger entry (visible in partner earnings).",
+        "email": "Partner email",
+        "amountUsd": "Amount (USD)",
+        "note": "Internal note",
+        "submit": "Credit bonus"
+      },
+      "levelsPage": {
+        "title": "Level thresholds",
+        "save": "Save",
+        "minDeals": "Min closed deals",
+        "salaryUsd": "Salary (USD/month, 0 clears)"
+      },
+      "tiersPage": {
+        "title": "Multi-level commission (basis points)",
+        "hint": "10000 bps = 100% of the product commission base to tier 1. Tier 2/3 are additional percentages of the same base.",
+        "save": "Save",
+        "tier1": "Tier 1 bps",
+        "tier2": "Tier 2 bps",
+        "tier3": "Tier 3 bps"
+      },
+      "levelsOrderLabel": "Order {n}",
+      "tiersMissingSeed": "Tier configuration is missing. Run: npx prisma db seed"
+    },
+    "auth": {
+      "signInTitle": "Partner sign-in",
+      "registerTitle": "Create partner account",
+      "email": "Email",
+      "password": "Password",
+      "name": "Name",
+      "referral": "Referral code (optional)",
+      "submit": "Continue",
+      "create": "Create account",
+      "switchToRegister": "Need an account? Register",
+      "switchToSignIn": "Already have an account? Sign in",
+      "registerIntro": "Create your partner profile to start earning when deals close.",
+      "signInHeroEyebrow": "T.E.N.E.G.T.A Growth Engine",
+      "signInHeroTitle": "Your command center for partner income",
+      "signInHeroLine1": "Commissions, levels, and XP — unified in one live workspace.",
+      "signInHeroLine2": "Build rank and reputation that compound instead of one-off hustle.",
+      "signInHeroLine3": "Network-aware payouts built for operators who scale with discipline.",
+      "signInError": "Invalid email or password.",
+      "errors": {
+        "invalid_input": "Please check the fields and try again.",
+        "email_taken": "This email is already registered.",
+        "invalid_referral": "Referral code was not found.",
+        "missing_seed": "Server data is not ready. Run database seed.",
+        "unknown": "Something went wrong. Try again."
+      }
+    }
   },
   "Common": {
     "learnMore": "Learn more",

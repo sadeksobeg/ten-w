@@ -30,24 +30,29 @@ export default async function ProjectsPage({ params }: Props) {
 
   return (
     <>
-      <Section className="border-b border-white/10 pb-12 pt-10">
-        <h1 className="font-[family-name:var(--font-cairo)] text-3xl font-bold md:text-4xl">
-          {t("hero.title")}
-        </h1>
-        <p className="mt-3 max-w-2xl text-muted">{t("hero.subtitle")}</p>
+      <Section className="border-b border-white/10 pb-10 pt-8 sm:pb-12 sm:pt-10">
+        <div className="max-w-3xl">
+          <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-bold sm:text-3xl md:text-4xl">
+            {t("hero.title")}
+          </h1>
+          <p className="mt-3 text-muted">{t("hero.subtitle")}</p>
+        </div>
       </Section>
 
       <Section>
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
           {projects.map((p) => (
-            <Card key={p.slug}>
-              <h2 className="text-lg font-semibold text-foreground">
+            <Card
+              key={p.slug}
+              className="flex h-full flex-col border-white/12 p-5 transition-colors hover:border-gold/40 sm:p-6"
+            >
+              <h2 className="text-lg font-semibold text-foreground sm:text-xl">
                 {p.title[cl]}
               </h2>
-              <p className="mt-2 text-sm text-muted">{p.excerpt[cl]}</p>
+              <p className="mt-2 text-sm leading-7 text-muted">{p.excerpt[cl]}</p>
               <Link
                 href={`/projects/${p.slug}`}
-                className="mt-4 inline-block text-sm font-semibold text-gold hover:underline"
+                className="mt-5 inline-flex min-h-10 items-center rounded-md border border-gold/40 px-4 text-sm font-semibold text-gold transition-colors hover:border-gold/70 hover:bg-gold-dim/40"
               >
                 {t("readMore")}
               </Link>

@@ -46,14 +46,14 @@ export default async function CaseStudyDetailPage({ params }: Props) {
 
   return (
     <>
-      <Section className="border-b border-white/10 pb-12 pt-10">
+      <Section className="border-b border-white/10 pb-10 pt-8 sm:pb-12 sm:pt-10">
         <Link
           href="/case-studies"
           className="text-sm font-medium text-gold hover:underline"
         >
           ← {t("backToList")}
         </Link>
-        <h1 className="mt-4 font-[family-name:var(--font-cairo)] text-3xl font-bold md:text-4xl">
+        <h1 className="mt-4 font-[family-name:var(--font-cairo)] text-2xl font-bold sm:text-3xl md:text-4xl">
           {cs.title[cl]}
         </h1>
         <p className="mt-3 max-w-3xl text-muted md:text-lg">{cs.excerpt[cl]}</p>

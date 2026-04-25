@@ -23,8 +23,8 @@ export default async function AboutPage({ params }: Props) {
 
   return (
     <>
-      <Section className="border-b border-white/10 pb-12 pt-10">
-        <h1 className="font-[family-name:var(--font-cairo)] text-3xl font-bold md:text-4xl">
+      <Section className="border-b border-white/10 pb-10 pt-8 sm:pb-12 sm:pt-10">
+        <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-bold sm:text-3xl md:text-4xl">
           {t("hero.title")}
         </h1>
       </Section>

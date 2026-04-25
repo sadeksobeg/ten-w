@@ -43,32 +43,32 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   return (
     <>
-      <Section className="border-b border-white/10 pb-12 pt-10">
+      <Section className="border-b border-white/10 pb-10 pt-8 sm:pb-12 sm:pt-10">
         <Link
           href="/projects"
-          className="text-sm font-medium text-gold hover:underline"
+          className="inline-flex min-h-10 items-center rounded-md border border-gold/40 px-4 text-sm font-medium text-gold transition-colors hover:border-gold/70 hover:bg-gold-dim/40"
         >
           ← {t("hero.title")}
         </Link>
-        <h1 className="mt-4 font-[family-name:var(--font-cairo)] text-3xl font-bold md:text-4xl">
+        <h1 className="mt-4 font-[family-name:var(--font-cairo)] text-2xl font-bold sm:text-3xl md:text-4xl">
           {project.title[cl]}
         </h1>
         <p className="mt-3 max-w-3xl text-muted">{project.excerpt[cl]}</p>
       </Section>
 
       <Section>
-        <div className="grid gap-6 md:grid-cols-3">
-          <Card>
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
+          <Card className="h-full border-white/12 p-5 sm:p-6">
             <h2 className="text-sm font-semibold text-gold">{t("challenge")}</h2>
-            <p className="mt-2 text-sm text-muted">{project.challenge[cl]}</p>
+            <p className="mt-2 text-sm leading-7 text-muted">{project.challenge[cl]}</p>
           </Card>
-          <Card>
+          <Card className="h-full border-white/12 p-5 sm:p-6">
             <h2 className="text-sm font-semibold text-gold">{t("solution")}</h2>
-            <p className="mt-2 text-sm text-muted">{project.solution[cl]}</p>
+            <p className="mt-2 text-sm leading-7 text-muted">{project.solution[cl]}</p>
           </Card>
-          <Card>
+          <Card className="h-full border-white/12 p-5 sm:p-6">
             <h2 className="text-sm font-semibold text-gold">{t("results")}</h2>
-            <p className="mt-2 text-sm text-muted">{project.results[cl]}</p>
+            <p className="mt-2 text-sm leading-7 text-muted">{project.results[cl]}</p>
           </Card>
         </div>
       </Section>

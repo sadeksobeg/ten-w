@@ -24,7 +24,7 @@ export function GlassCard({ children, className = "", onMouseMove, onMouseLeave,
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-2xl border border-white/12 bg-white/[0.035] p-7 shadow-[0_0_0_1px_rgba(201,160,97,0.06),0_24px_64px_-32px_rgba(0,0,0,0.85)] backdrop-blur-xl transition-[border-color,box-shadow,transform] duration-300 hover:border-gold/30 hover:shadow-[0_0_52px_-24px_rgba(201,160,97,0.35)] ${className}`}
+      className={`group relative overflow-hidden rounded-2xl border border-white/12 bg-white/[0.035] p-7 shadow-[0_0_0_1px_rgba(201,160,97,0.06),0_24px_64px_-32px_rgba(0,0,0,0.85)] backdrop-blur-xl transition-[border-color,box-shadow,transform] duration-300 hover:border-gold/30 hover:shadow-[0_0_52px_-24px_rgba(201,160,97,0.35)] motion-safe:hover:-translate-y-0.5 ${className}`}
       onMouseMove={move}
       onMouseLeave={leave}
       {...rest}

@@ -27,8 +27,8 @@ export default async function WhyUsPage({ params }: Props) {
 
   return (
     <>
-      <Section className="border-b border-white/10 pb-12 pt-10">
-        <h1 className="font-[family-name:var(--font-cairo)] text-3xl font-bold md:text-4xl">
+      <Section className="border-b border-white/10 pb-10 pt-8 sm:pb-12 sm:pt-10">
+        <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-bold sm:text-3xl md:text-4xl">
           {t("title")}
         </h1>
         <p className="mt-4 max-w-3xl text-muted md:text-lg">{t("intro")}</p>

@@ -145,6 +145,141 @@ export const fallbackProjects: ProjectCard[] = [
       en: "Materially reduced detection and containment time within months.",
     },
   },
+  {
+    slug: "customer-ops-triage",
+    title: {
+      ar: "منصة فرز تذاكر وخدمة العملاء",
+      en: "Customer operations triage platform",
+    },
+    excerpt: {
+      ar: "تصنيف تلقائي للتذاكر، تجميع حسب السبب الجذري، وأولوية مبنية على أثر الأعمال.",
+      en: "Automated ticket classification, root-cause clustering, and priority based on business impact.",
+    },
+    challenge: {
+      ar: "تكدس تذاكر، وقت انتظار مرتفع، وصعوبة اكتشاف الأسباب المتكررة.",
+      en: "Ticket backlog, long wait times, and difficulty spotting recurring root causes.",
+    },
+    solution: {
+      ar: "نماذج تصنيف + قواعد، ولوحة تشغيل تربط القنوات بسير العمل وقياس SLA.",
+      en: "Hybrid models + rules, plus an ops dashboard connecting channels to workflows and SLA tracking.",
+    },
+    results: {
+      ar: "تحسن وقت الاستجابة ووضوح أعلى لأسباب الأعطال المتكررة وتوجيه الموارد.",
+      en: "Improved response times, clearer recurring issue visibility, and better staffing decisions.",
+    },
+    metrics: {
+      ar: "−28% زمن انتظار · +وضوح للأسباب",
+      en: "−28% wait time · clearer root causes",
+    },
+  },
+  {
+    slug: "predictive-maintenance",
+    title: {
+      ar: "صيانة تنبؤية لبيئة صناعية",
+      en: "Industrial predictive maintenance",
+    },
+    excerpt: {
+      ar: "ربط إشارات حساسات ومؤشرات تشغيل لتوقع الأعطال وتقليل التوقف غير المخطط.",
+      en: "Connect sensor signals and operations data to predict failures and reduce unplanned downtime.",
+    },
+    challenge: {
+      ar: "توقف مفاجئ وتكاليف صيانة تفاعلية وغياب مؤشرات مبكرة موثوقة.",
+      en: "Unexpected downtime, reactive maintenance costs, and unreliable early indicators.",
+    },
+    solution: {
+      ar: "تجميع سلاسل زمنية، ميزات هندسية، نماذج شذوذ، ولوحات للصيانة والإنتاج.",
+      en: "Time-series ingestion, feature engineering, anomaly models, and maintenance/production dashboards.",
+    },
+    results: {
+      ar: "تقليل الأعطال المفاجئة ورفع نسبة الصيانة الوقائية مع قرار أسرع.",
+      en: "Fewer surprise failures, higher preventive maintenance ratio, and faster decisions.",
+    },
+    metrics: {
+      ar: "−18% توقف · +استباقية",
+      en: "−18% downtime · more proactive",
+    },
+  },
+  {
+    slug: "data-platform-governance",
+    title: {
+      ar: "منصة بيانات مؤسسية مع حوكمة",
+      en: "Enterprise data platform with governance",
+    },
+    excerpt: {
+      ar: "طبقة بيانات موحدة، كتالوج، وصلاحيات دقيقة لدعم التحليلات والتعلم الآلي بأمان.",
+      en: "Unified data layer, catalog, and fine-grained access controls for safe analytics and ML.",
+    },
+    challenge: {
+      ar: "مصادر متعددة، تعريفات متناقضة، ومخاطر وصول غير مضبوط للبيانات.",
+      en: "Many sources, inconsistent definitions, and uncontrolled access risk.",
+    },
+    solution: {
+      ar: "نمذجة نطاقات، كتالوج بيانات، سياسات وصول، ومراقبة جودة وتدفقات موثقة.",
+      en: "Domain modeling, data catalog, access policies, quality monitoring, and documented pipelines.",
+    },
+    results: {
+      ar: "تقليل الازدواجية ورفع الثقة بالبيانات لتقارير أسرع وبرامج ML قابلة للتدقيق.",
+      en: "Less duplication and higher trust enabling faster reporting and auditable ML programs.",
+    },
+    metrics: {
+      ar: "+ثقة · −ازدواجية",
+      en: "higher trust · less duplication",
+    },
+  },
+  {
+    slug: "secure-delivery-pipeline",
+    title: {
+      ar: "خط تسليم برمجي آمن (CI/CD) مع مراقبة",
+      en: "Secure CI/CD delivery with observability",
+    },
+    excerpt: {
+      ar: "بناء ونشر بإثباتات، مسارات تراجع، ومراقبة لزيادة الاعتمادية وتقليل المخاطر.",
+      en: "Evidence-based builds, rollback paths, and monitoring to raise reliability and reduce risk.",
+    },
+    challenge: {
+      ar: "نشر يدوي وأخطاء متكررة وصعوبة تتبع التغييرات والتوافق الأمني.",
+      en: "Manual releases, recurring errors, and difficulty tracking changes and security posture.",
+    },
+    solution: {
+      ar: "أتمتة CI/CD، فحص أمني، بيئات متطابقة، وربط بالمقاييس والسجلات والمسارات.",
+      en: "CI/CD automation, security scanning, reproducible environments, and telemetry wiring (metrics/logs/traces).",
+    },
+    results: {
+      ar: "إصدارات أسرع بثقة أعلى وتقليل حوادث مرتبطة بالنشر.",
+      en: "Faster releases with higher confidence and fewer release-related incidents.",
+    },
+    metrics: {
+      ar: "+سرعة نشر · −حوادث",
+      en: "faster releases · fewer incidents",
+    },
+  },
+  {
+    slug: "identity-access-modernization",
+    title: {
+      ar: "تحديث الهوية والصلاحيات (IAM) للمؤسسات",
+      en: "Enterprise identity & access modernization (IAM)",
+    },
+    excerpt: {
+      ar: "توحيد الدخول، سياسات أقل قدرًا، وتسجيل تدقيق يسهّل الامتثال ويقلل المخاطر.",
+      en: "Consolidated access, least-privilege policies, and audit trails for compliance and reduced risk.",
+    },
+    challenge: {
+      ar: "حسابات متفرقة، صلاحيات واسعة، وصعوبة تتبع الوصول عبر الأنظمة.",
+      en: "Scattered accounts, overly broad permissions, and poor cross-system access visibility.",
+    },
+    solution: {
+      ar: "نموذج أدوار، ربط موفري هوية، سياسات وصول، وتكامل مع التطبيقات والخدمات.",
+      en: "Role model, IdP integration, access policies, and integrations across apps and services.",
+    },
+    results: {
+      ar: "تقليل مخاطر الوصول وتحسين الجاهزية للتدقيق.",
+      en: "Reduced access risk and improved audit readiness.",
+    },
+    metrics: {
+      ar: "جاهزية تدقيق · أقل صلاحيات",
+      en: "audit-ready · least privilege",
+    },
+  },
 ];
 
 export const fallbackPosts: BlogPostCard[] = [
@@ -280,6 +415,60 @@ export const fallbackCaseStudies: CaseStudyCard[] = [
     results: {
       ar: "رؤية أدق للتربة والري والتوقيت الزراعي.",
       en: "Sharper insight into soil, irrigation, and crop timing.",
+    },
+  },
+  {
+    slug: "customer-triage",
+    title: {
+      ar: "فرز خدمة العملاء بنهج قابل للقياس",
+      en: "Measurable customer triage",
+    },
+    excerpt: {
+      ar: "تحويل تراكم التذاكر إلى مسار فرز وتعلم مستمر.",
+      en: "Turning backlog into a triage flow with continuous learning.",
+    },
+    problem: {
+      ar: "تذاكر كثيرة مع غياب أولوية واضحة وتباين في جودة الردود.",
+      en: "High ticket volume without clear prioritization and inconsistent response quality.",
+    },
+    approach: {
+      ar: "تعريف فئات وأسباب، تدريب مصنف، وربط النتائج بإجراءات واضحة للفريق.",
+      en: "Define categories and reasons, train a classifier, and tie outcomes to clear operator actions.",
+    },
+    architecture: {
+      ar: "تكامل قنوات، تخزين أحداث، نماذج + قواعد، ولوحات جودة وسرعة استجابة.",
+      en: "Channel integrations, event store, hybrid models + rules, and dashboards for quality and speed.",
+    },
+    results: {
+      ar: "تحسن زمن المعالجة وزيادة وضوح الأسباب المتكررة التي تحتاج إصلاحاً جذرياً.",
+      en: "Improved handling time and clearer recurring causes requiring systemic fixes.",
+    },
+  },
+  {
+    slug: "secure-delivery",
+    title: {
+      ar: "تسليم برمجي آمن من الفكرة إلى الإنتاج",
+      en: "Secure delivery from idea to production",
+    },
+    excerpt: {
+      ar: "تقليل المخاطر عبر خطوط تسليم قابلة للتتبع ومراقبة تشغيلية.",
+      en: "Reducing risk through traceable pipelines and operational visibility.",
+    },
+    problem: {
+      ar: "نشر يدوي وتغييرات غير موثقة تزيد احتمال انقطاع الخدمة.",
+      en: "Manual releases and undocumented changes increased outage likelihood.",
+    },
+    approach: {
+      ar: "معايير إصدار، أتمتة نشر، وفحوصات جودة/أمن قبل الإنتاج.",
+      en: "Release standards, automated deployments, and quality/security gates before production.",
+    },
+    architecture: {
+      ar: "CI/CD مع فحص أمني، بيئات متطابقة، وربط بالمقاييس والسجلات والمسارات.",
+      en: "CI/CD with security scanning, reproducible environments, and metrics/logs/traces wiring.",
+    },
+    results: {
+      ar: "إصدارات أسرع بثقة أعلى وحوادث أقل مرتبطة بالنشر.",
+      en: "Faster, safer releases with fewer deployment-related incidents.",
     },
   },
 ];

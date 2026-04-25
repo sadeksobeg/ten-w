@@ -62,7 +62,7 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
       />
-      <Section className="border-b border-white/10 pb-12 pt-10">
+      <Section className="border-b border-white/10 pb-10 pt-8 sm:pb-12 sm:pt-10">
         <Link
           href="/blog"
           className="text-sm font-medium text-gold hover:underline"
@@ -70,7 +70,7 @@ export default async function BlogPostPage({ params }: Props) {
           ← {t("hero.title")}
         </Link>
         <p className="mt-4 text-xs text-muted">{post.date}</p>
-        <h1 className="mt-2 font-[family-name:var(--font-cairo)] text-3xl font-bold md:text-4xl">
+        <h1 className="mt-2 font-[family-name:var(--font-cairo)] text-2xl font-bold sm:text-3xl md:text-4xl">
           {post.title[cl]}
         </h1>
       </Section>

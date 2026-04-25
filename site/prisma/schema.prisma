@@ -1,0 +1,378 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  PARTNER
+  ADMIN
+}
+
+enum DealStatus {
+  PENDING
+  CLOSED
+  LOST
+}
+
+enum PayoutStatus {
+  PENDING
+  APPROVED
+  PAID
+  REJECTED
+}
+
+enum BadgeType {
+  AUTO
+  ADMIN
+}
+
+enum BadgeCategory {
+  FINANCIAL
+  SOCIAL
+  BEHAVIORAL
+  META
+}
+
+enum DemoSessionStatus {
+  RUNNING
+  COMPLETED
+  ABORTED
+}
+
+enum ChatConversationStatus {
+  OPEN
+  RESOLVED
+}
+
+enum ChatPriority {
+  HIGH
+  NORMAL
+  LOW
+}
+
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  emailVerified    DateTime?
+  passwordHash     String
+  name             String?
+  image            String?
+  role             UserRole  @default(PARTNER)
+  marketingKitHits Int       @default(0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  partnerProfile   PartnerProfile?
+  referredPartners PartnerProfile[]   @relation("PartnerUpline")
+  userBadges       UserBadge[]        @relation("UserBadgeSubject")
+  xpEvents         XpEvent[]
+  streak           UserStreak?
+  payouts          PayoutRequest[]
+  deals            Deal[]             @relation("DealPartner")
+  commissionRows   CommissionLedger[]
+  badgesGranted    UserBadge[]        @relation("UserBadgeGranter")
+  missionDays      UserMissionDay[]
+  commissionOverrides PartnerCommissionOverride[] @relation("PartnerCommissionOverridePartner")
+  leaderboardGrants   LeaderboardGrantLog[]
+  demoSessions        DemoSession[]               @relation("DemoSessionCreator")
+  chatConversationsAsPartner ChatConversation[]  @relation("ChatPartnerConversations")
+  chatMessagesSent           ChatMessage[]        @relation("ChatMessageSender")
+}
+
+model PartnerProfile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  referralCode   String   @unique
+  parentUserId   String?
+  currentLevelId String
+  totalXp        Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent       User?           @relation("PartnerUpline", fields: [parentUserId], references: [id])
+  currentLevel LevelDefinition @relation(fields: [currentLevelId], references: [id])
+
+  @@index([parentUserId])
+  @@index([referralCode])
+}
+
+model LevelDefinition {
+  id             String   @id @default(cuid())
+  order          Int      @unique
+  code           String   @unique
+  name           String
+  minClosedDeals Int
+  salaryUsd      Int?
+  perksJson      Json?
+
+  partnerProfiles PartnerProfile[]
+}
+
+model Product {
+  id                    String  @id @default(cuid())
+  slug                  String  @unique
+  name                  String
+  priceCents            Int
+  commissionBaseCents   Int
+  marketingKit          Json?
+  active                Boolean @default(true)
+
+  deals               Deal[]
+  commissionOverrides PartnerCommissionOverride[]
+}
+
+model CommissionTierConfig {
+  id         String   @id @default(cuid())
+  tier1Bps   Int      @default(10000)
+  tier2Bps   Int      @default(1000)
+  tier3Bps   Int      @default(500)
+  updatedAt  DateTime @updatedAt
+}
+
+model Deal {
+  id              String     @id @default(cuid())
+  partnerId       String
+  productId       String
+  status          DealStatus @default(PENDING)
+  saleAmountCents Int
+  notes           String?
+  clientLabel     String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  closedAt        DateTime?
+  lostAt          DateTime?
+
+  partner  User                 @relation("DealPartner", fields: [partnerId], references: [id])
+  product  Product              @relation(fields: [productId], references: [id])
+  ledger   CommissionLedger[]
+  xpEvents XpEvent[]            @relation("XpDeal")
+  linkedConversations ChatConversation[] @relation("ChatLinkedDeal")
+
+  @@index([partnerId, status])
+  @@index([closedAt])
+}
+
+model CommissionLedger {
+  id          String   @id @default(cuid())
+  dealId      String?
+  userId      String
+  tier        Int
+  amountCents Int
+  ruleSnapshot Json?
+  createdAt   DateTime @default(now())
+
+  deal Deal? @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([dealId])
+}
+
+model BadgeDefinition {
+  id          String        @id @default(cuid())
+  key         String        @unique
+  name        String
+  type        BadgeType
+  category    BadgeCategory @default(META)
+  hidden      Boolean       @default(false)
+  iconKey     String?
+  description String?
+  criteria    Json?
+
+  userBadges UserBadge[]
+}
+
+model UserBadge {
+  id           String   @id @default(cuid())
+  userId       String
+  badgeId      String
+  grantedAt    DateTime @default(now())
+  grantedById  String?
+
+  user      User            @relation("UserBadgeSubject", fields: [userId], references: [id], onDelete: Cascade)
+  badge     BadgeDefinition @relation(fields: [badgeId], references: [id])
+  grantedBy User?           @relation("UserBadgeGranter", fields: [grantedById], references: [id])
+
+  @@unique([userId, badgeId])
+}
+
+model XpEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Int
+  reason    String
+  dealId    String?
+  createdAt DateTime @default(now())
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deal Deal? @relation("XpDeal", fields: [dealId], references: [id])
+
+  @@index([userId, createdAt])
+}
+
+model UserStreak {
+  userId          String    @id
+  currentStreak   Int       @default(0)
+  longestStreak   Int       @default(0)
+  lastActiveDate  DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PayoutRequest {
+  id          String       @id @default(cuid())
+  userId      String
+  amountCents Int
+  status      PayoutStatus @default(PENDING)
+  method      String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, status])
+}
+
+model MissionDefinition {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  title     String
+  xpReward  Int
+  criteria  Json
+  sortOrder Int      @default(0)
+  active    Boolean  @default(true)
+}
+
+model UserMissionDay {
+  id          String    @id @default(cuid())
+  userId      String
+  missionKey  String
+  day         String
+  progress    Int       @default(0)
+  completedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, missionKey, day])
+  @@index([userId, day])
+}
+
+model LeaderboardRewardRule {
+  id         String   @id @default(cuid())
+  name       String
+  windowMs   Int
+  rankMin    Int
+  rankMax    Int
+  bonusCents Int      @default(0)
+  badgeKey   String?
+  active     Boolean  @default(true)
+}
+
+model LeaderboardGrantLog {
+  id         String   @id @default(cuid())
+  userId     String
+  periodKey  String
+  rank       Int
+  ruleId     String?
+  bonusCents Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, periodKey])
+}
+
+model PartnerCommissionOverride {
+  id                  String   @id @default(cuid())
+  partnerUserId       String
+  productId           String?
+  commissionBaseCents Int?
+  note                String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  partner User    @relation("PartnerCommissionOverridePartner", fields: [partnerUserId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([partnerUserId])
+}
+
+model ActivityEvent {
+  id          String   @id @default(cuid())
+  kind        String
+  actorUserId String?
+  headline    String
+  amountCents Int?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model DemoSession {
+  id             String            @id @default(cuid())
+  createdById    String
+  status         DemoSessionStatus @default(RUNNING)
+  scriptVariant  String?
+  startedAt      DateTime          @default(now())
+  endedAt        DateTime?
+
+  creator User        @relation("DemoSessionCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  events  DemoEvent[]
+
+  @@index([createdById, startedAt])
+}
+
+model ChatConversation {
+  id            String                 @id @default(cuid())
+  partnerUserId String
+  status        ChatConversationStatus @default(OPEN)
+  priority      ChatPriority           @default(NORMAL)
+  linkedDealId  String?
+  subject       String?
+  lastMessageAt DateTime?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+
+  partner   User          @relation("ChatPartnerConversations", fields: [partnerUserId], references: [id], onDelete: Cascade)
+  linkedDeal Deal?        @relation("ChatLinkedDeal", fields: [linkedDealId], references: [id], onDelete: SetNull)
+  messages  ChatMessage[]
+
+  @@index([partnerUserId, status])
+  @@index([lastMessageAt])
+  @@index([priority])
+}
+
+model ChatMessage {
+  id             String   @id @default(cuid())
+  conversationId String
+  senderUserId   String
+  body           String
+  kind           String   @default("TEXT")
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User             @relation("ChatMessageSender", fields: [senderUserId], references: [id])
+
+  @@index([conversationId, createdAt])
+}
+
+model DemoEvent {
+  id        String   @id @default(cuid())
+  sessionId String
+  seq       Int
+  kind      String
+  delayMs   Int      @default(900)
+  payload   Json
+
+  session DemoSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, seq])
+  @@index([sessionId])
+}

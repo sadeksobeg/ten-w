@@ -3,6 +3,27 @@ import { z } from "zod";
 import { getClientIp, rateLimitContact } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 
+const DEFAULT_FORMSPREE = "https://formspree.io/f/mojpylaa";
+
+async function sendToFormspree(payload: Record<string, unknown>) {
+  const url = process.env.FORMSPREE_ENDPOINT ?? DEFAULT_FORMSPREE;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      console.error("Formspree HTTP error:", res.status, await res.text().catch(() => ""));
+    }
+  } catch (err) {
+    console.error("Formspree error:", err);
+  }
+}
+
 const bodySchema = z.object({
   name: z.string().min(1).max(200),
   email: z.string().email().max(320),
@@ -65,6 +86,17 @@ export async function POST(req: Request) {
 
   const { name, email, company, message, intent, topic } = parsed.data;
 
+  const messagePayload = {
+    name,
+    email,
+    company,
+    message,
+    intent,
+    topic,
+    source: "tenegta.com",
+    sentAt: new Date().toISOString(),
+  };
+
   const webhook = process.env.CONTACT_WEBHOOK_URL;
   if (webhook) {
     try {
@@ -72,22 +104,20 @@ export async function POST(req: Request) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          ...messagePayload,
           source: "tenegta-website",
-          name,
-          email,
-          company,
-          message,
-          intent: intent ?? null,
-          topic: topic ?? null,
-          at: new Date().toISOString(),
+          at: messagePayload.sentAt,
         }),
       });
-    } catch {
-      return NextResponse.json({ ok: false, error: "forward_failed" }, { status: 502 });
+    } catch (err) {
+      console.error("Contact webhook error:", err);
     }
   } else if (process.env.NODE_ENV === "development") {
-    console.info("[contact]", { name, email, company, message, intent, topic });
+    console.info("[contact]", messagePayload);
   }
+
+  // إرسال إلى Formspree (لا نوقف التنفيذ عند الفشل)
+  await sendToFormspree(messagePayload);
 
   return NextResponse.json({ ok: true });
 }

@@ -1,4 +1,3 @@
-import { Cairo, Inter, Tajawal } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
@@ -13,27 +12,6 @@ import { SoundProvider } from "@/components/sound/SoundProvider";
 import { routing, type Locale } from "@/i18n/routing";
 import { getSiteUrl } from "@/lib/site";
 import "../globals.css";
-
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  variable: "--font-cairo",
-  weight: ["600", "700", "800"],
-  display: "swap",
-});
-
-const tajawal = Tajawal({
-  subsets: ["arabic", "latin"],
-  variable: "--font-tajawal",
-  weight: ["400", "500", "700"],
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
 
 type Props = {
   children: React.ReactNode;
@@ -85,20 +63,18 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   setRequestLocale(locale);
   const messages = await getMessages();
-  const isAr = locale === "ar";
   const isLtr = locale === "en" || locale === "fr";
-  const fontVars = `${cairo.variable} ${tajawal.variable} ${inter.variable}`;
 
   return (
     <html
       lang={locale}
       dir={isLtr ? "ltr" : "rtl"}
-      className={`${fontVars} h-full antialiased`}
+      className="h-full antialiased"
       suppressHydrationWarning
     >
       <body
         className={`min-h-full flex flex-col bg-bg text-foreground ${
-          isLtr ? "font-[family-name:var(--font-inter)]" : "font-sans"
+          isLtr ? "[font-family:var(--font-inter)]" : "font-sans"
         }`}
       >
         <AmbientBackground />

@@ -18,4 +18,9 @@ test.describe("smoke", () => {
     await expect(page.getByRole("heading", { name: /Privacy policy/i })).toBeVisible();
     await expect(page.getByRole("heading", { name: /Cookies/i })).toBeVisible();
   });
+
+  test("Growth Engine sign-in page loads", async ({ page }) => {
+    await page.goto("/en/growth/sign-in");
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  });
 });

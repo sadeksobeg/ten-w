@@ -24,21 +24,25 @@ export default async function PilotsPage({ params }: Props) {
 
   return (
     <>
-      <Section className="border-b border-white/10 pb-12 pt-10">
-        <h1 className="font-[family-name:var(--font-cairo)] text-3xl font-bold md:text-4xl">
-          {t("hero.title")}
-        </h1>
-        <p className="mt-3 max-w-2xl text-muted">{t("hero.subtitle")}</p>
+      <Section className="border-b border-white/10 pb-10 pt-8 sm:pb-12 sm:pt-10">
+        <div className="max-w-3xl">
+          <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-bold sm:text-3xl md:text-4xl">
+            {t("hero.title")}
+          </h1>
+          <p className="mt-3 text-muted">{t("hero.subtitle")}</p>
+        </div>
       </Section>
 
       <Section>
-        <p className="max-w-3xl text-muted">{t("body")}</p>
-        <div className="mt-8 flex flex-wrap gap-4">
+        <div className="max-w-4xl rounded-2xl border border-white/10 bg-surface-elevated/70 p-5 shadow-lg shadow-black/20 sm:p-7">
+          <p className="text-muted">{t("body")}</p>
+        </div>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
           <TrackedLink
             href="/pilots/showcase"
             eventName="cta_secondary_click"
             eventParams={{ location: "pilots_page", target: "/pilots/showcase" }}
-            className="inline-flex min-h-11 items-center rounded-md border border-gold/60 px-5 py-2.5 text-sm font-semibold text-gold hover:bg-gold-dim"
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-gold/60 px-5 py-2.5 text-sm font-semibold text-gold hover:bg-gold-dim sm:w-auto"
           >
             {t("showcaseLink")}
           </TrackedLink>
@@ -46,7 +50,7 @@ export default async function PilotsPage({ params }: Props) {
             href="/contact?intent=pilot"
             eventName="cta_primary_click"
             eventParams={{ location: "pilots_page", target: "/contact" }}
-            className="inline-flex min-h-11 items-center rounded-md bg-gold px-5 py-2.5 text-sm font-semibold text-bg hover:bg-gold-bright"
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-md bg-gold px-5 py-2.5 text-sm font-semibold text-bg hover:bg-gold-bright sm:w-auto"
           >
             {t("cta.button")}
           </TrackedLink>
