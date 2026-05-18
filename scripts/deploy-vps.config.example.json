@@ -1,7 +1,8 @@
 {
-  "host": "YOUR_SERVER_IP_OR_HOSTNAME",
+  "host": "203.0.113.10",
   "user": "root",
   "port": 22,
+  "identityFile": "C:\\Users\\YOU\\.ssh\\id_rsa",
   "remotePath": "/var/www/tenegta",
   "branch": "main",
   "pm2Name": "tenegta",

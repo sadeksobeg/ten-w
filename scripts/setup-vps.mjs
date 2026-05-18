@@ -94,18 +94,18 @@ function sshTarget(cfg) {
 
 function runSsh(cfg, script) {
   const port = cfg.port ?? 22;
-  const r = spawnSync(
-    "ssh",
-    [
-      "-p",
-      String(port),
-      "-o",
-      "BatchMode=yes",
-      "-o",
-      "ConnectTimeout=15",
-      sshTarget(cfg),
-      "bash -s",
-    ],
+  const sshArgv = [
+    "-p",
+    String(port),
+    "-o",
+    "ConnectTimeout=20",
+    "-o",
+    "StrictHostKeyChecking=accept-new",
+  ];
+  if (cfg.identityFile) sshArgv.push("-i", cfg.identityFile);
+  sshArgv.push(sshTarget(cfg), "bash -s");
+
+  const r = spawnSync("ssh", sshArgv, {
     { input: script, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] },
   );
   if (r.status !== 0) {
@@ -156,8 +156,24 @@ echo "Bootstrap OK"
 const args = parseArgs(process.argv.slice(2));
 const defaults = loadJson(defaultsPath);
 
+const hostFromEnv = process.env.DEPLOY_HOST?.trim();
+const resolvedHost = args.host ?? hostFromEnv ?? defaults.host;
+
+if (!resolvedHost) {
+  console.error(`
+❌ Server IP/host required.
+
+  srv1640110 is NOT a valid SSH hostname — use the public IP from your host panel.
+
+  npm run setup:vps -- --host 123.45.67.89
+
+  Or:  set DEPLOY_HOST=123.45.67.89  then  npm run setup:vps
+`);
+  process.exit(1);
+}
+
 const deployConfig = {
-  host: args.host ?? defaults.host,
+  host: resolvedHost,
   user: defaults.user,
   port: defaults.port,
   remotePath: defaults.remotePath,
