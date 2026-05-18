@@ -1,4 +1,10 @@
-# نشر VPS من جهازك — بدون تعبئة يدوية
+# نشر VPS
+
+> **SSH من جهازك لا يعمل** استخدم **[DEPLOY-SIMPLE.md](./DEPLOY-SIMPLE.md)** — `npm run push:github` + `bash scripts/server-update.sh` في متصفح Hostinger.
+
+---
+
+# نشر VPS من جهازك (يتطلب SSH) — بدون تعبئة يدوية
 
 ## أمر واحد (يولّد كل شيء + يرفع + يبني)
 

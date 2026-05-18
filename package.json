@@ -15,8 +15,9 @@
     "lint": "npm run lint -w tenegta-website",
     "deploy:netlify": "npm run build && npx --yes netlify-cli deploy --prod",
     "setup:vps": "node scripts/setup-vps.mjs",
+    "push:github": "powershell -ExecutionPolicy Bypass -File scripts/push-github.ps1",
     "vps:ssh-key": "powershell -ExecutionPolicy Bypass -File scripts/vps-ssh-key.ps1",
     "deploy:vps": "powershell -ExecutionPolicy Bypass -File scripts/deploy-vps.ps1",
-    "vps": "node scripts/setup-vps.mjs && powershell -ExecutionPolicy Bypass -File scripts/deploy-vps.ps1"
+    "vps": "node scripts/setup-vps.mjs && powershell -ExecutionPolicy Bypass -File scripts/push-github.ps1"
   }
 }
