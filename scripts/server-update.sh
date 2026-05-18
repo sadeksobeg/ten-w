@@ -7,8 +7,8 @@ REPO="${REPO:-/var/www/tenegta}"
 BRANCH="${BRANCH:-main}"
 PM2_NAME="${PM2_NAME:-tenegta}"
 
-echo "==> T.E.N.E.G.T.A server update"
-echo "    repo: $REPO branch: $BRANCH"
+echo "==> T.E.N.E.G.T.A server update (isolated — does not touch other apps)"
+echo "    repo: $REPO branch: $BRANCH port: 3100 db: tenegta_db pm2: $PM2_NAME"
 
 cd "$REPO"
 
@@ -27,7 +27,9 @@ if [ ! -f site/.env ]; then
   bash "$REPO/scripts/server-setup-env.sh"
 fi
 
-bash "$REPO/scripts/server-ensure-node20.sh"
+# Node 20 in $REPO/.nvm only — system Node for other projects unchanged
+# shellcheck source=/dev/null
+source "$REPO/scripts/server-use-nvm.sh"
 
 cd site
 
@@ -47,11 +49,11 @@ npm run db:seed || echo "seed skipped or already done"
 echo "==> build"
 npm run build
 
-echo "==> pm2"
+echo "==> pm2 (process name: $PM2_NAME only)"
 if pm2 describe "$PM2_NAME" >/dev/null 2>&1; then
   pm2 restart "$PM2_NAME"
 else
-  pm2 start npm --name "$PM2_NAME" -- start
+  pm2 start npm --name "$PM2_NAME" --cwd "$(pwd)" -- start
   pm2 save
 fi
 

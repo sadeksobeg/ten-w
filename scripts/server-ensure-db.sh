@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Ensure PostgreSQL tenegta_db exists and site/.env points to it.
+# TENEGTA only: creates tenegta_db + tenegta_user if missing.
+# Does NOT drop or modify other databases (e.g. clinicsaas).
 set -euo pipefail
 
 REPO="${REPO:-/var/www/tenegta}"
@@ -15,9 +16,11 @@ if [ ! -f "$ENV_FILE" ]; then
 fi
 
 if grep -q "DATABASE_URL=" "$ENV_FILE"; then
-  if ! grep -q "/${DB_NAME}" "$ENV_FILE"; then
-    echo "Updating DATABASE_URL -> ${DB_NAME} (was pointing at another database)"
+  if ! grep -q "/${DB_NAME}?" "$ENV_FILE" && ! grep -q "/${DB_NAME}\"" "$ENV_FILE"; then
+    echo "Updating site/.env only -> DATABASE_URL uses ${DB_NAME} (not your other app's DB)"
     sed -i.bak -E "s|^DATABASE_URL=.*|DATABASE_URL=\"${TARGET_URL}\"|" "$ENV_FILE"
+  else
+    echo "DATABASE_URL already uses ${DB_NAME}"
   fi
 else
   echo "DATABASE_URL=\"${TARGET_URL}\"" >>"$ENV_FILE"
