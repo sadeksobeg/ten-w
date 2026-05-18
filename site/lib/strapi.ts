@@ -68,7 +68,7 @@ async function strapiFetch<T>(path: string): Promise<T | null> {
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      next: { revalidate: 120 },
+      next: { revalidate: 3600 },
     });
     if (!res.ok) return null;
     return (await res.json()) as T;

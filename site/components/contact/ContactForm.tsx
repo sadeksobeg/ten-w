@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { TurnstileField } from "@/components/contact/TurnstileField";
+import { LazyTurnstileField as TurnstileField } from "@/components/contact/LazyTurnstileField";
 import { trackEvent } from "@/lib/analytics";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";

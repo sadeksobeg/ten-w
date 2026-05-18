@@ -91,7 +91,7 @@ export function CinematicHero({
         </>
       ) : null}
 
-      {!reduced ? (
+      {!reduced && !coarse ? (
         <div className="absolute inset-0 z-0">
           <HeroNeuralCanvas
             pointer={pointer}

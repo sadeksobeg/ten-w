@@ -35,7 +35,6 @@ const nextConfig: NextConfig = {
       "gsap",
       "three",
       "@react-three/fiber",
-      "lottie-react",
     ],
   },
   async redirects() {

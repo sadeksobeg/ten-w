@@ -1,36 +1,76 @@
-# سرعة موقع T.E.N.E.G.T.A (Next.js — ليس WordPress)
+# قائمة تحسين السرعة — T.E.N.E.G.T.A (Next.js)
 
-الموقع مبني بـ **Next.js 16** ويُشغَّل على VPS عبر **Nginx + PM2**. اقتراحات مثل LiteSpeed Cache أو إضافات WordPress **لا تنطبق** هنا. البدائل المناسبة:
+الموقع **Next.js على VPS** (Nginx + PM2)، وليس WordPress. الحالة: ✅ منفّذ · 🟡 جزئي · ⬜ متبقّي.
 
-| اقتراح عام | ما يعادله عندكم |
-|------------|------------------|
-| تخزين مؤقت (Cache) | رؤوس `Cache-Control` لـ `/_next/static` و`/images` في `next.config.ts` + cache في Nginx (انظر `scripts/nginx-tenegta-performance.conf.example`) |
-| ضغط الملفات | `gzip` في Nginx + `compress: true` في Next |
-| تقليل الصور / WebP | `next/image` مع `sharp` — تنسيقات AVIF/WebP تلقائياً |
-| حذف إضافات غير ضرورية | لا إضافات WP؛ تقليل JS: تحميل Lenis/GSAP/cursor بشكل مؤجل، GA4 بعد الموافقة وبـ `lazyOnload` |
-| خطوط أسرع | `next/font` بدل `@import` من Google Fonts |
+---
 
-## ما تم في الكود
+## 1) الأعلى تأثيرًا
 
-- **preconnect** لـ Google Fonts + `display=swap` لتقليل تأخير الخطوط (السيرفر يبني بدون حاجب؛ `next/font` يتطلب اتصالاً عند البناء)
-- **تحميل مؤجل** لـ Lenis + GSAP + المؤشر المخصص
-- **تحسين الحزم**: `optimizePackageImports` لـ framer-motion وغيرها
-- **صور**: إزالة `unoptimized: true` + `sharp`
-- **GA4**: يُحمَّل فقط بعد قبول الكوكيز وبأولوية منخفضة
+| البند | الحالة | ملاحظة |
+|--------|--------|--------|
+| راجع الحزم واحذف غير المستخدم | ✅ | حُذف `lottie-react` (لم يُستورد في الكود) |
+| عطّل/أجّل سكريبتات خارجية | ✅ | GA4 بعد الموافقة + `lazyOnload`؛ Turnstile يُحمَّل عند صفحة التواصل فقط (chunk منفصل) |
+| `next/image` لكل الصور | 🟡 | مفعّل مع `sharp`؛ معظم المحتوى SVG/بدون صور؛ صور الفريق الخارجية ما زالت `<img>` عند CDN |
+| WebP/AVIF | ✅ | `formats: ['image/avif','image/webp']` في `next.config.ts` |
+| `next/font` بدل الخطوط اليدوية | 🟡 | `preconnect` + أوزان أقل في Google Fonts؛ `next/font` يفشل البناء بدون إنترنت على جهاز التطوير |
 
-## على السيرفر (مرة واحدة)
+---
 
-1. على VPS: `bash scripts/server-nginx-tenegta.sh` (ينسخ `scripts/nginx/tenegta.com.conf` إلى `/etc/nginx/sites-available/tenegta.com`).
-2. بعد كل تحديث كود: `git pull` ثم `bash scripts/server-update.sh`.
+## 2) تحسينات قوية
 
-## اختبار السرعة
+| البند | الحالة | ملاحظة |
+|--------|--------|--------|
+| Static / ISR بدل SSR | ✅ | صفحات التسويق SSG عند البناء؛ Strapi `revalidate: 3600` |
+| خفّف أوزان الخطوط | ✅ | Cairo 600/700، Tajawal 400/700، Inter 400/600/700 |
+| GA4 بعد الموافقة فقط | ✅ | `AnalyticsConsent.tsx` |
+| أجّل Lenis / GSAP / المؤشر | ✅ | import ديناميكي داخل `useEffect` + `LazyCustomCursor` |
+| Three.js في الهيرو على الجوال | ✅ | لا يُحمَّل عند `pointer: coarse` (لمس) |
 
-- [PageSpeed Insights](https://pagespeed.web.dev/) — `https://tenegta.com`
-- Chrome DevTools → Network: تحقق من cache لملفات `/_next/static/...`
-- Lighthouse (Mobile) — ركّز على LCP وعدد طلبات JS
+---
 
-## تحسينات إضافية (اختياري)
+## 3) تحسينات إضافية
 
-- تقليل تأثيرات Three.js على الصفحة الرئيسية لزوار الجوال (`prefers-reduced-motion` مفعّل جزئياً).
-- CDN أمام Nginx (Cloudflare) لـ SSL + cache عالمي للأصول الثابتة.
-- رفع صور جديدة بصيغة WebP قبل وضعها في `site/public/images/`.
+| البند | الحالة | ملاحظة |
+|--------|--------|--------|
+| Cache headers للملفات الثابتة | ✅ | `next.config.ts` + Nginx `scripts/nginx/tenegta.com.conf` |
+| تقليل re-renders | ⬜ | مراجعة يدوية لـ Growth chat / admin لاحقاً |
+| أبعاد صور قبل الرفع | ⬜ | عملية محتوى — راجع `site/public/images/` |
+| فحص الرئيسية — أكبر الحزم | 🟡 | Hero Three.js مؤجّل على الجوال؛ System Visualizer dynamic |
+
+---
+
+## 4) فحص نهائي
+
+بعد كل دفعة تغييرات:
+
+1. [PageSpeed Insights](https://pagespeed.web.dev/?url=https://tenegta.com)
+2. Lighthouse (Mobile): **LCP** · **INP** · **CLS**
+3. على السيرفر:
+   ```bash
+   ASSET=$(curl -s https://tenegta.com/en | grep -oE '/_next/static/[^"]+\.js' | head -1)
+   curl -sI "https://tenegta.com$ASSET" | grep -i cache-control
+   ```
+
+---
+
+## أوامر النشر
+
+```bash
+# جهازك
+npm run push:github
+
+# VPS
+cd /var/www/tenegta && git pull && bash scripts/server-update.sh
+bash scripts/server-nginx-tenegta.sh   # مرة واحدة أو عند تغيير Nginx
+```
+
+---
+
+## حزم ثقيلة (مقصودة — لا تحذف بدون بديل)
+
+| الحزمة | الاستخدام |
+|--------|-----------|
+| `three` + `@react-three/fiber` | هيرو سطح المكتب، محاكيات الحلول |
+| `gsap` + `lenis` | تمرير سلس + parallax |
+| `framer-motion` | حركات واجهة التسويق |
+| `@sentry/nextjs` | اختياري — فقط إذا `SENTRY_DSN` مضبوط |
