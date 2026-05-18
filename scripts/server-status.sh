@@ -18,6 +18,15 @@ echo ""
 echo "PM2:"
 bash "$REPO/scripts/server-pm2.sh" status 2>/dev/null || echo "pm2 not running"
 echo ""
+echo "PM2 logs (last 15 lines):"
+bash "$REPO/scripts/server-pm2.sh" logs tenegta --lines 15 --nostream 2>/dev/null || true
+echo ""
+if [ -d "$REPO/site/.next" ]; then
+  echo "Build: site/.next exists"
+else
+  echo "Build: MISSING site/.next — run bash scripts/server-update.sh"
+fi
+echo ""
 echo "HTTP /en:"
 curl -sI "http://127.0.0.1:${PORT}/en" | head -5 || true
 echo ""

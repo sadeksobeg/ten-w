@@ -59,15 +59,13 @@ echo "==> build"
 npm run build
 
 echo "==> pm2 (process name: $PM2_NAME only)"
-PM2="$REPO/scripts/server-pm2.sh"
-PORT="$(grep -E '^PORT=' .env 2>/dev/null | head -1 | cut -d= -f2 | tr -d '"' || echo 3100)"
-if bash "$PM2" describe "$PM2_NAME" >/dev/null 2>&1; then
-  bash "$PM2" restart "$PM2_NAME" --update-env
-else
-  bash "$PM2" start npm --name "$PM2_NAME" --cwd "$(pwd)" -- start
-  bash "$PM2" save
+if [ ! -d .next ]; then
+  echo "ERROR: build missing (.next). Build step may have been skipped."
+  exit 1
 fi
+bash "$REPO/scripts/server-restart.sh"
 
+PORT="$(grep -E '^PORT=' .env 2>/dev/null | head -1 | cut -d= -f2 | tr -d '"' || echo 3100)"
 echo ""
 echo "==> smoke test (port $PORT)"
 sleep 2

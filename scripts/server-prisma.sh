@@ -42,9 +42,6 @@ if [ "$code" -ne 0 ]; then
   fi
 fi
 
-# Apply follow-up migrations (e.g. windowMs BigInt)
-$RUN_PRISMA migrate deploy
-
 if ! env -u DATABASE_URL node scripts/has-prisma-tables.mjs 2>/dev/null; then
   echo ""
   echo "==> Growth tables still missing — migrate deploy on empty ${EXPECTED_DB} required."

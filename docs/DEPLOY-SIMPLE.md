@@ -88,6 +88,7 @@ bash scripts/server-update.sh
 ```bash
 bash scripts/server-status.sh          # تشخيص المنفذ وPM2
 bash scripts/server-pm2.sh logs tenegta
+bash scripts/server-restart.sh       # إعادة تشغيل كاملة (يحرّر المنفذ 3100)
 bash scripts/server-pm2.sh restart tenegta
 ```
 
