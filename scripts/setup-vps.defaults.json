@@ -1,5 +1,5 @@
 {
-  "host": "",
+  "host": "72.62.155.198",
   "user": "root",
   "port": 22,
   "remotePath": "/var/www/tenegta",

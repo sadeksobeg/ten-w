@@ -106,8 +106,10 @@ function runSsh(cfg, script) {
   sshArgv.push(sshTarget(cfg), "bash -s");
 
   const r = spawnSync("ssh", sshArgv, {
-    { input: script, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] },
-  );
+    input: script,
+    encoding: "utf8",
+    stdio: ["pipe", "pipe", "pipe"],
+  });
   if (r.status !== 0) {
     console.error(r.stderr || r.stdout);
     return false;
