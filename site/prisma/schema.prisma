@@ -267,7 +267,7 @@ model UserMissionDay {
 model LeaderboardRewardRule {
   id         String   @id @default(cuid())
   name       String
-  windowMs   Int
+  windowMs   BigInt
   rankMin    Int
   rankMax    Int
   bonusCents Int      @default(0)

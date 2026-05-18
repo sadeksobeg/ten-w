@@ -278,7 +278,7 @@ async function main() {
   await prisma.leaderboardRewardRule.create({
     data: {
       name: "Monthly #1 cash bonus",
-      windowMs: 30 * 24 * 60 * 60 * 1000,
+      windowMs: BigInt(30 * 24 * 60 * 60 * 1000),
       rankMin: 1,
       rankMax: 1,
       bonusCents: 50_000,

@@ -12,6 +12,11 @@ echo "    repo: $REPO branch: $BRANCH port: 3100 db: tenegta_db pm2: $PM2_NAME"
 
 cd "$REPO"
 
+if [ -n "${DATABASE_URL:-}" ]; then
+  echo "WARNING: shell DATABASE_URL is set — unsetting so site/.env is used (avoids hitting clinicsaas)"
+  unset DATABASE_URL
+fi
+
 if [ ! -d .git ]; then
   echo "Cloning repository..."
   git clone https://github.com/sadeksobeg/ten-w.git .
@@ -41,11 +46,11 @@ npm ci
 echo "==> check env"
 npm run check:env
 
-bash "$REPO/scripts/server-prisma.sh" "$(pwd)"
+bash "$REPO/scripts/server-prisma.sh"
 
 echo "==> db seed (if needed)"
-if node scripts/has-prisma-tables.mjs 2>/dev/null; then
-  npm run db:seed || echo "seed skipped or already done"
+if env -u DATABASE_URL node scripts/has-prisma-tables.mjs 2>/dev/null; then
+  env -u DATABASE_URL npm run db:seed || echo "seed skipped or already done"
 else
   echo "seed skipped — schema not ready"
 fi

@@ -68,7 +68,9 @@ bash scripts/server-update.sh
 
 هذا يسحب من GitHub، يثبت Node 20 إن لزم، يضبط قاعدة `tenegta_db`، يبني ويعيد تشغيل PM2.
 
-إذا ظهر خطأ Prisma **P3005** أو قاعدة قديمة مثل `clinicsaas` — السكربت يحوّل تلقائياً إلى `tenegta_db`.
+**مهم:** على السيرفر لا تضبط `export DATABASE_URL=...clinicsaas` في الطرفية — يجب أن يبقى الاتصال في `site/.env` فقط على قاعدة **`tenegta_db`**. السكربت يمسح متغير الشل تلقائياً ويرفض تعديل قواعد تطبيقات أخرى.
+
+إذا ظهر خطأ Prisma **P3005** — أنشئ قاعدة `tenegta_db` من Hostinger ثم أعد `server-update.sh` (بدون `db push` على `clinicsaas`).
 
 ---
 

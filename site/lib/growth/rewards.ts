@@ -22,7 +22,7 @@ export async function applyMonthlyLeaderboardBonuses(
   }
 
   const rules = await prisma.leaderboardRewardRule.findMany({
-    where: { active: true, windowMs: MONTH_MS },
+    where: { active: true, windowMs: BigInt(MONTH_MS) },
   });
   if (rules.length === 0) return { ok: true, granted: 0 };
 

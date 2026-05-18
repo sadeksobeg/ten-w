@@ -212,7 +212,7 @@ CREATE TABLE "UserMissionDay" (
 CREATE TABLE "LeaderboardRewardRule" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "windowMs" INTEGER NOT NULL,
+    "windowMs" BIGINT NOT NULL,
     "rankMin" INTEGER NOT NULL,
     "rankMax" INTEGER NOT NULL,
     "bonusCents" INTEGER NOT NULL DEFAULT 0,

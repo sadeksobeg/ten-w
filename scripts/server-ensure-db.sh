@@ -3,6 +3,9 @@
 # Does NOT drop or modify other databases (e.g. clinicsaas).
 set -euo pipefail
 
+# Never use a shell-exported DATABASE_URL (often clinicsaas on shared VPS).
+unset DATABASE_URL 2>/dev/null || true
+
 REPO="${REPO:-/var/www/tenegta}"
 ENV_FILE="$REPO/site/.env"
 LOCAL_ENV="$REPO/site/.env.local"
