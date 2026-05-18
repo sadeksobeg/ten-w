@@ -156,7 +156,7 @@ function sceneAi({ ctx, w, h, config, time, locale, reduced }: SceneDrawArgs) {
   const outLeft = w * 0.86;
   const obars = 7;
   for (let i = 0; i < obars; i++) {
-    const amp = 0.15 + 0.85 * Math.sin(phase * 0.8 + i * 0.65) ** 2;
+    const amp = 0.15 + 0.85 * Math.pow(Math.sin(phase * 0.8 + i * 0.65), 2);
     const bh = h * 0.22 * amp;
     ctx.fillStyle = hexToRgba(secondary, 0.35 + 0.45 * amp);
     ctx.fillRect(outLeft + i * 12, cy - bh, 10, bh);
@@ -457,7 +457,7 @@ function sceneHealth({ ctx, w, h, config, time, locale, reduced }: SceneDrawArgs
     const x = (i / steps) * w;
     const beat =
       Math.sin((i / steps) * Math.PI * 8 + time * 4) *
-        Math.exp(-(((i / steps) * 4) % 1) ** 2 * 8) *
+        Math.exp(-Math.pow(((i / steps) * 4) % 1, 2) * 8) *
         28 +
       Math.sin(i * 0.2 + time) * 4;
     if (i === 0) ctx.moveTo(x, y + beat);
