@@ -57,12 +57,12 @@ function Show-SshHelp {
   Write-Host "2) Test login manually (will prompt for password if no key):" -ForegroundColor Yellow
   Write-Host "     ssh -p $port ${user}@$hostName" -ForegroundColor Cyan
   Write-Host ""
-  Write-Host "3) Optional — passwordless deploy (recommended):" -ForegroundColor Yellow
+  Write-Host "3) Optional - passwordless deploy (recommended):" -ForegroundColor Yellow
   Write-Host "     ssh-keygen -t ed25519" -ForegroundColor Gray
-  Write-Host "     type `$env:USERPROFILE\.ssh\id_ed25519.pub | ssh ${user}@$hostName `"mkdir -p .ssh && cat >> .ssh/authorized_keys`"" -ForegroundColor Gray
+  Write-Host '     Then copy your .pub key to the server authorized_keys file' -ForegroundColor Gray
   Write-Host ""
   Write-Host "4) Add key path to scripts/deploy-vps.config.json:" -ForegroundColor Yellow
-  Write-Host '     "identityFile": "C:\\Users\\YOU\\.ssh\\id_ed25519"' -ForegroundColor Gray
+  Write-Host '     identityFile: C:\Users\YOU\.ssh\id_ed25519' -ForegroundColor Gray
   Write-Host ""
 }
 
@@ -107,7 +107,8 @@ fi
 echo Deploy OK
 "@
 
-Write-Host "`n==> Remote build & restart..." -ForegroundColor Cyan
+Write-Host ""
+Write-Host "==> Remote build and restart..." -ForegroundColor Cyan
 $remoteCmd | & ssh @sshArgs $target "bash -s"
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
