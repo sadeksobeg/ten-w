@@ -59,17 +59,26 @@ echo "==> build"
 npm run build
 
 echo "==> pm2 (process name: $PM2_NAME only)"
-if ! command -v pm2 >/dev/null 2>&1; then
-  echo "Installing pm2..."
-  npm install -g pm2
-fi
-if pm2 describe "$PM2_NAME" >/dev/null 2>&1; then
-  pm2 restart "$PM2_NAME"
+PM2="$REPO/scripts/server-pm2.sh"
+PORT="$(grep -E '^PORT=' .env 2>/dev/null | head -1 | cut -d= -f2 | tr -d '"' || echo 3100)"
+if bash "$PM2" describe "$PM2_NAME" >/dev/null 2>&1; then
+  bash "$PM2" restart "$PM2_NAME" --update-env
 else
-  pm2 start npm --name "$PM2_NAME" --cwd "$(pwd)" -- start
-  pm2 save
+  bash "$PM2" start npm --name "$PM2_NAME" --cwd "$(pwd)" -- start
+  bash "$PM2" save
 fi
 
 echo ""
-echo "Deploy OK. Site should be on PORT from .env (default 3100)."
-echo "  pm2 logs $PM2_NAME"
+echo "==> smoke test (port $PORT)"
+sleep 2
+if curl -fsS -o /dev/null -w "%{http_code}" "http://127.0.0.1:${PORT}/en" | grep -qE '200|307|308'; then
+  echo "OK: Next.js responding on http://127.0.0.1:${PORT}/en"
+else
+  echo "WARNING: No Next.js on port ${PORT}. Check: bash scripts/server-pm2.sh logs $PM2_NAME"
+  echo "         What listens: ss -tlnp | grep ${PORT}"
+fi
+
+echo ""
+echo "Deploy OK. Site on PORT $PORT (from site/.env)."
+echo "  bash scripts/server-pm2.sh logs $PM2_NAME"
+echo "  bash scripts/server-pm2.sh status"

@@ -5,6 +5,9 @@ REPO="${REPO:-/var/www/tenegta}"
 SITE="$REPO/site"
 EXPECTED_DB="${EXPECTED_DB:-tenegta_db}"
 
+# shellcheck source=/dev/null
+source "$REPO/scripts/server-use-nvm.sh"
+
 cd "$SITE"
 
 if [ -n "${DATABASE_URL:-}" ]; then
@@ -19,7 +22,7 @@ node scripts/verify-prisma-database.mjs
 
 echo "==> prisma migrate deploy"
 set +e
-out="$("$REPO/scripts/run-prisma.sh" migrate deploy 2>&1)"
+out="$(bash "$REPO/scripts/run-prisma.sh" migrate deploy 2>&1)"
 code=$?
 set -e
 echo "$out"
@@ -28,8 +31,8 @@ if [ "$code" -ne 0 ]; then
   if echo "$out" | grep -q "P3005"; then
     echo ""
     echo "==> Empty-ish DB with drift — baselining 0001_init on ${EXPECTED_DB} only"
-    "$REPO/scripts/run-prisma.sh" migrate resolve --applied 0001_init
-    "$REPO/scripts/run-prisma.sh" migrate deploy
+    bash "$REPO/scripts/run-prisma.sh" migrate resolve --applied 0001_init
+    bash "$REPO/scripts/run-prisma.sh" migrate deploy
   elif echo "$out" | grep -q "P1001\|P1000\|ECONNREFUSED\|P1003"; then
     echo "Create database '${EXPECTED_DB}' in Hostinger PostgreSQL, then re-run."
     exit 1
@@ -40,7 +43,7 @@ if [ "$code" -ne 0 ]; then
 fi
 
 # Apply follow-up migrations (e.g. windowMs BigInt)
-"$REPO/scripts/run-prisma.sh" migrate deploy
+$RUN_PRISMA migrate deploy
 
 if ! env -u DATABASE_URL node scripts/has-prisma-tables.mjs 2>/dev/null; then
   echo ""

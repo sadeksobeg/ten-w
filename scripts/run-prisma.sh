@@ -3,6 +3,8 @@
 set -euo pipefail
 
 REPO="${REPO:-/var/www/tenegta}"
+# shellcheck source=/dev/null
+source "$REPO/scripts/server-use-nvm.sh"
 cd "$REPO/site"
 
 if [ -n "${DATABASE_URL:-}" ]; then

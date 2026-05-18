@@ -82,3 +82,13 @@ bash scripts/server-update.sh
 | سيرفر (متصفح) | `bash scripts/server-update.sh` |
 
 لا حاجة لـ `npm run deploy:vps` إذا SSH من جهازك لا يعمل.
+
+### أوامر مفيدة على السيرفر
+
+```bash
+bash scripts/server-status.sh          # تشخيص المنفذ وPM2
+bash scripts/server-pm2.sh logs tenegta
+bash scripts/server-pm2.sh restart tenegta
+```
+
+`pm2` من النظام قد لا يعمل — استخدم دائماً `bash scripts/server-pm2.sh`.
