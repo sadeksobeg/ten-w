@@ -13,6 +13,7 @@
     "dev": "npm run dev -w tenegta-website",
     "start": "npm run start -w tenegta-website",
     "lint": "npm run lint -w tenegta-website",
-    "deploy:netlify": "npm run build && npx --yes netlify-cli deploy --prod"
+    "deploy:netlify": "npm run build && npx --yes netlify-cli deploy --prod",
+    "deploy:vps": "powershell -ExecutionPolicy Bypass -File scripts/deploy-vps.ps1"
   }
 }

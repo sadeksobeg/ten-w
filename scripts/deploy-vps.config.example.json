@@ -1,0 +1,9 @@
+{
+  "host": "YOUR_SERVER_IP_OR_HOSTNAME",
+  "user": "root",
+  "port": 22,
+  "remotePath": "/var/www/tenegta",
+  "branch": "main",
+  "pm2Name": "tenegta",
+  "gitRemote": "origin"
+}

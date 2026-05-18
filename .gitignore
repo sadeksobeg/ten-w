@@ -11,3 +11,7 @@ site/node_modules/
 Thumbs.db
 .idea/
 *.log
+
+# VPS deploy (local only)
+scripts/deploy-vps.config.json
+site/.env.vps.local

@@ -1,142 +1,101 @@
-# نشر T.E.N.E.G.T.A على VPS (tenegta.com)
+# نشر من جهازك — بدون تعديل ملفات على السيرفر
 
 المستودع: [github.com/sadeksobeg/ten-w](https://github.com/sadeksobeg/ten-w)
 
-## 1. استنساخ الكود (تم)
+السيرفر يستقبل فقط: `git pull` + ملف `.env` يُرفع تلقائياً من جهازك.
+
+---
+
+## مرة واحدة على السيرفر (إعداد أولي فقط)
 
 ```bash
 mkdir -p /var/www/tenegta
 cd /var/www/tenegta
 git clone https://github.com/sadeksobeg/ten-w.git .
-```
 
-## 2. ملف البيئة
-
-```bash
-# احصل على AUTH_SECRET قبل فتح المحرر
-openssl rand -base64 32
-
-cd /var/www/tenegta/site
-cp .env.vps.example .env
-nano .env
-```
-
-عدّل في `.env`:
-
-| المتغير | القيمة |
-|---------|--------|
-| `DATABASE_URL` | `postgresql://tenegta_user:Tenegta2025Secure@127.0.0.1:5432/tenegta_db` |
-| `AUTH_SECRET` | ناتج أمر `openssl rand -base64 32` (لا تتركه `PASTE_...`) |
-| `AUTH_URL` | `https://tenegta.com` |
-| `NEXT_PUBLIC_SITE_URL` | `https://tenegta.com` |
-| `NODE_ENV` | `production` |
-| `PORT` | `3100` |
-| `FORMSPREE_ENDPOINT` | رابط Formspree الحقيقي (مطلوب للنشر) |
-
-احفظ: `Ctrl+X` → `Y` → `Enter`.
-
-> **أمان:** لا ترفع ملف `.env` إلى Git. إذا كان المستودع عاماً، غيّر كلمة مرور PostgreSQL بعد أول نشر.
-
-## 3. PostgreSQL (إن لم يكن جاهزاً)
-
-```bash
+# PostgreSQL (مرة واحدة)
 sudo -u postgres psql <<'SQL'
 CREATE USER tenegta_user WITH PASSWORD 'Tenegta2025Secure';
 CREATE DATABASE tenegta_db OWNER tenegta_user;
 GRANT ALL PRIVILEGES ON DATABASE tenegta_db TO tenegta_user;
 SQL
-```
 
-## 4. تثبيت الاعتماديات والبناء
-
-```bash
-cd /var/www/tenegta
-# Node 20+ مطلوب
-node -v
-
-npm ci
-cd site
-npm run check:env
-npx prisma migrate deploy
-npm run db:seed
-cd ..
-npm run build --workspace=tenegta-website
-```
-
-أو من جذر المستودع:
-
-```bash
-cd /var/www/tenegta/site
-npm ci
-npm run check:env
-npx prisma migrate deploy
-npm run db:seed
-npm run build
-```
-
-## 5. تشغيل التطبيق (PM2)
-
-```bash
-cd /var/www/tenegta/site
 npm install -g pm2
-pm2 start npm --name tenegta -- start
-pm2 save
-pm2 startup
 ```
 
-التطبيق يستمع على `http://127.0.0.1:3100`.
+بعد ذلك **لا حاجة لـ nano** على السيرفر.
 
-## 6. Nginx (مثال)
+---
+
+## مرة واحدة على جهازك (Windows)
+
+من مجلد المشروع `TENEGTA WEBSITE`:
+
+```powershell
+# 1) إعداد الاتصال بالسيرفر
+copy scripts\deploy-vps.config.example.json scripts\deploy-vps.config.json
+# عدّل host إلى IP السيرفر (مثلاً عنوان srv1640110)
+
+# 2) ملف البيئة محلياً (لا يُرفع إلى Git)
+copy site\.env.vps.example site\.env.vps.local
+
+# 3) AUTH_SECRET
+openssl rand -base64 32
+# الصق الناتج في AUTH_SECRET داخل site\.env.vps.local
+
+# 4) عدّل في .env.vps.local:
+#    FORMSPREE_ENDPOINT، GROWTH_ADMIN_PASSWORD، GROWTH_DEMO_PASSWORD
+```
+
+---
+
+## كل نشر (من جهازك فقط)
+
+```powershell
+cd "D:\Sadek Company\TENEGTA WEBSITE"
+npm run deploy:vps
+```
+
+السكربت يقوم تلقائياً بـ:
+
+1. `git push` إلى GitHub (`ten-w`)
+2. رفع `site/.env.vps.local` → `/var/www/tenegta/site/.env`
+3. على السيرفر: `git pull` → `npm ci` → `check:env` → `prisma migrate` → `build` → `pm2 restart`
+
+---
+
+## Nginx (مرة واحدة على السيرفر)
 
 ```nginx
-server {
-    listen 80;
-    server_name tenegta.com www.tenegta.com;
-    return 301 https://tenegta.com$request_uri;
-}
-
-server {
-    listen 443 ssl http2;
-    server_name tenegta.com www.tenegta.com;
-
-    # ssl_certificate /etc/letsencrypt/live/tenegta.com/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/tenegta.com/privkey.pem;
-
-    location / {
-        proxy_pass http://127.0.0.1:3100;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
+location / {
+    proxy_pass http://127.0.0.1:3100;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
 }
 ```
 
 ```bash
-sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d tenegta.com -d www.tenegta.com
 ```
 
-شهادة SSL: `sudo certbot --nginx -d tenegta.com -d www.tenegta.com`
+---
 
-## 7. تحديث لاحق من Git
+## ملفات محلية (لا تُرفع لـ Git)
 
-```bash
-cd /var/www/tenegta
-git pull origin main
-cd site
-npm ci
-npx prisma migrate deploy
-npm run build
-pm2 restart tenegta
-```
+| ملف | الغرض |
+|-----|--------|
+| `site/.env.vps.local` | أسرار الإنتاج — يُرفع بالسكربت فقط |
+| `scripts/deploy-vps.config.json` | IP المستخدم SSH |
 
-## 8. تحقق سريع
+---
+
+## استكشاف الأخطاء
 
 ```bash
+# على السيرفر (قراءة فقط)
+pm2 logs tenegta
 curl -I http://127.0.0.1:3100
-curl -I https://tenegta.com
 ```
