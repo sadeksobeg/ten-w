@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AnalyticsConsent } from "@/components/analytics/AnalyticsConsent";
 import { AmbientBackground } from "@/components/layout/AmbientBackground";
+import { AsyncGoogleFonts } from "@/components/layout/AsyncGoogleFonts";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { LazyCustomCursor } from "@/components/layout/LazyCustomCursor";
@@ -79,6 +80,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <AsyncGoogleFonts />
       </head>
       <body
         className={`min-h-full flex flex-col bg-bg text-foreground ${

@@ -5,11 +5,16 @@ import { getSiteUrl } from "@/lib/site";
 export function buildAlternates(locale: Locale, pathname: string): Metadata["alternates"] {
   const base = getSiteUrl().origin;
   const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const suffix = path === "/" ? "" : path;
+  const canonical = `${base}/${locale}${suffix}`;
   return {
-    canonical: `${base}/${locale}${path}`,
-    languages: Object.fromEntries(
-      (["ar", "en", "fr"] as Locale[]).map((l) => [l, `${base}/${l}${path}`]),
-    ),
+    canonical,
+    languages: {
+      "x-default": `${base}/ar${suffix}`,
+      ...Object.fromEntries(
+        (["ar", "en", "fr"] as Locale[]).map((l) => [l, `${base}/${l}${suffix}`]),
+      ),
+    },
   };
 }
 

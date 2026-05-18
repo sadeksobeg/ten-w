@@ -15,7 +15,7 @@ export function TestimonialStrip() {
       <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
         <p
           id="testimonial-heading"
-          className="text-xs font-semibold uppercase tracking-[0.2em] text-gold/70"
+          className="text-xs font-semibold uppercase tracking-[0.2em] text-gold"
         >
           {t("testimonialEyebrow")}
         </p>
@@ -33,11 +33,11 @@ export function TestimonialStrip() {
             <cite className="not-italic font-semibold text-foreground">
               {pickLocalized(primary.role, locale)}
             </cite>
-            <span className="text-white/40"> · </span>
+            <span className="text-muted"> · </span>
             {pickLocalized(primary.org, locale)}
           </div>
         </footer>
-        <p className="mt-6 text-xs leading-relaxed text-white/40">{t("testimonialDisclaimer")}</p>
+        <p className="mt-6 text-xs leading-relaxed text-muted">{t("testimonialDisclaimer")}</p>
       </div>
     </section>
   );

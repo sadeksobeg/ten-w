@@ -96,6 +96,7 @@ export function ProjectsRail({
                   <Link
                     href={`/projects/${p.slug}`}
                     className="relative mt-6 inline-flex text-sm font-semibold text-gold underline-offset-4 hover:underline"
+                    aria-label={`${detailLabel}: ${p.title[cl]}`}
                   >
                     {detailLabel}
                   </Link>

@@ -37,7 +37,9 @@ export function CinematicHero({
   const reduced = useReducedMotion();
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [count, setCount] = useState(900);
-  const [coarse, setCoarse] = useState(false);
+  /** Mobile-first default avoids hero h1 starting at opacity:0 before hydration (hurts LCP). */
+  const [coarse, setCoarse] = useState(true);
+  const instantHero = reduced || coarse;
 
   useEffect(() => {
     const mq = window.matchMedia("(pointer: coarse)");
@@ -102,7 +104,7 @@ export function CinematicHero({
       ) : null}
 
       <div className="relative z-20 isolate mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        {reduced ? (
+        {instantHero ? (
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-gold/90 sm:text-sm">
               {brandLabel}
@@ -137,9 +139,9 @@ export function CinematicHero({
         ) : (
           <motion.div
             className="max-w-3xl"
-            initial={{ opacity: 0, y: 28 }}
+            initial={{ opacity: 1, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-gold/90 sm:text-sm">
               {brandLabel}
