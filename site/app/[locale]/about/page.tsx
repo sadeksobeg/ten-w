@@ -1,6 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+import { RelatedLinks } from "@/components/content/RelatedLinks";
 import { Section } from "@/components/ui/Section";
+import { Link } from "@/i18n/navigation";
 import { buildAlternates } from "@/lib/metadata-helpers";
 import type { Locale } from "@/i18n/routing";
 
@@ -20,6 +22,15 @@ export default async function AboutPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "AboutPage" });
+  const n = await getTranslations({ locale, namespace: "Nav" });
+
+  const relatedLinks = [
+    { href: "/solutions", label: n("solutions") },
+    { href: "/why-us", label: n("whyUs") },
+    { href: "/case-studies", label: n("caseStudies") },
+    { href: "/blog", label: n("blog") },
+    { href: "/contact", label: n("contact") },
+  ];
 
   return (
     <>
@@ -41,6 +52,18 @@ export default async function AboutPage({ params }: Props) {
         <p className="max-w-3xl font-[family-name:var(--font-cairo)] text-lg font-semibold leading-relaxed text-foreground md:text-xl">
           {t("valuesStatement")}
         </p>
+        <div className="mt-8">
+          <Link
+            href="/contact"
+            className="inline-flex min-h-11 items-center rounded-md bg-gold px-5 py-2.5 text-sm font-semibold text-bg hover:bg-gold/90"
+          >
+            {n("contact")}
+          </Link>
+        </div>
+      </Section>
+
+      <Section className="border-t border-white/10">
+        <RelatedLinks title={t("relatedTitle")} links={relatedLinks} />
       </Section>
     </>
   );

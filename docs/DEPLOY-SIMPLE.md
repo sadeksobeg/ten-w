@@ -64,6 +64,8 @@ cat /var/www/tenegta/scripts/server-generated-credentials.txt
 cd /var/www/tenegta
 git pull origin main
 bash scripts/server-update.sh
+# اختياري بعد تحديث SEO/nginx:
+# bash scripts/server-nginx-tenegta.sh && bash scripts/server-seo-verify.sh
 ```
 
 هذا يسحب من GitHub، يثبت Node 20 إن لزم، يضبط قاعدة `tenegta_db`، يبني ويعيد تشغيل PM2.
@@ -107,3 +109,34 @@ cd /var/www/tenegta
 git pull origin main
 bash scripts/server-nginx-tenegta.sh
 ```
+
+---
+
+## فهرسة Google (SEO)
+
+بعد أي تحديث يمسّ الروابط أو `sitemap` أو `robots`:
+
+```bash
+cd /var/www/tenegta
+git pull origin main
+bash scripts/server-nginx-tenegta.sh   # إن تغيّر nginx (www، HSTS، إلخ)
+bash scripts/server-update.sh
+bash scripts/server-seo-verify.sh      # تحقق سريع من 301 و hreflang
+```
+
+### مرة واحدة — Search Console
+
+1. [Google Search Console](https://search.google.com/search-console) → إضافة **نطاق** `tenegta.com` (تحقق DNS TXT).
+2. إرسال خريطة الموقع: `https://tenegta.com/sitemap.xml`
+3. **فحص عنوان URL** → طلب فهرسة لـ `/ar` و `/en` و `/fr`
+4. بعد 48–72 ساعة: تبويب **التغطية** (أخطاء الزحف / «تم الزحف - غير مفهرس»)
+
+### تحقق يدوي على السيرفر
+
+```bash
+curl -sI https://tenegta.com/ | grep -i location          # يجب: /ar
+curl -s https://tenegta.com/ar | grep -i canonical
+curl -s https://tenegta.com/sitemap.xml | head -25
+```
+
+**ملاحظة:** `tenegta.tech` منتج منفصل (ClinicSaaS) — لا يشارك الفهرسة مع `.com`؛ اربطهما في المحتوى أو علامة «من T.E.N.E.G.T.A» إن أردت توحيد العلامة.
