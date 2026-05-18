@@ -57,9 +57,11 @@ function Show-SshHelp {
   Write-Host "2) Test login manually (will prompt for password if no key):" -ForegroundColor Yellow
   Write-Host "     ssh -p $port ${user}@$hostName" -ForegroundColor Cyan
   Write-Host ""
-  Write-Host "3) Optional - passwordless deploy (recommended):" -ForegroundColor Yellow
-  Write-Host "     ssh-keygen -t ed25519" -ForegroundColor Gray
-  Write-Host '     Then copy your .pub key to the server authorized_keys file' -ForegroundColor Gray
+  Write-Host "3) Hostinger: add SSH key (recommended) - run on your PC:" -ForegroundColor Yellow
+  Write-Host "     npm run vps:ssh-key" -ForegroundColor Cyan
+  Write-Host "     Then paste the key in hPanel -> VPS -> SSH keys" -ForegroundColor Gray
+  Write-Host ""
+  Write-Host "     Or reset root password: hPanel -> VPS -> Reset root password" -ForegroundColor Gray
   Write-Host ""
   Write-Host "4) Add key path to scripts/deploy-vps.config.json:" -ForegroundColor Yellow
   Write-Host '     identityFile: C:\Users\YOU\.ssh\id_ed25519' -ForegroundColor Gray
