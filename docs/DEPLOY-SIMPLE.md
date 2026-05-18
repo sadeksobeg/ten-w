@@ -100,5 +100,10 @@ bash scripts/server-pm2.sh restart tenegta
 
 الموقع **Next.js** وليس WordPress — لا تستخدم LiteSpeed Cache أو إضافات WP.
 
-راجع **[PERFORMANCE-AR.md](./PERFORMANCE-AR.md)** وطبّق مرة واحدة على السيرفر:  
-`scripts/nginx-tenegta-performance.conf.example` (gzip + cache للأصول الثابتة).
+راجع **[PERFORMANCE-AR.md](./PERFORMANCE-AR.md)**. لتثبيت Nginx (gzip + cache + SSL → :3100):
+
+```bash
+cd /var/www/tenegta
+git pull origin main
+bash scripts/server-nginx-tenegta.sh
+```

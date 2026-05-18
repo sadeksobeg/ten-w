@@ -20,9 +20,8 @@
 
 ## على السيرفر (مرة واحدة)
 
-1. طبّق مقطع Nginx من `scripts/nginx-tenegta-performance.conf.example` داخل `server { }` لـ `tenegta.com`.
-2. تأكد أن `gzip on;` مفعّل (غالباً في `nginx.conf` الرئيسي).
-3. بعد كل تحديث كود: `git pull` ثم `bash scripts/server-update.sh`.
+1. على VPS: `bash scripts/server-nginx-tenegta.sh` (ينسخ `scripts/nginx/tenegta.com.conf` إلى `/etc/nginx/sites-available/tenegta.com`).
+2. بعد كل تحديث كود: `git pull` ثم `bash scripts/server-update.sh`.
 
 ## اختبار السرعة
 
