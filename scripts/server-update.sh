@@ -44,7 +44,11 @@ npm run check:env
 bash "$REPO/scripts/server-prisma.sh" "$(pwd)"
 
 echo "==> db seed (if needed)"
-npm run db:seed || echo "seed skipped or already done"
+if node scripts/has-prisma-tables.mjs 2>/dev/null; then
+  npm run db:seed || echo "seed skipped or already done"
+else
+  echo "seed skipped — schema not ready"
+fi
 
 echo "==> build"
 npm run build

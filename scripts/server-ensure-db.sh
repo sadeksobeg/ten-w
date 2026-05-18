@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-# TENEGTA only: creates tenegta_db + tenegta_user if missing.
+# TENEGTA only: point site/.env at tenegta_db + create DB if psql is available.
 # Does NOT drop or modify other databases (e.g. clinicsaas).
 set -euo pipefail
 
 REPO="${REPO:-/var/www/tenegta}"
 ENV_FILE="$REPO/site/.env"
+LOCAL_ENV="$REPO/site/.env.local"
 DB_USER="${DB_USER:-tenegta_user}"
 DB_PASS="${DB_PASS:-Tenegta2025Secure}"
 DB_NAME="${DB_NAME:-tenegta_db}"
@@ -15,15 +16,48 @@ if [ ! -f "$ENV_FILE" ]; then
   exit 1
 fi
 
-if grep -q "DATABASE_URL=" "$ENV_FILE"; then
-  if ! grep -q "/${DB_NAME}?" "$ENV_FILE" && ! grep -q "/${DB_NAME}\"" "$ENV_FILE"; then
-    echo "Updating site/.env only -> DATABASE_URL uses ${DB_NAME} (not your other app's DB)"
+get_db_from_line() {
+  local line="$1"
+  line="${line#DATABASE_URL=}"
+  line="${line%\"}"
+  line="${line#\"}"
+  line="${line%\'}"
+  line="${line#\'}"
+  echo "$line" | sed -E 's|.*/([^/?]+)(\?.*)?$|\1|'
+}
+
+current_db=""
+if grep -qE '^DATABASE_URL=' "$ENV_FILE"; then
+  db_line="$(grep -E '^DATABASE_URL=' "$ENV_FILE" | head -1)"
+  current_db="$(get_db_from_line "$db_line")"
+fi
+
+if [ "$current_db" != "$DB_NAME" ]; then
+  echo "Fixing site/.env DATABASE_URL: was '${current_db:-<unset>}' -> ${DB_NAME}"
+  if grep -qE '^DATABASE_URL=' "$ENV_FILE"; then
     sed -i.bak -E "s|^DATABASE_URL=.*|DATABASE_URL=\"${TARGET_URL}\"|" "$ENV_FILE"
   else
-    echo "DATABASE_URL already uses ${DB_NAME}"
+    echo "DATABASE_URL=\"${TARGET_URL}\"" >>"$ENV_FILE"
   fi
 else
-  echo "DATABASE_URL=\"${TARGET_URL}\"" >>"$ENV_FILE"
+  echo "site/.env DATABASE_URL uses ${DB_NAME}"
+fi
+
+if [ -f "$LOCAL_ENV" ] && grep -qE '^DATABASE_URL=' "$LOCAL_ENV"; then
+  local_line="$(grep -E '^DATABASE_URL=' "$LOCAL_ENV" | head -1)"
+  local_db="$(get_db_from_line "$local_line")"
+  if [ "$local_db" != "$DB_NAME" ]; then
+    echo "WARNING: site/.env.local overrides DATABASE_URL with '${local_db}' — updating to ${DB_NAME}"
+    sed -i.bak -E "s|^DATABASE_URL=.*|DATABASE_URL=\"${TARGET_URL}\"|" "$LOCAL_ENV"
+  fi
+fi
+
+cd "$REPO/site"
+resolved="$(node scripts/database-url-name.mjs 2>/dev/null || true)"
+if [ -n "$resolved" ] && [ "$resolved" != "$DB_NAME" ]; then
+  echo "ERROR: Prisma still resolves database '${resolved}' (expected ${DB_NAME})."
+  echo "       Edit site/.env and site/.env.local manually, then re-run server-update.sh"
+  exit 1
 fi
 
 if command -v psql >/dev/null 2>&1; then
@@ -41,5 +75,5 @@ GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${DB_USER};
 SQL
   echo "PostgreSQL database ${DB_NAME} ready"
 else
-  echo "psql not found — create database ${DB_NAME} manually if migrate fails"
+  echo "psql not found — create database '${DB_NAME}' in Hostinger (PostgreSQL) if migrate fails"
 fi
