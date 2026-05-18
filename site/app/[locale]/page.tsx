@@ -74,6 +74,7 @@ export default async function HomePage({ params }: Props) {
           title={t("hero.title")}
           subtitle={t("hero.subtitle")}
           lead={t("hero.lead")}
+          rotateFallback={t("hero.rotate1")}
           ctaPrimary={t("hero.ctaPrimary")}
           ctaSecondary={t("hero.ctaSecondary")}
           ctaPrimaryHref="/solutions/intelligent-systems"

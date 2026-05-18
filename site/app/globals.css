@@ -2,8 +2,8 @@
 
 :root {
   /* Loaded via CSS @import (avoids next/font build-time fetches that can time out offline). */
-  --font-cairo: "Cairo", ui-sans-serif, system-ui, sans-serif;
-  --font-tajawal: "Tajawal", ui-sans-serif, system-ui, sans-serif;
+  --font-cairo: "Cairo", "Segoe UI", "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
+  --font-tajawal: "Tajawal", "Segoe UI", "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
   --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --bg: #121212;

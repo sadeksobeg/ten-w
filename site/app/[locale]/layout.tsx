@@ -81,6 +81,13 @@ export default async function LocaleLayout({ children, params }: Props) {
           crossOrigin="anonymous"
         />
         <AsyncGoogleFonts />
+        {locale === "ar" || locale === "fr" ? (
+          <link
+            rel="preload"
+            as="style"
+            href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap"
+          />
+        ) : null}
       </head>
       <body
         className={`min-h-full flex flex-col bg-bg text-foreground ${

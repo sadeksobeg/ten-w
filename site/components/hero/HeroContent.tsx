@@ -1,23 +1,25 @@
-import { HeroRotatingHeadline } from "@/components/hero/HeroRotatingHeadline";
-import { MagneticLink } from "@/components/ui/MagneticLink";
+import { HeroDeferredRotatingHeadline } from "@/components/hero/HeroDeferredRotatingHeadline";
+import { Link } from "@/i18n/navigation";
 
 type Props = {
   brandLabel: string;
   title: string;
   subtitle: string;
   lead?: string;
+  rotateFallback: string;
   ctaPrimary: string;
   ctaSecondary: string;
   ctaPrimaryHref: string;
   ctaSecondaryHref: string;
 };
 
-/** Static hero copy — no entrance animation (LCP-friendly). */
+/** Server-rendered hero copy — h1 in initial HTML for LCP. */
 export function HeroContent({
   brandLabel,
   title,
   subtitle,
   lead,
+  rotateFallback,
   ctaPrimary,
   ctaSecondary,
   ctaPrimaryHref,
@@ -31,7 +33,7 @@ export function HeroContent({
       <h1 className="mt-5 font-[family-name:var(--font-cairo)] text-4xl font-bold leading-[1.06] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-[3.4rem]">
         {title}
       </h1>
-      <HeroRotatingHeadline />
+      <HeroDeferredRotatingHeadline fallbackLine={rotateFallback} />
       <p className="mt-6 max-w-xl text-base leading-relaxed text-muted md:text-lg">
         {subtitle}
       </p>
@@ -41,18 +43,18 @@ export function HeroContent({
         </p>
       ) : null}
       <div className="mt-10 flex flex-wrap gap-4">
-        <MagneticLink
+        <Link
           href={ctaPrimaryHref}
           className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-8 py-3 text-sm font-semibold text-bg shadow-[0_0_42px_-12px_rgba(201,160,97,0.7)] transition-shadow hover:shadow-[0_0_56px_-10px_rgba(255,215,0,0.5)]"
         >
           {ctaPrimary}
-        </MagneticLink>
-        <MagneticLink
+        </Link>
+        <Link
           href={ctaSecondaryHref}
           className="inline-flex min-h-12 items-center justify-center rounded-full border border-gold/45 bg-white/[0.04] px-8 py-3 text-sm font-semibold text-gold backdrop-blur-md transition-colors hover:border-gold hover:bg-gold-dim/35"
         >
           {ctaSecondary}
-        </MagneticLink>
+        </Link>
       </div>
     </div>
   );
