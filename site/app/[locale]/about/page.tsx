@@ -23,11 +23,12 @@ export default async function AboutPage({ params }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "AboutPage" });
   const n = await getTranslations({ locale, namespace: "Nav" });
+  const f = await getTranslations({ locale, namespace: "Footer" });
 
   const relatedLinks = [
     { href: "/solutions", label: n("solutions") },
-    { href: "/why-us", label: n("whyUs") },
-    { href: "/case-studies", label: n("caseStudies") },
+    { href: "/why-us", label: f("whyUs") },
+    { href: "/case-studies", label: f("caseStudies") },
     { href: "/blog", label: n("blog") },
     { href: "/contact", label: n("contact") },
   ];
