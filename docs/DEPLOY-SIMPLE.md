@@ -40,12 +40,17 @@ SQL
 npm install -g pm2
 ```
 
-### ملف `.env` (مرة واحدة — من File Manager)
+### ملف `.env`
 
-1. على جهازك افتح: `site\.env.vps.local` (بعد `npm run setup:vps`)  
-2. في Hostinger: **File Manager** → `/var/www/tenegta/site/`  
-3. أنشئ ملف **`.env`** والصق نفس المحتوى  
-4. عدّل `AUTH_SECRET` من الملف: `scripts\vps-generated-credentials.txt`
+يُنشأ **تلقائياً** عند أول تشغيل لـ `server-update.sh` (لا حاجة لنسخ من جهازك).
+
+كلمات المرور تُحفظ على السيرفر في:
+
+`scripts/server-generated-credentials.txt`
+
+```bash
+cat /var/www/tenegta/scripts/server-generated-credentials.txt
+```
 
 ---
 

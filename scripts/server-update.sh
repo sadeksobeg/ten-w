@@ -23,19 +23,8 @@ git checkout "$BRANCH"
 git pull origin "$BRANCH"
 
 if [ ! -f site/.env ]; then
-  echo ""
-  echo "ERROR: site/.env is missing."
-  echo "Create it once via Hostinger File Manager:"
-  echo "  Path: $REPO/site/.env"
-  echo "  Copy content from site/.env.vps.example on your PC (or .env.vps.local)"
-  echo "  Required: DATABASE_URL, AUTH_SECRET, AUTH_URL, NEXT_PUBLIC_SITE_URL, contact endpoint"
-  echo ""
-  if [ -f site/.env.vps.example ]; then
-    echo "Quick start (edit secrets after):"
-    echo "  cp site/.env.vps.example site/.env"
-    echo "  nano site/.env"
-  fi
-  exit 1
+  echo "==> site/.env missing — auto-generating..."
+  bash "$REPO/scripts/server-setup-env.sh"
 fi
 
 cd site
