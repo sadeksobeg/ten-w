@@ -27,7 +27,11 @@ if [ ! -f site/.env ]; then
   bash "$REPO/scripts/server-setup-env.sh"
 fi
 
+bash "$REPO/scripts/server-ensure-node20.sh"
+
 cd site
+
+bash "$REPO/scripts/server-ensure-db.sh"
 
 echo "==> npm ci"
 npm ci
@@ -35,8 +39,10 @@ npm ci
 echo "==> check env"
 npm run check:env
 
-echo "==> prisma migrate"
-npx prisma migrate deploy
+bash "$REPO/scripts/server-prisma.sh" "$(pwd)"
+
+echo "==> db seed (if needed)"
+npm run db:seed || echo "seed skipped or already done"
 
 echo "==> build"
 npm run build

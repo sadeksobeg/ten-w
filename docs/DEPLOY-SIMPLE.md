@@ -60,10 +60,13 @@ cat /var/www/tenegta/scripts/server-generated-credentials.txt
 
 ```bash
 cd /var/www/tenegta
+git pull origin main
 bash scripts/server-update.sh
 ```
 
-هذا يسحب من GitHub ويبني ويعيد تشغيل PM2.
+هذا يسحب من GitHub، يثبت Node 20 إن لزم، يضبط قاعدة `tenegta_db`، يبني ويعيد تشغيل PM2.
+
+إذا ظهر خطأ Prisma **P3005** أو قاعدة قديمة مثل `clinicsaas` — السكربت يحوّل تلقائياً إلى `tenegta_db`.
 
 ---
 
