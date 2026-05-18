@@ -43,9 +43,13 @@ export async function generateMetadata({
         ? "نصمّم ونسلّم أنظمة ذكاء اصطناعي قابلة للتشغيل، وأمن سيبراني، وبرمجيات متكاملة عبر قطاعات متعددة."
         : "Deployable AI systems, cybersecurity, and integrated software — multi-sector delivery from pilot to production.",
     alternates: {
-      languages: Object.fromEntries(
-        routing.locales.map((l) => [l, `${base.origin}/${l}`]),
-      ),
+      canonical: `${base.origin}/${locale}`,
+      languages: {
+        "x-default": `${base.origin}/ar`,
+        ...Object.fromEntries(
+          routing.locales.map((l) => [l, `${base.origin}/${l}`]),
+        ),
+      },
     },
     openGraph: {
       type: "website",

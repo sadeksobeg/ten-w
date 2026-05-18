@@ -1,14 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SoundToggle } from "@/components/sound/SoundToggle";
+import { getLinkedInUrl } from "@/lib/site-links";
 
 export async function Footer() {
   const t = await getTranslations("Footer");
   const n = await getTranslations("Nav");
   const year = new Date().getFullYear();
-  const linkedIn =
-    process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN?.trim() ||
-    "https://www.linkedin.com/in/sadek-al-etr-084b34205";
+  const linkedIn = getLinkedInUrl();
   const x = process.env.NEXT_PUBLIC_SOCIAL_X?.trim();
 
   return (

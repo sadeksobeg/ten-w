@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
       {
         source: "/",
         destination: "/ar",
-        permanent: false,
+        permanent: true,
       },
       {
         source: "/:locale/industries/:slug",

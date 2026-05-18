@@ -1,9 +1,11 @@
+import { getLinkedInUrl } from "@/lib/site-links";
 import { getSiteUrl } from "@/lib/site";
 
 export function OrganizationJsonLd() {
   const origin = getSiteUrl().origin;
   const orgId = `${origin}/#organization`;
   const websiteId = `${origin}/#website`;
+  const linkedIn = getLinkedInUrl();
 
   const data = {
     "@context": "https://schema.org",
@@ -27,7 +29,14 @@ export function OrganizationJsonLd() {
         },
         description:
           "T.E.N.E.G.T.A builds secure, intelligent systems that help organizations work with higher efficiency and clearer decisions.",
-        sameAs: [] as string[],
+        areaServed: ["SA", "AE", "SY", "FR", "LB"],
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          url: `${origin}/en/contact`,
+          availableLanguage: ["Arabic", "English", "French"],
+        },
+        sameAs: linkedIn ? [linkedIn] : [],
       },
     ],
   };
