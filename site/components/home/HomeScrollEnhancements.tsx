@@ -18,8 +18,11 @@ export function HomeScrollEnhancements({
     if (reduced) return;
 
     let ctx: { revert: () => void } | undefined;
+    let cancelled = false;
 
-    void Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(
+    const loadParallax = () => {
+      if (cancelled) return;
+      void Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(
       ([{ gsap }, { default: ScrollTrigger }]) => {
         const el = root.current;
         if (!el) return;
@@ -44,8 +47,21 @@ export function HomeScrollEnhancements({
         }, el);
       },
     );
+    };
+
+    const onFirstScroll = () => {
+      loadParallax();
+      window.removeEventListener("scroll", onFirstScroll);
+    };
+
+    window.addEventListener("scroll", onFirstScroll, { passive: true, once: true });
+
+    const fallback = window.setTimeout(loadParallax, 4000);
 
     return () => {
+      cancelled = true;
+      window.clearTimeout(fallback);
+      window.removeEventListener("scroll", onFirstScroll);
       ctx?.revert();
     };
   }, [reduced]);

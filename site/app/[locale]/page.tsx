@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { CinematicHero } from "@/components/hero/CinematicHero";
 import { HomeContactBand } from "@/components/home/HomeContactBand";
+import { HomeLazySections } from "@/components/home/HomeLazySections";
 import { SystemVisualizerSection } from "@/components/home/SystemVisualizerSection";
 import { Container } from "@/components/ui/Container";
 import { LogoMarquee } from "@/components/home/LogoMarquee";
@@ -82,37 +83,45 @@ export default async function HomePage({ params }: Props) {
         <LogoMarquee />
         <ProblemSolutionSection />
         <MetricsBand />
-        <TestimonialStrip />
-        <ThoughtLeadershipBand />
 
-        <ServicesMotionGrid
-          sectionTitle={t("services.title")}
-          items={services}
+        <HomeLazySections
+          testimonial={<TestimonialStrip />}
+          thoughtLeadership={<ThoughtLeadershipBand />}
+          services={
+            <ServicesMotionGrid
+              sectionTitle={t("services.title")}
+              items={services}
+            />
+          }
+          valueStrip={
+            <section className="border-y border-white/10 bg-surface/20 py-10 md:py-12">
+              <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+                <p className="font-[family-name:var(--font-cairo)] text-base leading-relaxed text-muted md:text-lg">
+                  {t("services.valueProposition")}
+                </p>
+              </div>
+            </section>
+          }
+          projects={
+            <ProjectsRail
+              title={t("featured.title")}
+              viewAllLabel={t("featured.viewAll")}
+              detailLabel={loc === "ar" ? "التفاصيل" : "Details"}
+              projects={projects}
+              locale={loc}
+            />
+          }
+          visualizer={
+            <section id="system-visualizer" className="relative py-20 md:py-28">
+              <Container>
+                <SystemVisualizerSection locale={loc} />
+              </Container>
+            </section>
+          }
+          contact={
+            <HomeContactBand title={t("cta.title")} subtitle={t("cta.subtitle")} />
+          }
         />
-
-        <section className="border-y border-white/10 bg-surface/20 py-10 md:py-12">
-          <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-            <p className="font-[family-name:var(--font-cairo)] text-base leading-relaxed text-muted md:text-lg">
-              {t("services.valueProposition")}
-            </p>
-          </div>
-        </section>
-
-        <ProjectsRail
-          title={t("featured.title")}
-          viewAllLabel={t("featured.viewAll")}
-          detailLabel={loc === "ar" ? "التفاصيل" : "Details"}
-          projects={projects}
-          locale={loc}
-        />
-
-        <section id="system-visualizer" className="relative py-20 md:py-28">
-          <Container>
-            <SystemVisualizerSection locale={loc} />
-          </Container>
-        </section>
-
-        <HomeContactBand title={t("cta.title")} subtitle={t("cta.subtitle")} />
       </HomeScrollEnhancements>
     </>
   );

@@ -1,10 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { HeroRotatingHeadline } from "@/components/hero/HeroRotatingHeadline";
-import { MagneticLink } from "@/components/ui/MagneticLink";
+import { HeroContent } from "@/components/hero/HeroContent";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 const HeroNeuralCanvas = dynamic(
@@ -16,7 +14,6 @@ export type CinematicHeroProps = {
   brandLabel: string;
   title: string;
   subtitle: string;
-  /** Supporting paragraph between subtitle and CTAs */
   lead?: string;
   ctaPrimary: string;
   ctaSecondary: string;
@@ -24,22 +21,11 @@ export type CinematicHeroProps = {
   ctaSecondaryHref: string;
 };
 
-export function CinematicHero({
-  brandLabel,
-  title,
-  subtitle,
-  lead,
-  ctaPrimary,
-  ctaSecondary,
-  ctaPrimaryHref,
-  ctaSecondaryHref,
-}: CinematicHeroProps) {
+export function CinematicHero(props: CinematicHeroProps) {
   const reduced = useReducedMotion();
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [count, setCount] = useState(900);
-  /** Mobile-first default avoids hero h1 starting at opacity:0 before hydration (hurts LCP). */
   const [coarse, setCoarse] = useState(true);
-  const instantHero = reduced || coarse;
 
   useEffect(() => {
     const mq = window.matchMedia("(pointer: coarse)");
@@ -70,6 +56,8 @@ export function CinematicHero({
     setPointer({ x, y });
   };
 
+  const showCanvas = !reduced && !coarse;
+
   return (
     <section
       className="relative flex min-h-[min(92vh,940px)] items-center overflow-hidden border-b border-white/10"
@@ -83,97 +71,21 @@ export function CinematicHero({
         className="pointer-events-none absolute inset-0 opacity-[0.55] [background-image:linear-gradient(to_right,rgba(201,160,97,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(201,160,97,0.05)_1px,transparent_1px)] [background-size:52px_52px]"
         aria-hidden
       />
-      {!reduced ? (
+      {showCanvas ? (
         <>
           <div
             className="hero-aurora pointer-events-none absolute inset-0 opacity-[0.55] mix-blend-screen"
             aria-hidden
           />
           <div className="hero-grain pointer-events-none absolute inset-0" aria-hidden />
+          <div className="absolute inset-0 z-0">
+            <HeroNeuralCanvas pointer={pointer} coarse={coarse} count={count} />
+          </div>
         </>
       ) : null}
 
-      {!reduced && !coarse ? (
-        <div className="absolute inset-0 z-0">
-          <HeroNeuralCanvas
-            pointer={pointer}
-            coarse={coarse}
-            count={count}
-          />
-        </div>
-      ) : null}
-
       <div className="relative z-20 isolate mx-auto w-full max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        {instantHero ? (
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-gold/90 sm:text-sm">
-              {brandLabel}
-            </p>
-            <h1 className="mt-5 font-[family-name:var(--font-cairo)] text-4xl font-bold leading-[1.06] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-[3.4rem]">
-              {title}
-            </h1>
-            <HeroRotatingHeadline />
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted md:text-lg">
-              {subtitle}
-            </p>
-            {lead ? (
-              <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted/90 md:text-base">
-                {lead}
-              </p>
-            ) : null}
-            <div className="mt-10 flex flex-wrap gap-4">
-              <MagneticLink
-                href={ctaPrimaryHref}
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-8 py-3 text-sm font-semibold text-bg shadow-[0_0_42px_-12px_rgba(201,160,97,0.7)] transition-shadow hover:shadow-[0_0_56px_-10px_rgba(255,215,0,0.5)]"
-              >
-                {ctaPrimary}
-              </MagneticLink>
-              <MagneticLink
-                href={ctaSecondaryHref}
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-gold/45 bg-white/[0.04] px-8 py-3 text-sm font-semibold text-gold backdrop-blur-md transition-colors hover:border-gold hover:bg-gold-dim/35"
-              >
-                {ctaSecondary}
-              </MagneticLink>
-            </div>
-          </div>
-        ) : (
-          <motion.div
-            className="max-w-3xl"
-            initial={{ opacity: 1, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-gold/90 sm:text-sm">
-              {brandLabel}
-            </p>
-            <h1 className="mt-5 font-[family-name:var(--font-cairo)] text-4xl font-bold leading-[1.06] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-[3.4rem]">
-              {title}
-            </h1>
-            <HeroRotatingHeadline />
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted md:text-lg">
-              {subtitle}
-            </p>
-            {lead ? (
-              <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted/90 md:text-base">
-                {lead}
-              </p>
-            ) : null}
-            <div className="mt-10 flex flex-wrap gap-4">
-              <MagneticLink
-                href={ctaPrimaryHref}
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-8 py-3 text-sm font-semibold text-bg shadow-[0_0_42px_-12px_rgba(201,160,97,0.7)] transition-shadow hover:shadow-[0_0_56px_-10px_rgba(255,215,0,0.5)]"
-              >
-                {ctaPrimary}
-              </MagneticLink>
-              <MagneticLink
-                href={ctaSecondaryHref}
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-gold/45 bg-white/[0.04] px-8 py-3 text-sm font-semibold text-gold backdrop-blur-md transition-colors hover:border-gold hover:bg-gold-dim/35"
-              >
-                {ctaSecondary}
-              </MagneticLink>
-            </div>
-          </motion.div>
-        )}
+        <HeroContent {...props} />
       </div>
     </section>
   );
