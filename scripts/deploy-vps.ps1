@@ -1,13 +1,9 @@
 # Deploy T.E.N.E.G.T.A to VPS from your PC — no manual edits on the server.
 # Prerequisites: OpenSSH (scp/ssh), Node 20+, git
 #
-# One-time local setup:
-#   copy scripts\deploy-vps.config.example.json scripts\deploy-vps.config.json
-#   copy site\.env.vps.example site\.env.vps.local
-#   Edit both files (server IP, AUTH_SECRET, Formspree, passwords)
-#
-# Deploy:
-#   npm run deploy:vps
+# First time: npm run setup:vps   (generates all secrets + config automatically)
+# Deploy:     npm run deploy:vps
+# Or both:    npm run vps
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
@@ -16,17 +12,10 @@ Set-Location $Root
 $configPath = Join-Path $Root "scripts\deploy-vps.config.json"
 $envLocal = Join-Path $Root "site\.env.vps.local"
 
-if (-not (Test-Path $configPath)) {
-  Write-Host "Missing scripts/deploy-vps.config.json" -ForegroundColor Red
-  Write-Host "  copy scripts\deploy-vps.config.example.json scripts\deploy-vps.config.json"
-  exit 1
-}
-
-if (-not (Test-Path $envLocal)) {
-  Write-Host "Missing site/.env.vps.local" -ForegroundColor Red
-  Write-Host "  copy site\.env.vps.example site\.env.vps.local"
-  Write-Host "  Fill AUTH_SECRET (openssl rand -base64 32) and FORMSPREE_ENDPOINT"
-  exit 1
+if (-not (Test-Path $configPath) -or -not (Test-Path $envLocal)) {
+  Write-Host "Running setup:vps (auto-generate config)..." -ForegroundColor Cyan
+  node (Join-Path $Root "scripts\setup-vps.mjs")
+  if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
 
 $cfg = Get-Content $configPath -Raw | ConvertFrom-Json

@@ -1,66 +1,79 @@
-# نشر من جهازك — بدون تعديل ملفات على السيرفر
+# نشر VPS من جهازك — بدون تعبئة يدوية
 
-المستودع: [github.com/sadeksobeg/ten-w](https://github.com/sadeksobeg/ten-w)
-
-السيرفر يستقبل فقط: `git pull` + ملف `.env` يُرفع تلقائياً من جهازك.
-
----
-
-## مرة واحدة على السيرفر (إعداد أولي فقط)
-
-```bash
-mkdir -p /var/www/tenegta
-cd /var/www/tenegta
-git clone https://github.com/sadeksobeg/ten-w.git .
-
-# PostgreSQL (مرة واحدة)
-sudo -u postgres psql <<'SQL'
-CREATE USER tenegta_user WITH PASSWORD 'Tenegta2025Secure';
-CREATE DATABASE tenegta_db OWNER tenegta_user;
-GRANT ALL PRIVILEGES ON DATABASE tenegta_db TO tenegta_user;
-SQL
-
-npm install -g pm2
-```
-
-بعد ذلك **لا حاجة لـ nano** على السيرفر.
-
----
-
-## مرة واحدة على جهازك (Windows)
-
-من مجلد المشروع `TENEGTA WEBSITE`:
-
-```powershell
-# 1) إعداد الاتصال بالسيرفر
-copy scripts\deploy-vps.config.example.json scripts\deploy-vps.config.json
-# عدّل host إلى IP السيرفر (مثلاً عنوان srv1640110)
-
-# 2) ملف البيئة محلياً (لا يُرفع إلى Git)
-copy site\.env.vps.example site\.env.vps.local
-
-# 3) AUTH_SECRET
-openssl rand -base64 32
-# الصق الناتج في AUTH_SECRET داخل site\.env.vps.local
-
-# 4) عدّل في .env.vps.local:
-#    FORMSPREE_ENDPOINT، GROWTH_ADMIN_PASSWORD، GROWTH_DEMO_PASSWORD
-```
-
----
-
-## كل نشر (من جهازك فقط)
+## أمر واحد (يولّد كل شيء + يرفع + يبني)
 
 ```powershell
 cd "D:\Sadek Company\TENEGTA WEBSITE"
+npm run vps
+```
+
+يفعل تلقائياً:
+
+1. **`setup:vps`** — يولّد `AUTH_SECRET`، كلمات مرور Growth، `site/.env.vps.local`، `scripts/deploy-vps.config.json`
+2. **`deploy:vps`** — push إلى GitHub، رفع `.env`، `git pull` + build + PM2 على السيرفر
+
+كلمات المرور تُحفظ في: **`scripts/vps-generated-credentials.txt`** (محلي فقط، لا يُرفع لـ Git).
+
+---
+
+## إعداد السيرفر لأول مرة (اختياري — عبر SSH)
+
+إذا السيرفر فارغ (Node / PostgreSQL / PM2):
+
+```powershell
+npm run setup:vps -- --bootstrap
 npm run deploy:vps
 ```
 
-السكربت يقوم تلقائياً بـ:
+أو معاً:
 
-1. `git push` إلى GitHub (`ten-w`)
-2. رفع `site/.env.vps.local` → `/var/www/tenegta/site/.env`
-3. على السيرفر: `git pull` → `npm ci` → `check:env` → `prisma migrate` → `build` → `pm2 restart`
+```powershell
+npm run setup:vps -- --bootstrap
+npm run vps
+```
+
+---
+
+## تغيير IP السيرفر فقط
+
+عدّل `scripts/setup-vps.defaults.json` → `"host": "عنوان-IP"` ثم:
+
+```powershell
+npm run setup:vps
+npm run deploy:vps
+```
+
+أو مرة واحدة:
+
+```powershell
+npm run setup:vps -- --host 203.0.113.10
+```
+
+---
+
+## Formspree حقيقي (اختياري — لاحقاً)
+
+```powershell
+npm run setup:vps -- --formspree mknnvgep
+npm run deploy:vps
+```
+
+(استبدل `mknnvgep` بمعرّف نموذجك من formspree.io)
+
+بدون Formspree يُستخدم `httpbin.org` للتحقق من النشر فقط — نموذج الاتصال لن يصلك إيميلات حقيقية حتى تضيف Formspree.
+
+---
+
+## القيم الافتراضية
+
+في `scripts/setup-vps.defaults.json`:
+
+| الحقل | الافتراضي |
+|-------|-----------|
+| host | `srv1640110` |
+| domain | `tenegta.com` |
+| DATABASE_URL | PostgreSQL محلي على السيرفر |
+| PORT | `3100` |
 
 ---
 
@@ -69,33 +82,11 @@ npm run deploy:vps
 ```nginx
 location / {
     proxy_pass http://127.0.0.1:3100;
-    proxy_http_version 1.1;
     proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
 }
 ```
 
 ```bash
 sudo certbot --nginx -d tenegta.com -d www.tenegta.com
-```
-
----
-
-## ملفات محلية (لا تُرفع لـ Git)
-
-| ملف | الغرض |
-|-----|--------|
-| `site/.env.vps.local` | أسرار الإنتاج — يُرفع بالسكربت فقط |
-| `scripts/deploy-vps.config.json` | IP المستخدم SSH |
-
----
-
-## استكشاف الأخطاء
-
-```bash
-# على السيرفر (قراءة فقط)
-pm2 logs tenegta
-curl -I http://127.0.0.1:3100
 ```

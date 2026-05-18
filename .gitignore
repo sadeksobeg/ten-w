@@ -14,4 +14,5 @@ Thumbs.db
 
 # VPS deploy (local only)
 scripts/deploy-vps.config.json
+scripts/vps-generated-credentials.txt
 site/.env.vps.local

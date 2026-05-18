@@ -1,0 +1,12 @@
+{
+  "host": "srv1640110",
+  "user": "root",
+  "port": 22,
+  "remotePath": "/var/www/tenegta",
+  "branch": "main",
+  "pm2Name": "tenegta",
+  "gitRemote": "origin",
+  "domain": "tenegta.com",
+  "databaseUrl": "postgresql://tenegta_user:Tenegta2025Secure@127.0.0.1:5432/tenegta_db",
+  "appPort": 3100
+}
