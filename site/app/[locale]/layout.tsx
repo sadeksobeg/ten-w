@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AnalyticsConsent } from "@/components/analytics/AnalyticsConsent";
 import { AmbientBackground } from "@/components/layout/AmbientBackground";
-import { CustomCursor } from "@/components/layout/CustomCursor";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { LazyCustomCursor } from "@/components/layout/LazyCustomCursor";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { SoundProvider } from "@/components/sound/SoundProvider";
 import { routing, type Locale } from "@/i18n/routing";
@@ -72,13 +72,21 @@ export default async function LocaleLayout({ children, params }: Props) {
       className="h-full antialiased"
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body
         className={`min-h-full flex flex-col bg-bg text-foreground ${
           isLtr ? "[font-family:var(--font-inter)]" : "font-sans"
         }`}
       >
         <AmbientBackground />
-        <CustomCursor />
+        <LazyCustomCursor />
         <NextIntlClientProvider messages={messages}>
             <SoundProvider>
               <SmoothScroll>

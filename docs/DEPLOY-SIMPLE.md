@@ -93,3 +93,12 @@ bash scripts/server-pm2.sh restart tenegta
 ```
 
 `pm2` من النظام قد لا يعمل — استخدم دائماً `bash scripts/server-pm2.sh`.
+
+---
+
+## سرعة الموقع
+
+الموقع **Next.js** وليس WordPress — لا تستخدم LiteSpeed Cache أو إضافات WP.
+
+راجع **[PERFORMANCE-AR.md](./PERFORMANCE-AR.md)** وطبّق مرة واحدة على السيرفر:  
+`scripts/nginx-tenegta-performance.conf.example` (gzip + cache للأصول الثابتة).

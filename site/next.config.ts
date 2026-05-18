@@ -21,9 +21,23 @@ const contentSecurityPolicy = [
   "frame-ancestors 'none'",
 ].join("; ");
 
+const staticAssetCache = "public, max-age=31536000, immutable";
+const imageCache = "public, max-age=86400, stale-while-revalidate=604800";
+
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  compress: true,
+  poweredByHeader: false,
   transpilePackages: ["three"],
+  experimental: {
+    optimizePackageImports: [
+      "framer-motion",
+      "gsap",
+      "three",
+      "@react-three/fiber",
+      "lottie-react",
+    ],
+  },
   async redirects() {
     return [
       {
@@ -41,6 +55,14 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/_next/static/:path*",
+        headers: [{ key: "Cache-Control", value: staticAssetCache }],
+      },
+      {
+        source: "/images/:path*",
+        headers: [{ key: "Cache-Control", value: imageCache }],
+      },
+      {
         source: "/:path*",
         headers: [
           { key: "Content-Security-Policy", value: contentSecurityPolicy },
@@ -56,7 +78,9 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
     remotePatterns: [
       {
         protocol: "http",

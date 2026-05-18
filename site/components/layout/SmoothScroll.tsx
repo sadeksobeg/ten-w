@@ -1,10 +1,7 @@
 "use client";
 
-import Lenis from "lenis";
 import { useEffect } from "react";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
-
-import "lenis/dist/lenis.css";
 
 type Props = { children: React.ReactNode };
 
@@ -18,10 +15,12 @@ export function SmoothScroll({ children }: Props) {
     let cleanup: (() => void) | undefined;
 
     void (async () => {
-      const [{ gsap }, { default: ScrollTrigger }] = await Promise.all([
-        import("gsap"),
-        import("gsap/ScrollTrigger"),
-      ]);
+      const [{ default: Lenis }, { gsap }, { default: ScrollTrigger }] =
+        await Promise.all([
+          import("lenis"),
+          import("gsap"),
+          import("gsap/ScrollTrigger"),
+        ]);
       if (destroyed) return;
 
       gsap.registerPlugin(ScrollTrigger);
