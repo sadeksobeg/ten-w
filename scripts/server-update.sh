@@ -50,6 +50,10 @@ echo "==> build"
 npm run build
 
 echo "==> pm2 (process name: $PM2_NAME only)"
+if ! command -v pm2 >/dev/null 2>&1; then
+  echo "Installing pm2..."
+  npm install -g pm2
+fi
 if pm2 describe "$PM2_NAME" >/dev/null 2>&1; then
   pm2 restart "$PM2_NAME"
 else
