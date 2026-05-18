@@ -9,7 +9,7 @@ const SystemVisualizer = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="min-h-[380px] animate-pulse rounded-2xl border border-white/10 bg-surface/30" />
+      <div className="h-[560px] animate-pulse rounded-2xl border border-white/10 bg-surface/30" />
     ),
   },
 );
