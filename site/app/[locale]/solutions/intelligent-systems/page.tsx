@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { DemoKpiStrip } from "@/components/demos/DemoKpiStrip";
+import { InteractiveArchitectureDiagram } from "@/components/visuals/InteractiveArchitectureDiagram";
 import { SystemFlow } from "@/components/visuals/SystemFlow";
 import { Card } from "@/components/ui/Card";
 import { Section } from "@/components/ui/Section";
@@ -67,6 +68,13 @@ export default async function IntelligentSystemsPage({ params }: Props) {
             {t("hero.ctaProjects")}
           </TrackedLink>
         </div>
+      </Section>
+
+      <Section>
+        <h2 className="font-[family-name:var(--font-cairo)] text-2xl font-bold">
+          {t("diagram.title")}
+        </h2>
+        <InteractiveArchitectureDiagram />
       </Section>
 
       <Section>

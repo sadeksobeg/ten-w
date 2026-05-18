@@ -210,6 +210,108 @@ export async function closeDealAdminFormAction(formData: FormData): Promise<void
   await closeDealAdminAction(dealId);
 }
 
+export async function markDealLostAdminFormAction(formData: FormData): Promise<void> {
+  const dealId = String(formData.get("dealId") ?? "").trim();
+  if (!dealId) return;
+  await markDealLostAdminAction(dealId);
+}
+
+export async function markDealLostAdminAction(
+  dealId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const deal = await prisma.deal.findUnique({ where: { id: dealId } });
+  if (!deal) return { ok: false, error: "not_found" };
+  if (deal.status !== DealStatus.PENDING) {
+    return { ok: false, error: "bad_state" };
+  }
+
+  await prisma.deal.update({
+    where: { id: dealId },
+    data: { status: DealStatus.LOST, lostAt: new Date() },
+  });
+
+  await logActivityEvent(prisma, {
+    kind: "deal_lost",
+    actorUserId: deal.partnerId,
+    headline: `Deal marked lost: ${deal.clientLabel ?? deal.id}`,
+    metadata: { dealId },
+  });
+
+  revalidatePath("/");
+  return { ok: true };
+}
+
+const payoutActionSchema = z.object({
+  payoutId: z.string().min(1),
+});
+
+export async function approvePayoutAdminFormAction(formData: FormData): Promise<void> {
+  const parsed = payoutActionSchema.safeParse({
+    payoutId: formData.get("payoutId"),
+  });
+  if (!parsed.success) return;
+  await updatePayoutStatusAdminAction(parsed.data.payoutId, PayoutStatus.APPROVED);
+}
+
+export async function rejectPayoutAdminFormAction(formData: FormData): Promise<void> {
+  const parsed = payoutActionSchema.safeParse({
+    payoutId: formData.get("payoutId"),
+  });
+  if (!parsed.success) return;
+  await updatePayoutStatusAdminAction(parsed.data.payoutId, PayoutStatus.REJECTED);
+}
+
+export async function markPayoutPaidAdminFormAction(formData: FormData): Promise<void> {
+  const parsed = payoutActionSchema.safeParse({
+    payoutId: formData.get("payoutId"),
+  });
+  if (!parsed.success) return;
+  await updatePayoutStatusAdminAction(parsed.data.payoutId, PayoutStatus.PAID);
+}
+
+async function updatePayoutStatusAdminAction(
+  payoutId: string,
+  status: PayoutStatus,
+): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return;
+  }
+
+  const payout = await prisma.payoutRequest.findUnique({ where: { id: payoutId } });
+  if (!payout) return;
+
+  if (status === PayoutStatus.APPROVED && payout.status !== PayoutStatus.PENDING) {
+    return;
+  }
+  if (status === PayoutStatus.REJECTED && payout.status === PayoutStatus.PAID) {
+    return;
+  }
+  if (status === PayoutStatus.PAID && payout.status !== PayoutStatus.APPROVED) {
+    return;
+  }
+
+  await prisma.payoutRequest.update({
+    where: { id: payoutId },
+    data: { status },
+  });
+
+  await logActivityEvent(prisma, {
+    kind: "payout_status",
+    actorUserId: payout.userId,
+    headline: `Payout ${status.toLowerCase()}: $${(payout.amountCents / 100).toFixed(0)}`,
+    amountCents: payout.amountCents,
+    metadata: { payoutId, status },
+  });
+
+  revalidatePath("/");
+}
+
 export async function closeDealAdminAction(
   dealId: string,
 ): Promise<{ ok: true } | { ok: false; error: string }> {

@@ -1,12 +1,25 @@
 import type { Locale } from "@/i18n/routing";
+import type { Localized } from "@/lib/fallback-data";
 
 /**
- * Strapi / fallback project and blog bodies are localized as `ar` | `en` only.
- * French UI (fr) uses English fallback strings for that content.
+ * Resolves which localized field to read from fallback / MDX content.
  */
-export function contentLocale(locale: string): "ar" | "en" {
+export type ContentLocale = "ar" | "en" | "fr";
+
+export function contentLocale(locale: string): ContentLocale {
   if (locale === "ar") return "ar";
+  if (locale === "fr") return "fr";
   return "en";
+}
+
+export function pickLocalized(
+  entry: Localized | Record<string, string> | undefined,
+  locale: string,
+): string {
+  if (!entry) return "";
+  const cl = contentLocale(locale);
+  const rec = entry as Record<string, string>;
+  return rec[cl] ?? rec.en ?? rec.ar ?? "";
 }
 
 export function isUiLocale(locale: string): locale is Locale {

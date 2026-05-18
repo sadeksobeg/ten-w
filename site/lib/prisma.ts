@@ -3,7 +3,10 @@ import { PrismaClient } from "@prisma/client";
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 function createPrismaClient(): PrismaClient {
+  // For Neon/Supabase serverless add ?pgbouncer=true&connection_limit=1 to DATABASE_URL.
+  const datasourceUrl = process.env.DATABASE_URL;
   return new PrismaClient({
+    ...(datasourceUrl ? { datasourceUrl } : {}),
     log:
       process.env.NODE_ENV === "development"
         ? ["query", "error", "warn"]

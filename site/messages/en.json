@@ -23,15 +23,27 @@
     "tagline": "T.E.N.E.G.T.A builds secure, intelligent systems that help organizations work with higher efficiency and clearer decisions.",
     "caseStudies": "Case studies",
     "engagement": "Engagement",
-    "whyUs": "Why us"
+    "whyUs": "Why us",
+    "status": "Status",
+    "techRadar": "Tech radar"
   },
   "HomePage": {
     "meta": {
       "title": "T.E.N.E.G.T.A – Deployable intelligent systems for enterprises",
       "description": "We design and deliver AI, cybersecurity, and systems development — from idea to operations."
     },
+    "credibility": {
+      "trustedBy": "Trusted by teams building critical infrastructure",
+      "logosAria": "Client sectors"
+    },
+    "problemSolution": {
+      "eyebrow": "The gap we close",
+      "problem": "Most enterprises don't fail from lack of data. They fail from systems that can't act on it.",
+      "solution": "We build the intelligence layer between your data and your decisions — AI systems, cybersecurity, and software engineering that run in production, not slide decks."
+    },
     "hero": {
-      "title": "Intelligent systems that create real value for organizations",
+      "title": "We build the intelligence layer between your data and your decisions.",
+      "tagline": "AI Systems · Cybersecurity · Software Engineering for enterprises",
       "rotate1": "From pilot to production — delivery you can measure.",
       "rotate2": "AI and data pipelines wired into real operations.",
       "rotate3": "Security-first architecture, not bolt-on patches.",
@@ -57,6 +69,39 @@
       "title": "Have a project or pilot in mind?",
       "subtitle": "Tell us your goals — we respond on business days.",
       "button": "Book a consultation"
+    },
+    "SystemVisualizer": {
+      "title": "Describe your system — we'll visualize it",
+      "subtitle": "Write any idea in any language. We'll detect its components and draw its live architecture.",
+      "placeholder": "Example: I want a system that monitors my warehouses and predicts stock shortages…",
+      "btnAnalyze": "Reveal the Architecture",
+      "btnBuild": "Build this with us",
+      "analyzing": "T.E.N.E.G.T.A is analyzing your system architecture",
+      "empty": "Your architecture vision will appear here",
+      "badges": {
+        "ai": "Artificial Intelligence",
+        "cyber": "Cybersecurity",
+        "software": "Software",
+        "infra": "Infrastructure",
+        "fintech": "Fintech",
+        "health": "Digital Health",
+        "logistics": "Logistics",
+        "iot": "Internet of Things",
+        "data": "Data Analytics",
+        "ecommerce": "E-Commerce"
+      },
+      "summaries": {
+        "ai": "Data pipelines, models, and inference wired for operational decisions.",
+        "cyber": "Zero-trust controls, detection, and audit trails across your perimeter.",
+        "software": "Auth, APIs, core services, and frontends as one deployable platform.",
+        "infra": "Load balancing, clusters, data stores, and observability at scale.",
+        "fintech": "Payments, risk, ledger, and compliance in a regulated flow.",
+        "health": "Patient access, clinical records, and care delivery connected securely.",
+        "logistics": "Orders, routing, fleet, warehouse, and last-mile delivery orchestrated.",
+        "iot": "Sensors, gateways, streaming, and dashboards for real-time operations.",
+        "data": "Ingestion, ETL, warehouse, and analytics for measurable insights.",
+        "ecommerce": "Catalog, cart, payments, fulfillment, and growth analytics unified."
+      }
     }
   },
   "AboutPage": {
@@ -88,6 +133,11 @@
       "s2": "Security-aware engineering",
       "s3": "Measurable outcomes & SLAs"
     },
+    "pillarLabels": {
+      "problem": "The problem",
+      "approach": "Our approach",
+      "outcome": "What you get"
+    },
     "pillarsHead": {
       "title": "Four capability pillars",
       "subtitle": "Shared architecture principles, documentation, and handover — so your organization can own the roadmap with confidence.",
@@ -96,6 +146,11 @@
     },
     "ai": {
       "title": "Artificial intelligence & analytics",
+      "problem": "Models work in notebooks but production lacks data contracts, owners, and SLOs.",
+      "approach": "We design event-driven feature pipelines, evaluation gates, and human-in-the-loop controls before scaling automation.",
+      "outcome": "Measurable KPI movement — not demo accuracy — with operable inference paths.",
+      "clientVoice": "We finally see the same number before the meeting.",
+      "pillarCta": "Start with AI systems",
       "body": "From raw signals to models — prediction, classification, and automation grounded in operational data you already have.",
       "b1": "Analytics and forecasting where data quality supports reliable decisions",
       "b2": "Reproducible ML workflows with evaluation, monitoring, and drift awareness",
@@ -103,6 +158,11 @@
     },
     "cyber": {
       "title": "Cybersecurity & resilience",
+      "problem": "Alert noise drowns analysts; OT and IT logs do not speak the same language.",
+      "approach": "Normalize, correlate, and automate playbooks with explicit human approval for sensitive actions.",
+      "outcome": "Fewer false positives, faster containment, audit-ready trails.",
+      "clientVoice": "Response became measurable — not a chain of midnight calls.",
+      "pillarCta": "Start with security",
       "body": "Protect identity, networks, and workloads with layered controls and operations you can observe and improve.",
       "b1": "Threat-informed design aligned to modern security baselines",
       "b2": "Detection, correlation, and response tuned to your SOC and tooling",
@@ -110,6 +170,11 @@
     },
     "software": {
       "title": "Software & integration platforms",
+      "problem": "Manual releases and mismatched environments block scale.",
+      "approach": "API-first design, CI/CD with quality gates, and tenant-aware data models.",
+      "outcome": "Confident monthly releases with production observability.",
+      "clientVoice": "We ship twelve times a month now — with evidence, not hope.",
+      "pillarCta": "Start with software delivery",
       "body": "Custom applications and integrations that connect people, data, and workflows across your technology estate.",
       "b1": "API-first integration with the systems you already run",
       "b2": "Role-based experiences for operators, analysts, and leadership",
@@ -117,6 +182,11 @@
     },
     "infra": {
       "title": "Digital infrastructure & operations",
+      "problem": "Fragile hosting and opaque operations inflate incident cost.",
+      "approach": "IaC, observability (metrics/logs/traces), and runbooks wired to your SLAs.",
+      "outcome": "Predictable operations with clear ownership and recovery paths.",
+      "clientVoice": "We stopped guessing during outages.",
+      "pillarCta": "Start with infrastructure",
       "body": "The foundation that keeps solutions reliable: data platforms, connectivity, deployment, and day-two operations.",
       "b1": "Cloud and hybrid patterns aligned to your constraints and regions",
       "b2": "Infrastructure as code and repeatable environments",
@@ -246,6 +316,24 @@
       "ctaDemo": "Try the interactive demo",
       "ctaContact": "Start a conversation",
       "ctaProjects": "View case studies"
+    },
+    "diagram": {
+      "title": "Interactive architecture map",
+      "hint": "Select a layer to see how we wire production-grade intelligent systems.",
+      "nodes": {
+        "ingest": "Ingest",
+        "store": "Store",
+        "model": "Model",
+        "api": "API",
+        "observe": "Observe"
+      },
+      "descriptions": {
+        "ingest": "Event contracts and quality gates normalize data at the boundary — before it pollutes downstream features.",
+        "store": "Analytical stores and feature layers with retention policies aligned to compliance and cost.",
+        "model": "Training, evaluation, and promotion workflows with drift monitoring — not one-off notebooks.",
+        "api": "Inference separated from product APIs; caching, auth, and SLOs owned by platform teams.",
+        "observe": "Metrics, logs, traces, and runbooks — incidents improve the system, not just close tickets."
+      }
     },
     "flow": {
       "title": "How data becomes action",
@@ -519,13 +607,34 @@
   },
   "TeamPage": {
     "meta": {
-      "title": "Our team – T.E.N.E.G.T.A",
-      "description": "Sadek Al-Atr — AI engineer, cybersecurity expert, and company director."
+      "title": "How we work – T.E.N.E.G.T.A",
+      "description": "Founder-led delivery with a curated specialist network. Sadek Al-Etr — AI engineer, cybersecurity specialist, and principal architect."
     },
     "hero": {
-      "title": "Our team",
-      "subtitle": "T.E.N.E.G.T.A is led by Sadek Al-Atr — AI engineer, cybersecurity expert, and company director — driving technical, security, and strategic direction."
-    }
+      "title": "How we work",
+      "subtitle": "Founder-led technical leadership and a specialist network engaged per project — not a fixed org chart."
+    },
+    "founder": {
+      "eyebrow": "Founder & principal architect",
+      "perspectivesTitle": "Where we stand",
+      "on": "On",
+      "credentialsTitle": "Credentials & stack",
+      "certifications": "Certifications",
+      "techStack": "Technology domains"
+    },
+    "workModel": {
+      "eyebrow": "Specialist network"
+    },
+    "engagement": {
+      "title": "How we engage",
+      "assess": "How we assess every project",
+      "staff": "How we staff specialists",
+      "decline": "What we don't take on"
+    },
+    "howWeThink": {
+      "title": "How we think"
+    },
+    "cta": "Start the conversation"
   },
   "InvestorsPage": {
     "meta": {
@@ -570,7 +679,37 @@
     "relatedTitle": "Continue exploring",
     "relatedSolutionsHub": "Solutions & capabilities",
     "relatedDemo": "Interactive demo",
-    "relatedIntelligentSystems": "How we build intelligent systems"
+    "relatedIntelligentSystems": "How we build intelligent systems",
+    "relatedCaseStudy": "Related case study",
+    "ctaContact": "Discuss this topic"
+  },
+  "StatusPage": {
+    "meta": {
+      "title": "System status – T.E.N.E.G.T.A",
+      "description": "Operational status for public services we operate."
+    },
+    "title": "System status",
+    "subtitle": "Current health of T.E.N.E.G.T.A operated surfaces.",
+    "updated": "Last updated",
+    "status": {
+      "operational": "Operational",
+      "degraded": "Degraded",
+      "outage": "Outage"
+    }
+  },
+  "TechRadarPage": {
+    "meta": {
+      "title": "Technology radar – T.E.N.E.G.T.A",
+      "description": "Technologies we adopt, trial, assess, and hold — transparent recommendations."
+    },
+    "title": "Technology radar",
+    "subtitle": "How we choose tools for client delivery — updated as the landscape evolves.",
+    "rings": {
+      "adopt": "Adopt",
+      "trial": "Trial",
+      "assess": "Assess",
+      "hold": "Hold"
+    }
   },
   "LegalPage": {
     "meta": {
@@ -737,7 +876,11 @@
     "problem": "Problem",
     "approach": "Approach",
     "architecture": "Architecture",
+    "architecturalDecisions": "Architectural decisions",
+    "technicalChallenges": "Technical challenges",
     "results": "Results",
+    "relatedStudies": "Related case studies",
+    "ctaPillar": "Explore solution pillar",
     "ctaDiscuss": "Discuss a similar engagement",
     "ctaDemo": "Try the interactive demo",
     "detailDisclaimer": "These case studies are illustrative summaries for discussion. They are not guarantees of results for your organization unless confirmed in a separate agreement."
@@ -1128,6 +1271,7 @@
       "nav": {
         "overview": "Overview",
         "deals": "Deals",
+        "payouts": "Payouts",
         "products": "Products",
         "badges": "Badges",
         "levels": "Levels",
@@ -1193,9 +1337,24 @@
         "product": "Product",
         "status": "Status",
         "close": "Close & pay commissions",
+        "markLost": "Mark lost",
         "createTitle": "Create pending deal",
         "createSubmit": "Create",
         "clientLabel": "Client label"
+      },
+      "payoutsPage": {
+        "title": "Payout requests",
+        "hint": "Approve partner withdrawal requests, then mark as paid after transfer.",
+        "empty": "No payout requests yet.",
+        "approve": "Approve",
+        "reject": "Reject",
+        "markPaid": "Mark paid",
+        "status": {
+          "pending": "Pending",
+          "approved": "Approved",
+          "paid": "Paid",
+          "rejected": "Rejected"
+        }
       },
       "productsPage": {
         "title": "Products & commissions",
@@ -1293,5 +1452,14 @@
   "Common": {
     "learnMore": "Learn more",
     "backHome": "Home"
+  },
+  "ErrorPage": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you requested does not exist or was moved.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "An unexpected error occurred. You can try again or return home.",
+    "tryAgain": "Try again",
+    "globalErrorTitle": "Critical error",
+    "globalErrorBody": "The application failed to load. Please refresh the page."
   }
 }

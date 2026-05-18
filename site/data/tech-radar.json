@@ -1,0 +1,15 @@
+{
+  "rings": ["adopt", "trial", "assess", "hold"],
+  "items": [
+    { "name": "Kubernetes", "ring": "adopt", "quadrant": "platforms" },
+    { "name": "PostgreSQL", "ring": "adopt", "quadrant": "data" },
+    { "name": "OpenTelemetry", "ring": "adopt", "quadrant": "platforms" },
+    { "name": "Python / FastAPI", "ring": "adopt", "quadrant": "languages" },
+    { "name": "Next.js", "ring": "adopt", "quadrant": "languages" },
+    { "name": "Terraform", "ring": "adopt", "quadrant": "platforms" },
+    { "name": "eBPF observability", "ring": "trial", "quadrant": "platforms" },
+    { "name": "ONNX runtime", "ring": "trial", "quadrant": "data" },
+    { "name": "Rust for edge parsers", "ring": "assess", "quadrant": "languages" },
+    { "name": "Unmonitored LLM agents", "ring": "hold", "quadrant": "data" }
+  ]
+}

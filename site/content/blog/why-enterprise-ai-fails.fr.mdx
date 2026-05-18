@@ -1,0 +1,163 @@
+---
+title: "Pourquoi la plupart des projets IA d'entreprise échouent avant le lancement"
+excerpt: "Le problème n'est pas le modèle. C'est l'écart entre ce que le modèle peut faire et ce que l'organisation est prête à exploiter."
+date: "2024-11-20"
+author: "Ingénierie T.E.N.E.G.T.A"
+tags: ["IA", "Entreprise", "MLOps", "Stratégie"]
+pillar: "ai"
+readingTime: 9
+relatedCaseStudy: "enterprise-ai-ops"
+---
+
+# Pourquoi la plupart des projets IA d'entreprise échouent avant le lancement
+
+Nous voyons un schéma récurrent lorsque des organisations nous appellent après l'arrêt d'une initiative IA. Le modèle est entraîné. Les métriques de précision sont raisonnables. La preuve de concept a impressionné le comité. Et pourtant, quelque part entre la salle de démo et la production, le projet meurt.
+
+Il n'échoue pas à cause de l'algorithme. Il échoue parce que l'organisation a construit le modèle avant de construire le socle dont il a besoin.
+
+---
+
+## La simplicité séduisante de la preuve de concept
+
+Une PoC est conçue pour répondre à une question : *est-ce que ça peut marcher ?* Elle repose sur des données propres et curatées. Elle tourne dans un environnement contrôlé. Elle est évaluée par des personnes qui veulent qu'elle réussisse.
+
+Les questions qu'une PoC ne pose pas sont celles qui comptent :
+
+- Peut-elle tourner de façon fiable avec les données désordonnées de la production ?
+- Peut-elle servir des prédictions assez vite pour les décisions à prendre ?
+- Quelqu'un dans l'organisation peut-il interpréter la sortie et agir ?
+- Que se passe-t-il quand elle se trompe — et qui est responsable ?
+
+Ces questions ressemblent à des détails d'implémentation. Ce sont des questions organisationnelles déguisées en technique.
+
+---
+
+## Les quatre modes d'échec
+
+Après des missions en logistique, services financiers et infrastructure critique, nous avons identifié quatre schémas récurrents :
+
+### 1. L'écart de réalité des données
+
+La PoC a été entraînée sur un jeu de données soigneusement assemblé. En production, les données ne ressemblent à rien de tout cela.
+
+- Des champs toujours remplis à l'entraînement sont parfois null en production
+- Les horodatages utilisent trois formats selon les systèmes sources
+- « ID client » ne signifie pas la même chose dans le CRM et l'ERP
+
+Ce n'est pas un problème de qualité que l'on règle une fois. C'est un problème de pipeline : schémas à l'ingestion, détection d'anomalies, propriété claire de ce que signifie « propre ».
+
+```python
+# Mauvaise approche : nettoyer manuellement avant chaque entraînement
+df = pd.read_csv("data.csv").dropna()
+
+# Bonne approche : contrats de qualité au niveau pipeline
+from great_expectations import Dataset
+
+dataset = Dataset(df)
+dataset.expect_column_values_to_not_be_null("customer_id")
+dataset.expect_column_values_to_be_between("transaction_amount", 0, 1_000_000)
+results = dataset.validate()
+```
+
+### 2. Le problème d'actionnabilité
+
+Le modèle produit une sortie. Personne ne sait quoi en faire.
+
+Score de churn que les ventes ne savent pas exploiter, alerte d'anomalie sans contexte pour les analystes, prévision que les achats ignorent faute de confiance.
+
+La cause : le modèle a été conçu sans le décideur dans la boucle.
+
+La correction : partir de la décision, pas du modèle. Quelle action change concrètement ? Qui est notifié ? De quelles données a-t-il besoin ?
+
+### 3. Le goulot d'intégration
+
+Le modèle est prêt. Les systèmes consommateurs ne le sont pas.
+
+Dans les grandes organisations, connecter un nouveau service prend des mois — APIs legacy, revues sécurité, infra. Quand l'intégration est prête, le modèle dérive déjà de sa distribution d'entraînement.
+
+Ce qui fonctionne : traiter le modèle comme un microservice dès le jour un. Contrat d'API avant l'entraînement. Couche d'intégration en parallèle du modèle, pas après.
+
+```
+POST /predict/churn-risk
+{
+  "customer_id": "string",
+  "snapshot_date": "ISO-8601"
+}
+
+Response:
+{
+  "risk_score": 0.0-1.0,
+  "risk_tier": "low|medium|high|critical",
+  "top_factors": [{"factor": "string", "direction": "string"}],
+  "recommended_action": "string",
+  "confidence": 0.0-1.0
+}
+```
+
+### 4. La dérive que personne ne voit
+
+Le modèle est déployé. Les métriques d'infra semblent stables.
+
+Six mois plus tard, le monde a changé — saisonnalité, marché, nouvelles lignes de produits — mais pas le modèle. Sans surveillance de la qualité des prédictions (pas seulement de l'infra), la dérive reste invisible jusqu'à la casse visible.
+
+Surveiller en production, c'est trois choses :
+
+- **Dérive des données** : la distribution des entrées a-t-elle bougé ?
+- **Dérive de concept** : la relation entrées/sorties a-t-elle changé ?
+- **Dérive métier** : les décisions en aval se dégradent-elles ?
+
+Seule la troisième compte vraiment. Les deux premières sont des signaux avancés.
+
+---
+
+## Ce que exige le succès
+
+Nous ne commençons pas par le choix du modèle. Nous commençons par trois questions :
+
+**1. Quelle décision va changer ?**  
+Si vous ne pouvez pas la nommer, vous n'êtes pas prêt à construire le modèle.
+
+**2. Qui possède la sortie ?**  
+Organisationnellement : qui revoit quand le modèle recommande X et l'humain fait Y ? Qui est responsable du réentraînement ?
+
+**3. À quoi ressemble « tort » — et que se passe-t-il alors ?**  
+Chaque modèle se trompera. Les organisations qui réussissent conçoivent l'échec avec grâce.
+
+---
+
+## L'infrastructure qui compte vraiment
+
+Avant le modèle :
+
+| Couche | Ce qu'elle permet |
+|--------|-------------------|
+| **Modèle de données canonique** | Toutes les sources parlent le même langage |
+| **Feature store** | Features réutilisables et versionnées |
+| **Suivi d'expériences** | Entraînements reproductibles |
+| **Registre de modèles** | Versions gouvernées avec lignage |
+| **Monitoring** | Dérive, qualité, résultat métier |
+| **Explicabilité** | Confiance des décideurs |
+
+Ce n'est pas de la surcharge. C'est le socle. Construire un modèle sans cela, c'est un gratte-ciel sans étude de sol.
+
+---
+
+## Une note sur la vitesse
+
+La pression est partout : le board veut des résultats, un concurrent a annoncé quelque chose, la PoC a impressionné.
+
+Le chemin le plus rapide vers l'IA en production n'est pas le chemin le plus rapide vers un modèle entraîné. C'est celui qui construit l'infra une fois, correctement, pour que chaque modèle suivant se déploie en jours et non en mois.
+
+Les organisations qui réussissent traitent le premier projet comme « construire la capacité de construire des modèles », pas « construire un modèle ».
+
+---
+
+## Conclusion
+
+Si votre initiative IA stagne, la question n'est pas « qu'est-ce qui ne va pas avec le modèle ? » mais « qu'avons-nous sauté pour en arriver là ? »
+
+La réponse est souvent dans les quatre modes ci-dessus. Et la correction est rarement un meilleur algorithme — c'est le travail ingrat des pipelines, de l'alignement organisationnel et du monitoring absent de la démo.
+
+Nous avons détaillé cette approche dans notre [étude de cas logistique](/case-studies/enterprise-ai-ops). Les décisions d'architecture sont transférables à presque tout domaine.
+
+Si vous traversez un défi similaire, [parlons d'abord de votre situation](/contact) — avant toute recommandation.

@@ -39,7 +39,8 @@ export function InteractiveDemoExplore() {
 
   useEffect(() => {
     const s = parseScenarioParam(searchParams.get("scenario"));
-    if (s) setScenario(s);
+    if (!s) return;
+    queueMicrotask(() => setScenario(s));
   }, [searchParams]);
 
   function runDemo() {

@@ -1,8 +1,6 @@
-# Git monorepo: build runs from repo root (`npm run build` → workspace), output is site/.next
-# If you deploy ONLY the contents of site/ as the repo root (manual zip), use publish = ".next"
-# and command = "npm run build" — see netlify-deploy-bundle/netlify.toml
+# Monorepo: Netlify build runs from repository root (see root package.json workspaces).
 [build]
-  command = "npm run build"
+  command = "npm run check:env -w tenegta-website && npm run build"
   publish = "site/.next"
 
 [build.environment]
@@ -10,3 +8,6 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Note: /api/* is same-origin for the contact form. Cross-origin clients are not supported
+# by default. Do not add a SPA /* → /index.html fallback — it breaks Next.js App Router on Netlify.

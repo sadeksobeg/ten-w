@@ -1,0 +1,21 @@
+{
+  "updatedAt": "2026-05-17T00:00:00.000Z",
+  "overall": "operational",
+  "components": [
+    {
+      "id": "website",
+      "name": { "en": "Public website", "ar": "الموقع العام", "fr": "Site public" },
+      "status": "operational"
+    },
+    {
+      "id": "growth",
+      "name": { "en": "Growth Engine", "ar": "محرك النمو", "fr": "Growth Engine" },
+      "status": "operational"
+    },
+    {
+      "id": "delivery",
+      "name": { "en": "Client delivery platforms", "ar": "منصات تسليم العملاء", "fr": "Plateformes de livraison client" },
+      "status": "operational"
+    }
+  ]
+}

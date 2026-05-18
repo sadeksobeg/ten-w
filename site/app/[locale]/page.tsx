@@ -2,7 +2,13 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { CinematicHero } from "@/components/hero/CinematicHero";
 import { HomeContactBand } from "@/components/home/HomeContactBand";
+import { SystemVisualizerSection } from "@/components/home/SystemVisualizerSection";
+import { Container } from "@/components/ui/Container";
+import { LogoMarquee } from "@/components/home/LogoMarquee";
+import { MetricsBand } from "@/components/home/MetricsBand";
+import { ProblemSolutionSection } from "@/components/home/ProblemSolutionSection";
 import { HomeScrollEnhancements } from "@/components/home/HomeScrollEnhancements";
+import { TestimonialStrip } from "@/components/home/TestimonialStrip";
 import {
   ProjectsRail,
 } from "@/components/home/ProjectsRail";
@@ -72,6 +78,11 @@ export default async function HomePage({ params }: Props) {
           ctaSecondaryHref="/contact?intent=consult"
         />
 
+        <LogoMarquee />
+        <ProblemSolutionSection />
+        <MetricsBand />
+        <TestimonialStrip />
+
         <ServicesMotionGrid
           sectionTitle={t("services.title")}
           items={services}
@@ -92,6 +103,12 @@ export default async function HomePage({ params }: Props) {
           projects={projects}
           locale={loc}
         />
+
+        <section id="system-visualizer" className="relative py-20 md:py-28">
+          <Container>
+            <SystemVisualizerSection locale={loc} />
+          </Container>
+        </section>
 
         <HomeContactBand title={t("cta.title")} subtitle={t("cta.subtitle")} />
       </HomeScrollEnhancements>

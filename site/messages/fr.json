@@ -1,251 +1,353 @@
 {
   "Nav": {
-    "home": "Home",
-    "about": "About",
+    "home": "Accueil",
+    "about": "À propos",
     "solutions": "Solutions",
-    "projects": "Projects",
-    "pilots": "Labs",
-    "techStack": "Tech stack",
-    "team": "Team",
-    "investors": "Investors",
+    "projects": "Projets",
+    "pilots": "Labos",
+    "techStack": "Stack technique",
+    "team": "Équipe",
+    "investors": "Investisseurs",
     "blog": "Blog",
     "growth": "Growth Engine",
     "contact": "Contact",
-    "legal": "Legal",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
-    "language": "Language"
+    "legal": "Mentions légales",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "language": "Langue"
   },
   "Footer": {
     "rights": "All rights reserved.",
     "privacy": "Privacy policy",
     "terms": "Terms & conditions",
-    "tagline": "T.E.N.E.G.T.A conçoit des systèmes intelligents et sécurisés qui aident les organisations à gagner en efficacité et en clarté décisionnelle.",
+    "tagline": "T.E.N.E.G.T.A builds secure, intelligent systems that help organizations work with higher efficiency and clearer decisions.",
     "caseStudies": "Case studies",
     "engagement": "Engagement",
-    "whyUs": "Why us"
+    "whyUs": "Why us",
+    "status": "Status",
+    "techRadar": "Tech radar"
   },
   "HomePage": {
     "meta": {
-      "title": "T.E.N.E.G.T.A – Systèmes intelligents déployables pour les entreprises",
-      "description": "Conception et réalisation en IA, cybersécurité et développement système — de l’idée à l’exploitation."
+      "title": "T.E.N.E.G.T.A – Deployable intelligent systems for enterprises",
+      "description": "We design and deliver AI, cybersecurity, and systems development — from idea to operations."
+    },
+    "credibility": {
+      "trustedBy": "La confiance d'équipes qui construisent des infrastructures critiques",
+      "logosAria": "Secteurs clients"
+    },
+    "problemSolution": {
+      "eyebrow": "L'écart que nous comblons",
+      "problem": "La plupart des entreprises n'échouent pas par manque de données, mais parce que leurs systèmes ne savent pas agir.",
+      "solution": "Nous construisons la couche d'intelligence entre vos données et vos décisions — IA, cybersécurité et ingénierie logicielle en production, pas en slides."
     },
     "hero": {
-      "title": "Des systèmes intelligents qui créent une valeur réelle pour les organisations",
-      "rotate1": "Du pilote à la production — une livraison mesurable.",
-      "rotate2": "IA et pipelines de données branchés sur l’exploitation réelle.",
-      "rotate3": "Architecture security-by-design — pas de rustines en fin de chaîne.",
-      "rotate4": "Un programme cohérent : IA, cyber, logiciel et infrastructure.",
-      "subtitle": "Nous concevons et déployons des solutions en intelligence artificielle, cybersécurité et développement de systèmes — du concept à l’exploitation.",
-      "lead": "T.E.N.E.G.T.A est une entreprise technologique axée sur des systèmes déployables et mesurables, qui aident à gagner en efficacité, réduire les risques et accélérer la décision.",
-      "ctaPrimary": "Découvrir comment nous construisons les systèmes",
-      "ctaSecondary": "Réserver une consultation"
+      "title": "Nous construisons la couche d'intelligence entre vos données et vos décisions.",
+      "tagline": "Systèmes IA · Cybersécurité · Ingénierie logicielle pour les entreprises",
+      "rotate1": "From pilot to production — delivery you can measure.",
+      "rotate2": "AI and data pipelines wired into real operations.",
+      "rotate3": "Security-first architecture, not bolt-on patches.",
+      "rotate4": "One coherent program: AI, cyber, software, and infrastructure.",
+      "subtitle": "We design and deliver solutions in artificial intelligence, cybersecurity, and systems development — from concept to live operations.",
+      "lead": "T.E.N.E.G.T.A is a technology company focused on deployable, measurable systems that help organizations raise efficiency, reduce risk, and speed up decisions.",
+      "ctaPrimary": "Explore how we build systems",
+      "ctaSecondary": "Book a consultation"
     },
     "services": {
-      "title": "Nos domaines d’intervention",
-      "valueProposition": "Nous n’offrons pas seulement des idées : nous bâtissons des solutions concrètes, évolutives et exploitables.",
-      "ai": { "title": "Intelligence artificielle", "desc": "Nous transformons les données en décisions plus claires, avec des modèles de prédiction, de classification et d’automatisation." },
-      "security": { "title": "Cybersécurité", "desc": "Nous protégeons les systèmes et les données par une conception sûre, une supervision attentive et des contrôles préventifs." },
-      "software": { "title": "Systèmes logiciels", "desc": "Nous construisons plateformes et applications sur mesure pour piloter l’activité et unir équipes et données." },
-      "infra": { "title": "Infrastructure numérique", "desc": "Nous mettons en place l’empilement opérationnel : bases de données, intégrations, déploiement et supervision." }
+      "title": "What we focus on",
+      "valueProposition": "We don’t stop at ideas — we build practical solutions that scale and run in production.",
+      "ai": {
+        "title": "Artificial intelligence",
+        "desc": "We turn data into clearer decisions with models for prediction, classification, and operational automation."
+      },
+      "security": {
+        "title": "Cybersecurity",
+        "desc": "We protect systems and data with secure design, attentive monitoring, and controls that reduce risk before incidents happen."
+      },
+      "software": {
+        "title": "Software systems",
+        "desc": "We build tailored platforms and applications that run operations and connect teams and data in one place."
+      },
+      "infra": {
+        "title": "Digital infrastructure",
+        "desc": "We create the stack that makes solutions operable: databases, integrations, deployment, and monitoring."
+      }
     },
     "featured": {
-      "title": "Projets en avant",
-      "viewAll": "Tous les projets"
+      "title": "Featured projects",
+      "viewAll": "All projects"
     },
     "cta": {
-      "title": "Un projet ou un pilote ?",
-      "subtitle": "Décrivez vos objectifs — nous répondons les jours ouvrés.",
-      "button": "Réserver une consultation"
+      "title": "Have a project or pilot in mind?",
+      "subtitle": "Tell us your goals — we respond on business days.",
+      "button": "Book a consultation"
+    },
+    "SystemVisualizer": {
+      "title": "Décrivez votre système — nous le visualisons",
+      "subtitle": "Écrivez n'importe quelle idée dans n'importe quelle langue. Nous détectons ses composants et dessinons son architecture vivante.",
+      "placeholder": "Exemple : je veux un système qui surveille mes entrepôts et prédit les ruptures de stock…",
+      "btnAnalyze": "Révéler l'architecture",
+      "btnBuild": "Construire avec nous",
+      "analyzing": "T.E.N.E.G.T.A analyse l'architecture de votre système…",
+      "empty": "Votre vision architecturale apparaîtra ici",
+      "badges": {
+        "ai": "Intelligence artificielle",
+        "cyber": "Cybersécurité",
+        "software": "Logiciel",
+        "infra": "Infrastructure",
+        "fintech": "Fintech",
+        "health": "Santé numérique",
+        "logistics": "Logistique",
+        "iot": "Internet des objets",
+        "data": "Analytique de données",
+        "ecommerce": "E-commerce"
+      },
+      "summaries": {
+        "ai": "Pipelines de données, modèles et inférence pour des décisions opérationnelles.",
+        "cyber": "Contrôles zero-trust, détection et pistes d'audit sur votre périmètre.",
+        "software": "Auth, API, services cœur et frontends en une plateforme déployable.",
+        "infra": "Équilibrage de charge, clusters, données et observabilité à l'échelle.",
+        "fintech": "Paiements, risque, grand livre et conformité dans un flux régulé.",
+        "health": "Accès patient, dossiers cliniques et soins connectés en sécurité.",
+        "logistics": "Commandes, routage, flotte, entrepôt et livraison dernier kilomètre.",
+        "iot": "Capteurs, passerelles, streaming et tableaux de bord temps réel.",
+        "data": "Ingestion, ETL, entrepôt et analytique pour des insights mesurables.",
+        "ecommerce": "Catalogue, panier, paiements, exécution et analytique unifiés."
+      }
     }
   },
   "AboutPage": {
     "meta": {
-      "title": "À propos – T.E.N.E.G.T.A",
-      "description": "Entreprise technologique spécialisée dans les systèmes intelligents et sécurisés — avec une livraison claire et mesurable."
+      "title": "About – T.E.N.E.G.T.A",
+      "description": "A technology company specialized in intelligent, secure systems — with clear, measurable delivery."
     },
-    "hero": { "title": "À propos" },
+    "hero": {
+      "title": "About us"
+    },
     "intro": {
-      "p1": "T.E.N.E.G.T.A est une entreprise technologique spécialisée dans la conception de systèmes intelligents et sécurisés.",
-      "p2": "Nous combinons rigueur d’ingénierie, compréhension du terrain et mise en œuvre numérique de façon claire et mesurable.",
-      "p3": "Nous accompagnons les organisations qui veulent améliorer la performance, structurer les processus et protéger les données — avec des solutions sur mesure, pas des modèles génériques."
+      "p1": "T.E.N.E.G.T.A is a technology company specialized in building intelligent, secure systems.",
+      "p2": "We combine engineering discipline, operational understanding, and digital delivery in a way that is clear and measurable.",
+      "p3": "We work with organizations that want to improve performance, organize processes, and protect data — through tailored solutions, not generic templates."
     },
-    "valuesStatement": "Nous croyons qu’une bonne technologie ne se contente pas d’impressionner : elle produit un impact clair et durable."
+    "valuesStatement": "We believe good technology doesn’t just impress — it creates clear, lasting impact."
   },
   "SolutionsPage": {
     "meta": {
-      "title": "Solutions – IA, cybersécurité, logiciels et infrastructure | T.E.N.E.G.T.A",
-      "description": "IA, cybersécurité, logiciels sur mesure et infrastructure numérique de niveau entreprise — livrés comme un programme cohérent pour des organisations dans le monde entier."
+      "title": "Solutions – AI, cybersecurity, software & infrastructure | T.E.N.E.G.T.A",
+      "description": "Enterprise-grade AI, cybersecurity, custom software, and digital infrastructure — delivered as one coherent program for organizations worldwide."
     },
     "hero": {
-      "eyebrow": "Ingénierie système pour entreprises",
-      "title": "Des solutions conçues pour la montée en charge",
-      "subtitle": "Intelligence artificielle, cybersécurité, logiciels et infrastructure — pensés comme un seul programme de livraison, pas comme des initiatives isolées.",
-      "lead": "Nous accompagnons des équipes dans plusieurs régions pour architecturer, déployer et exploiter des systèmes qui respectent la résidence des données, les référentiels de sécurité et votre réalité opérationnelle."
+      "eyebrow": "Enterprise systems delivery",
+      "title": "Solutions engineered for scale",
+      "subtitle": "Artificial intelligence, cybersecurity, software, and infrastructure — designed as a single delivery program, not disconnected initiatives.",
+      "lead": "We work with teams across regions to architect, deploy, and operate systems that respect data residency, security baselines, and how your business actually runs."
     },
     "stats": {
-      "s1": "Patterns de livraison multi-secteurs",
-      "s2": "Ingénierie « security-by-design »",
-      "s3": "Résultats mesurables et SLA"
+      "s1": "Multi-sector delivery patterns",
+      "s2": "Security-aware engineering",
+      "s3": "Measurable outcomes & SLAs"
+    },
+    "pillarLabels": {
+      "problem": "The problem",
+      "approach": "Our approach",
+      "outcome": "What you get"
     },
     "pillarsHead": {
-      "title": "Quatre piliers de capacité",
-      "subtitle": "Principes d’architecture partagés, documentation et transfert — pour que votre organisation maîtrise la feuille de route en toute confiance.",
-      "simHint": "Ouvrez un pilier pour lancer une simulation interactive immersive dédiée.",
-      "openSim": "Lancer la simulation →"
+      "title": "Four capability pillars",
+      "subtitle": "Shared architecture principles, documentation, and handover — so your organization can own the roadmap with confidence.",
+      "simHint": "Open any pillar to launch a full-screen interactive simulation tailored to that capability.",
+      "openSim": "Launch simulation →"
     },
     "ai": {
-      "title": "Intelligence artificielle et analytique",
-      "body": "Des signaux aux modèles — prédiction, classification et automatisation ancrées dans vos données opérationnelles.",
-      "b1": "Analytique et prévision lorsque la qualité des données permet des décisions fiables",
-      "b2": "Workflows ML reproductibles avec évaluation, surveillance et dérive",
-      "b3": "Contrôle humain dans la boucle pour les décisions sensibles ou réglementées"
+      "title": "Artificial intelligence & analytics",
+      "problem": "Models work in notebooks but production lacks data contracts, owners, and SLOs.",
+      "approach": "We design event-driven feature pipelines, evaluation gates, and human-in-the-loop controls before scaling automation.",
+      "outcome": "Measurable KPI movement — not demo accuracy — with operable inference paths.",
+      "clientVoice": "We finally see the same number before the meeting.",
+      "pillarCta": "Start with AI systems",
+      "body": "From raw signals to models — prediction, classification, and automation grounded in operational data you already have.",
+      "b1": "Analytics and forecasting where data quality supports reliable decisions",
+      "b2": "Reproducible ML workflows with evaluation, monitoring, and drift awareness",
+      "b3": "Human-in-the-loop controls for high-stakes or regulated decisions"
     },
     "cyber": {
-      "title": "Cybersécurité et résilience",
-      "body": "Protéger identités, réseaux et charges de travail avec des contrôles en couches et des opérations observables.",
-      "b1": "Conception informée par la menace et alignée sur les référentiels modernes",
-      "b2": "Détection, corrélation et réponse adaptées à votre SOC et à vos outils",
-      "b3": "Durcissement continu — pas une simple checklist d’audit ponctuelle"
+      "title": "Cybersecurity & resilience",
+      "problem": "Alert noise drowns analysts; OT and IT logs do not speak the same language.",
+      "approach": "Normalize, correlate, and automate playbooks with explicit human approval for sensitive actions.",
+      "outcome": "Fewer false positives, faster containment, audit-ready trails.",
+      "clientVoice": "Response became measurable — not a chain of midnight calls.",
+      "pillarCta": "Start with security",
+      "body": "Protect identity, networks, and workloads with layered controls and operations you can observe and improve.",
+      "b1": "Threat-informed design aligned to modern security baselines",
+      "b2": "Detection, correlation, and response tuned to your SOC and tooling",
+      "b3": "Continuous hardening — not a one-off audit checklist"
     },
     "software": {
-      "title": "Logiciels et plateformes d’intégration",
-      "body": "Applications sur mesure et intégrations qui relient personnes, données et processus sur votre paysage applicatif.",
-      "b1": "Intégration API-first avec les systèmes déjà en place",
-      "b2": "Expériences par rôle pour opérateurs, analystes et direction",
-      "b3": "Discipline de release : préproduction, retour arrière et observabilité en production"
+      "title": "Software & integration platforms",
+      "problem": "Manual releases and mismatched environments block scale.",
+      "approach": "API-first design, CI/CD with quality gates, and tenant-aware data models.",
+      "outcome": "Confident monthly releases with production observability.",
+      "clientVoice": "We ship twelve times a month now — with evidence, not hope.",
+      "pillarCta": "Start with software delivery",
+      "body": "Custom applications and integrations that connect people, data, and workflows across your technology estate.",
+      "b1": "API-first integration with the systems you already run",
+      "b2": "Role-based experiences for operators, analysts, and leadership",
+      "b3": "Release discipline: staging, rollback paths, and production observability"
     },
     "infra": {
-      "title": "Infrastructure numérique et opérations",
-      "body": "Le socle qui rend les solutions fiables : données, connectivité, déploiement et exploitation au quotidien.",
-      "b1": "Modèles cloud et hybrides adaptés à vos contraintes et régions",
-      "b2": "Infrastructure as code et environnements reproductibles",
-      "b3": "Supervision, SLO et runbooks que vos équipes peuvent exécuter sans dépendance fournisseur"
+      "title": "Digital infrastructure & operations",
+      "problem": "Fragile hosting and opaque operations inflate incident cost.",
+      "approach": "IaC, observability (metrics/logs/traces), and runbooks wired to your SLAs.",
+      "outcome": "Predictable operations with clear ownership and recovery paths.",
+      "clientVoice": "We stopped guessing during outages.",
+      "pillarCta": "Start with infrastructure",
+      "body": "The foundation that keeps solutions reliable: data platforms, connectivity, deployment, and day-two operations.",
+      "b1": "Cloud and hybrid patterns aligned to your constraints and regions",
+      "b2": "Infrastructure as code and repeatable environments",
+      "b3": "Monitoring, SLOs, and runbooks your teams can execute without vendor lock-in"
     },
     "global": {
-      "title": "Pensé pour les opérations internationales",
-      "lead": "Que vous opériez dans une ou plusieurs zones géographiques, nous alignons architecture et livraison sur les exigences locales, les fournisseurs d’identité et la réalité réseau.",
-      "p1": "Intégration d’abord : étendre l’existant plutôt que tout refondre sans nécessité.",
-      "p2": "Jalons, critères d’acceptation et documentation adaptés aux achats, à l’IT et aux métiers.",
-      "p3": "Un modèle de livraison qui supporte les équipes distribuées, les environnements hybrides et le déploiement par phases."
+      "title": "Built for international operations",
+      "lead": "Whether you operate in one geography or many, we align architecture and delivery with regional requirements, identity providers, and network realities.",
+      "p1": "Integration-first: extend what you already run instead of unnecessary greenfield replatforming.",
+      "p2": "Procurement-friendly milestones, acceptance criteria, and documentation for IT and business stakeholders.",
+      "p3": "A delivery model that supports distributed teams, hybrid footprints, and phased rollout."
     },
     "intelligentSystems": {
-      "title": "Comment nous construisons des systèmes intelligents",
-      "subtitle": "Un seul chemin d’ingénierie des données à l’action opérateur — adapté à votre secteur, stack et profil de risque.",
-      "link": "Voir le blueprint de livraison"
+      "title": "How we build intelligent systems",
+      "subtitle": "One engineering path from data to operator action — adapted to your sector, stack, and risk profile.",
+      "link": "Explore the delivery blueprint"
     },
     "cta": {
-      "title": "Parlons de votre prochaine initiative",
-      "subtitle": "Partagez objectifs, calendrier et contraintes — nous proposerons une approche par phases avec des résultats clairs.",
-      "button": "Réserver une consultation"
+      "title": "Discuss your next initiative",
+      "subtitle": "Share goals, timelines, and constraints — we will propose a phased plan with clear outcomes.",
+      "button": "Book a consultation"
     }
   },
   "SolutionPillarSim": {
     "common": {
-      "back": "Retour aux solutions",
-      "cta": "Parler de cette capacité",
-      "disclaimer": "Simulation illustrative en temps réel — pas de télémétrie de production.",
-      "explainerLabel": "Ce que montre cette animation"
+      "back": "Back to solutions",
+      "cta": "Discuss this capability",
+      "disclaimer": "Illustrative real-time simulation — not live production telemetry.",
+      "explainerLabel": "What this animation shows"
     },
     "ai": {
       "meta": {
-        "title": "Simulation IA & analytique | T.E.N.E.G.T.A",
-        "description": "Champ neural interactif : cœur d’inférence, chemins de signal, cohérence — expérience illustrative."
+        "title": "AI & analytics simulation | T.E.N.E.G.T.A",
+        "description": "Interactive neural-field visualization: inference core, signal paths, and model sync — illustrative experience."
       },
-      "title": "Intelligence artificielle et analytique",
-      "subtitle": "Voyez les signaux converger vers un cœur d’inférence — une vue stylisée d’une livraison centrée modèle.",
-      "body": "En production nous connectons workflows ML reproductibles, supervision et boucles humaines à votre patrimoine données — cette scène dramatise le flux pour la narration uniquement.",
-      "kpi1": "Cœur d’inférence",
-      "kpi2": "Chemins synaptiques",
-      "kpi3": "Cohérence du signal",
-      "simpleExplainer": "En termes simples : à gauche entrent les données (comme une « empreinte » colorée), au centre brillant le modèle fait son travail, et à droite les barres ressemblent à des scores ou réponses possibles. Les points en mouvement montrent l’information qui chemine. Les chiffres sont une démo illustrative — pas de vraies mesures de vos systèmes.",
+      "title": "Artificial intelligence & analytics",
+      "subtitle": "See how signals consolidate into an inference core — a stylized view of model-centric delivery.",
+      "body": "In production we wire reproducible ML workflows, monitoring, and human-in-the-loop controls to your data estate — this scene dramatizes signal flow for storytelling only.",
+      "kpi1": "Inference core",
+      "kpi2": "Synaptic paths",
+      "kpi3": "Signal coherence",
+      "simpleExplainer": "In plain terms: the left side is incoming information (like a colourful “fingerprint” of the data), the glowing centre is where the model does its work, and the bars on the right are possible outputs or scores. The moving dots show information travelling inward. The numbers are illustrative only—they are not real measurements from your systems.",
       "hud": {
-        "confidence": "Confiance",
-        "tokensPerSec": "Jetons/s",
-        "trainLoss": "Perte d’entraînement",
-        "pipeline": "Pipeline signal",
-        "layerIn": "Entrée",
-        "layerHidden": "Couches cachées",
-        "layerOut": "Sortie",
-        "caption": "Embeddings → pile → tête"
+        "confidence": "Confidence",
+        "tokensPerSec": "Tokens/s",
+        "trainLoss": "Train loss",
+        "pipeline": "Signal pipeline",
+        "layerIn": "Input",
+        "layerHidden": "Hidden",
+        "layerOut": "Output",
+        "caption": "Embeddings → stack → head"
       }
     },
     "cyber": {
       "meta": {
-        "title": "Simulation radar cybersécurité | T.E.N.E.G.T.A",
-        "description": "Radar façon SOC : balayage, blips menace, neutralisation — expérience illustrative."
+        "title": "Cybersecurity radar simulation | T.E.N.E.G.T.A",
+        "description": "Interactive SOC-style radar: sweep detection, threat blips, and neutralization — illustrative experience."
       },
-      "title": "Cybersécurité et résilience",
-      "subtitle": "Une métaphore radar vivante — les menaces apparaissent, le balayage intersecte, l’état devient « traité ».",
-      "body": "Les programmes réels combinent détection, corrélation et playbooks SOC — la démo est une abstraction cinématique, pas un flux temps réel.",
-      "kpi1": "Balayage actif",
-      "kpi2": "Menace → traité",
-      "kpi3": "Bouclier",
-      "simpleExplainer": "En termes simples : ce radar illustre la surveillance sécurité. Les points rouges sont comme des alertes ; quand le balayage vert passe dessus, ils deviennent verts pour dire « traité ». Les lignes du bas sont des messages fictifs pour l’effet visuel. Ce n’est pas une vue réelle de votre réseau.",
+      "title": "Cybersecurity & resilience",
+      "subtitle": "A live radar metaphor — threats surface, the sweep intersects, and events move to a cleared state.",
+      "body": "Real programs combine detection engineering, correlation, and playbooks aligned to your SOC — this demo is a cinematic abstraction, not a live feed.",
+      "kpi1": "Sweep active",
+      "kpi2": "Threat → cleared",
+      "kpi3": "Shield posture",
+      "simpleExplainer": "In plain terms: this radar is a metaphor for security monitoring. Red blips are like warnings; when the green sweep passes over them they turn safe (green) to show “handled.” The lines at the bottom are fake log messages for effect. This is not a live view of your network.",
       "hud": {
-        "activeThreats": "Actives",
-        "neutralized": "Neutralisées",
-        "sweepRpm": "Balayage",
-        "compass": "Radar SOC",
-        "log1": "[ALERTE] Empreinte TLS anormale — compartiment A",
-        "log2": "[INFO] Règle corrélation #204 correspondante",
-        "log3": "[OK] Playbook PR-12 terminé",
-        "log4": "[AVERT] Pic trafic est-ouest 14 %",
-        "log5": "[OK] Flux IOC synchronisé",
-        "log6": "[ALERTE] Mouvement latéral — file triage"
+        "activeThreats": "Active",
+        "neutralized": "Neutralized",
+        "sweepRpm": "Sweep",
+        "compass": "SOC radar",
+        "log1": "[ALERT] Anomalous TLS fingerprint — bucket A",
+        "log2": "[INFO] Correlation rule #204 matched",
+        "log3": "[OK] Playbook PR-12 completed",
+        "log4": "[WARN] East-west traffic spike 14%",
+        "log5": "[OK] IOC feed synchronized",
+        "log6": "[ALERT] Lateral movement — triage queue"
       }
     },
     "software": {
       "meta": {
-        "title": "Simulation mesh logiciel | T.E.N.E.G.T.A",
-        "description": "Modules, chemins API, jetons de synchro — expérience illustrative."
+        "title": "Software mesh simulation | T.E.N.E.G.T.A",
+        "description": "Interactive service mesh: modules, API paths, and sync tokens — illustrative experience."
       },
-      "title": "Logiciels et intégration",
-      "subtitle": "Les modules négocient sur des courbes — métaphore d’intégration API-first et releases maîtrisées.",
-      "body": "Nous livrons des plateformes intégration-first avec préprod, observabilité et retour arrière — l’animation met l’accent sur la connectivité, pas votre architecture réelle.",
-      "kpi1": "Mesh API",
-      "kpi2": "Jetons de synchro",
-      "kpi3": "Santé des modules",
-      "simpleExplainer": "En termes simples : chaque boîte est une partie d’application (API, service, etc.). La grande boîte centrale joue le rôle de passerelle. Les courbes sont des échanges ; les points or et cyan montrent requêtes et réponses. Le point vert signifie « ce composant répond ». C’est une image de coopération entre systèmes, pas votre architecture réelle.",
+      "title": "Software & integration",
+      "subtitle": "Modules negotiate over curved paths — a metaphor for API-first integration and controlled releases.",
+      "body": "We deliver integration-first platforms with staging, observability, and rollback — the animation highlights connectivity, not your actual architecture.",
+      "kpi1": "API mesh",
+      "kpi2": "Sync tokens",
+      "kpi3": "Module health",
+      "simpleExplainer": "In plain terms: each box is a piece of software (API, service, job, etc.). The large box in the middle is like a gateway or front door. Curved lines are conversations between parts; gold and cyan dots show requests and responses passing along those paths. The green dots mean “this part is responding.” It is a diagram of teamwork between systems, not your real architecture.",
       "hud": {
-        "p99": "Latence p99",
-        "rps": "Req/s",
-        "healthy": "Services sains",
-        "queue": "Profondeur file",
+        "p99": "p99 latency",
+        "rps": "Requests/s",
+        "healthy": "Healthy services",
+        "queue": "Queue depth",
         "mesh": "Service mesh"
       }
     },
     "infra": {
       "meta": {
-        "title": "Simulation trafic infrastructure | T.E.N.E.G.T.A",
-        "description": "Charge par région, backbone, flux de bits — expérience illustrative."
+        "title": "Infrastructure traffic simulation | T.E.N.E.G.T.A",
+        "description": "Interactive backbone view: regional load, backbone spine, and streaming bits — illustrative experience."
       },
-      "title": "Infrastructure numérique et opérations",
-      "subtitle": "Des voies régionales pulsent pendant que les bits traversent l’épine dorsale — une vue opérationnelle stylisée.",
-      "body": "L’exploitation couvre IaC, hybride, SLO et runbooks — cette visualisation est un art motion illustratif, pas des données de monitoring.",
-      "kpi1": "Charge régionale",
+      "title": "Digital infrastructure & operations",
+      "subtitle": "Regional lanes pulse with load while bits traverse the backbone — a stylized operations picture.",
+      "body": "Operational work spans IaC, hybrid footprints, SLOs, and runbooks — this visualization is illustrative traffic art, not monitoring data.",
+      "kpi1": "Regional load",
       "kpi2": "Backbone",
-      "kpi3": "Flux de bits",
-      "simpleExplainer": "En termes simples : chaque ligne horizontale est une région ou une voie. La barre colorée indique à quel point elle est chargée. La ligne verticale centrale est l’épine dorsale — comme une autoroute — et les traits lumineux sont des paquets de données. Les temps et totaux sont des exemples fictifs pour l’idée, pas du monitoring réel.",
+      "kpi3": "Streaming bits",
+      "simpleExplainer": "In plain terms: each horizontal row is a region or route (for example EU, US). The coloured bar shows how “busy” that path is. The vertical line in the middle is the main backbone—like a highway—and the bright dashes are packets of data moving along it. Times and totals in the corners are fictional examples to help you picture the idea, not live monitoring.",
       "hud": {
-        "throughput": "Débit",
-        "slo": "Santé SLO",
+        "throughput": "Throughput",
+        "slo": "SLO health",
         "backbone": "Backbone",
-        "crossLatency": "Inter-régions"
+        "crossLatency": "Cross-region"
       }
     }
   },
   "IntelligentSystemsPage": {
     "meta": {
-      "title": "Comment nous construisons des systèmes intelligents – T.E.N.E.G.T.A",
-      "description": "Des données aux modèles et tableaux opérateurs — ingénierie mesurable sur les secteurs."
+      "title": "How we build intelligent systems – T.E.N.E.G.T.A",
+      "description": "From data to models and operator dashboards — measurable engineering delivery across industries."
     },
     "hero": {
-      "title": "Comment nous construisons des systèmes intelligents",
-      "subtitle": "Nous concevons et livrons des stacks intégrées : données, modèles, interfaces et guides d’exploitation alignés sur vos objectifs — pas seulement des slides.",
+      "title": "How we build intelligent systems",
+      "subtitle": "We design and deliver integrated stacks: data, models, interfaces, and runbooks aligned to your goals — not slides alone.",
       "ctaDemo": "Try the interactive demo",
       "ctaContact": "Start a conversation",
       "ctaProjects": "View case studies"
+    },
+    "diagram": {
+      "title": "Interactive architecture map",
+      "hint": "Select a layer to see how we wire production-grade intelligent systems.",
+      "nodes": {
+        "ingest": "Ingest",
+        "store": "Store",
+        "model": "Model",
+        "api": "API",
+        "observe": "Observe"
+      },
+      "descriptions": {
+        "ingest": "Event contracts and quality gates normalize data at the boundary — before it pollutes downstream features.",
+        "store": "Analytical stores and feature layers with retention policies aligned to compliance and cost.",
+        "model": "Training, evaluation, and promotion workflows with drift monitoring — not one-off notebooks.",
+        "api": "Inference separated from product APIs; caching, auth, and SLOs owned by platform teams.",
+        "observe": "Metrics, logs, traces, and runbooks — incidents improve the system, not just close tickets."
+      }
     },
     "flow": {
       "title": "How data becomes action",
@@ -289,9 +391,18 @@
   },
   "DemoKpiStrip": {
     "disclaimer": "Illustrative sample — not live data.",
-    "kpi1": { "label": "Signal health", "value": "98%" },
-    "kpi2": { "label": "Latency (p95)", "value": "120ms" },
-    "kpi3": { "label": "Open alerts", "value": "3" },
+    "kpi1": {
+      "label": "Signal health",
+      "value": "98%"
+    },
+    "kpi2": {
+      "label": "Latency (p95)",
+      "value": "120ms"
+    },
+    "kpi3": {
+      "label": "Open alerts",
+      "value": "3"
+    },
     "alert": {
       "title": "Threshold",
       "body": "Anomaly score on stream #7 exceeded policy — review recommended."
@@ -300,13 +411,13 @@
   },
   "DemoExplorePage": {
     "meta": {
-      "title": "Démo interactive – T.E.N.E.G.T.A",
-      "description": "Choisissez un secteur ou un scénario, puis voyez comment les données deviennent recommandations, tableaux et décisions — à titre illustratif."
+      "title": "Interactive demo – T.E.N.E.G.T.A",
+      "description": "Choose a sector or scenario, then see how data becomes recommendations, dashboards, and operational decisions — illustrative only."
     },
     "hero": {
-      "title": "Démo interactive",
-      "subtitle": "Choisissez le secteur ou le scénario qui vous correspond, puis voyez comment les données se transforment en recommandations, tableaux de bord et décisions opérationnelles.",
-      "note": "Cette démo est illustrative — pour visualiser le système avant réalisation. Ce n’est pas un conseil professionnel ni une garantie de résultat."
+      "title": "Interactive demo",
+      "subtitle": "Choose the sector or scenario that fits you, then see how data turns into recommendations, dashboards, and operational decisions.",
+      "note": "This demo is for illustration — to visualize the system before build. It is not professional advice or a guaranteed outcome."
     },
     "intro": "These scenarios are labels for storytelling — they do not limit the industries we serve.",
     "scenarioLabel": "Scenario",
@@ -340,48 +451,75 @@
   "PilotsShowcasePage": {
     "meta": {
       "title": "Showcase – labs & pilots",
-      "description": "Vitrine de ce que nous livrons en laboratoires et pilotes — sans dépendre d’une vidéo."
+      "description": "A showcase of what we deliver in labs and pilots — without relying on video."
     },
     "hero": {
       "title": "Showcase",
       "subtitle": "A short view of our work in the field — from pilots to production-ready systems."
     },
     "reel": {
-      "eyebrow": "Reel pilote (illustratif)",
-      "title": "Des signaux à la décision — à quoi ressemble un pilote",
-      "subtitle": "Une abstraction cinématique : signaux opérationnels, unification, puis dashboards, modèles et runbooks exploitables par votre équipe.",
-      "kpi1": { "label": "Durée", "value": "2–6 semaines" },
-      "kpi2": { "label": "Périmètre", "value": "1–2 cas" },
-      "kpi3": { "label": "Résultat", "value": "Mesuré" },
-      "cards": {
-        "c1": { "title": "Découverte", "body": "Alignement contraintes, données, utilisateurs et critères d’acceptation. Pas de périmètre flou." },
-        "c2": { "title": "Construction", "body": "Intégrations, pipeline, prototypes et contrôles — connectés à votre environnement." },
-        "c3": { "title": "Exploitation", "body": "Dashboards, runbooks et transfert pour que votre équipe maîtrise la suite." }
+      "eyebrow": "Pilot reel (illustrative)",
+      "title": "From signals to decisions — what a pilot looks like",
+      "subtitle": "A short, cinematic abstraction of how we take real operational signals, unify them, then ship dashboards, models, and runbooks your team can operate.",
+      "kpi1": {
+        "label": "Timebox",
+        "value": "2–6 weeks"
       },
-      "disclaimer": "Visuels et chiffres sont illustratifs — pas de télémétrie de production et pas une garantie."
+      "kpi2": {
+        "label": "Scope",
+        "value": "1–2 use cases"
+      },
+      "kpi3": {
+        "label": "Outcome",
+        "value": "Measured"
+      },
+      "cards": {
+        "c1": {
+          "title": "Discovery",
+          "body": "Align on constraints, data, users, and acceptance criteria. No vague scope."
+        },
+        "c2": {
+          "title": "Build",
+          "body": "Integrations, pipeline, prototypes, and controls — wired into your environment."
+        },
+        "c3": {
+          "title": "Operate",
+          "body": "Dashboards, runbooks, and handover so your team can own the next iteration."
+        }
+      },
+      "disclaimer": "Visuals and numbers are illustrative examples — not production telemetry and not a guarantee of outcomes."
     },
     "sections": {
       "what": {
-        "title": "Ce que nous testons dans un pilote",
-        "body": "Un pilote n’est pas une démo : c’est une phase bornée avec métriques et critères d’acceptation.",
-        "b1": "Un flux opérationnel avec entrées/sorties claires (tickets, alertes, signaux terrain, etc.)",
-        "b2": "Préparation des données et seuils qualité (ce qu’on peut fiabiliser vs corriger)",
-        "b3": "Baseline sécurité : identité, accès, audit et pratiques compatibles production"
+        "title": "What we test in a pilot",
+        "body": "A pilot is not a demo. It is a bounded delivery phase with metrics and acceptance criteria.",
+        "b1": "One operational workflow with clear inputs/outputs (tickets, alerts, field signals, etc.)",
+        "b2": "Data readiness and quality gates (what we trust vs what we fix)",
+        "b3": "Security baseline: identity, access, audit trail, and production-safe practices"
       },
       "deliver": {
-        "title": "Ce que vous recevez",
-        "body": "Des artefacts exploitables — pas des slides — pour prolonger vers la production.",
-        "b1": "Dashboards + définitions de KPI (ce que « succès » veut dire)",
-        "b2": "Pipeline fonctionnel + environnements reproductibles",
-        "b3": "Runbooks + notes de transfert pour les opérations"
+        "title": "What you receive",
+        "body": "You receive usable artifacts — not slides — so the program can continue into production.",
+        "b1": "Dashboards + KPI definitions (what success means)",
+        "b2": "A working pipeline + reproducible environments",
+        "b3": "Runbooks + handover notes for day-two operations"
       },
       "samples": {
-        "title": "Exemples de pilotes (multi-secteurs)",
-        "body": "Exemples des types de pilotes que nous menons — adaptés au contexte, à la résidence des données et au terrain.",
-        "c1": { "title": "Sécurité & SOC", "body": "Corréler les alertes, réduire le bruit et livrer des playbooks de confinement." },
-        "c2": { "title": "Opérations & SLA", "body": "Unifier télémétrie et tickets avec prédiction de charge et besoins d’équipe." },
-        "c3": { "title": "Terrain & capteurs", "body": "Relier capteurs à des seuils actionnables et dashboards saisonniers." },
-        "disclaimer": "Exemples illustratifs et généralisés ; le périmètre final dépend de vos contraintes et de l’accord."
+        "title": "Sample pilot stories (multi-sector)",
+        "body": "Examples of the kinds of pilots we run — adapted to context, data residency, and operational reality.",
+        "c1": {
+          "title": "Security & SOC",
+          "body": "Correlate alerts, reduce noise, and ship playbooks for faster containment."
+        },
+        "c2": {
+          "title": "Operations & SLAs",
+          "body": "Unify telemetry and tickets with a view that predicts load and staffing needs."
+        },
+        "c3": {
+          "title": "Field & sensing",
+          "body": "Connect sensors to actionable thresholds and seasonal forecasting dashboards."
+        },
+        "disclaimer": "Examples are illustrative and generalized; final scope follows your constraints and agreement."
       }
     },
     "ctaPrimary": "Discuss a pilot",
@@ -390,18 +528,18 @@
   "ContactPage": {
     "meta": {
       "title": "Contact – T.E.N.E.G.T.A",
-      "description": "Projet, pilote ou idée à transformer en système — nous répondons les jours ouvrés."
+      "description": "A project, pilot, or idea you want turned into a system — we respond on business days."
     },
     "hero": {
-      "title": "Contactez-nous",
-      "body": "Si vous avez un projet, un pilote ou une idée à transformer en système concret, nous serons heureux d’ouvrir la discussion.",
-      "subtitle": "Nous répondons les jours ouvrés (souvent sous 1 à 2 jours).",
-      "slaNote": "Pour les sujets de sécurité urgents, indiquez « urgent » dans le message."
+      "title": "Contact us",
+      "body": "If you have a project, pilot, or idea you want turned into a real system, we would be glad to start the conversation.",
+      "subtitle": "We respond on business days (typically within 1–2 business days).",
+      "slaNote": "For urgent security matters, state “urgent” in the subject line."
     },
-    "phoneLabel": "Téléphone",
+    "phoneLabel": "Phone",
     "phoneRaw": "+963953562654",
     "phoneDisplay": "+963 953 562 654",
-    "addressLine": "Salmieh — en face du complexe médical Ibn al-Nafis",
+    "addressLine": "Salmieh — opposite Ibn al-Nafis Medical Complex",
     "regionalNote": "Global inquiries welcome — include your time zone for scheduling.",
     "formHeading": "Contact form",
     "form": {
@@ -412,30 +550,33 @@
       "submit": "Send",
       "sending": "Sending…",
       "success": "Message sent successfully.",
-      "successTitle": "Merci — nous avons bien reçu votre message",
-      "successSubtitle": "Nous répondrons les jours ouvrés. Vérifiez votre boîte (et les indésirables).",
-      "sendAnother": "Envoyer un autre message",
+      "successTitle": "Thank you — we received your message",
+      "successSubtitle": "We’ll reply on business days. Check your inbox (and spam) for our note.",
+      "sendAnother": "Send another message",
       "error": "Could not send. Please try again later.",
       "rateLimited": "Too many requests from this network. Please wait and try again.",
       "validation": {
         "email": "Please enter a valid email",
         "required": "This field is required",
-        "messageMin": "Le message doit contenir au moins 5 caractères.",
-        "checkFields": "Vérifiez les champs (e-mail, longueur du message, etc.)."
+        "messageMin": "Message must be at least 5 characters.",
+        "checkFields": "Check the fields (email, message length, etc.)."
       },
       "honeypot": "Leave this field empty"
     },
     "whatsapp": "WhatsApp",
     "address": "Address",
-    "hours": "Heures d’ouverture",
-    "hoursLine": "Dim–jeu, heures ouvrables"
+    "hours": "Business hours",
+    "hoursLine": "Sun–Thu, business hours"
   },
   "ProjectsPage": {
     "meta": {
       "title": "T.E.N.E.G.T.A projects – Success stories",
       "description": "AI, security, and systems delivery across industries."
     },
-    "hero": { "title": "Projects", "subtitle": "Challenge, solution, measurable outcomes." },
+    "hero": {
+      "title": "Projects",
+      "subtitle": "Challenge, solution, measurable outcomes."
+    },
     "readMore": "Details",
     "challenge": "Challenge",
     "solution": "Solution",
@@ -443,141 +584,201 @@
   },
   "PilotsPage": {
     "meta": {
-      "title": "Laboratoires et pilotes – T.E.N.E.G.T.A",
-      "description": "Tester les idées dans des environnements réels limités avant généralisation — réduire les risques et valider les hypothèses."
+      "title": "Labs & pilots – T.E.N.E.G.T.A",
+      "description": "Testing ideas in limited real environments before rollout — reducing risk and validating assumptions."
     },
     "hero": {
-      "title": "Laboratoires et pilotes",
-      "subtitle": "Nous testons les idées dans des environnements réels et limités avant généralisation. Cette phase réduit les risques, affine les hypothèses et transforme le concept en système évolutif."
+      "title": "Labs & pilots",
+      "subtitle": "We test ideas in limited real environments before broad rollout. This phase reduces risk, sharpens assumptions, and turns concepts into scalable systems."
     },
-    "body": "Nous travaillons avec des partenaires terrain et des équipes produit sur des expérimentations où les résultats sont mesurés avant passage à l’échelle. Contactez-nous pour un pilote adapté à votre contexte.",
-    "showcaseLink": "Voir la vitrine pilotes",
-    "cta": { "title": "Rejoindre comme partenaire pilote", "button": "Demander un pilote" }
+    "body": "We work with field partners and product teams on experiments where outcomes are measured before scale. Reach out to discuss a pilot that fits your context.",
+    "showcaseLink": "View pilots showcase",
+    "cta": {
+      "title": "Join as a pilot partner",
+      "button": "Request a pilot"
+    }
   },
   "TechPage": {
     "meta": {
-      "title": "Technologies & ingénierie – T.E.N.E.G.T.A",
-      "description": "Un standard d’ingénierie concret : baseline sécurité, observabilité actionnable, livraison reproductible et un socle choisi pour la production."
+      "title": "Technology & engineering stack – T.E.N.E.G.T.A",
+      "description": "A practical engineering standard: security baselines, observability, reproducible delivery, and a stack chosen for production."
     },
     "hero": {
-      "kicker": "Excellence d’ingénierie",
-      "title": "Une technologie qui évolue avec votre ambition",
-      "subtitle": "Nous livrons des systèmes de production avec des SLO mesurables, une baseline sécurité et des runbooks opérables — avec un socle moderne choisi pour la fiabilité, l’auditabilité et la maintenabilité.",
+      "kicker": "Engineering excellence",
+      "title": "Technology that scales with your ambition",
+      "subtitle": "We ship production systems with measurable SLOs, security baselines, and operator-ready runbooks — using a modern stack chosen for reliability, auditability, and long-term maintainability.",
       "badge1": "Cloud-native",
       "badge2": "Observable",
-      "badge3": "Security by design"
+      "badge3": "Security-minded"
     },
-    "scrollHint": "Explorer",
-    "stackSectionTitle": "Stack & outillage",
-    "stackSectionSubtitle": "Technologies représentatives utilisées dans des programmes enterprise ; les choix finaux suivent votre contexte de conformité, la résidence des données et l’architecture cible.",
+    "scrollHint": "Explore",
+    "stackSectionTitle": "Stack & tooling",
+    "stackSectionSubtitle": "Representative technologies used in enterprise-grade programs. Final selections follow your compliance constraints, data residency, and target architecture.",
     "standards": {
-      "title": "Standards d’ingénierie livrés",
-      "subtitle": "Les outils comptent — mais les standards comptent davantage. Voici les pratiques qui réduisent le risque et rendent la livraison prévisible.",
+      "title": "Engineering standards we ship with",
+      "subtitle": "Tooling matters — but standards matter more. These are the practices we apply to reduce risk and keep delivery predictable.",
       "s1": {
-        "eyebrow": "Baseline sécurité",
-        "title": "Identité, moindre privilège, audit",
-        "body": "Frontières d’accès claires, pipelines durcis et traçabilité des changements adaptés aux exigences enterprise."
+        "eyebrow": "Security baseline",
+        "title": "Identity, least privilege, audit trails",
+        "body": "Clear access boundaries, hardened delivery pipelines, and change traceability suitable for enterprise procurement."
       },
       "s2": {
-        "eyebrow": "Observabilité",
-        "title": "Métriques, logs, traces → actions",
-        "body": "Tableaux de bord et runbooks actionnables : alerting, triage, recovery — pas seulement des graphiques."
+        "eyebrow": "Observability",
+        "title": "Metrics, logs, traces → actions",
+        "body": "Dashboards and runbooks that operators can execute: alerting, triage, and recovery — not just pretty charts."
       },
       "s3": {
-        "eyebrow": "Discipline de livraison",
-        "title": "Builds reproductibles et rollback",
-        "body": "Préproduction, déploiement progressif si nécessaire, et chemins de retour arrière avec preuves et critères d’acceptation."
+        "eyebrow": "Delivery discipline",
+        "title": "Reproducible builds and rollbacks",
+        "body": "Staging, canary/gradual release when needed, and rollback paths with evidence and acceptance criteria."
       },
       "s4": {
-        "eyebrow": "Données & gouvernance",
-        "title": "Des définitions fiables",
-        "body": "Contrats de données, seuils qualité et gouvernance pour garder l’analytique et le ML auditables et stables dans le temps."
+        "eyebrow": "Data & governance",
+        "title": "Definitions you can trust",
+        "body": "Data contracts, quality gates, and governance so analytics and ML programs remain auditable and stable over time."
       }
     },
     "pillars": {
       "p1": {
-        "title": "Fiabilité & performance",
-        "body": "Nous concevons pour des SLO mesurables : services résilients, cache là où c’est pertinent, et budgets de charge qui tiennent le pic — pas seulement des benchmarks de démo."
+        "title": "Reliability & performance",
+        "body": "We design for measurable SLOs: resilient services, caching where it matters, and performance budgets that survive peak load — not demo-day benchmarks."
       },
       "p2": {
-        "title": "Sécurité & confiance",
-        "body": "Accès moindre privilège, pipelines de livraison durcis et changements traçables. La sécurité est intégrée à la construction et à l’exploitation — pas ajoutée en fin de chaîne."
+        "title": "Security & trust",
+        "body": "Least-privilege access, hardened delivery pipelines, and traceable changes. Security is embedded in how we build and operate — not bolted on at the end."
       },
       "p3": {
-        "title": "Observabilité & exploitation",
-        "body": "Métriques, logs et traces reliés à des tableaux de bord et runbooks actionnables — pour détecter, trier et récupérer avec clarté sous pression."
+        "title": "Observability & operations",
+        "body": "Metrics, logs, and traces wired into actionable dashboards and runbooks — so teams can detect, triage, and recover with clarity under pressure."
       },
       "p4": {
-        "title": "Portabilité & évolution",
-        "body": "Nous privilégions les interfaces ouvertes et l’automatisation pour que votre patrimoine évolue sans verrouillage inutile — des pilotes à la production à grande échelle."
+        "title": "Portability & evolution",
+        "body": "We favour open interfaces and automation so your estate can evolve without unnecessary lock-in — from pilots to scaled production."
       }
     },
     "platform": {
-      "title": "Une vision plateforme, pas un catalogue d’outils",
-      "body": "Les outils changent ; la discipline reste. Nous alignons les choix technologiques sur des résultats mesurables — décisions plus rapides, risque opérationnel réduit, et systèmes que vos équipes peuvent exploiter en confiance."
+      "title": "Platform thinking, not tool shopping",
+      "body": "Tools change; discipline endures. We align technology choices to measurable outcomes — faster decisions, lower operational risk, and systems your teams can run with confidence."
     }
   },
   "TeamPage": {
     "meta": {
-      "title": "Notre équipe – T.E.N.E.G.T.A",
-      "description": "Sadek Al-Atr — ingénieur IA, expert cybersécurité et directeur de l’entreprise."
+      "title": "Comment nous travaillons – T.E.N.E.G.T.A",
+      "description": "Livraison dirigée par le fondateur avec un réseau de spécialistes. Sadek Al-Etr — ingénieur IA, cybersécurité et architecte principal."
     },
     "hero": {
-      "title": "Notre équipe",
-      "subtitle": "T.E.N.E.G.T.A est portée par Sadek Al-Atr — ingénieur IA, expert cybersécurité et directeur — qui pilote la direction technique, sécurité et stratégique."
-    }
+      "title": "Comment nous travaillons",
+      "subtitle": "Leadership technique du fondateur et réseau de spécialistes mobilisé par projet — pas un organigramme fixe."
+    },
+    "founder": {
+      "eyebrow": "Fondateur & architecte principal",
+      "perspectivesTitle": "Notre position",
+      "on": "Sur",
+      "credentialsTitle": "Certifications & stack",
+      "certifications": "Certifications",
+      "techStack": "Domaines technologiques"
+    },
+    "workModel": {
+      "eyebrow": "Réseau de spécialistes"
+    },
+    "engagement": {
+      "title": "Comment nous nous engageons",
+      "assess": "Comment nous évaluons chaque projet",
+      "staff": "Comment nous mobilisons les spécialistes",
+      "decline": "Ce que nous n'acceptons pas"
+    },
+    "howWeThink": {
+      "title": "Comment nous pensons"
+    },
+    "cta": "Commencer la conversation"
   },
   "InvestorsPage": {
     "meta": {
-      "title": "Investisseurs & partenariats – T.E.N.E.G.T.A",
-      "description": "Narratif institutionnel : thèse de marché, gouvernance et relations investisseurs pour T.E.N.E.G.T.A."
+      "title": "Investors & partnerships – T.E.N.E.G.T.A",
+      "description": "Institutional narrative: market thesis, governance, and investor relations for T.E.N.E.G.T.A."
     },
     "hero": {
-      "kicker": "Relations investisseurs",
-      "title": "Construire des systèmes intelligents pour la décennie entreprise",
-      "subtitle": "T.E.N.E.G.T.A conçoit et livre des plateformes IA, cybersécurité et intégration d’abord, avec une discipline d’ingénierie — du pilote à la production. Cette page résume notre vision de la création de valeur, du risque et des partenariats durables."
+      "kicker": "Investor relations",
+      "title": "Building intelligent systems for the enterprise decade",
+      "subtitle": "T.E.N.E.G.T.A designs and delivers AI, cybersecurity, and integration-first platforms with engineering discipline — from pilot to production. This page summarizes how we think about value creation, risk, and long-term partnerships."
     },
     "thesis": {
-      "title": "Thèse d’investissement",
-      "body": "Les entreprises convergent vers des opérations centrées sur les données, des décisions assistées par l’IA et des modèles de sécurité zero trust. T.E.N.E.G.T.A se situe à cette intersection : nous livrons des systèmes déployables — pas des slides — avec KPI mesurables, déploiements par étapes et runbooks prêts pour l’exploitation.\n\nNotre différenciation est l’exécution : livraison reproductible, observabilité par défaut, et architectures qui respectent les environnements hybrides et les contraintes réglementaires."
+      "title": "Investment thesis",
+      "body": "Enterprises are consolidating around data-centric operations, AI-assisted decisions, and zero-trust security models. T.E.N.E.G.T.A sits at the intersection: we ship deployable systems — not slideware — with measurable KPIs, staged rollouts, and operator-ready runbooks.\n\nOur differentiation is execution: reproducible delivery, observability by default, and architectures that respect hybrid footprints and regulatory realities."
     },
     "opportunity": {
-      "title": "Opportunité de marché",
-      "body": "Les budgets de transformation numérique passent de projets IT génériques à des programmes liés aux résultats : opérations prédictives, analyses de sécurité et automatisation qui réduisent coût ou risque de façon démontrable.\n\nNous intervenons là où la complexité est élevée et le verrouillage fournisseur coûteux — avec une alternative pilotée par l’ingénierie, alignée sur la gouvernance client et la résidence des données."
+      "title": "Market opportunity",
+      "body": "Digital transformation budgets continue to shift from generic IT projects to outcome-linked programs: predictive operations, security analytics, and automation that demonstrably reduce cost or risk.\n\nWe engage where complexity is high and vendor lock-in is costly — offering an engineering-led alternative aligned to client governance and data residency constraints."
     },
     "model": {
-      "title": "Modèle économique (vue d’ensemble)",
-      "body": "Le chiffre d’affaires repose sur des prestations professionnelles cadrées, une livraison de projet par jalons et des contrats de support long terme liés à l’évolution des systèmes. Les engagements sont structurés avec critères d’acceptation, documentation et transfert clairs — réduisant l’ambiguïté d’exécution pour clients et contreparties.\n\nNous privilégions des marges de livraison durables à une croissance non différenciée ; la croissance suit des résultats référençables et des extensions répétées au sein des comptes."
+      "title": "Business model (high level)",
+      "body": "Revenue is driven by scoped professional services, milestone-based project delivery, and long-term support retainers tied to evolving systems. Engagements are structured with clear acceptance criteria, documentation, and handover — reducing execution ambiguity for clients and counterparties.\n\nWe prioritize sustainable delivery margins over undifferentiated scale; growth follows referenceable outcomes and repeat expansions within accounts."
     },
     "governance": {
-      "title": "Gouvernance, transparence & risque",
-      "body": "Nous maintenons des limites contractuelles claires, une propriété intellectuelle explicite et des bases de sécurité adaptées aux achats enterprise. Notre processus d’ingénierie met l’accent sur les pistes d’audit (versioning, journaux de changement, preuves de test) et la transparence opérationnelle via l’observabilité.\n\nLes éléments prospectifs sur ce site sont illustratifs ; ils ne constituent pas une garantie de performance future. Toute décision d’investissement exige une diligence indépendante et des accords contraignants."
+      "title": "Governance, transparency & risk",
+      "body": "We maintain clear contractual boundaries, intellectual property clarity, and security baselines appropriate to enterprise procurement. Our engineering process emphasizes audit trails in delivery (versioning, change records, test evidence) and operational transparency through observability.\n\nForward-looking statements on this site are illustrative; they are not guarantees of future performance. Investment decisions require independent due diligence and binding agreements."
     },
     "ir": {
-      "title": "Demandes investisseurs & partenariats",
-      "body": "Pour investisseurs institutionnels qualifiés, partenaires stratégiques et discussions d’alliance structurées, nous proposons un point d’entrée unique. Partagez votre mandat, calendrier et contraintes — nous répondons avec les supports et prochaines étapes appropriés, sous réserve d’adéquation mutuelle et de confidentialité."
+      "title": "Investor & partnership inquiries",
+      "body": "For qualified institutional investors, strategic partners, and structured alliance discussions, we provide a single intake path. Share your mandate, timeline, and constraints — we respond with the appropriate materials and next steps subject to mutual fit and confidentiality requirements."
     },
-    "cta": "Contacter les relations investisseurs",
-    "disclaimer": "Ce site ne constitue pas une offre de vente ni une sollicitation d’achat de titres. Les informations sont à titre de communication corporate générale et peuvent changer sans préavis. Les exemples de projets passés ne préjugent pas des résultats futurs."
+    "cta": "Contact investor relations",
+    "disclaimer": "This website does not constitute an offer to sell or a solicitation of an offer to buy any securities. Information herein is for general corporate communication only and may change without notice. Past project examples are not indicative of future results."
   },
   "BlogPage": {
     "meta": {
       "title": "Blog – Technical news",
       "description": "News and articles on AI, security, and systems."
     },
-    "hero": { "title": "Blog & news", "subtitle": "Technical insights and updates." },
+    "hero": {
+      "title": "Blog & news",
+      "subtitle": "Technical insights and updates."
+    },
     "read": "Read more",
     "relatedTitle": "Continue exploring",
-    "relatedSolutionsHub": "Solutions & capacités",
+    "relatedSolutionsHub": "Solutions & capabilities",
     "relatedDemo": "Interactive demo",
-    "relatedIntelligentSystems": "Comment nous construisons des systèmes intelligents"
+    "relatedIntelligentSystems": "How we build intelligent systems",
+    "relatedCaseStudy": "Related case study",
+    "ctaContact": "Discuss this topic"
+  },
+  "StatusPage": {
+    "meta": {
+      "title": "System status – T.E.N.E.G.T.A",
+      "description": "Operational status for public services we operate."
+    },
+    "title": "System status",
+    "subtitle": "Current health of T.E.N.E.G.T.A operated surfaces.",
+    "updated": "Last updated",
+    "status": {
+      "operational": "Operational",
+      "degraded": "Degraded",
+      "outage": "Outage"
+    }
+  },
+  "TechRadarPage": {
+    "meta": {
+      "title": "Technology radar – T.E.N.E.G.T.A",
+      "description": "Technologies we adopt, trial, assess, and hold — transparent recommendations."
+    },
+    "title": "Technology radar",
+    "subtitle": "How we choose tools for client delivery — updated as the landscape evolves.",
+    "rings": {
+      "adopt": "Adopt",
+      "trial": "Trial",
+      "assess": "Assess",
+      "hold": "Hold"
+    }
   },
   "LegalPage": {
     "meta": {
       "title": "Terms & policies – T.E.N.E.G.T.A",
       "description": "Terms, conditions, and privacy in Arabic and English."
     },
-    "hero": { "title": "Legal", "subtitle": "Transparency and data protection." }
+    "hero": {
+      "title": "Legal",
+      "subtitle": "Transparency and data protection."
+    }
   },
   "CookieConsent": {
     "ariaLabel": "Cookie preferences",
@@ -694,604 +895,633 @@
   },
   "EngagementPage": {
     "meta": {
-      "title": "Modèles d’engagement – Pilote, projet, support | T.E.N.E.G.T.A",
-      "description": "Pilotes ciblés, livraison de projet ou accompagnement long terme — périmètre clair avec votre équipe."
+      "title": "Engagement models – Pilot, project, support | T.E.N.E.G.T.A",
+      "description": "Focused pilots, full project delivery, or long-term support — clearly scoped with your team."
     },
-    "title": "Modèles d’engagement",
-    "subtitle": "Choisissez le modèle adapté au périmètre, au risque et à votre capacité interne.",
-    "pricingNote": "Les investissements se discutent selon le périmètre — contactez-nous pour une proposition sur mesure.",
+    "title": "Engagement models",
+    "subtitle": "Choose the model that fits scope, risk, and your internal capacity.",
+    "pricingNote": "Investment details are discussed per scope — contact us for a tailored proposal.",
     "pilot": {
-      "title": "Programme pilote",
-      "duration": "Phase courte et bornée pour tester l’idée et mesurer la valeur avant extension.",
-      "b1": "Essai initial",
-      "b2": "Preuve de valeur",
-      "b3": "Environnement à périmètre limité",
-      "ctaLabel": "Parler d’un pilote"
+      "title": "Pilot program",
+      "duration": "A short, bounded phase to test the idea and measure value before scaling.",
+      "b1": "Initial trial",
+      "b2": "Proof of value",
+      "b3": "Limited-scope environment",
+      "ctaLabel": "Start a pilot conversation"
     },
     "project": {
-      "title": "Livraison de projet",
-      "duration": "Réalisation complète de l’analyse à la livraison, avec phases claires et documentation.",
-      "b1": "Projets définis",
-      "b2": "Nouveaux systèmes",
-      "b3": "Intégrations sur mesure",
-      "ctaLabel": "Discuter d’un projet"
+      "title": "Project delivery",
+      "duration": "Full delivery from analysis to handover, with clear phases and documentation.",
+      "b1": "Defined projects",
+      "b2": "New systems",
+      "b3": "Custom integrations",
+      "ctaLabel": "Discuss a project"
     },
     "retainer": {
-      "title": "Support et continuité",
-      "duration": "Partenariat long terme : amélioration, supervision et évolution progressive.",
-      "b1": "Organisations en évolution continue",
-      "b2": "Équipes opérations et technologie",
-      "b3": "Amélioration progressive des indicateurs et services",
-      "ctaLabel": "Parler d’un accord de support"
+      "title": "Support & continuity",
+      "duration": "A long-term partnership covering improvement, monitoring, and gradual evolution.",
+      "b1": "Organizations that need continuous evolution",
+      "b2": "Operations and technology teams",
+      "b3": "Gradual improvement of KPIs and services",
+      "ctaLabel": "Talk about a support agreement"
     }
   },
   "CaseStudiesPage": {
     "meta": {
-      "title": "Études de cas – T.E.N.E.G.T.A",
-      "description": "Exemples courts : problème, approche, résultat — pour discussion, pas une garantie sans accord."
+      "title": "Case studies – T.E.N.E.G.T.A",
+      "description": "Short examples: problem, approach, result — for discussion, not a guarantee without an agreement."
     },
-    "title": "Études de cas",
-    "subtitle": "Problème, approche et résultat — synthèse pour discussion.",
+    "title": "Case studies",
+    "subtitle": "Problem, approach, and result — summarized for discussion.",
     "readStudy": "Read study",
     "backToList": "All case studies",
     "problem": "Problem",
     "approach": "Approach",
     "architecture": "Architecture",
+    "architecturalDecisions": "Architectural decisions",
+    "technicalChallenges": "Technical challenges",
     "results": "Results",
+    "relatedStudies": "Related case studies",
+    "ctaPillar": "Explore solution pillar",
     "ctaDiscuss": "Discuss a similar engagement",
     "ctaDemo": "Try the interactive demo",
     "detailDisclaimer": "These case studies are illustrative summaries for discussion. They are not guarantees of results for your organization unless confirmed in a separate agreement."
   },
   "WhyUsPage": {
     "meta": {
-      "title": "Pourquoi T.E.N.E.G.T.A ?",
-      "description": "Nous partons du vrai problème, concevons après avoir compris le contexte et les objectifs, puis livrons par étapes mesurables."
+      "title": "Why T.E.N.E.G.T.A?",
+      "description": "We start from the real problem, design after understanding context and goals, then deliver in measurable steps."
     },
-    "title": "Pourquoi T.E.N.E.G.T.A ?",
-    "intro": "Parce que nous partons du problème réel — pas de l’apparence.",
-    "intro2": "Nous concevons la solution après avoir compris l’environnement, les utilisateurs et l’objectif opérationnel — puis nous bâtissons le système selon les besoins réels.",
+    "title": "Why T.E.N.E.G.T.A?",
+    "intro": "Because we start from the real problem — not the surface.",
+    "intro2": "We design the solution after understanding the environment, users, and operational goal — then we build the system to match real needs.",
     "points": {
-      "p1": "Des solutions adaptées à chaque situation",
-      "p2": "Une livraison claire en phases mesurables",
-      "p3": "Une forte attention à la sécurité et à la fiabilité",
-      "p4": "Capacité d’intégration avec les systèmes existants",
-      "p5": "Accompagnement après la mise en service"
+      "p1": "Solutions tailored to each situation",
+      "p2": "Clear delivery in measurable phases",
+      "p3": "Strong focus on security and reliability",
+      "p4": "Able to integrate with existing systems",
+      "p5": "Ongoing support after launch"
     },
     "process": {
-      "title": "Comment nous travaillons",
-      "s1": "Étude de l’environnement et des besoins",
-      "s2": "Définition des objectifs et indicateurs",
-      "s3": "Conception de la solution adaptée",
-      "s4": "Réalisation et validation",
-      "s5": "Amélioration continue et support",
-      "summary": "Chaque étape est liée à un résultat opérationnel clair — pas seulement à des livrables formels."
+      "title": "How we work",
+      "s1": "Study the environment and needs",
+      "s2": "Define goals and indicators",
+      "s3": "Design the right solution",
+      "s4": "Implementation and validation",
+      "s5": "Continuous improvement and support",
+      "summary": "Every step is tied to a clear operational outcome — not just formal deliverables."
     },
     "whyNow": {
-      "title": "Pourquoi maintenant ?",
-      "body": "Les organisations qui unifient les données, automatisent la décision de façon responsable et sécurisent leurs systèmes vont plus vite et sont plus compétitives. La transformation numérique n’est plus une option : c’est une nécessité opérationnelle et stratégique."
+      "title": "Why now?",
+      "body": "Organizations that unify data, automate decisions responsibly, and harden systems move faster and compete more effectively. Digital change is no longer optional — it is an operational and strategic necessity."
     },
-    "ctaContact": "Contact",
-    "ctaEngagement": "Modèles d’engagement"
+    "ctaContact": "Contact us",
+    "ctaEngagement": "Engagement models"
   },
   "Growth": {
-    "signOut": "Se déconnecter",
-    "nextLevel": "Suivant : {name} à {n} affaires clôturées",
-    "maxLevel": "Vous êtes au sommet du parcours de niveaux — continuez à composer.",
-    "xpLine": "XP : {n}",
-    "networkRefWithCode": "Réf. : {code}",
+    "signOut": "Sign out",
+    "nextLevel": "Next: {name} at {n} closed deals",
+    "maxLevel": "You are at the top level path — keep compounding performance.",
+    "xpLine": "XP: {n}",
+    "networkRefWithCode": "Ref: {code}",
     "motivation": {
-      "defaultPrimary": "Continuez à clôturer — chaque affaire renforce rang, XP et gains.",
-      "dealsToNextLevel": "Encore {n} affaires clôturées pour atteindre le prochain palier de niveau.",
-      "topWeekly": "Vous êtes #{rank} au classement hebdomadaire — momentum d’élite.",
-      "streakHot": "Série d’activité de {n} jours — ne brisez pas la chaîne.",
-      "percentileStrong": "Vous devancez {p}% des partenaires en affaires clôturées (tout temps).",
-      "percentileLine": "Vous devancez {p}% des partenaires au global.",
-      "weeklyRankLine": "Rang hebdo #{rank} sur {total} partenaires ({closed} clôtures cette semaine)."
+      "defaultPrimary": "Keep closing—every deal compounds rank, XP, and payouts.",
+      "dealsToNextLevel": "{n} closed deals to go until your next level milestone.",
+      "topWeekly": "You are #{rank} on the weekly leaderboard—elite momentum.",
+      "streakHot": "{n}-day activity streak—keep the chain alive.",
+      "percentileStrong": "You are ahead of {p}% of partners by lifetime closed deals.",
+      "percentileLine": "Ahead of {p}% of partners overall.",
+      "weeklyRankLine": "Weekly rank #{rank} of {total} partners ({closed} closes this week)."
     },
     "heroClient": {
       "pillBrand": "T.E.N.E.G.T.A Growth Engine",
       "pillSubtitle": "Partner Command Center",
-      "tagline": "Vous ne « vendez pas des services » au sens classique — vous construisez des revenus, un rang et une réputation dans un système conçu pour se composer.",
-      "totalEarnings": "Gains totaux",
-      "activeDeals": "Affaires actives",
-      "progress": "Progression",
-      "progressDeals": "{current} / {target} affaires clôturées",
-      "weeklyRankLabel": "Rang cette semaine",
-      "weeklyRankSub": "{closed} clôtures · {total} partenaires"
+      "tagline": "You are not “selling services” in the traditional sense — you are building income, rank, and reputation inside a system designed to compound.",
+      "totalEarnings": "Total earnings",
+      "activeDeals": "Active deals",
+      "progress": "Progress",
+      "progressDeals": "{current} / {target} closed deals",
+      "weeklyRankLabel": "Rank this week",
+      "weeklyRankSub": "{closed} closes · {total} partners"
     },
     "hero": {
-      "addLead": "Ajouter un lead",
-      "addLeadHint": "Crée une affaire « en attente » liée à vous. L’admin la clôture pour déclencher commissions, XP et badges.",
-      "referral": "Votre code de parrainage"
+      "addLead": "Add new lead",
+      "addLeadHint": "Creates a pending deal tied to you. Admin closes it to trigger commissions, XP, and badges.",
+      "referral": "Your referral code"
     },
     "lead": {
-      "product": "Produit",
-      "client": "Client / libellé",
-      "clientPh": "ex. Clinique Dr Ali",
+      "product": "Product",
+      "client": "Client / label",
+      "clientPh": "e.g. Dr. Ali Clinic",
       "notes": "Notes",
-      "notesPh": "Optionnel"
+      "notesPh": "Optional context"
     },
     "deals": {
-      "title": "Mes affaires",
-      "empty": "Aucune affaire — ajoutez votre premier lead.",
-      "noClient": "Sans libellé client",
-      "closed": "clôturées",
-      "pending": "en attente",
+      "title": "My deals",
+      "empty": "No deals yet — add your first lead.",
+      "noClient": "No client label",
+      "closed": "closed",
+      "pending": "pending",
       "status": {
-        "pending": "En attente",
-        "closed": "Clôturée",
-        "lost": "Perdue"
+        "pending": "Pending",
+        "closed": "Closed",
+        "lost": "Lost"
       }
     },
     "network": {
-      "title": "Mon réseau",
-      "empty": "Pas encore de partenaires sous vous. Partagez votre code."
+      "title": "My network",
+      "empty": "No partners under you yet. Share your referral code."
     },
     "earnings": {
-      "title": "Gains",
-      "empty": "Pas encore de commissions. Clôturez une affaire pour générer des écritures.",
-      "bonus": "Bonus / ajustement",
-      "tier": "Palier {tier}",
-      "withdrawAmount": "Montant (USD)",
-      "method": "Méthode de paiement",
-      "methodPh": "Notes virement / wallet",
-      "request": "Demander un paiement"
+      "title": "Earnings",
+      "empty": "No commissions yet. Close a deal to generate ledger entries.",
+      "bonus": "Bonus / adjustment",
+      "tier": "Tier {tier}",
+      "withdrawAmount": "Withdraw amount (USD)",
+      "method": "Payout method",
+      "methodPh": "Bank / wallet notes",
+      "request": "Request payout"
     },
     "leaderboard": {
-      "title": "Classement hebdomadaire",
-      "empty": "Aucune clôture sur 7 jours pour l’instant.",
-      "anon": "Partenaire",
-      "monthlyTitle": "30 derniers jours",
-      "monthlyEmpty": "Aucune clôture sur 30 jours pour l’instant.",
-      "monthlyYou": "Votre rang 30 jours : #{rank} ({closed} clôtures)"
+      "title": "Weekly leaderboard",
+      "empty": "No closes in the last 7 days yet.",
+      "anon": "Partner",
+      "monthlyTitle": "Last 30 days",
+      "monthlyEmpty": "No closes in the last 30 days yet.",
+      "monthlyYou": "Your 30-day rank: #{rank} ({closed} closes)"
     },
     "streak": {
-      "title": "Série quotidienne",
-      "current": "Actuelle : {n} jours",
-      "longest": "Record : {n} jours",
-      "hint": "La série se met à jour quand vous ouvrez le dashboard."
+      "title": "Daily streak",
+      "current": "Current: {n} days",
+      "longest": "Best: {n} days",
+      "hint": "Streak updates when you visit the dashboard."
     },
     "missions": {
-      "title": "Missions du jour",
-      "empty": "Aucune mission configurée.",
+      "title": "Daily missions",
+      "empty": "No missions configured yet.",
       "progress": "{current} / {target}",
-      "done": "Terminé aujourd’hui"
+      "done": "Completed today"
     },
     "activity": {
-      "title": "Momentum en direct",
-      "empty": "Aucun événement récent."
+      "title": "Live momentum",
+      "empty": "No recent events yet."
     },
     "badges": {
       "title": "Badges",
-      "empty": "Pas encore de badges — clôturez des affaires et développez le réseau.",
-      "hiddenTag": "secret",
-      "unlockTitle": "BADGE DÉBLOQUÉ",
-      "unlockSubtitle": "Clé : {key}",
-      "unlockCta": "Continuer"
+      "empty": "No badges yet — close deals and grow your network.",
+      "hiddenTag": "hidden",
+      "unlockTitle": "BADGE UNLOCKED",
+      "unlockSubtitle": "Key: {key}",
+      "unlockCta": "Continue"
     },
     "kit": {
       "title": "Marketing kit",
-      "record": "Enregistrer une interaction (+ progression AI Seller)",
-      "audience": "Cible",
-      "pain": "Douleurs",
+      "record": "Record kit engagement (+AI Seller progress)",
+      "audience": "Target audience",
+      "pain": "Pain points",
       "solution": "Solution",
       "script": "Script",
-      "noKit": "Pas encore de kit marketing pour ce produit.",
-      "icpTitle": "Client idéal (ICP)",
-      "icpBusiness": "Type d’activité",
-      "icpTeam": "Taille d’équipe",
-      "icpAge": "Tranche d’âge décideur",
+      "noKit": "No marketing kit configured for this product yet.",
+      "icpTitle": "Ideal customer (ICP)",
+      "icpBusiness": "Business type",
+      "icpTeam": "Team size",
+      "icpAge": "Decision-maker age band",
       "tabs": {
-        "overview": "ICP & histoire",
+        "overview": "ICP & story",
         "scripts": "Scripts",
         "objections": "Objections",
-        "legacy": "Script legacy"
+        "legacy": "Legacy script"
       },
       "scriptLabels": {
-        "direct": "Pitch direct",
-        "consultative": "Consultatif",
-        "whatsapp": "Ouverture WhatsApp",
-        "call": "Ouverture appel"
+        "direct": "Direct pitch",
+        "consultative": "Consultative",
+        "whatsapp": "WhatsApp opener",
+        "call": "Call opener"
       },
-      "noObjections": "Pas encore de réponses aux objections.",
-      "legacyScript": "Script unique d’origine",
-      "openPlaybook": "Ouvrir la page complète",
+      "noObjections": "No objection handlers configured yet.",
+      "legacyScript": "Original single script",
+      "openPlaybook": "Open full playbook",
       "playbook": {
-        "headline": "Page marketing interactive",
-        "subline": "Tout ce qu’un marketeur doit maîtriser : cadre contractuel, valeur produit, angles de discours, objections, et checklist d’exécution.",
-        "supportingTitle": "Notes marché de soutien",
-        "back": "Retour au tableau",
+        "headline": "Interactive marketing command page",
+        "subline": "Everything a marketer needs: contract framing, product value, talk tracks, objections, and execution checklist.",
+        "supportingTitle": "Supporting market notes",
+        "back": "Back to dashboard",
         "tabs": {
-          "contract": "Contrat & valeur",
-          "talk": "Comment parler",
-          "objections": "Laboratoire d’objections",
-          "checklist": "Checklist d’exécution"
+          "contract": "Contract & value",
+          "talk": "How to talk",
+          "objections": "Objection lab",
+          "checklist": "Execution checklist"
         },
         "contract": {
-          "price": "Valeur du contrat",
-          "commission": "Commission de base",
-          "value": "Positionnement",
-          "valueLine": "Présentez ce produit comme un package de résultats mesurables, pas un simple service isolé.",
-          "notesTitle": "Notes contrat",
-          "note1": "Commencez par l’impact business, puis reliez chaque feature à l’argent, au temps ou à la conversion.",
-          "note2": "Ne finissez jamais l’échange sans une prochaine étape claire (audit, démo, date de proposition).",
-          "note3": "Ancrez la valeur d’abord, puis le prix selon le périmètre et le calendrier."
+          "price": "Contract value",
+          "commission": "Base commission",
+          "value": "Positioning",
+          "valueLine": "Pitch this product as a measurable outcome package, not a one-off service.",
+          "notesTitle": "Contract notes",
+          "note1": "Start with business impact and tie each feature to money, time, or conversion.",
+          "note2": "Set one clear next step before ending the call (audit, demo, or proposal date).",
+          "note3": "Anchor value first, then discuss price with rollout scope and timeline."
         },
         "talk": {
-          "tone": "Mode de conversation",
-          "clientState": "Préoccupation acheteur",
-          "stateTrust": "Besoin de confiance et de preuves",
-          "stateCost": "Sensible au prix",
-          "stateSpeed": "Recherche la vitesse",
-          "generatedScript": "Script adaptatif",
-          "noScript": "Aucun script configuré pour ce mode.",
-          "focusPrefix": "Ligne de focus",
-          "focusTrust": "Mettez l’accent sur preuves, cas similaires et résultat attendu clair.",
-          "focusCost": "Insistez sur ROI, efficacité du délai et vitesse de retour.",
-          "focusSpeed": "Soulignez la rapidité de déploiement et les gains opérationnels immédiats."
+          "tone": "Conversation mode",
+          "clientState": "Buyer concern",
+          "stateTrust": "Needs trust and proof",
+          "stateCost": "Price sensitive",
+          "stateSpeed": "Wants speed",
+          "generatedScript": "Adaptive script",
+          "noScript": "No script is configured for this mode yet.",
+          "focusPrefix": "Focus line",
+          "focusTrust": "Use proof, similar cases, and clear expected outcomes.",
+          "focusCost": "Emphasize ROI, timeline efficiency, and payback speed.",
+          "focusSpeed": "Highlight deployment speed and immediate operational wins."
         },
         "checklist": {
-          "title": "Checklist pré-closing",
-          "fit": "ICP validé et décideur identifié",
-          "pain": "Les 2 douleurs clés sont reliées aux capacités produit",
-          "timeline": "Calendrier d’implémentation et urgence alignés",
-          "nextStep": "Une prochaine étape explicite verrouillée avec date",
-          "followup": "Message de suivi prêt + fallback d’objection",
-          "hint": "Un message dominant : résultat d’abord, action ensuite, détails après."
+          "title": "Pre-close checklist",
+          "fit": "Confirmed ICP fit and decision owner",
+          "pain": "Mapped top 2 pain points to product capabilities",
+          "timeline": "Aligned implementation timeline and urgency",
+          "nextStep": "Locked one explicit next step with date",
+          "followup": "Prepared follow-up message and objection fallback",
+          "hint": "Keep one dominant message: outcome first, action second, details third."
         }
       }
     },
     "insights": {
       "label": "Intelligence",
-      "dotAria": "Diapositive {n}",
+      "dotAria": "Slide {n}",
       "slides": {
-        "followUpLoad": "Vous avez {n} affaires en attente — des relances courtes cette semaine augmentent souvent la conversion.",
-        "streakProtect": "Série de {n} jours : la constance se compose — protégez-la avec un geste quotidien.",
-        "rankClimb": "Classement hebdo #{rank} sur {total} — une clôture de plus peut vous faire gagner plusieurs places en milieu de semaine.",
-        "pipelineClean": "Pipeline propre : pas de friction en attente — le moment de remplir avec de nouveaux leads.",
-        "defaultMomentum": "L’élan est un récit : clôtures, visibilité, cadence — gardez les trois en mouvement."
+        "followUpLoad": "You have {n} pending deals — short follow-ups this week usually lift conversion.",
+        "streakProtect": "{n}-day streak: consistency compounds — protect the chain with one daily move.",
+        "rankClimb": "Weekly rank #{rank} of {total} — one more close can jump you several spots mid-week.",
+        "pipelineClean": "Clean pipeline: no pending friction — time to refill with net-new leads.",
+        "defaultMomentum": "Momentum is narrative: closes, visibility, and cadence — keep all three in motion."
       }
     },
     "journey": {
-      "title": "Parcours du deal",
+      "title": "Deal journey",
       "steps": {
         "lead": "Lead",
-        "contacted": "Contacté",
-        "negotiation": "Négociation",
-        "closed": "Clôturé",
-        "paid": "Payé"
+        "contacted": "Contacted",
+        "negotiation": "Negotiation",
+        "closed": "Closed",
+        "paid": "Paid"
       },
-      "lost": "Affaire stoppée — notez la leçon et visez la suivante."
+      "lost": "Deal stopped — capture the lesson and re-aim."
     },
     "chat": {
-      "back": "Retour au tableau",
+      "back": "Back to dashboard",
       "nav": "Support chat",
       "threadTitle": "Conversation",
-      "empty": "Pas encore de messages — écrivez la première ligne.",
+      "empty": "No messages yet — write the first line.",
       "placeholder": "Message…",
-      "send": "Envoyer",
-      "sendError": "Envoi impossible. Réessayez.",
+      "send": "Send",
+      "sendError": "Could not send. Try again.",
       "adminTag": "Admin",
-      "partnerTag": "Équipe",
+      "partnerTag": "Team",
       "message": {
         "kindBonus": "Bonus",
         "kindBadge": "Badge",
-        "kindSystem": "Système",
-        "kindWarning": "Alerte",
+        "kindSystem": "System",
+        "kindWarning": "Alert",
         "kindAction": "Action"
       },
       "inline": {
-        "pushClose": "Pousser au closing",
-        "offerBoost": "Angle boost",
-        "askUpdate": "Demander MAJ",
-        "commissionPlan": "Plan commission"
+        "pushClose": "Push to close",
+        "offerBoost": "Offer boost",
+        "askUpdate": "Ask update",
+        "commissionPlan": "Commission plan"
       },
       "timelineDay": "{date}",
-      "timelineToday": "Aujourd’hui",
-      "timelineEvent": "Événement",
-      "suggestedActions": "Suggestions",
-      "microActionOk": "OK",
-      "microImpactOk": "Envoyé — levée modélisée ≈ +{n} % sur le closing",
-      "microCommitOk": "Action enregistrée — parcours engagé",
+      "timelineToday": "Today",
+      "timelineEvent": "Event",
+      "suggestedActions": "Suggested",
+      "microActionOk": "Done",
+      "microImpactOk": "Sent — modeled close lift ≈ +{n}%",
+      "microCommitOk": "Action logged — committed path",
       "intelligence": {
-        "contextTitle": "Contexte économique",
-        "decisionTitle": "Radar décisionnel",
-        "primarySignalLabel": "Signal principal",
-        "primaryCloseNow": "CLOSE MAINTENANT",
-        "primaryRescueNow": "SAUVER LE PIPELINE",
-        "primaryUnblockNow": "DÉBLOQUER",
-        "primarySteadyNow": "TENIR LE RYTHME",
-        "systemDirective": "Directive système",
-        "directive_push_close": "Verrouiller une seule étape de closing — deadline + prochaine signature.",
-        "directive_offer_bonus": "Autoriser un bonus performance maintenant pour lever la friction finale.",
-        "directive_ask_update": "Exiger une MAJ des blocages avec une fenêtre de réponse 24h.",
-        "directive_commission_nudge": "Re-cadrer la commission pour aligner l’attente de payout.",
-        "directiveImpactHint": "Si exécuté : impact illustratif ≈ +{n} % probabilité de close",
-        "commitPathLabel": "Parcours d’action confirmé",
-        "commitLockedBadge": "Action recommandée verrouillée",
-        "commitAction_push_close": "Pousser au closing maintenant — une deadline + prochaine signature.",
-        "commitAction_offer_bonus": "Accorder un bonus performance ~50 $ maintenant",
-        "commitAction_ask_update": "Exiger une MAJ des blocages — fenêtre 24h",
-        "commitAction_commission_nudge": "Re-cadrer le plan de commission maintenant",
-        "probShiftLabel": "Glissement de probabilité (modèle)",
-        "probShiftModeled": "Glissement illustratif pour cette intervention — pas une prévision live.",
-        "expectedOutcomeTitle": "Résultat attendu",
-        "expectedOutcomeCloseMin": "Closing probable sous ~{m} min si le rythme tient",
-        "expectedOutcomeHint": "Heuristique score + état — pas une garantie.",
-        "riskRibbonHigh": "Pipeline à haut risque",
-        "riskRibbonMedium": "Risque moyen — resserrer le rythme",
+        "contextTitle": "Economic context",
+        "decisionTitle": "Decision radar",
+        "primarySignalLabel": "Primary signal",
+        "primaryCloseNow": "CLOSE NOW",
+        "primaryRescueNow": "RESCUE PIPELINE",
+        "primaryUnblockNow": "UNBLOCK NOW",
+        "primarySteadyNow": "HOLD STEADY",
+        "systemDirective": "System directive",
+        "directive_push_close": "Lock one decisive close step — deadline + next signature.",
+        "directive_offer_bonus": "Authorize a performance bonus now to remove last-mile friction.",
+        "directive_ask_update": "Demand a blocker update with a clear 24h reply window.",
+        "directive_commission_nudge": "Re-state commission so payout expectation unlocks momentum.",
+        "directiveImpactHint": "If executed: illustrative impact ≈ +{n}% close probability",
+        "commitPathLabel": "Confirmed action path",
+        "commitLockedBadge": "Recommended action locked",
+        "commitAction_push_close": "Push close now — one deadline + next signature.",
+        "commitAction_offer_bonus": "Give a ~$50 performance bonus now",
+        "commitAction_ask_update": "Demand a blocker update — 24h reply window",
+        "commitAction_commission_nudge": "Re-state commission path now",
+        "probShiftLabel": "Modeled probability shift",
+        "probShiftModeled": "Illustrative shift for this intervention — not a live forecast.",
+        "expectedOutcomeTitle": "Expected outcome",
+        "expectedOutcomeCloseMin": "Deal likely closes within ~{m} min if cadence holds",
+        "expectedOutcomeHint": "Heuristic from score + state — not a guarantee.",
+        "riskRibbonHigh": "High risk pipeline",
+        "riskRibbonMedium": "Medium risk — tighten cadence",
         "riskRibbonLow": "Pipeline stable",
-        "earnedLabel": "Gagné",
-        "activeDealTitle": "Deal actif",
-        "noFocusDeal": "Pas de deal pending focal — liez un deal ou attendez le pipeline.",
-        "closeProbability": "Probabilité de closing",
+        "earnedLabel": "Earned",
+        "activeDealTitle": "Active deal",
+        "noFocusDeal": "No pending deal in focus — link a deal or wait for pipeline.",
+        "closeProbability": "Close probability",
         "stageLead": "Lead",
-        "stageNegotiation": "Négociation",
-        "stageWon": "Clos",
-        "stageLost": "Perdu",
-        "insightTitle": "Insight système",
-        "insightRescue": "Mode sauvetage : réduire les pending avec dates avant incentives.",
-        "insightPushClose": "Momentum fort — pousser une seule next step + micro-bonus optionnel.",
-        "insightMomentum": "Série chaude — recap net + deadline pour convertir.",
-        "insightFollowUp": "Fenêtre solide — demander blocages + fenêtre de closing.",
-        "insightSteady": "Stable — garder le rythme ; journaliser le prochain touch.",
-        "patternTitle": "Signal comportemental",
-        "patternCloser": "Pattern : closer fort — bonus après push décisif fonctionne.",
-        "patternHeavyPipeline": "Pattern : lourd en pending — cycles courts > grosses poussées.",
-        "patternNeutral": "Pattern : neutre — playbook standard.",
-        "increaseCommission": "Plan commission",
+        "stageNegotiation": "Negotiation",
+        "stageWon": "Closed",
+        "stageLost": "Lost",
+        "insightTitle": "System insight",
+        "insightRescue": "Rescue mode: reduce pendings with explicit dates before incentives.",
+        "insightPushClose": "Momentum is high — push a single next step and optional micro-bonus.",
+        "insightMomentum": "Streak is hot — stack a crisp recap + deadline to convert.",
+        "insightFollowUp": "Solid window — ask for blockers and confirm the close window.",
+        "insightSteady": "Steady state — keep rhythm; log next touchpoint.",
+        "patternTitle": "Behavior signal",
+        "patternCloser": "Pattern: strong closer — rewards after decisive pushes land well.",
+        "patternHeavyPipeline": "Pattern: heavy pending load — shorter cycles beat big pushes.",
+        "patternNeutral": "Pattern: neutral — standard playbook applies.",
+        "increaseCommission": "Commission plan",
         "filterClosing": "Closing now",
-        "filterNew": "Nouveau",
+        "filterNew": "New",
         "inboxProb": "{n}% close",
-        "statPending": "En attente",
-        "cmdStateClosingTitle": "Fenêtre de closing active",
-        "cmdStateClosingSub": "Signal fort — une seule next step décisive.",
-        "cmdStateRescueTitle": "Sauver le pipeline",
-        "cmdStateRescueSub": "Charge à risque — dates et clarté avant grosses incentives.",
-        "cmdStateStaleTitle": "Momentum qui refroidit",
-        "cmdStateStaleSub": "Score tiré vers le bas — débloquer explicitement.",
-        "cmdStateSteadyTitle": "Régime stable",
-        "cmdStateSteadySub": "Pas de signal extrême — garder le rythme.",
-        "probFactorsTitle": "Lecteurs du score",
-        "detailsToggle": "Plus de métriques et liens",
+        "statPending": "Pending",
+        "cmdStateClosingTitle": "Closing window active",
+        "cmdStateClosingSub": "Strong close signal — drive one decisive next step.",
+        "cmdStateRescueTitle": "Rescue the pipeline",
+        "cmdStateRescueSub": "High risk load — dates and clarity before bigger incentives.",
+        "cmdStateStaleTitle": "Momentum cooling",
+        "cmdStateStaleSub": "Score dropped from age or drag — unblock the deal explicitly.",
+        "cmdStateSteadyTitle": "Steady state",
+        "cmdStateSteadySub": "No extreme signal — keep rhythm and logging.",
+        "probFactorsTitle": "Score drivers",
+        "detailsToggle": "More metrics & links",
         "factorUp": "+",
         "factorDown": "−",
         "factorNeutral": "·",
         "probFactors": {
-          "dealValue": "Taille du deal",
-          "streak": "Série / cadence",
-          "conversion": "Taux de win",
-          "recency": "Fraîcheur vs stagnation"
+          "dealValue": "Deal size",
+          "streak": "Streak / cadence",
+          "conversion": "Win rate",
+          "recency": "Freshness vs stall"
         },
-        "momentumRising": "Momentum en hausse",
+        "momentumRising": "Momentum rising",
         "momentumStable": "Momentum stable",
-        "momentumDropping": "Momentum en baisse",
-        "suggestPushCloseHi": "Pousser au closing (fort impact)",
-        "suggestOfferBoostHi": "Angle boost",
-        "suggestAskUpdateHi": "Demander MAJ",
-        "suggestCommissionHi": "Plan commission",
-        "suggestUnblockHi": "Débloquer le pipeline",
-        "suggestionsMore": "Plus d’actions",
-        "empty": "Choisissez une conversation pour voir l’intelligence partenaire.",
-        "loading": "Chargement des insights…",
-        "error": "Impossible de charger le contexte partenaire.",
-        "refresh": "Actualiser",
-        "level": "Niveau",
+        "momentumDropping": "Momentum dropping",
+        "suggestPushCloseHi": "Push close (high impact)",
+        "suggestOfferBoostHi": "Offer boost angle",
+        "suggestAskUpdateHi": "Ask for update",
+        "suggestCommissionHi": "Commission plan",
+        "suggestUnblockHi": "Unblock pipeline",
+        "suggestionsMore": "More actions",
+        "empty": "Select a conversation to see partner intelligence.",
+        "loading": "Loading insights…",
+        "error": "Could not load partner context.",
+        "refresh": "Refresh",
+        "level": "Level",
         "xp": "XP",
-        "earnings": "Gains cumulés",
-        "conversion": "Taux de closing",
-        "risk": "Risque pipeline",
+        "earnings": "Lifetime earnings",
+        "conversion": "Win rate",
+        "risk": "Pipeline risk",
         "riskReason": {
-          "riskOk": "Pipeline plutôt équilibré pour les relances.",
-          "riskHighPending": "Beaucoup de deals en attente sans série — risque de blocage.",
-          "riskMediumFollowUp": "Plusieurs pending et faible série — planifier une relance."
+          "riskOk": "Pipeline looks balanced for follow-ups.",
+          "riskHighPending": "Many pending deals with no streak — risk of stall.",
+          "riskMediumFollowUp": "Several pendings and low streak — schedule a nudge."
         },
-        "dealsLine": "{closed} clos · {pending} en attente · série {streak} j",
-        "closedLabel": "{n} clos",
-        "linkedDeal": "Deal lié",
-        "noDeal": "Aucun lien",
-        "saveLink": "Enregistrer",
-        "priority": "Priorité",
-        "priorityHigh": "Haute",
-        "priorityNormal": "Normale",
-        "priorityLow": "Basse",
-        "actionsTitle": "Actions rapides",
-        "amountUsd": "Montant (USD)",
-        "giveBonus": "Accorder un bonus",
-        "grantBadge": "Attribuer un badge",
-        "noBadges": "Aucun badge admin",
-        "suggestClose": "Pousser au closing",
-        "suggestBonus": "Angle boost",
-        "suggestUpdate": "Demander une mise à jour",
-        "activeDeals": "Deals récents",
-        "quickBusy": "Traitement…",
-        "filterAll": "Tous",
-        "filterOpen": "Ouverts",
-        "segmentHigh": "Haute valeur",
-        "segmentAtRisk": "À risque",
+        "dealsLine": "{closed} closed · {pending} pending · streak {streak}d",
+        "closedLabel": "{n} closes",
+        "linkedDeal": "Linked deal",
+        "noDeal": "No link",
+        "saveLink": "Save",
+        "priority": "Priority",
+        "priorityHigh": "High",
+        "priorityNormal": "Normal",
+        "priorityLow": "Low",
+        "actionsTitle": "Quick actions",
+        "amountUsd": "Amount (USD)",
+        "giveBonus": "Give bonus",
+        "grantBadge": "Grant badge",
+        "noBadges": "No admin badges",
+        "suggestClose": "Push to close",
+        "suggestBonus": "Offer boost angle",
+        "suggestUpdate": "Ask for update",
+        "activeDeals": "Recent deals",
+        "quickBusy": "Working…",
+        "filterAll": "All",
+        "filterOpen": "Open",
+        "segmentHigh": "High value",
+        "segmentAtRisk": "At risk",
         "segmentStandard": "Standard",
         "linkedPill": "Deal"
       },
       "admin": {
-        "pageTitle": "Boîte partenaires",
-        "timeToAct": "Temps d’agir : {m} min",
-        "windowClosing": "Fenêtre qui se referme",
-        "inbox": "Boîte de réception",
-        "open": "Ouvert",
-        "resolved": "Résolu",
-        "resolve": "Résoudre",
-        "pick": "Choisissez un fil"
+        "pageTitle": "Partner inbox",
+        "timeToAct": "Time to act: {m} min",
+        "windowClosing": "Window closing soon",
+        "inbox": "Inbox",
+        "open": "Open",
+        "resolved": "Resolved",
+        "resolve": "Resolve",
+        "pick": "Select a thread"
       }
     },
     "admin": {
       "enter": "Admin",
       "nav": {
-        "overview": "Vue d’ensemble",
-        "deals": "Affaires",
-        "products": "Produits",
+        "overview": "Overview",
+        "deals": "Deals",
+        "payouts": "Payouts",
+        "products": "Products",
         "badges": "Badges",
-        "levels": "Niveaux",
-        "tiers": "Paliers de commission",
-        "rewards": "Récompenses mensuelles",
+        "levels": "Levels",
+        "tiers": "Commission tiers",
+        "rewards": "Monthly rewards",
         "insights": "Insights",
-        "overrides": "Overrides partenaire",
-        "bonuses": "Bonus manuels",
-        "partnerDashboard": "Dashboard partenaire",
-        "demo": "Démo cinématique",
-        "chat": "Boîte chat"
+        "overrides": "Partner overrides",
+        "bonuses": "Manual bonuses",
+        "partnerDashboard": "Partner dashboard",
+        "demo": "Cinematic demo",
+        "chat": "Inbox"
       },
       "demo": {
-        "pageTitle": "Mode démo cinématique",
-        "pageLead": "Parcours digne d’un investisseur : rythme de revenu simulé, pulsation réseau et projection — sans toucher aux données de production.",
-        "launch": "Lancer l’expérience démo",
-        "close": "Quitter la démo",
-        "speed": "Vitesse de lecture",
-        "liveFeed": "Flux en direct",
-        "storyChat": "Chronologie décisionnelle",
-        "storyChatEmpty": "Les temps forts du récit apparaîtront ici pendant la lecture.",
-        "metrics": "Indicateurs simulés",
-        "volume": "Volume d’affaires",
-        "commission": "Commission (vous)",
-        "rank": "Classement hebdo",
-        "network": "Nœuds réseau",
-        "prediction": "Projection du mois",
-        "networkMap": "Pulsation réseau",
-        "dealJourney": "Parcours du deal",
-        "reducedTitle": "Mouvement réduit",
-        "reducedBody": "Toutes les étapes sont listées ci-dessous. Utilisez « Étape suivante » pour avancer manuellement.",
-        "nextBeat": "Étape suivante",
-        "replay": "Rejouer",
-        "loading": "Démarrage de la session…",
-        "chapter": "Chapitre",
+        "pageTitle": "Cinematic demo mode",
+        "pageLead": "Investor-grade walkthrough: scripted revenue beats, network pulse, and intelligence — without touching production data.",
+        "launch": "Launch demo experience",
+        "close": "Exit demo",
+        "speed": "Playback speed",
+        "liveFeed": "Live feed",
+        "storyChat": "Decision timeline",
+        "storyChatEmpty": "Story beats will appear here as the demo runs.",
+        "metrics": "Simulated metrics",
+        "volume": "Deal volume",
+        "commission": "Commission (you)",
+        "rank": "Weekly rank",
+        "network": "Network nodes",
+        "prediction": "Month projection",
+        "networkMap": "Network pulse",
+        "dealJourney": "Deal journey",
+        "reducedTitle": "Reduced motion",
+        "reducedBody": "Every beat is summarized below. Use “Next beat” to advance manually.",
+        "nextBeat": "Next beat",
+        "replay": "Replay",
+        "loading": "Starting session…",
+        "chapter": "Chapter",
         "hookLine": "Growth Intelligence",
         "dealStage0": "Lead",
-        "dealStage1": "Contacté",
-        "dealStage2": "Négociation",
-        "dealStage3": "Clôturé",
-        "dealStage4": "Payé",
-        "revealAll": "Tout révéler",
-        "startError": "Impossible de lancer la démo. Réessayez après vérification du réseau.",
-        "variantLabel": "Chemin du script",
-        "variantAlpha": "Signal · Nord",
-        "variantBeta": "Signal · Côte",
-        "variantGamma": "Signal · Désert",
-        "soundOn": "Son activé",
-        "soundOff": "Son coupé",
-        "sseReplay": "Replay SSE (DB)",
-        "sseReplayGo": "Replay depuis la base (SSE)"
+        "dealStage1": "Contacted",
+        "dealStage2": "Negotiation",
+        "dealStage3": "Closed",
+        "dealStage4": "Paid",
+        "revealAll": "Reveal all beats",
+        "startError": "Could not start the demo. Check your connection and try again.",
+        "variantLabel": "Script path",
+        "variantAlpha": "Signal · North",
+        "variantBeta": "Signal · Coast",
+        "variantGamma": "Signal · Desert",
+        "soundOn": "Sound on",
+        "soundOff": "Sound off",
+        "sseReplay": "SSE replay (DB)",
+        "sseReplayGo": "Replay from database (SSE)"
       },
-      "overviewTitle": "Vue d’ensemble admin",
-      "users": "Utilisateurs",
-      "partners": "Profils partenaires",
-      "dealsClosed": "Affaires clôturées",
-      "pendingDeals": "Affaires en attente",
-      "ledgerSum": "Somme du ledger commissions",
+      "overviewTitle": "Admin overview",
+      "users": "Users",
+      "partners": "Partner profiles",
+      "dealsClosed": "Closed deals",
+      "pendingDeals": "Pending deals",
+      "ledgerSum": "Commission ledger (sum)",
       "dealsPage": {
-        "title": "Opérations sur les affaires",
-        "partnerEmail": "Email partenaire",
-        "partner": "Partenaire",
-        "product": "Produit",
-        "status": "Statut",
-        "close": "Clôturer & payer commissions",
-        "createTitle": "Créer une affaire en attente",
-        "createSubmit": "Créer",
-        "clientLabel": "Libellé client"
+        "title": "Deal operations",
+        "partnerEmail": "Partner email",
+        "partner": "Partner",
+        "product": "Product",
+        "status": "Status",
+        "close": "Close & pay commissions",
+        "markLost": "Mark lost",
+        "createTitle": "Create pending deal",
+        "createSubmit": "Create",
+        "clientLabel": "Client label"
+      },
+      "payoutsPage": {
+        "title": "Payout requests",
+        "hint": "Approve partner withdrawal requests, then mark as paid after transfer.",
+        "empty": "No payout requests yet.",
+        "approve": "Approve",
+        "reject": "Reject",
+        "markPaid": "Mark paid",
+        "status": {
+          "pending": "Pending",
+          "approved": "Approved",
+          "paid": "Paid",
+          "rejected": "Rejected"
+        }
       },
       "productsPage": {
-        "title": "Produits & commissions",
-        "save": "Enregistrer",
-        "priceUsd": "Prix (USD)",
-        "commissionUsd": "Base commission (USD)",
+        "title": "Products & commissions",
+        "save": "Save",
+        "priceUsd": "Price (USD)",
+        "commissionUsd": "Commission base (USD)",
         "kitJson": "Marketing kit (JSON)",
-        "kitSave": "Enregistrer le kit"
+        "kitSave": "Save kit JSON"
       },
       "badgesPage": {
-        "title": "Attribuer un badge admin",
-        "email": "Email utilisateur",
-        "submit": "Attribuer",
-        "badgeKey": "Clé du badge",
-        "revokeTitle": "Retirer un badge",
-        "revokeHint": "Supprime tout badge (y compris auto) pour l’utilisateur.",
-        "revokeSubmit": "Retirer",
-        "revokeBadgeKey": "Clé du badge"
+        "title": "Assign admin badge",
+        "email": "User email",
+        "submit": "Grant badge",
+        "badgeKey": "Badge key",
+        "revokeTitle": "Revoke badge",
+        "revokeHint": "Removes any badge (including auto badges) from the user.",
+        "revokeSubmit": "Revoke",
+        "revokeBadgeKey": "Badge key"
       },
       "rewardsPage": {
-        "title": "Récompenses classement",
-        "hint": "Applique les bonus cash mensuels configurés (idempotent pour le mois UTC en cours).",
-        "submit": "Lancer le passage bonus"
+        "title": "Leaderboard rewards",
+        "hint": "Applies configured monthly cash bonuses to top partners (idempotent for the current UTC month).",
+        "submit": "Run monthly bonus pass"
       },
       "insightsPage": {
-        "title": "Insights opérationnels",
-        "inactiveTitle": "Partenaires inactifs (pas de clôture en 30 jours)",
-        "conversionTitle": "Tunnel d’affaires",
-        "pending": "En attente",
-        "closed": "Clôturées",
-        "lost": "Perdues",
-        "winRate": "Taux de gain (clôturées / (clôturées+perdues))"
+        "title": "Operational insights",
+        "inactiveTitle": "Partners inactive (no closed deal in 30 days)",
+        "conversionTitle": "Deal funnel",
+        "pending": "Pending",
+        "closed": "Closed",
+        "lost": "Lost",
+        "winRate": "Win rate (closed / (closed+lost))"
       },
       "overridesPage": {
-        "title": "Overrides commission partenaire",
-        "hint": "Laissez le slug produit vide pour un override global. S’applique à la prochaine clôture.",
-        "email": "Email partenaire",
-        "slug": "Slug produit (optionnel)",
-        "commissionUsd": "Base commission (USD)",
+        "title": "Partner commission overrides",
+        "hint": "Leave product slug empty for a global override. Values apply on the next deal close.",
+        "email": "Partner email",
+        "slug": "Product slug (optional)",
+        "commissionUsd": "Commission base (USD)",
         "note": "Note",
-        "submit": "Enregistrer l’override"
+        "submit": "Save override"
       },
       "bonusesPage": {
-        "title": "Bonus manuels",
-        "hint": "Crée une écriture ledger palier 0 (visible dans les gains partenaire).",
-        "email": "Email partenaire",
-        "amountUsd": "Montant (USD)",
-        "note": "Note interne",
-        "submit": "Créditer le bonus"
+        "title": "Manual bonuses",
+        "hint": "Credits a tier-0 ledger entry (visible in partner earnings).",
+        "email": "Partner email",
+        "amountUsd": "Amount (USD)",
+        "note": "Internal note",
+        "submit": "Credit bonus"
       },
       "levelsPage": {
-        "title": "Seuils de niveaux",
-        "save": "Enregistrer",
-        "minDeals": "Deals clôturés min",
-        "salaryUsd": "Salaire USD/mois (0 efface)"
+        "title": "Level thresholds",
+        "save": "Save",
+        "minDeals": "Min closed deals",
+        "salaryUsd": "Salary (USD/month, 0 clears)"
       },
       "tiersPage": {
-        "title": "Commission multi-niveaux (bps)",
-        "hint": "10000 bps = 100% de la base commission produit pour le palier 1. Les paliers 2/3 sont des pourcentages additionnels de la même base.",
-        "save": "Enregistrer",
-        "tier1": "Palier 1 (bps)",
-        "tier2": "Palier 2 (bps)",
-        "tier3": "Palier 3 (bps)"
+        "title": "Multi-level commission (basis points)",
+        "hint": "10000 bps = 100% of the product commission base to tier 1. Tier 2/3 are additional percentages of the same base.",
+        "save": "Save",
+        "tier1": "Tier 1 bps",
+        "tier2": "Tier 2 bps",
+        "tier3": "Tier 3 bps"
       },
-      "levelsOrderLabel": "Ordre {n}",
-      "tiersMissingSeed": "Configuration des paliers manquante. Exécutez : npx prisma db seed"
+      "levelsOrderLabel": "Order {n}",
+      "tiersMissingSeed": "Tier configuration is missing. Run: npx prisma db seed"
     },
     "auth": {
-      "signInTitle": "Connexion partenaire",
-      "registerTitle": "Créer un compte partenaire",
+      "signInTitle": "Partner sign-in",
+      "registerTitle": "Create partner account",
       "email": "Email",
-      "password": "Mot de passe",
-      "name": "Nom",
-      "referral": "Code de parrainage (optionnel)",
-      "submit": "Continuer",
-      "create": "Créer le compte",
-      "switchToRegister": "Pas de compte ? Inscription",
-      "switchToSignIn": "Déjà un compte ? Connexion",
-      "registerIntro": "Créez votre profil partenaire pour suivre vos gains quand les deals se closent.",
-      "signInHeroEyebrow": "Growth Engine T.E.N.E.G.T.A",
-      "signInHeroTitle": "Votre cockpit revenus partenaire",
-      "signInHeroLine1": "Commissions, niveaux et XP — unifiés dans un espace live.",
-      "signInHeroLine2": "Construisez rang et réputation qui se composent, pas du bruit ponctuel.",
-      "signInHeroLine3": "Paiements sensibles au réseau, pour ceux qui scalent avec rigueur.",
-      "signInError": "Email ou mot de passe invalide.",
+      "password": "Password",
+      "name": "Name",
+      "referral": "Referral code (optional)",
+      "submit": "Continue",
+      "create": "Create account",
+      "switchToRegister": "Need an account? Register",
+      "switchToSignIn": "Already have an account? Sign in",
+      "registerIntro": "Create your partner profile to start earning when deals close.",
+      "signInHeroEyebrow": "T.E.N.E.G.T.A Growth Engine",
+      "signInHeroTitle": "Your command center for partner income",
+      "signInHeroLine1": "Commissions, levels, and XP — unified in one live workspace.",
+      "signInHeroLine2": "Build rank and reputation that compound instead of one-off hustle.",
+      "signInHeroLine3": "Network-aware payouts built for operators who scale with discipline.",
+      "signInError": "Invalid email or password.",
       "errors": {
-        "invalid_input": "Vérifiez les champs et réessayez.",
-        "email_taken": "Cet email est déjà enregistré.",
-        "invalid_referral": "Code de parrainage introuvable.",
-        "missing_seed": "Données serveur non prêtes. Exécutez le seed de la base.",
-        "unknown": "Une erreur s’est produite. Réessayez."
+        "invalid_input": "Please check the fields and try again.",
+        "email_taken": "This email is already registered.",
+        "invalid_referral": "Referral code was not found.",
+        "missing_seed": "Server data is not ready. Run database seed.",
+        "unknown": "Something went wrong. Try again."
       }
     }
   },
   "Common": {
-    "learnMore": "Learn more",
-    "backHome": "Home"
+    "learnMore": "En savoir plus",
+    "backHome": "Accueil"
+  },
+  "ErrorPage": {
+    "notFoundTitle": "Page introuvable",
+    "notFoundBody": "La page demandée n'existe pas ou a été déplacée.",
+    "errorTitle": "Une erreur s'est produite",
+    "errorBody": "Une erreur inattendue s'est produite. Réessayez ou revenez à l'accueil.",
+    "tryAgain": "Réessayer",
+    "globalErrorTitle": "Erreur critique",
+    "globalErrorBody": "L'application n'a pas pu se charger. Actualisez la page."
   }
 }

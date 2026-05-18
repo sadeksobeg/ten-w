@@ -1,0 +1,140 @@
+---
+title: "Du pilote à la production : comment nous avons réduit la latence modèle IA de 60 %"
+excerpt: "La précision en notebook est ce qu'il y a de moins intéressant. Ce qui compte, c'est la vitesse de décision quand un utilisateur réel attend."
+date: "2024-08-15"
+author: "Ingénierie T.E.N.E.G.T.A"
+tags: ["MLOps", "Latence", "Production", "Optimisation", "IA"]
+pillar: "ai"
+readingTime: 8
+relatedCaseStudy: "enterprise-ai-ops"
+---
+
+# Du pilote à la production : comment nous avons réduit la latence modèle IA de 60 %
+
+Le notebook affichait 94 % de précision. La démo a impressionné la salle. Puis la production a posé une autre question : **pouvez-vous répondre en moins de 200 millisecondes quand un dispatcher fixe l'écran ?**
+
+Pour l'IA opérationnelle — routage, scoring de risque, détection d'anomalies — la latence n'est pas un luxe perf. C'est un **SLA de décision**. Ratez-le, et les humains contournent le modèle. Assez longtemps, le projet meurt quel que soit le F1.
+
+Nous sommes passés de **p95 420 ms → 168 ms (−60 %)** sur un chemin PyTorch sans jeter du matériel en premier. Voici la séquence qui a vraiment déplacé l'aiguille.
+
+---
+
+## Référence : la production avant
+
+```
+Client → API (FastAPI) → features (Postgres + joins)
+       → modèle PyTorch (GPU) → JSON
+```
+
+Sous charge réelle :
+
+- **Cold starts** sur workers GPU scale-to-zero
+- **Feature engineering synchrone** bloquant l'inférence
+- **PyTorch pleine précision** sur chaque requête
+- **Pas de cache** — mêmes vecteurs recalculés toutes les 30 s
+
+p95 à 200 RPS : **420 ms**. Les ops ont commencé un tableur à côté du modèle.
+
+---
+
+## Cinq leviers (dans l'ordre appliqué)
+
+### 1. Cache de features avec TTL aligné métier
+
+GPS : TTL 30 s. Stock entrepôt : 5 min. Bande météo : 15 min.
+
+```python
+def get_features(entity_id: str, tenant_id: str) -> FeatureVector:
+    key = f"feat:{tenant_id}:{entity_id}"
+    cached = redis.get(key)
+    if cached:
+        return FeatureVector.from_bytes(cached)
+    vec = compute_features(entity_id, tenant_id)
+    redis.setex(key, ttl_seconds_for_entity(entity_id), vec.to_bytes())
+    return vec
+```
+
+**Impact :** ~35 % sur la latence médiane — avant de toucher au modèle.
+
+### 2. Pipeline de prétraitement async
+
+I/O (DB, APIs externes) hors du chemin chaud d'inférence. Pour le synchrone : `asyncio.gather` — jamais bloquer le GPU sur Postgres.
+
+### 3. Export ONNX + quantification
+
+**ONNX Runtime** avec quantification dynamique pour l'inférence stable :
+
+```python
+torch.onnx.export(model, dummy, "model.onnx", opset_version=17,
+                  input_names=["features"], output_names=["score"])
+
+quantize_dynamic("model.onnx", "model.int8.onnx", weight_type=QuantType.QUInt8)
+session = ort.InferenceSession("model.int8.onnx", providers=["CPUExecutionProvider"])
+```
+
+Petit chemin GPU pour ~5 % des requêtes complexes — le reste en INT8 CPU à coût ÷3.
+
+### 4. Micro-batching
+
+Fenêtre 10 ms, batch max 32 — acceptable quand la base était 420 ms.
+
+### 5. Scaling horizontal avec pools chauds
+
+Minimum 2 réplicas chauds par région. Autoscale sur profondeur de file + p95, pas CPU seul.
+
+---
+
+## Monitoring : rendre l'optimisation reproductible
+
+| Métrique | Pourquoi |
+|----------|----------|
+| `inference_latency_ms` (p50/p95/p99) | SLO utilisateur |
+| `feature_cache_hit_rate` | Valide la stratégie TTL |
+| `batch_size` | Utilisation GPU |
+| `model_path` | Attribution coût |
+| `prediction_drift` | Garde-fou qualité |
+
+Alertes si **p95 régresse > 15 %** semaine/semaine ou hit rate cache < 70 %.
+
+Traces OpenTelemetry API → features → modèle → réponse.
+
+---
+
+## Avant / après
+
+| Étape | p95 | Notes |
+|-------|-----|-------|
+| Pilote (PyTorch GPU, sans cache) | 420 ms | OK démo, pas ops |
+| + Cache + async I/O | 280 ms | Plus gros gain |
+| + ONNX INT8 CPU | 195 ms | Coût ↓ aussi |
+| + Micro-batch + pool chaud | **168 ms** | Pic saison stable |
+
+Perte de précision : **< 0,4 %** — dans la tolérance métier. Fin du tableur parallèle.
+
+---
+
+## Pourquoi l'optimisation prématurée tue encore des projets
+
+Nous avons commencé par le **profiling** — 62 % du temps = recalcul de features, pas multiply matriciel.
+
+Échecs typiques : plus gros GPU avant mesure ; optimiser le modèle pendant des JOINs synchrones sur sept tables ; ONNX sans plan de dérive.
+
+**Optimisez le goulot qui bloque la décision**, pas la partie qui impressionne en revue d'architecture.
+
+Lien direct avec [pourquoi les projets IA enterprise stagnent](/blog/why-enterprise-ai-fails).
+
+---
+
+## Quand ce pattern s'applique
+
+Bon fit : inférence haut volume, entités répétées, SLO de latence lié à une décision humaine.
+
+Mauvais fit : analytics batch 24 h, modèles de recherche sans chemin prod.
+
+---
+
+## Pour aller plus loin
+
+Programme documenté dans notre [étude de cas IA opérationnelle](/case-studies/enterprise-ai-ops).
+
+Entre pilote et prod, la latence bloque ? [Décrivez votre chemin d'inférence](/contact?intent=project&topic=ai) — nous profilerons avant de recommander du matériel.

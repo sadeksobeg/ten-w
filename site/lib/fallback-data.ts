@@ -1,4 +1,4 @@
-export type Localized = { ar: string; en: string };
+export type Localized = { ar: string; en: string; fr?: string };
 
 export type ProjectCard = {
   slug: string;

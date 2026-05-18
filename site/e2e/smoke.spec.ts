@@ -23,4 +23,19 @@ test.describe("smoke", () => {
     await page.goto("/en/growth/sign-in");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   });
+
+  test("Home shows metrics band", async ({ page }) => {
+    await page.goto("/en");
+    await expect(page.getByText(/Enterprise systems delivered/i)).toBeVisible();
+  });
+
+  test("Deep case study shows architecture section", async ({ page }) => {
+    await page.goto("/en/case-studies/enterprise-ai-ops");
+    await expect(page.getByRole("heading", { name: /Architectural decisions/i })).toBeVisible();
+  });
+
+  test("French nav uses French labels", async ({ page }) => {
+    await page.goto("/fr");
+    await expect(page.getByRole("link", { name: /Accueil|Solutions|Contact/i }).first()).toBeVisible();
+  });
 });

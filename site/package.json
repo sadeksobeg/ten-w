@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
+    "check:env": "node scripts/check-env.mjs",
     "build": "prisma generate && next build --webpack",
     "start": "next start",
     "lint": "eslint",
@@ -12,7 +13,9 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "test:a11y": "node scripts/a11y-note.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "validate:i18n": "node scripts/validate-i18n-keys.mjs",
+    "sync:fr": "node scripts/sync-fr-from-en.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -21,15 +24,20 @@
     "@marsidev/react-turnstile": "^1.5.0",
     "@prisma/client": "^6.19.0",
     "@react-three/fiber": "^9.0.0",
+    "@sentry/nextjs": "^10.53.1",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
     "bcryptjs": "^3.0.2",
     "canvas-confetti": "^1.9.3",
     "framer-motion": "^11.15.0",
+    "gray-matter": "^4.0.3",
     "gsap": "^3.12.7",
     "lenis": "^1.1.18",
     "lottie-react": "^2.4.1",
     "next": "16.2.2",
     "next-auth": "^5.0.0-beta.30",
     "next-intl": "^4.0.2",
+    "next-mdx-remote": "^6.0.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "three": "^0.170.0",

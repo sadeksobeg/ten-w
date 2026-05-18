@@ -71,7 +71,8 @@ export function TechStackShowcase({ items }: Props) {
               muted
               loop
               playsInline
-              preload="metadata"
+              poster=""
+              preload="none"
               aria-hidden
             >
               <source src={videoSrc} type="video/mp4" />

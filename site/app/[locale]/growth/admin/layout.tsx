@@ -35,6 +35,9 @@ export default async function GrowthAdminLayout({ children, params }: Props) {
           <Link className={linkClass} href="/growth/admin/deals">
             {t("admin.nav.deals")}
           </Link>
+          <Link className={linkClass} href="/growth/admin/payouts">
+            {t("admin.nav.payouts")}
+          </Link>
           <Link className={linkClass} href="/growth/admin/products">
             {t("admin.nav.products")}
           </Link>

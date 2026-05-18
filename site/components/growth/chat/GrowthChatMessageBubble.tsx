@@ -64,10 +64,13 @@ export function GrowthChatMessageBubble({
     minute: "2-digit",
   }).format(new Date(m.createdAt));
 
-  const [bonusFlash, setBonusFlash] = useState(false);
+  const [bonusFlash, setBonusFlash] = useState(m.kind === "BONUS");
   useEffect(() => {
-    if (m.kind !== "BONUS") return;
-    setBonusFlash(true);
+    if (m.kind !== "BONUS") {
+      queueMicrotask(() => setBonusFlash(false));
+      return;
+    }
+    queueMicrotask(() => setBonusFlash(true));
     const id = window.setTimeout(() => setBonusFlash(false), 900);
     return () => window.clearTimeout(id);
   }, [m.id, m.kind]);

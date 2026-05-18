@@ -4,6 +4,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import {
   closeDealAdminFormAction,
   createDealAdminAction,
+  markDealLostAdminFormAction,
 } from "@/lib/growth/actions";
 import { prisma } from "@/lib/prisma";
 
@@ -101,15 +102,26 @@ export default async function GrowthAdminDealsPage() {
                       : t("deals.status.pending")}
                 </div>
                 {d.status === DealStatus.PENDING ? (
-                  <form action={closeDealAdminFormAction}>
-                    <input type="hidden" name="dealId" value={d.id} />
-                    <button
-                      type="submit"
-                      className="rounded-xl bg-gradient-to-r from-gold/30 via-gold to-gold-bright px-4 py-2 text-xs font-extrabold text-bg"
-                    >
-                      {t("admin.dealsPage.close")}
-                    </button>
-                  </form>
+                  <>
+                    <form action={closeDealAdminFormAction}>
+                      <input type="hidden" name="dealId" value={d.id} />
+                      <button
+                        type="submit"
+                        className="rounded-xl bg-gradient-to-r from-gold/30 via-gold to-gold-bright px-4 py-2 text-xs font-extrabold text-bg"
+                      >
+                        {t("admin.dealsPage.close")}
+                      </button>
+                    </form>
+                    <form action={markDealLostAdminFormAction}>
+                      <input type="hidden" name="dealId" value={d.id} />
+                      <button
+                        type="submit"
+                        className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs font-semibold text-red-200"
+                      >
+                        {t("admin.dealsPage.markLost")}
+                      </button>
+                    </form>
+                  </>
                 ) : null}
               </div>
             </div>

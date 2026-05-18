@@ -1,0 +1,145 @@
+---
+title: "Construire un SaaS multi-tenant à l'échelle : leçons de 12 déploiements"
+excerpt: "Les décisions d'architecture qui semblent des détails avec 3 clients pilotes deviennent structurelles à 40. Voici celles qui comptent le plus."
+date: "2024-09-01"
+author: "Ingénierie T.E.N.E.G.T.A"
+tags: ["SaaS", "Multi-tenant", "Architecture", "PostgreSQL", "Échelle"]
+pillar: "software"
+readingTime: 11
+relatedCaseStudy: "multi-tenant-saas-scale"
+---
+
+# Construire un SaaS multi-tenant à l'échelle : leçons de 12 déploiements
+
+Avec trois clients pilotes, le SaaS multi-tenant ressemble à un problème de configuration. À quarante institutions, c'est un problème de **physique opérationnelle** : isolation, attribution de latence, sécurité des releases, et chaque étape d'onboarding manuelle devient un emploi à temps plein pour vos meilleurs ingénieurs.
+
+Sur douze déploiements en production — fintech, logistique, outils internes — le schéma est le même : l'architecture pilote n'échoue pas bruyamment. Elle échoue **progressivement**, par fuites edge-case, latence non linéaire et peur de déployer.
+
+---
+
+## Trois modèles d'isolation (et quand les choisir)
+
+| Modèle | Force d'isolation | Complexité ops | Idéal pour |
+|--------|-------------------|----------------|------------|
+| **Schéma partagé + tenant_id** | Moyenne (app) | Faible | B2B early, < 20 tenants |
+| **DB partagée + RLS** | Élevée (DB) | Moyenne | La plupart des SaaS B2B à l'échelle |
+| **Schéma par tenant** | Élevée | Moyenne–élevée | Tenants régulés, schémas custom |
+| **DB par tenant** | Maximale | Élevée | Peu de grands clients enterprise |
+
+**L'erreur à l'échelle :** choisir DB par tenant car « plus sûr » au pilote, puis exploiter 40 bases, 40 politiques de backup et 40 chemins de migration.
+
+**Ce qui marche pour la plupart des B2B :** schéma partagé avec **RLS en filet de sécurité**, plus schéma par tenant uniquement si le contrat l'exige — même codebase, un flag de config.
+
+---
+
+## Row-Level Security : le filet qui survit aux bugs
+
+Le filtrage applicatif (`WHERE tenant_id = ?`) est nécessaire mais insuffisant. Un filtre oublié, un eager-load ORM sans contexte, un script admin non scopé — et vous livrez une fuite cross-tenant.
+
+PostgreSQL RLS déplace la frontière dans la base :
+
+```sql
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY tenant_isolation ON orders
+  USING (tenant_id = current_setting('app.current_tenant')::uuid);
+
+BEGIN;
+SELECT set_config('app.current_tenant', 'a1b2c3d4-...', true);
+SELECT * FROM orders;
+COMMIT;
+```
+
+Dans le code, définir le contexte tenant au **middleware requête ou transaction** :
+
+```typescript
+export async function withTenant<T>(
+  tenantId: string,
+  fn: (tx: Prisma.TransactionClient) => Promise<T>,
+): Promise<T> {
+  return prisma.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT set_config('app.current_tenant', ${tenantId}, true)`;
+    return fn(tx);
+  });
+}
+```
+
+**Leçon production :** le RLS ne remplace pas l'autorisation — il limite le blast radius à un tenant quand l'autorisation échoue.
+
+---
+
+## Automatisation de l'onboarding : pourquoi < 10 minutes
+
+À trois clients, l'onboarding est un fil Slack. À quarante, c'est **une semaine d'ingénierie par mois** — et chaque étape manuelle attend une faute de frappe.
+
+Nous visons **< 10 minutes** du contrat signé au premier appel API réussi :
+
+1. **Vélocité commerciale** — les acheteurs enterprise jugent la maturité ops à la friction d'onboarding
+2. **Sécurité** — moins de touches humaines
+3. **Revenu** — onboarding retardé = go-live retardé
+
+Pipeline minimal :
+
+```
+Provision tenant → RLS + schéma (si hybride) → config par défaut → IdP
+→ feature flags → smoke test → notifier le CS
+```
+
+Tout idempotent. Tout loggé avec `tenant_id` et `correlation_id`.
+
+---
+
+## Observabilité : les moyennes mentent en multi-tenant
+
+Quand le p95 explose, la première question : **quel tenant ?**
+
+Minimum :
+
+- **Tenant ID sur chaque span et ligne de log**
+- **Dashboards SLO par tenant**
+- **Attribution des requêtes lentes** via `set_config`
+
+Sans cela, vous optimisez la mauvaise couche — plus de CPU alors qu'un job de reporting d'un tenant a besoin d'une file.
+
+---
+
+## Feature flags : capacités par tenant sans fork de code
+
+Les flags doivent être **scopés tenant**, **auditables** et **évalués côté serveur**.
+
+Le pattern trunk-based + flags par tenant a permis [12 déploiements/mois](/case-studies/multi-tenant-saas-scale) pour un client sans chaos de release.
+
+---
+
+## Migrations de schéma sans downtime : Expand-Contract
+
+1. **Expand** — nouvelles colonnes/tables à côté de l'ancien (dual-write si besoin)
+2. **Migrate** — backfill tenant par tenant avec vérification
+3. **Contract** — basculer les lectures, supprimer l'ancien
+
+Pas d'ALTER « stop the world » le vendredi soir sauf si vous aimez les bridges d'incident.
+
+---
+
+## Ce que nous ne recommandons pas
+
+- DB par tenant par défaut
+- Logique tenant uniquement en front-end
+- « Observabilité après 20 clients »
+- Playbooks d'onboarding manuels
+
+---
+
+## Résultats alignés sur l'architecture
+
+Dans notre [étude de cas SaaS enterprise](/case-studies/multi-tenant-saas-scale), passage de 3 à 40+ institutions en six mois :
+
+- **−60 % latence p95**
+- **12 déploiements/mois**
+- **< 10 min** onboarding nouveau tenant
+
+---
+
+## Prochaine étape
+
+Entre pilote et production — ou déjà la peur de déployer ? [Parlons audit d'architecture](/contact?intent=project&topic=saas). Nous cartographierons vos frontières tenant et la décision d'isolation qui compte pour votre conformité.

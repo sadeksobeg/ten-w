@@ -5,8 +5,8 @@ import { Section } from "@/components/ui/Section";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { buildAlternates } from "@/lib/metadata-helpers";
-import { contentLocale } from "@/lib/locale-content";
-import { getBlogPosts } from "@/lib/strapi";
+import { getBlogPosts } from "@/lib/blog";
+import { pickLocalized } from "@/lib/locale-content";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -24,9 +24,7 @@ export default async function BlogPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "BlogPage" });
-  const loc = locale as Locale;
-  const cl = contentLocale(locale);
-  const posts = await getBlogPosts(loc);
+  const posts = await getBlogPosts(locale);
 
   return (
     <>
@@ -43,9 +41,9 @@ export default async function BlogPage({ params }: Props) {
             <Card key={post.slug}>
               <p className="text-xs text-muted">{post.date}</p>
               <h2 className="mt-2 text-lg font-semibold text-foreground">
-                {post.title[cl]}
+                {pickLocalized(post.title, locale)}
               </h2>
-              <p className="mt-2 text-sm text-muted">{post.excerpt[cl]}</p>
+              <p className="mt-2 text-sm text-muted">{pickLocalized(post.excerpt, locale)}</p>
               <Link
                 href={`/blog/${post.slug}`}
                 className="mt-4 inline-block text-sm font-semibold text-gold hover:underline"

@@ -1,0 +1,190 @@
+---
+title: "From Pilot to Production: How We Reduced AI Model Latency by 60%"
+titleAr: "من التجربة إلى الإنتاج: كيف خفّضنا زمن استجابة نموذج الذكاء الاصطناعي بنسبة 60٪"
+titleFr: "Du pilote à la production : −60 % de latence modèle IA"
+excerpt: "A model's accuracy in a notebook is the least interesting thing about it. What matters is how fast it can make a decision when a real user is waiting."
+excerptAr: "دقة النموذج في notebook هي أقل ما يهم. المهم كم يستغرق لاتخاذ قرار بينما مستخدم حقيقي ينتظر."
+excerptFr: "La précision en notebook importe peu. Ce qui compte, c'est la latence en production."
+date: "2024-08-15"
+author: "T.E.N.E.G.T.A Engineering"
+tags: ["MLOps", "Latency", "Production", "Optimization", "AI"]
+pillar: "ai"
+readingTime: 8
+relatedCaseStudy: "enterprise-ai-ops"
+---
+
+# From Pilot to Production: How We Reduced AI Model Latency by 60%
+
+The notebook said 94% accuracy. The demo impressed the room. Then production asked a different question: **can you answer in under 200 milliseconds when a dispatcher is staring at a screen?**
+
+For an operational AI system — routing, risk scoring, anomaly detection — latency is not a performance nice-to-have. It's a **decision SLA**. Miss it, and humans bypass the model. Bypass long enough, and the project is dead regardless of F1 score.
+
+We took a PyTorch inference path from **p95 420ms → 168ms (−60%)** without throwing hardware at the problem first. Here's the sequence that actually moved the needle.
+
+---
+
+## Baseline: What Production Looked Like Before
+
+The pilot stack was familiar:
+
+```
+Client → API (FastAPI) → feature fetch (Postgres + joins)
+       → PyTorch model (GPU instance) → JSON response
+```
+
+Problems under real load:
+
+- **Cold starts** on scaled-to-zero GPU workers
+- **Synchronous feature engineering** blocking the inference thread
+- **Full-precision PyTorch** on every request — even "easy" cases
+- **No cache** — identical feature vectors recomputed every 30 seconds for the same asset
+
+p95 at 200 RPS: **420ms**. p99 worse. Operations started keeping a spreadsheet alongside the model.
+
+---
+
+## Five Levers (In the Order We Applied Them)
+
+### 1. Feature caching with business-aligned TTL
+
+Not all features need real-time freshness. GPS position: 30s TTL. Warehouse inventory snapshot: 5 min. Weather band: 15 min.
+
+```python
+def get_features(entity_id: str, tenant_id: str) -> FeatureVector:
+    key = f"feat:{tenant_id}:{entity_id}"
+    cached = redis.get(key)
+    if cached:
+        return FeatureVector.from_bytes(cached)
+    vec = compute_features(entity_id, tenant_id)  # expensive
+    redis.setex(key, ttl_seconds_for_entity(entity_id), vec.to_bytes())
+    return vec
+```
+
+**Impact:** ~35% off median latency — before touching the model.
+
+### 2. Async preprocessing pipeline
+
+Moved I/O-bound work (DB, external APIs) off the inference hot path:
+
+```
+Request → enqueue preprocess job → return 202 + poll URL   (heavy reports)
+Request → cache hit → model path only                      (interactive UI)
+```
+
+For synchronous endpoints, we still preprocess in parallel using `asyncio.gather` — but never block GPU on Postgres round-trips.
+
+### 3. ONNX export + runtime quantization
+
+PyTorch is excellent for training. For stable inference at scale, **ONNX Runtime** with dynamic quantization:
+
+```python
+import torch
+from torch.quantization import quantize_dynamic
+
+model = load_trained_model()
+model.eval()
+
+dummy = torch.randn(1, feature_dim)
+torch.onnx.export(model, dummy, "model.onnx", opset_version=17,
+                  input_names=["features"], output_names=["score"])
+
+# Dynamic quantize for CPU inference path
+import onnxruntime as ort
+from onnxruntime.quantization import quantize_dynamic, QuantType
+
+quantize_dynamic("model.onnx", "model.int8.onnx", weight_type=QuantType.QUInt8)
+
+session = ort.InferenceSession("model.int8.onnx", providers=["CPUExecutionProvider"])
+```
+
+We kept a **small GPU path** for the 5% of requests flagged as high-complexity — most traffic hit INT8 CPU at 3× lower cost per request.
+
+### 4. Inference batching (micro-batches)
+
+Single-request GPU inference underutilizes hardware. A 10ms batching window collected concurrent requests:
+
+```python
+BATCH_WINDOW_MS = 10
+MAX_BATCH = 32
+
+async def infer_batch(requests: list[InferRequest]) -> list[InferResponse]:
+    tensor = stack_features(requests)
+    scores = session.run(None, {"features": tensor})[0]
+    return [InferResponse(score=s) for s in scores]
+```
+
+**Tradeoff:** adds up to 10ms wait — acceptable when baseline was 420ms.
+
+### 5. Horizontal scaling with warm pools
+
+Scaled-to-zero saved money in pilot. In production it bought latency spikes. **Minimum warm replicas** = 2 per region, autoscale on queue depth + p95, not CPU alone.
+
+---
+
+## Monitoring: Making Optimization Reproducible
+
+Every change without measurement is folklore. We tracked:
+
+| Metric | Why |
+|--------|-----|
+| `inference_latency_ms` (p50/p95/p99) | User-facing SLO |
+| `feature_cache_hit_rate` | Validates TTL strategy |
+| `batch_size` distribution | GPU utilization |
+| `model_path` (cpu_int8 vs gpu_fp16) | Cost attribution |
+| `prediction_drift` | Quality guardrail — speed can't trade away accuracy |
+
+Alerts fired when **p95 regressed > 15% week-over-week** or cache hit rate dropped below 70% — usually a sign of new entity types bypassing cache keys.
+
+OpenTelemetry traces linked API → feature → model → response so we could answer "which step grew?" without a war room.
+
+---
+
+## Before / After
+
+| Stage | p95 latency | Notes |
+|-------|-------------|-------|
+| Pilot (PyTorch GPU, no cache) | 420ms | Demo-acceptable, ops-unacceptable |
+| + Feature cache + async I/O | 280ms | Largest single win |
+| + ONNX INT8 CPU path | 195ms | Cost down simultaneously |
+| + Micro-batching + warm pool | **168ms** | Stable under peak season |
+
+Accuracy drop on primary metric: **< 0.4%** — within agreed business tolerance. The ops team stopped maintaining the spreadsheet.
+
+---
+
+## Why Premature Optimization Still Kills Projects
+
+We didn't start with quantization. We started with **profiling** — and learned 62% of request time was feature recomputation, not matrix multiply.
+
+The teams that fail usually:
+
+- Buy bigger GPUs before measuring
+- Optimize the model while features still do synchronous JOINs across seven tables
+- Ship ONNX without a drift monitoring plan — then blame "the model got worse" when the world changed
+
+**Optimize the bottleneck that blocks the decision**, not the part that impresses in a architecture review.
+
+This connects directly to the organizational failure modes we wrote about in [why enterprise AI projects stall](/blog/why-enterprise-ai-fails) — speed without observability and ownership is just faster failure.
+
+---
+
+## When This Pattern Applies
+
+Best fit:
+
+- **High-volume inference** (thousands+ requests/hour)
+- **Repeated entities** (same vehicles, accounts, devices scanned often)
+- **Clear latency SLO** tied to a human decision
+
+Poor fit:
+
+- Batch-only analytics with 24h freshness
+- One-off research models with no production path
+
+---
+
+## Further Reading
+
+The same program — unified data layer, decision-ready outputs, production discipline — is documented in our [enterprise AI operations case study](/case-studies/enterprise-ai-ops).
+
+If you're between pilot and production and latency is the blocker, [tell us about your inference path](/contact?intent=project&topic=ai) — we'll profile before we recommend hardware.

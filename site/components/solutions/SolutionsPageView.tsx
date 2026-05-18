@@ -165,6 +165,29 @@ export function SolutionsPageView() {
                     <p className="mt-3 text-sm leading-relaxed text-muted md:text-base">
                       {t(`${ns}.body`)}
                     </p>
+                    <dl className="mt-4 space-y-3 text-sm text-muted/95">
+                      <div>
+                        <dt className="text-xs font-semibold uppercase tracking-wide text-gold/75">
+                          {t("pillarLabels.problem")}
+                        </dt>
+                        <dd className="mt-1">{t(`${ns}.problem`)}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs font-semibold uppercase tracking-wide text-gold/75">
+                          {t("pillarLabels.approach")}
+                        </dt>
+                        <dd className="mt-1">{t(`${ns}.approach`)}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs font-semibold uppercase tracking-wide text-gold/75">
+                          {t("pillarLabels.outcome")}
+                        </dt>
+                        <dd className="mt-1">{t(`${ns}.outcome`)}</dd>
+                      </div>
+                      <blockquote className="border-s-2 border-gold/40 ps-3 italic text-white/70">
+                        {t(`${ns}.clientVoice`)}
+                      </blockquote>
+                    </dl>
                     <ul className="mt-5 space-y-2.5 border-t border-white/10 pt-5 text-sm text-muted/95 md:text-[0.9375rem]">
                       {bulletKeys.map((bk) => (
                         <li key={bk} className="flex gap-3">

@@ -1,0 +1,128 @@
+---
+title: "L'architecture Zero Trust n'est pas un produit — c'est une philosophie de conception"
+excerpt: "Chaque éditeur vous vendra une solution Zero Trust. La plupart vous revendent un périmètre sous un autre nom. Voici ce que Zero Trust signifie en pratique."
+date: "2024-07-20"
+author: "Ingénierie T.E.N.E.G.T.A"
+tags: ["Zero-Trust", "Cybersécurité", "Architecture", "NIST", "Philosophie"]
+pillar: "cyber"
+readingTime: 8
+relatedCaseStudy: "zero-trust-soc"
+---
+
+# L'architecture Zero Trust n'est pas un produit — c'est une philosophie de conception
+
+En 2010, John Kindervag — alors chez Forrester — a forgé **Zero Trust** : « Ne jamais faire confiance, toujours vérifier. » L'idée était simple : le périmètre réseau d'entreprise était devenu une fiction. Télétravail, APIs cloud et laptops compromis : « à l'intérieur » n'était plus « sûr ».
+
+Il a fallu une décennie de brèches et de ransomware pour que l'expression arrive dans les slides du board. Encore une demi-décennie pour que les éditeurs reconditionnent pare-feu, VPN et agents endpoint en « Zero Trust ».
+
+La plupart de ces achats n'ont pas échoué parce que Zero Trust est faux. Ils ont échoué parce que **les organisations ont acheté des produits avant de définir ce qu'elles protègent, de qui, et comment la vérification doit fonctionner.**
+
+---
+
+## Ce que Zero Trust n'est pas
+
+| Mythe | Réalité |
+|-------|---------|
+| « Acheter une plateforme Zero Trust » | Les produits implémentent des contrôles ; la philosophie définit lesquels comptent |
+| « Remplacer le VPN » | Identité et posture device comptent plus que la géométrie du tunnel |
+| « Tout micro-segmenter au T1 » | Déploiement par phases avec rollback bat le Big Bang |
+| « Zero Trust = zéro confiance interne » | Confiance *vérifiée*, en continu, avec moindre privilège |
+
+Si le pitch éditeur ne mentionne pas **threat model**, **cycle de vie identité** et **blast radius**, vous achetez probablement du périmètre avec de nouvelles icônes.
+
+---
+
+## Les trois principes (alignés NIST)
+
+### 1. Vérifier explicitement
+
+Chaque accès est authentifié et autorisé avec **tout le contexte disponible** — identité, santé du device, localisation, sensibilité de la ressource, signaux d'anomalie — pas seulement « user/password sur VPN ».
+
+### 2. Moindre privilège
+
+Le minimum pour la tâche, pour le minimum de temps. Droits admin permanents = dette technique à intérêts composés.
+
+### 3. Supposer la compromission
+
+Concevoir comme si l'attaquant était déjà dedans. Logs, segmentation et confinement ne sont pas « après incident » — ils définissent ce que signifie « dedans ».
+
+Ce ne sont pas des bullets marketing. Ce sont des **contraintes** sur chaque diagramme que vous validez.
+
+---
+
+## Cinq couches d'implémentation
+
+```
+┌─────────────────────────────────────────────┐
+│  Données — classification, chiffrement, DLP │
+├─────────────────────────────────────────────┤
+│  Application — authZ API, service mesh      │
+├─────────────────────────────────────────────┤
+│  Réseau — micro-segmentation, east-west     │
+├─────────────────────────────────────────────┤
+│  Device — posture, MDM, identité workload    │
+├─────────────────────────────────────────────┤
+│  Identité — MFA, RBAC, PAM, fédération     │
+└─────────────────────────────────────────────┘
+```
+
+**Erreur fréquente :** commencer par le Réseau car le vendeur pare-feu est arrivé en premier. **Succès :** commencer par l'Identité — toutes les autres couches dépendent de *qui* et *quoi* demande l'accès.
+
+---
+
+## Erreurs d'implémentation courantes
+
+1. **Threat model après l'achat** — le produit ne couvre pas vos protocoles OT ou SCADA legacy
+2. **Réseau plat + nouveau SIEM** — plus d'alertes, même mouvement latéral
+3. **MFA sur l'email seulement** — comptes de service partageant des clés
+4. **Segmentation Big Bang** — casse des intégrations non documentées
+
+Alternative documentée : **Zero Trust en huit mois** avec discovery, rollback par phase, disponibilité OT préservée — [étude de cas infrastructure critique](/case-studies/zero-trust-soc) : **−68 % faux positifs**, **0 incident critique**.
+
+---
+
+## Déploiement par phases : pourquoi le Big Bang échoue
+
+| Phase | Focus | Durée typique |
+|-------|--------|---------------|
+| 1 | Durcissement identité (MFA, RBAC, inventaire comptes de service) | 4–6 semaines |
+| 2 | Visibilité (cartographie east-west, inventaire actifs) | 4–8 semaines |
+| 3 | Micro-segmentation réseau (zone pilote → extension) | 8–12 semaines |
+| 4 | Contrôles workload + données | continu |
+
+Chaque phase a des **critères de sortie mesurables** et un **plan de rollback**.
+
+---
+
+## Checklist d'évaluation éditeur
+
+- [ ] Politique **par requête/session**, pas seulement à la jonction réseau ?
+- [ ] Intégration avec **votre IdP** et identités workload ?
+- [ ] **Systèmes legacy** sans changement firmware (proxies, sidecars) ?
+- [ ] **Phase discovery** avant enforcement ?
+- [ ] Réglage des **faux positifs** — boîte noire ML ou opérateur dans la boucle ?
+- [ ] Panne cloud éditeur — fail open ou closed, qui décide ?
+
+Les vrais vendeurs Zero Trust parlent de **votre threat model**. Les autres du quadrant Gartner.
+
+---
+
+## Zero Trust et dette sécurité
+
+Zero Trust est comment **arrêter d'accumuler** la dette décrite dans [le coût caché de la dette sécurité](/blog/security-debt-hidden-cost).
+
+---
+
+## Conclusion
+
+Zero Trust n'est pas une référence SKU. C'est la décision que **la confiance doit être gagnée en continu** — dans l'identité, les APIs, les données et les habitudes ops.
+
+Les produits aident. Ils ne remplacent pas l'architecture, le threat modeling ni la discipline par phases.
+
+---
+
+## Prochaine étape
+
+Application pour environnements proches SCADA : [étude de cas SOC Zero Trust](/case-studies/zero-trust-soc).
+
+Rollout ou choix d'éditeur ? [Commençons par une conversation](/contact?intent=consult&topic=zero-trust) — threat model avant le bon de commande.

@@ -3,27 +3,6 @@ import { z } from "zod";
 import { getClientIp, rateLimitContact } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 
-const DEFAULT_FORMSPREE = "https://formspree.io/f/mojpylaa";
-
-async function sendToFormspree(payload: Record<string, unknown>) {
-  const url = process.env.FORMSPREE_ENDPOINT ?? DEFAULT_FORMSPREE;
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) {
-      console.error("Formspree HTTP error:", res.status, await res.text().catch(() => ""));
-    }
-  } catch (err) {
-    console.error("Formspree error:", err);
-  }
-}
-
 const bodySchema = z.object({
   name: z.string().min(1).max(200),
   email: z.string().email().max(320),
@@ -37,14 +16,93 @@ const bodySchema = z.object({
   turnstileToken: z.string().max(4000).optional(),
 });
 
+function contactChannelsConfigured(): {
+  formspree: boolean;
+  webhook: boolean;
+} {
+  return {
+    formspree: Boolean(process.env.FORMSPREE_ENDPOINT?.trim()),
+    webhook: Boolean(process.env.CONTACT_WEBHOOK_URL?.trim()),
+  };
+}
+
+async function sendToFormspree(payload: Record<string, unknown>): Promise<boolean> {
+  const url = process.env.FORMSPREE_ENDPOINT?.trim();
+  if (!url) return false;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      console.error("[contact] Formspree HTTP error", {
+        status: res.status,
+        body: body.slice(0, 500),
+      });
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("[contact] Formspree request failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return false;
+  }
+}
+
+async function sendToWebhook(payload: Record<string, unknown>): Promise<boolean> {
+  const webhook = process.env.CONTACT_WEBHOOK_URL?.trim();
+  if (!webhook) return false;
+  try {
+    const res = await fetch(webhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...payload,
+        source: "tenegta-website",
+        at: payload.sentAt,
+      }),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      console.error("[contact] Webhook HTTP error", {
+        status: res.status,
+        webhook: webhook.split("?")[0],
+        body: body.slice(0, 500),
+      });
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("[contact] Webhook request failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return false;
+  }
+}
+
 /**
- * Forwards leads to CONTACT_WEBHOOK_URL when set.
- * Payload includes: source, name, email, company, message, intent, topic, at (ISO).
- * CRM systems (Zapier, Make, HubSpot, etc.) can map intent/topic to pipelines.
+ * Forwards leads to FORMSPREE_ENDPOINT and/or CONTACT_WEBHOOK_URL when configured.
  */
 export async function POST(req: Request) {
+  const { formspree, webhook } = contactChannelsConfigured();
+  if (!formspree && !webhook) {
+    console.error("[contact] No delivery channel configured", {
+      hint: "Set FORMSPREE_ENDPOINT and/or CONTACT_WEBHOOK_URL",
+    });
+    return NextResponse.json(
+      { ok: false, error: "service_unconfigured", message: "Contact service not configured" },
+      { status: 503 },
+    );
+  }
+
   const ip = getClientIp(req);
-  const limited = rateLimitContact(ip);
+  const limited = await rateLimitContact(ip);
   if (!limited.ok) {
     return NextResponse.json(
       { ok: false, error: "rate_limited" },
@@ -58,7 +116,10 @@ export async function POST(req: Request) {
   let json: unknown;
   try {
     json = await req.json();
-  } catch {
+  } catch (err) {
+    console.error("[contact] Invalid JSON body", {
+      error: err instanceof Error ? err.message : String(err),
+    });
     return NextResponse.json({ ok: false, error: "invalid_json" }, { status: 400 });
   }
 
@@ -97,27 +158,28 @@ export async function POST(req: Request) {
     sentAt: new Date().toISOString(),
   };
 
-  const webhook = process.env.CONTACT_WEBHOOK_URL;
-  if (webhook) {
-    try {
-      await fetch(webhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...messagePayload,
-          source: "tenegta-website",
-          at: messagePayload.sentAt,
-        }),
-      });
-    } catch (err) {
-      console.error("Contact webhook error:", err);
-    }
-  } else if (process.env.NODE_ENV === "development") {
-    console.info("[contact]", messagePayload);
+  const results = await Promise.all([
+    formspree ? sendToFormspree(messagePayload) : Promise.resolve(true),
+    webhook ? sendToWebhook(messagePayload) : Promise.resolve(true),
+  ]);
+
+  const formspreeOk = !formspree || results[0];
+  const webhookOk = !webhook || results[1];
+
+  if (!formspreeOk && !webhookOk) {
+    console.error("[contact] All configured channels failed", { email, intent, topic });
+    return NextResponse.json(
+      { ok: false, error: "delivery_failed", message: "Contact service not configured" },
+      { status: 503 },
+    );
   }
 
-  // إرسال إلى Formspree (لا نوقف التنفيذ عند الفشل)
-  await sendToFormspree(messagePayload);
+  if (process.env.NODE_ENV === "development") {
+    console.info("[contact] delivered", {
+      formspree: formspree ? results[0] : "skipped",
+      webhook: webhook ? results[1] : "skipped",
+    });
+  }
 
   return NextResponse.json({ ok: true });
 }

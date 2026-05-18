@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { TurnstileField } from "@/components/contact/TurnstileField";
@@ -96,8 +97,28 @@ function AnimatedSuccessMark() {
   );
 }
 
-export function ContactForm({ defaultIntent, defaultTopic }: Props) {
+function buildSystemPrefillMessage(
+  locale: string,
+  systemDesc: string,
+): string {
+  if (!systemDesc.trim()) return "";
+  const prefixes: Record<string, string> = {
+    ar: "أريد بناء النظام التالي:",
+    en: "I want to build the following system:",
+    fr: "Je veux construire le système suivant:",
+  };
+  const prefix = prefixes[locale] ?? prefixes.en;
+  return `${prefix}\n${systemDesc}`;
+}
+
+function ContactFormInner({ defaultIntent, defaultTopic }: Props) {
   const t = useTranslations("ContactPage.form");
+  const locale = useLocale();
+  const searchParams = useSearchParams();
+  const systemDesc = searchParams.get("system") ?? "";
+  const systemType = searchParams.get("type") ?? "";
+  const prefillMessage = buildSystemPrefillMessage(locale, systemDesc);
+  const resolvedTopic = defaultTopic ?? systemType;
   const [status, setStatus] = useState<
     "idle" | "sending" | "ok" | "err" | "rate"
   >("idle");
@@ -219,7 +240,7 @@ export function ContactForm({ defaultIntent, defaultTopic }: Props) {
             <input
               type="hidden"
               name="topic"
-              defaultValue={defaultTopic ?? ""}
+              defaultValue={resolvedTopic}
             />
 
             <div className="absolute -left-[9999px] h-px w-px overflow-hidden opacity-0">
@@ -282,6 +303,7 @@ export function ContactForm({ defaultIntent, defaultTopic }: Props) {
                 required
                 minLength={5}
                 rows={5}
+                defaultValue={prefillMessage}
                 className="w-full rounded-md border border-white/15 bg-bg px-3 py-2 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-gold"
               />
             </div>
@@ -370,5 +392,13 @@ export function ContactForm({ defaultIntent, defaultTopic }: Props) {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export function ContactForm(props: Props) {
+  return (
+    <Suspense fallback={null}>
+      <ContactFormInner {...props} />
+    </Suspense>
   );
 }

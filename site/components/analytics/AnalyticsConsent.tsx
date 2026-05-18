@@ -16,13 +16,15 @@ export function AnalyticsConsent() {
   const [consent, setConsent] = useState<ConsentValue | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "analytics" || stored === "essential") {
-      setConsent(stored);
-    } else {
-      setConsent(null);
-    }
-    setHydrated(true);
+    queueMicrotask(() => {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === "analytics" || stored === "essential") {
+        setConsent(stored);
+      } else {
+        setConsent(null);
+      }
+      setHydrated(true);
+    });
   }, []);
 
   function acceptAnalytics() {

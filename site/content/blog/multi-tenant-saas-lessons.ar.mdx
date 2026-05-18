@@ -1,0 +1,155 @@
+---
+title: "بناء SaaS متعدد المستأجرين على نطاق واسع: دروس من 12 نشراً"
+excerpt: "قرارات المعمارية التي تبدو تفاصيل في pilot بـ 3 عملاء تصبح جدراناً حاملة عند 40 عميلاً. إليك ما تعلمناه عن الأهم منها."
+date: "2024-09-01"
+author: "هندسة T.E.N.E.G.T.A"
+tags: ["SaaS", "تعدد المستأجرين", "معمارية", "PostgreSQL", "توسع"]
+pillar: "software"
+readingTime: 11
+relatedCaseStudy: "multi-tenant-saas-scale"
+---
+
+# بناء SaaS متعدد المستأجرين على نطاق واسع: دروس من 12 نشراً
+
+مع ثلاثة عملاء pilot، يبدو SaaS متعدد المستأجرين مشكلة إعداد. عند أربعين مؤسسة، يصبح مشكلة **فيزياء تشغيلية**: العزل، نسبة latency، أمان الإصدار، وتكلفة كل خطوة onboarding يدوية تتراكم إلى وظيفة بدوام كامل لأفضل مهندسيك.
+
+عبر اثني عشر نشراً إنتاجياً — fintech ومنصات لوجستيات وأدوات مؤسسية داخلية — رأينا النمط نفسه: معمارية الـ pilot لا تفشل بصوت عالٍ. تفشل **تدريجياً**، بتسريبات edge-case وlatency غير خطي وخوف من النشر.
+
+---
+
+## ثلاثة نماذج عزل (ومتى يفوز كل منها)
+
+| النموذج | قوة العزل | تعقيد التشغيل | الأنسب لـ |
+|---------|-----------|---------------|-----------|
+| **Schema مشترك + tenant_id** | متوسط (تطبيق) | منخفض | B2B مبكر، < 20 tenant |
+| **DB مشترك + RLS** | عالٍ (قاعدة بيانات) | متوسط | أغلب B2B SaaS على نطاق |
+| **Schema لكل tenant** | عالٍ | متوسط–عالٍ | tenants منظّمين، schemas مخصصة |
+| **DB لكل tenant** | أقصى | عالٍ | عدد قليل من عملاء enterprise كبار |
+
+**الخطأ عند التوسع:** اختيار DB لكل tenant لأنه «أكثر أماناً» في الـ pilot، ثم تشغيل 40 قاعدة و40 سياسة نسخ و40 مسار ترحيل.
+
+**ما ينجح لأغلب منصات B2B:** schema مشترك مع **RLS كشبكة أمان**، وschema-per-tenant فقط لمن يتطلبه العقد — على نفس codebase بإعداد واحد.
+
+---
+
+## Row-Level Security: الشبكة التي تنجو من الأخطاء
+
+الفلترة على مستوى التطبيق (`WHERE tenant_id = ?`) ضرورية لكن غير كافية. فلتر ناقص في endpoint جديد، ORM eager-load بلا سياق، سكربت admin بلا نطاق — وتسلّمت تسريباً بين tenants.
+
+RLS في PostgreSQL ينقل الحد إلى قاعدة البيانات:
+
+```sql
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY tenant_isolation ON orders
+  USING (tenant_id = current_setting('app.current_tenant')::uuid);
+
+BEGIN;
+SELECT set_config('app.current_tenant', 'a1b2c3d4-...', true);
+SELECT * FROM orders;
+COMMIT;
+```
+
+في التطبيق، عيّن سياق tenant في **middleware الطلب أو المعاملة** — لا تعتمد على أن كل repository method يتذكر:
+
+```typescript
+export async function withTenant<T>(
+  tenantId: string,
+  fn: (tx: Prisma.TransactionClient) => Promise<T>,
+): Promise<T> {
+  return prisma.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT set_config('app.current_tenant', ${tenantId}, true)`;
+    return fn(tx);
+  });
+}
+```
+
+**درس من الإنتاج:** RLS لا يستبدل منطق التفويض — يضمن أنه عند فشل التفويض، يبقى blast radius داخل tenant واحد.
+
+---
+
+## أتمتة Onboarding: لماذا أقل من 10 دقائق مهمة
+
+عند 3 عملاء، الـ onboarding محادثة Slack: سجلات DB، flags، credentials. عند 40، ذلك **أسبوع هندسة شهرياً** — وكل خطوة يدوية حادث أمني ينتظر خطأ مطبعياً.
+
+نهدف **< 10 دقائق** من توقيع العقد إلى أول API ناجح لأن:
+
+1. **سرعة المبيعات** — المشترون يحكمون على النضج التشغيلي باحتكاك الـ onboarding
+2. **الأمن** — لمسات بشرية أقل، جلسات admin مشتركة أقل
+3. **الإيراد** — تأخير onboarding يؤخر go-live
+
+خط أنابيب أدنى:
+
+```
+سجل tenant → RLS + schema (إن hybrid)
+→ إعداد افتراضي → IdP
+→ feature flags → smoke test
+→ إشعار نجاح العميل
+```
+
+كل شيء idempotent. كل شيء مسجّل بـ `tenant_id` و`correlation_id`.
+
+---
+
+## المراقبة: المتوسطات تكذب في multi-tenant
+
+عند ارتفاع p95، السؤال الأول: **أي tenant؟** بنية مشتركة تعني أن جاراً صاخباً يبدو كتراجع منصة.
+
+الحد الأدنى:
+
+- **tenant_id على كل span وسطر log**
+- **لوحات SLO لكل tenant**
+- **إسناد استعلامات بطيئة** بسياق tenant من `set_config`
+
+بدون هذا، تحسّن الطبقة الخاطئة — CPUs أكبر بينما تقرير tenant واحد يحتاج queue.
+
+---
+
+## Feature flags: قدرات لكل tenant بلا تفرع كود
+
+نادراً ما تُسلّم SaaS مؤسسي منتجاً واحداً. تُسلّم **منصة أساس** بقدرات لكل tenant: تحليلات متقدمة، SSO، سياسات احتفاظ.
+
+يجب أن تكون الـ flags:
+
+- **بنطاق tenant**
+- **قابلة للتدقيق**
+- **تُقيَّم server-side**
+
+هذا النمط — مع trunk-based development — مكّن [12 نشراً شهرياً](/case-studies/multi-tenant-saas-scale) لعميل دون فوضى إصدار.
+
+---
+
+## ترقية Schema بلا downtime: Expand-Contract
+
+1. **Expand** — أعمدة/جداول جديدة بجانب القديم (dual-write إن لزم)
+2. **Migrate** — backfill tenant بتenant مع تحقق
+3. **Contract** — تحويل القراءة، إزالة القديم
+
+لا ALTER «أوقف العالم» ليلة الجمعة إلا إذا أحببت bridges الحوادث.
+
+---
+
+## ما لا نوصي به
+
+- **DB لكل tenant افتراضياً**
+- **منطق tenant في الواجهة فقط**
+- **«نضيف observability بعد 20 عميلاً»**
+- **playbooks onboarding يدوية**
+
+---
+
+## نتائج تطابق المعمارية
+
+في [دراسة حالة SaaS المؤسسي](/case-studies/multi-tenant-saas-scale)، انتقلت منصة من 3 إلى 40+ مؤسسة في ستة أشهر مع:
+
+- **−60% p95 latency**
+- **12 نشراً/شهر**
+- **< 10 دقائق** onboarding
+
+الأرقام ليست سحراً — إنها فائدة مركّبة لقرارات العزل والمراقبة والأتمتة قبل العميل 10، لا بعد 35.
+
+---
+
+## الخطوة التالية
+
+إذا كنت بين pilot والإنتاج — أو تشعر بخوف النشر — [تحدث معنا عن تدقيق معماري](/contact?intent=project&topic=saas). سنرسم حدود tenant ومسار onboarding وقرار العزل الأهم لامتثالكم.
