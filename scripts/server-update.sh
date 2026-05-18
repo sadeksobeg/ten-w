@@ -36,12 +36,13 @@ fi
 # shellcheck source=/dev/null
 source "$REPO/scripts/server-use-nvm.sh"
 
-cd site
-
 bash "$REPO/scripts/server-ensure-db.sh"
 
-echo "==> npm ci"
+echo "==> npm ci (monorepo root — hoists next to node_modules/)"
+cd "$REPO"
 npm ci
+
+cd site
 
 echo "==> check env"
 npm run check:env

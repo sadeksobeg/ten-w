@@ -14,6 +14,13 @@ echo "PORT from site/.env: $PORT"
 echo ""
 echo "Listening on $PORT:"
 ss -tlnp 2>/dev/null | grep ":${PORT} " || netstat -tlnp 2>/dev/null | grep ":${PORT} " || echo "(install ss or netstat)"
+PID_ON_PORT="$(ss -tlnp 2>/dev/null | grep ":${PORT} " | sed -n 's/.*pid=\([0-9]*\).*/\1/p' | head -1)"
+if [ -n "$PID_ON_PORT" ] && [ -r "/proc/$PID_ON_PORT/cmdline" ]; then
+  echo "Process on ${PORT}: $(tr '\0' ' ' < "/proc/$PID_ON_PORT/cmdline" | head -c 200)"
+fi
+echo ""
+echo "next binary:"
+ls -la "$REPO/node_modules/next/dist/bin/next" 2>/dev/null || ls -la "$REPO/site/node_modules/next/dist/bin/next" 2>/dev/null || echo "  MISSING — run: cd $REPO && npm ci"
 echo ""
 echo "PM2:"
 bash "$REPO/scripts/server-pm2.sh" status 2>/dev/null || echo "pm2 not running"

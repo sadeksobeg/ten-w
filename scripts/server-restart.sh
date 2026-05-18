@@ -20,6 +20,12 @@ if [ ! -d .next ]; then
   exit 1
 fi
 
+NEXT_BIN="$SITE/../node_modules/next/dist/bin/next"
+if [ ! -f "$NEXT_BIN" ] && [ ! -f "$SITE/node_modules/next/dist/bin/next" ]; then
+  echo "Missing next — run from repo root: cd $REPO && npm ci"
+  exit 1
+fi
+
 echo "Stopping old PM2 process (if any)..."
 bash "$PM2" delete tenegta 2>/dev/null || true
 
