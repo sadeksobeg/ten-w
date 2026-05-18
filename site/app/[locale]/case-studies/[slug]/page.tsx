@@ -96,6 +96,11 @@ export default async function CaseStudyDetailPage({ params }: Props) {
       </Section>
 
       <Section>
+        <h2 className="font-[family-name:var(--font-cairo)] text-xl font-bold">{t("outcome")}</h2>
+        <ProseBlock text={pickLocalized(cs.outcome, locale)} />
+      </Section>
+
+      <Section>
         <h2 className="font-[family-name:var(--font-cairo)] text-xl font-bold">
           {t("architecturalDecisions")}
         </h2>
@@ -185,6 +190,7 @@ export default async function CaseStudyDetailPage({ params }: Props) {
               {pickLocalized(cs.clientQuote.org, locale)}
             </span>
           </footer>
+          <p className="mt-4 text-xs text-white/40">{t("quoteDisclaimer")}</p>
         </Section>
       ) : null}
 

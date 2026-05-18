@@ -9,6 +9,7 @@ import { MetricsBand } from "@/components/home/MetricsBand";
 import { ProblemSolutionSection } from "@/components/home/ProblemSolutionSection";
 import { HomeScrollEnhancements } from "@/components/home/HomeScrollEnhancements";
 import { TestimonialStrip } from "@/components/home/TestimonialStrip";
+import { ThoughtLeadershipBand } from "@/components/home/ThoughtLeadershipBand";
 import {
   ProjectsRail,
 } from "@/components/home/ProjectsRail";
@@ -82,6 +83,7 @@ export default async function HomePage({ params }: Props) {
         <ProblemSolutionSection />
         <MetricsBand />
         <TestimonialStrip />
+        <ThoughtLeadershipBand />
 
         <ServicesMotionGrid
           sectionTitle={t("services.title")}

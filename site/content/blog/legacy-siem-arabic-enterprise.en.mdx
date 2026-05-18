@@ -1,0 +1,98 @@
+---
+title: "Why Legacy SIEM Fails in Arabic Enterprise Environments"
+titleAr: "لماذا تفشل أنظمة SIEM التقليدية في البيئات المؤسسية العربية"
+titleFr: "Pourquoi le SIEM hérité échoue dans les environnements arabophones"
+excerpt: "Alert fatigue, bilingual log pipelines, and detection rules that operators never tune — the SIEM didn't fail; the operating model did."
+excerptAr: "إرهاق الإنذارات، مسارات سجلات ثنائية اللغة، وقواعد كشف لا يضبطها المشغّل — المشكلة ليست المنتج وحده بل نموذج التشغيل."
+excerptFr: "Fatigue d'alertes, pipelines bilingues et règles jamais affinées — le SIEM n'a pas échoué seul, le modèle opérationnel aussi."
+date: "2025-02-12"
+author: "T.E.N.E.G.T.A Engineering"
+tags: ["SIEM", "SOC", "Arabic", "Log pipelines", "Detection engineering"]
+pillar: "cyber"
+readingTime: 9
+relatedCaseStudy: "zero-trust-soc"
+---
+
+# Why Legacy SIEM Fails in Arabic Enterprise Environments
+
+Most regional enterprises did not buy a SIEM because they wanted another dashboard. They bought it because auditors, insurers, or a parent group asked for **evidence of monitoring**. The platform arrived; the operating model did not.
+
+Twelve months later the story is familiar: millions of events per day, thousands of daily alerts, three analysts who speak Arabic and English but work in tools that assume ASCII-only field names, and a runbook library that still references a vendor's default use cases from a European retail template.
+
+This is not a failure of "security culture." It is a **systems integration and language problem** dressed up as a tooling problem.
+
+---
+
+## Alert fatigue is a design outcome, not an accident
+
+Legacy SIEM deployments often inherit:
+
+- **Correlation rules** copied from community packs without asset context
+- **Thresholds** tuned for high-volume Western SaaS log shapes
+- **Severity inflation** because every rule defaults to "High" so nothing gets ignored in procurement reviews
+
+In Arabic enterprise estates you add:
+
+- Mixed **Latin and Arabic** identifiers in the same log field (user display names, department labels, ticket subjects)
+- **Legacy applications** that emit unstructured text in Windows-1256 or UTF-8 inconsistently
+- **National ID and phone patterns** that generic regex packs miss or over-match
+
+The SOC does not ignore alerts because analysts are lazy. They ignore alerts because **precision was never engineered into the pipeline**.
+
+---
+
+## Bilingual log pipelines need first-class treatment
+
+A workable pipeline for Arabic enterprises treats language as **schema**, not an afterthought:
+
+| Stage | What breaks without design | What good looks like |
+|-------|---------------------------|----------------------|
+| Collection | Double-encoded UTF-8, lost diacritics | Normalized UTF-8 at ingest; charset detection on legacy sources |
+| Parsing | Grok patterns built for English field names | Field maps per application; Arabic labels aliased to canonical keys |
+| Enrichment | GeoIP only, no asset owner | Asset CMDB + business unit + data classification |
+| Detection | English-only keywords | Bilingual IOC lists, Arabic phishing phrases, RTL-safe search |
+| Response | Runbooks in one language | Playbooks with Arabic operator steps where teams require it |
+
+Search that "works in Kibana" for `failed login` but fails for `فشل تسجيل الدخول` is not a minor UX issue — it is **missed detection coverage**.
+
+---
+
+## Detection engineering beats shelf content
+
+Shelf SIEM content assumes:
+
+- Endpoint telemetry from a single EDR vendor
+- Cloud APIs with predictable JSON
+- Identity from Azure AD or Okta with clean attribute names
+
+Regional estates often include **on-prem AD**, custom HR portals, government gateways, and OT-adjacent systems that never appear in vendor blueprints.
+
+**Detection engineering** — versioned rules, unit tests on log samples, purple-team validation, owner per use case — is how you move from "we bought SIEM" to "we can prove coverage."
+
+Practical starting points:
+
+1. **Top ten risks** from your actual threat model (not the vendor poster)
+2. **Data quality SLAs** per critical source (latency, parse success rate)
+3. **Use-case lifecycle**: propose → test → deploy → review → retire
+4. **Metrics operators trust**: mean time to triage true positives, not raw alert count
+
+---
+
+## What we recommend before the next license renewal
+
+Before renewing or rip-and-replacing, run a **two-week pipeline audit**:
+
+- Sample 1% of daily volume across top five sources
+- Measure parse failures and null critical fields
+- Run five bilingual hunt queries your analysts already use manually
+- Map each high-severity alert from the last 30 days to a closed ticket — or to "no owner"
+
+If more than half of high-severity alerts have no accountable owner, the fix is not another correlation rule. It is **operating model + data foundation**.
+
+---
+
+## Closing thought
+
+SIEM is inventory for security operations — not operations itself. In Arabic enterprise environments, credibility comes from **pipelines operators can search in their language**, detections tied to real assets, and leadership that funds tuning quarters, not just license quarters.
+
+If you are replatforming or unblocking a stuck SOC program, [our zero-trust SOC case study](/en/case-studies/zero-trust-soc) outlines how we structure phased delivery — or [book a consultation](/en/contact) to scope a pipeline audit.

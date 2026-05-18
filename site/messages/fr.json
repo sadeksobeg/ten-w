@@ -24,7 +24,8 @@
     "caseStudies": "Case studies",
     "engagement": "Engagement",
     "whyUs": "Why us",
-    "status": "Status",
+    "partners": "Écosystème",
+    "careers": "Carrières",
     "techRadar": "Tech radar"
   },
   "HomePage": {
@@ -34,7 +35,15 @@
     },
     "credibility": {
       "trustedBy": "La confiance d'équipes qui construisent des infrastructures critiques",
-      "logosAria": "Secteurs clients"
+      "logosAria": "Secteurs clients",
+      "testimonialEyebrow": "Scénario d'engagement représentatif",
+      "testimonialDisclaimer": "Scénario composite illustrant le type de résultats que nous concevons — pas attribué à un client nommé sans référence signée."
+    },
+    "thoughtLeadership": {
+      "eyebrow": "Leadership technique",
+      "title": "Pourquoi les SIEM legacy échouent dans les entreprises arabophones",
+      "description": "Essai technique sur la fatigue d'alertes, les pipelines de logs bilingues et la détection réellement utilisée.",
+      "cta": "Lire l'article"
     },
     "problemSolution": {
       "eyebrow": "L'écart que nous comblons",
@@ -661,6 +670,31 @@
       "body": "Tools change; discipline endures. We align technology choices to measurable outcomes — faster decisions, lower operational risk, and systems your teams can run with confidence."
     }
   },
+  "PartnersPage": {
+    "meta": {
+      "title": "Écosystème technologique – T.E.N.E.G.T.A",
+      "description": "Clouds, data et IA que nous concevons et intégrons pour des programmes d'entreprise."
+    },
+    "title": "Écosystème technologique",
+    "subtitle": "Nous architecturons pour les plateformes que vous utilisez déjà. Compatibilité — pas statut revendeur sauf mention contractuelle.",
+    "note": "Les choix finaux suivent conformité, résidence et achats.",
+    "ctaTech": "Voir le stack complet",
+    "ctaContact": "Discuter de votre environnement"
+  },
+  "CareersPage": {
+    "meta": {
+      "title": "Carrières – T.E.N.E.G.T.A",
+      "description": "Nous construisons un réseau de spécialistes. IA, sécurité ou plateformes en production — contactez-nous."
+    },
+    "title": "Carrières",
+    "subtitle": "Croissance mesurée — livraison par le fondateur aujourd'hui, réseau demain.",
+    "body": "Pas de job board générique. Nous mobilisons des spécialistes quand le programme l'exige. Envoyez votre profil et les problèmes que vous voulez résoudre.",
+    "cta": "Se présenter",
+    "valuesTitle": "Comment nous recrutons",
+    "v1": "Preuves en production avant les mots-clés CV",
+    "v2": "Esprit sécurité, pas cases à cocher",
+    "v3": "Communication claire en arabe et anglais"
+  },
   "TeamPage": {
     "meta": {
       "title": "Comment nous travaillons – T.E.N.E.G.T.A",
@@ -924,6 +958,42 @@
       "b2": "Operations and technology teams",
       "b3": "Gradual improvement of KPIs and services",
       "ctaLabel": "Talk about a support agreement"
+    },
+    "methodology": {
+      "title": "Comment nous travaillons avec vous",
+      "subtitle": "Un parcours clair de la première conversation à la production — avec des points de décision à chaque étape.",
+      "steps": {
+        "discover": {
+          "phase": "Semaine 1–2",
+          "title": "Briefing exécutif & découverte",
+          "description": "Cartographie des parties prenantes, contraintes et décisions opérationnelles — avant tout choix d'outils.",
+          "duration": "Ateliers · schéma d'architecture · registre des risques"
+        },
+        "assess": {
+          "phase": "Semaine 2–4",
+          "title": "Évaluation technologique",
+          "description": "Audit honnête de l'existant : flux de données, posture sécurité, dette d'intégration.",
+          "duration": "Revue lecture seule · modèle de menace · options de livraison"
+        },
+        "pilot": {
+          "phase": "Semaine 4–10",
+          "title": "Essai / pilote en production",
+          "description": "Périmètre borné avec critères de succès mesurables — prouver la valeur avant d'augmenter l'investissement.",
+          "duration": "Env pilote · KPI · pilotage hebdomadaire"
+        },
+        "deploy": {
+          "phase": "Semaine 10+",
+          "title": "Déploiement & passation",
+          "description": "Durcissement, documentation, runbooks et formation pour l'exploitation au quotidien.",
+          "duration": "CI/CD · observabilité · SLA support"
+        },
+        "evolve": {
+          "phase": "Continu",
+          "title": "Évoluer & améliorer",
+          "description": "Retainer ou feuille de route pour nouvelles capacités et posture sécurité évolutive.",
+          "duration": "Roadmap · revues trimestrielles"
+        }
+      }
     }
   },
   "CaseStudiesPage": {
@@ -936,7 +1006,12 @@
     "readStudy": "Read study",
     "backToList": "All case studies",
     "problem": "Problem",
-    "approach": "Approach",
+    "approach": "What we built",
+    "outcome": "Outcome",
+    "previewProblem": "Problem",
+    "previewBuild": "Build",
+    "previewOutcome": "Outcome",
+    "quoteDisclaimer": "Representative quote for discussion — composite scenario, not a named client endorsement unless stated otherwise.",
     "architecture": "Architecture",
     "architecturalDecisions": "Architectural decisions",
     "technicalChallenges": "Technical challenges",

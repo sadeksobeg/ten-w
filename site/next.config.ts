@@ -36,11 +36,6 @@ const nextConfig: NextConfig = {
         destination: "/:locale/solutions",
         permanent: true,
       },
-      {
-        source: "/:locale/careers",
-        destination: "/:locale/contact",
-        permanent: true,
-      },
     ];
   },
   async headers() {

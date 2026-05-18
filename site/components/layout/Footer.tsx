@@ -6,8 +6,10 @@ export async function Footer() {
   const t = await getTranslations("Footer");
   const n = await getTranslations("Nav");
   const year = new Date().getFullYear();
-  const linkedIn = process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN;
-  const x = process.env.NEXT_PUBLIC_SOCIAL_X;
+  const linkedIn =
+    process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN?.trim() ||
+    "https://www.linkedin.com/in/sadek-al-etr-084b34205";
+  const x = process.env.NEXT_PUBLIC_SOCIAL_X?.trim();
 
   return (
     <footer className="border-t border-white/10 bg-surface py-12">
@@ -28,6 +30,12 @@ export async function Footer() {
           <Link href="/why-us" className="text-muted hover:text-gold">
             {t("whyUs")}
           </Link>
+          <Link href="/partners" className="text-muted hover:text-gold">
+            {t("partners")}
+          </Link>
+          <Link href="/careers" className="text-muted hover:text-gold">
+            {t("careers")}
+          </Link>
           <Link href="/tech-radar" className="text-muted hover:text-gold">
             {t("techRadar")}
           </Link>
@@ -43,16 +51,14 @@ export async function Footer() {
           <Link href="/contact" className="text-muted hover:text-gold">
             {n("contact")}
           </Link>
-          {linkedIn ? (
-            <a
-              href={linkedIn}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted hover:text-gold"
-            >
-              LinkedIn
-            </a>
-          ) : null}
+          <a
+            href={linkedIn}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted hover:text-gold"
+          >
+            LinkedIn
+          </a>
           {x ? (
             <a
               href={x}

@@ -5,6 +5,7 @@ import { Section } from "@/components/ui/Section";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 import type { Locale } from "@/i18n/routing";
 import { buildAlternates } from "@/lib/metadata-helpers";
+import { MethodologyTimeline } from "@/components/engagement/MethodologyTimeline";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -38,6 +39,10 @@ export default async function EngagementPage({ params }: Props) {
         </h1>
         <p className="mt-3 max-w-3xl text-muted md:text-lg">{t("subtitle")}</p>
         <p className="mt-4 max-w-2xl text-sm text-muted">{t("pricingNote")}</p>
+      </Section>
+
+      <Section className="border-b border-white/10 bg-surface/20">
+        <MethodologyTimeline />
       </Section>
 
       <Section>

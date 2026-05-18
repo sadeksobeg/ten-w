@@ -7,6 +7,7 @@ import type { Locale } from "@/i18n/routing";
 import { buildAlternates } from "@/lib/metadata-helpers";
 import { deepCaseStudies } from "@/lib/case-studies-data";
 import { pickLocalized } from "@/lib/locale-content";
+import { previewParagraph } from "@/lib/text-preview";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -41,9 +42,35 @@ export default async function CaseStudiesIndexPage({ params }: Props) {
                 <h2 className="font-[family-name:var(--font-cairo)] text-xl font-semibold text-gold">
                   {pickLocalized(cs.title, locale)}
                 </h2>
-                <p className="mt-2 flex-1 text-sm leading-7 text-muted">
+                <p className="mt-2 text-sm leading-7 text-muted">
                   {pickLocalized(cs.excerpt, locale)}
                 </p>
+                <dl className="mt-4 space-y-3 border-t border-white/10 pt-4 text-xs">
+                  <div>
+                    <dt className="font-semibold uppercase tracking-wide text-gold/70">
+                      {t("previewProblem")}
+                    </dt>
+                    <dd className="mt-1 text-muted">
+                      {previewParagraph(pickLocalized(cs.problem, locale))}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold uppercase tracking-wide text-gold/70">
+                      {t("previewBuild")}
+                    </dt>
+                    <dd className="mt-1 text-muted">
+                      {previewParagraph(pickLocalized(cs.approach, locale))}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold uppercase tracking-wide text-gold/70">
+                      {t("previewOutcome")}
+                    </dt>
+                    <dd className="mt-1 text-muted">
+                      {previewParagraph(pickLocalized(cs.outcome, locale))}
+                    </dd>
+                  </div>
+                </dl>
                 <Link
                   href={`/case-studies/${cs.slug}`}
                   className="mt-5 inline-flex min-h-10 items-center rounded-md border border-gold/40 px-4 text-sm font-semibold text-gold transition-colors hover:border-gold/70 hover:bg-gold-dim/40"

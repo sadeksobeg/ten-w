@@ -29,6 +29,7 @@ export interface DeepCaseStudy {
   excerpt: Localized;
   problem: Localized;
   approach: Localized;
+  outcome: Localized;
   architecturalDecisions: ArchitecturalDecision[];
   technicalChallenges: TechnicalChallenge[];
   techStack: string[];
@@ -104,6 +105,11 @@ The interface was a single dashboard giving managers "the top 3 things that need
 Nous avons construit un pipeline de données unifié agrégeant signaux GPS, données d'entrepôts, planning des commandes et conditions météo dans un seul modèle. Au-dessus, nous avons déployé un modèle ML de détection d'anomalies et de prédiction des retards qui se déclenche avant que les problèmes surviennent.
 
 L'interface était un tableau de bord unique donnant aux managers "les 3 priorités immédiates" — pas des rapports, des décisions.`,
+    },
+    outcome: {
+      ar: `خلال 14 أسبوعاً: لوحة قرار موحّدة، تقليل زمن معالجة الحوادث بنحو 42% في بيئة الاختبار، وقدرة الفريق على التنبؤ بالتأخيرات قبل وقوعها — مع وثائق تشغيل واضحة للمديرين الميدانيين.`,
+      en: `Within 14 weeks: a unified decision dashboard, ~42% faster incident resolution in the pilot environment, and the ability to predict delays before they occur — with clear operational documentation for field managers.`,
+      fr: `En 14 semaines : tableau de bord unifié, résolution d'incidents ~42 % plus rapide en environnement pilote, et capacité à prédire les retards avant qu'ils surviennent — avec documentation opérationnelle claire pour les managers terrain.`,
     },
     architecturalDecisions: [
       {
@@ -277,6 +283,11 @@ For the alerts problem, we built a custom SOAR layer that automatically classifi
 
 Pour le problème des alertes, nous avons construit une couche SOAR personnalisée classifiant automatiquement les alertes et les corrélant avec la threat intelligence — transformant l'équipe du "combat d'incendies" à la "chasse aux menaces."`,
     },
+    outcome: {
+      ar: `بعد 12 أسبوعاً: تقليل الإنذارات الحرجة الوهمية بنحو 68%، زمن اكتشاف تهديدات حقيقية أقل من 4 دقائق، وبرنامج تدريب SOC يُبقي الفريق على نفس مستوى الوعي بعد مغادرة المشروع.`,
+      en: `After 12 weeks: ~68% reduction in false-positive critical alerts, sub-4-minute detection for genuine threats, and a SOC training program that sustains team awareness after handover.`,
+      fr: `Après 12 semaines : réduction d'environ 68 % des alertes critiques fausses, détection des menaces réelles en moins de 4 minutes, et programme de formation SOC maintenant la vigilance après la passation.`,
+    },
     architecturalDecisions: [
       {
         title: {
@@ -448,6 +459,11 @@ Plan en 3 phases :
 1. **Isolation** — séparer les données des tenants de manière sécurisée (Row-Level Security + schema-par-tenant pour les clients sensibles)
 2. **Performance** — réécrire les requêtes N+1, cache Redis, connection pooling
 3. **Automation** — pipeline CI/CD complet, Infrastructure as Code, onboarding d'un tenant en moins de 10 minutes`,
+    },
+    outcome: {
+      ar: `في 6 أشهر: من 3 إلى 40+ مؤسسة على نفس المنصة، تقليص p95 latency بنحو 60%، و12 نشراً شهرياً بدون توقف الإنتاج — مع عزل tenants مُثبت في الاختبارات.`,
+      en: `In 6 months: scaled from 3 to 40+ institutions on one platform, ~60% lower p95 latency, and 12 production deployments per month without downtime — with tenant isolation verified in testing.`,
+      fr: `En 6 mois : passage de 3 à 40+ institutions sur une plateforme, latence p95 réduite d'environ 60 %, et 12 déploiements production par mois sans interruption — isolation des tenants vérifiée en tests.`,
     },
     architecturalDecisions: [
       {

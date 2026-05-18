@@ -24,7 +24,8 @@
     "caseStudies": "Case studies",
     "engagement": "Engagement",
     "whyUs": "Why us",
-    "status": "Status",
+    "partners": "Ecosystem",
+    "careers": "Careers",
     "techRadar": "Tech radar"
   },
   "HomePage": {
@@ -34,7 +35,15 @@
     },
     "credibility": {
       "trustedBy": "Trusted by teams building critical infrastructure",
-      "logosAria": "Client sectors"
+      "logosAria": "Client sectors",
+      "testimonialEyebrow": "Representative engagement scenario",
+      "testimonialDisclaimer": "Composite scenario illustrating the type of outcomes we design for — not attributed to a single named client without a signed reference."
+    },
+    "thoughtLeadership": {
+      "eyebrow": "Thought leadership",
+      "title": "Why legacy SIEM fails in Arabic enterprise environments",
+      "description": "A technical essay on alert fatigue, bilingual log pipelines, and building detection that operators actually use.",
+      "cta": "Read the article"
     },
     "problemSolution": {
       "eyebrow": "The gap we close",
@@ -605,6 +614,31 @@
       "body": "Tools change; discipline endures. We align technology choices to measurable outcomes — faster decisions, lower operational risk, and systems your teams can run with confidence."
     }
   },
+  "PartnersPage": {
+    "meta": {
+      "title": "Technology ecosystem – T.E.N.E.G.T.A",
+      "description": "Clouds, data platforms, and AI tooling we design and integrate with — for enterprise-grade delivery."
+    },
+    "title": "Technology ecosystem",
+    "subtitle": "We architect for the platforms our clients already use. Listing compatibility — not official reseller status unless stated in contract.",
+    "note": "Final stack choices follow your compliance, residency, and procurement constraints.",
+    "ctaTech": "View full engineering stack",
+    "ctaContact": "Discuss your environment"
+  },
+  "CareersPage": {
+    "meta": {
+      "title": "Careers – T.E.N.E.G.T.A",
+      "description": "We're building a specialist network. If you ship production systems in AI, security, or platform engineering — reach out."
+    },
+    "title": "Careers",
+    "subtitle": "We're growing deliberately — founder-led delivery today, specialist network tomorrow.",
+    "body": "We don't publish generic job boards. We engage specialists when a program needs depth in AI, cybersecurity, or platform engineering. If that's you, send your profile and the kind of problems you want to solve.",
+    "cta": "Introduce yourself",
+    "valuesTitle": "How we hire",
+    "v1": "Production evidence over résumé keywords",
+    "v2": "Security mindset, not checkbox compliance",
+    "v3": "Clear communication in Arabic and English"
+  },
   "TeamPage": {
     "meta": {
       "title": "How we work – T.E.N.E.G.T.A",
@@ -862,6 +896,42 @@
       "b2": "Operations and technology teams",
       "b3": "Gradual improvement of KPIs and services",
       "ctaLabel": "Talk about a support agreement"
+    },
+    "methodology": {
+      "title": "How we work with you",
+      "subtitle": "A clear path from first conversation to production — with decision gates at every step.",
+      "steps": {
+        "discover": {
+          "phase": "Week 1–2",
+          "title": "Executive briefing & discovery",
+          "description": "We map stakeholders, constraints, and the operational decisions your system must support — before any tooling discussion.",
+          "duration": "Workshops · architecture sketch · risk register"
+        },
+        "assess": {
+          "phase": "Week 2–4",
+          "title": "Technology assessment",
+          "description": "Honest audit of what exists: data flows, security posture, integration debt, and what can be improved without a rewrite.",
+          "duration": "Read-only review · threat model · delivery options"
+        },
+        "pilot": {
+          "phase": "Week 4–10",
+          "title": "Production trial / pilot",
+          "description": "Bounded scope in a real environment with measurable success criteria — prove value before scaling spend.",
+          "duration": "Pilot env · KPIs · weekly steering"
+        },
+        "deploy": {
+          "phase": "Week 10+",
+          "title": "Deployment & handover",
+          "description": "Hardening, documentation, runbooks, and training so your team owns day-two operations.",
+          "duration": "CI/CD · observability · support SLA"
+        },
+        "evolve": {
+          "phase": "Ongoing",
+          "title": "Evolve & improve",
+          "description": "Retainer or phased roadmap for new capabilities, model updates, and security posture as your business changes.",
+          "duration": "Roadmap · quarterly reviews"
+        }
+      }
     }
   },
   "CaseStudiesPage": {
@@ -874,7 +944,12 @@
     "readStudy": "Read study",
     "backToList": "All case studies",
     "problem": "Problem",
-    "approach": "Approach",
+    "approach": "What we built",
+    "outcome": "Outcome",
+    "previewProblem": "Problem",
+    "previewBuild": "Build",
+    "previewOutcome": "Outcome",
+    "quoteDisclaimer": "Representative quote for discussion — composite scenario aligned with this archetype, not a named client endorsement unless stated otherwise.",
     "architecture": "Architecture",
     "architecturalDecisions": "Architectural decisions",
     "technicalChallenges": "Technical challenges",

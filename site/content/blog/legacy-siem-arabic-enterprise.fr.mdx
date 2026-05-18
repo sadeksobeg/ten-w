@@ -1,0 +1,85 @@
+---
+title: "Why Legacy SIEM Fails in Arabic Enterprise Environments"
+titleAr: "لماذا تفشل أنظمة SIEM التقليدية في البيئات المؤسسية العربية"
+titleFr: "Pourquoi le SIEM hérité échoue dans les environnements arabophones"
+excerpt: "Alert fatigue, bilingual log pipelines, and detection rules that operators never tune — the SIEM didn't fail; the operating model did."
+excerptAr: "إرهاق الإنذارات، مسارات سجلات ثنائية اللغة، وقواعد كشف لا يضبطها المشغّل — المشكلة ليست المنتج وحده بل نموذج التشغيل."
+excerptFr: "Fatigue d'alertes, pipelines bilingues et règles jamais affinées — le SIEM n'a pas échoué seul, le modèle opérationnel aussi."
+date: "2025-02-12"
+author: "T.E.N.E.G.T.A Engineering"
+tags: ["SIEM", "SOC", "Arabic", "Log pipelines", "Detection engineering"]
+pillar: "cyber"
+readingTime: 9
+relatedCaseStudy: "zero-trust-soc"
+---
+
+# Pourquoi le SIEM hérité échoue dans les environnements arabophones
+
+La plupart des entreprises régionales n'ont pas acheté un SIEM pour un tableau de bord de plus. Elles l'ont acheté parce qu'un auditeur, un assureur ou une maison mère exigeait **une preuve de surveillance**. La plateforme est arrivée ; le modèle opérationnel, non.
+
+Un an plus tard : des millions d'événements par jour, des milliers d'alertes, des analystes bilingues dans des outils pensés pour l'ASCII, et des playbooks calqués sur des modèles retail européens.
+
+Ce n'est pas un problème de « culture sécurité ». C'est un **problème d'intégration et de langue** présenté comme un problème d'outil.
+
+---
+
+## La fatigue d'alertes est un choix de design
+
+Les déploiements hérités accumulent :
+
+- Des **règles de corrélation** copiées sans contexte d'actifs
+- Des **seuils** calibrés pour des logs SaaS à fort volume
+- Une **sévérité gonflée** pour satisfaire les revues d'achat
+
+Dans les environnements arabophones s'ajoutent :
+
+- Des identifiants **latins et arabes** dans le même champ
+- Des applications legacy en encodages incohérents
+- Des motifs d'identité nationale mal couverts par les regex génériques
+
+Les SOC n'ignorent pas les alertes par paresse — la **précision n'a jamais été ingénierée**.
+
+---
+
+## Pipelines bilingues
+
+| Étape | Risque | Cible |
+|-------|--------|-------|
+| Collecte | UTF-8 double, perte de diacritiques | Normalisation à l'ingest |
+| Parsing | Grok anglais uniquement | Alias de champs arabes |
+| Enrichissement | GeoIP seul | CMDB + métier + classification |
+| Détection | Mots-clés anglais | IOC bilingues, recherche RTL |
+| Réponse | Runbook monolingue | Étapes en arabe si requis |
+
+Échouer sur `فشل تسجيل الدخول` alors que `failed login` fonctionne, c'est une **lacune de couverture**.
+
+---
+
+## Ingénierie de détection
+
+Le contenu catalogue suppose un EDR unique, du cloud JSON propre, Azure AD ou Okta.
+
+Les patrimoines régionaux mélangent **AD on-prem**, portails RH custom, passerelles étatiques et OT adjacent.
+
+L'**ingénierie de détection** — règles versionnées, tests sur échantillons, purple team, owner par cas d'usage — fait passer de « nous avons un SIEM » à « nous prouvons la couverture ».
+
+---
+
+## Avant le renouvellement de licence
+
+Audit pipeline de **deux semaines** :
+
+- Échantillon 1 % du volume sur les cinq principales sources
+- Taux d'échec de parsing
+- Cinq requêtes de chasse bilingues déjà utilisées manuellement
+- Chaque alerte haute sévérité des 30 derniers jours → ticket fermé ou sans owner
+
+Si plus de la moitié n'a pas d'owner, le correctif n'est pas une règle de plus — c'est **modèle opérationnel + fondation données**.
+
+---
+
+## Conclusion
+
+Le SIEM est l'inventaire des opérations sécurité — pas les opérations elles-mêmes. La crédibilité vient de **pipelines cherchables dans la langue des opérateurs**, de détections liées aux actifs réels, et d'un financement du tuning, pas seulement des licences.
+
+Voir [l'étude de cas SOC](/fr/case-studies/zero-trust-soc) ou [prendre contact](/fr/contact) pour cadrer un audit.

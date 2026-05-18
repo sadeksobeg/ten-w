@@ -26,85 +26,87 @@ export type Testimonial = {
   accentColor: string;
 };
 
+/** Commitment-based metrics — defensible from day one (not unaudited operational claims). */
 export const siteMetrics: SiteMetric[] = [
   {
-    value: "100",
-    suffix: "%",
+    value: "ISO",
+    suffix: "/NIST",
     label: {
-      ar: "معدل التسليم في الموعد",
-      en: "On-Time Delivery Rate",
-      fr: "Taux de livraison dans les délais",
+      ar: "أطر عمل معتمدة",
+      en: "Recognized frameworks",
+      fr: "Cadres reconnus",
     },
     sublabel: {
-      ar: "عبر جميع مراحل التسليم",
-      en: "Across all delivery phases",
-      fr: "Sur toutes les phases de livraison",
-    },
-  },
-  {
-    value: "4",
-    label: {
-      ar: "قطاعات مؤسسية مُخدَّمة",
-      en: "Enterprise Verticals Served",
-      fr: "Secteurs d'entreprise couverts",
-    },
-    sublabel: {
-      ar: "لوجستيات · مالية · بنية حرجة · صحة",
-      en: "Logistics · Finance · Critical Infra · Health",
-      fr: "Logistique · Finance · Infrastructure · Santé",
+      ar: "تصميم وفق ISO/NIST من اليوم الأول",
+      en: "Designed to ISO/NIST from day one",
+      fr: "Conçu selon ISO/NIST dès le premier jour",
     },
   },
   {
     value: "< 72",
     suffix: "h",
     label: {
-      ar: "وقت الاستجابة للحوادث الحرجة",
-      en: "Critical Incident Response Time",
-      fr: "Temps de réponse aux incidents critiques",
+      ar: "استجابة للحوادث الحرجة",
+      en: "Critical incident response",
+      fr: "Réponse aux incidents critiques",
     },
     sublabel: {
-      ar: "SLA مضمون في عقود الدعم",
-      en: "Guaranteed in support contracts",
-      fr: "Garanti dans les contrats de support",
+      ar: "SLA مكتوب في عقود الدعم",
+      en: "Written into every support contract",
+      fr: "Inscrit dans chaque contrat de support",
     },
   },
   {
     value: "3",
     label: {
-      ar: "ركائز تقنية متكاملة",
-      en: "Integrated Technology Pillars",
-      fr: "Piliers technologiques intégrés",
+      ar: "ركائز متكاملة",
+      en: "Integrated pillars",
+      fr: "Piliers intégrés",
     },
     sublabel: {
       ar: "ذكاء اصطناعي · أمن سيبراني · هندسة برمجيات",
-      en: "AI · Cybersecurity · Software Engineering",
+      en: "AI · Cybersecurity · Software engineering",
       fr: "IA · Cybersécurité · Génie logiciel",
     },
   },
   {
-    value: "0",
+    value: "1",
     label: {
-      ar: "حوادث أمنية حرجة في أنظمة مُسلَّمة",
-      en: "Critical Security Incidents in Delivered Systems",
-      fr: "Incidents de sécurité critiques dans les systèmes livrés",
+      ar: "فريق تسليم موحّد",
+      en: "Unified delivery team",
+      fr: "Équipe de livraison unifiée",
     },
     sublabel: {
-      ar: "منذ أول يوم تشغيل",
-      en: "Since day-one of operations",
-      fr: "Depuis le premier jour d'opération",
+      ar: "قيادة مؤسسية مباشرة في كل مشروع",
+      en: "Founder-led technical leadership on every engagement",
+      fr: "Leadership technique du fondateur sur chaque mission",
     },
   },
   {
-    value: "Arab",
+    value: "4",
     label: {
-      ar: "بصمة إقليمية عالمية المعايير",
-      en: "Regional Presence · Global Standards",
-      fr: "Présence régionale · Standards mondiaux",
+      ar: "قطاعات مؤسسية",
+      en: "Enterprise verticals",
+      fr: "Secteurs d'entreprise",
     },
     sublabel: {
-      ar: "مبني هنا · معايير ISO/NIST",
-      en: "Built here · ISO/NIST compliant",
-      fr: "Construit ici · Conforme ISO/NIST",
+      ar: "لوجستيات · مالية · بنية حرجة · صحة",
+      en: "Logistics · Finance · Critical infra · Health",
+      fr: "Logistique · Finance · Infrastructure · Santé",
+    },
+  },
+  {
+    value: "AR",
+    suffix: "/EN/FR",
+    label: {
+      ar: "تسليم ثلاثي اللغة",
+      en: "Trilingual delivery",
+      fr: "Livraison trilingue",
+    },
+    sublabel: {
+      ar: "وثائق وتشغيل بالعربية والإنجليزية والفرنسية",
+      en: "Documentation & ops in Arabic, English, and French",
+      fr: "Documentation et exploitation en arabe, anglais et français",
     },
   },
 ];
