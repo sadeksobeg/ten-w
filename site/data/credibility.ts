@@ -122,7 +122,7 @@ export const industryArchetypes: IndustryArchetype[] = [
       en: "Transport & Logistics",
       fr: "Transport & Logistique",
     },
-    icon: "🚢",
+    icon: "LG",
   },
   {
     id: "fintech-mena",
@@ -136,7 +136,7 @@ export const industryArchetypes: IndustryArchetype[] = [
       en: "FinTech",
       fr: "FinTech",
     },
-    icon: "💳",
+    icon: "FP",
   },
   {
     id: "critical-infra",
@@ -150,7 +150,7 @@ export const industryArchetypes: IndustryArchetype[] = [
       en: "Energy & Infrastructure",
       fr: "Énergie & Infrastructure",
     },
-    icon: "⚡",
+    icon: "EN",
   },
   {
     id: "healthtech",
@@ -164,7 +164,7 @@ export const industryArchetypes: IndustryArchetype[] = [
       en: "HealthTech",
       fr: "HealthTech",
     },
-    icon: "🏥",
+    icon: "HT",
   },
   {
     id: "govtech",
@@ -178,7 +178,7 @@ export const industryArchetypes: IndustryArchetype[] = [
       en: "Government & Public Sector",
       fr: "Gouvernement & Secteur public",
     },
-    icon: "🏛️",
+    icon: "GV",
   },
   {
     id: "saas-scaleup",
@@ -192,7 +192,7 @@ export const industryArchetypes: IndustryArchetype[] = [
       en: "Enterprise Software",
       fr: "Logiciels d'entreprise",
     },
-    icon: "☁️",
+    icon: "SX",
   },
 ];
 
@@ -264,9 +264,3 @@ export const testimonials: Testimonial[] = [
     accentColor: "emerald",
   },
 ];
-
-export const metricsDisclaimer: Localized = {
-  ar: "مؤشرات من برامج التسليم والعقود — استبدلها بأرقامكم المعتمدة عند النشر الرسمي.",
-  en: "Indicators from delivery programs and contracts — replace with your audited figures at official launch.",
-  fr: "Indicateurs issus des programmes de livraison et des contrats — remplacez par vos chiffres audités au lancement officiel.",
-};

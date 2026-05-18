@@ -21,7 +21,12 @@ export function LogoMarquee() {
               key={`${item.id}-${i}`}
               className="flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm"
             >
-              <span aria-hidden>{item.icon}</span>
+              <span
+                aria-hidden
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-gold/35 bg-gold/10 text-[10px] font-bold tracking-wide text-gold"
+              >
+                {item.icon}
+              </span>
               <span className="font-medium text-white/80">
                 {pickLocalized(item.label, locale)}
               </span>
