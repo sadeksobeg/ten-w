@@ -40,6 +40,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/",
+        destination: "/ar",
+        permanent: false,
+      },
+      {
         source: "/:locale/industries/:slug",
         destination: "/:locale/solutions",
         permanent: true,

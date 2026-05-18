@@ -43,7 +43,7 @@
 
 بعد كل دفعة تغييرات:
 
-1. [PageSpeed Insights](https://pagespeed.web.dev/?url=https://tenegta.com)
+1. [PageSpeed Insights](https://pagespeed.web.dev/?url=https://tenegta.com/ar) — استخدم **`/ar` أو `/en`** وليس `/` فقط (الجذر يوجّه تلقائياً بعد التحديث)
 2. Lighthouse (Mobile): **LCP** · **INP** · **CLS**
 3. على السيرفر:
    ```bash
