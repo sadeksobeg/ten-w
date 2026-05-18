@@ -51,4 +51,5 @@ run systemctl reload nginx
 
 echo ""
 echo "OK: tenegta.com nginx config applied (gzip + static cache + proxy :3100)"
-grep -E "gzip|_next/static|tenegta_next" "$DEST" || true
+echo "==> key lines in $DEST:"
+grep -nE "^\s*(upstream tenegta_next|gzip on|location /_next/static/)" "$DEST" || true
