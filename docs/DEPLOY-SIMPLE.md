@@ -140,3 +140,31 @@ curl -s https://tenegta.com/sitemap.xml | head -25
 ```
 
 **ملاحظة:** `tenegta.tech` منتج منفصل (ClinicSaaS) — لا يشارك الفهرسة مع `.com`؛ اربطهما في المحتوى أو علامة «من T.E.N.E.G.T.A» إن أردت توحيد العلامة.
+
+---
+
+## الموقع لا يفتح مع VPN
+
+**الكود وNginx في المشروع لا يحجب VPN.** إذا الموقع يعمل بدون VPN ويتوقف معه، السبب غالباً خارج التطبيق:
+
+| السبب الشائع | ماذا تفعل |
+|--------------|-----------|
+| **جدار Hostinger** | hPanel → **Security** → **Firewall** — تأكد أن **80** و **443** مفتوحان لجميع IPs (ليس دولة واحدة فقط). |
+| **fail2ban** | على السيرفر: `fail2ban-client status` — إن حُظر IP الـ VPN: `fail2ban-client unban <IP>`. |
+| **DNS الـ VPN** | جرّب في إعدادات VPN: **DNS عادي** أو **1.1.1.1** بدل DNS مدمج الـ VPN. |
+| **IPv6** | بعض VPNs تكسر IPv6 — عطّل IPv6 مؤقتاً على الجهاز أو جرّب VPN آخر. |
+| **منفذ 3100 مكشوف** | الموقع يجب أن يمر عبر **443 فقط**؛ لا تفتح 3100 في الجدار للعامة. |
+
+### من جهازك (مع VPN شغّال)
+
+1. `ping tenegta.com` — هل يوجد رد؟
+2. المتصفح: `https://tenegta.com/ar` — ما رسالة الخطأ؟ (timeout / SSL / 403 / DNS_PROBE)
+3. [https://www.ssllabs.com/ssltest/analyze.html?d=tenegta.com](https://www.ssllabs.com/ssltest/analyze.html?d=tenegta.com) — للتحقق من الشهادة من خارج سوريا/المنطقة
+
+### على السيرفر
+
+```bash
+bash scripts/server-diagnose-access.sh
+```
+
+إذا `curl https://tenegta.com/ar` من السيرفر **200** لكن من VPN **لا** → المشكلة شبكة/جدار/مزود VPN وليس Next.js.
