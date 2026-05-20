@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import {
+  getContactEmailTo,
+  isSmtpConfigured,
+  sendContactViaSmtp,
+  type ContactMessagePayload,
+} from "@/lib/contact-smtp";
 import { getClientIp, rateLimitContact } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 
@@ -17,10 +23,12 @@ const bodySchema = z.object({
 });
 
 function contactChannelsConfigured(): {
+  smtp: boolean;
   formspree: boolean;
   webhook: boolean;
 } {
   return {
+    smtp: isSmtpConfigured(),
     formspree: Boolean(process.env.FORMSPREE_ENDPOINT?.trim()),
     webhook: Boolean(process.env.CONTACT_WEBHOOK_URL?.trim()),
   };
@@ -87,14 +95,22 @@ async function sendToWebhook(payload: Record<string, unknown>): Promise<boolean>
 }
 
 /**
- * Forwards leads to FORMSPREE_ENDPOINT and/or CONTACT_WEBHOOK_URL when configured.
+ * Forwards leads via SMTP (Mailcow), FORMSPREE_ENDPOINT, and/or CONTACT_WEBHOOK_URL.
  */
 export async function POST(req: Request) {
-  const { formspree, webhook } = contactChannelsConfigured();
-  if (!formspree && !webhook) {
+  const channels = contactChannelsConfigured();
+  if (!channels.smtp && !channels.formspree && !channels.webhook) {
     console.error("[contact] No delivery channel configured", {
-      hint: "Set FORMSPREE_ENDPOINT and/or CONTACT_WEBHOOK_URL",
+      hint: "Set SMTP_* (Mailcow), FORMSPREE_ENDPOINT, and/or CONTACT_WEBHOOK_URL",
     });
+    return NextResponse.json(
+      { ok: false, error: "service_unconfigured", message: "Contact service not configured" },
+      { status: 503 },
+    );
+  }
+
+  if (channels.smtp && !getContactEmailTo()) {
+    console.error("[contact] SMTP configured but CONTACT_EMAIL_TO / SMTP_USER missing");
     return NextResponse.json(
       { ok: false, error: "service_unconfigured", message: "Contact service not configured" },
       { status: 503 },
@@ -147,7 +163,7 @@ export async function POST(req: Request) {
 
   const { name, email, company, message, intent, topic } = parsed.data;
 
-  const messagePayload = {
+  const messagePayload: ContactMessagePayload = {
     name,
     email,
     company,
@@ -158,27 +174,42 @@ export async function POST(req: Request) {
     sentAt: new Date().toISOString(),
   };
 
-  const results = await Promise.all([
-    formspree ? sendToFormspree(messagePayload) : Promise.resolve(true),
-    webhook ? sendToWebhook(messagePayload) : Promise.resolve(true),
-  ]);
+  const payloadRecord = messagePayload as Record<string, unknown>;
 
-  const formspreeOk = !formspree || results[0];
-  const webhookOk = !webhook || results[1];
+  const deliveries: { key: string; run: () => Promise<boolean> }[] = [];
+  if (channels.smtp) {
+    deliveries.push({ key: "smtp", run: () => sendContactViaSmtp(messagePayload) });
+  }
+  if (channels.formspree) {
+    deliveries.push({ key: "formspree", run: () => sendToFormspree(payloadRecord) });
+  }
+  if (channels.webhook) {
+    deliveries.push({ key: "webhook", run: () => sendToWebhook(payloadRecord) });
+  }
 
-  if (!formspreeOk && !webhookOk) {
-    console.error("[contact] All configured channels failed", { email, intent, topic });
+  const outcomes = await Promise.all(
+    deliveries.map(async (d) => ({ key: d.key, ok: await d.run() })),
+  );
+  const anyOk = outcomes.some((o) => o.ok);
+
+  if (!anyOk) {
+    console.error("[contact] All configured channels failed", {
+      email,
+      intent,
+      topic,
+      channels: outcomes.map((o) => ({ [o.key]: o.ok })),
+    });
     return NextResponse.json(
-      { ok: false, error: "delivery_failed", message: "Contact service not configured" },
+      { ok: false, error: "delivery_failed", message: "Contact delivery failed" },
       { status: 503 },
     );
   }
 
   if (process.env.NODE_ENV === "development") {
-    console.info("[contact] delivered", {
-      formspree: formspree ? results[0] : "skipped",
-      webhook: webhook ? results[1] : "skipped",
-    });
+    console.info(
+      "[contact] delivered",
+      Object.fromEntries(outcomes.map((o) => [o.key, o.ok])),
+    );
   }
 
   return NextResponse.json({ ok: true });

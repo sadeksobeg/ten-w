@@ -60,11 +60,13 @@ npm run setup:vps -- --host 203.0.113.10
 ## Formspree حقيقي (اختياري — لاحقاً)
 
 ```powershell
-npm run setup:vps -- --formspree mknnvgep
+npm run setup:vps
+# أو Formspree: npm run setup:vps -- --formspree mknnvgep
 npm run deploy:vps
 ```
 
-(استبدل `mknnvgep` بمعرّف نموذجك من formspree.io)
+الافتراضي: كتلة **Mailcow SMTP** في `.env` — ضع `SMTP_PASS` (App password) على السيرفر.  
+Formspree: استبدل `mknnvgep` بمعرّف النموذج من formspree.io.
 
 بدون Formspree يُستخدم `httpbin.org` للتحقق من النشر فقط — نموذج الاتصال لن يصلك إيميلات حقيقية حتى تضيف Formspree.
 

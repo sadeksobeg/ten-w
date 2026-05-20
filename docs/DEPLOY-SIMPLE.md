@@ -54,6 +54,34 @@ npm install -g pm2
 cat /var/www/tenegta/scripts/server-generated-credentials.txt
 ```
 
+### نموذج الاتصال — Mailcow SMTP (موصى به)
+
+1. في **Mailcow** → `https://mail.tenegta.com/user` → **App passwords** → أنشئ كلمة مرور للتطبيق.
+2. على السيرفر عدّل `/var/www/tenegta/site/.env`:
+
+```env
+SMTP_HOST="127.0.0.1"
+SMTP_PORT="587"
+SMTP_SECURE="false"
+SMTP_USER="info@tenegta.com"
+SMTP_PASS="كلمة-مرور-التطبيق-من-mailcow"
+CONTACT_EMAIL_TO="info@tenegta.com"
+SMTP_FROM="TENEGTA Website <info@tenegta.com>"
+```
+
+(احذف أو علّق `FORMSPREE_ENDPOINT` إن لم تعد تحتاج Formspree.)
+
+3. أعد التشغيل:
+
+```bash
+cd /var/www/tenegta
+bash scripts/server-pm2.sh restart tenegta
+```
+
+4. اختبر: `https://tenegta.com/ar/contact` — يجب أن تصل الرسالة إلى `info@tenegta.com`.
+
+**ملاحظة:** لتحسين وصول Gmail (تقليل Spam) أصلح PTR IPv4 و AAAA لـ `mail` كما في إعداد البريد.
+
 ---
 
 ## ج) كل تحديث على السيرفر

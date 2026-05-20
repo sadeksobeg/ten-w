@@ -40,10 +40,19 @@ const required = [
   { key: "NEXT_PUBLIC_SITE_URL", hint: "Public site origin (https://...)" },
 ];
 
+function hasSmtpDelivery() {
+  const host = process.env.SMTP_HOST?.trim();
+  const user = process.env.SMTP_USER?.trim();
+  const pass = process.env.SMTP_PASS?.trim();
+  const to =
+    process.env.CONTACT_EMAIL_TO?.trim() || process.env.SMTP_USER?.trim();
+  return Boolean(host && user && pass && to);
+}
+
 function hasContactDelivery() {
   const formspree = process.env.FORMSPREE_ENDPOINT?.trim();
   const webhook = process.env.CONTACT_WEBHOOK_URL?.trim();
-  return Boolean(formspree || webhook);
+  return Boolean(formspree || webhook || hasSmtpDelivery());
 }
 
 let failed = false;
@@ -62,12 +71,13 @@ for (const { key, hint } of required) {
 
 if (hasContactDelivery()) {
   const via = [];
+  if (hasSmtpDelivery()) via.push("SMTP (Mailcow)");
   if (process.env.FORMSPREE_ENDPOINT?.trim()) via.push("FORMSPREE_ENDPOINT");
   if (process.env.CONTACT_WEBHOOK_URL?.trim()) via.push("CONTACT_WEBHOOK_URL");
   console.log(`✅ CONTACT (via ${via.join(" + ")})`);
 } else {
   console.log(
-    "❌ CONTACT — set FORMSPREE_ENDPOINT and/or CONTACT_WEBHOOK_URL",
+    "❌ CONTACT — set SMTP_* (Mailcow), FORMSPREE_ENDPOINT, and/or CONTACT_WEBHOOK_URL",
   );
   failed = true;
 }
