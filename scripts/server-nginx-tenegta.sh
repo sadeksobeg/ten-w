@@ -46,8 +46,25 @@ run ln -sf "$DEST" "$ENABLED"
 echo "==> nginx -t"
 run nginx -t
 
-echo "==> reload nginx"
-run systemctl reload nginx
+echo "==> start or reload nginx"
+if run systemctl is-active --quiet nginx; then
+  run systemctl reload nginx
+else
+  if ss -tlnp 2>/dev/null | grep -q '0.0.0.0:443.*docker-proxy'; then
+    echo "ERROR: port 443 is still used by Mailcow (docker-proxy)."
+    echo "  Run first: sudo bash $REPO/scripts/server-mailcow-reverse-proxy.sh"
+    exit 1
+  fi
+  run systemctl enable nginx
+  run systemctl start nginx
+fi
+
+if ! run systemctl is-active --quiet nginx; then
+  echo "ERROR: nginx failed to start. Check:"
+  echo "  sudo journalctl -xeu nginx.service --no-pager | tail -40"
+  echo "  ss -tlnp | grep -E ':443|:80'"
+  exit 1
+fi
 
 echo ""
 echo "OK: tenegta.com nginx config applied (gzip + static cache + security headers + proxy :3100)"
