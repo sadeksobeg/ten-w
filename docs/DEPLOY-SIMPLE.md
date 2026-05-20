@@ -82,6 +82,22 @@ bash scripts/server-pm2.sh restart tenegta
 
 **ملاحظة:** لتحسين وصول Gmail (تقليل Spam) أصلح PTR IPv4 و AAAA لـ `mail` كما في إعداد البريد.
 
+### Mailcow + الموقع على نفس VPS (تعارض 443)
+
+إذا `tenegta.com` يعرض **404 nginx** بعد تثبيت Mailcow:
+
+```bash
+cd /var/www/tenegta
+git pull origin main
+sudo bash scripts/server-mailcow-reverse-proxy.sh
+sudo bash scripts/server-nginx-tenegta.sh
+sudo bash scripts/server-nginx-mail.sh
+sudo systemctl start nginx
+curl -sI https://tenegta.com/ar | head -5
+```
+
+السكربت يعلّق `HTTP_PORT=80` / `HTTPS_PORT=443` المكررة في `mailcow.conf` ويبقي `8080`/`8443` على `127.0.0.1`.
+
 ---
 
 ## ج) كل تحديث على السيرفر
