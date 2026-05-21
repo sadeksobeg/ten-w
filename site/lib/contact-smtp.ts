@@ -59,8 +59,10 @@ function buildTransport() {
       ? {
           tls: {
             servername: tlsServername,
-            // Loopback: cert is for mail.tenegta.com, not 127.0.0.1
-            rejectUnauthorized: process.env.SMTP_TLS_INSECURE !== "true",
+            // Same VPS: Mailcow cert is for mail.tenegta.com, not 127.0.0.1
+            rejectUnauthorized: isLoopbackHost(host)
+              ? process.env.SMTP_TLS_STRICT === "true"
+              : process.env.SMTP_TLS_INSECURE !== "true",
           },
         }
       : {}),
