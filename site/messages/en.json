@@ -1041,7 +1041,9 @@
       "rulesTitle": "Rules & terms",
       "confirmJoin": "Confirm join",
       "cancel": "Cancel",
-      "joined": "Joined successfully",
+      "joinedSuccess": "Joined successfully",
+      "tabAll": "All",
+      "tabJoined": "My events",
       "milestones": "Milestones",
       "back": "Back to events",
       "participantsPreview": "Participants",
@@ -1129,6 +1131,20 @@
       "listTitle": "Deal list",
       "kanbanEmpty": "None in this column",
       "empty": "No deals yet — add your first lead.",
+      "searchPh": "Search client or product…",
+      "emptyPending": "No pending deals — add a lead above.",
+      "emptyClosed": "No closed deals yet.",
+      "emptyLost": "No lost deals — keep pushing.",
+      "client": "Client",
+      "value": "Value",
+      "notes": "Notes",
+      "commission": "Commission",
+      "openChat": "Open support chat",
+      "journeyLost": "Deal stopped — capture the lesson and re-aim.",
+      "toastLeadAdded": "Lead added",
+      "errors": {
+        "invalid_input": "Could not add lead — check the form."
+      },
       "noClient": "No client label",
       "closed": "closed",
       "pending": "pending",
@@ -1146,6 +1162,7 @@
       "title": "Earnings",
       "totalLabel": "Total earnings",
       "ledgerCount": "Ledger entries",
+      "ledgerTitle": "Commission ledger",
       "empty": "No commissions yet. Close a deal to generate ledger entries.",
       "bonus": "Bonus / adjustment",
       "tier": "Tier {tier}",
@@ -1153,7 +1170,36 @@
       "method": "Payout method",
       "methodPh": "Bank / wallet notes",
       "request": "Request payout",
-      "exportCsv": "Export CSV"
+      "exportCsv": "Export CSV",
+      "toastPayoutSent": "Payout request submitted",
+      "wallet": {
+        "title": "Your wallet",
+        "available": "Available",
+        "pending": "Pending",
+        "paid": "Paid out",
+        "availableLabel": "Available to withdraw",
+        "pendingLine": "Pending: {amount}",
+        "paidLine": "Paid: {amount}",
+        "noAvailable": "No balance available to withdraw yet."
+      },
+      "payoutHistory": {
+        "title": "Payout requests",
+        "empty": "No payout requests yet.",
+        "status": {
+          "PENDING": "Pending",
+          "APPROVED": "Approved",
+          "PAID": "Paid",
+          "REJECTED": "Rejected"
+        }
+      },
+      "chart": {
+        "title": "Monthly earnings",
+        "empty": "No earnings data yet."
+      },
+      "errors": {
+        "insufficient_balance": "Amount exceeds available balance.",
+        "invalid_input": "Check the amount and try again."
+      }
     },
     "leaderboard": {
       "title": "Weekly leaderboard",
@@ -1272,7 +1318,23 @@
       "uploadHint": "Drop image or click to upload",
       "save": "Save",
       "saved": "Saved",
-      "error": "Could not save"
+      "error": "Could not save",
+      "profile": {
+        "title": "Public profile",
+        "hint": "Title, bio, and social links appear on your public partner page.",
+        "displayTitle": "Display title",
+        "bio": "Bio",
+        "save": "Save profile",
+        "saved": "Profile saved",
+        "error": "Could not save profile"
+      }
+    },
+    "levelPerks": {
+      "title": "Level perks",
+      "currentLevel": "Current level: {name}",
+      "salary": "Level salary: ${amount}/mo",
+      "noPerks": "No perks listed for this level yet.",
+      "nextLevel": "Next level unlocks"
     },
     "kit": {
       "title": "Marketing kit",
@@ -1576,6 +1638,10 @@
       }
     },
     "admin": {
+      "toastSaved": "Saved",
+      "toastDealClosed": "Deal closed",
+      "toastDealLost": "Deal marked lost",
+      "toastPayoutUpdated": "Payout updated",
       "activeEvents": "Active events",
       "eventParticipants": "Event participants",
       "unreadNotifications": "Unread notifications",
@@ -1837,7 +1903,12 @@
         "pending": "Pending",
         "closed": "Closed",
         "lost": "Lost",
-        "winRate": "Win rate (closed / (closed+lost))"
+        "winRate": "Win rate (closed / (closed+lost))",
+        "charts": {
+          "winRate": "Closed deals per week (6 weeks)",
+          "topPartners": "Top partners by closed deals",
+          "levelDist": "Partners per level"
+        }
       },
       "overridesPage": {
         "title": "Partner commission overrides",
@@ -1891,6 +1962,7 @@
       "signInHeroLine2": "Build rank and reputation that compound instead of one-off hustle.",
       "signInHeroLine3": "Network-aware payouts built for operators who scale with discipline.",
       "signInError": "Invalid email or password.",
+      "registeredBanner": "Account created — sign in with your email and password.",
       "errors": {
         "invalid_input": "Please check the fields and try again.",
         "email_taken": "This email is already registered.",

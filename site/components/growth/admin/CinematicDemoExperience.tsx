@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { playDemoChime, playDemoImpactStinger } from "@/lib/demo/demo-sound";
 import { useCinematicDemoStore, type DemoEventDTO, type PlaySpeed } from "@/stores/cinematic-demo-store";
 

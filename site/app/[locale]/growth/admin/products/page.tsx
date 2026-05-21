@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { updateProductAdminAction, updateProductMarketingKitAdminAction } from "@/lib/growth/actions";
 import { prisma } from "@/lib/prisma";
 

@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { EventStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { prisma } from "@/lib/prisma";
 import { renderMarkdownLite } from "@/lib/growth/markdown-lite";
 import { JoinEventModal } from "@/components/growth/JoinEventModal";

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { GROWTH_MOBILE_NAV_ICONS } from "@/components/growth/icons/GrowthNavIcons";
 
 type Props = {
   children: ReactNode;
@@ -18,6 +19,15 @@ const NAV = [
   { href: "/growth/chat", key: "chat" as const },
   { href: "/growth/notifications", key: "notifications" as const },
   { href: "/growth/settings", key: "settings" as const },
+] as const;
+
+const MOBILE_KEYS = [
+  "dashboard",
+  "deals",
+  "earnings",
+  "events",
+  "chat",
+  "settings",
 ] as const;
 
 function isActive(pathname: string, href: string, exact?: boolean) {
@@ -60,9 +70,7 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
     }`;
 
   const mobileNav = NAV.filter((n) =>
-    ["dashboard", "deals", "earnings", "network", "events", "chat", "notifications"].includes(
-      n.key,
-    ),
+    (MOBILE_KEYS as readonly string[]).includes(n.key),
   );
 
   return (
@@ -88,23 +96,30 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
       </nav>
       {children}
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 flex justify-around border-t border-white/10 bg-[#0A0A0F]/95 px-1 py-2 backdrop-blur-md lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-6 border-t border-white/10 bg-[#0A0A0F]/95 px-1 py-2 backdrop-blur-md lg:hidden"
         aria-label={t("mobileNavAria")}
       >
-        {mobileNav.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`relative ${linkClass(isActive(pathname, item.href, "exact" in item ? item.exact : false))} min-w-0 flex-1 px-1 text-center text-[10px]`}
-          >
-            {t(item.key)}
-            {item.key === "chat" && chatUnread > 0 ? (
-              <span className="absolute end-1/4 top-0 flex size-4 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white">
-                {chatUnread > 9 ? "9+" : chatUnread}
-              </span>
-            ) : null}
-          </Link>
-        ))}
+        {mobileNav.map((item) => {
+          const Icon = GROWTH_MOBILE_NAV_ICONS[item.key as keyof typeof GROWTH_MOBILE_NAV_ICONS];
+          const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`relative flex min-w-0 flex-col items-center gap-0.5 px-1 py-1 text-center text-[10px] font-semibold ${
+                active ? "text-gold" : "text-white/55"
+              }`}
+            >
+              <Icon className="size-6" />
+              <span className="truncate">{t(item.key)}</span>
+              {item.key === "chat" && chatUnread > 0 ? (
+                <span className="absolute end-1/4 top-0 flex size-4 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white">
+                  {chatUnread > 9 ? "9+" : chatUnread}
+                </span>
+              ) : null}
+            </Link>
+          );
+        })}
       </nav>
       <div className="h-16 lg:hidden" aria-hidden />
     </>

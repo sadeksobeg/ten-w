@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 
-export type EmptyIllustration = "rocket" | "trophy" | "calendar" | "chat";
+export type EmptyIllustration = "rocket" | "trophy" | "calendar" | "chat" | "refresh";
 
 type Props = {
   illustration: EmptyIllustration;
@@ -56,6 +56,18 @@ function Illustration({ kind }: { kind: EmptyIllustration }) {
           <circle cx="32" cy="36" r="2" fill={stroke} />
           <circle cx="40" cy="36" r="2" fill={stroke} />
           <circle cx="48" cy="36" r="2" fill={stroke} />
+        </svg>
+      );
+    case "refresh":
+      return (
+        <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden>
+          <path
+            d="M48 16a20 20 0 10-14 34M32 64a20 20 0 1014-34"
+            stroke={stroke}
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path d="M48 8v8h8M32 72v-8h-8" stroke={stroke} strokeWidth="2" strokeLinecap="round" />
         </svg>
       );
   }

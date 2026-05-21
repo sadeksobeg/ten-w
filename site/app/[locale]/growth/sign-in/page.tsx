@@ -1,21 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { getSession, signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
 
-export default function GrowthSignInPage() {
+function SignInForm() {
   const t = useTranslations("Growth.auth");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
+  const registered = searchParams.get("registered") === "1";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const prefill = searchParams.get("email");
+    if (prefill) setEmail(prefill);
+  }, [searchParams]);
 
   const dir = locale === "ar" ? "rtl" : "ltr";
   const d = reduceMotion ? 0 : 0.55;
@@ -125,6 +133,14 @@ export default function GrowthSignInPage() {
           <h2 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold">
             {t("signInTitle")}
           </h2>
+          {registered ? (
+            <p
+              className="mt-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200"
+              role="status"
+            >
+              {t("registeredBanner")}
+            </p>
+          ) : null}
 
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
             <label className="block">
@@ -169,5 +185,13 @@ export default function GrowthSignInPage() {
         </GlassCard>
       </div>
     </div>
+  );
+}
+
+export default function GrowthSignInPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignInForm />
+    </Suspense>
   );
 }

@@ -1079,8 +1079,11 @@
     "events": {
       "title": "Events",
       "invited": "New invites",
-      "joined": "Joined successfully",
-      "completed": "Completed",
+      "joined": "Mes événements",
+      "joinedSuccess": "Inscription réussie",
+      "tabAll": "Tous",
+      "tabJoined": "Mes événements",
+      "completed": "Terminés",
       "empty": "No events available",
       "participants": "participants",
       "eventProgress": "Your progress",
@@ -1164,15 +1167,30 @@
       "notesPh": "Optional context"
     },
     "deals": {
-      "title": "My deals",
-      "empty": "No deals yet — add your first lead.",
-      "noClient": "No client label",
-      "closed": "closed",
-      "pending": "pending",
+      "title": "Mes deals",
+      "listTitle": "Liste des deals",
+      "empty": "Aucun deal — ajoutez votre premier lead.",
+      "searchPh": "Rechercher client ou produit…",
+      "emptyPending": "Aucun deal en cours — ajoutez un lead ci-dessus.",
+      "emptyClosed": "Aucun deal clôturé pour l'instant.",
+      "emptyLost": "Aucun deal perdu.",
+      "client": "Client",
+      "value": "Valeur",
+      "notes": "Notes",
+      "commission": "Commission",
+      "openChat": "Ouvrir le chat support",
+      "journeyLost": "Deal arrêté — tirez la leçon et continuez.",
+      "toastLeadAdded": "Lead ajouté",
+      "errors": {
+        "invalid_input": "Impossible d'ajouter — vérifiez le formulaire."
+      },
+      "noClient": "Sans libellé client",
+      "closed": "clôturé",
+      "pending": "en cours",
       "status": {
-        "pending": "Pending",
-        "closed": "Closed",
-        "lost": "Lost"
+        "pending": "En cours",
+        "closed": "Clôturé",
+        "lost": "Perdu"
       }
     },
     "network": {
@@ -1180,16 +1198,47 @@
       "empty": "No partners under you yet. Share your referral code."
     },
     "earnings": {
-      "title": "Earnings",
-      "totalLabel": "Total earnings",
-      "ledgerCount": "Ledger entries",
-      "empty": "No commissions yet. Close a deal to generate ledger entries.",
-      "bonus": "Bonus / adjustment",
-      "tier": "Tier {tier}",
-      "withdrawAmount": "Withdraw amount (USD)",
-      "method": "Payout method",
-      "methodPh": "Bank / wallet notes",
-      "request": "Request payout"
+      "title": "Revenus",
+      "totalLabel": "Revenus totaux",
+      "ledgerCount": "Écritures",
+      "ledgerTitle": "Registre des commissions",
+      "empty": "Aucune commission pour l'instant.",
+      "bonus": "Bonus / ajustement",
+      "tier": "Niveau {tier}",
+      "withdrawAmount": "Montant (USD)",
+      "method": "Méthode de paiement",
+      "methodPh": "Banque / portefeuille",
+      "request": "Demander un retrait",
+      "exportCsv": "Exporter CSV",
+      "toastPayoutSent": "Demande de retrait envoyée",
+      "wallet": {
+        "title": "Votre portefeuille",
+        "available": "Disponible",
+        "pending": "En attente",
+        "paid": "Payé",
+        "availableLabel": "Solde disponible",
+        "pendingLine": "En attente : {amount}",
+        "paidLine": "Payé : {amount}",
+        "noAvailable": "Aucun solde disponible."
+      },
+      "payoutHistory": {
+        "title": "Demandes de retrait",
+        "empty": "Aucune demande.",
+        "status": {
+          "PENDING": "En attente",
+          "APPROVED": "Approuvé",
+          "PAID": "Payé",
+          "REJECTED": "Refusé"
+        }
+      },
+      "chart": {
+        "title": "Revenus mensuels",
+        "empty": "Pas encore de données."
+      },
+      "errors": {
+        "insufficient_balance": "Montant supérieur au solde.",
+        "invalid_input": "Vérifiez le montant."
+      }
     },
     "leaderboard": {
       "title": "Weekly leaderboard",
@@ -1247,13 +1296,29 @@
       "unlockCta": "Continue"
     },
     "settings": {
-      "title": "Profile settings",
-      "subtitle": "Avatar appears on your dashboard and public profile.",
-      "avatarSection": "Profile photo",
-      "uploadHint": "Drop image or click to upload",
-      "save": "Save",
-      "saved": "Saved",
-      "error": "Could not save"
+      "title": "Paramètres du profil",
+      "subtitle": "L'avatar apparaît sur votre tableau de bord et profil public.",
+      "avatarSection": "Photo de profil",
+      "uploadHint": "Déposez une image ou cliquez",
+      "save": "Enregistrer",
+      "saved": "Enregistré",
+      "error": "Échec de l'enregistrement",
+      "profile": {
+        "title": "Profil public",
+        "hint": "Titre, bio et réseaux sociaux sur votre page partenaire.",
+        "displayTitle": "Titre affiché",
+        "bio": "Bio",
+        "save": "Enregistrer le profil",
+        "saved": "Profil enregistré",
+        "error": "Impossible d'enregistrer le profil"
+      }
+    },
+    "levelPerks": {
+      "title": "Avantages du niveau",
+      "currentLevel": "Niveau actuel : {name}",
+      "salary": "Salaire niveau : {amount} $/mois",
+      "noPerks": "Aucun avantage listé pour ce niveau.",
+      "nextLevel": "Prochain niveau"
     },
     "kit": {
       "title": "Marketing kit",
@@ -1555,6 +1620,10 @@
       }
     },
     "admin": {
+      "toastSaved": "Enregistré",
+      "toastDealClosed": "Deal clôturé",
+      "toastDealLost": "Deal marqué perdu",
+      "toastPayoutUpdated": "Paiement mis à jour",
       "activeEvents": "Active events",
       "eventParticipants": "Event participants",
       "unreadNotifications": "Unread notifications",
@@ -1810,7 +1879,12 @@
         "pending": "Pending",
         "closed": "Closed",
         "lost": "Lost",
-        "winRate": "Win rate (closed / (closed+lost))"
+        "winRate": "Win rate (closed / (closed+lost))",
+        "charts": {
+          "winRate": "Deals clôturés par semaine (6 sem.)",
+          "topPartners": "Top partenaires (clôtures)",
+          "levelDist": "Partenaires par niveau"
+        }
       },
       "overridesPage": {
         "title": "Partner commission overrides",
@@ -1864,6 +1938,7 @@
       "signInHeroLine2": "Build rank and reputation that compound instead of one-off hustle.",
       "signInHeroLine3": "Network-aware payouts built for operators who scale with discipline.",
       "signInError": "Invalid email or password.",
+      "registeredBanner": "Compte créé — connectez-vous avec votre e-mail et mot de passe.",
       "errors": {
         "invalid_input": "Please check the fields and try again.",
         "email_taken": "This email is already registered.",

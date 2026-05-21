@@ -3,7 +3,7 @@
 import { Suspense, useActionState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { registerPartnerAction } from "@/lib/growth/actions";
 import { RegisterReferralField } from "@/components/growth/RegisterReferralField";
 
@@ -29,7 +29,11 @@ export default function GrowthRegisterPage() {
 
   useEffect(() => {
     if (state && typeof state === "object" && "ok" in state && state.ok === true) {
-      router.push("/growth/sign-in");
+      const q = new URLSearchParams({ registered: "1" });
+      if ("email" in state && typeof state.email === "string") {
+        q.set("email", state.email);
+      }
+      router.push(`/growth/sign-in?${q.toString()}`);
       router.refresh();
     }
   }, [state, router]);

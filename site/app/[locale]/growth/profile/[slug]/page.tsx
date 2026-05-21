@@ -36,14 +36,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const SKILL_PILLS = [
-  "Python",
-  "AI",
-  "Cybersecurity",
-  "Cloud",
-  "DevOps",
-] as const;
-
 export default async function PublicPartnerProfilePage({ params }: Props) {
   const { locale, slug } = await params;
   const t = await getTranslations("Growth.publicProfile");
@@ -175,22 +167,6 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
             locale={locale}
           />
         </GlassCard>
-      </section>
-
-      <section className="mt-8">
-        <h2 className="text-sm font-bold text-[var(--growth-text-sub)]">
-          {locale === "ar" ? "المهارات" : "Skills"}
-        </h2>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {SKILL_PILLS.map((skill) => (
-            <span
-              key={skill}
-              className="rounded-full border border-[var(--growth-border)] bg-white/[0.04] px-3 py-1 text-xs font-semibold"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
       </section>
 
       <GlassCard className="mt-8 p-6 text-center sm:text-start">

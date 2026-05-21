@@ -12,6 +12,7 @@ import { PartnerInsightCarousel } from "@/components/growth/PartnerInsightCarous
 import { GrowthCollapsibleSection } from "@/components/growth/ui/GrowthCollapsibleSection";
 import { PartnerOnboardingChecklist } from "@/components/growth/PartnerOnboardingChecklist";
 import { HubSupportCard } from "@/components/growth/HubSupportCard";
+import { LevelPerksCard } from "@/components/growth/LevelPerksCard";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 
 type Props = {
@@ -48,6 +49,8 @@ export async function GrowthHubView({
         nextLevelName={data.nextLevel?.name ?? null}
         nextLevelMinXp={data.nextLevel?.minXp ?? null}
       />
+
+      <LevelPerksCard current={data.currentLevelDetail} next={data.nextLevelDetail} />
 
       <GrowthMotivationBar
         primary={data.compete.motivationPrimary}

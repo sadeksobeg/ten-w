@@ -1,12 +1,15 @@
 import { getTranslations } from "next-intl/server";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { AdminInsightsCharts } from "@/components/growth/admin/AdminInsightsCharts";
+import { getAdminInsightsCharts } from "@/lib/growth/admin-insights-data";
 import { dealConversionRates, inactivePartnersSummary } from "@/lib/growth/rewards";
 
 export default async function GrowthAdminInsightsPage() {
   const t = await getTranslations("Growth");
-  const [inactive, conv] = await Promise.all([
+  const [inactive, conv, charts] = await Promise.all([
     inactivePartnersSummary(30),
     dealConversionRates(),
+    getAdminInsightsCharts(),
   ]);
 
   return (
@@ -35,6 +38,14 @@ export default async function GrowthAdminInsightsPage() {
             <div className="mt-1 text-2xl font-semibold text-gold/90">{conv.winRatePct}%</div>
           </div>
         </div>
+      </GlassCard>
+
+      <GlassCard className="p-4 sm:p-6">
+        <AdminInsightsCharts
+          weeklyWinRateSeries={charts.weeklyWinRateSeries}
+          topPartnersByClosed={charts.topPartnersByClosed}
+          levelDistribution={charts.levelDistribution}
+        />
       </GlassCard>
 
       <GlassCard className="p-4 sm:p-6">

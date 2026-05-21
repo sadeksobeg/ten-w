@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import {
+  Prisma,
   UserRole,
   DealStatus,
   PayoutStatus,
@@ -64,7 +65,7 @@ export async function growthSignOutAction(formData: FormData): Promise<void> {
 export async function registerPartnerAction(
   _prev: unknown,
   formData: FormData,
-): Promise<{ ok: true } | { ok: false; error: string }> {
+): Promise<{ ok: true; email: string } | { ok: false; error: string }> {
   const parsed = registerSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -134,7 +135,7 @@ export async function registerPartnerAction(
   }
 
   revalidatePath("/", "layout");
-  return { ok: true };
+  return { ok: true, email };
 }
 
 const addLeadSchema = z.object({
@@ -143,10 +144,13 @@ const addLeadSchema = z.object({
   notes: z.string().max(2000).optional().or(z.literal("")),
 });
 
-export async function addLeadDealAction(formData: FormData): Promise<void> {
+export async function addLeadDealAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
   const session = await auth();
   if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
-    return;
+    return { ok: false, error: "unauthorized" };
   }
 
   const parsed = addLeadSchema.safeParse({
@@ -154,13 +158,13 @@ export async function addLeadDealAction(formData: FormData): Promise<void> {
     clientLabel: formData.get("clientLabel") ?? "",
     notes: formData.get("notes") ?? "",
   });
-  if (!parsed.success) return;
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
 
   const product = await prisma.product.findUnique({
     where: { id: parsed.data.productId },
   });
   if (!product || !product.active) {
-    return;
+    return { ok: false, error: "invalid_input" };
   }
 
   await prisma.deal.create({
@@ -175,8 +179,8 @@ export async function addLeadDealAction(formData: FormData): Promise<void> {
   });
 
   await applyMissionProgress(prisma, session.user.id, "add_lead", 1);
-
-  revalidatePath("/");
+  revalidateGrowth();
+  return { ok: true };
 }
 
 export async function recordMarketingKitHitAction(_formData: FormData): Promise<void> {
@@ -194,19 +198,31 @@ const payoutSchema = z.object({
   method: z.string().max(120).optional().or(z.literal("")),
 });
 
-export async function requestPayoutAction(formData: FormData): Promise<void> {
+export async function requestPayoutAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
   const session = await auth();
   if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
-    return;
+    return { ok: false, error: "unauthorized" };
   }
 
   const parsed = payoutSchema.safeParse({
     amountUsd: formData.get("amountUsd"),
     method: formData.get("method") ?? "",
   });
-  if (!parsed.success) return;
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
 
   const cents = parsed.data.amountUsd * 100;
+  const { computePartnerWallet } = await import("@/lib/growth/wallet");
+  const wallet = await computePartnerWallet(session.user.id);
+  if (wallet.availableCents <= 0) {
+    return { ok: false, error: "insufficient_balance" };
+  }
+  if (cents > wallet.availableCents) {
+    return { ok: false, error: "insufficient_balance" };
+  }
+
   await prisma.payoutRequest.create({
     data: {
       userId: session.user.id,
@@ -216,19 +232,26 @@ export async function requestPayoutAction(formData: FormData): Promise<void> {
     },
   });
 
-  revalidatePath("/");
+  revalidateGrowth();
+  return { ok: true };
 }
 
-export async function closeDealAdminFormAction(formData: FormData): Promise<void> {
+export async function closeDealAdminFormAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
   const dealId = String(formData.get("dealId") ?? "").trim();
-  if (!dealId) return;
-  await closeDealAdminAction(dealId);
+  if (!dealId) return { ok: false, error: "invalid_input" };
+  return closeDealAdminAction(dealId);
 }
 
-export async function markDealLostAdminFormAction(formData: FormData): Promise<void> {
+export async function markDealLostAdminFormAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
   const dealId = String(formData.get("dealId") ?? "").trim();
-  if (!dealId) return;
-  await markDealLostAdminAction(dealId);
+  if (!dealId) return { ok: false, error: "invalid_input" };
+  return markDealLostAdminAction(dealId);
 }
 
 export async function markDealLostAdminAction(
@@ -265,50 +288,53 @@ const payoutActionSchema = z.object({
   payoutId: z.string().min(1),
 });
 
-export async function approvePayoutAdminFormAction(formData: FormData): Promise<void> {
-  const parsed = payoutActionSchema.safeParse({
-    payoutId: formData.get("payoutId"),
-  });
-  if (!parsed.success) return;
-  await updatePayoutStatusAdminAction(parsed.data.payoutId, PayoutStatus.APPROVED);
+export async function approvePayoutAdminFormAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const parsed = payoutActionSchema.safeParse({ payoutId: formData.get("payoutId") });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+  return updatePayoutStatusAdminAction(parsed.data.payoutId, PayoutStatus.APPROVED);
 }
 
-export async function rejectPayoutAdminFormAction(formData: FormData): Promise<void> {
-  const parsed = payoutActionSchema.safeParse({
-    payoutId: formData.get("payoutId"),
-  });
-  if (!parsed.success) return;
-  await updatePayoutStatusAdminAction(parsed.data.payoutId, PayoutStatus.REJECTED);
+export async function rejectPayoutAdminFormAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const parsed = payoutActionSchema.safeParse({ payoutId: formData.get("payoutId") });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+  return updatePayoutStatusAdminAction(parsed.data.payoutId, PayoutStatus.REJECTED);
 }
 
-export async function markPayoutPaidAdminFormAction(formData: FormData): Promise<void> {
-  const parsed = payoutActionSchema.safeParse({
-    payoutId: formData.get("payoutId"),
-  });
-  if (!parsed.success) return;
-  await updatePayoutStatusAdminAction(parsed.data.payoutId, PayoutStatus.PAID);
+export async function markPayoutPaidAdminFormAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const parsed = payoutActionSchema.safeParse({ payoutId: formData.get("payoutId") });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+  return updatePayoutStatusAdminAction(parsed.data.payoutId, PayoutStatus.PAID);
 }
 
 async function updatePayoutStatusAdminAction(
   payoutId: string,
   status: PayoutStatus,
-): Promise<void> {
+): Promise<{ ok: true } | { ok: false; error: string }> {
   const session = await auth();
   if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
-    return;
+    return { ok: false, error: "unauthorized" };
   }
 
   const payout = await prisma.payoutRequest.findUnique({ where: { id: payoutId } });
-  if (!payout) return;
+  if (!payout) return { ok: false, error: "not_found" };
 
   if (status === PayoutStatus.APPROVED && payout.status !== PayoutStatus.PENDING) {
-    return;
+    return { ok: false, error: "bad_state" };
   }
   if (status === PayoutStatus.REJECTED && payout.status === PayoutStatus.PAID) {
-    return;
+    return { ok: false, error: "bad_state" };
   }
   if (status === PayoutStatus.PAID && payout.status !== PayoutStatus.APPROVED) {
-    return;
+    return { ok: false, error: "bad_state" };
   }
 
   await prisma.payoutRequest.update({
@@ -334,6 +360,7 @@ async function updatePayoutStatusAdminAction(
   });
 
   revalidateGrowth();
+  return { ok: true };
 }
 
 export async function closeDealAdminAction(
@@ -1560,7 +1587,72 @@ export async function adminSendNotificationAction(
   return { ok: true, sent };
 }
 
+const partnerProfileSchema = z.object({
+  displayTitle: z.string().max(60).optional().or(z.literal("")),
+  bio: z.string().max(280).optional().or(z.literal("")),
+  whatsapp: z.string().max(120).optional().or(z.literal("")),
+  linkedin: z.string().max(500).optional().or(z.literal("")),
+  twitter: z.string().max(500).optional().or(z.literal("")),
+  locale: z.string().min(2).max(5),
+});
+
+export async function updatePartnerProfileAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const parsed = partnerProfileSchema.safeParse({
+    displayTitle: formData.get("displayTitle") ?? "",
+    bio: formData.get("bio") ?? "",
+    whatsapp: formData.get("whatsapp") ?? "",
+    linkedin: formData.get("linkedin") ?? "",
+    twitter: formData.get("twitter") ?? "",
+    locale: formData.get("locale") ?? "ar",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const social: Record<string, string> = {};
+  const w = parsed.data.whatsapp?.trim();
+  const li = parsed.data.linkedin?.trim();
+  const tw = parsed.data.twitter?.trim();
+  if (w) social.whatsapp = w;
+  if (li) social.linkedin = li;
+  if (tw) social.twitter = tw;
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { publicSlug: true, partnerProfile: { select: { id: true } } },
+  });
+  if (!user?.partnerProfile) return { ok: false, error: "invalid_input" };
+
+  await prisma.$transaction([
+    prisma.user.update({
+      where: { id: session.user.id },
+      data: { bio: parsed.data.bio?.trim() || null },
+    }),
+    prisma.partnerProfile.update({
+      where: { id: user.partnerProfile.id },
+      data: {
+        displayTitle: parsed.data.displayTitle?.trim() || null,
+        socialLinks:
+          Object.keys(social).length > 0 ? social : Prisma.JsonNull,
+      },
+    }),
+  ]);
+
+  revalidateGrowth();
+  if (user.publicSlug) {
+    revalidatePath(`/${parsed.data.locale}/growth/profile/${user.publicSlug}`);
+  }
+  return { ok: true };
+}
+
 export async function updatePartnerAvatarAction(
+  _prev: unknown,
   formData: FormData,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   const session = await auth();

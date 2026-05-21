@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import { EventStatus, ParticipantStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
-import { EventCard, type EventCardData } from "@/components/growth/events/EventCard";
+import { EventsHubTabs } from "@/components/growth/events/EventsHubTabs";
+import { type EventCardData } from "@/components/growth/events/EventCard";
 import { EmptyState } from "@/components/growth/ui/EmptyState";
 import { SectionHeader } from "@/components/growth/ui/SectionHeader";
 import { prisma } from "@/lib/prisma";
@@ -21,7 +22,7 @@ export default async function GrowthEventsPage({ params }: Props) {
 
   const t = await getTranslations("Growth.events");
 
-  const [events, participations] = await Promise.all([
+  const [events, participations, eventNotifs] = await Promise.all([
     prisma.growthEvent.findMany({
       where: { status: { in: [EventStatus.PUBLISHED, EventStatus.ACTIVE, EventStatus.COMPLETED] } },
       orderBy: { startAt: "desc" },
@@ -33,6 +34,10 @@ export default async function GrowthEventsPage({ params }: Props) {
     prisma.eventParticipant.findMany({
       where: { userId: session.user.id },
       select: { eventId: true, status: true, progress: true },
+    }),
+    prisma.eventNotification.findMany({
+      where: { notification: { userId: session.user.id } },
+      select: { eventId: true },
     }),
   ]);
 
@@ -60,6 +65,27 @@ export default async function GrowthEventsPage({ params }: Props) {
   }
 
   const allCards = events.map(toCard);
+  const invitedSlugs = events
+    .filter((ev) => {
+      const hasNotif = eventNotifs.some((n) => n.eventId === ev.id);
+      const part = partMap.get(ev.id);
+      return hasNotif && !part;
+    })
+    .map((ev) => ev.slug);
+
+  const joinedSlugs = participations
+    .filter(
+      (p) =>
+        p.status === ParticipantStatus.ACCEPTED &&
+        (p.progress == null || p.progress < 100),
+    )
+    .map((p) => events.find((e) => e.id === p.eventId)?.slug)
+    .filter((s): s is string => !!s);
+
+  const completedSlugs = participations
+    .filter((p) => p.status === ParticipantStatus.COMPLETED)
+    .map((p) => events.find((e) => e.id === p.eventId)?.slug)
+    .filter((s): s is string => !!s);
 
   if (allCards.length === 0) {
     return (
@@ -73,17 +99,17 @@ export default async function GrowthEventsPage({ params }: Props) {
   return (
     <div className="space-y-8">
       <SectionHeader title={t("title")} />
-      <div className="grid gap-6 md:grid-cols-2">
-        {allCards.map((ev) => (
-          <EventCard
-            key={ev.slug}
-            event={ev}
-            joinLabel={t("joinEvent")}
-            progressLabel={t("eventProgress")}
-            viewLabel={t("viewDetails")}
-          />
-        ))}
-      </div>
+      <EventsHubTabs
+        all={allCards}
+        invitedSlugs={invitedSlugs}
+        joinedSlugs={joinedSlugs}
+        completedSlugs={completedSlugs}
+        labels={{
+          join: t("joinEvent"),
+          progress: t("eventProgress"),
+          view: t("viewDetails"),
+        }}
+      />
     </div>
   );
 }

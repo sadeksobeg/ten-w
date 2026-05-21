@@ -1,11 +1,7 @@
 import { PayoutStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
-import { GlassCard } from "@/components/ui/GlassCard";
-import {
-  approvePayoutAdminFormAction,
-  markPayoutPaidAdminFormAction,
-  rejectPayoutAdminFormAction,
-} from "@/lib/growth/actions";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { AdminPayoutRowActions } from "@/components/growth/admin/AdminPayoutRowActions";
 import { prisma } from "@/lib/prisma";
 
 export default async function GrowthAdminPayoutsPage() {
@@ -69,39 +65,7 @@ export default async function GrowthAdminPayoutsPage() {
                   <span className="text-xs font-semibold uppercase tracking-wide text-gold/90">
                     {statusLabel(p.status)}
                   </span>
-                  {p.status === PayoutStatus.PENDING ? (
-                    <>
-                      <form action={approvePayoutAdminFormAction}>
-                        <input type="hidden" name="payoutId" value={p.id} />
-                        <button
-                          type="submit"
-                          className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-200"
-                        >
-                          {t("admin.payoutsPage.approve")}
-                        </button>
-                      </form>
-                      <form action={rejectPayoutAdminFormAction}>
-                        <input type="hidden" name="payoutId" value={p.id} />
-                        <button
-                          type="submit"
-                          className="rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200"
-                        >
-                          {t("admin.payoutsPage.reject")}
-                        </button>
-                      </form>
-                    </>
-                  ) : null}
-                  {p.status === PayoutStatus.APPROVED ? (
-                    <form action={markPayoutPaidAdminFormAction}>
-                      <input type="hidden" name="payoutId" value={p.id} />
-                      <button
-                        type="submit"
-                        className="rounded-xl bg-gradient-to-r from-gold/30 via-gold to-gold-bright px-4 py-2 text-xs font-extrabold text-bg"
-                      >
-                        {t("admin.payoutsPage.markPaid")}
-                      </button>
-                    </form>
-                  ) : null}
+                  <AdminPayoutRowActions payoutId={p.id} status={p.status} />
                 </div>
               </div>
             ))

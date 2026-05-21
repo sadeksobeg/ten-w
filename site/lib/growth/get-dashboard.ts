@@ -1,4 +1,4 @@
-import { DealStatus } from "@prisma/client";
+import { DealStatus, PayoutStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { sumEarningsCents } from "@/lib/growth/commission";
 import {
@@ -27,17 +27,44 @@ import { ensurePartnerProfile } from "@/lib/growth/ensure-partner-profile";
 import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
 import { resolveMissionTitle } from "@/lib/growth/mission-i18n";
 import { resolveLevelName } from "@/lib/growth/level-i18n";
+import { parseLevelPerks } from "@/lib/growth/parse-level-perks";
+import {
+  buildLast6MonthEarnings,
+  computePartnerWallet,
+  type MonthEarningsPoint,
+  type PartnerWallet,
+} from "@/lib/growth/wallet";
 
 export type DashboardDeal = {
   id: string;
   status: DealStatus;
   clientLabel: string | null;
   productName: string;
+  saleAmountCents: number;
+  notes: string | null;
+  commissionCents: number | null;
+  hasSupportChat: boolean;
   createdAt: Date;
   closedAt: Date | null;
   lostAt: Date | null;
   journey: { steps: DealJourneyStep[] };
 };
+
+export type DashboardPayoutRequest = {
+  id: string;
+  amountCents: number;
+  status: PayoutStatus;
+  method: string | null;
+  createdAt: string;
+};
+
+export type DashboardLevelInfo = {
+  name: string;
+  salaryUsd: number | null;
+  perks: string[];
+};
+
+export type { PartnerWallet, MonthEarningsPoint };
 
 export type DashboardNetworkRow = {
   userId: string;
@@ -112,6 +139,11 @@ export type DashboardData = {
   progress: { current: number; target: number };
   earningsCents: number;
   earningsThisMonthCents: number;
+  wallet: PartnerWallet;
+  payoutRequests: DashboardPayoutRequest[];
+  earningsByMonth: MonthEarningsPoint[];
+  currentLevelDetail: DashboardLevelInfo;
+  nextLevelDetail: DashboardLevelInfo | null;
   rankDelta: number;
   deals: DashboardDeal[];
   network: DashboardNetworkRow[];
@@ -166,6 +198,8 @@ export async function getPartnerDashboard(
     missionDays,
     activityRows,
     monthEarnings,
+    payoutRequests,
+    ledgerForMonths,
   ] = await Promise.all([
       prisma.deal.count({ where: { partnerId: userId, status: DealStatus.CLOSED } }),
       prisma.deal.count({ where: { partnerId: userId, status: DealStatus.PENDING } }),
@@ -173,8 +207,16 @@ export async function getPartnerDashboard(
       prisma.deal.findMany({
         where: { partnerId: userId },
         orderBy: { createdAt: "desc" },
-        take: 25,
-        include: {
+        take: 50,
+        select: {
+          id: true,
+          status: true,
+          clientLabel: true,
+          saleAmountCents: true,
+          notes: true,
+          createdAt: true,
+          closedAt: true,
+          lostAt: true,
           product: { select: { name: true } },
           _count: { select: { ledger: true } },
         },
@@ -233,9 +275,56 @@ export async function getPartnerDashboard(
           _sum: { amountCents: true },
         });
       })(),
+      prisma.payoutRequest.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+      }),
+      prisma.commissionLedger.findMany({
+        where: {
+          userId,
+          createdAt: {
+            gte: new Date(
+              Date.UTC(
+                new Date().getUTCFullYear(),
+                new Date().getUTCMonth() - 5,
+                1,
+              ),
+            ),
+          },
+        },
+        select: { createdAt: true, amountCents: true },
+      }),
     ]);
 
   const earningsCents = await sumEarningsCents(userId);
+  const wallet = await computePartnerWallet(userId);
+  const earningsByMonth = buildLast6MonthEarnings(ledgerForMonths, locale);
+
+  const dealIds = deals.map((d) => d.id);
+  const [commissionByDeal, linkedDeals] = await Promise.all([
+    dealIds.length > 0
+      ? prisma.commissionLedger.groupBy({
+          by: ["dealId"],
+          where: { userId, dealId: { in: dealIds }, tier: { gt: 0 } },
+          _sum: { amountCents: true },
+        })
+      : Promise.resolve([]),
+    dealIds.length > 0
+      ? prisma.chatConversation.findMany({
+          where: { partnerUserId: userId, linkedDealId: { in: dealIds } },
+          select: { linkedDealId: true },
+        })
+      : Promise.resolve([]),
+  ]);
+  const commissionMap = new Map(
+    commissionByDeal
+      .filter((r) => r.dealId)
+      .map((r) => [r.dealId!, r._sum.amountCents ?? 0]),
+  );
+  const linkedDealSet = new Set(
+    linkedDeals.map((c) => c.linkedDealId).filter(Boolean) as string[],
+  );
   const earningsThisMonthCents = monthEarnings._sum.amountCents ?? 0;
 
   const season = await getActiveLeaderboardSeason();
@@ -401,11 +490,37 @@ export async function getPartnerDashboard(
     earningsCents,
     earningsThisMonthCents,
     rankDelta,
+    wallet,
+    payoutRequests: payoutRequests.map((p) => ({
+      id: p.id,
+      amountCents: p.amountCents,
+      status: p.status,
+      method: p.method,
+      createdAt: p.createdAt.toISOString(),
+    })),
+    earningsByMonth,
+    currentLevelDetail: {
+      name: resolveLevelName(profile.currentLevel.name, locale),
+      salaryUsd: profile.currentLevel.salaryUsd,
+      perks: parseLevelPerks(profile.currentLevel.perksJson),
+    },
+    nextLevelDetail: nextLevel
+      ? {
+          name: resolveLevelName(nextLevel.name, locale),
+          salaryUsd: nextLevel.salaryUsd,
+          perks: parseLevelPerks(nextLevel.perksJson),
+        }
+      : null,
     deals: deals.map((d) => ({
       id: d.id,
       status: d.status,
       clientLabel: d.clientLabel,
       productName: d.product.name,
+      saleAmountCents: d.saleAmountCents,
+      notes: d.notes,
+      commissionCents:
+        d.status === DealStatus.CLOSED ? (commissionMap.get(d.id) ?? 0) : null,
+      hasSupportChat: linkedDealSet.has(d.id),
       createdAt: d.createdAt,
       closedAt: d.closedAt,
       lostAt: d.lostAt,

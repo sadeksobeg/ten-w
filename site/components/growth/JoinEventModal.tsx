@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { joinEventAction } from "@/lib/growth/actions";
+import { useToast } from "@/hooks/useToast";
 
 type Props = {
   eventId: string;
@@ -11,8 +12,19 @@ type Props = {
 
 export function JoinEventModal({ eventId, rulesHtml }: Props) {
   const t = useTranslations("Growth.events");
+  const { showToast } = useToast();
   const [open, setOpen] = useState(false);
-  const [state, action] = useActionState(joinEventAction, undefined);
+  const [state, action] = useActionState(joinEventAction, null);
+
+  useEffect(() => {
+    if (!state) return;
+    if (state.ok) {
+      showToast({ type: "success", title: t("joinedSuccess") });
+      setOpen(false);
+    } else {
+      showToast({ type: "error", title: state.error });
+    }
+  }, [state, showToast, t]);
 
   return (
     <>
@@ -41,7 +53,7 @@ export function JoinEventModal({ eventId, rulesHtml }: Props) {
                 <p className="text-sm text-red-300">{String((state as { error?: string }).error)}</p>
               ) : null}
               {state && typeof state === "object" && "ok" in state && state.ok === true ? (
-                <p className="text-sm text-emerald-300">{t("joined")}</p>
+                <p className="text-sm text-emerald-300">{t("joinedSuccess")}</p>
               ) : null}
               <div className="flex gap-2">
                 <button type="submit" className="rounded-xl bg-gold px-4 py-2 text-sm font-bold text-bg">

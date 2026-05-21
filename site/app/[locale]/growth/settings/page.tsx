@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { AvatarSettingsForm } from "@/components/growth/settings/AvatarSettingsForm";
+import { PartnerProfileSettingsForm } from "@/components/growth/settings/PartnerProfileSettingsForm";
 import { ProfileShareExport } from "@/components/growth/ProfileShareExport";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
 import { SectionHeader } from "@/components/growth/ui/SectionHeader";
@@ -17,7 +18,16 @@ export default async function GrowthSettingsPage({ params }: Props) {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { avatarUrl: true, name: true, email: true, publicSlug: true },
+    select: {
+      avatarUrl: true,
+      name: true,
+      email: true,
+      publicSlug: true,
+      bio: true,
+      partnerProfile: {
+        select: { displayTitle: true, socialLinks: true },
+      },
+    },
   });
 
   if (!user?.publicSlug) redirect(`/${locale}/growth`);
@@ -28,6 +38,18 @@ export default async function GrowthSettingsPage({ params }: Props) {
     <div className="mx-auto max-w-lg space-y-6 growth-page-enter">
       <GrowthPageHeader title={t("title")} subtitle={t("subtitle")} />
       <ProfileShareExport publicSlug={user.publicSlug!} locale={locale} />
+      <PartnerProfileSettingsForm
+        locale={locale}
+        displayTitle={user.partnerProfile?.displayTitle ?? ""}
+        bio={user.bio ?? ""}
+        social={
+          (user.partnerProfile?.socialLinks as {
+            whatsapp?: string;
+            linkedin?: string;
+            twitter?: string;
+          } | null) ?? {}
+        }
+      />
       <SectionHeader title={t("avatarSection")} />
       <AvatarSettingsForm
         locale={locale}

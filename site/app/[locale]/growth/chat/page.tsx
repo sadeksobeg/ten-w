@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GrowthChatThread } from "@/components/growth/chat/GrowthChatThread";
 import { ensureOpenConversation } from "@/lib/growth/chat-service";
 
