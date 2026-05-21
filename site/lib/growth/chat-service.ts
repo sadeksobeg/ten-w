@@ -11,6 +11,25 @@ export type ChatMessageDTO = {
   kind: string;
   createdAt: string;
   metadata: Record<string, unknown> | null;
+  /** True when message belongs to a resolved (archived) conversation session. */
+  archivedSession?: boolean;
+};
+
+export type ChatTimelineSegmentKind = "session_start" | "session_closed";
+
+export type ChatTimelineItem =
+  | { type: "segment"; kind: ChatTimelineSegmentKind; conversationId: string; at: string }
+  | { type: "message"; message: ChatMessageDTO };
+
+export type PartnerChatSummary = {
+  openConversationId: string;
+  openStatus: string;
+  unreadCount: number;
+  lastPreview: string | null;
+  lastMessageAt: string | null;
+  lastFromAdmin: boolean;
+  referralCode: string | null;
+  lastDealLabel: string | null;
 };
 
 export type ChatInboxSegment = "high_value" | "at_risk" | "standard";
@@ -247,17 +266,20 @@ export async function listAdminConversations(): Promise<ChatConversationListItem
 
 export async function listMessages(
   conversationId: string,
-  opts?: { after?: Date },
+  opts?: { after?: Date; before?: Date; take?: number },
 ): Promise<ChatMessageDTO[]> {
+  const take = opts?.take ?? (opts?.before || opts?.after ? 50 : 200);
   const rows = await prisma.chatMessage.findMany({
     where: {
       conversationId,
       ...(opts?.after ? { createdAt: { gt: opts.after } } : {}),
+      ...(opts?.before ? { createdAt: { lt: opts.before } } : {}),
     },
-    orderBy: { createdAt: "asc" },
-    take: 200,
+    orderBy: { createdAt: opts?.before ? "desc" : "asc" },
+    take,
   });
-  return rows.map((m) => ({
+  const ordered = opts?.before ? [...rows].reverse() : rows;
+  return ordered.map((m) => ({
     id: m.id,
     conversationId: m.conversationId,
     senderUserId: m.senderUserId,
@@ -266,6 +288,167 @@ export async function listMessages(
     createdAt: m.createdAt.toISOString(),
     metadata: (m.metadata as Record<string, unknown> | null) ?? null,
   }));
+}
+
+/** All conversations for partner, newest activity first. */
+export async function listPartnerConversations(partnerUserId: string) {
+  return prisma.chatConversation.findMany({
+    where: { partnerUserId },
+    orderBy: [{ updatedAt: "desc" }],
+  });
+}
+
+/** Merged timeline across OPEN + RESOLVED sessions for partner history view. */
+export async function listPartnerChatTimeline(
+  partnerUserId: string,
+  opts?: { limit?: number; before?: Date },
+): Promise<{ items: ChatTimelineItem[]; hasMore: boolean }> {
+  const limit = opts?.limit ?? 80;
+  const convs = await prisma.chatConversation.findMany({
+    where: { partnerUserId },
+    orderBy: { createdAt: "asc" },
+  });
+  if (convs.length === 0) return { items: [], hasMore: false };
+
+  const convById = new Map(convs.map((c) => [c.id, c]));
+
+  const rows = await prisma.chatMessage.findMany({
+    where: {
+      conversation: { partnerUserId },
+      ...(opts?.before ? { createdAt: { lt: opts.before } } : {}),
+    },
+    orderBy: { createdAt: "desc" },
+    take: limit + 1,
+  });
+  const hasMore = rows.length > limit;
+  const messages = rows.slice(0, limit).reverse();
+
+  const items: ChatTimelineItem[] = [];
+  let lastConvId: string | null = null;
+
+  for (const m of messages) {
+    const conv = convById.get(m.conversationId);
+    if (!conv) continue;
+    if (m.conversationId !== lastConvId) {
+      if (lastConvId !== null) {
+        const prev = convById.get(lastConvId);
+        if (prev?.status === "RESOLVED") {
+          items.push({
+            type: "segment",
+            kind: "session_closed",
+            conversationId: lastConvId,
+            at: prev.updatedAt.toISOString(),
+          });
+        }
+      }
+      items.push({
+        type: "segment",
+        kind: "session_start",
+        conversationId: m.conversationId,
+        at: conv.createdAt.toISOString(),
+      });
+      lastConvId = m.conversationId;
+    }
+    items.push({
+      type: "message",
+      message: {
+        id: m.id,
+        conversationId: m.conversationId,
+        senderUserId: m.senderUserId,
+        body: m.body,
+        kind: m.kind,
+        createdAt: m.createdAt.toISOString(),
+        metadata: (m.metadata as Record<string, unknown> | null) ?? null,
+        archivedSession: conv.status === "RESOLVED",
+      },
+    });
+  }
+
+  return { items, hasMore };
+}
+
+export async function countPartnerUnread(partnerUserId: string): Promise<number> {
+  const convs = await prisma.chatConversation.findMany({
+    where: { partnerUserId },
+    select: { id: true, partnerLastReadAt: true },
+  });
+  if (convs.length === 0) return 0;
+
+  let total = 0;
+  for (const c of convs) {
+    const since = c.partnerLastReadAt ?? new Date(0);
+    const n = await prisma.chatMessage.count({
+      where: {
+        conversationId: c.id,
+        senderUserId: { not: partnerUserId },
+        createdAt: { gt: since },
+      },
+    });
+    total += n;
+  }
+  return total;
+}
+
+export async function getPartnerChatSummary(partnerUserId: string): Promise<PartnerChatSummary> {
+  const open = await ensureOpenConversation(partnerUserId);
+  const unreadCount = await countPartnerUnread(partnerUserId);
+
+  const [lastMsg, profile, lastDeal] = await Promise.all([
+    prisma.chatMessage.findFirst({
+      where: { conversation: { partnerUserId } },
+      orderBy: { createdAt: "desc" },
+      select: { body: true, createdAt: true, senderUserId: true, kind: true },
+    }),
+    prisma.partnerProfile.findUnique({
+      where: { userId: partnerUserId },
+      select: { referralCode: true },
+    }),
+    prisma.deal.findFirst({
+      where: { partnerId: partnerUserId },
+      orderBy: { updatedAt: "desc" },
+      select: { clientLabel: true, status: true },
+    }),
+  ]);
+
+  const preview =
+    lastMsg && lastMsg.kind === "TEXT"
+      ? lastMsg.body.slice(0, 120)
+      : lastMsg
+        ? `[${lastMsg.kind}]`
+        : null;
+
+  const lastDealLabel = lastDeal
+    ? `${lastDeal.clientLabel ?? "—"} (${lastDeal.status})`
+    : null;
+
+  return {
+    openConversationId: open.id,
+    openStatus: open.status,
+    unreadCount,
+    lastPreview: preview,
+    lastMessageAt: lastMsg?.createdAt.toISOString() ?? null,
+    lastFromAdmin: lastMsg ? lastMsg.senderUserId !== partnerUserId : false,
+    referralCode: profile?.referralCode ?? null,
+    lastDealLabel,
+  };
+}
+
+export async function markPartnerConversationRead(
+  conversationId: string,
+  partnerUserId: string,
+): Promise<void> {
+  await prisma.chatConversation.updateMany({
+    where: { id: conversationId, partnerUserId },
+    data: { partnerLastReadAt: new Date() },
+  });
+}
+
+/** Mark all partner conversations as read. */
+export async function markAllPartnerChatsRead(partnerUserId: string): Promise<void> {
+  await prisma.chatConversation.updateMany({
+    where: { partnerUserId },
+    data: { partnerLastReadAt: new Date() },
+  });
 }
 
 export async function appendMessage(input: {

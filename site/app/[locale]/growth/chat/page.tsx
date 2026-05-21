@@ -43,6 +43,7 @@ export default async function GrowthPartnerChatPage({ params }: Props) {
             isAdmin={false}
             locale={locale}
             embedded
+            partnerHistoryMode
             className="h-full"
           />
         </div>

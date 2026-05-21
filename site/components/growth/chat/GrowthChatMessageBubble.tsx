@@ -123,11 +123,13 @@ export function GrowthChatMessageBubble({
 
   const toneExtra = textToneClass(m.metadata);
 
+  const archived = Boolean(m.archivedSession);
+
   return (
     <div
       className={`flex gap-2 py-0.5 ${mine ? "flex-row-reverse" : "flex-row"} ${
         showAvatarRow ? "pt-2" : "pt-0.5"
-      }`}
+      } ${archived ? "opacity-60" : ""}`}
     >
       {showAvatarRow ? (
         <div

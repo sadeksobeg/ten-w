@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { ensurePartnerProfile } from "@/lib/growth/ensure-partner-profile";
 import { resolveLevelName } from "@/lib/growth/level-i18n";
 import { GrowthPartnerHeader } from "@/components/growth/GrowthPartnerHeader";
 import { GrowthPartnerShell } from "@/components/growth/GrowthPartnerShell";
+import { PartnerChatBubble } from "@/components/growth/chat/PartnerChatBubble";
 
 type Props = {
   locale: string;
@@ -29,7 +31,7 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
       : "—";
 
   return (
-    <GrowthPartnerShell>
+    <GrowthPartnerShell locale={locale}>
       <GrowthPartnerHeader
         locale={locale}
         name={user?.name ?? null}
@@ -39,6 +41,9 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
         publicSlug={user?.publicSlug ?? null}
       />
       {children}
+      <Suspense fallback={null}>
+        <PartnerChatBubble locale={locale} viewerUserId={session.user.id} />
+      </Suspense>
     </GrowthPartnerShell>
   );
 }

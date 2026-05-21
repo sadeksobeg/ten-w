@@ -1,11 +1,12 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 type Props = {
   children: ReactNode;
+  locale: string;
 };
 
 const NAV = [
@@ -24,9 +25,32 @@ function isActive(pathname: string, href: string, exact?: boolean) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function GrowthPartnerShell({ children }: Props) {
+export function GrowthPartnerShell({ children, locale: _locale }: Props) {
   const t = useTranslations("Growth.nav");
   const pathname = usePathname();
+  const [chatUnread, setChatUnread] = useState(0);
+
+  const refreshUnread = useCallback(async () => {
+    try {
+      const res = await fetch("/api/growth/chat/partner-summary");
+      if (!res.ok) return;
+      const data = (await res.json()) as { unreadCount?: number };
+      setChatUnread(data.unreadCount ?? 0);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
+    void refreshUnread();
+    const id = window.setInterval(() => void refreshUnread(), 20000);
+    const onRead = () => void refreshUnread();
+    window.addEventListener("growth-chat-read", onRead);
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener("growth-chat-read", onRead);
+    };
+  }, [refreshUnread]);
 
   const linkClass = (active: boolean) =>
     `whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold transition ${
@@ -49,9 +73,14 @@ export function GrowthPartnerShell({ children }: Props) {
           <Link
             key={item.href}
             href={item.href}
-            className={linkClass(isActive(pathname, item.href, "exact" in item ? item.exact : false))}
+            className={`relative ${linkClass(isActive(pathname, item.href, "exact" in item ? item.exact : false))}`}
           >
             {t(item.key)}
+            {item.key === "chat" && chatUnread > 0 ? (
+              <span className="absolute -top-1 end-0 flex min-w-[1rem] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-black text-white">
+                {chatUnread > 99 ? "99+" : chatUnread}
+              </span>
+            ) : null}
           </Link>
         ))}
       </nav>
@@ -64,9 +93,14 @@ export function GrowthPartnerShell({ children }: Props) {
           <Link
             key={item.href}
             href={item.href}
-            className={`${linkClass(isActive(pathname, item.href, "exact" in item ? item.exact : false))} min-w-0 flex-1 px-1 text-center text-[10px]`}
+            className={`relative ${linkClass(isActive(pathname, item.href, "exact" in item ? item.exact : false))} min-w-0 flex-1 px-1 text-center text-[10px]`}
           >
             {t(item.key)}
+            {item.key === "chat" && chatUnread > 0 ? (
+              <span className="absolute end-1/4 top-0 flex size-4 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white">
+                {chatUnread > 9 ? "9+" : chatUnread}
+              </span>
+            ) : null}
           </Link>
         ))}
       </nav>

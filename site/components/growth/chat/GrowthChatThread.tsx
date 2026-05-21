@@ -2,12 +2,25 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import type { ChatMessageDTO } from "@/lib/growth/chat-service";
+import type {
+  ChatMessageDTO,
+  ChatTimelineItem,
+  ChatTimelineSegmentKind,
+} from "@/lib/growth/chat-service";
 import type { ChatSuggestionItem } from "@/lib/growth/chat-suggestions";
 import { suggestImpactDelta } from "@/lib/growth/chat-suggestions";
 import { GrowthChatMessageBubble } from "@/components/growth/chat/GrowthChatMessageBubble";
 import { GrowthChatQuickActionsBar } from "@/components/growth/chat/GrowthChatQuickActionsBar";
 import { playDemoChime } from "@/lib/demo/demo-sound";
+
+type ShareContext = {
+  referralCode: string | null;
+  lastDealLabel: string | null;
+};
+
+type ThreadRow =
+  | { type: "segment"; kind: ChatTimelineSegmentKind; at: string; conversationId: string }
+  | { type: "message"; message: ChatMessageDTO };
 
 type Props = {
   conversationId: string;
@@ -21,9 +34,21 @@ type Props = {
   /** Fills parent flex column (admin inbox center panel). */
   embedded?: boolean;
   className?: string;
+  /** Partner: merged OPEN + RESOLVED history via timeline API. */
+  partnerHistoryMode?: boolean;
+  shareContext?: ShareContext;
+  onPartnerMessage?: () => void;
 };
 
 const GROUP_MS = 5 * 60 * 1000;
+const MAX_BODY = 8000;
+const QUICK_REPLY_KEYS = [
+  "dealStatus",
+  "commission",
+  "levelHelp",
+  "payout",
+  "thanks",
+] as const;
 
 function commitActionLine(
   t: (key: string) => string,
@@ -57,6 +82,26 @@ function chatSoundEnabled(): boolean {
   }
 }
 
+function timelineToRows(items: ChatTimelineItem[]): ThreadRow[] {
+  return items.flatMap((it): ThreadRow[] => {
+    if (it.type === "segment") {
+      return [
+        {
+          type: "segment",
+          kind: it.kind,
+          at: it.at,
+          conversationId: it.conversationId,
+        },
+      ];
+    }
+    return [{ type: "message", message: it.message }];
+  });
+}
+
+function rowsToMessages(rows: ThreadRow[]): ChatMessageDTO[] {
+  return rows.filter((r): r is { type: "message"; message: ChatMessageDTO } => r.type === "message").map((r) => r.message);
+}
+
 export function GrowthChatThread({
   conversationId,
   viewerUserId,
@@ -67,11 +112,21 @@ export function GrowthChatThread({
   scrollMaxClassName,
   embedded = false,
   className = "",
+  partnerHistoryMode = false,
+  shareContext,
+  onPartnerMessage,
 }: Props) {
   const t = useTranslations("Growth.chat");
+  const tBubble = useTranslations("Growth.chat.bubble");
+  const tHistory = useTranslations("Growth.chat.history");
+  const tQuick = useTranslations("Growth.chat.quickReplies");
   const tMessage = useTranslations("Growth.chat.message");
   const tIntel = useTranslations("Growth.chat.intelligence");
   const [items, setItems] = useState<ChatMessageDTO[]>([]);
+  const [rows, setRows] = useState<ThreadRow[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(partnerHistoryMode);
+  const [historyHasMore, setHistoryHasMore] = useState(false);
+  const [loadingOlder, setLoadingOlder] = useState(false);
   const [suggestions, setSuggestions] = useState<ChatSuggestionItem[]>([]);
   const [modeledCloseProbability, setModeledCloseProbability] = useState<number | null>(
     null,
@@ -125,18 +180,53 @@ export function GrowthChatThread({
     [tMessage],
   );
 
-  const mergeIncoming = useCallback((rows: ChatMessageDTO[]) => {
-    if (rows.length === 0) return;
-    setItems((prev) => {
-      const map = new Map(prev.map((m) => [m.id, m]));
-      for (const m of rows) map.set(m.id, m);
-      return [...map.values()].sort(
-        (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
-    });
-    const last = rows[rows.length - 1]!;
-    lastTsRef.current = last.createdAt;
-  }, []);
+  const mergeIncoming = useCallback(
+    (incoming: ChatMessageDTO[]) => {
+      if (incoming.length === 0) return;
+      const mergeList = (prev: ChatMessageDTO[]) => {
+        const map = new Map(prev.map((m) => [m.id, m]));
+        for (const m of incoming) map.set(m.id, m);
+        return [...map.values()].sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        );
+      };
+      if (partnerHistoryMode) {
+        setRows((prev) => {
+          const next: ThreadRow[] = [...prev];
+          for (const m of incoming) {
+            if (m.conversationId !== conversationId) continue;
+            const i = next.findIndex(
+              (r) => r.type === "message" && r.message.id === m.id,
+            );
+            const row: ThreadRow = { type: "message", message: m };
+            if (i >= 0) next[i] = row;
+            else next.push(row);
+          }
+          return next.sort((a, b) => {
+            const ta =
+              a.type === "message"
+                ? new Date(a.message.createdAt).getTime()
+                : new Date(a.at).getTime();
+            const tb =
+              b.type === "message"
+                ? new Date(b.message.createdAt).getTime()
+                : new Date(b.at).getTime();
+            return ta - tb;
+          });
+        });
+      } else {
+        setItems((prev) => mergeList(prev));
+      }
+      const last = incoming[incoming.length - 1]!;
+      lastTsRef.current = last.createdAt;
+      if (!isAdmin && incoming.some((m) => m.senderUserId !== viewerUserId)) {
+        playDemoChime(chatSoundEnabled());
+      }
+    },
+    [partnerHistoryMode, isAdmin, viewerUserId, conversationId],
+  );
+
+  const displayMessages = partnerHistoryMode ? rowsToMessages(rows) : items;
 
   const reloadAllMessages = useCallback(async () => {
     const res = await fetch(`/api/growth/chat/${conversationId}/messages`);
@@ -150,7 +240,43 @@ export function GrowthChatThread({
     }
   }, [conversationId]);
 
-  const loadInitial = reloadAllMessages;
+  const loadPartnerTimeline = useCallback(
+    async (before?: string) => {
+      const qs = new URLSearchParams({ limit: "80" });
+      if (before) qs.set("before", before);
+      const res = await fetch(`/api/growth/chat/timeline?${qs}`);
+      if (!res.ok) return;
+      const data = (await res.json()) as { items: ChatTimelineItem[]; hasMore: boolean };
+      const nextRows = timelineToRows(data.items);
+      if (before) {
+        setRows((prev) => {
+          const ids = new Set(prev.filter((r) => r.type === "message").map((r) => r.message.id));
+          const merged = [...nextRows.filter((r) => r.type !== "message" || !ids.has(r.message.id)), ...prev];
+          return merged;
+        });
+      } else {
+        setRows(nextRows);
+        const msgs = rowsToMessages(nextRows);
+        if (msgs.length > 0) lastTsRef.current = msgs[msgs.length - 1]!.createdAt;
+        else lastTsRef.current = null;
+      }
+      setHistoryHasMore(data.hasMore);
+    },
+    [],
+  );
+
+  const loadInitial = useCallback(async () => {
+    if (partnerHistoryMode) {
+      setHistoryLoading(true);
+      try {
+        await loadPartnerTimeline();
+      } finally {
+        setHistoryLoading(false);
+      }
+      return;
+    }
+    await reloadAllMessages();
+  }, [partnerHistoryMode, loadPartnerTimeline, reloadAllMessages]);
 
   const loadSuggestions = useCallback(async () => {
     if (!isAdmin) {
@@ -197,7 +323,41 @@ export function GrowthChatThread({
     setProbShift(null);
     setModeledCloseProbability(null);
     setItems([]);
+    setRows([]);
+    setHistoryHasMore(false);
   }, [conversationId]);
+
+  useEffect(() => {
+    if (!partnerHistoryMode || isAdmin) return;
+    void fetch(`/api/growth/chat/${conversationId}/read`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ all: true }),
+    }).then(() => window.dispatchEvent(new CustomEvent("growth-chat-read")));
+  }, [conversationId, partnerHistoryMode, isAdmin]);
+
+  const loadOlderHistory = useCallback(async () => {
+    if (!partnerHistoryMode || loadingOlder || !historyHasMore) return;
+    const msgs = rowsToMessages(rows);
+    if (msgs.length === 0) return;
+    const oldest = msgs[0]!.createdAt;
+    setLoadingOlder(true);
+    try {
+      await loadPartnerTimeline(oldest);
+    } finally {
+      setLoadingOlder(false);
+    }
+  }, [partnerHistoryMode, loadingOlder, historyHasMore, rows, loadPartnerTimeline]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || !partnerHistoryMode) return;
+    const onScroll = () => {
+      if (el.scrollTop < 48 && historyHasMore && !loadingOlder) void loadOlderHistory();
+    };
+    el.addEventListener("scroll", onScroll);
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [partnerHistoryMode, historyHasMore, loadingOlder, loadOlderHistory]);
 
   useEffect(() => {
     if (!probShift) return;
@@ -208,7 +368,7 @@ export function GrowthChatThread({
   useEffect(() => {
     const id = window.requestAnimationFrame(() => scrollToBottom(false));
     return () => window.cancelAnimationFrame(id);
-  }, [items.length, conversationId, scrollToBottom]);
+  }, [displayMessages.length, conversationId, scrollToBottom, historyLoading]);
 
   const shouldPoll = !preferRealtime || sseDead;
 
@@ -312,6 +472,7 @@ export function GrowthChatThread({
       setBody("");
       flashToast(t("microActionOk"));
       playDemoChime(chatSoundEnabled());
+      onPartnerMessage?.();
       scrollToBottom(true);
     } catch {
       setError(t("sendError"));
@@ -321,26 +482,29 @@ export function GrowthChatThread({
   };
 
   const showAvatarRow = useCallback(
-    (idx: number) => {
-      const m = items[idx];
+    (idx: number, list: ChatMessageDTO[]) => {
+      const m = list[idx];
       if (!m) return true;
-      const prev = items[idx - 1];
+      const prev = list[idx - 1];
       if (!prev) return true;
       if (prev.senderUserId !== m.senderUserId) return true;
       const dt =
         new Date(m.createdAt).getTime() - new Date(prev.createdAt).getTime();
       return dt > GROUP_MS;
     },
-    [items],
+    [],
   );
+
+  const segmentLabel = (kind: ChatTimelineSegmentKind) =>
+    kind === "session_closed" ? tHistory("sessionClosed") : tHistory("sessionNew");
 
   const topSuggestion = suggestions[0];
   const scrollAreaClass = embedded
     ? "min-h-0 flex-1"
     : scrollMaxClassName ?? "max-h-[min(52vh,420px)]";
 
-  const messageNodes = items.flatMap((m, idx) => {
-    const prev = items[idx - 1];
+  const renderMessage = (m: ChatMessageDTO, idx: number, list: ChatMessageDTO[]) => {
+    const prev = list[idx - 1];
     const showDay =
       idx === 0 || (prev && dayKey(prev.createdAt) !== dayKey(m.createdAt));
     const dayDate = new Date(m.createdAt);
@@ -369,7 +533,7 @@ export function GrowthChatThread({
         viewerUserId={viewerUserId}
         isAdmin={isAdmin}
         locale={locale}
-        showAvatarRow={showAvatarRow(idx)}
+        showAvatarRow={showAvatarRow(idx, list)}
         kindLabel={kindLabel}
         partnerTag={t("partnerTag")}
         adminTag={t("adminTag")}
@@ -391,7 +555,40 @@ export function GrowthChatThread({
       ];
     }
     return [row];
-  });
+  };
+
+  const messageNodes = partnerHistoryMode
+    ? (() => {
+        let msgIdx = -1;
+        const list = displayMessages;
+        return rows.flatMap((row, i) => {
+          if (row.type === "segment") {
+            return [
+              <div key={`seg-${row.conversationId}-${row.at}-${i}`} className="flex justify-center py-2">
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] font-semibold text-white/40">
+                  {segmentLabel(row.kind)}
+                </span>
+              </div>,
+            ];
+          }
+          msgIdx += 1;
+          return renderMessage(row.message, msgIdx, list);
+        });
+      })()
+    : items.flatMap((m, idx) => renderMessage(m, idx, items));
+
+  const skeleton = (
+    <div className="space-y-3 px-2 py-4" aria-hidden>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <div
+          key={i}
+          className={`growth-skeleton-pulse h-10 max-w-[70%] rounded-2xl bg-white/10 ${
+            i % 2 === 0 ? "ms-auto" : ""
+          }`}
+        />
+      ))}
+    </div>
+  );
 
   const shellClass = embedded
     ? `flex h-full min-h-0 flex-col ${className}`
@@ -439,6 +636,21 @@ export function GrowthChatThread({
           </div>
         ) : null}
 
+        {sseDead && preferRealtime && !isAdmin ? (
+          <div
+            className="shrink-0 border-b border-amber-500/25 bg-amber-950/40 px-3 py-1.5 text-center text-[11px] font-semibold text-amber-100/90"
+            role="status"
+          >
+            {tHistory("reconnecting")}
+          </div>
+        ) : null}
+
+        {!sseDead && preferRealtime && !isAdmin && !historyLoading ? (
+          <div className="shrink-0 border-b border-emerald-500/20 bg-emerald-950/30 px-3 py-1 text-center text-[10px] text-emerald-200/80">
+            {tHistory("connected")}
+          </div>
+        ) : null}
+
         {isAdmin && topSuggestion ? (
           <div className="shrink-0 border-b border-emerald-500/20 bg-gradient-to-r from-emerald-950/50 via-[#050816] to-transparent px-3 py-2">
             <div className="flex flex-wrap items-center gap-2">
@@ -458,11 +670,21 @@ export function GrowthChatThread({
             embedded ? "bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Cpath d=%22M0 20h40M20 0v40%22 stroke=%22%23ffffff%22 stroke-opacity=%220.03%22/%3E%3C/svg%3E')]" : ""
           }`}
         >
-          {items.length === 0 ? (
-            <div className="flex h-full min-h-[200px] flex-col items-center justify-center text-center">
-              <p className="text-sm text-white/45">{t("empty")}</p>
+          {loadingOlder ? (
+            <p className="pb-2 text-center text-[10px] text-white/40">{tHistory("loadingOlder")}</p>
+          ) : null}
+          {historyLoading ? (
+            skeleton
+          ) : displayMessages.length === 0 && rows.filter((r) => r.type === "segment").length === 0 ? (
+            <div className="flex h-full min-h-[200px] flex-col items-center justify-center px-4 text-center">
+              <p className="text-sm font-semibold text-white/70">
+                {!isAdmin ? tBubble("emptyWelcome") : t("empty")}
+              </p>
               {!isAdmin ? (
-                <p className="mt-1 text-xs text-white/30">{t("partnerSupportHint")}</p>
+                <>
+                  <p className="mt-2 text-xs text-white/45">{tBubble("emptyHint")}</p>
+                  <p className="mt-3 text-[10px] text-white/35">{tBubble("etaReply")}</p>
+                </>
               ) : null}
             </div>
           ) : (
@@ -479,10 +701,52 @@ export function GrowthChatThread({
         ) : null}
 
         <div className="shrink-0 border-t border-white/10 bg-[#070b18]/95 p-3 backdrop-blur-md">
+          {!isAdmin ? (
+            <div className="mb-2 flex flex-wrap gap-1.5">
+              {QUICK_REPLY_KEYS.map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-semibold text-white/70 hover:border-gold/30 hover:text-gold"
+                  onClick={() => setBody((b) => (b ? `${b}\n` : "") + tQuick(key))}
+                >
+                  {tQuick(key)}
+                </button>
+              ))}
+              {shareContext?.lastDealLabel ? (
+                <button
+                  type="button"
+                  className="rounded-full border border-gold/25 bg-gold/10 px-2.5 py-1 text-[10px] font-semibold text-gold"
+                  onClick={() =>
+                    setBody(
+                      (b) =>
+                        `${b ? `${b}\n` : ""}${tBubble("shareDealTemplate", { deal: shareContext.lastDealLabel! })}`,
+                    )
+                  }
+                >
+                  {tBubble("shareDeal")}
+                </button>
+              ) : null}
+              {shareContext?.referralCode ? (
+                <button
+                  type="button"
+                  className="rounded-full border border-gold/25 bg-gold/10 px-2.5 py-1 text-[10px] font-semibold text-gold"
+                  onClick={() =>
+                    setBody(
+                      (b) =>
+                        `${b ? `${b}\n` : ""}${tBubble("shareReferralTemplate", { code: shareContext.referralCode! })}`,
+                    )
+                  }
+                >
+                  {tBubble("shareReferral")}
+                </button>
+              ) : null}
+            </div>
+          ) : null}
           <div className="flex items-end gap-2">
             <textarea
               value={body}
-              onChange={(e) => setBody(e.target.value)}
+              onChange={(e) => setBody(e.target.value.slice(0, MAX_BODY))}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -502,6 +766,12 @@ export function GrowthChatThread({
             >
               ↑
             </button>
+          </div>
+          <div className="mt-1 flex justify-between gap-2 text-[10px] text-white/35">
+            <span>{tBubble("supportHours")}</span>
+            <span className="tabular-nums">
+              {body.length}/{MAX_BODY}
+            </span>
           </div>
           {error ? (
             <p className="mt-2 text-xs text-rose-300" role="alert">

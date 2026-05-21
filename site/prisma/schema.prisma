@@ -427,9 +427,10 @@ model ChatConversation {
   priority      ChatPriority           @default(NORMAL)
   linkedDealId  String?
   subject       String?
-  lastMessageAt DateTime?
-  createdAt     DateTime               @default(now())
-  updatedAt     DateTime               @updatedAt
+  lastMessageAt       DateTime?
+  partnerLastReadAt   DateTime?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
 
   partner   User          @relation("ChatPartnerConversations", fields: [partnerUserId], references: [id], onDelete: Cascade)
   linkedDeal Deal?        @relation("ChatLinkedDeal", fields: [linkedDealId], references: [id], onDelete: SetNull)

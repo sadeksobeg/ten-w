@@ -11,6 +11,7 @@ import { GrowthMotivationBar } from "@/components/growth/GrowthMotivationBar";
 import { PartnerInsightCarousel } from "@/components/growth/PartnerInsightCarousel";
 import { GrowthCollapsibleSection } from "@/components/growth/ui/GrowthCollapsibleSection";
 import { PartnerOnboardingChecklist } from "@/components/growth/PartnerOnboardingChecklist";
+import { HubSupportCard } from "@/components/growth/HubSupportCard";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 
 type Props = {
@@ -58,6 +59,8 @@ export async function GrowthHubView({
       <PartnerOnboardingChecklist locale={locale} data={data} userId={userId} />
 
       <DashboardStatsGrid data={data} />
+
+      <HubSupportCard />
 
       <div className="flex flex-wrap gap-2">
         <Link

@@ -1186,6 +1186,20 @@
       "progress": "{current} / {target}",
       "done": "Completed today"
     },
+    "hub": {
+      "quickDeals": "Pipeline affaires",
+      "quickEarnings": "Revenus & paiement",
+      "quickNetwork": "Réseau parrainage",
+      "quickKit": "Kit marketing",
+      "support": {
+        "title": "Support en direct",
+        "empty": "Pas encore de messages — nous sommes là pour vous.",
+        "lastFromAdmin": "Dernière réponse admin",
+        "lastFromYou": "Vous",
+        "unread": "{n} non lus",
+        "openChat": "Ouvrir le chat"
+      }
+    },
     "activity": {
       "title": "Live momentum",
       "empty": "No recent events yet."
@@ -1337,6 +1351,36 @@
       "microActionOk": "Done",
       "microImpactOk": "Sent — modeled close lift ≈ +{n}%",
       "microCommitOk": "Action logged — committed path",
+      "bubble": {
+        "open": "Ouvrir le chat support",
+        "close": "Fermer",
+        "closeOverlay": "Fermer le panneau",
+        "panelTitle": "Support",
+        "expand": "Plein écran",
+        "toggleSound": "Alertes sonores",
+        "supportHours": "Horaires : dim.–jeu. 9h–18h (réponse sous ~1 jour ouvré)",
+        "etaReply": "Première réponse habituelle sous un jour ouvré.",
+        "emptyWelcome": "Bienvenue — comment pouvons-nous aider ?",
+        "emptyHint": "Posez une question sur une affaire, commission ou niveau.",
+        "shareDeal": "Envoyer la dernière affaire",
+        "shareReferral": "Envoyer le code parrain",
+        "shareDealTemplate": "Dernière affaire : {deal}",
+        "shareReferralTemplate": "Mon code parrain : {code}"
+      },
+      "history": {
+        "sessionNew": "Nouvelle conversation",
+        "sessionClosed": "Session précédente — fermée",
+        "loadingOlder": "Chargement des messages…",
+        "reconnecting": "Reconnexion…",
+        "connected": "Connecté"
+      },
+      "quickReplies": {
+        "dealStatus": "Quel est le statut de ma dernière affaire ?",
+        "commission": "Question sur ma commission",
+        "levelHelp": "Comment atteindre le niveau suivant ?",
+        "payout": "Quand est mon prochain paiement ?",
+        "thanks": "Merci — c'est utile !"
+      },
       "intelligence": {
         "contextTitle": "Economic context",
         "decisionTitle": "Decision radar",

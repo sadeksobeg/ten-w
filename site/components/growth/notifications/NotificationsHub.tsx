@@ -90,7 +90,14 @@ export function NotificationsHub({ initial, locale }: Props) {
                 ) : null}
               </div>
               {n.link ? (
-                <Link href={n.link} className="mt-2 inline-block text-xs text-gold hover:underline">
+                <Link
+                  href={
+                    n.link.includes("/growth/chat") || n.link.includes("openChat=1")
+                      ? "/growth?openChat=1"
+                      : n.link
+                  }
+                  className="mt-2 inline-block text-xs text-gold hover:underline"
+                >
                   {t("open")}
                 </Link>
               ) : null}

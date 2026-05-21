@@ -2,6 +2,7 @@
 .growth-root {
   --growth-gold: #b07d2b;
   --growth-gold-bright: #e4b84d;
+  --growth-chat-bubble-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 0 24px rgba(180, 125, 43, 0.2);
   --growth-bg: #0a0a0f;
   --growth-surface: #111118;
   --growth-surface-2: #1a1a24;
@@ -147,6 +148,19 @@
 }
 .growth-podium-3 {
   box-shadow: 0 0 12px -8px rgba(180, 120, 80, 0.3);
+}
+
+.growth-chat-bubble-root {
+  --growth-chat-bubble-z: 60;
+}
+
+.growth-chat-bubble-fab {
+  z-index: calc(var(--growth-chat-bubble-z) + 1);
+}
+
+.growth-chat-bubble-panel {
+  z-index: calc(var(--growth-chat-bubble-z) + 2);
+  max-height: min(85vh, 560px);
 }
 
 @media (prefers-reduced-motion: reduce) {

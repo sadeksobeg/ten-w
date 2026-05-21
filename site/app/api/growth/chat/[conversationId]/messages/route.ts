@@ -31,11 +31,22 @@ export async function GET(req: Request, ctx: RouteContext) {
   }
   const url = new URL(req.url);
   const afterRaw = url.searchParams.get("after");
+  const beforeRaw = url.searchParams.get("before");
   const after = afterRaw ? new Date(afterRaw) : undefined;
+  const before = beforeRaw ? new Date(beforeRaw) : undefined;
   if (afterRaw && (after === undefined || Number.isNaN(after.getTime()))) {
     return NextResponse.json({ error: "invalid_after" }, { status: 400 });
   }
-  const items = await listMessages(conversationId, after ? { after } : undefined);
+  if (beforeRaw && (before === undefined || Number.isNaN(before.getTime()))) {
+    return NextResponse.json({ error: "invalid_before" }, { status: 400 });
+  }
+  const takeRaw = url.searchParams.get("take");
+  const take = takeRaw ? Number(takeRaw) : undefined;
+  const items = await listMessages(conversationId, {
+    after,
+    before,
+    take: take && Number.isFinite(take) ? take : undefined,
+  });
   return NextResponse.json({ items });
 }
 

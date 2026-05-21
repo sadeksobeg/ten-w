@@ -1155,7 +1155,15 @@
       "quickDeals": "Deals pipeline",
       "quickEarnings": "Earnings & payout",
       "quickNetwork": "Referral network",
-      "quickKit": "Marketing kit"
+      "quickKit": "Marketing kit",
+      "support": {
+        "title": "Live support",
+        "empty": "No messages yet — we're here when you need us.",
+        "lastFromAdmin": "Last from admin",
+        "lastFromYou": "You",
+        "unread": "{n} unread",
+        "openChat": "Open chat"
+      }
     },
     "dashboard": {
       "expand": "Show",
@@ -1365,6 +1373,36 @@
       "microActionOk": "Done",
       "microImpactOk": "Sent — modeled close lift ≈ +{n}%",
       "microCommitOk": "Action logged — committed path",
+      "bubble": {
+        "open": "Open support chat",
+        "close": "Close",
+        "closeOverlay": "Close chat panel",
+        "panelTitle": "Support",
+        "expand": "Full screen",
+        "toggleSound": "Sound alerts",
+        "supportHours": "Support hours: Sun–Thu 9:00–18:00 (approx. reply within 1 business day)",
+        "etaReply": "Typical first reply within one business day.",
+        "emptyWelcome": "Welcome — how can we help?",
+        "emptyHint": "Ask about a deal, commission, or your level.",
+        "shareDeal": "Send last deal",
+        "shareReferral": "Send referral code",
+        "shareDealTemplate": "Latest deal: {deal}",
+        "shareReferralTemplate": "My referral code: {code}"
+      },
+      "history": {
+        "sessionNew": "New conversation",
+        "sessionClosed": "Previous session — closed",
+        "loadingOlder": "Loading older messages…",
+        "reconnecting": "Reconnecting…",
+        "connected": "Connected"
+      },
+      "quickReplies": {
+        "dealStatus": "What's the status of my latest deal?",
+        "commission": "Question about my commission",
+        "levelHelp": "How do I reach the next level?",
+        "payout": "When is my next payout?",
+        "thanks": "Thanks — that helps!"
+      },
       "intelligence": {
         "contextTitle": "Economic context",
         "decisionTitle": "Decision radar",

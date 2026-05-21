@@ -1135,6 +1135,20 @@
       "progress": "{current} / {target}",
       "done": "أُنجزت اليوم"
     },
+    "hub": {
+      "quickDeals": "مسار الصفقات",
+      "quickEarnings": "الأرباح والصرف",
+      "quickNetwork": "شبكة الإحالة",
+      "quickKit": "حزمة التسويق",
+      "support": {
+        "title": "دعم مباشر",
+        "empty": "لا رسائل بعد — نحن هنا عندما تحتاجنا.",
+        "lastFromAdmin": "آخر رد من الإدارة",
+        "lastFromYou": "أنت",
+        "unread": "{n} غير مقروء",
+        "openChat": "فتح المحادثة"
+      }
+    },
     "activity": {
       "title": "زخم مباشر",
       "empty": "لا أحداث حديثة بعد."
@@ -1286,6 +1300,36 @@
       "microActionOk": "تم",
       "microImpactOk": "أُرسل — ارتفاع نموذجي في احتمال الإغلاق ≈ +{n}٪",
       "microCommitOk": "تم تسجيل الإجراء — مسار مُلتزم",
+      "bubble": {
+        "open": "فتح محادثة الدعم",
+        "close": "إغلاق",
+        "closeOverlay": "إغلاق لوحة المحادثة",
+        "panelTitle": "الدعم",
+        "expand": "ملء الشاشة",
+        "toggleSound": "تنبيهات صوتية",
+        "supportHours": "ساعات الدعم: الأحد–الخميس 9:00–18:00 (رد تقريبي خلال يوم عمل)",
+        "etaReply": "رد أولي معتاد خلال يوم عمل واحد.",
+        "emptyWelcome": "مرحباً — كيف نساعدك؟",
+        "emptyHint": "اسأل عن صفقة، عمولة، أو مستواك.",
+        "shareDeal": "أرسل آخر صفقة",
+        "shareReferral": "أرسل كود الإحالة",
+        "shareDealTemplate": "آخر صفقة: {deal}",
+        "shareReferralTemplate": "كود الإحالة: {code}"
+      },
+      "history": {
+        "sessionNew": "محادثة جديدة",
+        "sessionClosed": "جلسة سابقة — مُغلقة",
+        "loadingOlder": "جاري تحميل رسائل أقدم…",
+        "reconnecting": "يعيد الاتصال…",
+        "connected": "متصل"
+      },
+      "quickReplies": {
+        "dealStatus": "ما حالة آخر صفقة لدي؟",
+        "commission": "سؤال عن العمولة",
+        "levelHelp": "كيف أصل للمستوى التالي؟",
+        "payout": "متى الصرف القادم؟",
+        "thanks": "شكراً — هذا مفيد!"
+      },
       "intelligence": {
         "contextTitle": "السياق الاقتصادي",
         "decisionTitle": "رادار القرار",
