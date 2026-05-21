@@ -25,7 +25,13 @@ export default async function GrowthPage({ params, searchParams }: Props) {
   }
 
   await touchPartnerStreak(session.user.id);
-  const data = await getPartnerDashboard(session.user.id);
+  const [data, userRow] = await Promise.all([
+    getPartnerDashboard(session.user.id),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { avatarUrl: true },
+    }),
+  ]);
 
   const celebrate = typeof sp.celebrate === "string" ? sp.celebrate : undefined;
   let badgeUnlockName: string | undefined;
@@ -41,7 +47,15 @@ export default async function GrowthPage({ params, searchParams }: Props) {
   return (
     <>
       <GrowthCelebrationClient celebrate={celebrate} badgeName={badgeUnlockName} />
-      <GrowthDashboardView locale={locale} data={data} celebrate={celebrate} />
+      <GrowthDashboardView
+        locale={locale}
+        data={data}
+        celebrate={celebrate}
+        userId={session.user.id}
+        userName={session.user.name ?? session.user.email ?? "Partner"}
+        userEmail={session.user.email ?? ""}
+        avatarUrl={userRow?.avatarUrl ?? session.user.image}
+      />
     </>
   );
 }

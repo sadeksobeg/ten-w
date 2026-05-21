@@ -31,7 +31,9 @@
 - [x] `ensurePartnerProfile` — منع crash عند غياب الملف
 - [x] استعلامات إشعارات آمنة إن نقصت الجداول
 - [x] `growth/error.tsx` برسالة واضحة
-- [ ] على السيرفر: `bash scripts/server-repair-growth-0003.sh --force` + `bash scripts/run-seed.sh`
+- [x] نظام تصميم Growth (`growth-globals.css`, `components/growth/ui/*`, Toast, BadgeIcon/BadgeGrid)
+- [x] لوحة شريك gaming-grade + لوحة أدمن KPI + فعاليات بصورة + بروفايل عام
+- [ ] على السيرفر: `git pull` + `migrate deploy` (0004) + `bash scripts/server-repair-growth-0003.sh --force` + `bash scripts/run-seed.sh`
 
 ---
 

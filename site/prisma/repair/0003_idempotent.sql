@@ -144,3 +144,5 @@ DO $$ BEGIN
     FOREIGN KEY ("notificationId") REFERENCES "Notification"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
+
+ALTER TABLE "GrowthEvent" ADD COLUMN IF NOT EXISTS "coverImage" TEXT;

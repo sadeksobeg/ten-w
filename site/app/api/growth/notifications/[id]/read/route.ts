@@ -12,11 +12,8 @@ export async function POST(_req: Request, ctx: RouteContext) {
   const { id } = await ctx.params;
 
   const updated = await prisma.notification.updateMany({
-    where: { id, userId: session.user.id },
+    where: { id, userId: session.user.id, isRead: false },
     data: { isRead: true },
   });
-  if (updated.count === 0) {
-    return NextResponse.json({ error: "not_found" }, { status: 404 });
-  }
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, updated: updated.count });
 }

@@ -62,6 +62,21 @@ export async function grantAdminBadge(
   userId: string,
   badgeKey: string,
   granterId: string,
-) {
-  await grantIfMissing(db, userId, badgeKey, granterId);
+): Promise<boolean> {
+  const badge = await db.badgeDefinition.findUnique({ where: { key: badgeKey } });
+  if (!badge) return false;
+
+  const existing = await db.userBadge.findUnique({
+    where: { userId_badgeId: { userId, badgeId: badge.id } },
+  });
+  if (existing) return false;
+
+  await db.userBadge.create({
+    data: {
+      userId,
+      badgeId: badge.id,
+      grantedById: granterId,
+    },
+  });
+  return true;
 }

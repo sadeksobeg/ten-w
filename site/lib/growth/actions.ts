@@ -431,31 +431,36 @@ const assignBadgeSchema = z.object({
   badgeKey: z.string().min(2).max(64),
 });
 
-export async function assignAdminBadgeAction(formData: FormData): Promise<void> {
+export async function assignAdminBadgeAction(
+  formData: FormData,
+): Promise<{ ok: true; badgeName: string; badgeKey: string } | { ok: false; error: string }> {
   const session = await auth();
   if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
-    return;
+    return { ok: false, error: "unauthorized" };
   }
 
   const parsed = assignBadgeSchema.safeParse({
     email: formData.get("email"),
     badgeKey: formData.get("badgeKey"),
   });
-  if (!parsed.success) return;
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
 
   const user = await prisma.user.findUnique({
     where: { email: parsed.data.email.toLowerCase().trim() },
+    select: { id: true, name: true, email: true },
   });
-  if (!user) return;
+  if (!user) return { ok: false, error: "user_not_found" };
 
   const badge = await prisma.badgeDefinition.findUnique({
     where: { key: parsed.data.badgeKey },
   });
   if (!badge || badge.type !== BadgeType.ADMIN) {
-    return;
+    return { ok: false, error: "invalid_badge" };
   }
 
-  await grantAdminBadge(prisma, user.id, badge.key, session.user.id);
+  const granted = await grantAdminBadge(prisma, user.id, badge.key, session.user.id);
+  if (!granted) return { ok: false, error: "badge_already_granted" };
+
   await createNotification(prisma, {
     userId: user.id,
     type: NotificationType.BADGE_EARNED,
@@ -465,6 +470,7 @@ export async function assignAdminBadgeAction(formData: FormData): Promise<void> 
     metadata: { badgeKey: badge.key },
   });
   revalidateGrowth();
+  return { ok: true, badgeName: badge.name, badgeKey: badge.key };
 }
 
 const revokeBadgeSchema = z.object({
@@ -1014,6 +1020,14 @@ export async function adminCreateEventAction(
     slug = eventSlugFromTitle(title);
   }
 
+  const coverRaw = String(formData.get("coverImage") ?? "").trim();
+  let coverImage: string | null = null;
+  if (coverRaw) {
+    if (coverRaw.length > 2_800_000) return { ok: false, error: "image_too_large" };
+    if (!coverRaw.startsWith("data:image/")) return { ok: false, error: "invalid_image" };
+    coverImage = coverRaw;
+  }
+
   const event = await prisma.$transaction(async (tx) => {
     const ev = await tx.growthEvent.create({
       data: {
@@ -1024,6 +1038,7 @@ export async function adminCreateEventAction(
         startAt,
         endAt,
         maxParticipants,
+        coverImage,
         status,
         createdById: session.user!.id,
       },
@@ -1307,4 +1322,31 @@ export async function adminSendNotificationAction(
 
   revalidateGrowth();
   return { ok: true, sent };
+}
+
+export async function updatePartnerAvatarAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const raw = String(formData.get("avatarUrl") ?? "").trim();
+  if (!raw) {
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { avatarUrl: null },
+    });
+    revalidateGrowth();
+    return { ok: true };
+  }
+  if (raw.length > 2_800_000 || !raw.startsWith("data:image/")) {
+    return { ok: false, error: "invalid_image" };
+  }
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: { avatarUrl: raw },
+  });
+  revalidateGrowth();
+  return { ok: true };
 }

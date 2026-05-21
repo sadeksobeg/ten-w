@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import type { ChatMessageDTO } from "@/lib/growth/chat-service";
 import type { ChatSuggestionItem } from "@/lib/growth/chat-suggestions";
@@ -400,31 +399,23 @@ export function GrowthChatThread({
 
   return (
     <div dir={dir} className={shellClass}>
-      <AnimatePresence>
-        {probShift ? (
-          <motion.div
-            key="prob"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="shrink-0 overflow-hidden px-3 pt-2"
+      {probShift ? (
+        <div className="growth-page-enter shrink-0 overflow-hidden px-3 pt-2">
+          <div
+            className="rounded-xl border border-violet-400/35 bg-gradient-to-br from-violet-950/60 to-black/50 px-4 py-2.5 text-center"
+            role="status"
           >
-            <div
-              className="rounded-xl border border-violet-400/35 bg-gradient-to-br from-violet-950/60 to-black/50 px-4 py-2.5 text-center"
-              role="status"
-            >
-              <div className="text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/90">
-                {tIntel("probShiftLabel")}
-              </div>
-              <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-lg font-black tabular-nums text-white">
-                <span>{probShift.from}%</span>
-                <span className="text-gold">→</span>
-                <span className="text-gold">{probShift.to}%</span>
-              </div>
+            <div className="text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/90">
+              {tIntel("probShiftLabel")}
             </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+            <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-lg font-black tabular-nums text-white">
+              <span>{probShift.from}%</span>
+              <span className="text-gold">→</span>
+              <span className="text-gold">{probShift.to}%</span>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {toast ? (
         <div

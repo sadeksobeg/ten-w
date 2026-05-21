@@ -158,8 +158,8 @@ export function GrowthChatMessageBubble({
         <div
           className={`px-3.5 py-2 text-sm shadow-md ${
             mine
-              ? "rounded-2xl rounded-ee-md bg-gradient-to-br from-[#B07D2B] to-[#8a6322] text-white"
-              : `rounded-2xl rounded-es-md border border-white/10 bg-[#121a2e] text-white/92 ${toneExtra}`
+              ? "rounded-[18px] rounded-ee-[4px] bg-[linear-gradient(135deg,#B07D2B,#E4B84D)] text-black shadow-md"
+              : `rounded-[18px] rounded-es-[4px] border border-white/10 bg-white/[0.06] text-[var(--growth-text)] backdrop-blur-[8px] ${toneExtra}`
           }`}
         >
           <div className="whitespace-pre-wrap break-words leading-relaxed">{m.body}</div>

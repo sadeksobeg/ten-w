@@ -71,6 +71,7 @@ type MissionDayRow = {
 
 type ActivityRow = {
   id: string;
+  kind: string;
   headline: string;
   amountCents: number | null;
   createdAt: Date;

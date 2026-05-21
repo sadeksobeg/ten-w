@@ -1,9 +1,14 @@
 import { DealStatus } from "@prisma/client";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { EmptyState } from "@/components/growth/ui/EmptyState";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
-import { PartnerInsightCarousel } from "@/components/growth/PartnerInsightCarousel";
+import { DashboardHero } from "@/components/growth/dashboard/DashboardHero";
+import { DashboardStatsGrid } from "@/components/growth/dashboard/DashboardStatsGrid";
+import { DashboardMissions } from "@/components/growth/dashboard/DashboardMissions";
+import { DashboardBadgesSection } from "@/components/growth/dashboard/DashboardBadgesSection";
+import { DashboardLeaderboardPreview } from "@/components/growth/dashboard/DashboardLeaderboardPreview";
 import { DealJourneyRow } from "@/components/growth/DealJourneyRow";
 import {
   addLeadDealAction,
@@ -11,20 +16,27 @@ import {
   requestPayoutAction,
 } from "@/lib/growth/actions";
 import { GrowthActivityFeed } from "@/components/growth/GrowthActivityFeed";
-import { GrowthConfetti } from "@/components/growth/GrowthConfetti";
-import { GrowthHeroClient } from "@/components/growth/GrowthHeroClient";
-import { GrowthMotivationBar } from "@/components/growth/GrowthMotivationBar";
 import { MarketingKitProductCard } from "@/components/growth/MarketingKitProductCard";
-import { XpProgressBar } from "@/components/growth/XpProgressBar";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 
 type Props = {
   locale: string;
   data: DashboardData;
   celebrate?: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  avatarUrl?: string | null;
 };
 
-export async function GrowthDashboardView({ locale, data, celebrate }: Props) {
+export async function GrowthDashboardView({
+  locale,
+  data,
+  userId,
+  userName,
+  userEmail,
+  avatarUrl,
+}: Props) {
   const t = await getTranslations("Growth");
   const nfLocale =
     locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US";
@@ -40,73 +52,30 @@ export async function GrowthDashboardView({ locale, data, celebrate }: Props) {
 
   return (
     <div className="space-y-10">
-      <GrowthConfetti trigger={celebrate} />
-
-      <GrowthHeroClient
-        levelName={`${data.profile.levelName}`}
-        earningsCents={data.earningsCents}
-        pendingDeals={data.pendingDeals}
-        progressCurrent={data.progress.current}
-        progressTarget={data.progress.target}
-        weeklyRank={data.compete.weeklyRank}
-        weeklyClosed={data.compete.weeklyClosed}
-        weeklyFieldSize={data.compete.weeklyFieldSize}
-      />
-
-      <GrowthMotivationBar
-        primary={data.compete.motivationPrimary}
-        secondary={data.compete.motivationSecondary}
-      />
-
-      <XpProgressBar
+      <DashboardHero
         locale={locale}
-        currentXp={data.profile.totalXp}
-        currentLevel={{
-          name: data.profile.levelName,
-          order: data.profile.levelOrder,
-          minXp: data.currentLevelMinXp,
-        }}
-        nextLevel={
-          data.nextLevel
-            ? { name: data.nextLevel.name, minXp: data.nextLevel.minXp, order: 0 }
-            : null
-        }
+        name={userName}
+        email={userEmail}
+        avatarUrl={avatarUrl}
+        levelName={data.profile.levelName}
+        levelOrder={data.profile.levelOrder}
+        totalXp={data.profile.totalXp}
+        currentLevelMinXp={data.currentLevelMinXp}
+        nextLevelName={data.nextLevel?.name ?? null}
+        nextLevelMinXp={data.nextLevel?.minXp ?? null}
       />
 
-      <PartnerInsightCarousel slides={data.insights} />
+      <DashboardStatsGrid locale={locale} data={data} />
 
-      <GlassCard className="border border-white/12 bg-white/[0.03] p-6">
-        <h2 className="font-[family-name:var(--font-cairo)] text-lg font-bold">
-          {t("missions.title")}
-        </h2>
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
-          {data.missions.length === 0 ? (
-            <div className="text-sm text-white/60">{t("missions.empty")}</div>
-          ) : null}
-          {data.missions.map((m) => (
-            <div
-              key={m.key}
-              className="rounded-xl border border-white/10 bg-black/25 p-4 transition-[transform,box-shadow] duration-300 motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-gold/20"
-            >
-              <div className="text-xs font-semibold text-white/55">{m.title}</div>
-              <div className="mt-2 text-xs text-white/45">
-                +{m.xpReward} {powerLabel} · {t("missions.progress", { current: m.progress, target: m.target })}
-              </div>
-              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-purple-500/40 via-gold to-gold-bright"
-                  style={{
-                    width: `${Math.min(100, Math.round((m.progress / Math.max(1, m.target)) * 100))}%`,
-                  }}
-                />
-              </div>
-              {m.completed ? (
-                <div className="mt-2 text-xs font-semibold text-gold">{t("missions.done")}</div>
-              ) : null}
-            </div>
-          ))}
-        </div>
-      </GlassCard>
+      <DashboardMissions locale={locale} missions={data.missions} />
+
+      <DashboardBadgesSection locale={locale} badges={data.badges} />
+
+      <DashboardLeaderboardPreview
+        locale={locale}
+        leaderboard={data.leaderboard}
+        currentUserId={userId}
+      />
 
       <GrowthActivityFeed initial={data.activityFeed} />
 
@@ -199,7 +168,11 @@ export async function GrowthDashboardView({ locale, data, celebrate }: Props) {
           </div>
           <div className="mt-5 space-y-3">
             {data.deals.length === 0 ? (
-              <div className="text-sm text-white/60">{t("deals.empty")}</div>
+              <EmptyState
+                illustration="rocket"
+                message={t("deals.empty")}
+                actionLabel={`+ ${t("hero.addLead")}`}
+              />
             ) : (
               data.deals.map((d) => (
                 <div

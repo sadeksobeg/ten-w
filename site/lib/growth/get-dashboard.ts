@@ -50,6 +50,9 @@ export type DashboardBadge = {
   name: string;
   category: string;
   hidden: boolean;
+  description?: string | null;
+  earned: boolean;
+  grantedAt?: string | null;
 };
 
 export type DashboardMission = {
@@ -96,6 +99,8 @@ export type DashboardData = {
   currentLevelMinXp: number;
   progress: { current: number; target: number };
   earningsCents: number;
+  earningsThisMonthCents: number;
+  rankDelta: number;
   deals: DashboardDeal[];
   network: DashboardNetworkRow[];
   ledger: DashboardLedgerRow[];
@@ -134,12 +139,14 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     networkProfiles,
     ledger,
     products,
-    badges,
+    userBadges,
+    allBadgeDefs,
     streak,
     lb,
     missionDefs,
     missionDays,
     activityRows,
+    monthEarnings,
   ] = await Promise.all([
       prisma.deal.count({ where: { partnerId: userId, status: DealStatus.CLOSED } }),
       prisma.deal.count({ where: { partnerId: userId, status: DealStatus.PENDING } }),
@@ -177,17 +184,40 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
       prisma.userBadge.findMany({
         where: { userId },
         include: {
-          badge: { select: { key: true, name: true, category: true, hidden: true } },
+          badge: {
+            select: {
+              key: true,
+              name: true,
+              category: true,
+              hidden: true,
+              description: true,
+            },
+          },
         },
+      }),
+      prisma.badgeDefinition.findMany({
+        where: { hidden: false },
+        orderBy: { key: "asc" },
+        select: { key: true, name: true, description: true, hidden: true, category: true },
       }),
       prisma.userStreak.findUnique({ where: { userId } }),
       weeklyLeaderboard(8),
       fetchMissionDefinitionsSafe(prisma),
       fetchUserMissionDaySafe(prisma, userId, day),
       fetchActivityEventsSafe(prisma, 20),
+      (() => {
+        const start = new Date();
+        start.setUTCDate(1);
+        start.setUTCHours(0, 0, 0, 0);
+        return prisma.commissionLedger.aggregate({
+          where: { userId, createdAt: { gte: start } },
+          _sum: { amountCents: true },
+        });
+      })(),
     ]);
 
   const earningsCents = await sumEarningsCents(userId);
+  const earningsThisMonthCents = monthEarnings._sum.amountCents ?? 0;
 
   const [weeklyCompete, monthlyCompete, percentileBetter, monthlyLb] = await Promise.all([
     partnerRankInWindow(userId, WEEK_MS),
@@ -251,12 +281,24 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     completed: !!progMap.get(m.key)?.completedAt,
   }));
 
-  const badgesData: DashboardBadge[] = badges.map((b) => ({
-    key: b.badge.key,
-    name: b.badge.name,
-    category: b.badge.category,
-    hidden: b.badge.hidden,
-  }));
+  const earnedMap = new Map(
+    userBadges.map((b) => [
+      b.badge.key,
+      { grantedAt: b.grantedAt.toISOString(), description: b.badge.description },
+    ]),
+  );
+  const badgesData: DashboardBadge[] = allBadgeDefs.map((def) => {
+    const earned = earnedMap.get(def.key);
+    return {
+      key: def.key,
+      name: def.name,
+      category: def.category,
+      hidden: def.hidden,
+      description: def.description,
+      earned: !!earned,
+      grantedAt: earned?.grantedAt ?? null,
+    };
+  });
 
   const activityData: DashboardActivity[] = activityRows.map((a) => ({
     id: a.id,
@@ -285,6 +327,8 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
       : null,
     progress: { current: closedDeals, target: progressTarget },
     earningsCents,
+    earningsThisMonthCents,
+    rankDelta: 0,
     deals: deals.map((d) => ({
       id: d.id,
       status: d.status,

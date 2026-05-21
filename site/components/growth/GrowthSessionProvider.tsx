@@ -9,7 +9,5 @@ type Props = {
 };
 
 export function GrowthSessionProvider({ children, session }: Props) {
-  return (
-    <SessionProvider session={session ?? undefined}>{children}</SessionProvider>
-  );
+  return <SessionProvider session={session ?? undefined}>{children}</SessionProvider>;
 }

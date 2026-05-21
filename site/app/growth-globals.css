@@ -1,0 +1,149 @@
+/* Growth Engine — scoped design tokens (import only from growth layout) */
+.growth-root {
+  --growth-gold: #b07d2b;
+  --growth-gold-bright: #e4b84d;
+  --growth-bg: #0a0a0f;
+  --growth-surface: #111118;
+  --growth-surface-2: #1a1a24;
+  --growth-border: rgba(180, 130, 40, 0.15);
+  --growth-text: #f0ede8;
+  --growth-text-sub: #8a8490;
+  --growth-purple: #534ab7;
+  --growth-red: #a32d2d;
+  --growth-green: #3b6d11;
+}
+
+.growth-page-enter {
+  animation: growthFadeInUp 0.3s ease-out;
+}
+
+@keyframes growthFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.growth-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--growth-gold) 0%,
+    var(--growth-gold-bright) 50%,
+    var(--growth-gold) 100%
+  );
+  background-size: 200% 100%;
+  animation: growthShimmer 2s linear infinite;
+}
+
+@keyframes growthShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.growth-badge-earn {
+  animation: growthBadgeEarn 0.8s ease-out;
+}
+
+@keyframes growthBadgeEarn {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.3) rotate(10deg);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(0.9) rotate(-5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.growth-bell-ring {
+  animation: growthBellRing 2s ease-in-out 1s infinite;
+}
+
+@keyframes growthBellRing {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20% {
+    transform: rotate(15deg);
+  }
+  40% {
+    transform: rotate(-12deg);
+  }
+  60% {
+    transform: rotate(8deg);
+  }
+  80% {
+    transform: rotate(-5deg);
+  }
+}
+
+.growth-card-hover {
+  transition:
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.growth-card-hover:hover {
+  border-color: rgba(180, 130, 40, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.growth-toast-enter {
+  animation: growthToastIn 0.35s ease-out;
+}
+
+@keyframes growthToastIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.growth-skeleton-pulse {
+  animation: growthSkeletonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes growthSkeletonPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .growth-page-enter,
+  .growth-shimmer,
+  .growth-badge-earn,
+  .growth-bell-ring,
+  .growth-skeleton-pulse,
+  .growth-toast-enter {
+    animation: none !important;
+  }
+  .growth-card-hover:hover {
+    transform: none;
+  }
+}

@@ -1,14 +1,17 @@
 import { EventStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
-import { GlassCard } from "@/components/ui/GlassCard";
-import { prisma } from "@/lib/prisma";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { CreateEventForm } from "@/components/growth/admin/EventAdminForms";
 import {
   adminUpdateEventStatusFormAction,
   adminUpdateParticipantProgressFormAction,
 } from "@/lib/growth/actions";
+import { prisma } from "@/lib/prisma";
 
-export default async function GrowthAdminEventsPage() {
+type PageProps = { params: Promise<{ locale: string }> };
+
+export default async function GrowthAdminEventsPage({ params }: PageProps) {
+  const { locale } = await params;
   const t = await getTranslations("Growth.admin.events");
 
   const events = await prisma.growthEvent.findMany({
@@ -31,7 +34,7 @@ export default async function GrowthAdminEventsPage() {
       <GlassCard className="p-4 sm:p-6">
         <h2 className="text-lg font-bold">{t("createTitle")}</h2>
         <div className="mt-5">
-          <CreateEventForm />
+          <CreateEventForm locale={locale} />
         </div>
       </GlassCard>
 

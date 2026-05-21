@@ -2,10 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { GlassCard } from "@/components/ui/GlassCard";
-import { getPublicProfileBySlug } from "@/lib/growth/get-public-profile";
+import { BadgeGrid } from "@/components/growth/badges/BadgeGrid";
+import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { ProfileViewTracker } from "@/components/growth/ProfileViewTracker";
-import { XpProgressBar } from "@/components/growth/XpProgressBar";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { GoldButton } from "@/components/growth/ui/GoldButton";
+import { LevelBadge } from "@/components/growth/ui/LevelBadge";
+import { getLevelVisual } from "@/lib/growth/level-visual";
+import { getPublicProfileBySlug } from "@/lib/growth/get-public-profile";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 
 type Props = {
@@ -27,10 +31,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function initials(name: string): string {
-  const parts = name.trim().split(/\s+/).slice(0, 2);
-  return parts.map((p) => p[0]?.toUpperCase() ?? "").join("") || "P";
-}
+const SKILL_PILLS = [
+  "Python",
+  "AI",
+  "Cybersecurity",
+  "Cloud",
+  "DevOps",
+] as const;
 
 export default async function PublicPartnerProfilePage({ params }: Props) {
   const { locale, slug } = await params;
@@ -40,136 +47,138 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
 
   const xpLabel = getXpBrandLabel(locale);
   const registerHref = `/${locale}/growth/register?ref=${encodeURIComponent(data.referralCode)}`;
+  const lv = getLevelVisual(data.levelName);
 
   return (
     <>
       <ProfileViewTracker slug={slug} />
 
-      <GlassCard className="border border-white/12 bg-white/[0.03] p-6 sm:p-8">
-        <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-start">
-          {data.avatarUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={data.avatarUrl}
-              alt=""
-              className="size-24 rounded-2xl border border-white/15 object-cover"
-            />
-          ) : (
-            <div
-              className="flex size-24 items-center justify-center rounded-2xl border border-gold/30 bg-gold/15 text-2xl font-extrabold text-gold"
-              aria-hidden
-            >
-              {initials(data.name)}
+      <div
+        className="overflow-hidden rounded-2xl border border-[var(--growth-border)]"
+        style={{
+          background: `linear-gradient(135deg, ${lv.gradientFrom}33, var(--growth-surface) 55%, ${lv.gradientTo}22)`,
+        }}
+      >
+        <div className="flex flex-col items-center gap-4 px-6 py-10 text-center sm:flex-row sm:text-start">
+          <div className="relative shrink-0">
+            <svg width="112" height="112" className="-rotate-90" aria-hidden>
+              <circle cx="56" cy="56" r="48" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3" />
+              <circle cx="56" cy="56" r="48" fill="none" stroke={lv.ringColor} strokeWidth="3" />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <GrowthAvatar
+                name={data.name}
+                email={data.referralCode}
+                avatarUrl={data.avatarUrl}
+                size="lg"
+                className="!size-24"
+              />
             </div>
-          )}
-          <div className="flex-1">
-            <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold">
-              {data.name}
-            </h1>
+          </div>
+          <div className="min-w-0 flex-1">
+            <h1 className="font-[family-name:var(--font-cairo)] text-3xl font-extrabold">{data.name}</h1>
             {data.displayTitle ? (
               <p className="mt-1 text-sm text-gold/90">{data.displayTitle}</p>
             ) : null}
-            <p className="mt-2 text-xs tracking-wide text-white/50">T.E.N.E.G.T.A Partner</p>
-            <span className="mt-3 inline-flex rounded-full border border-purple-400/30 bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-100">
-              {data.levelName}
-            </span>
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+              <LevelBadge levelName={data.levelName} size="lg" />
+              <span className="text-xs text-[var(--growth-text-sub)]">T.E.N.E.G.T.A</span>
+            </div>
             {data.bio ? (
-              <p className="mt-4 text-sm leading-relaxed text-white/70">{data.bio}</p>
+              <p className="mt-4 text-sm leading-relaxed text-[var(--growth-text-sub)]">{data.bio}</p>
+            ) : null}
+            {data.socialLinks ? (
+              <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
+                {Object.entries(data.socialLinks).map(([k, url]) => (
+                  <a
+                    key={k}
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-lg border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold capitalize hover:border-gold/30"
+                  >
+                    {k}
+                  </a>
+                ))}
+              </div>
             ) : null}
           </div>
         </div>
+      </div>
 
-        <div className="mt-8">
-          <XpProgressBar
-            locale={locale}
-            currentXp={data.totalXp}
-            currentLevel={{
-              name: data.levelName,
-              order: data.levelOrder,
-              minXp: data.currentLevelMinXp,
-            }}
-            nextLevel={
-              data.nextLevel
-                ? { name: data.nextLevel.name, minXp: data.nextLevel.minXp, order: 0 }
-                : null
-            }
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[
+          { label: xpLabel, value: String(data.totalXp), icon: "⚡" },
+          { label: t("closedDeals"), value: String(data.closedDeals), icon: "🤝" },
+          { label: t("badges"), value: String(data.badgeCount), icon: "🏆" },
+          { label: locale === "ar" ? "مشاهدات" : "Views", value: String(data.profileViews), icon: "👁" },
+        ].map((s) => (
+          <GlassCard key={s.label} className="p-4 text-center">
+            <span className="text-lg" aria-hidden>
+              {s.icon}
+            </span>
+            <div className="mt-1 text-xl font-extrabold text-gold">{s.value}</div>
+            <div className="text-[10px] text-[var(--growth-text-sub)]">{s.label}</div>
+          </GlassCard>
+        ))}
+      </div>
+
+      <section className="mt-8">
+        <h2 className="text-lg font-bold">{t("badgesTitle")}</h2>
+        <GlassCard className="mt-4">
+          <BadgeGrid
+            badges={data.allBadges.map((b) => ({
+              key: b.key,
+              name: b.earned ? b.name : "???",
+              description: b.earned ? undefined : t("lockedBadge"),
+              earned: b.earned,
+              hidden: b.hidden,
+            }))}
+            size="md"
+            showLocked
           />
-        </div>
+        </GlassCard>
+      </section>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-white/10 bg-black/25 p-4 text-center">
-            <div className="text-xs text-white/50">{xpLabel}</div>
-            <div className="mt-1 text-xl font-bold text-gold">{data.totalXp}</div>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-black/25 p-4 text-center">
-            <div className="text-xs text-white/50">{t("closedDeals")}</div>
-            <div className="mt-1 text-xl font-bold text-white">{data.closedDeals}</div>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-black/25 p-4 text-center">
-            <div className="text-xs text-white/50">{t("badges")}</div>
-            <div className="mt-1 text-xl font-bold text-white">{data.badgeCount}</div>
-          </div>
-        </div>
-      </GlassCard>
-
-      <GlassCard className="mt-6 border border-white/12 bg-white/[0.03] p-6">
-        <h2 className="font-[family-name:var(--font-cairo)] text-lg font-bold">{t("badgesTitle")}</h2>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {data.allBadges.map((b) => (
+      <section className="mt-8">
+        <h2 className="text-sm font-bold text-[var(--growth-text-sub)]">
+          {locale === "ar" ? "المهارات" : "Skills"}
+        </h2>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {SKILL_PILLS.map((skill) => (
             <span
-              key={b.key}
-              className={
-                b.earned
-                  ? "rounded-full border border-purple-400/25 bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-100"
-                  : "rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/35"
-              }
+              key={skill}
+              className="rounded-full border border-[var(--growth-border)] bg-white/[0.04] px-3 py-1 text-xs font-semibold"
             >
-              {b.name}
+              {skill}
             </span>
           ))}
         </div>
-      </GlassCard>
+      </section>
 
-      {data.socialLinks && Object.keys(data.socialLinks).length > 0 ? (
-        <GlassCard className="mt-6 border border-white/12 bg-white/[0.03] p-6">
-          <h2 className="text-lg font-bold">{t("channels")}</h2>
-          <ul className="mt-3 space-y-2 text-sm text-white/70">
-            {Object.entries(data.socialLinks).map(([k, v]) => (
-              <li key={k}>
-                <span className="text-white/45">{k}: </span>
-                {v.startsWith("http") ? (
-                  <a href={v} className="text-gold hover:underline" target="_blank" rel="noreferrer">
-                    {v}
-                  </a>
-                ) : (
-                  v
-                )}
-              </li>
-            ))}
-          </ul>
-        </GlassCard>
-      ) : null}
-
-      <GlassCard className="mt-6 border border-gold/20 bg-gold/5 p-6 text-center">
+      <GlassCard className="mt-8 p-6 text-center sm:text-start">
         <h2 className="text-lg font-bold">{t("ctaTitle")}</h2>
-        <p className="mt-2 text-sm text-white/65">{t("ctaBody")}</p>
-        <Link
-          href={registerHref}
-          className="mt-5 inline-flex rounded-2xl bg-gradient-to-r from-gold/35 via-gold to-gold-bright px-8 py-3 text-sm font-extrabold text-bg"
-        >
-          {t("ctaButton")}
+        <p className="mt-2 text-sm text-[var(--growth-text-sub)]">{t("ctaBody")}</p>
+        <Link href={registerHref} className="mt-4 inline-block">
+          <GoldButton>{t("ctaButton")} ←</GoldButton>
         </Link>
       </GlassCard>
 
-      <div
-        id="qr-placeholder"
-        className="mt-6 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.02] py-12 text-center"
-      >
-        <div className="text-4xl opacity-40" aria-hidden>
-          ▦
-        </div>
-        <p className="mt-3 text-sm font-semibold text-white/50">{t("qrSoon")}</p>
-      </div>
+      <GlassCard className="mt-6 flex flex-col items-center p-6 text-center">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden>
+          <rect x="8" y="8" width="20" height="20" fill="var(--growth-gold)" opacity="0.3" />
+          <rect x="36" y="8" width="20" height="20" fill="var(--growth-gold)" />
+          <rect x="8" y="36" width="20" height="20" fill="var(--growth-gold)" />
+          <rect x="36" y="36" width="8" height="8" fill="var(--growth-gold)" />
+          <rect x="48" y="36" width="8" height="8" fill="var(--growth-gold)" opacity="0.5" />
+          <rect x="36" y="48" width="8" height="8" fill="var(--growth-gold)" opacity="0.5" />
+          <rect x="48" y="48" width="8" height="8" fill="var(--growth-gold)" />
+        </svg>
+        <p className="mt-3 text-sm font-bold">{t("qrSoon")}</p>
+        <p className="text-xs text-[var(--growth-text-sub)]">
+          {locale === "ar" ? "شارك ملفك مباشرة" : "Share your card"}
+        </p>
+      </GlassCard>
     </>
   );
 }

@@ -1133,9 +1133,22 @@
       "title": "Badges",
       "empty": "No badges yet — close deals and grow your network.",
       "hiddenTag": "hidden",
+      "locked": "Locked",
+      "rarityCommon": "COMMON",
+      "rarityRare": "RARE",
+      "rarityEpic": "EPIC",
+      "rarityLegendary": "LEGENDARY",
       "unlockTitle": "BADGE UNLOCKED",
       "unlockSubtitle": "Key: {key}",
       "unlockCta": "Continue"
+    },
+    "settings": {
+      "title": "Profile settings",
+      "subtitle": "Avatar appears on your dashboard and public profile.",
+      "uploadHint": "Drop image or click to upload",
+      "save": "Save",
+      "saved": "Saved",
+      "error": "Could not save"
     },
     "kit": {
       "title": "Marketing kit",
@@ -1534,6 +1547,14 @@
         "sseReplayGo": "Replay from database (SSE)"
       },
       "overviewTitle": "Admin overview",
+      "recentActivity": "Recent activity",
+      "trendWeek": "vs prior week",
+      "overview": {
+        "actionCreatePartner": "Create partner",
+        "actionNewEvent": "New event",
+        "actionBroadcast": "Broadcast",
+        "actionGrantBadge": "Grant badge"
+      },
       "users": "Users",
       "partnerProfiles": "Partner profiles",
       "dealsClosed": "Closed deals",
@@ -1578,6 +1599,15 @@
         "email": "User email",
         "submit": "Grant badge",
         "badgeKey": "Badge key",
+        "confirmTitle": "Confirm badge grant",
+        "confirmBody": "Grant «{badge}» to {partner}",
+        "cancel": "Cancel",
+        "confirmSubmit": "Confirm grant",
+        "toastSuccess": "Badge granted",
+        "errors": {
+          "badge_already_granted": "Badge already granted",
+          "unknown": "Something went wrong"
+        },
         "revokeTitle": "Revoke badge",
         "revokeHint": "Removes any badge (including auto badges) from the user.",
         "revokeSubmit": "Revoke",

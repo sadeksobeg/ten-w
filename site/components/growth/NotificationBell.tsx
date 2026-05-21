@@ -88,17 +88,41 @@ export function NotificationBell({ locale }: Props) {
   }, [open]);
 
   async function markRead(id: string) {
-    await fetch(`/api/growth/notifications/${id}/read`, { method: "POST" });
-    void load();
+    const item = items.find((x) => x.id === id);
+    if (!item || item.isRead) return;
+
+    const prevItems = items;
+    const prevUnread = unread;
+    setItems((list) =>
+      list.map((x) => (x.id === id ? { ...x, isRead: true } : x)),
+    );
+    setUnread((c) => Math.max(0, c - 1));
+
+    try {
+      const res = await fetch(`/api/growth/notifications/${id}/read`, { method: "POST" });
+      if (!res.ok) throw new Error("read failed");
+    } catch {
+      setItems(prevItems);
+      setUnread(prevUnread);
+    }
   }
 
   async function markAll() {
-    await fetch("/api/growth/notifications/read-all", { method: "POST" });
-    void load();
+    const prevItems = items;
+    const prevUnread = unread;
+    setItems((list) => list.map((x) => ({ ...x, isRead: true })));
+    setUnread(0);
+    try {
+      const res = await fetch("/api/growth/notifications/read-all", { method: "POST" });
+      if (!res.ok) throw new Error("read-all failed");
+    } catch {
+      setItems(prevItems);
+      setUnread(prevUnread);
+    }
   }
 
   async function onClickItem(n: NotificationRow) {
-    if (!n.isRead) await markRead(n.id);
+    if (!n.isRead) void markRead(n.id);
     setOpen(false);
     if (n.link) router.push(n.link);
   }
@@ -111,7 +135,9 @@ export function NotificationBell({ locale }: Props) {
         className="relative rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-sm hover:border-gold/30"
         aria-label={t("title")}
       >
-        <span aria-hidden>🔔</span>
+        <span className={unread > 0 ? "growth-bell-ring inline-block" : ""} aria-hidden>
+          🔔
+        </span>
         {unread > 0 ? (
           <span className="absolute -end-1 -top-1 flex size-5 items-center justify-center rounded-full bg-gold text-[10px] font-bold text-bg">
             {unread > 9 ? "9+" : unread}

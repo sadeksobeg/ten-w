@@ -1041,7 +1041,8 @@
       "ctaTitle": "هل تريد الانضمام للشبكة؟",
       "ctaBody": "سجّل كشريك وابدأ بناء دخلك مع T.E.N.E.G.T.A",
       "ctaButton": "انضم الآن",
-      "qrSoon": "رمز QR — قريباً"
+      "qrSoon": "رمز QR — قريباً",
+      "lockedBadge": "شارة مخفية — أكمل الإنجازات لفتحها"
     },
     "nextLevel": "التالي: {name} عند {n} صفقة مغلقة",
     "maxLevel": "أنت على أعلى مسار مستويات حاليًا — واصل تراكم الأداء والنتائج.",
@@ -1133,9 +1134,22 @@
       "title": "الشارات",
       "empty": "لا شارات بعد — أغلق صفقات ووسّع شبكتك.",
       "hiddenTag": "مخفية",
+      "locked": "مقفل",
+      "rarityCommon": "عادي",
+      "rarityRare": "نادر",
+      "rarityEpic": "ملحمي",
+      "rarityLegendary": "أسطوري",
       "unlockTitle": "شارة جديدة",
       "unlockSubtitle": "المفتاح: {key}",
       "unlockCta": "متابعة"
+    },
+    "settings": {
+      "title": "إعدادات الملف",
+      "subtitle": "صورة الملف الشخصي تظهر في لوحتك وبروفايلك العام.",
+      "uploadHint": "اسحب صورة أو انقر للرفع",
+      "save": "حفظ",
+      "saved": "تم الحفظ",
+      "error": "تعذر الحفظ"
     },
     "kit": {
       "title": "حزمة التسويق",
@@ -1480,7 +1494,14 @@
         "createSubmit": "إنشاء الفعالية",
         "created": "تم إنشاء الفعالية",
         "participants": "مشاركين",
-        "updateProgress": "تحديث"
+        "updateProgress": "تحديث",
+        "coverImage": "صورة الغلاف",
+        "coverPlaceholder": "اسحب صورة أو انقر للرفع",
+        "livePreview": "معاينة مباشرة",
+        "previewTitle": "عنوان الفعالية",
+        "previewDesc": "وصف مختصر يظهر للشركاء",
+        "previewJoin": "انضم الآن",
+        "previewView": "عرض التفاصيل"
       },
       "notifications": {
         "title": "الإشعارات",
@@ -1533,6 +1554,14 @@
         "sseReplayGo": "إعادة من قاعدة البيانات (SSE)"
       },
       "overviewTitle": "لوحة الإدارة",
+      "recentActivity": "النشاط الأخير",
+      "trendWeek": "مقارنة بالأسبوع السابق",
+      "overview": {
+        "actionCreatePartner": "إنشاء شريك",
+        "actionNewEvent": "فعالية جديدة",
+        "actionBroadcast": "إشعار جماعي",
+        "actionGrantBadge": "منح شارة"
+      },
       "users": "المستخدمون",
       "partnerProfiles": "ملفات الشركاء",
       "dealsClosed": "صفقات مغلقة",
@@ -1577,6 +1606,15 @@
         "email": "بريد المستخدم",
         "submit": "منح الشارة",
         "badgeKey": "مفتاح الشارة",
+        "confirmTitle": "تأكيد منح الشارة",
+        "confirmBody": "منح «{badge}» للشريك: {partner}",
+        "cancel": "إلغاء",
+        "confirmSubmit": "تأكيد المنح",
+        "toastSuccess": "تم منح الشارة بنجاح",
+        "errors": {
+          "badge_already_granted": "الشارة ممنوحة بالفعل",
+          "unknown": "حدث خطأ"
+        },
         "revokeTitle": "سحب شارة",
         "revokeHint": "يزيل أي شارة (بما فيها التلقائية) من المستخدم.",
         "revokeSubmit": "سحب",

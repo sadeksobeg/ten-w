@@ -1,7 +1,8 @@
 import { BadgeType } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
-import { GlassCard } from "@/components/ui/GlassCard";
-import { assignAdminBadgeAction, revokeAdminBadgeAction } from "@/lib/growth/actions";
+import { AdminBadgesClient } from "@/components/growth/admin/AdminBadgesClient";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { revokeAdminBadgeAction } from "@/lib/growth/actions";
 import { prisma } from "@/lib/prisma";
 
 export default async function GrowthAdminBadgesPage() {
@@ -10,6 +11,7 @@ export default async function GrowthAdminBadgesPage() {
     prisma.badgeDefinition.findMany({
       where: { type: BadgeType.ADMIN },
       orderBy: { key: "asc" },
+      select: { key: true, name: true },
     }),
     prisma.badgeDefinition.findMany({ orderBy: { key: "asc" } }),
   ]);
@@ -20,61 +22,27 @@ export default async function GrowthAdminBadgesPage() {
         {t("admin.badgesPage.title")}
       </h1>
 
-      <GlassCard className="p-4 sm:p-6">
-        <form action={assignAdminBadgeAction} className="grid gap-3 sm:grid-cols-12">
-          <label className="sm:col-span-5">
-            <span className="text-xs text-white/55">{t("admin.badgesPage.email")}</span>
-            <input
-              name="email"
-              type="email"
-              required
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
-            />
-          </label>
-          <label className="sm:col-span-4">
-            <span className="text-xs text-white/55">{t("admin.badgesPage.badgeKey")}</span>
-            <select
-              name="badgeKey"
-              required
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
-            >
-              {adminBadges.map((b) => (
-                <option key={b.id} value={b.key}>
-                  {b.key}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="flex items-end sm:col-span-3">
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-gradient-to-r from-gold/30 via-gold to-gold-bright px-4 py-3 text-xs font-extrabold text-bg"
-            >
-              {t("admin.badgesPage.submit")}
-            </button>
-          </div>
-        </form>
-      </GlassCard>
+      <AdminBadgesClient adminBadges={adminBadges} />
 
-      <GlassCard className="p-4 sm:p-6">
+      <GlassCard>
         <h2 className="text-lg font-bold">{t("admin.badgesPage.revokeTitle")}</h2>
-        <p className="mt-2 text-sm text-white/55">{t("admin.badgesPage.revokeHint")}</p>
+        <p className="mt-2 text-sm text-[var(--growth-text-sub)]">{t("admin.badgesPage.revokeHint")}</p>
         <form action={revokeAdminBadgeAction} className="mt-5 grid gap-3 sm:grid-cols-12">
           <label className="sm:col-span-5">
-            <span className="text-xs text-white/55">{t("admin.badgesPage.email")}</span>
+            <span className="text-xs text-[var(--growth-text-sub)]">{t("admin.badgesPage.email")}</span>
             <input
               name="email"
               type="email"
               required
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
+              className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
             />
           </label>
           <label className="sm:col-span-4">
-            <span className="text-xs text-white/55">{t("admin.badgesPage.revokeBadgeKey")}</span>
+            <span className="text-xs text-[var(--growth-text-sub)]">{t("admin.badgesPage.revokeBadgeKey")}</span>
             <select
               name="badgeKey"
               required
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
+              className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
             >
               {allBadges.map((b) => (
                 <option key={b.id} value={b.key}>
@@ -86,7 +54,7 @@ export default async function GrowthAdminBadgesPage() {
           <div className="flex items-end sm:col-span-3">
             <button
               type="submit"
-              className="w-full rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-xs font-semibold text-red-200 hover:border-red-400/50"
+              className="w-full rounded-xl border border-rose-500/40 bg-rose-500/15 px-4 py-3 text-xs font-semibold text-rose-200"
             >
               {t("admin.badgesPage.revokeSubmit")}
             </button>

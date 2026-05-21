@@ -1195,9 +1195,22 @@
       "title": "Badges",
       "empty": "No badges yet — close deals and grow your network.",
       "hiddenTag": "hidden",
+      "locked": "Verrouillé",
+      "rarityCommon": "COMMUN",
+      "rarityRare": "RARE",
+      "rarityEpic": "ÉPIQUE",
+      "rarityLegendary": "LÉGENDAIRE",
       "unlockTitle": "BADGE UNLOCKED",
       "unlockSubtitle": "Key: {key}",
       "unlockCta": "Continue"
+    },
+    "settings": {
+      "title": "Profil",
+      "subtitle": "Avatar visible sur le tableau de bord et le profil public.",
+      "uploadHint": "Glisser une image ou cliquer",
+      "save": "Enregistrer",
+      "saved": "Enregistré",
+      "error": "Échec"
     },
     "kit": {
       "title": "Marketing kit",
