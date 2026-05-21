@@ -33,7 +33,7 @@ export default async function GrowthAdminHomePage({ params }: Props) {
 
   const stats = [
     { label: t("admin.users"), value: users },
-    { label: t("admin.partners"), value: partners },
+    { label: t("admin.partnerProfiles"), value: partners },
     { label: t("admin.dealsClosed"), value: closed },
     { label: t("admin.pendingDeals"), value: pending },
     {
