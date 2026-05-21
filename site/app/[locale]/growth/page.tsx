@@ -25,13 +25,22 @@ export default async function GrowthPage({ params, searchParams }: Props) {
   }
 
   await touchPartnerStreak(session.user.id);
-  const [data, userRow] = await Promise.all([
-    getPartnerDashboard(session.user.id),
-    prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { avatarUrl: true },
-    }),
-  ]);
+
+  let data;
+  try {
+    data = await getPartnerDashboard(session.user.id);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "";
+    if (msg === "missing_seed" || msg === "not_a_partner") {
+      throw e;
+    }
+    throw new Error("dashboard_load_failed");
+  }
+
+  const userRow = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { avatarUrl: true },
+  }).catch(() => null);
 
   const celebrate = typeof sp.celebrate === "string" ? sp.celebrate : undefined;
   let badgeUnlockName: string | undefined;

@@ -9,9 +9,14 @@ function utcDayStart(d: Date): number {
 export async function touchPartnerStreak(userId: string) {
   const today = utcDayStart(new Date());
 
-  const existing = await prisma.userStreak.findUnique({
-    where: { userId },
-  });
+  let existing: Awaited<ReturnType<typeof prisma.userStreak.findUnique>>;
+  try {
+    existing = await prisma.userStreak.findUnique({
+      where: { userId },
+    });
+  } catch {
+    return;
+  }
 
   if (!existing) {
     await prisma.userStreak.create({

@@ -6,8 +6,12 @@ import { SectionHeader } from "@/components/growth/ui/SectionHeader";
 import { StatCard } from "@/components/growth/ui/StatCard";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
-import { countNotificationsSafe } from "@/lib/growth/prisma-optional";
-import { fetchActivityEventsSafe } from "@/lib/growth/prisma-optional";
+import {
+  countEventParticipantsSafe,
+  countGrowthEventsSafe,
+  countNotificationsSafe,
+  fetchActivityEventsSafe,
+} from "@/lib/growth/prisma-optional";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -48,8 +52,8 @@ export default async function GrowthAdminHomePage({ params }: Props) {
     prisma.deal.count({ where: { status: DealStatus.CLOSED } }),
     prisma.deal.count({ where: { status: DealStatus.PENDING } }),
     prisma.commissionLedger.aggregate({ _sum: { amountCents: true } }),
-    prisma.growthEvent.count({ where: { status: "ACTIVE" } }),
-    prisma.eventParticipant.count(),
+    countGrowthEventsSafe(prisma, { status: "ACTIVE" }),
+    countEventParticipantsSafe(prisma),
     session?.user?.id
       ? countNotificationsSafe(prisma, {
           userId: session.user.id,

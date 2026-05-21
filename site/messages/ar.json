@@ -999,7 +999,7 @@
     "errors": {
       "eyebrow": "محرك النمو",
       "title": "حدث خطأ",
-      "body": "تعذر تحميل لوحة الشريك. جرّب مرة أخرى. إن استمر الخطأ، تأكد من اكتمال قاعدة البيانات على السيرفر (ترحيل 0003 + seed).",
+      "body": "تعذر تحميل لوحة Growth. على السيرفر نفّذ: unset DATABASE_URL ثم bash scripts/server-repair-growth-0003.sh --force و bash scripts/run-seed.sh ثم أعد تشغيل الموقع.",
       "retry": "إعادة المحاولة",
       "home": "الرئيسية"
     },

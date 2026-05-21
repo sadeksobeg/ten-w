@@ -105,8 +105,53 @@ export async function fetchActivityEventsSafe(client: PrismaClient, take: number
   const c = client as unknown as {
     activityEvent: { findMany: (a: object) => Promise<ActivityRow[]> };
   };
-  return c.activityEvent.findMany({
-    orderBy: { createdAt: "desc" },
-    take,
-  });
+  try {
+    return await c.activityEvent.findMany({
+      orderBy: { createdAt: "desc" },
+      take,
+    });
+  } catch {
+    return [];
+  }
+}
+
+export function growthEventModelsAvailable(client: PrismaClient): boolean {
+  const c = client as unknown as {
+    growthEvent?: { count?: unknown };
+    eventParticipant?: { count?: unknown };
+  };
+  return (
+    typeof c.growthEvent?.count === "function" &&
+    typeof c.eventParticipant?.count === "function"
+  );
+}
+
+export async function countGrowthEventsSafe(
+  client: PrismaClient,
+  where?: Record<string, unknown>,
+): Promise<number> {
+  if (!growthEventModelsAvailable(client)) return 0;
+  const c = client as unknown as {
+    growthEvent: { count: (a: { where?: Record<string, unknown> }) => Promise<number> };
+  };
+  try {
+    return await c.growthEvent.count({ where });
+  } catch {
+    return 0;
+  }
+}
+
+export async function countEventParticipantsSafe(
+  client: PrismaClient,
+  where?: Record<string, unknown>,
+): Promise<number> {
+  if (!growthEventModelsAvailable(client)) return 0;
+  const c = client as unknown as {
+    eventParticipant: { count: (a: { where?: Record<string, unknown> }) => Promise<number> };
+  };
+  try {
+    return await c.eventParticipant.count({ where });
+  } catch {
+    return 0;
+  }
 }
