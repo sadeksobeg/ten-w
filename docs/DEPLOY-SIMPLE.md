@@ -145,6 +145,32 @@ npx prisma db seed
 
 في الإنتاج غيّر كلمات المرور عبر `GROWTH_ADMIN_PASSWORD` و`GROWTH_DEMO_PASSWORD` في `site/.env` ولا تعتمد على القيم الافتراضية.
 
+**كلمة مرور الأدمن على السيرفر = قيمة `GROWTH_ADMIN_PASSWORD` في `site/.env` وقت تشغيل seed** (مثلاً إن كان `change-me-strong-admin` فهذه هي كلمة الدخول، وليست `ChangeMeAdmin!123`).
+
+### إذا فشل seed: `EventNotification` does not exist
+
+الترحيل `0003` لم يُطبَّق بعد. **لا تشغّل seed قبل migrate:**
+
+```bash
+cd /var/www/tenegta
+git pull origin main
+bash scripts/server-prisma.sh    # يطبّق 0002 و 0003 — راقب سطر Applying migration
+cd site
+npm run db:seed                  # يمسح بيانات Growth ويعيد إنشاء الأدمن
+bash ../scripts/server-restart.sh
+```
+
+تحقق من وجود الأدمن:
+
+```bash
+cd /var/www/tenegta/site
+bash ../scripts/run-prisma.sh db execute --schema prisma/schema.prisma --stdin <<'SQL'
+SELECT email, role, "isActive" FROM "User" WHERE email = 'admin@tenegta.local';
+SQL
+```
+
+ملف `scripts/server-generated-credentials.txt` يُنشأ فقط عند أول `server-setup-env.sh` — إن لم يوجد استخدم `grep GROWTH_ADMIN_PASSWORD site/.env`.
+
 ---
 
 ## ملخص الأوامر

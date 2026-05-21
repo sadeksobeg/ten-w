@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -35,7 +35,8 @@ export default function GrowthSignInPage() {
         setError("invalid");
         return;
       }
-      router.push("/growth");
+      const session = await getSession();
+      router.push(session?.user?.role === "ADMIN" ? "/growth/admin" : "/growth");
       router.refresh();
     } finally {
       setLoading(false);
