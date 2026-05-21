@@ -149,15 +149,21 @@ npx prisma db seed
 
 ### إذا فشل seed: `EventNotification` does not exist
 
-الترحيل `0003` لم يُطبَّق بعد. **لا تشغّل seed قبل migrate:**
+غالباً **انحراف ترحيل**: Prisma يقول `No pending migrations` لكن جداول `0003` غير موجودة.
 
 ```bash
 cd /var/www/tenegta
 git pull origin main
-bash scripts/server-prisma.sh    # يطبّق 0002 و 0003 — راقب سطر Applying migration
+bash scripts/server-repair-growth-0003.sh   # يصلح 0003 ثم يخبرك بتشغيل seed
 cd site
-npm run db:seed                  # يمسح بيانات Growth ويعيد إنشاء الأدمن
+npm run db:seed
 bash ../scripts/server-restart.sh
+```
+
+إن كانت قاعدة جديدة تماماً ولم يُسجَّل 0003 بعد:
+
+```bash
+bash scripts/server-prisma.sh
 ```
 
 تحقق من وجود الأدمن:
