@@ -1,3 +1,5 @@
+"use client";
+
 import { StatCard } from "@/components/growth/ui/StatCard";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
 

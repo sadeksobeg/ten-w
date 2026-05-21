@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { AnimatedNumber } from "@/components/growth/ui/AnimatedNumber";
 import { GlassCard } from "@/components/growth/ui/GlassCard";

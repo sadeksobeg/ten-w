@@ -26,6 +26,9 @@ export default function GrowthError({
         {t("title")}
       </h1>
       <p className="mt-3 text-sm leading-relaxed text-white/55">{t("body")}</p>
+      {error.digest ? (
+        <p className="mt-2 font-mono text-[10px] text-white/35">ref: {error.digest}</p>
+      ) : null}
       <div className="mt-6 flex flex-wrap justify-center gap-3">
         <button
           type="button"
