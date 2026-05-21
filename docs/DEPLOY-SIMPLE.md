@@ -94,6 +94,7 @@ git pull origin main
 sudo bash scripts/server-mailcow-reverse-proxy.sh
 sudo bash scripts/server-nginx-tenegta.sh
 sudo bash scripts/server-nginx-mail.sh
+# إن لم توجد شهادة: sudo certbot certonly --webroot -w /var/www/certbot -d mail.tenegta.com -d autodiscover.tenegta.com -d autoconfig.tenegta.com
 sudo systemctl start nginx
 curl -sI https://tenegta.com/ar | head -5
 ```
