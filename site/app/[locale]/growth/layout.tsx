@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { auth } from "@/auth";
 import { GrowthSessionProvider } from "@/components/growth/GrowthSessionProvider";
+
+/** Partner portal — must not be indexed (credential forms trigger Safe Browsing). */
+export const metadata: Metadata = {
+  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+};
 
 type Props = {
   children: ReactNode;

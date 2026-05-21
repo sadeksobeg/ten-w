@@ -33,7 +33,7 @@ const staticPaths = [
   "/terms",
   "/status",
   "/tech-radar",
-  "/growth",
+  // /growth omitted — partner login area; not for public indexing (Safe Browsing)
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

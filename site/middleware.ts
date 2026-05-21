@@ -10,7 +10,12 @@ export default function middleware(request: NextRequest) {
     url.pathname = `/${routing.defaultLocale}`;
     return NextResponse.redirect(url, 301);
   }
-  return intlMiddleware(request);
+
+  const res = intlMiddleware(request);
+  if (/\/growth(\/|$)/.test(request.nextUrl.pathname)) {
+    res.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
+  return res;
 }
 
 export const config = {
