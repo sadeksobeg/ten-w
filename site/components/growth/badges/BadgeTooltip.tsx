@@ -7,7 +7,8 @@ import {
   RARITY_LABEL_KEYS,
   type BadgeRarity,
 } from "@/lib/growth/badge-visual";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import type { BadgeProgress } from "@/lib/growth/badge-progress";
 
 type Props = {
   badgeKey: string;
@@ -16,7 +17,8 @@ type Props = {
   howTo?: string;
   earned: boolean;
   grantedAt?: string | null;
-  locale: string;
+  locale?: string;
+  progress?: BadgeProgress | null;
   children: ReactNode;
 };
 
@@ -27,10 +29,13 @@ export function BadgeTooltip({
   howTo,
   earned,
   grantedAt,
-  locale,
+  locale: localeProp,
+  progress,
   children,
 }: Props) {
   const t = useTranslations("Growth.badges");
+  const intlLocale = useLocale();
+  const locale = localeProp ?? intlLocale;
   const meta = getBadgeVisual(badgeKey);
   const rarity = meta.rarity as BadgeRarity;
   const dateStr =
@@ -64,16 +69,20 @@ export function BadgeTooltip({
         ) : null}
         {howTo ? (
           <p className="mt-2 text-xs text-gold/90">
-            <span className="font-semibold">
-              {locale === "ar" ? "كيف تُكتسب: " : locale === "fr" ? "Comment: " : "How: "}
-            </span>
+            <span className="font-semibold">{t("howTo")}: </span>
             {howTo}
           </p>
         ) : null}
-        {earned && dateStr ? (
-          <p className="mt-2 text-[10px] text-emerald-400/90">
-            {locale === "ar" ? `مُنحت في ${dateStr}` : locale === "fr" ? `Obtenu le ${dateStr}` : `Earned ${dateStr}`}
+        {!earned && progress ? (
+          <p className="mt-2 text-[10px] text-white/55">
+            {t(`progress.${progress.labelKey}`, {
+              current: progress.current,
+              target: progress.target,
+            })}
           </p>
+        ) : null}
+        {earned && dateStr ? (
+          <p className="mt-2 text-[10px] text-emerald-400/90">{t("earnedOn", { date: dateStr })}</p>
         ) : !earned ? (
           <p className="mt-2 text-[10px] text-white/45">{t("locked")}</p>
         ) : null}

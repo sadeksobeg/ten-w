@@ -1,11 +1,8 @@
-import { auth } from "@/auth";
 import { GrowthCelebrationClient } from "@/components/growth/GrowthCelebrationClient";
-import { GrowthDashboardView } from "@/components/growth/GrowthDashboardView";
-import { getPartnerDashboard } from "@/lib/growth/get-dashboard";
+import { GrowthHubView } from "@/components/growth/GrowthHubView";
+import { requirePartnerDashboard } from "@/lib/growth/partner-page";
 import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
-import { touchActivityDay, touchPartnerStreak } from "@/lib/growth/streak";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -16,31 +13,10 @@ export default async function GrowthPage({ params, searchParams }: Props) {
   const { locale } = await params;
   const sp = await searchParams;
 
-  const session = await auth();
-  if (!session?.user?.id) {
-    redirect(`/${locale}/growth/sign-in`);
-  }
-
-  if (session.user.role === "ADMIN") {
-    redirect(`/${locale}/growth/admin`);
-  }
-
-  await touchPartnerStreak(session.user.id);
-  await touchActivityDay(session.user.id);
-
-  let data;
-  try {
-    data = await getPartnerDashboard(session.user.id, locale);
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : "";
-    if (msg === "missing_seed" || msg === "not_a_partner") {
-      throw e;
-    }
-    throw new Error("dashboard_load_failed");
-  }
+  const { data, userId, userName, userEmail } = await requirePartnerDashboard(locale);
 
   const userRow = await prisma.user.findUnique({
-    where: { id: session.user.id },
+    where: { id: userId },
     select: { avatarUrl: true },
   }).catch(() => null);
 
@@ -60,14 +36,13 @@ export default async function GrowthPage({ params, searchParams }: Props) {
   return (
     <>
       <GrowthCelebrationClient celebrate={celebrate} badgeName={badgeUnlockName} />
-      <GrowthDashboardView
+      <GrowthHubView
         locale={locale}
         data={data}
-        celebrate={celebrate}
-        userId={session.user.id}
-        userName={session.user.name ?? session.user.email ?? "Partner"}
-        userEmail={session.user.email ?? ""}
-        avatarUrl={userRow?.avatarUrl ?? session.user.image}
+        userId={userId}
+        userName={userName}
+        userEmail={userEmail}
+        avatarUrl={userRow?.avatarUrl ?? undefined}
       />
     </>
   );

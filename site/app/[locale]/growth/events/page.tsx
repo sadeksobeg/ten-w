@@ -46,6 +46,7 @@ export default async function GrowthEventsPage({ params }: Props) {
       description: ev.description,
       coverImage: ev.coverImage,
       status: ev.status,
+      statusLabel: t(`status.${ev.status}` as "status.PUBLISHED"),
       startAt: ev.startAt.toISOString(),
       endAt: ev.endAt?.toISOString() ?? null,
       participantCount: ev._count.participants,

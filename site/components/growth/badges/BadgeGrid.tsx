@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { BadgeTooltip } from "@/components/growth/badges/BadgeTooltip";
+import { BadgeDetailDrawer } from "@/components/growth/badges/BadgeDetailDrawer";
+import type { BadgeProgress } from "@/lib/growth/badge-progress";
 
 export type BadgeGridItem = {
   key: string;
@@ -12,6 +15,7 @@ export type BadgeGridItem = {
   earned: boolean;
   grantedAt?: string | null;
   hidden?: boolean;
+  progress?: BadgeProgress | null;
 };
 
 type Props = {
@@ -23,6 +27,7 @@ type Props = {
 
 export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = true }: Props) {
   const t = useTranslations("Growth.badges");
+  const [drawer, setDrawer] = useState<BadgeGridItem | null>(null);
 
   const visible = badges.filter((b) => showLocked || b.earned || !b.hidden);
   const sorted = [...visible].sort((a, b) => {
@@ -30,30 +35,53 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
     return a.name.localeCompare(b.name, locale === "ar" ? "ar" : "en");
   });
 
-  if (sorted.length === 0) {
-    return null;
-  }
+  if (sorted.length === 0) return null;
 
   return (
-    <ul className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-      {sorted.map((b) => (
-        <li key={b.key} className="flex flex-col items-center gap-2">
-          <BadgeTooltip
-            badgeKey={b.key}
-            name={b.name}
-            description={b.description}
-            howTo={b.howTo}
-            earned={b.earned}
-            grantedAt={b.grantedAt}
-            locale={locale}
-          >
-            <BadgeIcon badgeKey={b.key} earned={b.earned} size={size} lockedLabel={t("locked")} />
-          </BadgeTooltip>
-          <span className="max-w-full truncate text-center text-[10px] font-semibold text-[var(--growth-text)]">
-            {b.name}
-          </span>
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+        {sorted.map((b) => (
+          <li key={b.key} className="flex flex-col items-center gap-2">
+            <BadgeTooltip
+              badgeKey={b.key}
+              name={b.name}
+              description={b.description}
+              howTo={b.howTo}
+              earned={b.earned}
+              grantedAt={b.grantedAt}
+              locale={locale}
+              progress={b.progress}
+            >
+              <button
+                type="button"
+                className="rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold"
+                onClick={() => setDrawer(b)}
+              >
+                <BadgeIcon badgeKey={b.key} earned={b.earned} size={size} lockedLabel={t("locked")} />
+              </button>
+            </BadgeTooltip>
+            <span className="max-w-full truncate text-center text-[10px] font-semibold text-[var(--growth-text)]">
+              {b.name}
+            </span>
+            {!b.earned && b.progress ? (
+              <span className="text-[9px] text-white/45">
+                {b.progress.current}/{b.progress.target}
+              </span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+      {drawer ? (
+        <BadgeDetailDrawer
+          badgeKey={drawer.key}
+          name={drawer.name}
+          description={drawer.description}
+          howTo={drawer.howTo}
+          earned={drawer.earned}
+          progress={drawer.progress ?? null}
+          onClose={() => setDrawer(null)}
+        />
+      ) : null}
+    </>
   );
 }

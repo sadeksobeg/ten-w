@@ -7,6 +7,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { prisma } from "@/lib/prisma";
 import { renderMarkdownLite } from "@/lib/growth/markdown-lite";
 import { JoinEventModal } from "@/components/growth/JoinEventModal";
+import { EventMilestoneTimeline } from "@/components/growth/events/EventMilestoneTimeline";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -54,7 +55,7 @@ export default async function GrowthEventDetailPage({ params }: Props) {
         <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold">{event.title}</h1>
         <p className="mt-3 text-sm text-white/70">{event.description}</p>
         <div className="mt-4 flex flex-wrap gap-3 text-xs text-white/45">
-          <span>{event.status}</span>
+          <span>{t(`status.${event.status}` as "status.PUBLISHED")}</span>
           <span>{new Date(event.startAt).toLocaleString()}</span>
           {event.endAt ? <span>→ {new Date(event.endAt).toLocaleString()}</span> : null}
           <span>
@@ -79,27 +80,20 @@ export default async function GrowthEventDetailPage({ params }: Props) {
 
       <GlassCard className="p-6">
         <h2 className="text-lg font-bold">{t("milestones")}</h2>
-        <ol className="mt-4 space-y-4 border-s border-white/10 ps-4">
-          {event.milestones.map((m) => {
-            const done = (myPart?.progress ?? 0) >= m.requiredProgress;
-            return (
-              <li key={m.id} className="relative">
-                <span
-                  className={
-                    done
-                      ? "absolute -start-[1.35rem] top-1 size-2.5 rounded-full bg-gold"
-                      : "absolute -start-[1.35rem] top-1 size-2.5 rounded-full border border-white/30 bg-transparent"
-                  }
-                />
-                <div className="text-sm font-semibold">{m.title}</div>
-                {m.description ? <p className="text-xs text-white/50">{m.description}</p> : null}
-                <div className="text-xs text-white/40">
-                  {m.requiredProgress}% · +{m.xpReward} ⚡
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+        <div className="mt-4">
+          <EventMilestoneTimeline
+            locale={locale}
+            currentProgress={myPart?.progress ?? 0}
+            milestones={event.milestones.map((m) => ({
+              id: m.id,
+              title: m.title,
+              description: m.description,
+              requiredProgress: m.requiredProgress,
+              xpReward: m.xpReward,
+              reached: (myPart?.progress ?? 0) >= m.requiredProgress,
+            }))}
+          />
+        </div>
       </GlassCard>
 
       {event.participants.length > 0 ? (

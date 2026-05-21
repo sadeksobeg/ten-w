@@ -100,6 +100,7 @@ export type DashboardData = {
     totalXp: number;
     levelName: string;
     levelOrder: number;
+    onboardingSteps?: Record<string, boolean> | null;
   };
   closedDeals: number;
   pendingDeals: number;
@@ -365,6 +366,10 @@ export async function getPartnerDashboard(
       totalXp: profile.totalXp,
       levelName: resolveLevelName(profile.currentLevel.name, locale),
       levelOrder: profile.currentLevel.order,
+      onboardingSteps:
+        profile.onboardingSteps && typeof profile.onboardingSteps === "object"
+          ? (profile.onboardingSteps as Record<string, boolean>)
+          : null,
     },
     closedDeals,
     pendingDeals,

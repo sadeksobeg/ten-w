@@ -5,18 +5,26 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 type Props = {
-  locale: string;
   children: ReactNode;
 };
 
 const NAV = [
-  { href: "/growth", key: "dashboard" as const },
+  { href: "/growth", key: "dashboard" as const, exact: true },
+  { href: "/growth/deals", key: "deals" as const },
+  { href: "/growth/earnings", key: "earnings" as const },
+  { href: "/growth/network", key: "network" as const },
   { href: "/growth/events", key: "events" as const },
   { href: "/growth/chat", key: "chat" as const },
+  { href: "/growth/notifications", key: "notifications" as const },
   { href: "/growth/settings", key: "settings" as const },
-];
+] as const;
 
-export function GrowthPartnerShell({ locale, children }: Props) {
+function isActive(pathname: string, href: string, exact?: boolean) {
+  if (exact) return pathname === href || pathname.endsWith(href);
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function GrowthPartnerShell({ children }: Props) {
   const t = useTranslations("Growth.nav");
   const pathname = usePathname();
 
@@ -27,46 +35,40 @@ export function GrowthPartnerShell({ locale, children }: Props) {
         : "text-white/60 hover:bg-white/[0.06] hover:text-white"
     }`;
 
+  const mobileNav = NAV.filter((n) =>
+    ["dashboard", "deals", "events", "chat", "notifications"].includes(n.key),
+  );
+
   return (
     <>
       <nav
-        className="mb-6 hidden gap-2 overflow-x-auto border-b border-white/10 pb-3 lg:flex [scrollbar-width:none]"
-        aria-label={locale === "ar" ? "قائمة الشريك" : "Partner navigation"}
+        className="mb-4 hidden gap-2 overflow-x-auto border-b border-white/10 pb-3 lg:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        aria-label={t("navAria")}
       >
-        {NAV.map((item) => {
-          const active =
-            item.href === "/growth"
-              ? pathname === "/growth"
-              : pathname.startsWith(item.href);
-          return (
-            <Link key={item.href} href={item.href} className={linkClass(active)}>
-              {item.key === "settings"
-                ? locale === "ar"
-                  ? "الإعدادات"
-                  : locale === "fr"
-                    ? "Réglages"
-                    : "Settings"
-                : t(item.key)}
-            </Link>
-          );
-        })}
+        {NAV.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={linkClass(isActive(pathname, item.href, "exact" in item ? item.exact : false))}
+          >
+            {t(item.key)}
+          </Link>
+        ))}
       </nav>
       {children}
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 flex justify-around border-t border-white/10 bg-[#0A0A0F]/95 px-2 py-2 backdrop-blur-md lg:hidden"
-        aria-label={locale === "ar" ? "تنقل سفلي" : "Mobile nav"}
+        className="fixed inset-x-0 bottom-0 z-40 flex justify-around border-t border-white/10 bg-[#0A0A0F]/95 px-1 py-2 backdrop-blur-md lg:hidden"
+        aria-label={t("mobileNavAria")}
       >
-        {NAV.slice(0, 3).map((item) => {
-          const active =
-            item.href === "/growth"
-              ? pathname === "/growth"
-              : pathname.startsWith(item.href);
-          return (
-            <Link key={item.href} href={item.href} className={`${linkClass(active)} flex-1 text-center`}>
-              {t(item.key)}
-            </Link>
-          );
-        })}
+        {mobileNav.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`${linkClass(isActive(pathname, item.href, "exact" in item ? item.exact : false))} min-w-0 flex-1 px-1 text-center text-[10px]`}
+          >
+            {t(item.key)}
+          </Link>
+        ))}
       </nav>
       <div className="h-16 lg:hidden" aria-hidden />
     </>

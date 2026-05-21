@@ -1378,3 +1378,213 @@ export async function updatePartnerAvatarAction(
   revalidateGrowth();
   return { ok: true };
 }
+
+export async function markAllNotificationsReadAction(): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id) return;
+  await prisma.notification.updateMany({
+    where: { userId: session.user.id, isRead: false },
+    data: { isRead: true },
+  });
+  revalidateGrowth();
+}
+
+export async function completeOnboardingStepFormAction(formData: FormData): Promise<void> {
+  await completeOnboardingStepAction(formData);
+}
+
+export async function completeOnboardingStepAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const step = String(formData.get("step") ?? "").trim();
+  if (!step) return { ok: false, error: "invalid_input" };
+
+  const profile = await prisma.partnerProfile.findUnique({
+    where: { userId: session.user.id },
+    select: { id: true, onboardingSteps: true },
+  });
+  if (!profile) return { ok: false, error: "not_partner" };
+
+  const prev =
+    profile.onboardingSteps && typeof profile.onboardingSteps === "object"
+      ? (profile.onboardingSteps as Record<string, boolean>)
+      : {};
+  await prisma.partnerProfile.update({
+    where: { id: profile.id },
+    data: { onboardingSteps: { ...prev, [step]: true } },
+  });
+  revalidateGrowth();
+  return { ok: true };
+}
+
+const rewardRuleSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1).max(120),
+  windowMs: z.coerce.number().int().positive(),
+  rankMin: z.coerce.number().int().min(1),
+  rankMax: z.coerce.number().int().min(1),
+  bonusCents: z.coerce.number().int().min(0),
+  badgeKey: z.string().max(64).optional().or(z.literal("")),
+  active: z.coerce.boolean().optional(),
+});
+
+export async function adminUpsertRewardRuleFormAction(formData: FormData): Promise<void> {
+  await adminUpsertRewardRuleAction(formData);
+}
+
+export async function adminUpsertRewardRuleAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = rewardRuleSchema.safeParse({
+    id: formData.get("id") ?? undefined,
+    name: formData.get("name"),
+    windowMs: formData.get("windowMs"),
+    rankMin: formData.get("rankMin"),
+    rankMax: formData.get("rankMax"),
+    bonusCents: formData.get("bonusCents"),
+    badgeKey: formData.get("badgeKey") ?? "",
+    active: formData.get("active") === "on" || formData.get("active") === "true",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+  const d = parsed.data;
+  const badgeKey = d.badgeKey?.trim() || null;
+
+  if (d.id) {
+    await prisma.leaderboardRewardRule.update({
+      where: { id: d.id },
+      data: {
+        name: d.name,
+        windowMs: BigInt(d.windowMs),
+        rankMin: d.rankMin,
+        rankMax: d.rankMax,
+        bonusCents: d.bonusCents,
+        badgeKey,
+        active: d.active ?? true,
+      },
+    });
+  } else {
+    await prisma.leaderboardRewardRule.create({
+      data: {
+        name: d.name,
+        windowMs: BigInt(d.windowMs),
+        rankMin: d.rankMin,
+        rankMax: d.rankMax,
+        bonusCents: d.bonusCents,
+        badgeKey,
+        active: d.active ?? true,
+      },
+    });
+  }
+  const { logAdminAudit } = await import("@/lib/growth/audit-log");
+  await logAdminAudit(session.user.id, "upsert_reward_rule", "LeaderboardRewardRule", d.id, {
+    name: d.name,
+  });
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function adminDeleteRewardRuleAction(formData: FormData): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) return;
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  await prisma.leaderboardRewardRule.delete({ where: { id } }).catch(() => null);
+  const { logAdminAudit } = await import("@/lib/growth/audit-log");
+  await logAdminAudit(session.user.id, "delete_reward_rule", "LeaderboardRewardRule", id);
+  revalidateGrowth();
+}
+
+const missionSchema = z.object({
+  id: z.string().optional(),
+  key: z.string().min(1).max(64),
+  title: z.string().min(1).max(200),
+  xpReward: z.coerce.number().int().min(0),
+  sortOrder: z.coerce.number().int().min(0).default(0),
+  chainGroup: z.string().max(64).optional().or(z.literal("")),
+  active: z.coerce.boolean().optional(),
+  criteriaJson: z.string().min(2),
+});
+
+export async function adminUpsertMissionFormAction(formData: FormData): Promise<void> {
+  await adminUpsertMissionAction(formData);
+}
+
+export async function adminUpsertMissionAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = missionSchema.safeParse({
+    id: formData.get("id") ?? undefined,
+    key: formData.get("key"),
+    title: formData.get("title"),
+    xpReward: formData.get("xpReward"),
+    sortOrder: formData.get("sortOrder"),
+    chainGroup: formData.get("chainGroup") ?? "",
+    active: formData.get("active") === "on" || formData.get("active") === "true",
+    criteriaJson: formData.get("criteriaJson"),
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+  let criteria: unknown;
+  try {
+    criteria = JSON.parse(parsed.data.criteriaJson);
+  } catch {
+    return { ok: false, error: "invalid_criteria" };
+  }
+  const chainGroup = parsed.data.chainGroup?.trim() || null;
+  const payload = {
+    key: parsed.data.key,
+    title: parsed.data.title,
+    xpReward: parsed.data.xpReward,
+    sortOrder: parsed.data.sortOrder,
+    chainGroup,
+    active: parsed.data.active ?? true,
+    criteria: criteria as object,
+  };
+  if (parsed.data.id) {
+    await prisma.missionDefinition.update({
+      where: { id: parsed.data.id },
+      data: payload,
+    });
+  } else {
+    await prisma.missionDefinition.create({ data: payload });
+  }
+  const { logAdminAudit } = await import("@/lib/growth/audit-log");
+  await logAdminAudit(session.user.id, "upsert_mission", "MissionDefinition", parsed.data.id, {
+    key: parsed.data.key,
+  });
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function adminDeleteMissionAction(formData: FormData): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) return;
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  await prisma.missionDefinition.delete({ where: { id } }).catch(() => null);
+  const { logAdminAudit } = await import("@/lib/growth/audit-log");
+  await logAdminAudit(session.user.id, "delete_mission", "MissionDefinition", id);
+  revalidateGrowth();
+}
+
+export async function adminCloseSeasonFormAction(formData: FormData): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) return;
+  const seasonId = String(formData.get("seasonId") ?? "");
+  if (!seasonId) return;
+
+  const { closeLeaderboardSeason } = await import("@/lib/growth/season-archive");
+  await closeLeaderboardSeason(seasonId, session.user.id);
+  revalidateGrowth();
+}

@@ -1005,14 +1005,27 @@
     },
     "nav": {
       "dashboard": "Dashboard",
+      "deals": "Deals",
+      "earnings": "Earnings",
+      "network": "Network",
       "events": "Events",
       "chat": "Chat",
-      "signOut": "Sign out"
+      "notifications": "Alerts",
+      "settings": "Settings",
+      "kit": "Kit",
+      "signOut": "Sign out",
+      "myProfile": "My profile",
+      "navAria": "Partner navigation",
+      "mobileNavAria": "Mobile navigation"
     },
     "notifications": {
       "title": "Notifications",
       "markAllRead": "Mark all read",
-      "empty": "No new notifications"
+      "empty": "No new notifications",
+      "filterAll": "All",
+      "filterUnread": "Unread",
+      "unread": "New",
+      "open": "Open"
     },
     "events": {
       "title": "Events",
@@ -1031,7 +1044,14 @@
       "joined": "Joined successfully",
       "milestones": "Milestones",
       "back": "Back to events",
-      "participantsPreview": "Participants"
+      "participantsPreview": "Participants",
+      "status": {
+        "DRAFT": "Draft",
+        "PUBLISHED": "Published",
+        "ACTIVE": "Active",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled"
+      }
     },
     "publicProfile": {
       "closedDeals": "Closed deals",
@@ -1041,7 +1061,9 @@
       "ctaTitle": "Join the network?",
       "ctaBody": "Register as a partner and build income with T.E.N.E.G.T.A",
       "ctaButton": "Join now",
-      "qrSoon": "QR code — coming soon"
+      "qrSoon": "QR code — coming soon",
+      "share": "Share profile",
+      "linkCopied": "Link copied"
     },
     "nextLevel": "Next: {name} at {n} closed deals",
     "maxLevel": "You are at the top level path — keep compounding performance.",
@@ -1081,6 +1103,8 @@
     },
     "deals": {
       "title": "My deals",
+      "listTitle": "Deal list",
+      "kanbanEmpty": "None in this column",
       "empty": "No deals yet — add your first lead.",
       "noClient": "No client label",
       "closed": "closed",
@@ -1103,7 +1127,8 @@
       "withdrawAmount": "Withdraw amount (USD)",
       "method": "Payout method",
       "methodPh": "Bank / wallet notes",
-      "request": "Request payout"
+      "request": "Request payout",
+      "exportCsv": "Export CSV"
     },
     "leaderboard": {
       "title": "Weekly leaderboard",
@@ -1123,7 +1148,59 @@
       "title": "Daily missions",
       "empty": "No missions configured yet.",
       "progress": "{current} / {target}",
-      "done": "Completed today"
+      "done": "Done ✓",
+      "resetsIn": "Resets in {h}h {m}m"
+    },
+    "hub": {
+      "quickDeals": "Deals pipeline",
+      "quickEarnings": "Earnings & payout",
+      "quickNetwork": "Referral network",
+      "quickKit": "Marketing kit"
+    },
+    "dashboard": {
+      "expand": "Show",
+      "collapse": "Hide",
+      "heatmap": {
+        "title": "Activity (30d)",
+        "subtitle": "Member {memberDays}d · {activeDays} active days"
+      },
+      "stats": {
+        "totalEarnings": "Total earnings",
+        "thisMonth": "This month: {amount}",
+        "deals": "Deals",
+        "dealsSub": "{closed} closed · {pending} pending",
+        "rank": "Weekly rank",
+        "unranked": "Unranked",
+        "rankSub": "{n} deals this week",
+        "streak": "Streak",
+        "streakSub": "{n} day streak"
+      },
+      "leaderboard": {
+        "title": "Top partners",
+        "weights": "Composite: deals {deals}% · XP {xp}% · streak {streak}%",
+        "week": "Week",
+        "month": "Month",
+        "dealsUnit": "deals"
+      }
+    },
+    "onboarding": {
+      "title": "Getting started",
+      "progress": "{done} / {total} complete",
+      "go": "Go",
+      "markDone": "Mark done",
+      "steps": {
+        "profile": "Complete your profile",
+        "firstLead": "Add your first lead",
+        "firstClose": "Close your first deal",
+        "network": "Grow your network",
+        "kit": "Open the marketing kit"
+      }
+    },
+    "networkAnalytics": {
+      "downlines": "Direct partners",
+      "yourCloses": "Your closed deals",
+      "activityIndex": "Activity index",
+      "codeHint": "Share code {code} to grow your tree"
     },
     "activity": {
       "title": "Live momentum",
@@ -1134,6 +1211,16 @@
       "empty": "No badges yet — close deals and grow your network.",
       "hiddenTag": "hidden",
       "locked": "Locked",
+      "howTo": "How to earn",
+      "earned": "Earned",
+      "earnedOn": "Earned {date}",
+      "close": "Close",
+      "progress": {
+        "deals": "{current} / {target} closed deals",
+        "downlines": "{current} / {target} referrals",
+        "kitHits": "{current} / {target} kit opens",
+        "unknown": "In progress"
+      },
       "rarityCommon": "COMMON",
       "rarityRare": "RARE",
       "rarityEpic": "EPIC",
@@ -1440,6 +1527,9 @@
         "levels": "Levels",
         "tiers": "Commission tiers",
         "leaderboard": "Leaderboard",
+        "seasons": "Seasons",
+        "missions": "Missions",
+        "audit": "Audit log",
         "rewards": "Monthly rewards",
         "insights": "Insights",
         "overrides": "Partner overrides",
@@ -1616,8 +1706,33 @@
       },
       "rewardsPage": {
         "title": "Leaderboard rewards",
-        "hint": "Applies configured monthly cash bonuses to top partners (idempotent for the current UTC month).",
-        "submit": "Run monthly bonus pass"
+        "hint": "Rules use the same composite leaderboard as the partner dashboard. Monthly pass is idempotent per UTC month.",
+        "submit": "Run monthly bonus pass",
+        "addRule": "Add rule",
+        "name": "Rule name",
+        "active": "Active",
+        "save": "Save",
+        "delete": "Delete"
+      },
+      "missionsPage": {
+        "title": "Daily missions",
+        "hint": "Missions with the same chainGroup form a weekly quest — completing all grants bonus XP.",
+        "add": "Add mission",
+        "active": "Active",
+        "save": "Save",
+        "delete": "Delete"
+      },
+      "auditPage": {
+        "title": "Admin audit log",
+        "hint": "Immutable record of admin changes (deals, badges, rules, seasons).",
+        "empty": "No audit entries yet."
+      },
+      "seasonsPage": {
+        "title": "Leaderboard seasons",
+        "active": "Active seasons",
+        "archive": "Past seasons",
+        "closeSeason": "Close & award top performer",
+        "empty": "No archived seasons yet."
       },
       "insightsPage": {
         "title": "Operational insights",

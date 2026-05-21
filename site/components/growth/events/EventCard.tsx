@@ -8,6 +8,7 @@ export type EventCardData = {
   description: string;
   coverImage?: string | null;
   status: string;
+  statusLabel?: string;
   startAt: string;
   endAt?: string | null;
   participantCount: number;
@@ -45,8 +46,16 @@ export function EventCard({ event, joinLabel, progressLabel, viewLabel }: Props)
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-        <span className="absolute start-3 top-3 rounded-md bg-black/50 px-2 py-0.5 text-[10px] font-bold uppercase text-gold">
-          {event.status}
+        <span
+          className={`absolute start-3 top-3 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase ${
+            event.status === "ACTIVE"
+              ? "bg-emerald-500/30 text-emerald-200"
+              : event.status === "PUBLISHED"
+                ? "bg-gold/30 text-gold"
+                : "bg-black/50 text-white/70"
+          }`}
+        >
+          {event.statusLabel ?? event.status}
         </span>
         <span className="absolute end-3 top-3 text-[10px] text-white/70">
           {new Date(event.startAt).toLocaleDateString()}

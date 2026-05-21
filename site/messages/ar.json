@@ -1005,9 +1005,18 @@
     },
     "nav": {
       "dashboard": "لوحة التحكم",
+      "deals": "الصفقات",
+      "earnings": "الأرباح",
+      "network": "الشبكة",
       "events": "الفعاليات",
       "chat": "المحادثات",
-      "signOut": "خروج"
+      "notifications": "التنبيهات",
+      "settings": "الإعدادات",
+      "kit": "الحزمة",
+      "signOut": "خروج",
+      "myProfile": "بروفايلي",
+      "navAria": "قائمة الشريك",
+      "mobileNavAria": "تنقل سفلي"
     },
     "notifications": {
       "title": "الإشعارات",

@@ -34,12 +34,20 @@ export async function applyMissionProgress(
     return;
   }
   const day = utcDayKey();
-  const missions = await (
-    db as unknown as { missionDefinition: { findMany: (a: object) => Promise<{ key: string; xpReward: number; criteria: unknown }[]> } }
+  const missions = (await (
+    db as unknown as {
+      missionDefinition: {
+        findMany: (a: object) => Promise<
+          { key: string; xpReward: number; criteria: unknown; chainGroup?: string | null }[]
+        >;
+      };
+    }
   ).missionDefinition.findMany({
     where: { active: true },
     orderBy: { sortOrder: "asc" },
-  });
+  })) as { key: string; xpReward: number; criteria: unknown; chainGroup: string | null }[];
+
+  const completedChains = new Set<string>();
 
   for (const m of missions) {
     const ct = criterionType(m.criteria);
@@ -88,5 +96,14 @@ export async function applyMissionProgress(
       where: { userId },
       data: { totalXp: { increment: xp } },
     });
+
+    if (m.chainGroup) completedChains.add(m.chainGroup);
+  }
+
+  if (completedChains.size > 0 && "missionDefinition" in db) {
+    const { tryCompleteQuestChain } = await import("@/lib/growth/quest-chain");
+    for (const g of completedChains) {
+      await tryCompleteQuestChain(userId, g);
+    }
   }
 }

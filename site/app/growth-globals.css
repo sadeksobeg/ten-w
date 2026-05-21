@@ -139,6 +139,16 @@
   outline-offset: 2px;
 }
 
+.growth-podium-1 {
+  box-shadow: 0 0 24px -6px rgba(228, 184, 77, 0.45);
+}
+.growth-podium-2 {
+  box-shadow: 0 0 16px -8px rgba(192, 192, 210, 0.35);
+}
+.growth-podium-3 {
+  box-shadow: 0 0 12px -8px rgba(180, 120, 80, 0.3);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .growth-page-enter,
   .growth-shimmer,

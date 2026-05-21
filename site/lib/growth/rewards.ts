@@ -1,6 +1,12 @@
 import { DealStatus, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { MONTH_MS, monthlyLeaderboard } from "@/lib/growth/leaderboard";
+import {
+  MONTH_MS,
+  compositeLeaderboard,
+  getActiveLeaderboardSeason,
+} from "@/lib/growth/leaderboard";
+import { grantAdminBadge } from "@/lib/growth/badges";
+import { logAdminAudit } from "@/lib/growth/audit-log";
 import { logActivityEvent } from "@/lib/growth/activity";
 import { leaderboardRewardModelsAvailable } from "@/lib/growth/prisma-optional";
 
@@ -26,17 +32,33 @@ export async function applyMonthlyLeaderboardBonuses(
   });
   if (rules.length === 0) return { ok: true, granted: 0 };
 
-  const board = await monthlyLeaderboard(50);
+  const season = await getActiveLeaderboardSeason();
+  const board = await compositeLeaderboard(
+    MONTH_MS,
+    {
+      weightDeals: season.weightDeals,
+      weightXp: season.weightXp,
+      weightStreak: season.weightStreak,
+    },
+    50,
+  );
   if (board.length === 0) return { ok: true, granted: 0 };
 
   const pk = periodKeyMonthly();
   let granted = 0;
 
+  await logAdminAudit(actorUserId, "apply_monthly_bonuses", "leaderboard", pk, {
+    seasonId: season.id,
+    ruleCount: rules.length,
+  });
+
   for (let i = 0; i < board.length; i += 1) {
     const rank = i + 1;
     const row = board[i]!;
-    const rule = rules.find((r) => rank >= r.rankMin && rank <= r.rankMax && r.bonusCents > 0);
+    const rule = rules.find((r) => rank >= r.rankMin && rank <= r.rankMax);
     if (!rule) continue;
+    const hasBonus = rule.bonusCents > 0;
+    if (!hasBonus && !rule.badgeKey) continue;
 
     const existing = await prisma.leaderboardGrantLog.findFirst({
       where: { userId: row.userId, periodKey: pk },
@@ -53,24 +75,32 @@ export async function applyMonthlyLeaderboardBonuses(
           bonusCents: rule.bonusCents,
         },
       });
-      await tx.commissionLedger.create({
-        data: {
-          dealId: null,
-          userId: row.userId,
-          tier: 0,
-          amountCents: rule.bonusCents,
-          ruleSnapshot: { kind: "leaderboard_monthly", rank, ruleId: rule.id, periodKey: pk },
-        },
-      });
+      if (hasBonus) {
+        await tx.commissionLedger.create({
+          data: {
+            dealId: null,
+            userId: row.userId,
+            tier: 0,
+            amountCents: rule.bonusCents,
+            ruleSnapshot: { kind: "leaderboard_monthly_composite", rank, ruleId: rule.id, periodKey: pk },
+          },
+        });
+      }
     });
 
-    await logActivityEvent(prisma, {
-      kind: "leaderboard_bonus",
-      actorUserId: row.userId,
-      headline: `Monthly rank #${rank} bonus credited`,
-      amountCents: rule.bonusCents,
-      metadata: { periodKey: pk },
-    });
+    if (rule.badgeKey) {
+      await grantAdminBadge(prisma, row.userId, rule.badgeKey, actorUserId);
+    }
+
+    if (hasBonus) {
+      await logActivityEvent(prisma, {
+        kind: "leaderboard_bonus",
+        actorUserId: row.userId,
+        headline: `Monthly rank #${rank} bonus credited`,
+        amountCents: rule.bonusCents,
+        metadata: { periodKey: pk, compositeScore: row.score },
+      });
+    }
     granted += 1;
   }
 

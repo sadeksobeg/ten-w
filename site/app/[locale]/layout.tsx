@@ -57,6 +57,11 @@ export async function generateMetadata({
         locale === "ar" ? "ar_SA" : locale === "fr" ? "fr_FR" : "en_US",
       siteName: "T.E.N.E.G.T.A",
     },
+    icons: {
+      icon: [{ url: "/tenegta-icon.png", type: "image/png" }],
+      apple: [{ url: "/tenegta-icon.png", type: "image/png" }],
+      shortcut: "/tenegta-icon.png",
+    },
   };
 }
 
@@ -85,6 +90,8 @@ export default async function LocaleLayout({ children, params }: Props) {
           crossOrigin="anonymous"
         />
         <AsyncGoogleFonts />
+        <link rel="icon" href="/tenegta-icon.png" type="image/png" sizes="512x512" />
+        <link rel="apple-touch-icon" href="/tenegta-icon.png" />
         {locale === "ar" || locale === "fr" ? (
           <link
             rel="preload"

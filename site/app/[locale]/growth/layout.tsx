@@ -3,8 +3,7 @@ import type { ReactNode } from "react";
 import "@/app/growth-globals.css";
 import { auth } from "@/auth";
 import { GrowthSessionProvider } from "@/components/growth/GrowthSessionProvider";
-import { GrowthTopBar } from "@/components/growth/GrowthTopBar";
-import { GrowthPartnerShell } from "@/components/growth/GrowthPartnerShell";
+import { GrowthPartnerChrome } from "@/components/growth/GrowthPartnerChrome";
 import { ToastHost } from "@/components/growth/ui/Toast";
 
 /** Partner portal — must not be indexed (credential forms trigger Safe Browsing). */
@@ -33,10 +32,9 @@ export default async function GrowthLayout({ children, params }: Props) {
         <div
           className={`relative mx-auto px-4 py-8 sm:px-6 lg:px-8 ${isAdmin ? "max-w-[90rem]" : "max-w-7xl"}`}
         >
-          {showPartnerBar ? <GrowthTopBar locale={locale} variant="partner" /> : null}
           <div className="growth-page-enter">
             {showPartnerBar ? (
-              <GrowthPartnerShell locale={locale}>{children}</GrowthPartnerShell>
+              <GrowthPartnerChrome locale={locale}>{children}</GrowthPartnerChrome>
             ) : (
               children
             )}

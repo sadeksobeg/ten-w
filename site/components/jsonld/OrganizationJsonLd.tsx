@@ -25,7 +25,7 @@ export function OrganizationJsonLd() {
         url: origin,
         logo: {
           "@type": "ImageObject",
-          url: `${origin}/ar/opengraph-image`,
+          url: `${origin}/tenegta-icon.png`,
         },
         description:
           "T.E.N.E.G.T.A builds secure, intelligent systems that help organizations work with higher efficiency and clearer decisions.",

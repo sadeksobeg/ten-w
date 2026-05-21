@@ -1,0 +1,44 @@
+import type { ReactNode } from "react";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { ensurePartnerProfile } from "@/lib/growth/ensure-partner-profile";
+import { resolveLevelName } from "@/lib/growth/level-i18n";
+import { GrowthPartnerHeader } from "@/components/growth/GrowthPartnerHeader";
+import { GrowthPartnerShell } from "@/components/growth/GrowthPartnerShell";
+
+type Props = {
+  locale: string;
+  children: ReactNode;
+};
+
+export async function GrowthPartnerChrome({ locale, children }: Props) {
+  const session = await auth();
+  if (!session?.user?.id) return <>{children}</>;
+
+  const [user, profile] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true, email: true, avatarUrl: true, publicSlug: true },
+    }),
+    ensurePartnerProfile(session.user.id),
+  ]);
+
+  const levelName =
+    profile?.currentLevel != null
+      ? resolveLevelName(profile.currentLevel.name, locale)
+      : "—";
+
+  return (
+    <GrowthPartnerShell>
+      <GrowthPartnerHeader
+        locale={locale}
+        name={user?.name ?? null}
+        email={user?.email ?? session.user.email ?? ""}
+        avatarUrl={user?.avatarUrl ?? session.user.image ?? null}
+        levelName={levelName}
+        publicSlug={user?.publicSlug ?? null}
+      />
+      {children}
+    </GrowthPartnerShell>
+  );
+}

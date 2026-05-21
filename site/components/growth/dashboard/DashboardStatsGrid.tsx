@@ -1,10 +1,12 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { StatCard } from "@/components/growth/ui/StatCard";
+import { GrowthIcon } from "@/components/growth/icons/GrowthIcon";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
 
 type Props = {
-  locale: string;
   data: DashboardData;
 };
 
@@ -17,93 +19,43 @@ function money(cents: number, locale: string) {
   }).format(cents / 100);
 }
 
-export function DashboardStatsGrid({ locale, data }: Props) {
-  const monthLabel =
-    locale === "ar"
-      ? `هذا الشهر: ${money(data.earningsThisMonthCents, locale)}`
-      : locale === "fr"
-        ? `Ce mois: ${money(data.earningsThisMonthCents, locale)}`
-        : `This month: ${money(data.earningsThisMonthCents, locale)}`;
-
-  const dealSub =
-    locale === "ar"
-      ? `${data.closedDeals} مغلقة · ${data.pendingDeals} قيد المتابعة${data.lostDeals > 0 ? ` · ${data.lostDeals} خسارة` : ""}`
-      : locale === "fr"
-        ? `${data.closedDeals} fermées · ${data.pendingDeals} en cours`
-        : `${data.closedDeals} closed · ${data.pendingDeals} pending`;
-
-  const rankSub =
-    locale === "ar"
-      ? `${data.compete.weeklyClosed} صفقة هذا الأسبوع`
-      : locale === "fr"
-        ? `${data.compete.weeklyClosed} deals cette semaine`
-        : `${data.compete.weeklyClosed} deals this week`;
+export function DashboardStatsGrid({ data }: Props) {
+  const t = useTranslations("Growth.dashboard.stats");
+  const locale = useLocale();
 
   const rankDisplay =
-    data.compete.weeklyRank === null
-      ? locale === "ar"
-        ? "غير مُصنَّف"
-        : locale === "fr"
-          ? "Non classé"
-          : "Unranked"
-      : `#${data.compete.weeklyRank}`;
+    data.compete.weeklyRank === null ? t("unranked") : `#${data.compete.weeklyRank}`;
 
-  const streakSub = data.streak
-    ? locale === "ar"
-      ? `${data.streak.current} يوم متواصل`
-      : `${data.streak.current} day streak`
-    : "—";
+  const streakSub = data.streak ? t("streakSub", { n: data.streak.current }) : "—";
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <StatCard
-        label={locale === "ar" ? "الأرباح الإجمالية" : "Total earnings"}
+        label={t("totalEarnings")}
         value={data.earningsCents / 100}
+        sub={t("thisMonth", { amount: money(data.earningsThisMonthCents, locale) })}
+        icon={<GrowthIcon name="earnings" />}
+        animateValue
         valueFormat={(n) => money(Math.round(n * 100), locale)}
-        sub={monthLabel}
-        icon={<span aria-hidden>💰</span>}
       />
       <StatCard
-        label={
-          locale === "ar" ? "الصفقات المغلقة" : locale === "fr" ? "Deals fermés" : "Closed deals"
-        }
+        label={t("deals")}
         value={data.closedDeals}
-        sub={dealSub}
-        icon={<span aria-hidden>🎯</span>}
+        sub={t("dealsSub", { closed: data.closedDeals, pending: data.pendingDeals })}
+        icon={<GrowthIcon name="deals" />}
       />
       <StatCard
-        label={
-          locale === "ar" ? "ترتيبك هذا الأسبوع" : locale === "fr" ? "Classement hebdo" : "Weekly rank"
-        }
+        label={t("rank")}
         value={rankDisplay}
+        sub={t("rankSub", { n: data.compete.weeklyClosed })}
+        icon={<GrowthIcon name="rank" />}
         animateValue={false}
-        sub={rankSub}
-        trend={
-          data.rankDelta !== 0
-            ? {
-                delta: data.rankDelta,
-                label:
-                  locale === "ar"
-                    ? "مقارنة بالأسبوع السابق"
-                    : locale === "fr"
-                      ? "vs semaine précédente"
-                      : "vs prior week",
-              }
-            : undefined
-        }
-        icon={
-          data.compete.weeklyRank !== null && data.compete.weeklyRank <= 3 ? (
-            <span aria-hidden>🏆</span>
-          ) : (
-            <span aria-hidden>📊</span>
-          )
-        }
       />
       <StatCard
-        label={locale === "ar" ? "سلسلة النشاط" : "Activity streak"}
+        label={t("streak")}
         value={data.streak?.current ?? 0}
         sub={streakSub}
-        icon={<span aria-hidden>🔥</span>}
+        icon={<GrowthIcon name="streak" />}
       />
     </div>
   );

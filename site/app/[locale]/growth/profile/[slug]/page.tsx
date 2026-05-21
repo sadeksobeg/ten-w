@@ -6,6 +6,7 @@ import { BadgeGrid } from "@/components/growth/badges/BadgeGrid";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { ProfileViewTracker } from "@/components/growth/ProfileViewTracker";
 import { ProfileQr } from "@/components/growth/ProfileQr";
+import { ProfileShareButton } from "@/components/growth/ProfileShareButton";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
@@ -183,7 +184,11 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
         </Link>
       </GlassCard>
 
-      <GlassCard className="mt-6 flex flex-col items-center p-6 text-center">
+      <GlassCard className="mt-6 flex flex-col items-center gap-4 p-6 text-center">
+        <ProfileShareButton
+          title={data.name}
+          url={`https://tenegta.com/${locale}/growth/profile/${data.publicSlug}`}
+        />
         <ProfileQr
           url={`https://tenegta.com/${locale}/growth/profile/${data.publicSlug}`}
           label={locale === "ar" ? "امسح لمشاركة البروفايل" : "Scan to share profile"}
