@@ -1414,6 +1414,11 @@
       "unreadNotifications": "Unread notifications",
       "enter": "Admin",
       "nav": {
+        "adminNavAria": "Growth admin navigation",
+        "jumpTo": "Jump to",
+        "groupOperations": "Operations",
+        "groupCatalog": "Configuration",
+        "groupPrograms": "Programs",
         "overview": "Overview",
         "deals": "Deals",
         "payouts": "Payouts",
@@ -1427,14 +1432,18 @@
         "bonuses": "Manual bonuses",
         "partnerDashboard": "Partner dashboard",
         "demo": "Cinematic demo",
-        "chat": "Inbox",
+        "chat": "Chat",
         "partners": "Partners",
         "events": "Events",
         "notifications": "Notifications"
       },
       "partners": {
         "title": "Partner management",
+        "subtitle": "Create accounts, adjust level and power points, enable or disable partners.",
         "createTitle": "Create partner account",
+        "createHint": "Email, password, and partner profile are created together. Do not use the admin email here.",
+        "listTitle": "Registered partners",
+        "xpControls": "Power points & level",
         "name": "Name",
         "email": "Email",
         "password": "Password",
@@ -1449,6 +1458,9 @@
         "errors": {
           "email_taken": "Email already used",
           "invalid_referral": "Invalid referral code",
+          "invalid_input": "Check the fields (valid email, password at least 8 characters).",
+          "missing_seed": "Database not initialized — run seed on the server.",
+          "server_error": "Server error (often the database). Check logs or run repair 0003.",
           "unauthorized": "Unauthorized",
           "unknown": "Something went wrong"
         }

@@ -748,43 +748,48 @@ export async function adminCreatePartnerAction(
   const starter = await prisma.levelDefinition.findFirst({ orderBy: { order: "asc" } });
   if (!starter) return { ok: false, error: "missing_seed" };
 
-  const passwordHash = await bcrypt.hash(parsed.data.password, 10);
-  const referralCode = await uniqueReferralCode();
-  const publicSlug = await uniquePublicSlug(prisma, parsed.data.name);
+  try {
+    const passwordHash = await bcrypt.hash(parsed.data.password, 10);
+    const referralCode = await uniqueReferralCode();
+    const publicSlug = await uniquePublicSlug(prisma, parsed.data.name);
 
-  const user = await prisma.$transaction(async (tx) => {
-    const u = await tx.user.create({
-      data: {
-        email,
-        passwordHash,
-        name: parsed.data.name,
-        phone: parsed.data.phone?.trim() || null,
-        publicSlug,
-        role: UserRole.PARTNER,
-        isActive: true,
-      },
+    const user = await prisma.$transaction(async (tx) => {
+      const u = await tx.user.create({
+        data: {
+          email,
+          passwordHash,
+          name: parsed.data.name,
+          phone: parsed.data.phone?.trim() || null,
+          publicSlug,
+          role: UserRole.PARTNER,
+          isActive: true,
+        },
+      });
+      await tx.partnerProfile.create({
+        data: {
+          userId: u.id,
+          referralCode,
+          parentUserId,
+          currentLevelId: starter.id,
+        },
+      });
+      return u;
     });
-    await tx.partnerProfile.create({
-      data: {
-        userId: u.id,
-        referralCode,
-        parentUserId,
-        currentLevelId: starter.id,
-      },
+
+    await createNotification(prisma, {
+      userId: user.id,
+      type: NotificationType.SYSTEM,
+      title: "مرحباً بك في T.E.N.E.G.T.A",
+      body: "تم إنشاء حسابك. سجّل الدخول وابدأ البناء.",
+      link: "/growth/sign-in",
     });
-    return u;
-  });
 
-  await createNotification(prisma, {
-    userId: user.id,
-    type: NotificationType.SYSTEM,
-    title: "مرحباً بك في T.E.N.E.G.T.A",
-    body: "تم إنشاء حسابك. سجّل الدخول وابدأ البناء.",
-    link: "/growth/sign-in",
-  });
-
-  revalidateGrowth();
-  return { ok: true, partnerId: user.id };
+    revalidateGrowth();
+    return { ok: true, partnerId: user.id };
+  } catch (err) {
+    console.error("[adminCreatePartner]", err);
+    return { ok: false, error: "server_error" };
+  }
 }
 
 export async function togglePartnerActiveFormAction(formData: FormData): Promise<void> {

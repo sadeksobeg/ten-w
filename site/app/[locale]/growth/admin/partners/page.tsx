@@ -37,21 +37,30 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
     }));
 
   return (
-    <div className="space-y-6">
-      <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold sm:text-3xl">
-        {t("title")}
-      </h1>
+    <div className="space-y-8">
+      <header>
+        <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold sm:text-3xl">
+          {t("title")}
+        </h1>
+        <p className="mt-2 max-w-2xl text-sm text-white/50">{t("subtitle")}</p>
+      </header>
 
-      <GlassCard className="p-4 sm:p-6">
-        <h2 className="text-lg font-bold">{t("createTitle")}</h2>
-        <div className="mt-5">
+      <GlassCard className="border border-white/10 p-5 sm:p-6">
+        <h2 className="text-lg font-bold text-white">{t("createTitle")}</h2>
+        <p className="mt-1 text-xs text-white/45">{t("createHint")}</p>
+        <div className="mt-6">
           <CreatePartnerForm />
         </div>
       </GlassCard>
 
-      <GlassCard className="overflow-hidden p-0">
-        <PartnerList partners={rows} levels={levels} />
-      </GlassCard>
+      <section>
+        <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-white/45">
+          {t("listTitle")} ({rows.length})
+        </h2>
+        <GlassCard className="overflow-hidden border border-white/10 p-0">
+          <PartnerList partners={rows} levels={levels} />
+        </GlassCard>
+      </section>
     </div>
   );
 }

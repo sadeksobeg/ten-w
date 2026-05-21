@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import { countNotificationsSafe } from "@/lib/growth/prisma-optional";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -25,8 +26,9 @@ export default async function GrowthAdminHomePage({ params }: Props) {
       prisma.growthEvent.count({ where: { status: "ACTIVE" } }),
       prisma.eventParticipant.count(),
       session?.user?.id
-        ? prisma.notification.count({
-            where: { userId: session.user.id, isRead: false },
+        ? countNotificationsSafe(prisma, {
+            userId: session.user.id,
+            isRead: false,
           })
         : Promise.resolve(0),
     ]);

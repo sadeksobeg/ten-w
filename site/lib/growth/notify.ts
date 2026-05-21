@@ -20,17 +20,21 @@ export async function createNotification(
   if (typeof c.notification?.create !== "function") {
     return null;
   }
-  const row = await c.notification.create({
-    data: {
-      userId: params.userId,
-      type: params.type,
-      title: params.title,
-      body: params.body,
-      link: params.link ?? null,
-      metadata: (params.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
-    },
-  });
-  return { id: row.id };
+  try {
+    const row = await c.notification.create({
+      data: {
+        userId: params.userId,
+        type: params.type,
+        title: params.title,
+        body: params.body,
+        link: params.link ?? null,
+        metadata: (params.metadata ?? undefined) as Prisma.InputJsonValue | undefined,
+      },
+    });
+    return { id: row.id };
+  } catch {
+    return null;
+  }
 }
 
 export async function createNotificationsForAllActivePartners(params: {
