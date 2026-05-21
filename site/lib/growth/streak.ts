@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { utcDayKey } from "@/lib/growth/missions";
 
 function utcDayStart(d: Date): number {
   const x = new Date(d);
@@ -54,4 +55,32 @@ export async function touchPartnerStreak(userId: string) {
       lastActiveDate: new Date(today),
     },
   });
+}
+
+/** Records UTC day for activity heatmap (idempotent). */
+export async function touchActivityDay(userId: string) {
+  const day = utcDayKey();
+  try {
+    await prisma.userActivityDay.upsert({
+      where: { userId_day: { userId, day } },
+      create: { userId, day },
+      update: {},
+    });
+  } catch {
+    /* table may be missing before migration */
+  }
+}
+
+export async function getActivityDays(userId: string, limit = 30): Promise<string[]> {
+  try {
+    const rows = await prisma.userActivityDay.findMany({
+      where: { userId },
+      orderBy: { day: "desc" },
+      take: limit,
+      select: { day: true },
+    });
+    return rows.map((r) => r.day);
+  } catch {
+    return [];
+  }
 }

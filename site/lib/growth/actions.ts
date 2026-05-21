@@ -512,6 +512,34 @@ export async function applyMonthlyRewardsAdminAction(_formData: FormData): Promi
   revalidatePath("/");
 }
 
+export async function saveLeaderboardSeasonAction(formData: FormData): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) return;
+
+  const name = String(formData.get("name") ?? "Season").trim().slice(0, 120);
+  const windowDays = Math.min(90, Math.max(1, Number(formData.get("windowDays") ?? 7)));
+  const weightDeals = Math.min(100, Math.max(0, Number(formData.get("weightDeals") ?? 40)));
+  const weightXp = Math.min(100, Math.max(0, Number(formData.get("weightXp") ?? 40)));
+  const weightStreak = Math.min(100, Math.max(0, Number(formData.get("weightStreak") ?? 20)));
+
+  try {
+    await prisma.leaderboardSeason.updateMany({ data: { active: false } });
+    await prisma.leaderboardSeason.create({
+      data: {
+        name,
+        windowMs: BigInt(windowDays * 24 * 60 * 60 * 1000),
+        weightDeals,
+        weightXp,
+        weightStreak,
+        active: true,
+      },
+    });
+  } catch {
+    return;
+  }
+  revalidatePath("/");
+}
+
 const overrideSchema = z.object({
   partnerEmail: z.string().email(),
   productSlug: z.string().max(64).optional().or(z.literal("")),

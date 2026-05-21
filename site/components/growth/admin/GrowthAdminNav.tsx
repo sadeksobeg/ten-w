@@ -23,6 +23,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { href: "/growth/admin/badges", labelKey: "badges" },
       { href: "/growth/admin/levels", labelKey: "levels" },
       { href: "/growth/admin/tiers", labelKey: "tiers" },
+      { href: "/growth/admin/leaderboard", labelKey: "leaderboard" },
       { href: "/growth/admin/rewards", labelKey: "rewards" },
       { href: "/growth/admin/overrides", labelKey: "overrides" },
       { href: "/growth/admin/bonuses", labelKey: "bonuses" },

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { BadgeGrid } from "@/components/growth/badges/BadgeGrid";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { SectionHeader } from "@/components/growth/ui/SectionHeader";
@@ -9,29 +10,24 @@ type Props = {
   badges: DashboardBadge[];
 };
 
-export function DashboardBadgesSection({ locale, badges }: Props) {
+export async function DashboardBadgesSection({ locale, badges }: Props) {
+  const t = await getTranslations("Growth.badges");
   const earned = badges.filter((b) => b.earned).length;
-  const title = locale === "ar" ? "مجموعة الشارات" : "Badge collection";
 
   return (
     <section>
-      <SectionHeader title={title} subtitle={`${earned} / ${badges.length}`} />
+      <SectionHeader title={t("title")} subtitle={`${earned} / ${badges.length}`} />
       <GlassCard className="mt-4">
         {badges.length === 0 ? (
-          <EmptyState
-            illustration="trophy"
-            message={
-              locale === "ar"
-                ? "أنجز مهامك واكسب شاراتك الأولى"
-                : "Complete missions to earn your first badges"
-            }
-          />
+          <EmptyState illustration="trophy" message={t("empty")} />
         ) : (
           <BadgeGrid
+            locale={locale}
             badges={badges.map((b) => ({
               key: b.key,
               name: b.name,
               description: b.description ?? undefined,
+              howTo: b.howTo,
               earned: b.earned,
               grantedAt: b.grantedAt,
               hidden: b.hidden,

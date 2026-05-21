@@ -2,7 +2,8 @@ import { auth } from "@/auth";
 import { GrowthCelebrationClient } from "@/components/growth/GrowthCelebrationClient";
 import { GrowthDashboardView } from "@/components/growth/GrowthDashboardView";
 import { getPartnerDashboard } from "@/lib/growth/get-dashboard";
-import { touchPartnerStreak } from "@/lib/growth/streak";
+import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
+import { touchActivityDay, touchPartnerStreak } from "@/lib/growth/streak";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -25,10 +26,11 @@ export default async function GrowthPage({ params, searchParams }: Props) {
   }
 
   await touchPartnerStreak(session.user.id);
+  await touchActivityDay(session.user.id);
 
   let data;
   try {
-    data = await getPartnerDashboard(session.user.id);
+    data = await getPartnerDashboard(session.user.id, locale);
   } catch (e) {
     const msg = e instanceof Error ? e.message : "";
     if (msg === "missing_seed" || msg === "not_a_partner") {
@@ -50,7 +52,9 @@ export default async function GrowthPage({ params, searchParams }: Props) {
       where: { key: bk },
       select: { name: true },
     });
-    badgeUnlockName = b?.name;
+    badgeUnlockName = b
+      ? resolveBadgeCopy(bk, locale, { name: b.name }).name
+      : undefined;
   }
 
   return (

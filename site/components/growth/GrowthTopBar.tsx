@@ -67,6 +67,16 @@ export async function GrowthTopBar({ locale, variant }: Props) {
             <Link className={linkClass} href="/growth/chat">
               {t("chat")}
             </Link>
+            {userRow?.publicSlug ? (
+              <Link
+                className={linkClass}
+                href={`/growth/profile/${userRow.publicSlug}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {locale === "ar" ? "بروفايلي" : locale === "fr" ? "Mon profil" : "My profile"}
+              </Link>
+            ) : null}
           </>
         ) : null}
         </div>

@@ -4,11 +4,16 @@ import { sumEarningsCents } from "@/lib/growth/commission";
 import {
   MONTH_MS,
   WEEK_MS,
+  compositeLeaderboard,
+  getActiveLeaderboardSeason,
   monthlyLeaderboard,
+  partnerCompositeRank,
   partnerLifetimePercentileBetter,
+  partnerRankDelta,
   partnerRankInWindow,
-  weeklyLeaderboard,
+  type CompositeLeaderboardRow,
 } from "@/lib/growth/leaderboard";
+import { getActivityDays } from "@/lib/growth/streak";
 import { missionTargetFromCriteria, utcDayKey } from "@/lib/growth/missions";
 import {
   fetchActivityEventsSafe,
@@ -18,6 +23,9 @@ import {
 import { buildDealJourney, type DealJourneyStep } from "@/lib/growth/deal-journey";
 import { buildPartnerInsightSlides, type PartnerInsightSlide } from "@/lib/growth/partner-insights";
 import { ensurePartnerProfile } from "@/lib/growth/ensure-partner-profile";
+import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
+import { resolveMissionTitle } from "@/lib/growth/mission-i18n";
+import { resolveLevelName } from "@/lib/growth/level-i18n";
 
 export type DashboardDeal = {
   id: string;
@@ -51,6 +59,7 @@ export type DashboardBadge = {
   category: string;
   hidden: boolean;
   description?: string | null;
+  howTo?: string;
   earned: boolean;
   grantedAt?: string | null;
 };
@@ -108,14 +117,18 @@ export type DashboardData = {
   badges: DashboardBadge[];
   missions: DashboardMission[];
   activityFeed: DashboardActivity[];
-  leaderboard: Awaited<ReturnType<typeof weeklyLeaderboard>>;
-  monthlyLeaderboard: Awaited<ReturnType<typeof monthlyLeaderboard>>;
-  monthlyRank: { closedInWindow: number; rank: number; fieldSize: number };
+  leaderboard: CompositeLeaderboardRow[];
+  monthlyLeaderboard: CompositeLeaderboardRow[];
+  leaderboardSeason: { name: string; weightDeals: number; weightXp: number; weightStreak: number };
+  activityDays: string[];
+  memberDays: number;
+  monthlyRank: { closedInWindow: number; rank: number | null; fieldSize: number };
   streak: { current: number; longest: number } | null;
   compete: {
-    weeklyRank: number;
+    weeklyRank: number | null;
     weeklyClosed: number;
     weeklyFieldSize: number;
+    compositeScore: number;
     percentileBetter: number;
     motivationPrimary: MotivationLine;
     motivationSecondary: MotivationLine | null;
@@ -123,7 +136,10 @@ export type DashboardData = {
   insights: PartnerInsightSlide[];
 };
 
-export async function getPartnerDashboard(userId: string): Promise<DashboardData> {
+export async function getPartnerDashboard(
+  userId: string,
+  locale = "ar",
+): Promise<DashboardData> {
   const profile = await ensurePartnerProfile(userId);
   if (!profile) {
     throw new Error("not_a_partner");
@@ -142,7 +158,7 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     userBadges,
     allBadgeDefs,
     streak,
-    lb,
+    userCreated,
     missionDefs,
     missionDays,
     activityRows,
@@ -201,7 +217,7 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
         select: { key: true, name: true, description: true, hidden: true, category: true },
       }),
       prisma.userStreak.findUnique({ where: { userId } }),
-      weeklyLeaderboard(8),
+      prisma.user.findUnique({ where: { id: userId }, select: { createdAt: true } }),
       fetchMissionDefinitionsSafe(prisma),
       fetchUserMissionDaySafe(prisma, userId, day),
       fetchActivityEventsSafe(prisma, 20),
@@ -219,16 +235,43 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
   const earningsCents = await sumEarningsCents(userId);
   const earningsThisMonthCents = monthEarnings._sum.amountCents ?? 0;
 
-  const [weeklyCompete, monthlyCompete, percentileBetter, monthlyLb] = await Promise.all([
-    partnerRankInWindow(userId, WEEK_MS),
+  const season = await getActiveLeaderboardSeason();
+  const weights = {
+    weightDeals: season.weightDeals,
+    weightXp: season.weightXp,
+    weightStreak: season.weightStreak,
+  };
+
+  const [
+    weeklyCompete,
+    monthlyCompete,
+    percentileBetter,
+    lb,
+    monthlyLb,
+    rankDelta,
+    compositeRank,
+    activityDays,
+  ] = await Promise.all([
+    partnerRankInWindow(userId, season.windowMs),
     partnerRankInWindow(userId, MONTH_MS),
     partnerLifetimePercentileBetter(userId, closedDeals),
-    monthlyLeaderboard(12),
+    compositeLeaderboard(season.windowMs, weights, 8),
+    compositeLeaderboard(MONTH_MS, weights, 12),
+    partnerRankDelta(userId, season.windowMs),
+    partnerCompositeRank(userId, season.windowMs, weights),
+    getActivityDays(userId, 30),
   ]);
 
+  const memberDays = userCreated
+    ? Math.max(
+        1,
+        Math.floor((Date.now() - userCreated.createdAt.getTime()) / (24 * 60 * 60 * 1000)),
+      )
+    : 1;
+
   const nextLevel = await prisma.levelDefinition.findFirst({
-    where: { minXp: { gt: profile.totalXp } },
-    orderBy: { minXp: "asc" },
+    where: { order: { gt: profile.currentLevel.order } },
+    orderBy: { order: "asc" },
   });
 
   const progressTarget = nextLevel?.minClosedDeals ?? Math.max(closedDeals, 1);
@@ -241,7 +284,7 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     pendingDeals,
     closedDeals,
     streakCurrent,
-    weeklyRank: weeklyCompete.rank,
+    weeklyRank: weeklyCompete.rank ?? 0,
     weeklyFieldSize: weeklyCompete.fieldSize,
     weeklyClosed: weeklyCompete.closedInWindow,
   });
@@ -249,7 +292,11 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
   let motivationPrimary: MotivationLine = { key: "defaultPrimary" };
   if (dealsToNext > 0) {
     motivationPrimary = { key: "dealsToNextLevel", params: { n: dealsToNext } };
-  } else if (weeklyCompete.closedInWindow > 0 && weeklyCompete.rank <= 5) {
+  } else if (
+    weeklyCompete.closedInWindow > 0 &&
+    weeklyCompete.rank !== null &&
+    weeklyCompete.rank <= 5
+  ) {
     motivationPrimary = { key: "topWeekly", params: { rank: weeklyCompete.rank } };
   } else if (streakCurrent >= 3) {
     motivationPrimary = { key: "streakHot", params: { n: streakCurrent } };
@@ -264,7 +311,7 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     motivationSecondary = {
       key: "weeklyRankLine",
       params: {
-        rank: weeklyCompete.rank,
+        rank: weeklyCompete.rank ?? 0,
         total: weeklyCompete.fieldSize,
         closed: weeklyCompete.closedInWindow,
       },
@@ -274,7 +321,7 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
   const progMap = new Map(missionDays.map((m) => [m.missionKey, m]));
   const missionsData: DashboardMission[] = missionDefs.map((m) => ({
     key: m.key,
-    title: m.title,
+    title: resolveMissionTitle(m.key, locale, m.title),
     target: missionTargetFromCriteria(m.criteria),
     progress: progMap.get(m.key)?.progress ?? 0,
     xpReward: m.xpReward,
@@ -289,12 +336,17 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
   );
   const badgesData: DashboardBadge[] = allBadgeDefs.map((def) => {
     const earned = earnedMap.get(def.key);
+    const copy = resolveBadgeCopy(def.key, locale, {
+      name: def.name,
+      description: def.description,
+    });
     return {
       key: def.key,
-      name: def.name,
+      name: copy.name,
       category: def.category,
       hidden: def.hidden,
-      description: def.description,
+      description: copy.description,
+      howTo: copy.howTo,
       earned: !!earned,
       grantedAt: earned?.grantedAt ?? null,
     };
@@ -311,7 +363,7 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     profile: {
       referralCode: profile.referralCode,
       totalXp: profile.totalXp,
-      levelName: profile.currentLevel.name,
+      levelName: resolveLevelName(profile.currentLevel.name, locale),
       levelOrder: profile.currentLevel.order,
     },
     closedDeals,
@@ -320,7 +372,7 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     currentLevelMinXp: profile.currentLevel.minXp,
     nextLevel: nextLevel
       ? {
-          name: nextLevel.name,
+          name: resolveLevelName(nextLevel.name, locale),
           minClosedDeals: nextLevel.minClosedDeals,
           minXp: nextLevel.minXp,
         }
@@ -328,7 +380,7 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     progress: { current: closedDeals, target: progressTarget },
     earningsCents,
     earningsThisMonthCents,
-    rankDelta: 0,
+    rankDelta,
     deals: deals.map((d) => ({
       id: d.id,
       status: d.status,
@@ -369,8 +421,6 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     badges: badgesData,
     missions: missionsData,
     activityFeed: activityData,
-    leaderboard: lb,
-    monthlyLeaderboard: monthlyLb,
     monthlyRank: {
       closedInWindow: monthlyCompete.closedInWindow,
       rank: monthlyCompete.rank,
@@ -379,10 +429,21 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     streak: streak
       ? { current: streak.currentStreak, longest: streak.longestStreak }
       : null,
+    leaderboard: lb,
+    monthlyLeaderboard: monthlyLb,
+    leaderboardSeason: {
+      name: season.name,
+      weightDeals: season.weightDeals,
+      weightXp: season.weightXp,
+      weightStreak: season.weightStreak,
+    },
+    activityDays,
+    memberDays,
     compete: {
-      weeklyRank: weeklyCompete.rank,
+      weeklyRank: compositeRank.rank ?? weeklyCompete.rank,
       weeklyClosed: weeklyCompete.closedInWindow,
       weeklyFieldSize: weeklyCompete.fieldSize,
+      compositeScore: compositeRank.score,
       percentileBetter,
       motivationPrimary,
       motivationSecondary,

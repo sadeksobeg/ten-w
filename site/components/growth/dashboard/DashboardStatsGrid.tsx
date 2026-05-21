@@ -25,16 +25,28 @@ export function DashboardStatsGrid({ locale, data }: Props) {
         ? `Ce mois: ${money(data.earningsThisMonthCents, locale)}`
         : `This month: ${money(data.earningsThisMonthCents, locale)}`;
 
-  const activeTotal = data.closedDeals + data.pendingDeals;
   const dealSub =
     locale === "ar"
-      ? `${data.pendingDeals} نشطة · ${data.closedDeals} مغلقة`
-      : `${data.pendingDeals} active · ${data.closedDeals} closed`;
+      ? `${data.closedDeals} مغلقة · ${data.pendingDeals} قيد المتابعة${data.lostDeals > 0 ? ` · ${data.lostDeals} خسارة` : ""}`
+      : locale === "fr"
+        ? `${data.closedDeals} fermées · ${data.pendingDeals} en cours`
+        : `${data.closedDeals} closed · ${data.pendingDeals} pending`;
 
   const rankSub =
     locale === "ar"
       ? `${data.compete.weeklyClosed} صفقة هذا الأسبوع`
-      : `${data.compete.weeklyClosed} deals this week`;
+      : locale === "fr"
+        ? `${data.compete.weeklyClosed} deals cette semaine`
+        : `${data.compete.weeklyClosed} deals this week`;
+
+  const rankDisplay =
+    data.compete.weeklyRank === null
+      ? locale === "ar"
+        ? "غير مُصنَّف"
+        : locale === "fr"
+          ? "Non classé"
+          : "Unranked"
+      : `#${data.compete.weeklyRank}`;
 
   const streakSub = data.streak
     ? locale === "ar"
@@ -52,23 +64,39 @@ export function DashboardStatsGrid({ locale, data }: Props) {
         icon={<span aria-hidden>💰</span>}
       />
       <StatCard
-        label={locale === "ar" ? "الصفقات" : "Deals"}
-        value={data.pendingDeals}
+        label={
+          locale === "ar" ? "الصفقات المغلقة" : locale === "fr" ? "Deals fermés" : "Closed deals"
+        }
+        value={data.closedDeals}
         sub={dealSub}
         icon={<span aria-hidden>🎯</span>}
       />
       <StatCard
-        label={locale === "ar" ? "ترتيبك هذا الأسبوع" : "Weekly rank"}
-        value={`#${data.compete.weeklyRank}`}
+        label={
+          locale === "ar" ? "ترتيبك هذا الأسبوع" : locale === "fr" ? "Classement hebdo" : "Weekly rank"
+        }
+        value={rankDisplay}
         animateValue={false}
         sub={rankSub}
         trend={
           data.rankDelta !== 0
-            ? { delta: data.rankDelta, label: locale === "ar" ? "مقارنة بالأسبوع الماضي" : "" }
+            ? {
+                delta: data.rankDelta,
+                label:
+                  locale === "ar"
+                    ? "مقارنة بالأسبوع السابق"
+                    : locale === "fr"
+                      ? "vs semaine précédente"
+                      : "vs prior week",
+              }
             : undefined
         }
         icon={
-          data.compete.weeklyRank <= 3 ? <span aria-hidden>🏆</span> : <span aria-hidden>📊</span>
+          data.compete.weeklyRank !== null && data.compete.weeklyRank <= 3 ? (
+            <span aria-hidden>🏆</span>
+          ) : (
+            <span aria-hidden>📊</span>
+          )
         }
       />
       <StatCard

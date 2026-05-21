@@ -31,9 +31,12 @@ export function DashboardHero({
   nextLevelMinXp,
 }: Props) {
   const lv = getLevelVisual(levelName);
-  const target = nextLevelMinXp ?? totalXp + 1;
+  const hasNext = nextLevelMinXp !== null && nextLevelMinXp > currentLevelMinXp;
+  const target = hasNext ? nextLevelMinXp! : currentLevelMinXp + 1;
   const span = Math.max(1, target - currentLevelMinXp);
-  const pct = Math.min(100, Math.round(((totalXp - currentLevelMinXp) / span) * 100));
+  const pct = hasNext
+    ? Math.min(100, Math.max(0, Math.round(((totalXp - currentLevelMinXp) / span) * 100)))
+    : 100;
   const powerLabel = getXpBrandLabel(locale);
   const circumference = 2 * Math.PI * 34;
   const offset = circumference - (pct / 100) * circumference;
@@ -77,10 +80,20 @@ export function DashboardHero({
           <div className="mt-5">
             <div className="mb-1 flex justify-between text-xs font-semibold text-[var(--growth-text-sub)]">
               <span>
-                {powerLabel} — {pct}%
+                {hasNext
+                  ? `${powerLabel} — ${pct}%`
+                  : locale === "ar"
+                    ? `${powerLabel} — أعلى مستوى`
+                    : locale === "fr"
+                      ? `${powerLabel} — niveau max`
+                      : `${powerLabel} — max level`}
               </span>
               <span>
-                {totalXp} / {target}
+                {hasNext
+                  ? `${Math.max(0, totalXp - currentLevelMinXp)} / ${span}`
+                  : totalXp.toLocaleString(
+                      locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US",
+                    )}
               </span>
             </div>
             <div className="h-3 overflow-hidden rounded-full bg-white/10">

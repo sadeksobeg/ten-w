@@ -9,6 +9,7 @@ import { DashboardStatsGrid } from "@/components/growth/dashboard/DashboardStats
 import { DashboardMissions } from "@/components/growth/dashboard/DashboardMissions";
 import { DashboardBadgesSection } from "@/components/growth/dashboard/DashboardBadgesSection";
 import { DashboardLeaderboardPreview } from "@/components/growth/dashboard/DashboardLeaderboardPreview";
+import { ActivityHeatmap } from "@/components/growth/dashboard/ActivityHeatmap";
 import { DealJourneyRow } from "@/components/growth/DealJourneyRow";
 import {
   addLeadDealAction,
@@ -69,11 +70,15 @@ export async function GrowthDashboardView({
 
       <DashboardMissions locale={locale} missions={data.missions} />
 
-      <DashboardBadgesSection locale={locale} badges={data.badges} />
+      {await DashboardBadgesSection({ locale, badges: data.badges })}
+
+      <ActivityHeatmap locale={locale} days={data.activityDays} memberDays={data.memberDays} />
 
       <DashboardLeaderboardPreview
         locale={locale}
-        leaderboard={data.leaderboard}
+        weekly={data.leaderboard}
+        monthly={data.monthlyLeaderboard}
+        season={data.leaderboardSeason}
         currentUserId={userId}
       />
 
@@ -315,7 +320,12 @@ export async function GrowthDashboardView({
                     <span className="text-white/40">#{idx + 1}</span>{" "}
                     {row.name ?? t("leaderboard.anon")}
                   </div>
-                  <div className="text-sm font-semibold text-gold/90">{row.closedDeals}</div>
+                  <div className="text-sm font-semibold text-gold/90">
+                    {row.score}{" "}
+                    <span className="text-[10px] text-white/40">
+                      ({row.closedDeals} {locale === "ar" ? "صفقة" : "deals"})
+                    </span>
+                  </div>
                 </div>
               ))
             )}
@@ -327,7 +337,7 @@ export async function GrowthDashboardView({
             </div>
             <div className="mt-2 text-xs text-white/50">
               {t("leaderboard.monthlyYou", {
-                rank: data.monthlyRank.rank,
+                rank: data.monthlyRank.rank ?? "—",
                 closed: data.monthlyRank.closedInWindow,
               })}
             </div>
@@ -344,7 +354,7 @@ export async function GrowthDashboardView({
                       <span className="text-white/40">#{idx + 1}</span>{" "}
                       {row.name ?? t("leaderboard.anon")}
                     </div>
-                    <div className="text-sm font-semibold text-gold/90">{row.closedDeals}</div>
+                    <div className="text-sm font-semibold text-gold/90">{row.score}</div>
                   </div>
                 ))
               )}

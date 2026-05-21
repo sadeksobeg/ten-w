@@ -12,31 +12,45 @@ export type BadgeIconId =
   | "sparkle"
   | "star";
 
+/** Unique silhouette per badge (not only rarity). */
+export type BadgeShapeId =
+  | "circle"
+  | "hexagon"
+  | "pentagon"
+  | "star16"
+  | "shield"
+  | "medal"
+  | "diamond_frame"
+  | "octagon"
+  | "crest";
+
 export type BadgeVisualMeta = {
   rarity: BadgeRarity;
   iconId: BadgeIconId;
   glowColor: string;
+  shapeId: BadgeShapeId;
 };
 
 const BADGE_VISUAL: Record<string, BadgeVisualMeta> = {
-  first_deal: { rarity: "rare", iconId: "lightning", glowColor: "#e4b84d" },
-  deals_5: { rarity: "epic", iconId: "target", glowColor: "#534ab7" },
-  deals_10: { rarity: "legendary", iconId: "diamond", glowColor: "#22d3ee" },
-  first_referral: { rarity: "rare", iconId: "link", glowColor: "#3b6d11" },
-  network_builder: { rarity: "epic", iconId: "globe", glowColor: "#3b82f6" },
-  ai_seller: { rarity: "rare", iconId: "robot", glowColor: "#534ab7" },
-  fast_closer: { rarity: "epic", iconId: "bolt_clock", glowColor: "#e4b84d" },
-  top_performer: { rarity: "legendary", iconId: "crown", glowColor: "#e4b84d" },
-  elite_pulse: { rarity: "legendary", iconId: "sparkle", glowColor: "#a855f7" },
-  trusted_partner: { rarity: "epic", iconId: "crown", glowColor: "#e4b84d" },
-  vip_seller: { rarity: "rare", iconId: "diamond", glowColor: "#e4b84d" },
-  strategic_agent: { rarity: "rare", iconId: "target", glowColor: "#534ab7" },
+  first_deal: { rarity: "rare", iconId: "lightning", glowColor: "#e4b84d", shapeId: "shield" },
+  deals_5: { rarity: "epic", iconId: "target", glowColor: "#534ab7", shapeId: "hexagon" },
+  deals_10: { rarity: "legendary", iconId: "diamond", glowColor: "#22d3ee", shapeId: "star16" },
+  first_referral: { rarity: "rare", iconId: "link", glowColor: "#3b6d11", shapeId: "circle" },
+  network_builder: { rarity: "epic", iconId: "globe", glowColor: "#3b82f6", shapeId: "octagon" },
+  ai_seller: { rarity: "rare", iconId: "robot", glowColor: "#534ab7", shapeId: "pentagon" },
+  fast_closer: { rarity: "epic", iconId: "bolt_clock", glowColor: "#e4b84d", shapeId: "diamond_frame" },
+  top_performer: { rarity: "legendary", iconId: "crown", glowColor: "#e4b84d", shapeId: "medal" },
+  elite_pulse: { rarity: "legendary", iconId: "sparkle", glowColor: "#a855f7", shapeId: "crest" },
+  trusted_partner: { rarity: "epic", iconId: "crown", glowColor: "#e4b84d", shapeId: "shield" },
+  vip_seller: { rarity: "rare", iconId: "diamond", glowColor: "#e4b84d", shapeId: "medal" },
+  strategic_agent: { rarity: "rare", iconId: "target", glowColor: "#534ab7", shapeId: "hexagon" },
 };
 
 const DEFAULT_META: BadgeVisualMeta = {
   rarity: "common",
   iconId: "star",
   glowColor: "#8a8490",
+  shapeId: "circle",
 };
 
 export function getBadgeVisual(badgeKey: string): BadgeVisualMeta {

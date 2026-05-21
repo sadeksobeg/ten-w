@@ -6,6 +6,7 @@ import {
   RARITY_COLORS,
   type BadgeIconId,
 } from "@/lib/growth/badge-visual";
+import { badgeShapeElement } from "@/lib/growth/badge-shape";
 
 export type BadgeIconSize = "sm" | "md" | "lg" | "xl";
 
@@ -204,33 +205,13 @@ export function BadgeIcon({
           <defs>
             <ShapeMask rarity={meta.rarity} size={px} />
             <clipPath id={clipId}>
-              {meta.rarity === "common" ? (
-                <circle cx={px / 2} cy={px / 2} r={px * 0.44} />
-              ) : meta.rarity === "rare" ? (
-                <polygon
-                  points={Array.from({ length: 6 })
-                    .map((_, i) => {
-                      const a = (Math.PI / 3) * i - Math.PI / 6;
-                      const r = px * 0.44;
-                      return `${px / 2 + r * Math.cos(a)},${px / 2 + r * Math.sin(a)}`;
-                    })
-                    .join(" ")}
-                />
-              ) : meta.rarity === "epic" ? (
-                <path
-                  d={`M${px * 0.5} ${px * 0.08} L${px * 0.9} ${px * 0.3} L${px * 0.75} ${px * 0.9} L${px * 0.25} ${px * 0.9} L${px * 0.1} ${px * 0.3} Z`}
-                />
-              ) : (
-                <polygon
-                  points={Array.from({ length: 16 })
-                    .map((_, i) => {
-                      const a = (Math.PI / 8) * i - Math.PI / 2;
-                      const rad = i % 2 === 0 ? px * 0.44 : px * 0.18;
-                      return `${px / 2 + rad * Math.cos(a)},${px / 2 + rad * Math.sin(a)}`;
-                    })
-                    .join(" ")}
-                />
-              )}
+              {(() => {
+                const shape = badgeShapeElement(meta.shapeId, px);
+                if (shape.type === "polygon") {
+                  return <polygon points={shape.points} />;
+                }
+                return <path d={shape.d} />;
+              })()}
             </clipPath>
           </defs>
           <circle

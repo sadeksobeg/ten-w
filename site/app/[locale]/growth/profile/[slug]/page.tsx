@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { BadgeGrid } from "@/components/growth/badges/BadgeGrid";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { ProfileViewTracker } from "@/components/growth/ProfileViewTracker";
+import { ProfileQr } from "@/components/growth/ProfileQr";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
@@ -42,7 +43,7 @@ const SKILL_PILLS = [
 export default async function PublicPartnerProfilePage({ params }: Props) {
   const { locale, slug } = await params;
   const t = await getTranslations("Growth.publicProfile");
-  const data = await getPublicProfileBySlug(slug);
+  const data = await getPublicProfileBySlug(slug, locale);
   if (!data) notFound();
 
   const xpLabel = getXpBrandLabel(locale);
@@ -106,10 +107,25 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {[
           { label: xpLabel, value: String(data.totalXp), icon: "⚡" },
           { label: t("closedDeals"), value: String(data.closedDeals), icon: "🤝" },
+          {
+            label: locale === "ar" ? "قيد المتابعة" : "Pending",
+            value: String(data.pendingDeals),
+            icon: "📋",
+          },
+          {
+            label: locale === "ar" ? "سلسلة النشاط" : "Streak",
+            value: String(data.streakCurrent),
+            icon: "🔥",
+          },
+          {
+            label: locale === "ar" ? "أيام العضوية" : "Member days",
+            value: String(data.memberDays),
+            icon: "📅",
+          },
           { label: t("badges"), value: String(data.badgeCount), icon: "🏆" },
           { label: locale === "ar" ? "مشاهدات" : "Views", value: String(data.profileViews), icon: "👁" },
         ].map((s) => (
@@ -127,11 +143,14 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
         <h2 className="text-lg font-bold">{t("badgesTitle")}</h2>
         <GlassCard className="mt-4">
           <BadgeGrid
+            locale={locale}
             badges={data.allBadges.map((b) => ({
               key: b.key,
               name: b.earned ? b.name : "???",
-              description: b.earned ? undefined : t("lockedBadge"),
+              description: b.earned ? b.description : t("lockedBadge"),
+              howTo: b.howTo,
               earned: b.earned,
+              grantedAt: b.grantedAt,
               hidden: b.hidden,
             }))}
             size="md"
@@ -165,19 +184,10 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
       </GlassCard>
 
       <GlassCard className="mt-6 flex flex-col items-center p-6 text-center">
-        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden>
-          <rect x="8" y="8" width="20" height="20" fill="var(--growth-gold)" opacity="0.3" />
-          <rect x="36" y="8" width="20" height="20" fill="var(--growth-gold)" />
-          <rect x="8" y="36" width="20" height="20" fill="var(--growth-gold)" />
-          <rect x="36" y="36" width="8" height="8" fill="var(--growth-gold)" />
-          <rect x="48" y="36" width="8" height="8" fill="var(--growth-gold)" opacity="0.5" />
-          <rect x="36" y="48" width="8" height="8" fill="var(--growth-gold)" opacity="0.5" />
-          <rect x="48" y="48" width="8" height="8" fill="var(--growth-gold)" />
-        </svg>
-        <p className="mt-3 text-sm font-bold">{t("qrSoon")}</p>
-        <p className="text-xs text-[var(--growth-text-sub)]">
-          {locale === "ar" ? "شارك ملفك مباشرة" : "Share your card"}
-        </p>
+        <ProfileQr
+          url={`https://tenegta.com/${locale}/growth/profile/${data.publicSlug}`}
+          label={locale === "ar" ? "امسح لمشاركة البروفايل" : "Scan to share profile"}
+        />
       </GlassCard>
     </>
   );

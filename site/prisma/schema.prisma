@@ -119,6 +119,7 @@ model User {
   notifications              Notification[]
   eventsCreated              GrowthEvent[]        @relation("EventCreator")
   eventParticipants          EventParticipant[]
+  activityDays               UserActivityDay[]
 }
 
 model PartnerProfile {
@@ -314,6 +315,36 @@ model LeaderboardRewardRule {
   bonusCents Int      @default(0)
   badgeKey   String?
   active     Boolean  @default(true)
+}
+
+/// Active scoring weights for partner leaderboards (composite: deals + XP + streak).
+model LeaderboardSeason {
+  id           String   @id @default(cuid())
+  name         String
+  windowMs     BigInt
+  weightDeals  Int      @default(40)
+  weightXp     Int      @default(40)
+  weightStreak Int      @default(20)
+  active       Boolean  @default(true)
+  startsAt     DateTime @default(now())
+  endsAt       DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([active])
+}
+
+/// One row per partner per UTC day they opened the dashboard (activity heatmap).
+model UserActivityDay {
+  id     String   @id @default(cuid())
+  userId String
+  day    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, day])
+  @@index([userId])
 }
 
 model LeaderboardGrantLog {

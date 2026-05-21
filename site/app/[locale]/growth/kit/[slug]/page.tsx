@@ -18,7 +18,7 @@ export default async function GrowthKitProductPage({ params }: Props) {
     redirect(`/${locale}/growth/admin`);
   }
 
-  const data = await getPartnerDashboard(session.user.id);
+  const data = await getPartnerDashboard(session.user.id, locale);
   const product = data.products.find((p) => p.slug === slug);
   if (!product) notFound();
 
