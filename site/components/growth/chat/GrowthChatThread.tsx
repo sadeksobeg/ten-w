@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import type { ChatMessageDTO } from "@/lib/growth/chat-service";
 import type { ChatSuggestionItem } from "@/lib/growth/chat-suggestions";
 import { suggestImpactDelta } from "@/lib/growth/chat-suggestions";
 import { GrowthChatMessageBubble } from "@/components/growth/chat/GrowthChatMessageBubble";
+import { GrowthChatQuickActionsBar } from "@/components/growth/chat/GrowthChatQuickActionsBar";
 import { playDemoChime } from "@/lib/demo/demo-sound";
 
 type Props = {
@@ -14,10 +15,13 @@ type Props = {
   viewerUserId: string;
   isAdmin: boolean;
   locale: string;
-  /** Prefer SSE when true (falls back to polling if EventSource errors). */
   preferRealtime?: boolean;
   hideThreadTitle?: boolean;
+  /** @deprecated Use `embedded` + flex parent for height. Kept for partner page. */
   scrollMaxClassName?: string;
+  /** Fills parent flex column (admin inbox center panel). */
+  embedded?: boolean;
+  className?: string;
 };
 
 const GROUP_MS = 5 * 60 * 1000;
@@ -61,7 +65,9 @@ export function GrowthChatThread({
   locale,
   preferRealtime = true,
   hideThreadTitle = false,
-  scrollMaxClassName = "max-h-[min(52vh,420px)]",
+  scrollMaxClassName,
+  embedded = false,
+  className = "",
 }: Props) {
   const t = useTranslations("Growth.chat");
   const tMessage = useTranslations("Growth.chat.message");
@@ -78,6 +84,7 @@ export function GrowthChatThread({
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const lastTsRef = useRef<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [sseDead, setSseDead] = useState(false);
   const dir = locale === "ar" ? "rtl" : "ltr";
   const nfDate =
@@ -88,6 +95,15 @@ export function GrowthChatThread({
   const flashToast = useCallback((msg: string) => {
     setToast(msg);
     window.setTimeout(() => setToast(null), 2600);
+  }, []);
+
+  const scrollToBottom = useCallback((smooth = false) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({
+      top: el.scrollHeight,
+      behavior: smooth ? "smooth" : "auto",
+    });
   }, []);
 
   const kindLabel = useCallback(
@@ -181,6 +197,7 @@ export function GrowthChatThread({
     lastTsRef.current = null;
     setProbShift(null);
     setModeledCloseProbability(null);
+    setItems([]);
   }, [conversationId]);
 
   useEffect(() => {
@@ -188,6 +205,11 @@ export function GrowthChatThread({
     const id = window.setTimeout(() => setProbShift(null), 4200);
     return () => window.clearTimeout(id);
   }, [probShift]);
+
+  useEffect(() => {
+    const id = window.requestAnimationFrame(() => scrollToBottom(false));
+    return () => window.cancelAnimationFrame(id);
+  }, [items.length, conversationId, scrollToBottom]);
 
   const shouldPoll = !preferRealtime || sseDead;
 
@@ -243,7 +265,7 @@ export function GrowthChatThread({
   }, [conversationId, mergeIncoming, preferRealtime, sseDead]);
 
   const runQuickSuggest = async (
-    tpl: "push_close" | "offer_bonus" | "ask_update" | "commission_nudge",
+    tpl: ChatSuggestionItem["suggestTemplate"],
   ) => {
     setInlineBusy(true);
     const delta =
@@ -263,6 +285,7 @@ export function GrowthChatThread({
         setProbShift({ from: fromProb, to: toProb });
         window.setTimeout(() => flashToast(t("microCommitOk")), 280);
         playDemoChime(chatSoundEnabled());
+        scrollToBottom(true);
       }
     } finally {
       setInlineBusy(false);
@@ -290,6 +313,7 @@ export function GrowthChatThread({
       setBody("");
       flashToast(t("microActionOk"));
       playDemoChime(chatSoundEnabled());
+      scrollToBottom(true);
     } catch {
       setError(t("sendError"));
     } finally {
@@ -297,21 +321,26 @@ export function GrowthChatThread({
     }
   };
 
-  const showAvatarRow = useCallback((idx: number) => {
-    const m = items[idx];
-    if (!m) return true;
-    const prev = items[idx - 1];
-    if (!prev) return true;
-    if (prev.senderUserId !== m.senderUserId) return true;
-    const dt =
-      new Date(m.createdAt).getTime() - new Date(prev.createdAt).getTime();
-    return dt > GROUP_MS;
-  }, [items]);
+  const showAvatarRow = useCallback(
+    (idx: number) => {
+      const m = items[idx];
+      if (!m) return true;
+      const prev = items[idx - 1];
+      if (!prev) return true;
+      if (prev.senderUserId !== m.senderUserId) return true;
+      const dt =
+        new Date(m.createdAt).getTime() - new Date(prev.createdAt).getTime();
+      return dt > GROUP_MS;
+    },
+    [items],
+  );
 
-  const topSuggestions = suggestions.slice(0, 3);
-  const moreSuggestions = suggestions.slice(3);
+  const topSuggestion = suggestions[0];
+  const scrollAreaClass = embedded
+    ? "min-h-0 flex-1"
+    : scrollMaxClassName ?? "max-h-[min(52vh,420px)]";
 
-  const timelineNodes = items.flatMap((m, idx) => {
+  const messageNodes = items.flatMap((m, idx) => {
     const prev = items[idx - 1];
     const showDay =
       idx === 0 || (prev && dayKey(prev.createdAt) !== dayKey(m.createdAt));
@@ -325,95 +354,39 @@ export function GrowthChatThread({
             day: "numeric",
           }).format(dayDate);
 
-    const timeShort = new Intl.DateTimeFormat(nfTime, {
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(new Date(m.createdAt));
-
-    const isEvent = ["SYSTEM", "BONUS", "BADGE", "WARNING", "ACTION"].includes(m.kind);
-
-    const showInline =
-      isAdmin &&
-      m.senderUserId !== viewerUserId &&
-      m.kind === "TEXT" &&
-      m.body.trim().length > 0;
+    const mine = m.senderUserId === viewerUserId;
+    const avatarLabel = mine
+      ? isAdmin
+        ? t("adminTag")
+        : t("partnerTag")
+      : isAdmin
+        ? t("partnerTag")
+        : t("adminTag");
 
     const row = (
-      <div
+      <GrowthChatMessageBubble
         key={m.id}
-        className={`relative border-s border-white/10 ps-3 ms-0.5 ${
-          isEvent ? "border-gold/30 bg-gold/[0.04]" : ""
-        }`}
-      >
-        <div className="absolute start-0 top-3 h-2 w-2 -translate-x-[calc(50%+1px)] rounded-full bg-white/25 ring-2 ring-black/40" />
-        <div className="flex items-baseline justify-between gap-2 pe-1 pt-1">
-          <span className="font-mono text-[10px] font-semibold tabular-nums text-white/40">
-            {timeShort}
-          </span>
-          {isEvent ? (
-            <span className="text-[9px] font-bold uppercase tracking-wide text-gold/70">
-              {t("timelineEvent")}
-            </span>
-          ) : null}
-        </div>
-        <GrowthChatMessageBubble
-          message={m}
-          viewerUserId={viewerUserId}
-          isAdmin={isAdmin}
-          locale={locale}
-          showAvatarRow={showAvatarRow(idx)}
-          kindLabel={kindLabel}
-          partnerTag={t("partnerTag")}
-          adminTag={t("adminTag")}
-        />
-        {showInline && topSuggestions.length > 0 ? (
-          <div className="mb-2 mt-1 flex flex-wrap items-center gap-1 border-t border-white/5 pt-2">
-            <span className="w-full text-[9px] font-bold uppercase tracking-wide text-white/35">
-              {t("suggestedActions")}
-            </span>
-            {topSuggestions.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                disabled={inlineBusy}
-                onClick={() => void runQuickSuggest(s.suggestTemplate)}
-                className="rounded-lg border border-white/10 bg-white/[0.06] px-2 py-1 text-[10px] font-semibold text-white/80 transition hover:scale-[1.03] hover:border-gold/35 hover:text-white active:scale-95 disabled:opacity-40"
-              >
-                {tIntel(s.labelKey as "suggestPushCloseHi")}
-              </button>
-            ))}
-            {moreSuggestions.length > 0 ? (
-              <details className="w-full">
-                <summary className="cursor-pointer text-[10px] font-semibold text-gold/80 hover:text-gold">
-                  {tIntel("suggestionsMore")}
-                </summary>
-                <div className="mt-1 flex flex-wrap gap-1">
-                  {moreSuggestions.map((s) => (
-                    <button
-                      key={s.id}
-                      type="button"
-                      disabled={inlineBusy}
-                      onClick={() => void runQuickSuggest(s.suggestTemplate)}
-                      className="rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-white/75 hover:border-white/25"
-                    >
-                      {tIntel(s.labelKey as "suggestPushCloseHi")}
-                    </button>
-                  ))}
-                </div>
-              </details>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
+        message={m}
+        viewerUserId={viewerUserId}
+        isAdmin={isAdmin}
+        locale={locale}
+        showAvatarRow={showAvatarRow(idx)}
+        kindLabel={kindLabel}
+        partnerTag={t("partnerTag")}
+        adminTag={t("adminTag")}
+        avatarLabel={avatarLabel}
+      />
     );
 
     if (showDay) {
       return [
         <div
-          key={`day-${dayKey(m.createdAt)}-${m.id}`}
-          className="sticky top-0 z-10 mb-2 mt-2 border-b border-white/10 bg-[#050816]/95 py-2 text-center text-[11px] font-bold uppercase tracking-wide text-white/50 first:mt-0"
+          key={`day-${dayKey(m.createdAt)}`}
+          className="flex justify-center py-3 first:pt-1"
         >
-          {t("timelineDay", { date: dayLabel })}
+          <span className="rounded-full border border-white/10 bg-[#0a1020]/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white/45 shadow-sm">
+            {t("timelineDay", { date: dayLabel })}
+          </span>
         </div>,
         row,
       ];
@@ -421,103 +394,131 @@ export function GrowthChatThread({
     return [row];
   });
 
+  const shellClass = embedded
+    ? `flex h-full min-h-0 flex-col ${className}`
+    : `space-y-3 ${className}`;
+
   return (
-    <div dir={dir} className="space-y-4">
-      {probShift ? (
-        <motion.div
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl border border-violet-400/35 bg-gradient-to-br from-violet-950/60 to-black/50 px-4 py-3 text-center shadow-[0_0_28px_rgba(139,92,246,0.12)]"
-          role="status"
-        >
-          <div className="text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/90">
-            {tIntel("probShiftLabel")}
-          </div>
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-xl font-black tabular-nums text-white sm:text-2xl">
-            <span>{probShift.from}%</span>
-            <motion.span
-              aria-hidden
-              initial={{ opacity: 0.3, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-gold"
+    <div dir={dir} className={shellClass}>
+      <AnimatePresence>
+        {probShift ? (
+          <motion.div
+            key="prob"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="shrink-0 overflow-hidden px-3 pt-2"
+          >
+            <div
+              className="rounded-xl border border-violet-400/35 bg-gradient-to-br from-violet-950/60 to-black/50 px-4 py-2.5 text-center"
+              role="status"
             >
-              →
-            </motion.span>
-            <motion.span
-              key={probShift.to}
-              initial={{ opacity: 0, x: dir === "rtl" ? -10 : 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ type: "spring", stiffness: 320, damping: 22 }}
-              className="text-gold drop-shadow-[0_0_12px_rgba(234,179,8,0.45)]"
-            >
-              {probShift.to}%
-            </motion.span>
-          </div>
-          <p className="mt-2 text-[10px] leading-relaxed text-white/45">{tIntel("probShiftModeled")}</p>
-        </motion.div>
-      ) : null}
+              <div className="text-[9px] font-black uppercase tracking-[0.22em] text-violet-200/90">
+                {tIntel("probShiftLabel")}
+              </div>
+              <div className="mt-1 flex flex-wrap items-center justify-center gap-2 text-lg font-black tabular-nums text-white">
+                <span>{probShift.from}%</span>
+                <span className="text-gold">→</span>
+                <span className="text-gold">{probShift.to}%</span>
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
       {toast ? (
         <div
-          className="motion-safe:animate-in motion-safe:fade-in rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3 py-2 text-center text-xs font-semibold text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+          className="mx-3 shrink-0 rounded-lg border border-emerald-400/30 bg-emerald-500/15 px-3 py-1.5 text-center text-xs font-semibold text-emerald-100"
           role="status"
         >
           {toast}
         </div>
       ) : null}
-      <div className="rounded-2xl border border-white/10 bg-[#050816]/80 p-4 shadow-[0_0_30px_rgba(0,0,0,0.35)] backdrop-blur-xl">
-        {hideThreadTitle ? null : (
-          <div className="text-xs font-semibold text-white/50">{t("threadTitle")}</div>
-        )}
-        {isAdmin && topSuggestions.length > 0 ? (
-          <div className="mt-3 rounded-xl border border-emerald-500/35 bg-gradient-to-br from-emerald-950/45 via-[#050816] to-black/60 px-3 py-2.5 shadow-[0_0_22px_rgba(16,185,129,0.1)]">
-            <div className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-200/85">
-              {tIntel("commitPathLabel")}
-            </div>
-            <div className="mt-1.5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-white/80">
-              <span className="inline-flex size-4 items-center justify-center rounded-full bg-emerald-500/30 text-[11px] text-emerald-100 ring-1 ring-emerald-400/40">
-                ✓
-              </span>
-              {tIntel("commitLockedBadge")}
-            </div>
-            <p className="mt-2 text-sm font-bold leading-snug text-white">
-              {commitActionLine(tIntel, topSuggestions[0]!.suggestTemplate)}
-            </p>
-            <p className="mt-1 text-[10px] text-emerald-200/90">
-              {tIntel("directiveImpactHint", { n: topSuggestions[0]!.impactCloseDelta })}
-            </p>
+
+      <div
+        className={
+          embedded
+            ? "flex min-h-0 flex-1 flex-col overflow-hidden"
+            : "rounded-2xl border border-white/10 bg-[#050816]/80 shadow-[0_0_30px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+        }
+      >
+        {!embedded && !hideThreadTitle ? (
+          <div className="border-b border-white/10 px-4 py-2.5 text-xs font-semibold text-white/50">
+            {t("threadTitle")}
           </div>
         ) : null}
-        <div className={`mt-3 space-y-1 overflow-y-auto pe-1 ${scrollMaxClassName}`}>
+
+        {isAdmin && topSuggestion ? (
+          <div className="shrink-0 border-b border-emerald-500/20 bg-gradient-to-r from-emerald-950/50 via-[#050816] to-transparent px-3 py-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-md bg-emerald-500/25 px-1.5 py-0.5 text-[9px] font-black uppercase text-emerald-100 ring-1 ring-emerald-400/35">
+                {tIntel("commitLockedBadge")}
+              </span>
+              <p className="min-w-0 flex-1 text-xs font-semibold leading-snug text-white/90">
+                {commitActionLine(tIntel, topSuggestion.suggestTemplate)}
+              </p>
+            </div>
+          </div>
+        ) : null}
+
+        <div
+          ref={scrollRef}
+          className={`overflow-y-auto px-3 py-3 ${scrollAreaClass} ${
+            embedded ? "bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Cpath d=%22M0 20h40M20 0v40%22 stroke=%22%23ffffff%22 stroke-opacity=%220.03%22/%3E%3C/svg%3E')]" : ""
+          }`}
+        >
           {items.length === 0 ? (
-            <div className="text-sm text-white/45">{t("empty")}</div>
+            <div className="flex h-full min-h-[200px] flex-col items-center justify-center text-center">
+              <p className="text-sm text-white/45">{t("empty")}</p>
+              {!isAdmin ? (
+                <p className="mt-1 text-xs text-white/30">{t("partnerSupportHint")}</p>
+              ) : null}
+            </div>
           ) : (
-            timelineNodes
+            <div className="space-y-0.5">{messageNodes}</div>
           )}
         </div>
-      </div>
 
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <textarea
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          rows={2}
-          className="min-h-[72px] flex-1 resize-y rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none transition hover:border-white/15 focus:border-gold/35"
-          placeholder={t("placeholder")}
-        />
-        <button
-          type="button"
-          disabled={busy}
-          onClick={() => void onSend()}
-          className="rounded-xl bg-gradient-to-r from-gold/30 to-gold/15 px-5 py-3 text-sm font-bold text-white transition hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(234,179,8,0.2)] active:scale-[0.98] disabled:opacity-50"
-        >
-          {t("send")}
-        </button>
+        {isAdmin ? (
+          <GrowthChatQuickActionsBar
+            suggestions={suggestions}
+            disabled={inlineBusy}
+            onSuggest={(tpl) => void runQuickSuggest(tpl)}
+          />
+        ) : null}
+
+        <div className="shrink-0 border-t border-white/10 bg-[#070b18]/95 p-3 backdrop-blur-md">
+          <div className="flex items-end gap-2">
+            <textarea
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  if (!busy && body.trim()) void onSend();
+                }
+              }}
+              rows={1}
+              className="max-h-32 min-h-[44px] flex-1 resize-y rounded-2xl border border-white/10 bg-black/50 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-gold/35"
+              placeholder={t("placeholder")}
+            />
+            <button
+              type="button"
+              disabled={busy || !body.trim()}
+              onClick={() => void onSend()}
+              aria-label={t("send")}
+              className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gold/50 to-gold/20 text-lg font-bold text-white shadow-[0_0_20px_rgba(234,179,8,0.25)] transition hover:scale-105 active:scale-95 disabled:opacity-40"
+            >
+              ↑
+            </button>
+          </div>
+          {error ? (
+            <p className="mt-2 text-xs text-rose-300" role="alert">
+              {error}
+            </p>
+          ) : null}
+        </div>
       </div>
-      {error ? (
-        <p className="text-sm text-rose-300" role="alert">
-          {error}
-        </p>
-      ) : null}
     </div>
   );
 }

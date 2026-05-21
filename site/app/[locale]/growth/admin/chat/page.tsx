@@ -19,10 +19,11 @@ export default async function GrowthAdminChatPage({ params }: Props) {
   const t = await getTranslations("Growth.chat.admin");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold sm:text-3xl">
         {t("pageTitle")}
       </h1>
+      <p className="max-w-2xl text-sm text-white/50">{t("pageSubtitle")}</p>
       <GrowthAdminChatClient locale={locale} adminUserId={session.user.id} />
     </div>
   );

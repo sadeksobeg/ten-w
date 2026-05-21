@@ -1251,6 +1251,8 @@
       "timelineToday": "اليوم",
       "timelineEvent": "حدث",
       "suggestedActions": "مقترح",
+      "quickActionsLabel": "إجراءات سريعة",
+      "partnerSupportHint": "فريق TENEGTA يرد عادةً خلال ساعات العمل.",
       "microActionOk": "تم",
       "microImpactOk": "أُرسل — ارتفاع نموذجي في احتمال الإغلاق ≈ +{n}٪",
       "microCommitOk": "تم تسجيل الإجراء — مسار مُلتزم",
@@ -1375,13 +1377,26 @@
       },
       "admin": {
         "pageTitle": "صندوق محادثات الشركاء",
+        "pageSubtitle": "صندوق وارد بثلاثة أعمدة: شركاء، محادثة فقاعات، وذكاء القرار.",
         "timeToAct": "الوقت المتبقي للتحرك: {m} د",
         "windowClosing": "النافذة تضيق قريباً",
         "inbox": "صندوق الوارد",
         "open": "مفتوحة",
         "resolved": "مغلقة",
         "resolve": "إغلاق الموضوع",
-        "pick": "اختر محادثة"
+        "pick": "اختر محادثة",
+        "pickHint": "من القائمة على اليسار — المحادثات ذات النقطة الزرقاء بانتظار ردك.",
+        "searchPlaceholder": "بحث بالاسم أو البريد…",
+        "noThreads": "لا محادثات تطابق الفلتر.",
+        "noPreview": "لا رسائل بعد",
+        "filterUnread": "بانتظار الرد",
+        "unreadHint": "رسالة جديدة من الشريك",
+        "justNow": "الآن",
+        "minutesAgo": "منذ {m} د",
+        "hoursAgo": "منذ {h} س",
+        "daysAgo": "منذ {d} ي",
+        "showContext": "السياق",
+        "hideContext": "إخفاء"
       }
     },
     "admin": {

@@ -35,13 +35,17 @@ export default async function GrowthPartnerChatPage({ params }: Props) {
           {t("chat.back")}
         </Link>
       </div>
-      <GlassCard className="border border-white/12 bg-white/[0.03] p-4 sm:p-6">
-        <GrowthChatThread
-          conversationId={conv.id}
-          viewerUserId={session.user.id}
-          isAdmin={false}
-          locale={locale}
-        />
+      <GlassCard className="overflow-hidden border border-white/12 bg-white/[0.03] p-0 sm:p-0">
+        <div className="h-[min(72vh,640px)]">
+          <GrowthChatThread
+            conversationId={conv.id}
+            viewerUserId={session.user.id}
+            isAdmin={false}
+            locale={locale}
+            embedded
+            className="h-full"
+          />
+        </div>
       </GlassCard>
     </div>
   );

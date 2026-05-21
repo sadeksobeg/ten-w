@@ -1251,6 +1251,10 @@
       "timelineToday": "Today",
       "timelineEvent": "Event",
       "suggestedActions": "Suggested",
+      "quickActionsLabel": "Quick actions",
+      "partnerSupportHint": "The TENEGTA team usually replies during business hours.",
+      "quickActionsLabel": "Quick actions",
+      "partnerSupportHint": "The admin team usually replies during business hours.",
       "microActionOk": "Done",
       "microImpactOk": "Sent — modeled close lift ≈ +{n}%",
       "microCommitOk": "Action logged — committed path",
@@ -1375,13 +1379,26 @@
       },
       "admin": {
         "pageTitle": "Partner inbox",
+        "pageSubtitle": "Three-column desk: partner list, bubble thread, and decision radar.",
         "timeToAct": "Time to act: {m} min",
         "windowClosing": "Window closing soon",
         "inbox": "Inbox",
         "open": "Open",
         "resolved": "Resolved",
         "resolve": "Resolve",
-        "pick": "Select a thread"
+        "pick": "Select a thread",
+        "pickHint": "Pick a partner from the list or search by name or email.",
+        "searchPlaceholder": "Search conversations…",
+        "noThreads": "No conversations match this filter.",
+        "noPreview": "No messages yet",
+        "filterUnread": "Needs reply",
+        "unreadHint": "New message from partner",
+        "justNow": "Now",
+        "minutesAgo": "{m}m ago",
+        "hoursAgo": "{h}h ago",
+        "daysAgo": "{d}d ago",
+        "showContext": "Context",
+        "hideContext": "Hide"
       }
     },
     "admin": {

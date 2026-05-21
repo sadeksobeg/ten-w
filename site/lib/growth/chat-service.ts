@@ -42,6 +42,10 @@ export type ChatConversationListItem = {
    * Not a SLA clock; derived from segment, probability, and recency.
    */
   timeToActMinutes: number | null;
+  /** Sender of the latest message (for inbox unread / reply-needed UI). */
+  lastMessageSenderId: string | null;
+  /** Open thread where the partner sent the last message — admin should reply. */
+  needsAdminReply: boolean;
 };
 
 export async function ensureOpenConversation(partnerUserId: string) {
@@ -100,7 +104,7 @@ export async function listAdminConversations(): Promise<ChatConversationListItem
       messages: {
         orderBy: { createdAt: "desc" },
         take: 1,
-        select: { body: true },
+        select: { body: true, senderUserId: true },
       },
     },
   });
@@ -226,9 +230,17 @@ export async function listAdminConversations(): Promise<ChatConversationListItem
       isFresh,
       momentumKey,
     };
+    const lastMessageSenderId = r.messages[0]?.senderUserId ?? null;
+    const needsAdminReply =
+      r.status === "OPEN" &&
+      lastMessageSenderId != null &&
+      lastMessageSenderId === pid;
+
     return {
       ...listShape,
       timeToActMinutes: timeToActMinutesForInbox(listShape),
+      lastMessageSenderId,
+      needsAdminReply,
     };
   });
 }

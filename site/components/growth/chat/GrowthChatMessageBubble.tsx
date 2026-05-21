@@ -12,6 +12,7 @@ type Props = {
   kindLabel: (kind: string) => string;
   partnerTag: string;
   adminTag: string;
+  avatarLabel?: string;
 };
 
 function bubbleTone(kind: string): string {
@@ -45,6 +46,12 @@ function textToneClass(metadata: Record<string, unknown> | null): string {
   }
 }
 
+function avatarInitial(label: string): string {
+  const parts = label.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) return (parts[0]![0]! + parts[1]![0]!).toUpperCase();
+  return label.slice(0, 2).toUpperCase();
+}
+
 export function GrowthChatMessageBubble({
   message: m,
   viewerUserId,
@@ -54,6 +61,7 @@ export function GrowthChatMessageBubble({
   kindLabel,
   partnerTag,
   adminTag,
+  avatarLabel,
 }: Props) {
   const mine = m.senderUserId === viewerUserId;
   const kindUpper = m.kind.toUpperCase();
@@ -64,6 +72,9 @@ export function GrowthChatMessageBubble({
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(m.createdAt));
+
+  const label =
+    avatarLabel ?? (mine ? (isAdmin ? adminTag : partnerTag) : isAdmin ? partnerTag : adminTag);
 
   const [bonusFlash, setBonusFlash] = useState(kindUpper === "BONUS");
   useEffect(() => {
@@ -78,8 +89,10 @@ export function GrowthChatMessageBubble({
 
   if (kindUpper === "SYSTEM") {
     return (
-      <div className={`flex justify-center py-1 ${showAvatarRow ? "pt-2" : ""}`}>
-        <p className="max-w-[90%] text-center text-[11px] italic text-white/45">{m.body}</p>
+      <div className={`flex justify-center py-1.5 ${showAvatarRow ? "pt-2" : "pt-0.5"}`}>
+        <p className="max-w-[88%] rounded-2xl bg-white/[0.04] px-4 py-2 text-center text-[11px] italic text-white/50">
+          {m.body}
+        </p>
       </div>
     );
   }
@@ -89,20 +102,20 @@ export function GrowthChatMessageBubble({
     const flash = kindUpper === "BONUS" && bonusFlash;
     return (
       <div
-        className={`motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-1 motion-safe:duration-300 flex justify-center py-0.5 ${
-          showAvatarRow ? "pt-1" : ""
+        className={`motion-safe:animate-in motion-safe:fade-in flex justify-center py-1 ${
+          showAvatarRow ? "pt-2" : "pt-0.5"
         }`}
       >
         <div
-          className={`max-w-[92%] rounded-2xl border px-3 py-2 text-sm transition-shadow duration-500 ${tone} ${
+          className={`max-w-[min(92%,420px)] rounded-2xl border px-4 py-2.5 text-sm transition-shadow duration-500 ${tone} ${
             flash ? "shadow-[0_0_40px_rgba(234,179,8,0.55)] ring-2 ring-gold/50" : ""
           }`}
         >
           <div className="text-[10px] font-semibold uppercase tracking-wide text-white/50">
             {kindLabel(kindUpper)}
           </div>
-          <div className="mt-1 whitespace-pre-wrap break-words">{m.body}</div>
-          <div className="mt-1 text-[10px] text-white/35">{time}</div>
+          <div className="mt-1 whitespace-pre-wrap break-words leading-relaxed">{m.body}</div>
+          <div className="mt-1.5 text-end text-[10px] text-white/35">{time}</div>
         </div>
       </div>
     );
@@ -112,22 +125,51 @@ export function GrowthChatMessageBubble({
 
   return (
     <div
-      className={`motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-1 motion-safe:duration-300 flex ${
-        mine ? "justify-end" : "justify-start"
-      } py-0.5 ${showAvatarRow ? "pt-1.5" : ""}`}
+      className={`flex gap-2 py-0.5 ${mine ? "flex-row-reverse" : "flex-row"} ${
+        showAvatarRow ? "pt-2" : "pt-0.5"
+      }`}
     >
+      {showAvatarRow ? (
+        <div
+          className={`flex size-8 shrink-0 items-center justify-center rounded-full text-[10px] font-black ${
+            mine
+              ? "bg-[#B07D2B]/90 text-white"
+              : "bg-white/12 text-white/80 ring-1 ring-white/15"
+          }`}
+          aria-hidden
+        >
+          {avatarInitial(label)}
+        </div>
+      ) : (
+        <div className="size-8 shrink-0" aria-hidden />
+      )}
       <div
-        className={`max-w-[75%] px-3 py-2 text-sm shadow-sm ${
-          mine
-            ? "rounded-2xl rounded-tr-none bg-[#B07D2B]/80 text-white"
-            : `rounded-2xl rounded-tl-none bg-white/[0.08] text-white/90 ${toneExtra}`
-        }`}
+        className={`max-w-[min(78%,380px)] ${mine ? "items-end" : "items-start"} flex flex-col`}
       >
-        <div className="whitespace-pre-wrap break-words">{m.body}</div>
-        <div className="mt-1 text-[10px] text-white/40">
-          {time}
-          {isAdmin && !mine ? ` · ${partnerTag}` : null}
-          {!isAdmin && !mine ? ` · ${adminTag}` : null}
+        {showAvatarRow ? (
+          <span
+            className={`mb-0.5 px-1 text-[10px] font-semibold text-white/40 ${
+              mine ? "text-end" : "text-start"
+            }`}
+          >
+            {label}
+          </span>
+        ) : null}
+        <div
+          className={`px-3.5 py-2 text-sm shadow-md ${
+            mine
+              ? "rounded-2xl rounded-ee-md bg-gradient-to-br from-[#B07D2B] to-[#8a6322] text-white"
+              : `rounded-2xl rounded-es-md border border-white/10 bg-[#121a2e] text-white/92 ${toneExtra}`
+          }`}
+        >
+          <div className="whitespace-pre-wrap break-words leading-relaxed">{m.body}</div>
+          <div
+            className={`mt-1 text-[10px] ${mine ? "text-white/55" : "text-white/40"} ${
+              mine ? "text-end" : "text-start"
+            }`}
+          >
+            {time}
+          </div>
         </div>
       </div>
     </div>
