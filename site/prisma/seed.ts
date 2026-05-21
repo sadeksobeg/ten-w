@@ -32,6 +32,15 @@ async function uniqueReferralCode(): Promise<string> {
 }
 
 async function main() {
+  const existingUsers = await prisma.user.count();
+  if (existingUsers > 0 && process.env.FORCE_GROWTH_SEED !== "1") {
+    console.error(
+      `[seed] ABORT: database already has ${existingUsers} user(s). ` +
+        "Seed wipes all Growth data. Use FORCE_GROWTH_SEED=1 only on a dev reset.",
+    );
+    return;
+  }
+
   await prisma.eventNotification.deleteMany();
   await prisma.notification.deleteMany();
   await prisma.eventMilestone.deleteMany();

@@ -117,6 +117,8 @@ bash scripts/server-update.sh
 
 هذا يسحب من GitHub، يثبت Node 20 إن لزم، يضبط قاعدة `tenegta_db`، يبني ويعيد تشغيل PM2.
 
+**تحديثات الكود لا تمسح الشركاء:** `server-update.sh` يشغّل `seed` فقط إذا كانت قاعدة البيانات **فارغة**. بعد إنشاء شركاء حقيقيين، لا تشغّل `bash scripts/run-seed.sh` يدوياً (يمسح كل الحسابات).
+
 **مهم:** على السيرفر لا تضبط `export DATABASE_URL=...clinicsaas` في الطرفية — يجب أن يبقى الاتصال في `site/.env` فقط على قاعدة **`tenegta_db`**. السكربت يمسح متغير الشل تلقائياً ويرفض تعديل قواعد تطبيقات أخرى.
 
 **لا تستخدم** `npx prisma db seed` مباشرة إن كان `DATABASE_URL` مضبوطاً في الشل — استخدم `bash scripts/run-seed.sh` (يستخدم `site/.env` فقط).
