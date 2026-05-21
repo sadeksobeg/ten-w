@@ -51,7 +51,7 @@ bash "$REPO/scripts/server-prisma.sh"
 
 echo "==> db seed (if needed)"
 if env -u DATABASE_URL node scripts/has-prisma-tables.mjs 2>/dev/null; then
-  env -u DATABASE_URL npm run db:seed || echo "seed skipped or already done"
+  env -u DATABASE_URL bash "$REPO/scripts/run-seed.sh" || echo "seed skipped or already done"
 else
   echo "seed skipped — schema not ready"
 fi

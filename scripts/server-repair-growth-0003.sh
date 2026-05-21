@@ -18,8 +18,21 @@ fi
 
 node scripts/verify-prisma-database.mjs
 
-if node scripts/check-growth-0003.mjs 2>/dev/null; then
-  echo "OK: Growth 0003 tables already present (EventNotification exists)."
+FORCE="${1:-}"
+if [ "$FORCE" != "--force" ] && node scripts/check-growth-0003.mjs 2>/dev/null; then
+  echo "OK: Growth 0003 tables already present on tenegta_db."
+  echo "If seed still fails, shell DATABASE_URL may override .env — use:"
+  echo "  bash scripts/run-seed.sh"
+  exit 0
+fi
+
+if [ "$FORCE" = "--force" ]; then
+  echo "==> --force: applying idempotent SQL on tenegta_db"
+  bash "$REPO/scripts/run-prisma.sh" db execute \
+    --file prisma/repair/0003_idempotent.sql \
+    --schema prisma/schema.prisma
+  node scripts/check-growth-0003.mjs
+  echo "Next: bash $REPO/scripts/run-seed.sh"
   exit 0
 fi
 
@@ -42,7 +55,7 @@ bash "$REPO/scripts/run-prisma.sh" db execute \
 
 if node scripts/check-growth-0003.mjs 2>/dev/null; then
   echo "OK: repaired via prisma/repair/0003_idempotent.sql"
-  echo "Next: cd $SITE && npm run db:seed"
+  echo "Next: bash $REPO/scripts/run-seed.sh"
   exit 0
 fi
 

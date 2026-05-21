@@ -119,6 +119,8 @@ bash scripts/server-update.sh
 
 **مهم:** على السيرفر لا تضبط `export DATABASE_URL=...clinicsaas` في الطرفية — يجب أن يبقى الاتصال في `site/.env` فقط على قاعدة **`tenegta_db`**. السكربت يمسح متغير الشل تلقائياً ويرفض تعديل قواعد تطبيقات أخرى.
 
+**لا تستخدم** `npx prisma db seed` مباشرة إن كان `DATABASE_URL` مضبوطاً في الشل — استخدم `bash scripts/run-seed.sh` (يستخدم `site/.env` فقط).
+
 إذا ظهر خطأ Prisma **P3005** — أنشئ قاعدة `tenegta_db` من Hostinger ثم أعد `server-update.sh` (بدون `db push` على `clinicsaas`).
 
 ### Growth Engine (بعد تحديث 0003)
@@ -129,7 +131,7 @@ bash scripts/server-update.sh
 
 ```bash
 cd /var/www/tenegta/site
-npx prisma db seed
+bash scripts/run-seed.sh
 ```
 
 | الدور | البريد | كلمة المرور الافتراضية (seed) |
@@ -155,9 +157,8 @@ npx prisma db seed
 cd /var/www/tenegta
 git pull origin main
 bash scripts/server-repair-growth-0003.sh   # يصلح 0003 ثم يخبرك بتشغيل seed
-cd site
-npm run db:seed
-bash ../scripts/server-restart.sh
+bash scripts/run-seed.sh
+bash scripts/server-restart.sh
 ```
 
 إن كانت قاعدة جديدة تماماً ولم يُسجَّل 0003 بعد:

@@ -11,7 +11,7 @@
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "prisma db seed",
+    "db:seed": "node scripts/seed-cli.mjs",
     "test:a11y": "node scripts/a11y-note.mjs",
     "test:e2e": "playwright test",
     "validate:i18n": "node scripts/validate-i18n-keys.mjs",
