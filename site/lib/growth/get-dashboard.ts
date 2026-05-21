@@ -17,6 +17,7 @@ import {
 } from "@/lib/growth/prisma-optional";
 import { buildDealJourney, type DealJourneyStep } from "@/lib/growth/deal-journey";
 import { buildPartnerInsightSlides, type PartnerInsightSlide } from "@/lib/growth/partner-insights";
+import { ensurePartnerProfile } from "@/lib/growth/ensure-partner-profile";
 
 export type DashboardDeal = {
   id: string;
@@ -118,12 +119,9 @@ export type DashboardData = {
 };
 
 export async function getPartnerDashboard(userId: string): Promise<DashboardData> {
-  const profile = await prisma.partnerProfile.findUnique({
-    where: { userId },
-    include: { currentLevel: true },
-  });
+  const profile = await ensurePartnerProfile(userId);
   if (!profile) {
-    throw new Error("Missing partner profile");
+    throw new Error("not_a_partner");
   }
 
   const day = utcDayKey();

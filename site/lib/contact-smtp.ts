@@ -121,9 +121,15 @@ export async function sendContactViaSmtp(
     });
     return true;
   } catch (err) {
+    const e = err as Error & { code?: string; response?: string; responseCode?: number };
     console.error("[contact] SMTP failed", {
       host: process.env.SMTP_HOST,
-      error: err instanceof Error ? err.message : String(err),
+      port: smtpPort(),
+      user: process.env.SMTP_USER,
+      code: e.code,
+      responseCode: e.responseCode,
+      response: e.response?.slice?.(0, 300),
+      error: e.message ?? String(err),
     });
     return false;
   }

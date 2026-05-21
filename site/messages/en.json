@@ -996,6 +996,13 @@
     "signOut": "Sign out",
     "powerPointsLine": "{label}: {n}",
     "powerPoints": "Power Points",
+    "errors": {
+      "eyebrow": "Growth Engine",
+      "title": "Something went wrong",
+      "body": "We could not load your partner dashboard. Try again. If it persists, ensure the server database has migration 0003 applied.",
+      "retry": "Try again",
+      "home": "Home"
+    },
     "nav": {
       "dashboard": "Dashboard",
       "events": "Events",

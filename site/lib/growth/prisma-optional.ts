@@ -1,6 +1,29 @@
 import type { PrismaClient } from "@prisma/client";
 
 /** True when `npx prisma generate` has been run after Growth schema extensions. */
+export function growthNotificationModelsAvailable(client: PrismaClient): boolean {
+  const c = client as unknown as { notification?: { count?: unknown; findMany?: unknown } };
+  return (
+    typeof c.notification?.count === "function" &&
+    typeof c.notification?.findMany === "function"
+  );
+}
+
+export async function countNotificationsSafe(
+  client: PrismaClient,
+  where: Record<string, unknown>,
+): Promise<number> {
+  if (!growthNotificationModelsAvailable(client)) return 0;
+  const c = client as unknown as {
+    notification: { count: (a: { where: Record<string, unknown> }) => Promise<number> };
+  };
+  try {
+    return await c.notification.count({ where });
+  } catch {
+    return 0;
+  }
+}
+
 export function growthPrismaModelsAvailable(client: PrismaClient): boolean {
   const c = client as unknown as {
     missionDefinition?: { findMany?: unknown };

@@ -1058,6 +1058,13 @@
     "signOut": "Déconnexion",
     "powerPointsLine": "{label} : {n}",
     "powerPoints": "Points de Puissance",
+    "errors": {
+      "eyebrow": "Growth Engine",
+      "title": "Une erreur est survenue",
+      "body": "Impossible de charger le tableau partenaire. Réessayez. Si le problème persiste, vérifiez la migration 0003 sur le serveur.",
+      "retry": "Réessayer",
+      "home": "Accueil"
+    },
     "nav": {
       "dashboard": "Tableau de bord",
       "events": "Événements",

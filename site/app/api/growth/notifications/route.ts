@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { growthNotificationModelsAvailable } from "@/lib/growth/prisma-optional";
 
 export async function GET() {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
+  if (!growthNotificationModelsAvailable(prisma)) {
+    return NextResponse.json({ notifications: [], unreadCount: 0 });
   }
 
   const [notifications, unreadCount] = await Promise.all([
