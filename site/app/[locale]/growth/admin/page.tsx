@@ -1,4 +1,3 @@
-import { DealStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { AdminOverviewClient } from "@/components/growth/admin/AdminOverviewClient";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
@@ -6,12 +5,7 @@ import { SectionHeader } from "@/components/growth/ui/SectionHeader";
 import { StatCard } from "@/components/growth/ui/StatCard";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
-import {
-  countEventParticipantsSafe,
-  countGrowthEventsSafe,
-  countNotificationsSafe,
-  fetchActivityEventsSafe,
-} from "@/lib/growth/prisma-optional";
+import { fetchAdminOverviewStatsSafe } from "@/lib/growth/prisma-optional";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -31,46 +25,20 @@ export default async function GrowthAdminHomePage({ params }: Props) {
     locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US";
 
   const session = await auth();
-  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
-
-  const [
+  const stats = await fetchAdminOverviewStatsSafe(prisma, session?.user?.id);
+  const {
     users,
     partners,
     closed,
     pending,
-    ledgerSum,
+    ledgerCents,
     activeEvents,
     eventParticipants,
     unreadAdmin,
     closedThisWeek,
     closedPrevWeek,
     activityRows,
-  ] = await Promise.all([
-    prisma.user.count(),
-    prisma.partnerProfile.count(),
-    prisma.deal.count({ where: { status: DealStatus.CLOSED } }),
-    prisma.deal.count({ where: { status: DealStatus.PENDING } }),
-    prisma.commissionLedger.aggregate({ _sum: { amountCents: true } }),
-    countGrowthEventsSafe(prisma, { status: "ACTIVE" }),
-    countEventParticipantsSafe(prisma),
-    session?.user?.id
-      ? countNotificationsSafe(prisma, {
-          userId: session.user.id,
-          isRead: false,
-        })
-      : Promise.resolve(0),
-    prisma.deal.count({
-      where: { status: DealStatus.CLOSED, closedAt: { gte: weekAgo } },
-    }),
-    prisma.deal.count({
-      where: {
-        status: DealStatus.CLOSED,
-        closedAt: { gte: twoWeeksAgo, lt: weekAgo },
-      },
-    }),
-    fetchActivityEventsSafe(prisma, 10),
-  ]);
+  } = stats;
 
   const dealTrend = closedThisWeek - closedPrevWeek;
   const money = (cents: number) =>
@@ -98,7 +66,7 @@ export default async function GrowthAdminHomePage({ params }: Props) {
           <StatCard label={t("admin.pendingDeals")} value={pending} />
           <StatCard
             label={t("admin.ledgerSum")}
-            value={money(ledgerSum._sum.amountCents ?? 0)}
+            value={money(ledgerCents)}
             animateValue={false}
           />
           <StatCard label={t("admin.activeEvents")} value={activeEvents} />

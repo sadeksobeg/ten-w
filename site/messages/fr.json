@@ -1,20 +1,20 @@
 {
   "Nav": {
-    "home": "Accueil",
-    "about": "À propos",
+    "home": "Home",
+    "about": "About",
     "solutions": "Solutions",
-    "projects": "Projets",
-    "pilots": "Labos",
-    "techStack": "Stack technique",
-    "team": "Équipe",
-    "investors": "Investisseurs",
+    "projects": "Projects",
+    "pilots": "Labs",
+    "techStack": "Tech stack",
+    "team": "Team",
+    "investors": "Investors",
     "blog": "Blog",
     "growth": "Growth Engine",
     "contact": "Contact",
-    "legal": "Mentions légales",
-    "openMenu": "Ouvrir le menu",
-    "closeMenu": "Fermer le menu",
-    "language": "Langue"
+    "legal": "Legal",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language"
   },
   "Footer": {
     "rights": "All rights reserved.",
@@ -24,8 +24,8 @@
     "caseStudies": "Case studies",
     "engagement": "Engagement",
     "whyUs": "Why us",
-    "partners": "Écosystème",
-    "careers": "Carrières",
+    "partners": "Ecosystem",
+    "careers": "Careers",
     "techRadar": "Tech radar"
   },
   "HomePage": {
@@ -34,25 +34,25 @@
       "description": "We design and deliver AI, cybersecurity, and systems development — from idea to operations."
     },
     "credibility": {
-      "trustedBy": "La confiance d'équipes qui construisent des infrastructures critiques",
-      "logosAria": "Secteurs clients",
-      "testimonialEyebrow": "Scénario d'engagement représentatif",
-      "testimonialDisclaimer": "Scénario composite illustrant le type de résultats que nous concevons — pas attribué à un client nommé sans référence signée."
+      "trustedBy": "Trusted by teams building critical infrastructure",
+      "logosAria": "Client sectors",
+      "testimonialEyebrow": "Representative engagement scenario",
+      "testimonialDisclaimer": "Composite scenario illustrating the type of outcomes we design for — not attributed to a single named client without a signed reference."
     },
     "thoughtLeadership": {
-      "eyebrow": "Leadership technique",
-      "title": "Pourquoi les SIEM legacy échouent dans les entreprises arabophones",
-      "description": "Essai technique sur la fatigue d'alertes, les pipelines de logs bilingues et la détection réellement utilisée.",
-      "cta": "Lire l'article"
+      "eyebrow": "Thought leadership",
+      "title": "Why legacy SIEM fails in Arabic enterprise environments",
+      "description": "A technical essay on alert fatigue, bilingual log pipelines, and building detection that operators actually use.",
+      "cta": "Read the article"
     },
     "problemSolution": {
-      "eyebrow": "L'écart que nous comblons",
-      "problem": "La plupart des entreprises n'échouent pas par manque de données, mais parce que leurs systèmes ne savent pas agir.",
-      "solution": "Nous construisons la couche d'intelligence entre vos données et vos décisions — IA, cybersécurité et ingénierie logicielle en production, pas en slides."
+      "eyebrow": "The gap we close",
+      "problem": "Most enterprises don't fail from lack of data. They fail from systems that can't act on it.",
+      "solution": "We build the intelligence layer between your data and your decisions — AI systems, cybersecurity, and software engineering that run in production, not slide decks."
     },
     "hero": {
-      "title": "Nous construisons la couche d'intelligence entre vos données et vos décisions.",
-      "tagline": "Systèmes IA · Cybersécurité · Ingénierie logicielle pour les entreprises",
+      "title": "We build the intelligence layer between your data and your decisions.",
+      "tagline": "AI Systems · Cybersecurity · Software Engineering for enterprises",
       "rotate1": "From pilot to production — delivery you can measure.",
       "rotate2": "AI and data pipelines wired into real operations.",
       "rotate3": "Security-first architecture, not bolt-on patches.",
@@ -92,36 +92,36 @@
       "button": "Book a consultation"
     },
     "SystemVisualizer": {
-      "title": "Décrivez votre système — nous le visualisons",
-      "subtitle": "Écrivez n'importe quelle idée dans n'importe quelle langue. Nous détectons ses composants et dessinons son architecture vivante.",
-      "placeholder": "Exemple : je veux un système qui surveille mes entrepôts et prédit les ruptures de stock…",
-      "btnAnalyze": "Révéler l'architecture",
-      "btnBuild": "Construire avec nous",
-      "analyzing": "T.E.N.E.G.T.A analyse l'architecture de votre système…",
-      "empty": "Votre vision architecturale apparaîtra ici",
+      "title": "Describe your system — we'll visualize it",
+      "subtitle": "Write any idea in any language. We'll detect its components and draw its live architecture.",
+      "placeholder": "Example: I want a system that monitors my warehouses and predicts stock shortages…",
+      "btnAnalyze": "Reveal the Architecture",
+      "btnBuild": "Build this with us",
+      "analyzing": "T.E.N.E.G.T.A is analyzing your system architecture",
+      "empty": "Your architecture vision will appear here",
       "badges": {
-        "ai": "Intelligence artificielle",
-        "cyber": "Cybersécurité",
-        "software": "Logiciel",
+        "ai": "Artificial Intelligence",
+        "cyber": "Cybersecurity",
+        "software": "Software",
         "infra": "Infrastructure",
         "fintech": "Fintech",
-        "health": "Santé numérique",
-        "logistics": "Logistique",
-        "iot": "Internet des objets",
-        "data": "Analytique de données",
-        "ecommerce": "E-commerce"
+        "health": "Digital Health",
+        "logistics": "Logistics",
+        "iot": "Internet of Things",
+        "data": "Data Analytics",
+        "ecommerce": "E-Commerce"
       },
       "summaries": {
-        "ai": "Pipelines de données, modèles et inférence pour des décisions opérationnelles.",
-        "cyber": "Contrôles zero-trust, détection et pistes d'audit sur votre périmètre.",
-        "software": "Auth, API, services cœur et frontends en une plateforme déployable.",
-        "infra": "Équilibrage de charge, clusters, données et observabilité à l'échelle.",
-        "fintech": "Paiements, risque, grand livre et conformité dans un flux régulé.",
-        "health": "Accès patient, dossiers cliniques et soins connectés en sécurité.",
-        "logistics": "Commandes, routage, flotte, entrepôt et livraison dernier kilomètre.",
-        "iot": "Capteurs, passerelles, streaming et tableaux de bord temps réel.",
-        "data": "Ingestion, ETL, entrepôt et analytique pour des insights mesurables.",
-        "ecommerce": "Catalogue, panier, paiements, exécution et analytique unifiés."
+        "ai": "Data pipelines, models, and inference wired for operational decisions.",
+        "cyber": "Zero-trust controls, detection, and audit trails across your perimeter.",
+        "software": "Auth, APIs, core services, and frontends as one deployable platform.",
+        "infra": "Load balancing, clusters, data stores, and observability at scale.",
+        "fintech": "Payments, risk, ledger, and compliance in a regulated flow.",
+        "health": "Patient access, clinical records, and care delivery connected securely.",
+        "logistics": "Orders, routing, fleet, warehouse, and last-mile delivery orchestrated.",
+        "iot": "Sensors, gateways, streaming, and dashboards for real-time operations.",
+        "data": "Ingestion, ETL, warehouse, and analytics for measurable insights.",
+        "ecommerce": "Catalog, cart, payments, fulfillment, and growth analytics unified."
       }
     }
   },
@@ -139,7 +139,7 @@
       "p3": "We work with organizations that want to improve performance, organize processes, and protect data — through tailored solutions, not generic templates."
     },
     "valuesStatement": "We believe good technology doesn’t just impress — it creates clear, lasting impact.",
-    "relatedTitle": "En savoir plus"
+    "relatedTitle": "Explore further"
   },
   "SolutionsPage": {
     "meta": {
@@ -673,59 +673,59 @@
   },
   "PartnersPage": {
     "meta": {
-      "title": "Écosystème technologique – T.E.N.E.G.T.A",
-      "description": "Clouds, data et IA que nous concevons et intégrons pour des programmes d'entreprise."
+      "title": "Technology ecosystem – T.E.N.E.G.T.A",
+      "description": "Clouds, data platforms, and AI tooling we design and integrate with — for enterprise-grade delivery."
     },
-    "title": "Écosystème technologique",
-    "subtitle": "Nous architecturons pour les plateformes que vous utilisez déjà. Compatibilité — pas statut revendeur sauf mention contractuelle.",
-    "note": "Les choix finaux suivent conformité, résidence et achats.",
-    "ctaTech": "Voir le stack complet",
-    "ctaContact": "Discuter de votre environnement"
+    "title": "Technology ecosystem",
+    "subtitle": "We architect for the platforms our clients already use. Listing compatibility — not official reseller status unless stated in contract.",
+    "note": "Final stack choices follow your compliance, residency, and procurement constraints.",
+    "ctaTech": "View full engineering stack",
+    "ctaContact": "Discuss your environment"
   },
   "CareersPage": {
     "meta": {
-      "title": "Carrières – T.E.N.E.G.T.A",
-      "description": "Nous construisons un réseau de spécialistes. IA, sécurité ou plateformes en production — contactez-nous."
+      "title": "Careers – T.E.N.E.G.T.A",
+      "description": "We're building a specialist network. If you ship production systems in AI, security, or platform engineering — reach out."
     },
-    "title": "Carrières",
-    "subtitle": "Croissance mesurée — livraison par le fondateur aujourd'hui, réseau demain.",
-    "body": "Pas de job board générique. Nous mobilisons des spécialistes quand le programme l'exige. Envoyez votre profil et les problèmes que vous voulez résoudre.",
-    "cta": "Se présenter",
-    "valuesTitle": "Comment nous recrutons",
-    "v1": "Preuves en production avant les mots-clés CV",
-    "v2": "Esprit sécurité, pas cases à cocher",
-    "v3": "Communication claire en arabe et anglais"
+    "title": "Careers",
+    "subtitle": "We're growing deliberately — founder-led delivery today, specialist network tomorrow.",
+    "body": "We don't publish generic job boards. We engage specialists when a program needs depth in AI, cybersecurity, or platform engineering. If that's you, send your profile and the kind of problems you want to solve.",
+    "cta": "Introduce yourself",
+    "valuesTitle": "How we hire",
+    "v1": "Production evidence over résumé keywords",
+    "v2": "Security mindset, not checkbox compliance",
+    "v3": "Clear communication in Arabic and English"
   },
   "TeamPage": {
     "meta": {
-      "title": "Comment nous travaillons – T.E.N.E.G.T.A",
-      "description": "Livraison dirigée par le fondateur avec un réseau de spécialistes. Sadek Al-Etr — ingénieur IA, cybersécurité et architecte principal."
+      "title": "How we work – T.E.N.E.G.T.A",
+      "description": "Founder-led delivery with a curated specialist network. Sadek Al-Etr — AI engineer, cybersecurity specialist, and principal architect."
     },
     "hero": {
-      "title": "Comment nous travaillons",
-      "subtitle": "Leadership technique du fondateur et réseau de spécialistes mobilisé par projet — pas un organigramme fixe."
+      "title": "How we work",
+      "subtitle": "Founder-led technical leadership and a specialist network engaged per project — not a fixed org chart."
     },
     "founder": {
-      "eyebrow": "Fondateur & architecte principal",
-      "perspectivesTitle": "Notre position",
-      "on": "Sur",
-      "credentialsTitle": "Certifications & stack",
+      "eyebrow": "Founder & principal architect",
+      "perspectivesTitle": "Where we stand",
+      "on": "On",
+      "credentialsTitle": "Credentials & stack",
       "certifications": "Certifications",
-      "techStack": "Domaines technologiques"
+      "techStack": "Technology domains"
     },
     "workModel": {
-      "eyebrow": "Réseau de spécialistes"
+      "eyebrow": "Specialist network"
     },
     "engagement": {
-      "title": "Comment nous nous engageons",
-      "assess": "Comment nous évaluons chaque projet",
-      "staff": "Comment nous mobilisons les spécialistes",
-      "decline": "Ce que nous n'acceptons pas"
+      "title": "How we engage",
+      "assess": "How we assess every project",
+      "staff": "How we staff specialists",
+      "decline": "What we don't take on"
     },
     "howWeThink": {
-      "title": "Comment nous pensons"
+      "title": "How we think"
     },
-    "cta": "Commencer la conversation"
+    "cta": "Start the conversation"
   },
   "InvestorsPage": {
     "meta": {
@@ -961,38 +961,38 @@
       "ctaLabel": "Talk about a support agreement"
     },
     "methodology": {
-      "title": "Comment nous travaillons avec vous",
-      "subtitle": "Un parcours clair de la première conversation à la production — avec des points de décision à chaque étape.",
+      "title": "How we work with you",
+      "subtitle": "A clear path from first conversation to production — with decision gates at every step.",
       "steps": {
         "discover": {
-          "phase": "Semaine 1–2",
-          "title": "Briefing exécutif & découverte",
-          "description": "Cartographie des parties prenantes, contraintes et décisions opérationnelles — avant tout choix d'outils.",
-          "duration": "Ateliers · schéma d'architecture · registre des risques"
+          "phase": "Week 1–2",
+          "title": "Executive briefing & discovery",
+          "description": "We map stakeholders, constraints, and the operational decisions your system must support — before any tooling discussion.",
+          "duration": "Workshops · architecture sketch · risk register"
         },
         "assess": {
-          "phase": "Semaine 2–4",
-          "title": "Évaluation technologique",
-          "description": "Audit honnête de l'existant : flux de données, posture sécurité, dette d'intégration.",
-          "duration": "Revue lecture seule · modèle de menace · options de livraison"
+          "phase": "Week 2–4",
+          "title": "Technology assessment",
+          "description": "Honest audit of what exists: data flows, security posture, integration debt, and what can be improved without a rewrite.",
+          "duration": "Read-only review · threat model · delivery options"
         },
         "pilot": {
-          "phase": "Semaine 4–10",
-          "title": "Essai / pilote en production",
-          "description": "Périmètre borné avec critères de succès mesurables — prouver la valeur avant d'augmenter l'investissement.",
-          "duration": "Env pilote · KPI · pilotage hebdomadaire"
+          "phase": "Week 4–10",
+          "title": "Production trial / pilot",
+          "description": "Bounded scope in a real environment with measurable success criteria — prove value before scaling spend.",
+          "duration": "Pilot env · KPIs · weekly steering"
         },
         "deploy": {
-          "phase": "Semaine 10+",
-          "title": "Déploiement & passation",
-          "description": "Durcissement, documentation, runbooks et formation pour l'exploitation au quotidien.",
-          "duration": "CI/CD · observabilité · SLA support"
+          "phase": "Week 10+",
+          "title": "Deployment & handover",
+          "description": "Hardening, documentation, runbooks, and training so your team owns day-two operations.",
+          "duration": "CI/CD · observability · support SLA"
         },
         "evolve": {
-          "phase": "Continu",
-          "title": "Évoluer & améliorer",
-          "description": "Retainer ou feuille de route pour nouvelles capacités et posture sécurité évolutive.",
-          "duration": "Roadmap · revues trimestrielles"
+          "phase": "Ongoing",
+          "title": "Evolve & improve",
+          "description": "Retainer or phased roadmap for new capabilities, model updates, and security posture as your business changes.",
+          "duration": "Roadmap · quarterly reviews"
         }
       }
     }
@@ -1012,7 +1012,7 @@
     "previewProblem": "Problem",
     "previewBuild": "Build",
     "previewOutcome": "Outcome",
-    "quoteDisclaimer": "Representative quote for discussion — composite scenario, not a named client endorsement unless stated otherwise.",
+    "quoteDisclaimer": "Representative quote for discussion — composite scenario aligned with this archetype, not a named client endorsement unless stated otherwise.",
     "architecture": "Architecture",
     "architecturalDecisions": "Architectural decisions",
     "technicalChallenges": "Technical challenges",
@@ -1055,57 +1055,56 @@
     "ctaEngagement": "Engagement models"
   },
   "Growth": {
-    "signOut": "Déconnexion",
-    "powerPointsLine": "{label} : {n}",
-    "powerPoints": "Points de Puissance",
+    "signOut": "Sign out",
+    "powerPointsLine": "{label}: {n}",
+    "powerPoints": "Power Points",
     "errors": {
       "eyebrow": "Growth Engine",
-      "title": "Une erreur est survenue",
-      "body": "Impossible de charger le tableau partenaire. Réessayez. Si le problème persiste, vérifiez la migration 0003 sur le serveur.",
-      "retry": "Réessayer",
-      "home": "Accueil"
+      "title": "Something went wrong",
+      "body": "Could not load Growth. On the server run: unset DATABASE_URL, then bash scripts/server-repair-growth-0003.sh --force, bash scripts/run-seed.sh, and restart the app.",
+      "retry": "Try again",
+      "home": "Home"
     },
     "nav": {
-      "dashboard": "Tableau de bord",
-      "events": "Événements",
+      "dashboard": "Dashboard",
+      "events": "Events",
       "chat": "Chat",
-      "signOut": "Déconnexion"
+      "signOut": "Sign out"
     },
     "notifications": {
       "title": "Notifications",
-      "markAllRead": "Tout marquer lu",
-      "empty": "Aucune notification"
+      "markAllRead": "Mark all read",
+      "empty": "No new notifications"
     },
     "events": {
-      "title": "Événements",
-      "invited": "Invitations",
-      "joined": "Mes événements",
-      "completed": "Terminés",
-      "empty": "Aucun événement",
+      "title": "Events",
+      "invited": "New invites",
+      "joined": "Joined successfully",
+      "completed": "Completed",
+      "empty": "No events available",
       "participants": "participants",
-      "eventProgress": "Votre progression",
-      "viewDetails": "Voir détails",
-      "joinEvent": "Rejoindre",
-      "acceptRules": "J'accepte le règlement",
-      "rulesTitle": "Règlement",
-      "confirmJoin": "Confirmer",
-      "cancel": "Annuler",
-      "joined": "Inscription réussie",
-      "milestones": "Jalons",
-      "back": "Retour",
+      "eventProgress": "Your progress",
+      "viewDetails": "View details",
+      "joinEvent": "Join event",
+      "acceptRules": "I accept the rules and terms",
+      "rulesTitle": "Rules & terms",
+      "confirmJoin": "Confirm join",
+      "cancel": "Cancel",
+      "milestones": "Milestones",
+      "back": "Back to events",
       "participantsPreview": "Participants"
     },
     "publicProfile": {
-      "closedDeals": "Affaires closes",
+      "closedDeals": "Closed deals",
       "badges": "Badges",
       "badgesTitle": "Badges",
-      "channels": "Canaux",
-      "ctaTitle": "Rejoindre le réseau ?",
-      "ctaBody": "Inscrivez-vous comme partenaire T.E.N.E.G.T.A",
-      "ctaButton": "S'inscrire",
-      "qrSoon": "QR code — bientôt"
+      "channels": "Channels",
+      "ctaTitle": "Join the network?",
+      "ctaBody": "Register as a partner and build income with T.E.N.E.G.T.A",
+      "ctaButton": "Join now",
+      "qrSoon": "QR code — coming soon"
     },
-    "nextLevel": "Suivant : {name} à {n} affaires closes",
+    "nextLevel": "Next: {name} at {n} closed deals",
     "maxLevel": "You are at the top level path — keep compounding performance.",
     "xpLine": "XP: {n}",
     "networkRefWithCode": "Ref: {code}",
@@ -1195,22 +1194,22 @@
       "title": "Badges",
       "empty": "No badges yet — close deals and grow your network.",
       "hiddenTag": "hidden",
-      "locked": "Verrouillé",
-      "rarityCommon": "COMMUN",
+      "locked": "Locked",
+      "rarityCommon": "COMMON",
       "rarityRare": "RARE",
-      "rarityEpic": "ÉPIQUE",
-      "rarityLegendary": "LÉGENDAIRE",
+      "rarityEpic": "EPIC",
+      "rarityLegendary": "LEGENDARY",
       "unlockTitle": "BADGE UNLOCKED",
       "unlockSubtitle": "Key: {key}",
       "unlockCta": "Continue"
     },
     "settings": {
-      "title": "Profil",
-      "subtitle": "Avatar visible sur le tableau de bord et le profil public.",
-      "uploadHint": "Glisser une image ou cliquer",
-      "save": "Enregistrer",
-      "saved": "Enregistré",
-      "error": "Échec"
+      "title": "Profile settings",
+      "subtitle": "Avatar appears on your dashboard and public profile.",
+      "uploadHint": "Drop image or click to upload",
+      "save": "Save",
+      "saved": "Saved",
+      "error": "Could not save"
     },
     "kit": {
       "title": "Marketing kit",
@@ -1333,8 +1332,8 @@
       "timelineToday": "Today",
       "timelineEvent": "Event",
       "suggestedActions": "Suggested",
-      "quickActionsLabel": "Actions rapides",
-      "partnerSupportHint": "L'équipe TENEGTA répond en général aux heures ouvrables.",
+      "quickActionsLabel": "Quick actions",
+      "partnerSupportHint": "The admin team usually replies during business hours.",
       "microActionOk": "Done",
       "microImpactOk": "Sent — modeled close lift ≈ +{n}%",
       "microCommitOk": "Action logged — committed path",
@@ -1458,113 +1457,112 @@
         "linkedPill": "Deal"
       },
       "admin": {
-        "pageTitle": "Boîte partenaires",
-        "pageSubtitle": "Trois colonnes : liste, fil à bulles, radar décisionnel.",
-        "timeToAct": "Agir sous {m} min",
-        "windowClosing": "Fenêtre qui se ferme",
-        "inbox": "Boîte de réception",
-        "open": "Ouvert",
-        "resolved": "Résolu",
-        "resolve": "Clôturer",
-        "pick": "Choisir une conversation",
-        "pickHint": "Choisissez un partenaire ou recherchez par nom ou e-mail.",
-        "searchPlaceholder": "Rechercher…",
-        "noThreads": "Aucune conversation pour ce filtre.",
-        "noPreview": "Pas encore de message",
-        "filterUnread": "À répondre",
-        "unreadHint": "Nouveau message du partenaire",
-        "justNow": "À l'instant",
-        "minutesAgo": "il y a {m} min",
-        "hoursAgo": "il y a {h} h",
-        "daysAgo": "il y a {d} j",
-        "showContext": "Contexte",
-        "hideContext": "Masquer"
+        "pageTitle": "Partner inbox",
+        "pageSubtitle": "Three-column desk: partner list, bubble thread, and decision radar.",
+        "timeToAct": "Time to act: {m} min",
+        "windowClosing": "Window closing soon",
+        "inbox": "Inbox",
+        "open": "Open",
+        "resolved": "Resolved",
+        "resolve": "Resolve",
+        "pick": "Select a thread",
+        "pickHint": "Pick a partner from the list or search by name or email.",
+        "searchPlaceholder": "Search conversations…",
+        "noThreads": "No conversations match this filter.",
+        "noPreview": "No messages yet",
+        "filterUnread": "Needs reply",
+        "unreadHint": "New message from partner",
+        "justNow": "Now",
+        "minutesAgo": "{m}m ago",
+        "hoursAgo": "{h}h ago",
+        "daysAgo": "{d}d ago",
+        "showContext": "Context",
+        "hideContext": "Hide"
       }
     },
     "admin": {
-      "activeEvents": "Événements actifs",
-      "eventParticipants": "Participants",
-      "unreadNotifications": "Non lues",
+      "activeEvents": "Active events",
+      "eventParticipants": "Event participants",
+      "unreadNotifications": "Unread notifications",
       "enter": "Admin",
       "nav": {
-        "adminNavAria": "Navigation admin Growth",
-        "jumpTo": "Aller à",
-        "groupOperations": "Opérations",
+        "adminNavAria": "Growth admin navigation",
+        "jumpTo": "Jump to",
+        "groupOperations": "Operations",
         "groupCatalog": "Configuration",
-        "groupPrograms": "Programmes",
-        "overview": "Vue d'ensemble",
-        "deals": "Affaires",
-        "payouts": "Retraits",
-        "products": "Produits",
+        "groupPrograms": "Programs",
+        "overview": "Overview",
+        "deals": "Deals",
+        "payouts": "Payouts",
+        "products": "Products",
         "badges": "Badges",
-        "levels": "Niveaux",
-        "tiers": "Taux de commission",
-        "rewards": "Récompenses mensuelles",
-        "insights": "Analyses",
-        "overrides": "Dérogations",
-        "bonuses": "Bonus manuels",
-        "partnerDashboard": "Tableau partenaire",
-        "demo": "Démo cinématique",
-        "chat": "Messages",
-        "partners": "Partenaires",
-        "events": "Événements",
+        "levels": "Levels",
+        "tiers": "Commission tiers",
+        "rewards": "Monthly rewards",
+        "insights": "Insights",
+        "overrides": "Partner overrides",
+        "bonuses": "Manual bonuses",
+        "partnerDashboard": "Partner dashboard",
+        "demo": "Cinematic demo",
+        "chat": "Chat",
+        "partners": "Partners",
+        "events": "Events",
         "notifications": "Notifications"
       },
       "partners": {
-        "title": "Gestion des partenaires",
-        "subtitle": "Créer des comptes, ajuster niveau et points, activer ou désactiver.",
-        "createTitle": "Créer un compte partenaire",
-        "createHint": "E-mail, mot de passe et profil sont créés ensemble. N'utilisez pas l'e-mail admin.",
-        "listTitle": "Partenaires enregistrés",
-        "xpControls": "Points et niveau",
-        "name": "Nom",
-        "email": "E-mail",
-        "password": "Mot de passe",
-        "phone": "Téléphone",
-        "referralOptional": "Code parrain (optionnel)",
-        "createSubmit": "Créer",
-        "created": "Compte créé",
-        "empty": "Aucun partenaire",
-        "active": "Actif",
-        "inactive": "Inactif",
-        "setLevel": "Niveau",
+        "title": "Partner management",
+        "subtitle": "Create accounts, adjust level and power points, enable or disable partners.",
+        "createTitle": "Create partner account",
+        "createHint": "Email, password, and partner profile are created together. Do not use the admin email here.",
+        "listTitle": "Registered partners",
+        "xpControls": "Power points & level",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "phone": "Phone",
+        "referralOptional": "Referral code (optional)",
+        "createSubmit": "Create account",
+        "created": "Partner created",
+        "empty": "No partners",
+        "active": "Active",
+        "inactive": "Inactive",
+        "setLevel": "Set level",
         "errors": {
-          "email_taken": "E-mail déjà utilisé",
-          "invalid_referral": "Code invalide",
-          "invalid_input": "Vérifiez les champs (e-mail valide, mot de passe 8 caractères min.).",
-          "missing_seed": "Base non initialisée — exécutez seed sur le serveur.",
-          "server_error": "Erreur serveur (souvent la base). Consultez les logs ou repair 0003.",
-          "unauthorized": "Non autorisé",
-          "unknown": "Erreur inattendue"
+          "email_taken": "Email already used",
+          "invalid_referral": "Invalid referral code",
+          "invalid_input": "Check the fields (valid email, password at least 8 characters).",
+          "missing_seed": "Database not initialized — run seed on the server.",
+          "server_error": "Server error (often the database). Check logs or run repair 0003.",
+          "unauthorized": "Unauthorized",
+          "unknown": "Something went wrong"
         }
       },
       "events": {
-        "title": "Événements",
-        "createTitle": "Créer un événement",
-        "title": "Titre",
+        "title": "Title",
+        "createTitle": "Create event",
         "description": "Description",
-        "rules": "Règles (Markdown)",
-        "startAt": "Début",
-        "endAt": "Fin",
+        "rules": "Rules (Markdown)",
+        "startAt": "Start",
+        "endAt": "End",
         "maxParticipants": "Max participants",
-        "status": "Statut",
-        "milestones": "Jalons",
-        "addMilestone": "Ajouter jalon",
-        "milestoneTitle": "Titre du jalon",
-        "createSubmit": "Créer",
-        "created": "Événement créé",
+        "status": "Status",
+        "milestones": "Milestones",
+        "addMilestone": "Add milestone",
+        "milestoneTitle": "Milestone title",
+        "createSubmit": "Create event",
+        "created": "Event created",
         "participants": "participants",
-        "updateProgress": "Mettre à jour"
+        "updateProgress": "Update"
       },
       "notifications": {
         "title": "Notifications",
-        "sendTitle": "Envoyer",
-        "emailOptional": "E-mail (vide = tous)",
-        "allPartnersHint": "Vide pour tous",
-        "notifTitle": "Titre",
-        "body": "Message",
-        "link": "Lien",
-        "sendSubmit": "Envoyer"
+        "sendTitle": "Send notification",
+        "emailOptional": "Partner email (blank = all)",
+        "allPartnersHint": "Leave blank for all partners",
+        "notifTitle": "Title",
+        "body": "Body",
+        "link": "Link (optional)",
+        "sendSubmit": "Send"
       },
       "demo": {
         "pageTitle": "Cinematic demo mode",
@@ -1607,8 +1605,16 @@
         "sseReplayGo": "Replay from database (SSE)"
       },
       "overviewTitle": "Admin overview",
+      "recentActivity": "Recent activity",
+      "trendWeek": "vs prior week",
+      "overview": {
+        "actionCreatePartner": "Create partner",
+        "actionNewEvent": "New event",
+        "actionBroadcast": "Broadcast",
+        "actionGrantBadge": "Grant badge"
+      },
       "users": "Users",
-      "partnerProfiles": "Profils partenaires",
+      "partnerProfiles": "Partner profiles",
       "dealsClosed": "Closed deals",
       "pendingDeals": "Pending deals",
       "ledgerSum": "Commission ledger (sum)",
@@ -1651,6 +1657,15 @@
         "email": "User email",
         "submit": "Grant badge",
         "badgeKey": "Badge key",
+        "confirmTitle": "Confirm badge grant",
+        "confirmBody": "Grant «{badge}» to {partner}",
+        "cancel": "Cancel",
+        "confirmSubmit": "Confirm grant",
+        "toastSuccess": "Badge granted",
+        "errors": {
+          "badge_already_granted": "Badge already granted",
+          "unknown": "Something went wrong"
+        },
         "revokeTitle": "Revoke badge",
         "revokeHint": "Removes any badge (including auto badges) from the user.",
         "revokeSubmit": "Revoke",
@@ -1732,16 +1747,16 @@
     }
   },
   "Common": {
-    "learnMore": "En savoir plus",
-    "backHome": "Accueil"
+    "learnMore": "Learn more",
+    "backHome": "Home"
   },
   "ErrorPage": {
-    "notFoundTitle": "Page introuvable",
-    "notFoundBody": "La page demandée n'existe pas ou a été déplacée.",
-    "errorTitle": "Une erreur s'est produite",
-    "errorBody": "Une erreur inattendue s'est produite. Réessayez ou revenez à l'accueil.",
-    "tryAgain": "Réessayer",
-    "globalErrorTitle": "Erreur critique",
-    "globalErrorBody": "L'application n'a pas pu se charger. Actualisez la page."
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you requested does not exist or was moved.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "An unexpected error occurred. You can try again or return home.",
+    "tryAgain": "Try again",
+    "globalErrorTitle": "Critical error",
+    "globalErrorBody": "The application failed to load. Please refresh the page."
   }
 }

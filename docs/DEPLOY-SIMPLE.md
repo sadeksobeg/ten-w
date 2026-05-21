@@ -180,10 +180,19 @@ node scripts/set-growth-admin-password.mjs
 ```bash
 cd /var/www/tenegta
 git pull origin main
-bash scripts/server-repair-growth-0003.sh   # يصلح 0003 ثم يخبرك بتشغيل seed
+unset DATABASE_URL
+bash scripts/server-check-growth-health.sh   # تشخيص سريع (جداول + أعمدة + أدمن)
+bash scripts/server-repair-growth-0003.sh --force   # إن فشل التشخيص
 bash scripts/run-seed.sh
-bash scripts/server-restart.sh
+bash scripts/server-update.sh                  # migrate + build + pm2 (مهم بعد UI overhaul)
 ```
+
+إن ظهر «حدث خطأ» على `/ar/growth/admin` رغم نجاح seed:
+
+1. تأكد أن آخر commit مُسحوب (`git log -1` يجب أن يكون حديثاً).
+2. `bash scripts/server-check-growth-health.sh` — يطبع ما الناقص (مثلاً `coverImage` أو `EventNotification`).
+3. `bash scripts/server-pm2.sh logs tenegta` — ابحث عن `[growth/admin] overview stats failed` أو `P2022`.
+4. لا تعتمد على `pm2 restart` وحده بعد تغييرات كبيرة — استخدم `server-update.sh` لإعادة `npm run build`.
 
 إن كانت قاعدة جديدة تماماً ولم يُسجَّل 0003 بعد:
 

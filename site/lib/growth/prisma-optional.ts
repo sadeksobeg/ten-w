@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+import { DealStatus, type PrismaClient } from "@prisma/client";
 
 /** True when `npx prisma generate` has been run after Growth schema extensions. */
 export function growthNotificationModelsAvailable(client: PrismaClient): boolean {
@@ -153,5 +153,99 @@ export async function countEventParticipantsSafe(
     return await c.eventParticipant.count({ where });
   } catch {
     return 0;
+  }
+}
+
+export type AdminOverviewStats = {
+  users: number;
+  partners: number;
+  closed: number;
+  pending: number;
+  ledgerCents: number;
+  activeEvents: number;
+  eventParticipants: number;
+  unreadAdmin: number;
+  closedThisWeek: number;
+  closedPrevWeek: number;
+  activityRows: ActivityRow[];
+};
+
+const EMPTY_ADMIN_OVERVIEW: AdminOverviewStats = {
+  users: 0,
+  partners: 0,
+  closed: 0,
+  pending: 0,
+  ledgerCents: 0,
+  activeEvents: 0,
+  eventParticipants: 0,
+  unreadAdmin: 0,
+  closedThisWeek: 0,
+  closedPrevWeek: 0,
+  activityRows: [],
+};
+
+/** Admin home KPIs — never throws (logs and returns zeros on DB drift). */
+export async function fetchAdminOverviewStatsSafe(
+  client: PrismaClient,
+  sessionUserId: string | undefined,
+): Promise<AdminOverviewStats> {
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
+
+  try {
+    const [
+      users,
+      partners,
+      closed,
+      pending,
+      ledgerSum,
+      activeEvents,
+      eventParticipants,
+      unreadAdmin,
+      closedThisWeek,
+      closedPrevWeek,
+      activityRows,
+    ] = await Promise.all([
+      client.user.count(),
+      client.partnerProfile.count(),
+      client.deal.count({ where: { status: DealStatus.CLOSED } }),
+      client.deal.count({ where: { status: DealStatus.PENDING } }),
+      client.commissionLedger.aggregate({ _sum: { amountCents: true } }),
+      countGrowthEventsSafe(client, { status: "ACTIVE" }),
+      countEventParticipantsSafe(client),
+      sessionUserId
+        ? countNotificationsSafe(client, {
+            userId: sessionUserId,
+            isRead: false,
+          })
+        : Promise.resolve(0),
+      client.deal.count({
+        where: { status: DealStatus.CLOSED, closedAt: { gte: weekAgo } },
+      }),
+      client.deal.count({
+        where: {
+          status: DealStatus.CLOSED,
+          closedAt: { gte: twoWeeksAgo, lt: weekAgo },
+        },
+      }),
+      fetchActivityEventsSafe(client, 10),
+    ]);
+
+    return {
+      users,
+      partners,
+      closed,
+      pending,
+      ledgerCents: ledgerSum._sum.amountCents ?? 0,
+      activeEvents,
+      eventParticipants,
+      unreadAdmin,
+      closedThisWeek,
+      closedPrevWeek,
+      activityRows,
+    };
+  } catch (err) {
+    console.error("[growth/admin] overview stats failed:", err);
+    return EMPTY_ADMIN_OVERVIEW;
   }
 }

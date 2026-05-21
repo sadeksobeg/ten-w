@@ -1,15 +1,21 @@
 "use client";
 
+import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export default function GrowthError({
+  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
   const t = useTranslations("Growth.errors");
+
+  useEffect(() => {
+    console.error("[Growth]", error.message, error.digest ?? "");
+  }, [error]);
 
   return (
     <div className="mx-auto max-w-lg rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-center">
