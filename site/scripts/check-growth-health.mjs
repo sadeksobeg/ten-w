@@ -87,11 +87,10 @@ if (failed) {
   console.log("  bash scripts/run-seed.sh");
   console.log("  cd site && npx prisma migrate deploy");
   console.log("  bash scripts/server-restart.sh");
+  await prisma.$disconnect();
   process.exit(1);
 }
 
 console.log("\nAll Growth health checks passed.");
+await prisma.$disconnect();
 process.exit(0);
-} finally {
-  await prisma.$disconnect();
-}
