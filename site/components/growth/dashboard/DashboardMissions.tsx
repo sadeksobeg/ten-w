@@ -58,7 +58,15 @@ export function DashboardMissions({ missions }: Props) {
                 </div>
                 <p className="mt-1 text-xs text-[var(--growth-text-sub)]">
                   {mission.progress}/{mission.target}
-                  {mission.completed ? ` · ${t("done")}` : ""}
+                  {mission.completed && mission.rewardStatus === "pending"
+                    ? ` · ${t("pendingApproval")}`
+                    : mission.completed && mission.rewardStatus === "approved"
+                      ? ` · ${t("done")}`
+                      : mission.completed && mission.rewardStatus === "rejected"
+                        ? ` · ${t("rejected")}`
+                        : mission.completed
+                          ? ` · ${t("done")}`
+                          : ""}
                 </p>
                 <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
                   <div

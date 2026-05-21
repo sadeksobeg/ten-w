@@ -1102,7 +1102,24 @@
       "ctaTitle": "Join the network?",
       "ctaBody": "Register as a partner and build income with T.E.N.E.G.T.A",
       "ctaButton": "Join now",
-      "qrSoon": "QR code — coming soon"
+      "qrSoon": "QR code — coming soon",
+      "lockedBadge": "Badge caché — complétez les objectifs",
+      "teamTitle": "Mon équipe",
+      "teamSubtitle": "Réseau sur 3 niveaux — partenaires actifs uniquement"
+    },
+    "network": {
+      "tree": {
+        "loading": "Chargement du réseau…",
+        "empty": "Pas encore d'équipe — partagez votre code.",
+        "stats": "Direct: {direct} · Total: {total} · Profondeur: {depth}"
+      }
+    },
+    "profileShare": {
+      "title": "Carte de partage",
+      "hint": "Image prête pour les réseaux sociaux",
+      "downloadLandscape": "Télécharger post (1200×630)",
+      "downloadStory": "Télécharger story (1080×1080)",
+      "previewAlt": "Aperçu"
     },
     "nextLevel": "Next: {name} at {n} closed deals",
     "maxLevel": "You are at the top level path — keep compounding performance.",
@@ -1116,6 +1133,12 @@
       "percentileStrong": "You are ahead of {p}% of partners by lifetime closed deals.",
       "percentileLine": "Ahead of {p}% of partners overall.",
       "weeklyRankLine": "Weekly rank #{rank} of {total} partners ({closed} closes this week)."
+    },
+    "celebration": {
+      "levelUp": {
+        "title": "Niveau supérieur !",
+        "subtitle": "Vous êtes maintenant au niveau :"
+      }
     },
     "heroClient": {
       "pillBrand": "T.E.N.E.G.T.A Growth Engine",
@@ -1158,6 +1181,8 @@
     },
     "earnings": {
       "title": "Earnings",
+      "totalLabel": "Total earnings",
+      "ledgerCount": "Ledger entries",
       "empty": "No commissions yet. Close a deal to generate ledger entries.",
       "bonus": "Bonus / adjustment",
       "tier": "Tier {tier}",
@@ -1181,10 +1206,13 @@
       "hint": "Streak updates when you visit the dashboard."
     },
     "missions": {
-      "title": "Daily missions",
-      "empty": "No missions configured yet.",
+      "title": "Missions du jour",
+      "empty": "Aucune mission configurée.",
       "progress": "{current} / {target}",
-      "done": "Completed today"
+      "done": "Approuvée",
+      "pendingApproval": "Terminée — en attente d'approbation admin",
+      "rejected": "Non approuvée",
+      "resetsIn": "Réinitialisation dans {h}h {m}m"
     },
     "hub": {
       "quickDeals": "Pipeline affaires",
@@ -1208,6 +1236,7 @@
       "title": "Badges",
       "empty": "No badges yet — close deals and grow your network.",
       "hiddenTag": "hidden",
+      "lockedLabel": "Verrouillé",
       "locked": "Locked",
       "rarityCommon": "COMMON",
       "rarityRare": "RARE",
@@ -1220,6 +1249,7 @@
     "settings": {
       "title": "Profile settings",
       "subtitle": "Avatar appears on your dashboard and public profile.",
+      "avatarSection": "Profile photo",
       "uploadHint": "Drop image or click to upload",
       "save": "Save",
       "saved": "Saved",
@@ -1543,6 +1573,9 @@
         "levels": "Levels",
         "tiers": "Commission tiers",
         "leaderboard": "Classement",
+        "seasons": "Saisons",
+        "missions": "Missions quotidiennes",
+        "audit": "Journal d'audit",
         "rewards": "Monthly rewards",
         "insights": "Insights",
         "overrides": "Partner overrides",
@@ -1572,9 +1605,23 @@
         "active": "Active",
         "inactive": "Inactive",
         "setLevel": "Set level",
+        "uplinePicker": "Partenaire supérieur",
+        "uplineNone": "Sans supérieur",
+        "uplineLabel": "Sous:",
+        "referralOrPicker": "Ou code parrain",
+        "networkColumn": "Réseau",
+        "networkCounts": "Direct {direct} · Total {total}",
+        "setUpline": "Définir le réseau",
+        "uplineConfirm": "Confirmer",
+        "uplineWarning": "Les commissions passées ne sont pas recalculées.",
+        "uplineSaved": "Réseau mis à jour",
+        "showTree": "Arbre d'équipe",
+        "hideTree": "Masquer l'arbre",
         "errors": {
           "email_taken": "Email already used",
           "invalid_referral": "Invalid referral code",
+          "cycle": "Cycle réseau invalide",
+          "self": "Impossible de s'assigner soi-même",
           "invalid_input": "Check the fields (valid email, password at least 8 characters).",
           "missing_seed": "Database not initialized — run seed on the server.",
           "server_error": "Server error (often the database). Check logs or run repair 0003.",
@@ -1597,7 +1644,16 @@
         "createSubmit": "Create event",
         "created": "Event created",
         "participants": "participants",
-        "updateProgress": "Update"
+        "updateProgress": "Update",
+        "slug": "Slug",
+        "editEvent": "Modifier",
+        "collapseEdit": "Masquer",
+        "saveEvent": "Enregistrer",
+        "updated": "Mis à jour",
+        "deleteEvent": "Supprimer",
+        "deleteConfirm": "Suppression définitive ?",
+        "deleteYes": "Oui, supprimer",
+        "cancel": "Annuler"
       },
       "notifications": {
         "title": "Notifications",
@@ -1720,6 +1776,32 @@
         "title": "Leaderboard rewards",
         "hint": "Applies configured monthly cash bonuses to top partners (idempotent for the current UTC month).",
         "submit": "Run monthly bonus pass"
+      },
+      "missionsPage": {
+        "title": "Missions quotidiennes",
+        "hint": "Les missions avec le même chainGroup forment une quête — bonus XP après approbation admin.",
+        "add": "Ajouter une mission",
+        "active": "Active",
+        "save": "Enregistrer",
+        "delete": "Supprimer",
+        "pendingTitle": "Récompenses en attente",
+        "pendingHint": "Les points de puissance ne sont crédités qu'après approbation ici.",
+        "pendingEmpty": "Aucune demande en attente.",
+        "approve": "Approuver",
+        "reject": "Refuser",
+        "chainBadge": "Bonus chaîne"
+      },
+      "auditPage": {
+        "title": "Journal d'audit admin",
+        "hint": "Historique des actions admin (deals, badges, règles, saisons, missions).",
+        "empty": "Aucune entrée."
+      },
+      "seasonsPage": {
+        "title": "Saisons du classement",
+        "active": "Saisons actives",
+        "archive": "Saisons passées",
+        "closeSeason": "Clôturer et récompenser le 1er",
+        "empty": "Aucune saison archivée."
       },
       "insightsPage": {
         "title": "Operational insights",

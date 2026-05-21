@@ -11,6 +11,7 @@ import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
 import { getLevelVisual } from "@/lib/growth/level-visual";
+import { PartnerNetworkTree } from "@/components/growth/profile/PartnerNetworkTree";
 import { getPublicProfileBySlug } from "@/lib/growth/get-public-profile";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 
@@ -19,16 +20,18 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const data = await getPublicProfileBySlug(slug);
+  const { slug, locale } = await params;
+  const data = await getPublicProfileBySlug(slug, locale);
   if (!data) return { title: "Partner" };
   const title = `${data.name} — T.E.N.E.G.T.A Partner`;
   const description =
     data.bio?.trim() ||
     `${data.name} — ${data.levelName}. انضم لشبكة T.E.N.E.G.T.A.`;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://tenegta.com";
+  const ogImage = `${baseUrl}/api/growth/profile/${slug}/share-card?format=landscape&locale=${locale}`;
   return {
     title,
-    openGraph: { title, description },
+    openGraph: { title, description, images: [{ url: ogImage, width: 1200, height: 630 }] },
     description,
   };
 }
@@ -156,6 +159,20 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
             }))}
             size="md"
             showLocked
+          />
+        </GlassCard>
+      </section>
+
+      <section className="mt-8 growth-page-enter">
+        <h2 className="font-[family-name:var(--font-cairo)] text-lg font-bold text-gold">
+          {t("teamTitle")}
+        </h2>
+        <p className="mt-1 text-sm text-[var(--growth-text-sub)]">{t("teamSubtitle")}</p>
+        <GlassCard className="mt-4 p-4 sm:p-6">
+          <PartnerNetworkTree
+            tree={data.networkTree}
+            stats={data.networkStats}
+            locale={locale}
           />
         </GlassCard>
       </section>

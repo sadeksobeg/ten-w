@@ -1,8 +1,13 @@
 import { UserRole } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { prisma } from "@/lib/prisma";
 import { CreatePartnerForm, PartnerList } from "@/components/growth/admin/PartnerAdminPanel";
+import {
+  getPartnerUpline,
+  getPartnerNetworkTree,
+  listPartnersForPicker,
+} from "@/lib/growth/partner-network";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -10,7 +15,7 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations("Growth.admin.partners");
 
-  const [partners, levels] = await Promise.all([
+  const [partners, levels, pickerOptions] = await Promise.all([
     prisma.user.findMany({
       where: { role: UserRole.PARTNER },
       orderBy: { createdAt: "desc" },
@@ -19,22 +24,36 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
       },
     }),
     prisma.levelDefinition.findMany({ orderBy: { order: "asc" }, select: { id: true, name: true } }),
+    listPartnersForPicker(),
   ]);
 
-  const rows = partners
-    .filter((u) => u.partnerProfile)
-    .map((u) => ({
-      userId: u.id,
-      name: u.name ?? u.email,
-      email: u.email,
-      phone: u.phone,
-      levelName: u.partnerProfile!.currentLevel.name,
-      totalXp: u.partnerProfile!.totalXp,
-      joinedAt: u.createdAt.toISOString(),
-      isActive: u.isActive,
-      publicSlug: u.publicSlug,
-      locale,
-    }));
+  const filtered = partners.filter((u) => u.partnerProfile);
+  const enriched = await Promise.all(
+    filtered.map(async (u) => {
+      const [upline, { stats }] = await Promise.all([
+        getPartnerUpline(u.id),
+        getPartnerNetworkTree(u.id, { maxDepth: 1, locale }),
+      ]);
+      return {
+        userId: u.id,
+        name: u.name ?? u.email,
+        email: u.email,
+        phone: u.phone,
+        levelName: u.partnerProfile!.currentLevel.name,
+        totalXp: u.partnerProfile!.totalXp,
+        joinedAt: u.createdAt.toISOString(),
+        isActive: u.isActive,
+        publicSlug: u.publicSlug,
+        locale,
+        uplineName: upline?.name ?? null,
+        uplineUserId: upline?.userId ?? null,
+        uplineSlug: upline?.publicSlug ?? null,
+        directCount: stats.directCount,
+        totalCount: stats.totalCount,
+      };
+    }),
+  );
+  const rows = enriched;
 
   return (
     <div className="space-y-8">
@@ -49,7 +68,7 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
         <h2 className="text-lg font-bold text-white">{t("createTitle")}</h2>
         <p className="mt-1 text-xs text-white/45">{t("createHint")}</p>
         <div className="mt-6">
-          <CreatePartnerForm />
+          <CreatePartnerForm pickerOptions={pickerOptions} />
         </div>
       </GlassCard>
 
@@ -58,7 +77,7 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
           {t("listTitle")} ({rows.length})
         </h2>
         <GlassCard className="overflow-hidden border border-white/10 p-0">
-          <PartnerList partners={rows} levels={levels} />
+          <PartnerList partners={rows} levels={levels} pickerOptions={pickerOptions} />
         </GlassCard>
       </section>
     </div>

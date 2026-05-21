@@ -1,16 +1,26 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   adminAdjustPartnerXpFormAction,
   adminCreatePartnerAction,
   adminSetPartnerLevelFormAction,
+  adminSetPartnerUplineAction,
   togglePartnerActiveFormAction,
 } from "@/lib/growth/actions";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
+import { PartnerNetworkTree } from "@/components/growth/profile/PartnerNetworkTree";
 
 type LevelOption = { id: string; name: string };
+
+type PickerOption = {
+  userId: string;
+  name: string;
+  email: string;
+  referralCode: string;
+  publicSlug: string | null;
+};
 
 type PartnerRow = {
   userId: string;
@@ -23,6 +33,11 @@ type PartnerRow = {
   isActive: boolean;
   publicSlug: string | null;
   locale: string;
+  uplineName: string | null;
+  uplineUserId: string | null;
+  uplineSlug: string | null;
+  directCount: number;
+  totalCount: number;
 };
 
 function createErrorText(t: (k: string) => string, code: string) {
@@ -39,6 +54,10 @@ function createErrorText(t: (k: string) => string, code: string) {
       return t("errors.server_error");
     case "unauthorized":
       return t("errors.unauthorized");
+    case "cycle":
+      return t("errors.cycle");
+    case "self":
+      return t("errors.self");
     default:
       return t("errors.unknown");
   }
@@ -47,9 +66,10 @@ function createErrorText(t: (k: string) => string, code: string) {
 const fieldClass =
   "mt-1.5 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2.5 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20";
 
-export function CreatePartnerForm() {
+export function CreatePartnerForm({ pickerOptions }: { pickerOptions: PickerOption[] }) {
   const t = useTranslations("Growth.admin.partners");
   const [state, action] = useActionState(adminCreatePartnerAction, undefined);
+  const [parentId, setParentId] = useState("");
 
   return (
     <form action={action} className="space-y-5">
@@ -83,9 +103,33 @@ export function CreatePartnerForm() {
           <span className="text-xs font-semibold text-white/55">{t("phone")}</span>
           <input name="phone" type="tel" className={fieldClass} />
         </label>
+        <label className="block sm:col-span-2">
+          <span className="text-xs font-semibold text-white/55">{t("uplinePicker")}</span>
+          <select
+            name="parentUserId"
+            className={fieldClass}
+            value={parentId}
+            onChange={(e) => {
+              const id = e.target.value;
+              setParentId(id);
+              const opt = pickerOptions.find((p) => p.userId === id);
+              const refInput = document.querySelector<HTMLInputElement>(
+                'input[name="referralCode"]',
+              );
+              if (refInput && opt) refInput.value = opt.referralCode;
+            }}
+          >
+            <option value="">{t("uplineNone")}</option>
+            {pickerOptions.map((p) => (
+              <option key={p.userId} value={p.userId}>
+                {p.name} ({p.referralCode})
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="block">
           <span className="text-xs font-semibold text-white/55">{t("referralOptional")}</span>
-          <input name="referralCode" className={fieldClass} />
+          <input name="referralCode" className={fieldClass} placeholder={t("referralOrPicker")} />
         </label>
       </div>
 
@@ -158,8 +202,67 @@ function PartnerXpControls({ partnerId, levels }: { partnerId: string; levels: L
   );
 }
 
-export function PartnerList({ partners, levels }: { partners: PartnerRow[]; levels: LevelOption[] }) {
+function PartnerUplineForm({
+  partnerId,
+  pickerOptions,
+  currentUplineId,
+}: {
+  partnerId: string;
+  pickerOptions: PickerOption[];
+  currentUplineId: string | null;
+}) {
   const t = useTranslations("Growth.admin.partners");
+  const [state, action] = useActionState(adminSetPartnerUplineAction, undefined);
+  const [showWarn, setShowWarn] = useState(false);
+
+  return (
+    <form action={action} className="mt-3 space-y-2 rounded-xl border border-amber-500/20 bg-amber-950/20 p-3">
+      <p className="text-[10px] font-semibold text-amber-100/80">{t("uplineWarning")}</p>
+      <input type="hidden" name="partnerId" value={partnerId} />
+      <select
+        name="parentUserId"
+        defaultValue={currentUplineId ?? ""}
+        className="w-full rounded-lg border border-white/10 bg-black/40 px-2 py-1.5 text-xs text-white"
+      >
+        <option value="">{t("uplineNone")}</option>
+        {pickerOptions
+          .filter((p) => p.userId !== partnerId)
+          .map((p) => (
+            <option key={p.userId} value={p.userId}>
+              {p.name}
+            </option>
+          ))}
+      </select>
+      {state && typeof state === "object" && "ok" in state && state.ok === false ? (
+        <p className="text-xs text-rose-300" role="alert">
+          {createErrorText(t, String((state as { error?: string }).error ?? ""))}
+        </p>
+      ) : null}
+      {state && typeof state === "object" && "ok" in state && state.ok === true ? (
+        <p className="text-xs text-emerald-300">{t("uplineSaved")}</p>
+      ) : null}
+      <button
+        type="submit"
+        className="rounded-lg border border-gold/35 bg-gold/10 px-3 py-1.5 text-xs font-bold text-gold"
+        onClick={() => setShowWarn(true)}
+      >
+        {showWarn ? t("uplineConfirm") : t("setUpline")}
+      </button>
+    </form>
+  );
+}
+
+export function PartnerList({
+  partners,
+  levels,
+  pickerOptions,
+}: {
+  partners: PartnerRow[];
+  levels: LevelOption[];
+  pickerOptions: PickerOption[];
+}) {
+  const t = useTranslations("Growth.admin.partners");
+  const [expandedTree, setExpandedTree] = useState<string | null>(null);
 
   return (
     <ul className="divide-y divide-white/10">
@@ -202,6 +305,30 @@ export function PartnerList({ partners, levels }: { partners: PartnerRow[]; leve
                     {new Date(p.joinedAt).toLocaleDateString()}
                   </span>
                 </div>
+                <div className="mt-2 text-xs text-white/50">
+                  <span className="font-semibold text-white/60">{t("networkColumn")}: </span>
+                  {p.uplineName ? (
+                    <>
+                      {t("uplineLabel")}{" "}
+                      {p.uplineSlug ? (
+                        <a
+                          href={`/${p.locale}/growth/profile/${p.uplineSlug}`}
+                          className="text-gold hover:underline"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {p.uplineName}
+                        </a>
+                      ) : (
+                        p.uplineName
+                      )}
+                      {" · "}
+                    </>
+                  ) : (
+                    <span>{t("uplineNone")} · </span>
+                  )}
+                  {t("networkCounts", { direct: p.directCount, total: p.totalCount })}
+                </div>
                 {p.publicSlug ? (
                   <a
                     href={`/${p.locale}/growth/profile/${p.publicSlug}`}
@@ -211,6 +338,29 @@ export function PartnerList({ partners, levels }: { partners: PartnerRow[]; leve
                   >
                     /growth/profile/{p.publicSlug}
                   </a>
+                ) : null}
+                <PartnerUplineForm
+                  partnerId={p.userId}
+                  pickerOptions={pickerOptions}
+                  currentUplineId={p.uplineUserId}
+                />
+                <button
+                  type="button"
+                  className="mt-2 text-[10px] font-bold text-gold hover:underline"
+                  onClick={() =>
+                    setExpandedTree((id) => (id === p.userId ? null : p.userId))
+                  }
+                >
+                  {expandedTree === p.userId ? t("hideTree") : t("showTree")}
+                </button>
+                {expandedTree === p.userId ? (
+                  <PartnerNetworkTree
+                    tree={[]}
+                    locale={p.locale}
+                    compact
+                    fetchUserId={p.userId}
+                    className="mt-2"
+                  />
                 ) : null}
                 <PartnerXpControls partnerId={p.userId} levels={levels} />
               </div>

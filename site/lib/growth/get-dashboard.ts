@@ -14,6 +14,7 @@ import {
   type CompositeLeaderboardRow,
 } from "@/lib/growth/leaderboard";
 import { getActivityDays } from "@/lib/growth/streak";
+import { GrowthRewardStatus } from "@prisma/client";
 import { missionTargetFromCriteria, utcDayKey } from "@/lib/growth/missions";
 import {
   fetchActivityEventsSafe,
@@ -71,6 +72,7 @@ export type DashboardMission = {
   progress: number;
   xpReward: number;
   completed: boolean;
+  rewardStatus: "none" | "pending" | "approved" | "rejected";
 };
 
 export type DashboardActivity = {
@@ -320,14 +322,27 @@ export async function getPartnerDashboard(
   }
 
   const progMap = new Map(missionDays.map((m) => [m.missionKey, m]));
-  const missionsData: DashboardMission[] = missionDefs.map((m) => ({
-    key: m.key,
-    title: resolveMissionTitle(m.key, locale, m.title),
-    target: missionTargetFromCriteria(m.criteria),
-    progress: progMap.get(m.key)?.progress ?? 0,
-    xpReward: m.xpReward,
-    completed: !!progMap.get(m.key)?.completedAt,
-  }));
+  const missionsData: DashboardMission[] = missionDefs.map((m) => {
+    const row = progMap.get(m.key);
+    const rs = row?.rewardStatus ?? GrowthRewardStatus.NONE;
+    const rewardStatus =
+      rs === GrowthRewardStatus.PENDING
+        ? "pending"
+        : rs === GrowthRewardStatus.APPROVED
+          ? "approved"
+          : rs === GrowthRewardStatus.REJECTED
+            ? "rejected"
+            : "none";
+    return {
+      key: m.key,
+      title: resolveMissionTitle(m.key, locale, m.title),
+      target: missionTargetFromCriteria(m.criteria),
+      progress: row?.progress ?? 0,
+      xpReward: m.xpReward,
+      completed: !!row?.completedAt,
+      rewardStatus,
+    };
+  });
 
   const earnedMap = new Map(
     userBadges.map((b) => [

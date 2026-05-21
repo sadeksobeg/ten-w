@@ -22,6 +22,11 @@ import { applyMonthlyLeaderboardBonuses } from "@/lib/growth/rewards";
 import { partnerOverrideModelsAvailable } from "@/lib/growth/prisma-optional";
 import { createNotification, createNotificationsForAllActivePartners, notifyAdmins } from "@/lib/growth/notify";
 import { uniquePublicSlug, randomSlugSuffix } from "@/lib/growth/public-slug";
+import {
+  PartnerNetworkError,
+  setPartnerUpline,
+} from "@/lib/growth/partner-network";
+import { logAdminAudit } from "@/lib/growth/audit-log";
 
 const registerSchema = z.object({
   email: z.string().email().max(320),
@@ -770,13 +775,22 @@ export async function adminCreatePartnerAction(
   if (existing) return { ok: false, error: "email_taken" };
 
   let parentUserId: string | null = null;
-  const ref = parsed.data.referralCode?.trim();
-  if (ref) {
+  const parentFromForm = String(formData.get("parentUserId") ?? "").trim();
+  if (parentFromForm) {
     const parentProfile = await prisma.partnerProfile.findUnique({
-      where: { referralCode: ref },
+      where: { userId: parentFromForm },
     });
     if (!parentProfile) return { ok: false, error: "invalid_referral" };
     parentUserId = parentProfile.userId;
+  } else {
+    const ref = parsed.data.referralCode?.trim();
+    if (ref) {
+      const parentProfile = await prisma.partnerProfile.findUnique({
+        where: { referralCode: ref },
+      });
+      if (!parentProfile) return { ok: false, error: "invalid_referral" };
+      parentUserId = parentProfile.userId;
+    }
   }
 
   const starter = await prisma.levelDefinition.findFirst({ orderBy: { order: "asc" } });
@@ -852,6 +866,45 @@ export async function togglePartnerActiveAction(
 
   revalidateGrowth();
   return { ok: true };
+}
+
+const setUplineSchema = z.object({
+  partnerId: z.string().min(1),
+  parentUserId: z.string().optional().or(z.literal("")),
+});
+
+export async function adminSetPartnerUplineFormAction(formData: FormData): Promise<void> {
+  await adminSetPartnerUplineAction(undefined, formData);
+}
+
+export async function adminSetPartnerUplineAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = setUplineSchema.safeParse({
+    partnerId: formData.get("partnerId"),
+    parentUserId: formData.get("parentUserId") ?? "",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const parentRaw = parsed.data.parentUserId?.trim();
+  const parentUserId = parentRaw ? parentRaw : null;
+
+  try {
+    await setPartnerUpline(parsed.data.partnerId, parentUserId, session.user.id);
+    revalidateGrowth();
+    return { ok: true };
+  } catch (e) {
+    if (e instanceof PartnerNetworkError) {
+      return { ok: false, error: e.code };
+    }
+    console.error("[adminSetPartnerUpline]", e);
+    return { ok: false, error: "server_error" };
+  }
 }
 
 const adjustXpSchema = z.object({
@@ -1152,6 +1205,161 @@ export async function adminUpdateEventStatusAction(
 
   revalidateGrowth();
   return { ok: true };
+}
+
+function parseEventMilestones(milestonesJson: string) {
+  const parsed = JSON.parse(milestonesJson) as unknown;
+  if (!Array.isArray(parsed)) return null;
+  return parsed.slice(0, 5).map((m, i) => {
+    const row = m as Record<string, unknown>;
+    return {
+      title: String(row.title ?? `Milestone ${i + 1}`),
+      description: row.description ? String(row.description) : undefined,
+      xpReward: Number(row.xpReward) || 0,
+      order: i,
+      requiredProgress: Math.min(100, Math.max(0, Number(row.requiredProgress) || 0)),
+    };
+  });
+}
+
+export async function adminUpdateEventAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const eventId = String(formData.get("eventId") ?? "").trim();
+  const title = String(formData.get("title") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const rules = String(formData.get("rules") ?? "").trim();
+  const startAtRaw = String(formData.get("startAt") ?? "").trim();
+  const endAtRaw = String(formData.get("endAt") ?? "").trim();
+  const maxRaw = String(formData.get("maxParticipants") ?? "").trim();
+  const slugRaw = String(formData.get("slug") ?? "").trim();
+
+  if (!eventId || !title || !description || !rules || !startAtRaw) {
+    return { ok: false, error: "invalid_input" };
+  }
+
+  const event = await prisma.growthEvent.findUnique({
+    where: { id: eventId },
+    include: { _count: { select: { participants: true } } },
+  });
+  if (!event) return { ok: false, error: "not_found" };
+
+  const startAt = new Date(startAtRaw);
+  if (Number.isNaN(startAt.getTime())) return { ok: false, error: "invalid_date" };
+  const endAt = endAtRaw ? new Date(endAtRaw) : null;
+  if (endAt && Number.isNaN(endAt.getTime())) return { ok: false, error: "invalid_date" };
+
+  const maxParticipants = maxRaw ? Number(maxRaw) : null;
+  if (maxParticipants != null && (!Number.isFinite(maxParticipants) || maxParticipants < 1)) {
+    return { ok: false, error: "invalid_max" };
+  }
+
+  let slug = slugRaw || event.slug;
+  if (slug !== event.slug) {
+    if (event._count.participants > 0) {
+      return { ok: false, error: "slug_locked" };
+    }
+    const taken = await prisma.growthEvent.findFirst({
+      where: { slug, id: { not: eventId } },
+    });
+    if (taken) return { ok: false, error: "slug_taken" };
+  }
+
+  const milestonesJson = String(formData.get("milestonesJson") ?? "[]");
+  let milestones: ReturnType<typeof parseEventMilestones> = [];
+  try {
+    milestones = parseEventMilestones(milestonesJson);
+    if (!milestones) return { ok: false, error: "invalid_milestones" };
+  } catch {
+    return { ok: false, error: "invalid_milestones" };
+  }
+
+  const coverRaw = String(formData.get("coverImage") ?? "").trim();
+  let coverPatch: { coverImage?: string | null } = {};
+  if (coverRaw === "__keep__") {
+    /* omit */
+  } else if (coverRaw) {
+    if (coverRaw.length > 2_800_000) return { ok: false, error: "image_too_large" };
+    if (!coverRaw.startsWith("data:image/")) return { ok: false, error: "invalid_image" };
+    coverPatch = { coverImage: coverRaw };
+  } else {
+    coverPatch = { coverImage: null };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.growthEvent.update({
+      where: { id: eventId },
+      data: {
+        slug,
+        title,
+        description,
+        rules,
+        startAt,
+        endAt,
+        maxParticipants,
+        ...coverPatch,
+      },
+    });
+    await tx.eventMilestone.deleteMany({ where: { eventId } });
+    if (milestones.length > 0) {
+      await tx.eventMilestone.createMany({
+        data: milestones.map((m) => ({
+          eventId,
+          title: m.title,
+          description: m.description ?? null,
+          xpReward: m.xpReward,
+          order: m.order,
+          requiredProgress: m.requiredProgress,
+        })),
+      });
+    }
+  });
+
+  await logAdminAudit(session.user.id, "update_event", "GrowthEvent", eventId, { title });
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function adminUpdateEventFormAction(formData: FormData): Promise<void> {
+  await adminUpdateEventAction(formData);
+}
+
+export async function adminDeleteEventAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const eventId = String(formData.get("eventId") ?? "").trim();
+  const confirm = String(formData.get("confirm") ?? "").trim();
+  if (!eventId) return { ok: false, error: "invalid_input" };
+
+  const event = await prisma.growthEvent.findUnique({
+    where: { id: eventId },
+    include: { _count: { select: { participants: true } } },
+  });
+  if (!event) return { ok: false, error: "not_found" };
+
+  if (event._count.participants > 0 && confirm !== "DELETE") {
+    return { ok: false, error: "confirm_required" };
+  }
+
+  await prisma.growthEvent.delete({ where: { id: eventId } });
+  await logAdminAudit(session.user.id, "delete_event", "GrowthEvent", eventId, {
+    title: event.title,
+  });
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function adminDeleteEventFormAction(formData: FormData): Promise<void> {
+  await adminDeleteEventAction(formData);
 }
 
 type RewardedMap = Record<string, boolean>;
@@ -1575,6 +1783,28 @@ export async function adminDeleteMissionAction(formData: FormData): Promise<void
   await prisma.missionDefinition.delete({ where: { id } }).catch(() => null);
   const { logAdminAudit } = await import("@/lib/growth/audit-log");
   await logAdminAudit(session.user.id, "delete_mission", "MissionDefinition", id);
+  revalidateGrowth();
+}
+
+export async function adminApproveMissionRewardAction(formData: FormData): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) return;
+  const kind = String(formData.get("kind") ?? "") as "mission" | "chain";
+  const id = String(formData.get("id") ?? "");
+  if (!id || (kind !== "mission" && kind !== "chain")) return;
+  const { adminApproveMissionReward } = await import("@/lib/growth/mission-rewards");
+  await adminApproveMissionReward(session.user.id, kind, id);
+  revalidateGrowth();
+}
+
+export async function adminRejectMissionRewardAction(formData: FormData): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) return;
+  const kind = String(formData.get("kind") ?? "") as "mission" | "chain";
+  const id = String(formData.get("id") ?? "");
+  if (!id || (kind !== "mission" && kind !== "chain")) return;
+  const { adminRejectMissionReward } = await import("@/lib/growth/mission-rewards");
+  await adminRejectMissionReward(session.user.id, kind, id);
   revalidateGrowth();
 }
 

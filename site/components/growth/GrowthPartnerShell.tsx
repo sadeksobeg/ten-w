@@ -60,7 +60,9 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
     }`;
 
   const mobileNav = NAV.filter((n) =>
-    ["dashboard", "deals", "events", "chat", "notifications"].includes(n.key),
+    ["dashboard", "deals", "earnings", "network", "events", "chat", "notifications"].includes(
+      n.key,
+    ),
   );
 
   return (

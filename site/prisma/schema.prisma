@@ -71,6 +71,13 @@ enum ParticipantStatus {
   WITHDRAWN
 }
 
+enum GrowthRewardStatus {
+  NONE
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum NotificationType {
   EVENT_INVITE
   EVENT_REMINDER
@@ -110,7 +117,10 @@ model User {
   deals            Deal[]             @relation("DealPartner")
   commissionRows   CommissionLedger[]
   badgesGranted    UserBadge[]        @relation("UserBadgeGranter")
-  missionDays      UserMissionDay[]
+  missionDays              UserMissionDay[]
+  missionRewardsReviewed   UserMissionDay[]     @relation("MissionRewardReviewed")
+  pendingChainRewards      PendingChainReward[]
+  chainRewardsReviewed     PendingChainReward[] @relation("ChainRewardReviewed")
   commissionOverrides PartnerCommissionOverride[] @relation("PartnerCommissionOverridePartner")
   leaderboardGrants   LeaderboardGrantLog[]
   demoSessions        DemoSession[]               @relation("DemoSessionCreator")
@@ -311,17 +321,41 @@ model AdminAuditLog {
 }
 
 model UserMissionDay {
-  id          String    @id @default(cuid())
-  userId      String
-  missionKey  String
-  day         String
-  progress    Int       @default(0)
-  completedAt DateTime?
+  id           String              @id @default(cuid())
+  userId       String
+  missionKey   String
+  day          String
+  progress     Int                 @default(0)
+  completedAt  DateTime?
+  rewardStatus GrowthRewardStatus  @default(NONE)
+  rewardXp     Int?
+  reviewedAt   DateTime?
+  reviewedById String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy User? @relation("MissionRewardReviewed", fields: [reviewedById], references: [id], onDelete: SetNull)
 
   @@unique([userId, missionKey, day])
   @@index([userId, day])
+  @@index([rewardStatus])
+}
+
+model PendingChainReward {
+  id             String             @id @default(cuid())
+  userId         String
+  chainGroup     String
+  day            String
+  xpAmount       Int
+  rewardStatus   GrowthRewardStatus @default(PENDING)
+  reviewedAt     DateTime?
+  reviewedById   String?
+  createdAt      DateTime           @default(now())
+
+  user       User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy User? @relation("ChainRewardReviewed", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@unique([userId, chainGroup, day])
+  @@index([rewardStatus])
 }
 
 model LeaderboardRewardRule {

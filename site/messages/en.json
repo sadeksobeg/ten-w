@@ -1063,7 +1063,24 @@
       "ctaButton": "Join now",
       "qrSoon": "QR code — coming soon",
       "share": "Share profile",
-      "linkCopied": "Link copied"
+      "linkCopied": "Link copied",
+      "lockedBadge": "Hidden badge — complete achievements to unlock",
+      "teamTitle": "My team",
+      "teamSubtitle": "Referral network up to 3 levels — active partners only"
+    },
+    "network": {
+      "tree": {
+        "loading": "Loading network…",
+        "empty": "No team yet — share your referral code.",
+        "stats": "Direct: {direct} · Total: {total} · Depth: {depth}"
+      }
+    },
+    "profileShare": {
+      "title": "Share card",
+      "hint": "Ready-to-post image for social media",
+      "downloadLandscape": "Download post (1200×630)",
+      "downloadStory": "Download story (1080×1080)",
+      "previewAlt": "Card preview"
     },
     "nextLevel": "Next: {name} at {n} closed deals",
     "maxLevel": "You are at the top level path — keep compounding performance.",
@@ -1077,6 +1094,12 @@
       "percentileStrong": "You are ahead of {p}% of partners by lifetime closed deals.",
       "percentileLine": "Ahead of {p}% of partners overall.",
       "weeklyRankLine": "Weekly rank #{rank} of {total} partners ({closed} closes this week)."
+    },
+    "celebration": {
+      "levelUp": {
+        "title": "Level up!",
+        "subtitle": "You are now at level:"
+      }
     },
     "heroClient": {
       "pillBrand": "T.E.N.E.G.T.A Growth Engine",
@@ -1121,6 +1144,8 @@
     },
     "earnings": {
       "title": "Earnings",
+      "totalLabel": "Total earnings",
+      "ledgerCount": "Ledger entries",
       "empty": "No commissions yet. Close a deal to generate ledger entries.",
       "bonus": "Bonus / adjustment",
       "tier": "Tier {tier}",
@@ -1148,7 +1173,9 @@
       "title": "Daily missions",
       "empty": "No missions configured yet.",
       "progress": "{current} / {target}",
-      "done": "Done ✓",
+      "done": "Approved ✓",
+      "pendingApproval": "Complete — awaiting admin approval",
+      "rejected": "Not approved",
       "resetsIn": "Resets in {h}h {m}m"
     },
     "hub": {
@@ -1218,6 +1245,7 @@
       "title": "Badges",
       "empty": "No badges yet — close deals and grow your network.",
       "hiddenTag": "hidden",
+      "lockedLabel": "Locked",
       "locked": "Locked",
       "howTo": "How to earn",
       "earned": "Earned",
@@ -1240,6 +1268,7 @@
     "settings": {
       "title": "Profile settings",
       "subtitle": "Avatar appears on your dashboard and public profile.",
+      "avatarSection": "Profile photo",
       "uploadHint": "Drop image or click to upload",
       "save": "Save",
       "saved": "Saved",
@@ -1597,9 +1626,23 @@
         "active": "Active",
         "inactive": "Inactive",
         "setLevel": "Set level",
+        "uplinePicker": "Upline partner (network)",
+        "uplineNone": "No upline",
+        "uplineLabel": "Under:",
+        "referralOrPicker": "Or type referral code",
+        "networkColumn": "Network",
+        "networkCounts": "Direct {direct} · Total {total}",
+        "setUpline": "Set network",
+        "uplineConfirm": "Confirm assignment",
+        "uplineWarning": "Warning: does not recalculate past commissions — structure only.",
+        "uplineSaved": "Network updated",
+        "showTree": "Show team tree",
+        "hideTree": "Hide tree",
         "errors": {
           "email_taken": "Email already used",
           "invalid_referral": "Invalid referral code",
+          "cycle": "Invalid assignment — network cycle",
+          "self": "Cannot assign partner under themselves",
           "invalid_input": "Check the fields (valid email, password at least 8 characters).",
           "missing_seed": "Database not initialized — run seed on the server.",
           "server_error": "Server error (often the database). Check logs or run repair 0003.",
@@ -1623,7 +1666,16 @@
         "createSubmit": "Create event",
         "created": "Event created",
         "participants": "participants",
-        "updateProgress": "Update"
+        "updateProgress": "Update",
+        "slug": "Slug",
+        "editEvent": "Edit event",
+        "collapseEdit": "Hide edit",
+        "saveEvent": "Save changes",
+        "updated": "Updated",
+        "deleteEvent": "Delete event",
+        "deleteConfirm": "Permanent delete? Confirm if participants exist.",
+        "deleteYes": "Yes, delete",
+        "cancel": "Cancel"
       },
       "notifications": {
         "title": "Notifications",
@@ -1754,11 +1806,17 @@
       },
       "missionsPage": {
         "title": "Daily missions",
-        "hint": "Missions with the same chainGroup form a weekly quest — completing all grants bonus XP.",
+        "hint": "Missions with the same chainGroup form a weekly quest — completing all grants bonus XP after admin approval.",
         "add": "Add mission",
         "active": "Active",
         "save": "Save",
-        "delete": "Delete"
+        "delete": "Delete",
+        "pendingTitle": "Rewards awaiting approval",
+        "pendingHint": "Partner power points are not credited until you approve here.",
+        "pendingEmpty": "No pending reward requests.",
+        "approve": "Approve",
+        "reject": "Reject",
+        "chainBadge": "Chain bonus"
       },
       "auditPage": {
         "title": "Admin audit log",

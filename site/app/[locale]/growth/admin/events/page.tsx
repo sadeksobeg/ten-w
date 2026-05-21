@@ -1,7 +1,11 @@
 import { EventStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
-import { CreateEventForm } from "@/components/growth/admin/EventAdminForms";
+import {
+  CreateEventForm,
+  DeleteEventButton,
+  EditEventForm,
+} from "@/components/growth/admin/EventAdminForms";
 import {
   adminUpdateEventStatusFormAction,
   adminUpdateParticipantProgressFormAction,
@@ -18,6 +22,7 @@ export default async function GrowthAdminEventsPage({ params }: PageProps) {
     orderBy: { createdAt: "desc" },
     include: {
       _count: { select: { participants: true, milestones: true } },
+      milestones: { orderBy: { order: "asc" } },
       participants: {
         take: 8,
         include: { user: { select: { email: true, name: true } } },
@@ -101,6 +106,28 @@ export default async function GrowthAdminEventsPage({ params }: PageProps) {
                 ))}
               </div>
             ) : null}
+            <EditEventForm
+              locale={locale}
+              event={{
+                id: ev.id,
+                slug: ev.slug,
+                title: ev.title,
+                description: ev.description,
+                rules: ev.rules,
+                startAt: ev.startAt.toISOString(),
+                endAt: ev.endAt?.toISOString() ?? null,
+                maxParticipants: ev.maxParticipants,
+                coverImage: ev.coverImage,
+                participantCount: ev._count.participants,
+                milestones: ev.milestones.map((m) => ({
+                  title: m.title,
+                  description: m.description ?? "",
+                  xpReward: m.xpReward,
+                  requiredProgress: m.requiredProgress,
+                })),
+              }}
+            />
+            <DeleteEventButton eventId={ev.id} participantCount={ev._count.participants} />
           </GlassCard>
         ))}
       </div>

@@ -1,5 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { StatCard } from "@/components/growth/ui/StatCard";
+import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
 import { Link } from "@/i18n/navigation";
 import { requestPayoutAction } from "@/lib/growth/actions";
@@ -21,19 +23,32 @@ export async function GrowthEarningsView({ locale, data }: Props) {
     }).format(cents / 100);
 
   return (
-    <GlassCard className="p-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-[family-name:var(--font-cairo)] text-xl font-bold">{t("earnings.title")}</h1>
-        <Link
-          href="/api/growth/earnings-export"
-          className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-xs font-semibold text-white/80 hover:border-gold/35"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {t("earnings.exportCsv")}
-        </Link>
+    <div className="space-y-6 growth-page-enter">
+      <GrowthPageHeader
+        title={t("earnings.title")}
+        action={
+          <Link
+            href="/api/growth/earnings-export"
+            className="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-semibold text-gold hover:bg-gold/20"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {t("earnings.exportCsv")}
+          </Link>
+        }
+      />
+      <div className="grid gap-3 sm:grid-cols-3">
+        <StatCard label={t("earnings.totalLabel")} value={fmt(data.earningsCents)} icon="💰" />
+        <StatCard
+          label={t("deals.title")}
+          value={String(data.closedDeals)}
+          sub={`${data.closedDeals} / ${data.pendingDeals}`}
+          icon="🤝"
+        />
+        <StatCard label={t("earnings.ledgerCount")} value={String(data.ledger.length)} icon="📜" />
       </div>
-      <div className="mt-4 text-3xl font-semibold tracking-tight">{fmt(data.earningsCents)}</div>
+    <GlassCard className="p-6 growth-card-hover">
+      <div className="text-3xl font-extrabold tracking-tight text-gold">{fmt(data.earningsCents)}</div>
       <div className="mt-6 space-y-3">
         {data.ledger.length === 0 ? (
           <div className="text-sm text-white/60">{t("earnings.empty")}</div>
@@ -81,5 +96,6 @@ export async function GrowthEarningsView({ locale, data }: Props) {
         </div>
       </form>
     </GlassCard>
+    </div>
   );
 }

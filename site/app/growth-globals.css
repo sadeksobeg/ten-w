@@ -2,6 +2,9 @@
 .growth-root {
   --growth-gold: #b07d2b;
   --growth-gold-bright: #e4b84d;
+  /* Align site Tailwind gold tokens inside growth shell */
+  --gold: #b07d2b;
+  --gold-bright: #e4b84d;
   --growth-chat-bubble-shadow: 0 8px 40px rgba(0, 0, 0, 0.55), 0 0 24px rgba(180, 125, 43, 0.2);
   --growth-bg: #0a0a0f;
   --growth-surface: #111118;

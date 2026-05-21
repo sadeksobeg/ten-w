@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import {
   getBadgeVisual,
   RARITY_COLORS,
@@ -178,8 +179,10 @@ export function BadgeIcon({
   showGlow = true,
   animate,
   className = "",
-  lockedLabel = "مقفل",
+  lockedLabel,
 }: BadgeIconProps) {
+  const t = useTranslations("Growth.badges");
+  const lockText = lockedLabel ?? t("lockedLabel");
   const px = SIZE_PX[size];
   const meta = getBadgeVisual(badgeKey);
   const color = earned ? meta.glowColor : "#6b7280";
@@ -195,7 +198,7 @@ export function BadgeIcon({
   return (
     <div
       className={`group relative inline-flex flex-col items-center gap-1 ${className}`}
-      title={!earned ? lockedLabel : undefined}
+      title={!earned ? lockText : undefined}
     >
       <div
         className={`relative motion-safe:transition-transform motion-safe:group-hover:scale-105 ${animate ? "growth-badge-earn" : ""} ${!earned ? "opacity-40 grayscale" : ""}`}

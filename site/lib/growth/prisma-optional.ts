@@ -67,6 +67,7 @@ type MissionDayRow = {
   missionKey: string;
   progress: number;
   completedAt: Date | null;
+  rewardStatus?: string;
 };
 
 type ActivityRow = {

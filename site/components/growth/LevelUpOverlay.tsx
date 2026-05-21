@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function LevelUpOverlay({ levelName, previousName, onDone }: Props) {
+  const t = useTranslations("Growth.celebration.levelUp");
   const [show, setShow] = useState(true);
 
   useEffect(() => {
@@ -45,9 +47,9 @@ export function LevelUpOverlay({ levelName, previousName, onDone }: Props) {
           🎉
         </p>
         <h2 className="mt-2 font-[family-name:var(--font-cairo)] text-2xl font-extrabold">
-          ترقية مستوى!
+          {t("title")}
         </h2>
-        <p className="mt-2 text-sm text-[var(--growth-text-sub)]">أنت الآن على مستوى:</p>
+        <p className="mt-2 text-sm text-[var(--growth-text-sub)]">{t("subtitle")}</p>
         <div className="mt-4 flex justify-center">
           <LevelBadge levelName={levelName} size="xl" />
         </div>

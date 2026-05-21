@@ -1,5 +1,6 @@
-import type { Prisma, PrismaClient } from "@prisma/client";
+import { GrowthRewardStatus, type Prisma, type PrismaClient } from "@prisma/client";
 import { growthPrismaModelsAvailable } from "@/lib/growth/prisma-optional";
+import { tryQueueChainBonus } from "@/lib/growth/mission-rewards";
 
 export type MissionCriterionType = "close_deal" | "add_lead" | "referral";
 
@@ -77,33 +78,23 @@ export async function applyMissionProgress(
 
     if (next < target) continue;
 
+    const xp = m.xpReward;
     await db.userMissionDay.update({
       where: { id: row.id },
-      data: { completedAt: new Date(), progress: target },
-    });
-
-    const xp = m.xpReward;
-    if (xp <= 0) continue;
-
-    await db.xpEvent.create({
       data: {
-        userId,
-        amount: xp,
-        reason: `mission:${m.key}`,
+        completedAt: new Date(),
+        progress: target,
+        rewardStatus: xp > 0 ? GrowthRewardStatus.PENDING : GrowthRewardStatus.APPROVED,
+        rewardXp: xp > 0 ? xp : null,
       },
-    });
-    await db.partnerProfile.update({
-      where: { userId },
-      data: { totalXp: { increment: xp } },
     });
 
     if (m.chainGroup) completedChains.add(m.chainGroup);
   }
 
-  if (completedChains.size > 0 && "missionDefinition" in db) {
-    const { tryCompleteQuestChain } = await import("@/lib/growth/quest-chain");
+  if (completedChains.size > 0) {
     for (const g of completedChains) {
-      await tryCompleteQuestChain(userId, g);
+      await tryQueueChainBonus(userId, g);
     }
   }
 }

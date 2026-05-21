@@ -2,6 +2,11 @@ import { DealStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
 import { resolveLevelName } from "@/lib/growth/level-i18n";
+import {
+  getPartnerNetworkTree,
+  type NetworkNode,
+  type NetworkStats,
+} from "@/lib/growth/partner-network";
 
 export type PublicProfileBadge = {
   key: string;
@@ -36,6 +41,8 @@ export type PublicProfileData = {
   streakLongest: number;
   memberDays: number;
   activityDaysCount: number;
+  networkTree: NetworkNode[];
+  networkStats: NetworkStats;
 };
 
 export async function getPublicProfileBySlug(
@@ -115,6 +122,11 @@ export async function getPublicProfileBySlug(
     Math.floor((Date.now() - user.createdAt.getTime()) / (24 * 60 * 60 * 1000)),
   );
 
+  const { tree: networkTree, stats: networkStats } = await getPartnerNetworkTree(user.id, {
+    locale,
+    maxDepth: 3,
+  });
+
   return {
     name: user.name ?? "Partner",
     displayTitle: user.partnerProfile.displayTitle,
@@ -145,5 +157,7 @@ export async function getPublicProfileBySlug(
     streakLongest: user.streak?.longestStreak ?? 0,
     memberDays,
     activityDaysCount: activityCount,
+    networkTree,
+    networkStats,
   };
 }

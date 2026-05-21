@@ -5,6 +5,8 @@ type Props = { params: Promise<{ locale: string }> };
 
 export default async function GrowthNetworkPage({ params }: Props) {
   const { locale } = await params;
-  const { data } = await requirePartnerDashboard(locale);
-  return <GrowthNetworkView locale={locale} data={data} />;
+  const { data, session } = await requirePartnerDashboard(locale);
+  return (
+    <GrowthNetworkView locale={locale} data={data} userId={session.user.id} />
+  );
 }
