@@ -147,6 +147,30 @@ bash scripts/run-seed.sh
 
 في الإنتاج غيّر كلمات المرور عبر `GROWTH_ADMIN_PASSWORD` و`GROWTH_DEMO_PASSWORD` في `site/.env` ولا تعتمد على القيم الافتراضية.
 
+### تعيين / تغيير كلمة مرور الأدمن (بدون مسح البيانات)
+
+```bash
+cd /var/www/tenegta
+unset DATABASE_URL
+bash scripts/set-admin-password.sh 'كلمة-مرور-قوية-هنا'
+```
+
+أو ضعها في `site/.env` ثم:
+
+```bash
+# GROWTH_ADMIN_PASSWORD="كلمة-مرور-قوية-هنا"
+cd /var/www/tenegta/site
+unset DATABASE_URL
+node scripts/set-growth-admin-password.mjs
+```
+
+| | |
+|--|--|
+| **البريد** | `admin@tenegta.local` |
+| **الدخول** | https://tenegta.com/ar/growth/sign-in |
+
+`db:seed` يعيد إنشاء الأدمن من `GROWTH_ADMIN_PASSWORD` لكنه **يمسح** شركاء وصفقات Growth — استخدمه فقط للبيئة التجريبية.
+
 **كلمة مرور الأدمن على السيرفر = قيمة `GROWTH_ADMIN_PASSWORD` في `site/.env` وقت تشغيل seed** (مثلاً إن كان `change-me-strong-admin` فهذه هي كلمة الدخول، وليست `ChangeMeAdmin!123`).
 
 ### إذا فشل seed: `EventNotification` does not exist
