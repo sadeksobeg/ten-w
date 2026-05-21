@@ -69,6 +69,8 @@ CONTACT_EMAIL_TO="info@tenegta.com"
 SMTP_FROM="TENEGTA Website <info@tenegta.com>"
 ```
 
+استخدم **App password** من Mailcow (ليس كلمة دخول SOGo). إن فشل الإرسال مع `127.0.0.1`، جرّب `SMTP_HOST="mail.tenegta.com"` أو راجع `bash scripts/server-pm2.sh logs tenegta` لسطر `[contact] SMTP failed`.
+
 (احذف أو علّق `FORMSPREE_ENDPOINT` إن لم تعد تحتاج Formspree.)
 
 3. أعد التشغيل:

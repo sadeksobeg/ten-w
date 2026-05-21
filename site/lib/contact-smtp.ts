@@ -33,11 +33,18 @@ function smtpPort(): number {
   return Number.isFinite(n) && n > 0 ? n : 587;
 }
 
+function isLoopbackHost(host: string): boolean {
+  return host === "127.0.0.1" || host === "localhost" || host === "::1";
+}
+
 function buildTransport() {
   const host = process.env.SMTP_HOST!.trim();
   const port = smtpPort();
   const secure =
     process.env.SMTP_SECURE === "true" || process.env.SMTP_SECURE === "1" || port === 465;
+  const tlsServername =
+    process.env.SMTP_TLS_SERVERNAME?.trim() ||
+    (isLoopbackHost(host) ? "mail.tenegta.com" : undefined);
 
   return nodemailer.createTransport({
     host,
@@ -48,6 +55,15 @@ function buildTransport() {
       pass: process.env.SMTP_PASS!.trim(),
     },
     ...(secure ? {} : { requireTLS: true }),
+    ...(tlsServername
+      ? {
+          tls: {
+            servername: tlsServername,
+            // Loopback: cert is for mail.tenegta.com, not 127.0.0.1
+            rejectUnauthorized: process.env.SMTP_TLS_INSECURE !== "true",
+          },
+        }
+      : {}),
     connectionTimeout: 15_000,
     greetingTimeout: 15_000,
     socketTimeout: 20_000,
