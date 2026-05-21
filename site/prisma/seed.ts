@@ -1,4 +1,12 @@
-import { BadgeCategory, Prisma, PrismaClient, UserRole, BadgeType } from "@prisma/client";
+import {
+  BadgeCategory,
+  EventStatus,
+  NotificationType,
+  Prisma,
+  PrismaClient,
+  UserRole,
+  BadgeType,
+} from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -24,6 +32,11 @@ async function uniqueReferralCode(): Promise<string> {
 }
 
 async function main() {
+  await prisma.eventNotification.deleteMany();
+  await prisma.notification.deleteMany();
+  await prisma.eventMilestone.deleteMany();
+  await prisma.eventParticipant.deleteMany();
+  await prisma.growthEvent.deleteMany();
   await prisma.activityEvent.deleteMany();
   await prisma.leaderboardGrantLog.deleteMany();
   await prisma.leaderboardRewardRule.deleteMany();
@@ -59,6 +72,7 @@ async function main() {
         code: "starter",
         name: "Starter",
         minClosedDeals: 0,
+        minXp: 0,
         salaryUsd: null,
         perksJson: { tag: "Access" },
       },
@@ -69,6 +83,7 @@ async function main() {
         code: "hunter",
         name: "Hunter",
         minClosedDeals: 5,
+        minXp: 500,
         salaryUsd: null,
         perksJson: { tag: "Badge unlock" },
       },
@@ -79,6 +94,7 @@ async function main() {
         code: "closer",
         name: "Closer",
         minClosedDeals: 10,
+        minXp: 1500,
         salaryUsd: 100,
         perksJson: { tag: "$100 / mo stipend (configured)" },
       },
@@ -89,6 +105,7 @@ async function main() {
         code: "pro",
         name: "Pro",
         minClosedDeals: 20,
+        minXp: 3600,
         salaryUsd: 200,
         perksJson: { tag: "$200 / mo stipend (configured)" },
       },
@@ -99,6 +116,7 @@ async function main() {
         code: "elite",
         name: "Elite",
         minClosedDeals: 40,
+        minXp: 8000,
         salaryUsd: null,
         perksJson: { tag: "Bonus + higher split (configured)" },
       },
@@ -109,6 +127,7 @@ async function main() {
         code: "titan",
         name: "Titan",
         minClosedDeals: 80,
+        minXp: 18000,
         salaryUsd: null,
         perksJson: { tag: "Double commission window (configured)" },
       },
@@ -119,6 +138,7 @@ async function main() {
         code: "legend",
         name: "Legend",
         minClosedDeals: 150,
+        minXp: 50000,
         salaryUsd: null,
         perksJson: { tag: "Near-passive income track (configured)" },
       },
@@ -397,7 +417,9 @@ async function main() {
     data: {
       email: "admin@tenegta.local",
       passwordHash: adminHash,
-      name: "Growth Admin",
+      name: "Sadek Al-Etr Admin",
+      phone: "+966500000000",
+      publicSlug: "sadek-admin",
       role: UserRole.ADMIN,
     },
   });
@@ -407,6 +429,9 @@ async function main() {
       email: "partner@tenegta.local",
       passwordHash: demoHash,
       name: "Demo Partner",
+      phone: "+966511111111",
+      publicSlug: "demo-partner",
+      bio: "شريك تجريبي لعرض قدرات محرك النمو.",
       role: UserRole.PARTNER,
     },
   });
@@ -417,7 +442,49 @@ async function main() {
       referralCode: await uniqueReferralCode(),
       parentUserId: null,
       currentLevelId: starter.id,
+      displayTitle: "Elite Partner",
+      socialLinks: { whatsapp: "+966511111111", linkedin: "https://linkedin.com" },
     },
+  });
+
+  const sampleEvent = await prisma.growthEvent.create({
+    data: {
+      slug: "spring-challenge-2026",
+      title: "تحدي الربيع 2026",
+      description: "فعالية تجريبية لاختبار نظام المراحل والنقاط.",
+      rules: "## القواعد\n- التزم بأخلاقيات العلامة\n- **لا وعود مضللة** للعملاء",
+      startAt: new Date(),
+      endAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      maxParticipants: 50,
+      status: EventStatus.PUBLISHED,
+      createdById: admin.id,
+      milestones: {
+        create: [
+          { title: "بداية قوية", order: 0, requiredProgress: 25, xpReward: 50 },
+          { title: "منتصف الطريق", order: 1, requiredProgress: 50, xpReward: 100 },
+          { title: "خط النهاية", order: 2, requiredProgress: 100, xpReward: 200 },
+        ],
+      },
+    },
+  });
+
+  await prisma.notification.createMany({
+    data: [
+      {
+        userId: demo.id,
+        type: NotificationType.EVENT_INVITE,
+        title: `فعالية جديدة: ${sampleEvent.title}`,
+        body: sampleEvent.description.slice(0, 120),
+        link: `/growth/events/${sampleEvent.slug}`,
+      },
+      {
+        userId: demo.id,
+        type: NotificationType.SYSTEM,
+        title: "مرحباً في Growth Engine",
+        body: "استكشف لوحة التحكم، الفعاليات، والحزمة التسويقية.",
+        link: "/growth",
+      },
+    ],
   });
 
   // eslint-disable-next-line no-console -- seed script

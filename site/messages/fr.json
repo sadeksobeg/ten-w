@@ -1055,8 +1055,50 @@
     "ctaEngagement": "Engagement models"
   },
   "Growth": {
-    "signOut": "Sign out",
-    "nextLevel": "Next: {name} at {n} closed deals",
+    "signOut": "Déconnexion",
+    "powerPointsLine": "{label} : {n}",
+    "powerPoints": "Points de Puissance",
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "events": "Événements",
+      "chat": "Chat",
+      "signOut": "Déconnexion"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "markAllRead": "Tout marquer lu",
+      "empty": "Aucune notification"
+    },
+    "events": {
+      "title": "Événements",
+      "invited": "Invitations",
+      "joined": "Mes événements",
+      "completed": "Terminés",
+      "empty": "Aucun événement",
+      "participants": "participants",
+      "eventProgress": "Votre progression",
+      "viewDetails": "Voir détails",
+      "joinEvent": "Rejoindre",
+      "acceptRules": "J'accepte le règlement",
+      "rulesTitle": "Règlement",
+      "confirmJoin": "Confirmer",
+      "cancel": "Annuler",
+      "joined": "Inscription réussie",
+      "milestones": "Jalons",
+      "back": "Retour",
+      "participantsPreview": "Participants"
+    },
+    "publicProfile": {
+      "closedDeals": "Affaires closes",
+      "badges": "Badges",
+      "badgesTitle": "Badges",
+      "channels": "Canaux",
+      "ctaTitle": "Rejoindre le réseau ?",
+      "ctaBody": "Inscrivez-vous comme partenaire T.E.N.E.G.T.A",
+      "ctaButton": "S'inscrire",
+      "qrSoon": "QR code — bientôt"
+    },
+    "nextLevel": "Suivant : {name} à {n} affaires closes",
     "maxLevel": "You are at the top level path — keep compounding performance.",
     "xpLine": "XP: {n}",
     "networkRefWithCode": "Ref: {code}",
@@ -1405,6 +1447,9 @@
       }
     },
     "admin": {
+      "activeEvents": "Événements actifs",
+      "eventParticipants": "Participants",
+      "unreadNotifications": "Non lues",
       "enter": "Admin",
       "nav": {
         "overview": "Overview",
@@ -1420,7 +1465,59 @@
         "bonuses": "Manual bonuses",
         "partnerDashboard": "Partner dashboard",
         "demo": "Cinematic demo",
-        "chat": "Inbox"
+        "chat": "Inbox",
+        "partners": "Partenaires",
+        "events": "Événements",
+        "notifications": "Notifications"
+      },
+      "partners": {
+        "title": "Partenaires",
+        "createTitle": "Créer un compte",
+        "name": "Nom",
+        "email": "E-mail",
+        "password": "Mot de passe",
+        "phone": "Téléphone",
+        "referralOptional": "Code parrain (optionnel)",
+        "createSubmit": "Créer",
+        "created": "Compte créé",
+        "empty": "Aucun partenaire",
+        "active": "Actif",
+        "inactive": "Inactif",
+        "setLevel": "Niveau",
+        "errors": {
+          "email_taken": "E-mail déjà utilisé",
+          "invalid_referral": "Code invalide",
+          "unauthorized": "Non autorisé",
+          "unknown": "Erreur"
+        }
+      },
+      "events": {
+        "title": "Événements",
+        "createTitle": "Créer un événement",
+        "title": "Titre",
+        "description": "Description",
+        "rules": "Règles (Markdown)",
+        "startAt": "Début",
+        "endAt": "Fin",
+        "maxParticipants": "Max participants",
+        "status": "Statut",
+        "milestones": "Jalons",
+        "addMilestone": "Ajouter jalon",
+        "milestoneTitle": "Titre du jalon",
+        "createSubmit": "Créer",
+        "created": "Événement créé",
+        "participants": "participants",
+        "updateProgress": "Mettre à jour"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "sendTitle": "Envoyer",
+        "emailOptional": "E-mail (vide = tous)",
+        "allPartnersHint": "Vide pour tous",
+        "notifTitle": "Titre",
+        "body": "Message",
+        "link": "Lien",
+        "sendSubmit": "Envoyer"
       },
       "demo": {
         "pageTitle": "Cinematic demo mode",

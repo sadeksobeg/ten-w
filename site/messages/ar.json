@@ -994,6 +994,48 @@
   },
   "Growth": {
     "signOut": "تسجيل الخروج",
+    "powerPointsLine": "{label}: {n}",
+    "powerPoints": "نقاط القوة",
+    "nav": {
+      "dashboard": "لوحة التحكم",
+      "events": "الفعاليات",
+      "chat": "المحادثات",
+      "signOut": "خروج"
+    },
+    "notifications": {
+      "title": "الإشعارات",
+      "markAllRead": "تحديد الكل كمقروء",
+      "empty": "لا إشعارات جديدة"
+    },
+    "events": {
+      "title": "الفعاليات",
+      "invited": "دعوات جديدة",
+      "joined": "فعالياتي",
+      "completed": "منتهية",
+      "empty": "لا فعاليات متاحة حالياً",
+      "participants": "مشارك",
+      "eventProgress": "تقدمك في الفعالية",
+      "viewDetails": "عرض التفاصيل",
+      "joinEvent": "انضم للفعالية",
+      "acceptRules": "أوافق على القواعد والشروط",
+      "rulesTitle": "القواعد والشروط",
+      "confirmJoin": "تأكيد الانضمام",
+      "cancel": "إلغاء",
+      "joined": "تم الانضمام بنجاح",
+      "milestones": "المراحل",
+      "back": "العودة للفعاليات",
+      "participantsPreview": "المشاركون"
+    },
+    "publicProfile": {
+      "closedDeals": "صفقات مُغلقة",
+      "badges": "شارات",
+      "badgesTitle": "الشارات",
+      "channels": "قنوات التواصل",
+      "ctaTitle": "هل تريد الانضمام للشبكة؟",
+      "ctaBody": "سجّل كشريك وابدأ بناء دخلك مع T.E.N.E.G.T.A",
+      "ctaButton": "انضم الآن",
+      "qrSoon": "رمز QR — قريباً"
+    },
     "nextLevel": "التالي: {name} عند {n} صفقة مغلقة",
     "maxLevel": "أنت على أعلى مسار مستويات حاليًا — واصل تراكم الأداء والنتائج.",
     "xpLine": "نقاط الخبرة: {n}",
@@ -1343,6 +1385,9 @@
       }
     },
     "admin": {
+      "activeEvents": "فعاليات نشطة",
+      "eventParticipants": "مشاركون في الفعاليات",
+      "unreadNotifications": "إشعارات غير مقروءة",
       "enter": "الإدارة",
       "nav": {
         "overview": "نظرة عامة",
@@ -1358,7 +1403,60 @@
         "bonuses": "مكافآت يدوية",
         "partnerDashboard": "لوحة الشريك",
         "demo": "تجربة سينمائية",
-        "chat": "صندوق المحادثات"
+        "chat": "صندوق المحادثات",
+        "partners": "الشركاء",
+        "events": "الفعاليات",
+        "notifications": "الإشعارات"
+      },
+      "partners": {
+        "title": "إدارة الشركاء",
+        "createTitle": "إنشاء حساب شريك جديد",
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "phone": "رقم الهاتف",
+        "referralOptional": "كود إحالة (اختياري)",
+        "createSubmit": "إنشاء الحساب",
+        "created": "تم إنشاء الشريك بنجاح",
+        "empty": "لا يوجد شركاء",
+        "active": "نشط",
+        "inactive": "معطّل",
+        "setLevel": "تعيين المستوى",
+        "errors": {
+          "email_taken": "البريد مستخدم مسبقاً",
+          "invalid_referral": "كود إحالة غير صالح",
+          "unauthorized": "غير مصرح",
+          "unknown": "حدث خطأ"
+        }
+      },
+      "events": {
+        "title": "الفعاليات",
+        "createTitle": "إنشاء فعالية",
+        "titleField": "العنوان",
+        "title": "العنوان",
+        "description": "الوصف",
+        "rules": "القواعد (Markdown)",
+        "startAt": "تاريخ البداية",
+        "endAt": "تاريخ النهاية",
+        "maxParticipants": "الحد الأقصى",
+        "status": "الحالة",
+        "milestones": "مراحل الفعالية",
+        "addMilestone": "إضافة مرحلة",
+        "milestoneTitle": "عنوان المرحلة",
+        "createSubmit": "إنشاء الفعالية",
+        "created": "تم إنشاء الفعالية",
+        "participants": "مشاركين",
+        "updateProgress": "تحديث"
+      },
+      "notifications": {
+        "title": "الإشعارات",
+        "sendTitle": "إرسال إشعار",
+        "emailOptional": "بريد شريك (فارغ = الجميع)",
+        "allPartnersHint": "اتركه فارغاً لجميع الشركاء",
+        "notifTitle": "العنوان",
+        "body": "المحتوى",
+        "link": "رابط (اختياري)",
+        "sendSubmit": "إرسال"
       },
       "demo": {
         "pageTitle": "وضع العرض السينمائي",

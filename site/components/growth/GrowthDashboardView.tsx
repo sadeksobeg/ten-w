@@ -7,7 +7,6 @@ import { PartnerInsightCarousel } from "@/components/growth/PartnerInsightCarous
 import { DealJourneyRow } from "@/components/growth/DealJourneyRow";
 import {
   addLeadDealAction,
-  growthSignOutAction,
   recordMarketingKitHitAction,
   requestPayoutAction,
 } from "@/lib/growth/actions";
@@ -16,6 +15,8 @@ import { GrowthConfetti } from "@/components/growth/GrowthConfetti";
 import { GrowthHeroClient } from "@/components/growth/GrowthHeroClient";
 import { GrowthMotivationBar } from "@/components/growth/GrowthMotivationBar";
 import { MarketingKitProductCard } from "@/components/growth/MarketingKitProductCard";
+import { XpProgressBar } from "@/components/growth/XpProgressBar";
+import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 
 type Props = {
   locale: string;
@@ -28,6 +29,7 @@ export async function GrowthDashboardView({ locale, data, celebrate }: Props) {
   const nfLocale =
     locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US";
   const products = data.products.map((p) => ({ id: p.id, name: p.name }));
+  const powerLabel = getXpBrandLabel(locale);
   const journeyLabels = {
     lead: t("journey.steps.lead"),
     contacted: t("journey.steps.contacted"),
@@ -39,24 +41,6 @@ export async function GrowthDashboardView({ locale, data, celebrate }: Props) {
   return (
     <div className="space-y-10">
       <GrowthConfetti trigger={celebrate} />
-
-      <div className="flex flex-wrap items-center justify-end gap-3">
-        <Link
-          href={`/${locale}/growth/chat`}
-          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 backdrop-blur-md hover:border-gold/30 hover:text-white"
-        >
-          {t("chat.nav")}
-        </Link>
-        <form action={growthSignOutAction} className="inline-flex">
-          <input type="hidden" name="locale" value={locale} />
-          <button
-            type="submit"
-            className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 backdrop-blur-md hover:border-gold/30 hover:text-white"
-          >
-            {t("signOut")}
-          </button>
-        </form>
-      </div>
 
       <GrowthHeroClient
         levelName={`${data.profile.levelName}`}
@@ -72,6 +56,21 @@ export async function GrowthDashboardView({ locale, data, celebrate }: Props) {
       <GrowthMotivationBar
         primary={data.compete.motivationPrimary}
         secondary={data.compete.motivationSecondary}
+      />
+
+      <XpProgressBar
+        locale={locale}
+        currentXp={data.profile.totalXp}
+        currentLevel={{
+          name: data.profile.levelName,
+          order: data.profile.levelOrder,
+          minXp: data.currentLevelMinXp,
+        }}
+        nextLevel={
+          data.nextLevel
+            ? { name: data.nextLevel.name, minXp: data.nextLevel.minXp, order: 0 }
+            : null
+        }
       />
 
       <PartnerInsightCarousel slides={data.insights} />
@@ -91,7 +90,7 @@ export async function GrowthDashboardView({ locale, data, celebrate }: Props) {
             >
               <div className="text-xs font-semibold text-white/55">{m.title}</div>
               <div className="mt-2 text-xs text-white/45">
-                +{m.xpReward} XP · {t("missions.progress", { current: m.progress, target: m.target })}
+                +{m.xpReward} {powerLabel} · {t("missions.progress", { current: m.progress, target: m.target })}
               </div>
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
                 <div
@@ -113,7 +112,7 @@ export async function GrowthDashboardView({ locale, data, celebrate }: Props) {
 
       <div className="flex flex-wrap gap-3 text-xs text-white/70">
         <span className="rounded-full border border-purple-400/20 bg-purple-500/10 px-4 py-2 font-semibold text-purple-100">
-          {t("xpLine", { n: data.profile.totalXp })}
+          {t("powerPointsLine", { n: data.profile.totalXp, label: powerLabel })}
         </span>
         {data.nextLevel ? (
           <span className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-white/70">

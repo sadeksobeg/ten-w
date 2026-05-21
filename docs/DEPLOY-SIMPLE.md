@@ -121,6 +121,30 @@ bash scripts/server-update.sh
 
 إذا ظهر خطأ Prisma **P3005** — أنشئ قاعدة `tenegta_db` من Hostinger ثم أعد `server-update.sh` (بدون `db push` على `clinicsaas`).
 
+### Growth Engine (بعد تحديث 0003)
+
+الترحيل `site/prisma/migrations/0003_growth_extensions` يُطبَّق تلقائياً مع `server-update.sh` (`prisma migrate deploy`).
+
+**بيانات تجريبية (اختياري — يمسح بيانات Growth القديمة):**
+
+```bash
+cd /var/www/tenegta/site
+npx prisma db seed
+```
+
+| الدور | البريد | كلمة المرور الافتراضية (seed) |
+|------|--------|-------------------------------|
+| **أدمن** | `admin@tenegta.local` | `ChangeMeAdmin!123` أو `GROWTH_ADMIN_PASSWORD` في `.env` |
+| **شريك تجريبي** | `partner@tenegta.local` | `ChangeMePartner!123` أو `GROWTH_DEMO_PASSWORD` |
+
+**مسارات جديدة:**
+
+- لوحة الأدمن: `/ar/growth/admin` — شركاء، فعاليات، إشعارات
+- الشريك: `/ar/growth` — فعاليات، دردشة، جرس إشعارات
+- بروفايل عام (للمشاركة/QR لاحقاً): `/ar/growth/profile/{publicSlug}` — مثال بعد seed: `/ar/growth/profile/demo-partner`
+
+في الإنتاج غيّر كلمات المرور عبر `GROWTH_ADMIN_PASSWORD` و`GROWTH_DEMO_PASSWORD` في `site/.env` ولا تعتمد على القيم الافتراضية.
+
 ---
 
 ## ملخص الأوامر

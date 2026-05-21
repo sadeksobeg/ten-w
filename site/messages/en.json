@@ -994,6 +994,48 @@
   },
   "Growth": {
     "signOut": "Sign out",
+    "powerPointsLine": "{label}: {n}",
+    "powerPoints": "Power Points",
+    "nav": {
+      "dashboard": "Dashboard",
+      "events": "Events",
+      "chat": "Chat",
+      "signOut": "Sign out"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "markAllRead": "Mark all read",
+      "empty": "No new notifications"
+    },
+    "events": {
+      "title": "Events",
+      "invited": "New invites",
+      "joined": "My events",
+      "completed": "Completed",
+      "empty": "No events available",
+      "participants": "participants",
+      "eventProgress": "Your progress",
+      "viewDetails": "View details",
+      "joinEvent": "Join event",
+      "acceptRules": "I accept the rules and terms",
+      "rulesTitle": "Rules & terms",
+      "confirmJoin": "Confirm join",
+      "cancel": "Cancel",
+      "joined": "Joined successfully",
+      "milestones": "Milestones",
+      "back": "Back to events",
+      "participantsPreview": "Participants"
+    },
+    "publicProfile": {
+      "closedDeals": "Closed deals",
+      "badges": "Badges",
+      "badgesTitle": "Badges",
+      "channels": "Channels",
+      "ctaTitle": "Join the network?",
+      "ctaBody": "Register as a partner and build income with T.E.N.E.G.T.A",
+      "ctaButton": "Join now",
+      "qrSoon": "QR code — coming soon"
+    },
     "nextLevel": "Next: {name} at {n} closed deals",
     "maxLevel": "You are at the top level path — keep compounding performance.",
     "xpLine": "XP: {n}",
@@ -1343,6 +1385,9 @@
       }
     },
     "admin": {
+      "activeEvents": "Active events",
+      "eventParticipants": "Event participants",
+      "unreadNotifications": "Unread notifications",
       "enter": "Admin",
       "nav": {
         "overview": "Overview",
@@ -1358,7 +1403,59 @@
         "bonuses": "Manual bonuses",
         "partnerDashboard": "Partner dashboard",
         "demo": "Cinematic demo",
-        "chat": "Inbox"
+        "chat": "Inbox",
+        "partners": "Partners",
+        "events": "Events",
+        "notifications": "Notifications"
+      },
+      "partners": {
+        "title": "Partner management",
+        "createTitle": "Create partner account",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "phone": "Phone",
+        "referralOptional": "Referral code (optional)",
+        "createSubmit": "Create account",
+        "created": "Partner created",
+        "empty": "No partners",
+        "active": "Active",
+        "inactive": "Inactive",
+        "setLevel": "Set level",
+        "errors": {
+          "email_taken": "Email already used",
+          "invalid_referral": "Invalid referral code",
+          "unauthorized": "Unauthorized",
+          "unknown": "Something went wrong"
+        }
+      },
+      "events": {
+        "title": "Events",
+        "createTitle": "Create event",
+        "title": "Title",
+        "description": "Description",
+        "rules": "Rules (Markdown)",
+        "startAt": "Start",
+        "endAt": "End",
+        "maxParticipants": "Max participants",
+        "status": "Status",
+        "milestones": "Milestones",
+        "addMilestone": "Add milestone",
+        "milestoneTitle": "Milestone title",
+        "createSubmit": "Create event",
+        "created": "Event created",
+        "participants": "participants",
+        "updateProgress": "Update"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "sendTitle": "Send notification",
+        "emailOptional": "Partner email (blank = all)",
+        "allPartnersHint": "Leave blank for all partners",
+        "notifTitle": "Title",
+        "body": "Body",
+        "link": "Link (optional)",
+        "sendSubmit": "Send"
       },
       "demo": {
         "pageTitle": "Cinematic demo mode",

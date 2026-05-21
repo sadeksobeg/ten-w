@@ -91,7 +91,8 @@ export type DashboardData = {
   closedDeals: number;
   pendingDeals: number;
   lostDeals: number;
-  nextLevel: { name: string; minClosedDeals: number } | null;
+  nextLevel: { name: string; minClosedDeals: number; minXp: number } | null;
+  currentLevelMinXp: number;
   progress: { current: number; target: number };
   earningsCents: number;
   deals: DashboardDeal[];
@@ -198,8 +199,8 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
   ]);
 
   const nextLevel = await prisma.levelDefinition.findFirst({
-    where: { minClosedDeals: { gt: closedDeals } },
-    orderBy: { order: "asc" },
+    where: { minXp: { gt: profile.totalXp } },
+    orderBy: { minXp: "asc" },
   });
 
   const progressTarget = nextLevel?.minClosedDeals ?? Math.max(closedDeals, 1);
@@ -276,8 +277,13 @@ export async function getPartnerDashboard(userId: string): Promise<DashboardData
     closedDeals,
     pendingDeals,
     lostDeals,
+    currentLevelMinXp: profile.currentLevel.minXp,
     nextLevel: nextLevel
-      ? { name: nextLevel.name, minClosedDeals: nextLevel.minClosedDeals }
+      ? {
+          name: nextLevel.name,
+          minClosedDeals: nextLevel.minClosedDeals,
+          minXp: nextLevel.minXp,
+        }
       : null,
     progress: { current: closedDeals, target: progressTarget },
     earningsCents,

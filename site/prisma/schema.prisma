@@ -56,6 +56,34 @@ enum ChatPriority {
   LOW
 }
 
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum ParticipantStatus {
+  PENDING
+  ACCEPTED
+  COMPLETED
+  WITHDRAWN
+}
+
+enum NotificationType {
+  EVENT_INVITE
+  EVENT_REMINDER
+  EVENT_MILESTONE
+  BADGE_EARNED
+  LEVEL_UP
+  XP_BOOST
+  PAYOUT_UPDATE
+  DEAL_CLOSED
+  SYSTEM
+  ADMIN_MESSAGE
+}
+
 model User {
   id               String    @id @default(cuid())
   email            String    @unique
@@ -63,6 +91,11 @@ model User {
   passwordHash     String
   name             String?
   image            String?
+  phone            String?
+  avatarUrl        String?
+  bio              String?
+  publicSlug       String?   @unique
+  isActive         Boolean   @default(true)
   role             UserRole  @default(PARTNER)
   marketingKitHits Int       @default(0)
   createdAt        DateTime  @default(now())
@@ -83,6 +116,9 @@ model User {
   demoSessions        DemoSession[]               @relation("DemoSessionCreator")
   chatConversationsAsPartner ChatConversation[]  @relation("ChatPartnerConversations")
   chatMessagesSent           ChatMessage[]        @relation("ChatMessageSender")
+  notifications              Notification[]
+  eventsCreated              GrowthEvent[]        @relation("EventCreator")
+  eventParticipants          EventParticipant[]
 }
 
 model PartnerProfile {
@@ -92,6 +128,9 @@ model PartnerProfile {
   parentUserId   String?
   currentLevelId String
   totalXp        Int      @default(0)
+  displayTitle   String?
+  socialLinks    Json?
+  profileViews   Int      @default(0)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -109,6 +148,7 @@ model LevelDefinition {
   code           String   @unique
   name           String
   minClosedDeals Int
+  minXp          Int      @default(0)
   salaryUsd      Int?
   perksJson      Json?
 
@@ -208,6 +248,7 @@ model XpEvent {
   userId    String
   amount    Int
   reason    String
+  source    String?
   dealId    String?
   createdAt DateTime @default(now())
 
@@ -377,4 +418,89 @@ model DemoEvent {
 
   @@unique([sessionId, seq])
   @@index([sessionId])
+}
+
+model GrowthEvent {
+  id              String      @id @default(cuid())
+  slug            String      @unique
+  title           String
+  description     String
+  rules           String
+  startAt         DateTime
+  endAt           DateTime?
+  maxParticipants Int?
+  status          EventStatus @default(DRAFT)
+  createdById     String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  creator      User               @relation("EventCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  participants EventParticipant[]
+  milestones   EventMilestone[]
+  eventNotifications EventNotification[]
+
+  @@index([status])
+  @@index([startAt])
+}
+
+model EventParticipant {
+  id            String            @id @default(cuid())
+  eventId       String
+  userId        String
+  status        ParticipantStatus @default(PENDING)
+  joinedAt      DateTime?
+  progress      Int               @default(0)
+  xpEarned      Int               @default(0)
+  acceptedRules Boolean           @default(false)
+  acceptedAt    DateTime?
+  rewardedMilestones Json?
+
+  event GrowthEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([userId])
+}
+
+model EventMilestone {
+  id               String @id @default(cuid())
+  eventId          String
+  title            String
+  description      String?
+  xpReward         Int    @default(0)
+  order            Int
+  requiredProgress Int    @default(0)
+
+  event GrowthEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  link      String?
+  isRead    Boolean          @default(false)
+  metadata  Json?
+  createdAt DateTime         @default(now())
+
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventNotifications EventNotification[]
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+}
+
+model EventNotification {
+  id             String @id @default(cuid())
+  eventId        String
+  notificationId String
+
+  event        GrowthEvent  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, notificationId])
 }

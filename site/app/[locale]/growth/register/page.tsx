@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { Suspense, useActionState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { registerPartnerAction } from "@/lib/growth/actions";
+import { RegisterReferralField } from "@/components/growth/RegisterReferralField";
 
 function registerErrorText(t: (key: string) => string, code: string) {
   switch (code) {
@@ -69,13 +70,9 @@ export default function GrowthRegisterPage() {
               required
             />
           </label>
-          <label className="block">
-            <span className="text-xs text-white/55">{t("referral")}</span>
-            <input
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
-              name="referralCode"
-            />
-          </label>
+          <Suspense fallback={null}>
+            <RegisterReferralField label={t("referral")} />
+          </Suspense>
 
           {state && typeof state === "object" && "ok" in state && state.ok === false ? (
             <div className="text-sm text-red-300" role="alert">

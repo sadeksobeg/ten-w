@@ -1,7 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { UserRole, DealStatus, PayoutStatus, BadgeType } from "@prisma/client";
+import {
+  UserRole,
+  DealStatus,
+  PayoutStatus,
+  BadgeType,
+  EventStatus,
+  ParticipantStatus,
+  NotificationType,
+} from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { auth, signOut } from "@/auth";
@@ -12,6 +20,8 @@ import { applyMissionProgress } from "@/lib/growth/missions";
 import { logActivityEvent } from "@/lib/growth/activity";
 import { applyMonthlyLeaderboardBonuses } from "@/lib/growth/rewards";
 import { partnerOverrideModelsAvailable } from "@/lib/growth/prisma-optional";
+import { createNotification, createNotificationsForAllActivePartners, notifyAdmins } from "@/lib/growth/notify";
+import { uniquePublicSlug, randomSlugSuffix } from "@/lib/growth/public-slug";
 
 const registerSchema = z.object({
   email: z.string().email().max(320),
@@ -309,7 +319,16 @@ async function updatePayoutStatusAdminAction(
     metadata: { payoutId, status },
   });
 
-  revalidatePath("/");
+  await createNotification(prisma, {
+    userId: payout.userId,
+    type: NotificationType.PAYOUT_UPDATE,
+    title: "تحديث السحب",
+    body: `حالة الطلب: ${status}`,
+    link: "/growth",
+    metadata: { payoutId, status },
+  });
+
+  revalidateGrowth();
 }
 
 export async function closeDealAdminAction(
@@ -437,7 +456,15 @@ export async function assignAdminBadgeAction(formData: FormData): Promise<void> 
   }
 
   await grantAdminBadge(prisma, user.id, badge.key, session.user.id);
-  revalidatePath("/");
+  await createNotification(prisma, {
+    userId: user.id,
+    type: NotificationType.BADGE_EARNED,
+    title: "شارة جديدة",
+    body: badge.name,
+    link: "/growth",
+    metadata: { badgeKey: badge.key },
+  });
+  revalidateGrowth();
 }
 
 const revokeBadgeSchema = z.object({
@@ -672,4 +699,607 @@ export async function updateCommissionTierAdminAction(formData: FormData): Promi
   });
 
   revalidatePath("/");
+}
+
+function revalidateGrowth() {
+  revalidatePath("/", "layout");
+}
+
+const adminCreatePartnerSchema = z.object({
+  name: z.string().min(1).max(120),
+  email: z.string().email().max(320),
+  password: z.string().min(8).max(128),
+  phone: z.string().max(32).optional().or(z.literal("")),
+  referralCode: z.string().max(16).optional().or(z.literal("")),
+});
+
+export async function adminCreatePartnerAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true; partnerId: string } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const parsed = adminCreatePartnerSchema.safeParse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    phone: formData.get("phone") ?? "",
+    referralCode: formData.get("referralCode") ?? "",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const email = parsed.data.email.toLowerCase().trim();
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) return { ok: false, error: "email_taken" };
+
+  let parentUserId: string | null = null;
+  const ref = parsed.data.referralCode?.trim();
+  if (ref) {
+    const parentProfile = await prisma.partnerProfile.findUnique({
+      where: { referralCode: ref },
+    });
+    if (!parentProfile) return { ok: false, error: "invalid_referral" };
+    parentUserId = parentProfile.userId;
+  }
+
+  const starter = await prisma.levelDefinition.findFirst({ orderBy: { order: "asc" } });
+  if (!starter) return { ok: false, error: "missing_seed" };
+
+  const passwordHash = await bcrypt.hash(parsed.data.password, 10);
+  const referralCode = await uniqueReferralCode();
+  const publicSlug = await uniquePublicSlug(prisma, parsed.data.name);
+
+  const user = await prisma.$transaction(async (tx) => {
+    const u = await tx.user.create({
+      data: {
+        email,
+        passwordHash,
+        name: parsed.data.name,
+        phone: parsed.data.phone?.trim() || null,
+        publicSlug,
+        role: UserRole.PARTNER,
+        isActive: true,
+      },
+    });
+    await tx.partnerProfile.create({
+      data: {
+        userId: u.id,
+        referralCode,
+        parentUserId,
+        currentLevelId: starter.id,
+      },
+    });
+    return u;
+  });
+
+  await createNotification(prisma, {
+    userId: user.id,
+    type: NotificationType.SYSTEM,
+    title: "مرحباً بك في T.E.N.E.G.T.A",
+    body: "تم إنشاء حسابك. سجّل الدخول وابدأ البناء.",
+    link: "/growth/sign-in",
+  });
+
+  revalidateGrowth();
+  return { ok: true, partnerId: user.id };
+}
+
+export async function togglePartnerActiveFormAction(formData: FormData): Promise<void> {
+  await togglePartnerActiveAction(formData);
+}
+
+export async function togglePartnerActiveAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const userId = String(formData.get("userId") ?? "").trim();
+  if (!userId) return { ok: false, error: "invalid_input" };
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user || user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "not_found" };
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { isActive: !user.isActive },
+  });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+const adjustXpSchema = z.object({
+  partnerId: z.string().min(1),
+  amount: z.coerce.number().int().min(-1_000_000).max(1_000_000),
+  reason: z.string().max(500).optional().or(z.literal("")),
+});
+
+export async function adminAdjustPartnerXpFormAction(formData: FormData): Promise<void> {
+  await adminAdjustPartnerXpAction(formData);
+}
+
+export async function adminAdjustPartnerXpAction(
+  formData: FormData,
+): Promise<
+  | { ok: true; newTotalXp: number; newLevelName: string }
+  | { ok: false; error: string }
+> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = adjustXpSchema.safeParse({
+    partnerId: formData.get("partnerId"),
+    amount: formData.get("amount"),
+    reason: formData.get("reason") ?? "",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const profile = await prisma.partnerProfile.findUnique({
+    where: { userId: parsed.data.partnerId },
+    include: { currentLevel: true },
+  });
+  if (!profile) return { ok: false, error: "not_found" };
+
+  const nextXp = Math.max(0, profile.totalXp + parsed.data.amount);
+  await prisma.$transaction(async (tx) => {
+    await tx.xpEvent.create({
+      data: {
+        userId: parsed.data.partnerId,
+        amount: parsed.data.amount,
+        reason: parsed.data.reason?.trim() || "admin_adjustment",
+        source: "manual_admin",
+      },
+    });
+    await tx.partnerProfile.update({
+      where: { userId: parsed.data.partnerId },
+      data: { totalXp: nextXp },
+    });
+  });
+
+  const updated = await prisma.partnerProfile.findUnique({
+    where: { userId: parsed.data.partnerId },
+    include: { currentLevel: true },
+  });
+
+  await createNotification(prisma, {
+    userId: parsed.data.partnerId,
+    type: NotificationType.XP_BOOST,
+    title: "تحديث نقاط القوة",
+    body: `${parsed.data.amount >= 0 ? "+" : ""}${parsed.data.amount} نقطة قوة`,
+    link: "/growth",
+  });
+
+  revalidateGrowth();
+  return {
+    ok: true,
+    newTotalXp: nextXp,
+    newLevelName: updated?.currentLevel.name ?? profile.currentLevel.name,
+  };
+}
+
+export async function adminSetPartnerLevelFormAction(formData: FormData): Promise<void> {
+  await adminSetPartnerLevelAction(formData);
+}
+
+export async function adminSetPartnerLevelAction(
+  formData: FormData,
+): Promise<{ ok: true; levelName: string } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const partnerId = String(formData.get("partnerId") ?? "").trim();
+  const levelId = String(formData.get("levelId") ?? "").trim();
+  if (!partnerId || !levelId) return { ok: false, error: "invalid_input" };
+
+  const level = await prisma.levelDefinition.findUnique({ where: { id: levelId } });
+  if (!level) return { ok: false, error: "level_not_found" };
+
+  const profile = await prisma.partnerProfile.findUnique({ where: { userId: partnerId } });
+  if (!profile) return { ok: false, error: "not_found" };
+
+  await prisma.partnerProfile.update({
+    where: { userId: partnerId },
+    data: { currentLevelId: levelId },
+  });
+
+  await createNotification(prisma, {
+    userId: partnerId,
+    type: NotificationType.LEVEL_UP,
+    title: "ترقية مستوى",
+    body: `مستواك الآن: ${level.name}`,
+    link: "/growth",
+  });
+
+  await logActivityEvent(prisma, {
+    kind: "level_set_admin",
+    actorUserId: partnerId,
+    headline: `Level set to ${level.name} by admin`,
+    metadata: { levelId, adminId: session.user.id },
+  });
+
+  revalidateGrowth();
+  return { ok: true, levelName: level.name };
+}
+
+function eventSlugFromTitle(title: string): string {
+  const base = title
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]/gu, "")
+    .replace(/\s+/g, "-")
+    .slice(0, 48);
+  return `${base || "event"}-${randomSlugSuffix()}`;
+}
+
+export async function adminCreateEventAction(
+  formData: FormData,
+): Promise<{ ok: true; eventId: string } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const title = String(formData.get("title") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const rules = String(formData.get("rules") ?? "").trim();
+  const startAtRaw = String(formData.get("startAt") ?? "").trim();
+  const endAtRaw = String(formData.get("endAt") ?? "").trim();
+  const maxRaw = String(formData.get("maxParticipants") ?? "").trim();
+  const statusRaw = String(formData.get("status") ?? "DRAFT").trim();
+
+  if (!title || !description || !rules || !startAtRaw) {
+    return { ok: false, error: "invalid_input" };
+  }
+
+  const startAt = new Date(startAtRaw);
+  if (Number.isNaN(startAt.getTime())) return { ok: false, error: "invalid_date" };
+
+  const endAt = endAtRaw ? new Date(endAtRaw) : null;
+  if (endAt && Number.isNaN(endAt.getTime())) return { ok: false, error: "invalid_date" };
+
+  const maxParticipants = maxRaw ? Number(maxRaw) : null;
+  if (maxParticipants != null && (!Number.isFinite(maxParticipants) || maxParticipants < 1)) {
+    return { ok: false, error: "invalid_max" };
+  }
+
+  const status =
+    statusRaw === "PUBLISHED" ? EventStatus.PUBLISHED : EventStatus.DRAFT;
+
+  const milestonesJson = String(formData.get("milestonesJson") ?? "[]");
+  let milestones: Array<{
+    title: string;
+    description?: string;
+    xpReward: number;
+    order: number;
+    requiredProgress: number;
+  }> = [];
+  try {
+    const parsed = JSON.parse(milestonesJson) as unknown;
+    if (Array.isArray(parsed)) {
+      milestones = parsed
+        .slice(0, 5)
+        .map((m, i) => {
+          const row = m as Record<string, unknown>;
+          return {
+            title: String(row.title ?? `Milestone ${i + 1}`),
+            description: row.description ? String(row.description) : undefined,
+            xpReward: Number(row.xpReward) || 0,
+            order: i,
+            requiredProgress: Math.min(100, Math.max(0, Number(row.requiredProgress) || 0)),
+          };
+        });
+    }
+  } catch {
+    return { ok: false, error: "invalid_milestones" };
+  }
+
+  let slug = eventSlugFromTitle(title);
+  for (let i = 0; i < 10; i += 1) {
+    const exists = await prisma.growthEvent.findUnique({ where: { slug } });
+    if (!exists) break;
+    slug = eventSlugFromTitle(title);
+  }
+
+  const event = await prisma.$transaction(async (tx) => {
+    const ev = await tx.growthEvent.create({
+      data: {
+        slug,
+        title,
+        description,
+        rules,
+        startAt,
+        endAt,
+        maxParticipants,
+        status,
+        createdById: session.user!.id,
+      },
+    });
+    if (milestones.length > 0) {
+      await tx.eventMilestone.createMany({
+        data: milestones.map((m) => ({
+          eventId: ev.id,
+          title: m.title,
+          description: m.description ?? null,
+          xpReward: m.xpReward,
+          order: m.order,
+          requiredProgress: m.requiredProgress,
+        })),
+      });
+    }
+    return ev;
+  });
+
+  if (status === EventStatus.PUBLISHED) {
+    await createNotificationsForAllActivePartners({
+      type: NotificationType.EVENT_INVITE,
+      title: `فعالية جديدة: ${title}`,
+      body: description.slice(0, 200),
+      link: `/growth/events/${slug}`,
+      eventId: event.id,
+    });
+  }
+
+  revalidateGrowth();
+  return { ok: true, eventId: event.id };
+}
+
+export async function adminUpdateEventStatusFormAction(formData: FormData): Promise<void> {
+  await adminUpdateEventStatusAction(formData);
+}
+
+export async function adminUpdateEventStatusAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const eventId = String(formData.get("eventId") ?? "").trim();
+  const statusRaw = String(formData.get("status") ?? "").trim();
+  if (!eventId || !statusRaw) return { ok: false, error: "invalid_input" };
+
+  const status = statusRaw as EventStatus;
+  if (!Object.values(EventStatus).includes(status)) {
+    return { ok: false, error: "invalid_status" };
+  }
+
+  const event = await prisma.growthEvent.findUnique({ where: { id: eventId } });
+  if (!event) return { ok: false, error: "not_found" };
+
+  await prisma.growthEvent.update({
+    where: { id: eventId },
+    data: { status },
+  });
+
+  if (event.status !== EventStatus.PUBLISHED && status === EventStatus.PUBLISHED) {
+    await createNotificationsForAllActivePartners({
+      type: NotificationType.EVENT_INVITE,
+      title: `فعالية جديدة: ${event.title}`,
+      body: event.description.slice(0, 200),
+      link: `/growth/events/${event.slug}`,
+      eventId: event.id,
+    });
+  }
+
+  if (status === EventStatus.COMPLETED) {
+    const participants = await prisma.eventParticipant.findMany({
+      where: { eventId, status: ParticipantStatus.ACCEPTED, progress: 100 },
+    });
+    for (const p of participants) {
+      await prisma.eventParticipant.update({
+        where: { id: p.id },
+        data: { status: ParticipantStatus.COMPLETED },
+      });
+    }
+  }
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+type RewardedMap = Record<string, boolean>;
+
+function parseRewardedMap(raw: unknown): RewardedMap {
+  if (typeof raw === "object" && raw !== null && !Array.isArray(raw)) {
+    return raw as RewardedMap;
+  }
+  return {};
+}
+
+export async function adminUpdateParticipantProgressFormAction(formData: FormData): Promise<void> {
+  await adminUpdateParticipantProgressAction(formData);
+}
+
+export async function adminUpdateParticipantProgressAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const eventId = String(formData.get("eventId") ?? "").trim();
+  const userId = String(formData.get("userId") ?? "").trim();
+  const progress = Number(formData.get("progress"));
+  if (!eventId || !userId || !Number.isFinite(progress)) {
+    return { ok: false, error: "invalid_input" };
+  }
+  const clamped = Math.min(100, Math.max(0, Math.trunc(progress)));
+
+  const participant = await prisma.eventParticipant.findUnique({
+    where: { eventId_userId: { eventId, userId } },
+  });
+  if (!participant) return { ok: false, error: "not_found" };
+
+  const milestones = await prisma.eventMilestone.findMany({
+    where: { eventId },
+    orderBy: { order: "asc" },
+  });
+
+  let rewarded = parseRewardedMap(participant.rewardedMilestones);
+  let xpEarned = participant.xpEarned;
+
+  for (const m of milestones) {
+    if (clamped >= m.requiredProgress && !rewarded[m.id]) {
+      rewarded = { ...rewarded, [m.id]: true };
+      if (m.xpReward > 0) {
+        xpEarned += m.xpReward;
+        await prisma.$transaction(async (tx) => {
+          await tx.xpEvent.create({
+            data: {
+              userId,
+              amount: m.xpReward,
+              reason: `event:${eventId}:milestone:${m.id}`,
+              source: "event",
+            },
+          });
+          await tx.partnerProfile.update({
+            where: { userId },
+            data: { totalXp: { increment: m.xpReward } },
+          });
+        });
+        await createNotification(prisma, {
+          userId,
+          type: NotificationType.EVENT_MILESTONE,
+          title: `إنجاز: ${m.title}`,
+          body: `+${m.xpReward} نقطة قوة`,
+          link: `/growth/events`,
+        });
+      }
+    }
+  }
+
+  const nextStatus =
+    clamped >= 100 ? ParticipantStatus.COMPLETED : participant.status;
+
+  await prisma.eventParticipant.update({
+    where: { id: participant.id },
+    data: {
+      progress: clamped,
+      xpEarned,
+      rewardedMilestones: rewarded,
+      status: nextStatus,
+    },
+  });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function joinEventAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const eventId = String(formData.get("eventId") ?? "").trim();
+  const acceptRules = formData.get("acceptRules") === "on" || formData.get("acceptRules") === "true";
+  if (!eventId || !acceptRules) return { ok: false, error: "rules_required" };
+
+  const event = await prisma.growthEvent.findUnique({
+    where: { id: eventId },
+    include: { _count: { select: { participants: true } } },
+  });
+  if (!event) return { ok: false, error: "not_found" };
+  if (event.status !== EventStatus.PUBLISHED && event.status !== EventStatus.ACTIVE) {
+    return { ok: false, error: "not_open" };
+  }
+  if (
+    event.maxParticipants != null &&
+    event._count.participants >= event.maxParticipants
+  ) {
+    return { ok: false, error: "full" };
+  }
+
+  const existing = await prisma.eventParticipant.findUnique({
+    where: { eventId_userId: { eventId, userId: session.user.id } },
+  });
+  if (existing) return { ok: false, error: "already_joined" };
+
+  await prisma.eventParticipant.create({
+    data: {
+      eventId,
+      userId: session.user.id,
+      status: ParticipantStatus.ACCEPTED,
+      joinedAt: new Date(),
+      acceptedRules: true,
+      acceptedAt: new Date(),
+    },
+  });
+
+  await notifyAdmins({
+    type: NotificationType.ADMIN_MESSAGE,
+    title: "انضمام لفعالية",
+    body: `شريك انضم إلى: ${event.title}`,
+    link: `/growth/admin/events`,
+  });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+const sendNotifSchema = z.object({
+  email: z.string().email().optional().or(z.literal("")),
+  title: z.string().min(1).max(200),
+  body: z.string().min(1).max(2000),
+  link: z.string().max(500).optional().or(z.literal("")),
+});
+
+export async function adminSendNotificationFormAction(formData: FormData): Promise<void> {
+  await adminSendNotificationAction(formData);
+}
+
+export async function adminSendNotificationAction(
+  formData: FormData,
+): Promise<{ ok: true; sent: number } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = sendNotifSchema.safeParse({
+    email: formData.get("email") ?? "",
+    title: formData.get("title"),
+    body: formData.get("body"),
+    link: formData.get("link") ?? "",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const link = parsed.data.link?.trim() || null;
+  let sent = 0;
+
+  if (parsed.data.email?.trim()) {
+    const user = await prisma.user.findUnique({
+      where: { email: parsed.data.email.toLowerCase().trim() },
+    });
+    if (!user) return { ok: false, error: "user_not_found" };
+    const n = await createNotification(prisma, {
+      userId: user.id,
+      type: NotificationType.SYSTEM,
+      title: parsed.data.title,
+      body: parsed.data.body,
+      link,
+    });
+    if (n) sent = 1;
+  } else {
+    sent = await createNotificationsForAllActivePartners({
+      type: NotificationType.SYSTEM,
+      title: parsed.data.title,
+      body: parsed.data.body,
+      link: link ?? undefined,
+    });
+  }
+
+  revalidateGrowth();
+  return { ok: true, sent };
 }

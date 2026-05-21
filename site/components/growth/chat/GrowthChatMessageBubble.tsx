@@ -56,7 +56,8 @@ export function GrowthChatMessageBubble({
   adminTag,
 }: Props) {
   const mine = m.senderUserId === viewerUserId;
-  const rich = ["BONUS", "BADGE", "SYSTEM", "WARNING", "ACTION"].includes(m.kind);
+  const kindUpper = m.kind.toUpperCase();
+  const rich = ["BONUS", "BADGE", "SYSTEM", "WARNING", "ACTION"].includes(kindUpper);
   const nf =
     locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US";
   const time = new Intl.DateTimeFormat(nf, {
@@ -64,20 +65,28 @@ export function GrowthChatMessageBubble({
     minute: "2-digit",
   }).format(new Date(m.createdAt));
 
-  const [bonusFlash, setBonusFlash] = useState(m.kind === "BONUS");
+  const [bonusFlash, setBonusFlash] = useState(kindUpper === "BONUS");
   useEffect(() => {
-    if (m.kind !== "BONUS") {
+    if (kindUpper !== "BONUS") {
       queueMicrotask(() => setBonusFlash(false));
       return;
     }
     queueMicrotask(() => setBonusFlash(true));
     const id = window.setTimeout(() => setBonusFlash(false), 900);
     return () => window.clearTimeout(id);
-  }, [m.id, m.kind]);
+  }, [m.id, kindUpper]);
+
+  if (kindUpper === "SYSTEM") {
+    return (
+      <div className={`flex justify-center py-1 ${showAvatarRow ? "pt-2" : ""}`}>
+        <p className="max-w-[90%] text-center text-[11px] italic text-white/45">{m.body}</p>
+      </div>
+    );
+  }
 
   if (rich) {
-    const tone = bubbleTone(m.kind);
-    const flash = m.kind === "BONUS" && bonusFlash;
+    const tone = bubbleTone(kindUpper);
+    const flash = kindUpper === "BONUS" && bonusFlash;
     return (
       <div
         className={`motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-1 motion-safe:duration-300 flex justify-center py-0.5 ${
@@ -90,7 +99,7 @@ export function GrowthChatMessageBubble({
           }`}
         >
           <div className="text-[10px] font-semibold uppercase tracking-wide text-white/50">
-            {kindLabel(m.kind)}
+            {kindLabel(kindUpper)}
           </div>
           <div className="mt-1 whitespace-pre-wrap break-words">{m.body}</div>
           <div className="mt-1 text-[10px] text-white/35">{time}</div>
@@ -108,10 +117,10 @@ export function GrowthChatMessageBubble({
       } py-0.5 ${showAvatarRow ? "pt-1.5" : ""}`}
     >
       <div
-        className={`max-w-[85%] rounded-2xl border border-transparent px-3 py-2 text-sm transition-transform duration-200 hover:scale-[1.01] ${
+        className={`max-w-[75%] px-3 py-2 text-sm shadow-sm ${
           mine
-            ? "bg-gradient-to-br from-gold/25 to-gold/10 text-white"
-            : `bg-white/[0.06] text-white/85 ${toneExtra}`
+            ? "rounded-2xl rounded-tr-none bg-[#B07D2B]/80 text-white"
+            : `rounded-2xl rounded-tl-none bg-white/[0.08] text-white/90 ${toneExtra}`
         }`}
       >
         <div className="whitespace-pre-wrap break-words">{m.body}</div>

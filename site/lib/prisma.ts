@@ -27,7 +27,10 @@ function isStaleCachedPrismaClient(client: PrismaClient): boolean {
   const chatOk =
     typeof c.chatConversation?.create === "function" &&
     typeof c.chatMessage?.create === "function";
-  return !(missionOk && demoOk && chatOk);
+  const growthExtOk =
+    typeof c.notification?.create === "function" &&
+    typeof c.growthEvent?.create === "function";
+  return !(missionOk && demoOk && chatOk && growthExtOk);
 }
 
 let resolved: PrismaClient | undefined;

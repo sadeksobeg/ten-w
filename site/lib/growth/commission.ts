@@ -5,6 +5,8 @@ import { evaluateAutoBadgesForUser, grantFastCloserIfEligible } from "@/lib/grow
 import { logActivityEvent } from "@/lib/growth/activity";
 import { resolveLevelForClosedDeals } from "@/lib/growth/levels";
 import { applyMissionProgress } from "@/lib/growth/missions";
+import { createNotification } from "@/lib/growth/notify";
+import { NotificationType } from "@prisma/client";
 
 function splitAmount(baseCents: number, bps: number): number {
   return Math.floor((baseCents * bps) / 10_000);
@@ -135,6 +137,7 @@ export async function closeDealAsAdmin(params: {
         userId: u1,
         amount: xpAmount,
         reason: "deal_closed",
+        source: "deal_close",
         dealId: deal.id,
       },
     });
@@ -188,6 +191,15 @@ export async function closeDealAsAdmin(params: {
     actorUserId: u1,
     headline: `${label} closed a deal`,
     amountCents: t1,
+    metadata: { dealId: deal.id },
+  });
+
+  await createNotification(prisma, {
+    userId: u1,
+    type: NotificationType.DEAL_CLOSED,
+    title: "صفقة مُغلقة",
+    body: `تم إغلاق صفقة — عمولة $${(t1 / 100).toFixed(0)}`,
+    link: "/growth",
     metadata: { dealId: deal.id },
   });
 

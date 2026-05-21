@@ -2,6 +2,7 @@ import { DealStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -13,13 +14,22 @@ export default async function GrowthAdminHomePage({ params }: Props) {
   const nfLocale =
     locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US";
 
-  const [users, partners, closed, pending, ledgerSum] = await Promise.all([
-    prisma.user.count(),
-    prisma.partnerProfile.count(),
-    prisma.deal.count({ where: { status: DealStatus.CLOSED } }),
-    prisma.deal.count({ where: { status: DealStatus.PENDING } }),
-    prisma.commissionLedger.aggregate({ _sum: { amountCents: true } }),
-  ]);
+  const session = await auth();
+  const [users, partners, closed, pending, ledgerSum, activeEvents, eventParticipants, unreadAdmin] =
+    await Promise.all([
+      prisma.user.count(),
+      prisma.partnerProfile.count(),
+      prisma.deal.count({ where: { status: DealStatus.CLOSED } }),
+      prisma.deal.count({ where: { status: DealStatus.PENDING } }),
+      prisma.commissionLedger.aggregate({ _sum: { amountCents: true } }),
+      prisma.growthEvent.count({ where: { status: "ACTIVE" } }),
+      prisma.eventParticipant.count(),
+      session?.user?.id
+        ? prisma.notification.count({
+            where: { userId: session.user.id, isRead: false },
+          })
+        : Promise.resolve(0),
+    ]);
 
   const stats = [
     { label: t("admin.users"), value: users },
@@ -34,6 +44,9 @@ export default async function GrowthAdminHomePage({ params }: Props) {
         maximumFractionDigits: 0,
       }).format((ledgerSum._sum.amountCents ?? 0) / 100),
     },
+    { label: t("admin.activeEvents"), value: activeEvents },
+    { label: t("admin.eventParticipants"), value: eventParticipants },
+    { label: t("admin.unreadNotifications"), value: unreadAdmin },
   ];
 
   return (
