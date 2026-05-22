@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
-import { IconBadge, IconEvent, IconNetwork, IconXp } from "@/components/growth/icons/GrowthIcons";
+import { IconBadge, IconNetwork, IconXp } from "@/components/growth/icons/GrowthIcons";
+import { EventCoverImage } from "@/components/growth/events/EventCoverImage";
 
 export type EventCardData = {
   slug: string;
@@ -28,14 +29,8 @@ type Props = {
   viewLabel: string;
 };
 
-function coverGradient(slug: string): string {
-  let h = 0;
-  for (let i = 0; i < slug.length; i += 1) h = (h * 31 + slug.charCodeAt(i)) % 360;
-  return `linear-gradient(135deg, hsl(${h} 40% 18%), hsl(${(h + 60) % 360} 50% 28%))`;
-}
-
 export function EventCard({ event, joinLabel, progressLabel, viewLabel }: Props) {
-  const href = `/${event.locale}/growth/events/${event.slug}`;
+  const href = `/${event.locale}/growth/events/${encodeURIComponent(event.slug)}`;
   const desc =
     event.description.length > 120
       ? `${event.description.slice(0, 120)}…`
@@ -44,17 +39,7 @@ export function EventCard({ event, joinLabel, progressLabel, viewLabel }: Props)
   return (
     <GlassCard className="overflow-hidden p-0">
       <div className="relative aspect-video w-full bg-black/40">
-        {event.coverImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={event.coverImage} alt="" className="size-full object-cover" />
-        ) : (
-          <div
-            className="flex size-full items-center justify-center text-gold/50"
-            style={{ background: coverGradient(event.slug) }}
-          >
-            <IconEvent size={48} />
-          </div>
-        )}
+        <EventCoverImage coverImage={event.coverImage} slug={event.slug} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
         <span
           className={`absolute start-3 top-3 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase ${

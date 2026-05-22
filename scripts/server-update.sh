@@ -63,6 +63,9 @@ else
   echo "seed skipped — schema not ready"
 fi
 
+echo "==> uploads dir (event covers)"
+mkdir -p public/uploads/events
+
 echo "==> build"
 npm run build
 

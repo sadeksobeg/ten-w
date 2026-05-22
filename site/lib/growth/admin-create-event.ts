@@ -2,7 +2,7 @@ import { EventStatus, NotificationType, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { createNotificationsForAllActivePartners } from "@/lib/growth/notify";
-import { randomSlugSuffix } from "@/lib/growth/public-slug";
+import { uniqueEventSlug } from "@/lib/growth/event-slug";
 import { saveEventCoverToPublic } from "@/lib/growth/event-cover-storage";
 import { isMissingCoverColumn, prismaErrorKey } from "@/lib/growth/prisma-error-code";
 import { resolveAdminUserId } from "@/lib/growth/resolve-admin-user";
@@ -18,26 +18,6 @@ export type AdminCreateEventPayload = {
   coverImage?: string;
   milestonesJson?: string;
 };
-
-function eventSlugFromTitle(title: string): string {
-  const base = title
-    .trim()
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s-]/gu, "")
-    .replace(/\s+/g, "-")
-    .slice(0, 48);
-  return `${base || "event"}-${randomSlugSuffix()}`;
-}
-
-async function uniqueEventSlug(title: string): Promise<string> {
-  let slug = eventSlugFromTitle(title);
-  for (let i = 0; i < 12; i += 1) {
-    const exists = await prisma.growthEvent.findUnique({ where: { slug }, select: { id: true } });
-    if (!exists) return slug;
-    slug = `event-${randomSlugSuffix()}`;
-  }
-  throw new Error("slug_exhausted");
-}
 
 function parseMilestones(milestonesJson: string) {
   const parsed = JSON.parse(milestonesJson) as unknown;

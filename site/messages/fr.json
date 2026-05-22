@@ -1095,7 +1095,21 @@
       "cancel": "Cancel",
       "milestones": "Milestones",
       "back": "Back to events",
-      "participantsPreview": "Participants"
+      "participantsPreview": "Participants",
+      "memberHub": "Espace membres",
+      "memberOnlyHint": "Publications des participants à cet événement.",
+      "postPlaceholder": "Partagez votre avancement…",
+      "postSubmit": "Publier",
+      "repost": "Republier",
+      "feedEmpty": "Aucune publication pour l'instant.",
+      "joinedLocked": "Rejoignez l'événement pour voir les détails complets.",
+      "status": {
+        "DRAFT": "Brouillon",
+        "PUBLISHED": "Publié",
+        "ACTIVE": "Actif",
+        "COMPLETED": "Terminé",
+        "CANCELLED": "Annulé"
+      }
     },
     "publicProfile": {
       "closedDeals": "Closed deals",

@@ -22,7 +22,7 @@ import { logActivityEvent } from "@/lib/growth/activity";
 import { applyMonthlyLeaderboardBonuses } from "@/lib/growth/rewards";
 import { partnerOverrideModelsAvailable } from "@/lib/growth/prisma-optional";
 import { createNotification, createNotificationsForAllActivePartners, notifyAdmins } from "@/lib/growth/notify";
-import { uniquePublicSlug, randomSlugSuffix } from "@/lib/growth/public-slug";
+import { uniquePublicSlug } from "@/lib/growth/public-slug";
 import {
   PartnerNetworkError,
   setPartnerUpline,
@@ -1218,16 +1218,6 @@ export async function adminSetPartnerLevelAction(
   return { ok: true, levelName: level.name };
 }
 
-function eventSlugFromTitle(title: string): string {
-  const base = title
-    .trim()
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s-]/gu, "")
-    .replace(/\s+/g, "-")
-    .slice(0, 48);
-  return `${base || "event"}-${randomSlugSuffix()}`;
-}
-
 export async function adminCreateEventAction(
   formData: FormData,
 ): Promise<{ ok: true; eventId: string } | { ok: false; error: string }> {
@@ -1390,7 +1380,13 @@ export async function adminUpdateEventAction(
   } else if (coverRaw) {
     if (coverRaw.length > 1_500_000) return { ok: false, error: "image_too_large" };
     if (!coverRaw.startsWith("data:image/")) return { ok: false, error: "invalid_image" };
-    coverPatch = { coverImage: coverRaw };
+    try {
+      const { saveEventCoverToPublic } = await import("@/lib/growth/event-cover-storage");
+      const publicPath = await saveEventCoverToPublic(eventId, coverRaw);
+      coverPatch = { coverImage: publicPath };
+    } catch {
+      coverPatch = { coverImage: coverRaw };
+    }
   } else {
     coverPatch = { coverImage: null };
   }

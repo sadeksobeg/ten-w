@@ -9,8 +9,11 @@ import { renderMarkdownLite } from "@/lib/growth/markdown-lite";
 import { JoinEventModal } from "@/components/growth/JoinEventModal";
 import { EventMilestoneTimeline } from "@/components/growth/events/EventMilestoneTimeline";
 import { EventMemberFeed } from "@/components/growth/events/EventMemberFeed";
+import { EventCoverImage } from "@/components/growth/events/EventCoverImage";
 import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
 import { listEventPostsForMember } from "@/lib/growth/event-posts";
+import { findGrowthEventByRouteSlug } from "@/lib/growth/resolve-event";
+import { normalizeEventRouteSlug } from "@/lib/growth/event-slug";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -22,19 +25,14 @@ export default async function GrowthEventDetailPage({ params }: Props) {
   }
 
   const t = await getTranslations("Growth.events");
-  const event = await prisma.growthEvent.findUnique({
-    where: { slug },
-    include: {
-      milestones: { orderBy: { order: "asc" } },
-      _count: { select: { participants: true } },
-      participants: {
-        where: { status: "ACCEPTED" },
-        take: 5,
-        include: { user: { select: { name: true, image: true } } },
-      },
-    },
-  });
+  const event = await findGrowthEventByRouteSlug(slug);
   if (!event) notFound();
+
+  const canonicalSlug = normalizeEventRouteSlug(event.slug);
+  const requestedSlug = normalizeEventRouteSlug(slug);
+  if (canonicalSlug !== requestedSlug) {
+    redirect(`/${locale}/growth/events/${encodeURIComponent(event.slug)}`);
+  }
 
   const myPart = await prisma.eventParticipant.findUnique({
     where: {
@@ -66,7 +64,12 @@ export default async function GrowthEventDetailPage({ params }: Props) {
         {t("back")}
       </Link>
 
-      <GlassCard className="p-6">
+      <GlassCard className="overflow-hidden p-0">
+        <div className="relative aspect-[21/9] w-full bg-black/40">
+          <EventCoverImage coverImage={event.coverImage} slug={event.slug} />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-black/30 to-transparent" />
+        </div>
+        <div className="p-6">
         <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold">{event.title}</h1>
         <p className="mt-3 text-sm text-white/70">{event.description}</p>
         <div className="mt-4 flex flex-wrap gap-3 text-xs text-white/45">
@@ -93,6 +96,7 @@ export default async function GrowthEventDetailPage({ params }: Props) {
             <JoinEventModal eventId={event.id} rulesHtml={rulesHtml} />
           </div>
         ) : null}
+        </div>
       </GlassCard>
 
       {isMember ? (
