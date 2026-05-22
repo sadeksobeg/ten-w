@@ -1236,134 +1236,24 @@ export async function adminCreateEventAction(
     return { ok: false, error: "unauthorized" };
   }
 
-  try {
-  const title = String(formData.get("title") ?? "").trim();
-  const description = String(formData.get("description") ?? "").trim();
-  const rulesRaw = String(formData.get("rules") ?? "").trim();
-  const rules = rulesRaw || "—";
-  const startAtRaw = String(formData.get("startAt") ?? "").trim();
-  const endAtRaw = String(formData.get("endAt") ?? "").trim();
-  const maxRaw = String(formData.get("maxParticipants") ?? "").trim();
-  const statusRaw = String(formData.get("status") ?? "DRAFT").trim();
+  const { createAdminEvent } = await import("@/lib/growth/admin-create-event");
+  const result = await createAdminEvent(
+    {
+      title: String(formData.get("title") ?? ""),
+      description: String(formData.get("description") ?? ""),
+      rules: String(formData.get("rules") ?? ""),
+      startAt: String(formData.get("startAt") ?? ""),
+      endAt: String(formData.get("endAt") ?? ""),
+      maxParticipants: String(formData.get("maxParticipants") ?? ""),
+      status: String(formData.get("status") ?? "DRAFT"),
+      coverImage: String(formData.get("coverImage") ?? ""),
+      milestonesJson: String(formData.get("milestonesJson") ?? "[]"),
+    },
+    session.user.id,
+  );
 
-  if (!title || !description || !startAtRaw) {
-    return { ok: false, error: "invalid_input" };
-  }
-
-  const startAt = new Date(startAtRaw);
-  if (Number.isNaN(startAt.getTime())) return { ok: false, error: "invalid_date" };
-
-  const endAt = endAtRaw ? new Date(endAtRaw) : null;
-  if (endAt && Number.isNaN(endAt.getTime())) return { ok: false, error: "invalid_date" };
-
-  const maxParticipants = maxRaw ? Number(maxRaw) : null;
-  if (maxParticipants != null && (!Number.isFinite(maxParticipants) || maxParticipants < 1)) {
-    return { ok: false, error: "invalid_max" };
-  }
-
-  const status =
-    statusRaw === "PUBLISHED" ? EventStatus.PUBLISHED : EventStatus.DRAFT;
-
-  const milestonesJson = String(formData.get("milestonesJson") ?? "[]");
-  let milestones: Array<{
-    title: string;
-    description?: string;
-    xpReward: number;
-    order: number;
-    requiredProgress: number;
-  }> = [];
-  try {
-    const parsed = JSON.parse(milestonesJson) as unknown;
-    if (Array.isArray(parsed)) {
-      milestones = parsed
-        .slice(0, 5)
-        .map((m, i) => {
-          const row = m as Record<string, unknown>;
-          return {
-            title: String(row.title ?? `Milestone ${i + 1}`),
-            description: row.description ? String(row.description) : undefined,
-            xpReward: Number(row.xpReward) || 0,
-            order: i,
-            requiredProgress: Math.min(100, Math.max(0, Number(row.requiredProgress) || 0)),
-          };
-        });
-    }
-  } catch {
-    return { ok: false, error: "invalid_milestones" };
-  }
-
-  let slug = eventSlugFromTitle(title);
-  for (let i = 0; i < 10; i += 1) {
-    const exists = await prisma.growthEvent.findUnique({ where: { slug } });
-    if (!exists) break;
-    slug = `event-${randomSlugSuffix()}`;
-  }
-
-  const coverRaw = String(formData.get("coverImage") ?? "").trim();
-  let coverImage: string | null = null;
-  if (coverRaw) {
-    if (coverRaw.length > 1_500_000) return { ok: false, error: "image_too_large" };
-    if (!coverRaw.startsWith("data:image/")) return { ok: false, error: "invalid_image" };
-    coverImage = coverRaw;
-  }
-
-  const event = await prisma.$transaction(async (tx) => {
-    const ev = await tx.growthEvent.create({
-      data: {
-        slug,
-        title,
-        description,
-        rules,
-        startAt,
-        endAt,
-        maxParticipants,
-        coverImage,
-        status,
-        createdById: session.user!.id,
-      },
-    });
-    if (milestones.length > 0) {
-      await tx.eventMilestone.createMany({
-        data: milestones.map((m) => ({
-          eventId: ev.id,
-          title: m.title,
-          description: m.description ?? null,
-          xpReward: m.xpReward,
-          order: m.order,
-          requiredProgress: m.requiredProgress,
-        })),
-      });
-    }
-    return ev;
-  });
-
-  try {
-    revalidateGrowth();
-  } catch (revalidateErr) {
-    console.error("[adminCreateEvent] revalidate", revalidateErr);
-  }
-
-  if (status === EventStatus.PUBLISHED) {
-    void createNotificationsForAllActivePartners({
-      type: NotificationType.EVENT_INVITE,
-      title: `فعالية جديدة: ${title}`,
-      body: description.slice(0, 200),
-      link: `/growth/events/${slug}`,
-      eventId: event.id,
-    }).catch((notifyErr) => {
-      console.error("[adminCreateEvent] notify partners", notifyErr);
-    });
-  }
-
-  return { ok: true, eventId: event.id };
-  } catch (err) {
-    console.error("[adminCreateEvent]", err);
-    const code =
-      err && typeof err === "object" && "code" in err && (err as { code: string }).code === "P2002"
-        ? "slug_taken"
-        : "server_error";
-    return { ok: false, error: code };
-  }
+  if (!result.ok) return result;
+  return { ok: true, eventId: result.eventId };
 }
 
 export async function adminUpdateEventStatusFormAction(formData: FormData): Promise<void> {

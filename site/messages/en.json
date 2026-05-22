@@ -1930,6 +1930,9 @@
           "invalid_image": "Invalid cover image.",
           "image_too_large": "Cover image is too large — use a smaller file.",
           "slug_taken": "Could not allocate a unique URL — change the title and try again.",
+          "db_schema": "Could not save — database setup on the server is incomplete. Re-run deploy or contact support.",
+          "invalid_creator": "Admin account is not linked in the database.",
+          "cover_skipped": "Event created without cover image — upload again from edit.",
           "unauthorized": "Unauthorized.",
           "server_error": "Server error. Try again later."
         }

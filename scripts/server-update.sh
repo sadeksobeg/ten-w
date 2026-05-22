@@ -49,6 +49,9 @@ npm run check:env
 
 bash "$REPO/scripts/server-prisma.sh"
 
+echo "==> growth schema repair (events, coverImage column, notifications)"
+bash "$REPO/scripts/server-repair-growth-0003.sh" --force || echo "WARNING: growth repair failed — check site/.env DATABASE_URL"
+
 echo "==> db seed (only on empty database — never wipes existing partners)"
 if env -u DATABASE_URL node scripts/has-prisma-tables.mjs 2>/dev/null; then
   if env -u DATABASE_URL node scripts/should-run-seed.mjs 2>/dev/null; then

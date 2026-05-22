@@ -7,11 +7,7 @@ import { ImageUpload } from "@/components/growth/ui/ImageUpload";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { EventCard, type EventCardData } from "@/components/growth/events/EventCard";
-import {
-  adminCreateEventAction,
-  adminDeleteEventAction,
-  adminUpdateEventAction,
-} from "@/lib/growth/actions";
+import { adminDeleteEventAction, adminUpdateEventAction } from "@/lib/growth/actions";
 import {
   EVENT_COVER_COMPRESS_OPTS,
   EVENT_COVER_MAX_BASE64,
@@ -72,14 +68,7 @@ export function CreateEventForm({ locale }: { locale: string }) {
     e.preventDefault();
     setStatus(null);
     setPending(true);
-    const fd = new FormData();
-    fd.set("title", title);
-    fd.set("description", description);
-    fd.set("rules", rules);
-    fd.set("startAt", startAt);
-    fd.set("endAt", endAt);
-    fd.set("maxParticipants", maxParticipants);
-    fd.set("status", eventStatus);
+    let coverPayload: string | undefined;
     if (coverImage) {
       try {
         const cover = await shrinkDataUrl(coverImage, EVENT_COVER_COMPRESS_OPTS);
@@ -88,28 +77,46 @@ export function CreateEventForm({ locale }: { locale: string }) {
           setPending(false);
           return;
         }
-        fd.set("coverImage", cover);
+        coverPayload = cover;
       } catch {
         setStatus(eventErrorText(t, "image_too_large"));
         setPending(false);
         return;
       }
     }
-    fd.set(
-      "milestonesJson",
-      JSON.stringify(
-        milestones
-          .filter((m) => m.title.trim())
-          .map((m, order) => ({ ...m, order })),
-      ),
-    );
     try {
-      const res = await adminCreateEventAction(fd);
-      if (res.ok) {
-        setStatus("ok");
+      const res = await fetch("/api/growth/admin/events/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({
+          title,
+          description,
+          rules,
+          startAt,
+          endAt,
+          maxParticipants,
+          status: eventStatus,
+          coverImage: coverPayload,
+          milestonesJson: JSON.stringify(
+            milestones
+              .filter((m) => m.title.trim())
+              .map((m, order) => ({ ...m, order })),
+          ),
+        }),
+      });
+      const data = (await res.json()) as {
+        ok: boolean;
+        error?: string;
+        coverWarning?: string;
+      };
+      if (data.ok) {
+        setStatus(
+          data.coverWarning ? eventErrorText(t, data.coverWarning) : "ok",
+        );
         router.refresh();
       } else {
-        setStatus(eventErrorText(t, res.error));
+        setStatus(eventErrorText(t, data.error ?? "server_error"));
       }
     } catch {
       setStatus(eventErrorText(t, "server_error"));

@@ -47,3 +47,7 @@ next-env.d.ts
 # local sqlite (Growth Engine / Prisma)
 /prisma/dev.db
 /prisma/dev.db-journal
+
+# uploaded event covers (keep folder only)
+/public/uploads/events/*
+!/public/uploads/events/.gitkeep
