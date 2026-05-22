@@ -23,7 +23,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400 });
   }
 
-  const result = await createAdminEvent(body, session.user.id);
+  const result = await createAdminEvent(
+    body,
+    session.user.id,
+    session.user.email,
+  );
   const status = result.ok ? 200 : result.error === "unauthorized" ? 401 : 400;
   return NextResponse.json(result, { status });
 }

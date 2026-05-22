@@ -39,11 +39,38 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user && "role" in user) {
         token.role = user.role as "PARTNER" | "ADMIN";
+        if (user.id) token.sub = user.id;
+      }
+      const email =
+        typeof token.email === "string" ? token.email.toLowerCase().trim() : "";
+      if (email) {
+        const row = await prisma.user.findUnique({
+          where: { email },
+          select: { id: true, role: true },
+        });
+        if (row) {
+          token.sub = row.id;
+          token.role = row.role;
+        }
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
+        const email = session.user.email?.toLowerCase().trim();
+        if (email) {
+          const row = await prisma.user.findUnique({
+            where: { email },
+            select: { id: true, role: true, name: true, image: true },
+          });
+          if (row) {
+            session.user.id = row.id;
+            session.user.role = row.role;
+            if (row.name) session.user.name = row.name;
+            if (row.image) session.user.image = row.image;
+            return session;
+          }
+        }
         session.user.id = token.sub ?? "";
         session.user.role = (token.role as "PARTNER" | "ADMIN") ?? "PARTNER";
       }

@@ -5,6 +5,7 @@ import { createNotificationsForAllActivePartners } from "@/lib/growth/notify";
 import { randomSlugSuffix } from "@/lib/growth/public-slug";
 import { saveEventCoverToPublic } from "@/lib/growth/event-cover-storage";
 import { isMissingCoverColumn, prismaErrorKey } from "@/lib/growth/prisma-error-code";
+import { resolveAdminUserId } from "@/lib/growth/resolve-admin-user";
 
 export type AdminCreateEventPayload = {
   title: string;
@@ -60,15 +61,13 @@ function revalidateGrowth() {
 export async function createAdminEvent(
   payload: AdminCreateEventPayload,
   actorUserId: string,
+  actorEmail?: string | null,
 ): Promise<
   | { ok: true; eventId: string; slug: string; coverWarning?: string }
   | { ok: false; error: string }
 > {
-  const admin = await prisma.user.findFirst({
-    where: { id: actorUserId, role: UserRole.ADMIN, isActive: true },
-    select: { id: true },
-  });
-  if (!admin) return { ok: false, error: "invalid_creator" };
+  const creatorId = await resolveAdminUserId(actorUserId, actorEmail);
+  if (!creatorId) return { ok: false, error: "invalid_creator" };
 
   const title = payload.title.trim();
   const description = payload.description.trim();
@@ -126,7 +125,7 @@ export async function createAdminEvent(
         maxParticipants,
         coverImage: null,
         status,
-        createdById: actorUserId,
+        createdById: creatorId,
       },
       select: { id: true },
     });

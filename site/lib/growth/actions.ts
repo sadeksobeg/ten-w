@@ -1250,6 +1250,7 @@ export async function adminCreateEventAction(
       milestonesJson: String(formData.get("milestonesJson") ?? "[]"),
     },
     session.user.id,
+    session.user.email,
   );
 
   if (!result.ok) return result;
