@@ -2,7 +2,7 @@ import { GrowthRewardStatus, type Prisma, type PrismaClient } from "@prisma/clie
 import { growthPrismaModelsAvailable } from "@/lib/growth/prisma-optional";
 import { tryQueueChainBonus } from "@/lib/growth/mission-rewards";
 
-export type MissionCriterionType = "close_deal" | "add_lead" | "referral";
+export type MissionCriterionType = "close_deal" | "add_lead" | "referral" | "join_event";
 
 export function utcDayKey(d = new Date()): string {
   return d.toISOString().slice(0, 10);
@@ -13,7 +13,9 @@ function criterionType(criteria: unknown): MissionCriterionType | null {
     return null;
   }
   const t = String((criteria as { type: string }).type);
-  if (t === "close_deal" || t === "add_lead" || t === "referral") return t;
+  if (t === "close_deal" || t === "add_lead" || t === "referral" || t === "join_event") {
+    return t;
+  }
   return null;
 }
 

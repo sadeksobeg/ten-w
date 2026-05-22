@@ -21,6 +21,7 @@ export default async function GrowthSettingsPage({ params }: Props) {
     where: { id: session.user.id },
     select: {
       avatarUrl: true,
+      avatarPreset: true,
       name: true,
       email: true,
       publicSlug: true,
@@ -69,6 +70,7 @@ export default async function GrowthSettingsPage({ params }: Props) {
         <AvatarSettingsForm
           locale={locale}
           initialAvatar={user?.avatarUrl ?? ""}
+          initialPreset={user?.avatarPreset ?? null}
           name={user?.name ?? session.user.name ?? ""}
           email={user?.email ?? session.user.email ?? ""}
         />

@@ -13,34 +13,85 @@ import { PartnerContextPanel } from "@/components/growth/chat/PartnerContextPane
 type Props = {
   locale: string;
   adminUserId: string;
+  initialConversationId?: string | null;
+  initialPartnerUserId?: string | null;
 };
 
-export function GrowthAdminChatClient({ locale, adminUserId }: Props) {
+export function GrowthAdminChatClient({
+  locale,
+  adminUserId,
+  initialConversationId = null,
+  initialPartnerUserId = null,
+}: Props) {
   const t = useTranslations("Growth.chat.admin");
   const ti = useTranslations("Growth.chat.intelligence");
   const [rows, setRows] = useState<ChatConversationListItem[]>([]);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(initialConversationId);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [filter, setFilter] = useState<InboxFilter>("all");
   const [inboxNonce, setInboxNonce] = useState(0);
   const [contextOpen, setContextOpen] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [openingPartner, setOpeningPartner] = useState(false);
 
   const load = useCallback(async () => {
-    const res = await fetch("/api/growth/chat/conversations");
-    if (!res.ok) return;
-    const data = (await res.json()) as { items: ChatConversationListItem[] };
-    setRows(data.items);
-    setSelected((sel) => {
-      if (sel && data.items.some((i) => i.id === sel)) return sel;
-      return data.items[0]?.id ?? null;
-    });
-  }, []);
+    try {
+      const res = await fetch("/api/growth/chat/conversations");
+      if (!res.ok) {
+        setLoadError(t("loadError"));
+        return;
+      }
+      setLoadError(null);
+      const data = (await res.json()) as { items: ChatConversationListItem[] };
+      setRows(data.items);
+      setSelected((sel) => {
+        if (sel && data.items.some((i) => i.id === sel)) return sel;
+        if (initialConversationId && data.items.some((i) => i.id === initialConversationId)) {
+          return initialConversationId;
+        }
+        return data.items[0]?.id ?? null;
+      });
+    } catch {
+      setLoadError(t("loadError"));
+    }
+  }, [initialConversationId, t]);
 
   useEffect(() => {
     void load();
     const id = window.setInterval(() => void load(), 8000);
     return () => window.clearInterval(id);
   }, [load, inboxNonce]);
+
+  useEffect(() => {
+    if (!initialPartnerUserId) return;
+    let cancelled = false;
+    setOpeningPartner(true);
+    void (async () => {
+      try {
+        const res = await fetch("/api/growth/chat/conversations/admin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ partnerUserId: initialPartnerUserId }),
+        });
+        if (!res.ok) {
+          if (!cancelled) setLoadError(t("openPartnerError"));
+          return;
+        }
+        const data = (await res.json()) as { conversationId: string };
+        if (!cancelled) {
+          setSelected(data.conversationId);
+          setInboxNonce((n) => n + 1);
+        }
+      } catch {
+        if (!cancelled) setLoadError(t("openPartnerError"));
+      } finally {
+        if (!cancelled) setOpeningPartner(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [initialPartnerUserId, t]);
 
   const bumpInbox = useCallback(() => {
     setInboxNonce((n) => n + 1);
@@ -60,7 +111,9 @@ export function GrowthAdminChatClient({ locale, adminUserId }: Props) {
         body: JSON.stringify({ status: "RESOLVED" }),
       });
       bumpInbox();
-      if (selected === id) setSelected(null);
+      setRows((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, status: "RESOLVED" } : r)),
+      );
     } finally {
       setBusyId(null);
     }
@@ -74,6 +127,20 @@ export function GrowthAdminChatClient({ locale, adminUserId }: Props) {
 
   return (
     <div className="flex h-[min(78vh,760px)] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#030712]/90 shadow-[0_0_40px_rgba(0,0,0,0.45)] backdrop-blur-xl lg:flex-row">
+      {loadError ? (
+        <div
+          className="shrink-0 border-b border-rose-500/30 bg-rose-500/10 px-4 py-2 text-center text-xs font-semibold text-rose-200 lg:absolute lg:inset-x-0 lg:top-0 lg:z-10"
+          role="alert"
+        >
+          {loadError}
+        </div>
+      ) : null}
+      {openingPartner ? (
+        <div className="shrink-0 border-b border-gold/20 bg-gold/5 px-4 py-2 text-center text-xs text-gold lg:absolute lg:inset-x-0 lg:top-8 lg:z-10">
+          {t("openingPartner")}
+        </div>
+      ) : null}
+
       <GrowthChatInbox
         locale={locale}
         rows={rows}

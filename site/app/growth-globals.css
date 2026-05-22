@@ -1,5 +1,9 @@
 /* Growth Engine — scoped design tokens (import only from growth layout) */
 .growth-root {
+  --growth-page-max: 72rem;
+  --growth-touch-min: 44px;
+  --growth-mobile-nav-h: 4rem;
+  --growth-safe-bottom: env(safe-area-inset-bottom, 0px);
   --growth-gold: #b07d2b;
   --growth-gold-bright: #e4b84d;
   /* Align site Tailwind gold tokens inside growth shell */
@@ -215,5 +219,44 @@
   }
   .growth-card-hover:hover {
     transform: none;
+  }
+}
+
+.growth-page-wrap {
+  width: 100%;
+  max-width: var(--growth-page-max);
+  margin-inline: auto;
+  padding-inline: max(1rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+}
+
+.growth-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.growth-touch-target {
+  min-height: var(--growth-touch-min);
+  min-width: var(--growth-touch-min);
+}
+
+.growth-mobile-pad {
+  padding-bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 0.5rem);
+}
+
+@media (min-width: 1024px) {
+  .growth-mobile-pad {
+    padding-bottom: 0;
+  }
+}
+
+.growth-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  .growth-hide-mobile {
+    display: none !important;
   }
 }

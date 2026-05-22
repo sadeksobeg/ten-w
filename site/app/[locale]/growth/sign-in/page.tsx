@@ -7,6 +7,7 @@ import { getSession, signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { PasswordInput } from "@/components/growth/ui/PasswordInput";
 
 function SignInForm() {
   const t = useTranslations("Growth.auth");
@@ -155,18 +156,14 @@ function SignInForm() {
                 required
               />
             </label>
-            <label className="block">
-              <span className="text-xs text-white/55">{t("password")}</span>
-              <input
-                className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </label>
+            <PasswordInput
+              name="password"
+              label={t("password")}
+              required
+              autoComplete="current-password"
+              value={password}
+              onChange={setPassword}
+            />
 
             {error ? (
               <div className="text-sm text-red-300" role="alert">

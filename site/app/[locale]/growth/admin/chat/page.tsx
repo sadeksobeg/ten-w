@@ -5,10 +5,12 @@ import { GrowthAdminChatClient } from "@/components/growth/chat/GrowthAdminChatC
 
 type Props = {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ conversationId?: string; partnerUserId?: string }>;
 };
 
-export default async function GrowthAdminChatPage({ params }: Props) {
+export default async function GrowthAdminChatPage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const sp = await searchParams;
   const session = await auth();
   if (!session?.user?.id) {
     redirect(`/${locale}/growth/sign-in`);
@@ -24,7 +26,12 @@ export default async function GrowthAdminChatPage({ params }: Props) {
         {t("pageTitle")}
       </h1>
       <p className="max-w-2xl text-sm text-white/50">{t("pageSubtitle")}</p>
-      <GrowthAdminChatClient locale={locale} adminUserId={session.user.id} />
+      <GrowthAdminChatClient
+        locale={locale}
+        adminUserId={session.user.id}
+        initialConversationId={sp.conversationId ?? null}
+        initialPartnerUserId={sp.partnerUserId ?? null}
+      />
     </div>
   );
 }

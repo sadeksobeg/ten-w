@@ -867,6 +867,57 @@ export async function adminCreatePartnerAction(
   }
 }
 
+const adminUpdatePartnerCredentialsSchema = z.object({
+  partnerId: z.string().min(1),
+  email: z.string().email().max(320),
+  newPassword: z.string().max(128).optional().or(z.literal("")),
+});
+
+export async function adminUpdatePartnerCredentialsAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const parsed = adminUpdatePartnerCredentialsSchema.safeParse({
+    partnerId: formData.get("partnerId"),
+    email: formData.get("email"),
+    newPassword: formData.get("newPassword") ?? "",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const user = await prisma.user.findUnique({
+    where: { id: parsed.data.partnerId },
+  });
+  if (!user || user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "not_found" };
+  }
+
+  const email = parsed.data.email.toLowerCase().trim();
+  if (email !== user.email) {
+    const taken = await prisma.user.findUnique({ where: { email } });
+    if (taken) return { ok: false, error: "email_taken" };
+  }
+
+  const data: { email: string; passwordHash?: string } = { email };
+  const pw = parsed.data.newPassword?.trim() ?? "";
+  if (pw) {
+    if (pw.length < 8) return { ok: false, error: "invalid_input" };
+    data.passwordHash = await bcrypt.hash(pw, 10);
+  }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data,
+  });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
 export async function togglePartnerActiveFormAction(formData: FormData): Promise<void> {
   await togglePartnerActiveAction(formData);
 }
@@ -1528,6 +1579,63 @@ export async function joinEventAction(
     link: `/growth/admin/events`,
   });
 
+  const { applyMissionProgress } = await import("@/lib/growth/missions");
+  await applyMissionProgress(prisma, session.user.id, "join_event");
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function createEventPostAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const eventId = String(formData.get("eventId") ?? "").trim();
+  const body = String(formData.get("body") ?? "");
+  if (!eventId) return { ok: false, error: "invalid_input" };
+
+  const { createEventPost } = await import("@/lib/growth/event-posts");
+  const result = await createEventPost(eventId, session.user.id, body, "POST");
+  if (!result.ok) return result;
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function repostEventPostAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const eventId = String(formData.get("eventId") ?? "").trim();
+  const repostOfId = String(formData.get("repostOfId") ?? "").trim();
+  if (!eventId || !repostOfId) return { ok: false, error: "invalid_input" };
+
+  const original = await prisma.eventPost.findFirst({
+    where: { id: repostOfId, eventId },
+    select: { body: true },
+  });
+  if (!original) return { ok: false, error: "not_found" };
+
+  const { createEventPost } = await import("@/lib/growth/event-posts");
+  const result = await createEventPost(
+    eventId,
+    session.user.id,
+    original.body,
+    "REPOST",
+    repostOfId,
+  );
+  if (!result.ok) return result;
+
   revalidateGrowth();
   return { ok: true };
 }
@@ -1659,11 +1767,20 @@ export async function updatePartnerAvatarAction(
   if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
     return { ok: false, error: "unauthorized" };
   }
+  const preset = String(formData.get("avatarPreset") ?? "").trim() || null;
   const raw = String(formData.get("avatarUrl") ?? "").trim();
+  if (!raw && preset) {
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { avatarUrl: null, avatarPreset: preset },
+    });
+    revalidateGrowth();
+    return { ok: true };
+  }
   if (!raw) {
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { avatarUrl: null },
+      data: { avatarUrl: null, avatarPreset: null },
     });
     revalidateGrowth();
     return { ok: true };
@@ -1673,7 +1790,25 @@ export async function updatePartnerAvatarAction(
   }
   await prisma.user.update({
     where: { id: session.user.id },
-    data: { avatarUrl: raw },
+    data: { avatarUrl: raw, avatarPreset: preset },
+  });
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function adminUpdateOfficialProfileAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const isVerified = formData.get("isVerifiedOfficial") === "on";
+  const officialDisplayName = String(formData.get("officialDisplayName") ?? "").trim() || null;
+  await prisma.user.update({
+    where: { id: session.user.id },
+    data: { isVerifiedOfficial: isVerified, officialDisplayName },
   });
   revalidateGrowth();
   return { ok: true };

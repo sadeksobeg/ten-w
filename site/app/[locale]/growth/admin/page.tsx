@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { AdminOverviewClient } from "@/components/growth/admin/AdminOverviewClient";
+import { AdminOfficialProfileCard } from "@/components/growth/admin/AdminOfficialProfileCard";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { SectionHeader } from "@/components/growth/ui/SectionHeader";
 import { StatCard } from "@/components/growth/ui/StatCard";
@@ -37,6 +38,13 @@ export default async function GrowthAdminHomePage({ params }: Props) {
     locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US";
 
   const session = await auth();
+  const adminUser =
+    session?.user?.id && session.user.role === "ADMIN"
+      ? await prisma.user.findUnique({
+          where: { id: session.user.id },
+          select: { isVerifiedOfficial: true, officialDisplayName: true },
+        })
+      : null;
   const stats = await fetchAdminOverviewStatsSafe(prisma, session?.user?.id);
   const {
     users,
@@ -65,6 +73,13 @@ export default async function GrowthAdminHomePage({ params }: Props) {
       <SectionHeader title={t("admin.overviewTitle")} />
 
       <AdminOverviewClient />
+
+      {adminUser ? (
+        <AdminOfficialProfileCard
+          isVerified={adminUser.isVerifiedOfficial}
+          officialDisplayName={adminUser.officialDisplayName ?? ""}
+        />
+      ) : null}
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="grid gap-4 sm:grid-cols-2 lg:col-span-2">

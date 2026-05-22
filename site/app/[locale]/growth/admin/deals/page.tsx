@@ -2,6 +2,7 @@ import { DealStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { AdminDealRowActions } from "@/components/growth/admin/AdminDealRowActions";
+import { AdminOpenChatLink } from "@/components/growth/admin/AdminOpenChatLink";
 import { createDealAdminAction } from "@/lib/growth/actions";
 import { prisma } from "@/lib/prisma";
 
@@ -14,7 +15,7 @@ export default async function GrowthAdminDealsPage() {
       take: 60,
       include: {
         product: { select: { name: true } },
-        partner: { select: { email: true, name: true } },
+        partner: { select: { id: true, email: true, name: true } },
       },
     }),
     prisma.product.findMany({
@@ -77,7 +78,7 @@ export default async function GrowthAdminDealsPage() {
       </GlassCard>
 
       <GlassCard className="overflow-hidden p-0">
-        <div className="divide-y divide-white/10">
+        <div className="growth-table-scroll divide-y divide-white/10">
           {deals.map((d) => (
             <div
               key={d.id}
@@ -91,6 +92,7 @@ export default async function GrowthAdminDealsPage() {
                 <div className="mt-1 text-xs text-white/45">{d.clientLabel ?? "—"}</div>
               </div>
               <div className="flex flex-wrap items-center gap-3">
+                <AdminOpenChatLink partnerUserId={d.partner.id} />
                 <div className="text-xs font-semibold uppercase tracking-wide text-gold/90">
                   {d.status === DealStatus.CLOSED
                     ? t("deals.status.closed")

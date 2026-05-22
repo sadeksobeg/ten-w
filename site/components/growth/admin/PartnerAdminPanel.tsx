@@ -7,9 +7,12 @@ import {
   adminCreatePartnerAction,
   adminSetPartnerLevelFormAction,
   adminSetPartnerUplineAction,
+  adminUpdatePartnerCredentialsAction,
   togglePartnerActiveFormAction,
 } from "@/lib/growth/actions";
+import { PasswordInput } from "@/components/growth/ui/PasswordInput";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
+import { AdminOpenChatLink } from "@/components/growth/admin/AdminOpenChatLink";
 import { PartnerNetworkTree } from "@/components/growth/profile/PartnerNetworkTree";
 
 type LevelOption = { id: string; name: string };
@@ -70,6 +73,8 @@ export function CreatePartnerForm({ pickerOptions }: { pickerOptions: PickerOpti
   const t = useTranslations("Growth.admin.partners");
   const [state, action] = useActionState(adminCreatePartnerAction, undefined);
   const [parentId, setParentId] = useState("");
+  const [password, setPassword] = useState("");
+  const [lastCreatedPassword, setLastCreatedPassword] = useState<string | null>(null);
 
   return (
     <form action={action} className="space-y-5">
@@ -88,17 +93,15 @@ export function CreatePartnerForm({ pickerOptions }: { pickerOptions: PickerOpti
             autoComplete="off"
           />
         </label>
-        <label className="block">
-          <span className="text-xs font-semibold text-white/55">{t("password")}</span>
-          <input
-            name="password"
-            type="password"
-            minLength={8}
-            required
-            className={fieldClass}
-            autoComplete="new-password"
-          />
-        </label>
+        <PasswordInput
+          name="password"
+          label={t("password")}
+          required
+          minLength={8}
+          autoComplete="new-password"
+          value={password}
+          onChange={(v) => setPassword(v)}
+        />
         <label className="block">
           <span className="text-xs font-semibold text-white/55">{t("phone")}</span>
           <input name="phone" type="tel" className={fieldClass} />
@@ -143,12 +146,20 @@ export function CreatePartnerForm({ pickerOptions }: { pickerOptions: PickerOpti
       ) : null}
       {state && typeof state === "object" && "ok" in state && state.ok === true ? (
         <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
-          {t("created")}
+          <p>{t("created")}</p>
+          {lastCreatedPassword ? (
+            <p className="mt-2 font-mono text-xs">
+              {t("createdWithPassword")} <strong>{lastCreatedPassword}</strong>
+            </p>
+          ) : null}
         </div>
       ) : null}
 
       <button
         type="submit"
+        onClick={() => {
+          if (password.length >= 8) setLastCreatedPassword(password);
+        }}
         className="w-full rounded-xl bg-gradient-to-r from-gold/35 via-gold to-gold-bright px-6 py-3 text-sm font-extrabold text-bg sm:w-auto sm:min-w-[200px]"
       >
         {t("createSubmit")}
@@ -199,6 +210,58 @@ function PartnerXpControls({ partnerId, levels }: { partnerId: string; levels: L
         </button>
       </form>
     </div>
+  );
+}
+
+function PartnerCredentialsForm({
+  partnerId,
+  email,
+}: {
+  partnerId: string;
+  email: string;
+}) {
+  const t = useTranslations("Growth.admin.partners");
+  const [state, action] = useActionState(adminUpdatePartnerCredentialsAction, undefined);
+  const [newPassword, setNewPassword] = useState("");
+
+  return (
+    <form action={action} className="mt-3 space-y-2 rounded-xl border border-white/10 bg-black/20 p-3">
+      <p className="text-[10px] font-semibold text-white/55">{t("credentialsTitle")}</p>
+      <p className="text-[10px] text-white/40">{t("credentialsHint")}</p>
+      <input type="hidden" name="partnerId" value={partnerId} />
+      <label className="block">
+        <span className="text-[10px] text-white/50">{t("email")}</span>
+        <input
+          name="email"
+          type="email"
+          required
+          defaultValue={email}
+          className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-2 py-1.5 text-xs text-white"
+        />
+      </label>
+      <PasswordInput
+        name="newPassword"
+        label={t("newPassword")}
+        autoComplete="new-password"
+        className="block"
+        value={newPassword}
+        onChange={setNewPassword}
+      />
+      {state && typeof state === "object" && "ok" in state && state.ok === false ? (
+        <p className="text-xs text-rose-300" role="alert">
+          {createErrorText(t, String((state as { error?: string }).error ?? ""))}
+        </p>
+      ) : null}
+      {state && typeof state === "object" && "ok" in state && state.ok === true ? (
+        <p className="text-xs text-emerald-300">{t("credentialsSaved")}</p>
+      ) : null}
+      <button
+        type="submit"
+        className="rounded-lg border border-gold/35 bg-gold/10 px-3 py-1.5 text-xs font-bold text-gold"
+      >
+        {t("updateCredentials")}
+      </button>
+    </form>
   );
 }
 
@@ -329,16 +392,20 @@ export function PartnerList({
                   )}
                   {t("networkCounts", { direct: p.directCount, total: p.totalCount })}
                 </div>
-                {p.publicSlug ? (
-                  <a
-                    href={`/${p.locale}/growth/profile/${p.publicSlug}`}
-                    className="mt-2 inline-block text-xs font-semibold text-gold hover:underline"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    /growth/profile/{p.publicSlug}
-                  </a>
-                ) : null}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <AdminOpenChatLink partnerUserId={p.userId} />
+                  {p.publicSlug ? (
+                    <a
+                      href={`/${p.locale}/growth/profile/${p.publicSlug}`}
+                      className="inline-flex min-h-[var(--growth-touch-min)] items-center rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-white/70 hover:border-gold/30 hover:text-white"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {t("viewProfile")}
+                    </a>
+                  ) : null}
+                </div>
+                <PartnerCredentialsForm partnerId={p.userId} email={p.email} />
                 <PartnerUplineForm
                   partnerId={p.userId}
                   pickerOptions={pickerOptions}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { IconEarnings } from "@/components/growth/icons/GrowthIcons";
 import type { ChatMessageDTO } from "@/lib/growth/chat-service";
@@ -114,6 +115,7 @@ export function GrowthChatMessageBubble({
 }: Props) {
   const tChat = useTranslations("Growth.chat");
   const tBadges = useTranslations("Growth.badges");
+  const tKw = useTranslations("Growth.chat.keywords");
   const mine = m.senderUserId === viewerUserId;
   const kindUpper = m.kind.toUpperCase();
   const nf =
@@ -210,8 +212,42 @@ export function GrowthChatMessageBubble({
     );
   }
 
-  const richKinds = ["WARNING", "ACTION"];
-  if (richKinds.includes(kindUpper)) {
+  if (kindUpper === "ACTION") {
+    const links = Array.isArray(m.metadata?.links)
+      ? (m.metadata!.links as { labelKey: string; href: string }[])
+      : null;
+    return (
+      <div
+        className={`motion-safe:animate-in motion-safe:fade-in flex justify-center py-1 ${
+          showAvatarRow ? "pt-2" : "pt-0.5"
+        }`}
+      >
+        <div className="max-w-[min(92%,420px)] rounded-2xl border border-sky-400/35 bg-sky-500/10 px-4 py-3 text-sm">
+          <div className="text-[10px] font-semibold uppercase tracking-wide text-sky-200/80">
+            {tChat("keywordPaths")}
+          </div>
+          {links && links.length > 0 ? (
+            <div className="mt-2 flex flex-wrap justify-center gap-2">
+              {links.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="rounded-full border border-gold/40 bg-gold/15 px-3 py-1 text-xs font-bold text-gold hover:bg-gold/25"
+                >
+                  {tKw(l.labelKey as "deals")}
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-1 whitespace-pre-wrap break-words text-white/80">{m.body}</div>
+          )}
+          <div className="mt-1.5 text-end text-[10px] text-white/35">{time}</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (kindUpper === "WARNING") {
     const tone = bubbleTone(kindUpper);
     return (
       <div

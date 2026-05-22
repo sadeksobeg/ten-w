@@ -29,8 +29,8 @@ export function LevelBadge({
   className = "",
 }: Props) {
   const t = useTranslations("Growth.levels");
-  const v = getLevelVisual(levelName);
   const key = getLevelI18nKey(levelCode, levelName);
+  const v = getLevelVisual(levelName, levelCode);
   const i18nKey = `${key}.name` as const;
   let label = resolveLevelName(levelName, locale);
   try {

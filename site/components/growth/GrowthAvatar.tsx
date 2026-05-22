@@ -1,5 +1,7 @@
 "use client";
 
+import { getAvatarPreset } from "@/lib/growth/avatar-presets";
+
 type Size = "sm" | "md" | "lg";
 
 const sizeMap: Record<Size, string> = {
@@ -29,6 +31,7 @@ type Props = {
   name?: string | null;
   email: string;
   avatarUrl?: string | null;
+  avatarPreset?: string | null;
   size?: Size;
   className?: string;
 };
@@ -37,12 +40,14 @@ export function GrowthAvatar({
   name,
   email,
   avatarUrl,
+  avatarPreset,
   size = "md",
   className = "",
 }: Props) {
   const label = initials(name, email);
   const hue = hueFromSeed(email.toLowerCase());
   const ring = "ring-2 ring-gold/35 ring-offset-2 ring-offset-[#050816]";
+  const preset = getAvatarPreset(avatarPreset);
 
   if (avatarUrl?.trim()) {
     return (
@@ -51,6 +56,18 @@ export function GrowthAvatar({
         alt=""
         className={`${sizeMap[size]} shrink-0 rounded-full object-cover ${ring} ${className}`}
       />
+    );
+  }
+
+  if (preset) {
+    return (
+      <div
+        aria-hidden
+        className={`${sizeMap[size]} flex shrink-0 items-center justify-center rounded-full font-black text-white ${ring} ${className}`}
+        style={{ background: preset.gradient }}
+      >
+        {label}
+      </div>
     );
   }
 

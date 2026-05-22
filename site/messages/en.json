@@ -1052,6 +1052,13 @@
       "milestoneComplete": "Complete",
       "back": "Back to events",
       "participantsPreview": "Participants",
+      "memberHub": "Member hub",
+      "memberOnlyHint": "Posts and reposts from participants in this event only.",
+      "postPlaceholder": "Share progress or an insight with the team…",
+      "postSubmit": "Post",
+      "repost": "Repost",
+      "feedEmpty": "No posts yet — be the first to share.",
+      "joinedLocked": "Join the event to unlock full details and the member feed.",
       "status": {
         "DRAFT": "Draft",
         "PUBLISHED": "Published",
@@ -1080,11 +1087,20 @@
       "teamSubtitle": "Referral network up to 3 levels — active partners only"
     },
     "network": {
+      "title": "My network",
+      "empty": "No partners under you yet. Share your referral code.",
+      "directList": "Direct referrals",
       "tree": {
         "loading": "Loading network…",
         "empty": "No team yet — share your referral code.",
         "stats": "Direct: {direct} · Total: {total} · Depth: {depth}"
       }
+    },
+    "networkAnalytics": {
+      "downlines": "Direct partners",
+      "yourCloses": "Your closed deals",
+      "activityIndex": "Activity index",
+      "codeHint": "Share code {code} to grow your tree"
     },
     "profileShare": {
       "title": "Share card",
@@ -1162,10 +1178,6 @@
         "closed": "Closed",
         "lost": "Lost"
       }
-    },
-    "network": {
-      "title": "My network",
-      "empty": "No partners under you yet. Share your referral code."
     },
     "earnings": {
       "title": "Earnings",
@@ -1289,24 +1301,18 @@
         "kit": "Open the marketing kit"
       }
     },
-    "networkAnalytics": {
-      "downlines": "Direct partners",
-      "yourCloses": "Your closed deals",
-      "activityIndex": "Activity index",
-      "codeHint": "Share code {code} to grow your tree"
-    },
     "activity": {
       "title": "Live momentum",
       "empty": "No recent events yet."
     },
     "levels": {
-      "starter": { "name": "Starter", "color": "#8a8490" },
-      "hunter": { "name": "Hunter", "color": "#3b6d11" },
-      "closer": { "name": "Closer", "color": "#3b82f6" },
-      "pro": { "name": "Pro", "color": "#534ab7" },
-      "elite": { "name": "Elite", "color": "#e4b84d" },
-      "titan": { "name": "Titan", "color": "#22d3ee" },
-      "legend": { "name": "Legend", "color": "#a855f7" }
+      "starter": { "name": "Seeker", "color": "#C9A061" },
+      "hunter": { "name": "Striker", "color": "#B07D2B" },
+      "closer": { "name": "Finisher", "color": "#3b82f6" },
+      "pro": { "name": "Vanguard", "color": "#10B981" },
+      "elite": { "name": "Warlord", "color": "#F97316" },
+      "titan": { "name": "Overlord", "color": "#8B5CF6" },
+      "legend": { "name": "Mythic", "color": "#E4B84D" }
     },
     "deal_status": {
       "PENDING": "Pending",
@@ -1389,6 +1395,19 @@
       "title": "Profile settings",
       "subtitle": "Avatar appears on your dashboard and public profile.",
       "live_preview": "Profile Preview",
+      "avatarPresets": "Choose avatar style",
+      "presetGold1": "Gold",
+      "presetGold2": "Bronze",
+      "presetViolet1": "Violet",
+      "presetViolet2": "Indigo",
+      "presetEmerald1": "Emerald",
+      "presetEmerald2": "Forest",
+      "presetCrimson1": "Crimson",
+      "presetCrimson2": "Rose",
+      "presetCyan1": "Cyan",
+      "presetCyan2": "Teal",
+      "presetSlate1": "Slate",
+      "presetSlate2": "Steel",
       "avatarSection": "Profile photo",
       "uploadHint": "Drop image or click to upload",
       "save": "Save",
@@ -1527,6 +1546,22 @@
       "partnerTag": "Partner",
       "youLabel": "You",
       "supportLabel": "TENEGTA Support",
+      "tabCommunity": "Community",
+      "tabSupport": "Support",
+      "communityHint": "Public partner lounge — names visible to all members.",
+      "communityPlaceholder": "Message the community…",
+      "communityWelcome": "Welcome to the TENEGTA partner community. Ask about deals, earnings, or events.",
+      "communityLoadError": "Could not load community chat.",
+      "verifiedOfficial": "Official",
+      "keywordPaths": "Suggested paths",
+      "keywords": {
+        "deals": "Deals pipeline",
+        "kit": "Marketing kit",
+        "earnings": "Earnings",
+        "network": "Referral network",
+        "events": "Events",
+        "dashboard": "Dashboard"
+      },
       "dateToday": "Today",
       "dateYesterday": "Yesterday",
       "message": {
@@ -1723,7 +1758,10 @@
         "hoursAgo": "{h}h ago",
         "daysAgo": "{d}d ago",
         "showContext": "Context",
-        "hideContext": "Hide"
+        "hideContext": "Hide",
+        "loadError": "Could not load conversations. Refresh the page.",
+        "openPartnerError": "Could not open partner chat.",
+        "openingPartner": "Opening conversation…"
       }
     },
     "admin": {
@@ -1735,8 +1773,20 @@
       "eventParticipants": "Event participants",
       "unreadNotifications": "Unread notifications",
       "enter": "Admin",
+      "official": {
+        "title": "Official community identity",
+        "hint": "Verified admins show a badge and gold styling in the partner community chat.",
+        "verified": "Verified",
+        "verifyToggle": "Show as verified official account",
+        "displayName": "Display name in community",
+        "displayNamePh": "TENEGTA Support",
+        "save": "Save",
+        "saved": "Saved",
+        "error": "Could not save"
+      },
       "nav": {
         "adminNavAria": "Growth admin navigation",
+        "navAria": "Growth admin navigation",
         "jumpTo": "Jump to",
         "groupOperations": "Operations",
         "groupCatalog": "Configuration",
@@ -1777,7 +1827,16 @@
         "referralOptional": "Referral code (optional)",
         "createSubmit": "Create account",
         "created": "Partner created",
+        "createdWithPassword": "Created. Password (save now — not shown again):",
+        "credentialsTitle": "Email & password",
+        "credentialsHint": "Stored passwords cannot be retrieved. Set a new password if needed.",
+        "newPassword": "New password (optional)",
+        "newPasswordPlaceholder": "Leave blank to keep current",
+        "updateCredentials": "Save email / password",
+        "credentialsSaved": "Login details updated",
         "empty": "No partners",
+        "openChat": "Open chat",
+        "viewProfile": "View profile",
         "active": "Active",
         "inactive": "Inactive",
         "setLevel": "Set level",
@@ -2038,6 +2097,8 @@
       "registerTitle": "Create partner account",
       "email": "Email",
       "password": "Password",
+      "showPassword": "Show",
+      "hidePassword": "Hide",
       "name": "Name",
       "referral": "Referral code (optional)",
       "submit": "Continue",

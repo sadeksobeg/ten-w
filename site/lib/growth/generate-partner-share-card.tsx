@@ -39,7 +39,7 @@ export function generatePartnerShareCard(input: ShareCardInput) {
           height: "100%",
           padding: format === "story" ? 72 : 56,
           background:
-            "linear-gradient(145deg, #0a0a0f 0%, #12121a 40%, #1a1510 70%, #0a0a0f 100%)",
+            "linear-gradient(145deg, #1a1208 0%, #0a0a0f 35%, #2a1f0a 65%, #0a0a0f 100%)",
           color: "#f0ede8",
           fontFamily: "system-ui, sans-serif",
           direction: dir,
@@ -47,17 +47,43 @@ export function generatePartnerShareCard(input: ShareCardInput) {
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: 32, fontWeight: 800, letterSpacing: "0.14em", color: "#e4b84d" }}>
-            T.E.N.E.G.T.A
-          </span>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div
+              style={{
+                display: "flex",
+                width: 56,
+                height: 56,
+                borderRadius: 14,
+                background: "linear-gradient(135deg, #B07D2B 0%, #E4B84D 50%, #534AB7 100%)",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 28,
+                fontWeight: 900,
+                color: "#0a0a0f",
+                border: "2px solid rgba(228,184,77,0.7)",
+                boxShadow: "0 0 24px rgba(228,184,77,0.35)",
+              }}
+            >
+              T
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <span style={{ fontSize: 28, fontWeight: 800, letterSpacing: "0.12em", color: "#e4b84d" }}>
+                T.E.N.E.G.T.A
+              </span>
+              <span style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", letterSpacing: "0.2em" }}>
+                {isRtl ? "شريك معتمد" : "CERTIFIED PARTNER"}
+              </span>
+            </div>
+          </div>
           <span
             style={{
               fontSize: 22,
               fontWeight: 700,
               padding: "8px 20px",
               borderRadius: 999,
-              background: "rgba(176, 125, 43, 0.25)",
+              background: "linear-gradient(90deg, rgba(176,125,43,0.5), rgba(228,184,77,0.4))",
               color: "#e4b84d",
+              border: "2px solid rgba(228,184,77,0.6)",
             }}
           >
             {input.levelName}

@@ -301,6 +301,13 @@ async function main() {
         criteria: { type: "referral", count: 1 },
         sortOrder: 2,
       },
+      {
+        key: "daily_join_event",
+        title: "Join an event today",
+        xpReward: 40,
+        criteria: { type: "join_event", count: 1 },
+        sortOrder: 3,
+      },
     ],
   });
 

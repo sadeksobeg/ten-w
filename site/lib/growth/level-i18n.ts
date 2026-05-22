@@ -43,13 +43,13 @@ const NAME_TO_CODE: Record<string, string> = {
 };
 
 export const LEVEL_COLORS: Record<string, string> = {
-  starter: "#6B7280",
+  starter: "#C9A061",
   hunter: "#B07D2B",
   closer: "#3B82F6",
   pro: "#10B981",
   elite: "#F97316",
   titan: "#8B5CF6",
-  legend: "#EC4899",
+  legend: "#E4B84D",
   seeker: "#3B82F6",
   scout: "#10B981",
   warrior: "#F97316",

@@ -1,11 +1,12 @@
 "use client";
 
-import { Suspense, useActionState, useEffect } from "react";
+import { Suspense, useActionState, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { registerPartnerAction } from "@/lib/growth/actions";
 import { RegisterReferralField } from "@/components/growth/RegisterReferralField";
+import { PasswordInput } from "@/components/growth/ui/PasswordInput";
 
 function registerErrorText(t: (key: string) => string, code: string) {
   switch (code) {
@@ -26,6 +27,7 @@ export default function GrowthRegisterPage() {
   const t = useTranslations("Growth.auth");
   const router = useRouter();
   const [state, formAction] = useActionState(registerPartnerAction, undefined);
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (state && typeof state === "object" && "ok" in state && state.ok === true) {
@@ -64,16 +66,14 @@ export default function GrowthRegisterPage() {
               required
             />
           </label>
-          <label className="block">
-            <span className="text-xs text-white/55">{t("password")}</span>
-            <input
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
-              name="password"
-              type="password"
-              minLength={8}
-              required
-            />
-          </label>
+          <PasswordInput
+            name="password"
+            label={t("password")}
+            required
+            minLength={8}
+            value={password}
+            onChange={setPassword}
+          />
           <Suspense fallback={null}>
             <RegisterReferralField label={t("referral")} />
           </Suspense>

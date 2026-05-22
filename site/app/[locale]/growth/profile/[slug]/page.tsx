@@ -9,7 +9,7 @@ import { ProfileQr } from "@/components/growth/ProfileQr";
 import { ProfileShareButton } from "@/components/growth/ProfileShareButton";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
-import { LevelBadge } from "@/components/growth/ui/LevelBadge";
+import { RankEmblem } from "@/components/growth/ui/RankEmblem";
 import { getLevelVisual } from "@/lib/growth/level-visual";
 import { getLevelI18nKey, LEVEL_COLORS } from "@/lib/growth/level-i18n";
 import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
@@ -58,7 +58,7 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
 
   const xpLabel = getXpBrandLabel(locale);
   const registerHref = `/${locale}/growth/register?ref=${encodeURIComponent(data.referralCode)}`;
-  const lv = getLevelVisual(data.levelName);
+  const lv = getLevelVisual(data.levelName, data.levelCode);
   const levelKey = getLevelI18nKey(data.levelCode, data.levelName);
   const heroColor = LEVEL_COLORS[levelKey] ?? LEVEL_COLORS.starter;
 
@@ -67,35 +67,64 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
       <ProfileViewTracker slug={slug} />
 
       <div
-        className="overflow-hidden rounded-2xl border border-[var(--growth-border)]"
+        className="growth-profile-hero relative overflow-hidden rounded-2xl border border-gold/25"
         style={{
-          background: `linear-gradient(135deg, ${heroColor}33, var(--growth-surface) 55%, ${heroColor}22)`,
+          background: `linear-gradient(145deg, ${heroColor}44 0%, var(--growth-surface) 42%, #0a0a0f 100%)`,
+          boxShadow: `0 0 60px ${heroColor}22`,
         }}
       >
-        <div className="flex flex-col items-center gap-4 px-6 py-10 text-center sm:flex-row sm:text-start">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(228,184,77,0.35), transparent)",
+          }}
+          aria-hidden
+        />
+        <div className="relative flex flex-col items-center gap-6 px-6 py-10 text-center sm:flex-row sm:items-center sm:text-start">
           <div className="relative shrink-0">
-            <svg width="112" height="112" className="-rotate-90" aria-hidden>
-              <circle cx="56" cy="56" r="48" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3" />
-              <circle cx="56" cy="56" r="48" fill="none" stroke={lv.ringColor} strokeWidth="3" />
+            <div
+              className="absolute -inset-2 rounded-full motion-safe:animate-pulse motion-reduce:animate-none"
+              style={{ boxShadow: `0 0 32px ${lv.ringColor}66` }}
+              aria-hidden
+            />
+            <svg width="128" height="128" className="-rotate-90" aria-hidden>
+              <circle cx="64" cy="64" r="54" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="4" />
+              <circle
+                cx="64"
+                cy="64"
+                r="54"
+                fill="none"
+                stroke={lv.ringColor}
+                strokeWidth="4"
+                strokeDasharray="8 4"
+              />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
               <GrowthAvatar
                 name={data.name}
                 email={data.referralCode}
                 avatarUrl={data.avatarUrl}
+                avatarPreset={data.avatarPreset}
                 size="lg"
-                className="!size-24"
+                className="!size-28 !text-base"
               />
             </div>
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="font-[family-name:var(--font-cairo)] text-3xl font-extrabold">{data.name}</h1>
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold/70">
+              T.E.N.E.G.T.A Partner
+            </p>
+            <h1 className="mt-1 font-[family-name:var(--font-cairo)] text-3xl font-extrabold sm:text-4xl">
+              {data.name}
+            </h1>
             {data.displayTitle ? (
-              <p className="mt-1 text-sm text-gold/90">{data.displayTitle}</p>
+              <p className="mt-2 text-base font-semibold text-[var(--growth-gold-bright)]">
+                {data.displayTitle}
+              </p>
             ) : null}
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-              <LevelBadge levelName={data.levelName} levelCode={data.levelCode} locale={locale} size="lg" />
-              <span className="text-xs text-[var(--growth-text-sub)]">T.E.N.E.G.T.A</span>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-4 sm:justify-start">
+              <RankEmblem levelCode={data.levelCode} levelName={data.levelName} size="lg" />
             </div>
             {data.bio ? (
               <p className="mt-4 text-sm leading-relaxed text-[var(--growth-text-sub)]">{data.bio}</p>
@@ -165,11 +194,18 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
               grantedAt: b.grantedAt,
               hidden: b.hidden,
             }))}
-            size="md"
+            size="lg"
             showLocked
           />
         </GlassCard>
       </section>
+
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-gold/20 bg-[#0a0a0f]/95 p-3 backdrop-blur-md sm:hidden">
+        <ProfileShareButton
+          title={data.name}
+          url={`https://tenegta.com/${locale}/growth/profile/${data.publicSlug}`}
+        />
+      </div>
 
       <section className="mt-8 growth-page-enter">
         <h2 className="font-[family-name:var(--font-cairo)] text-lg font-bold text-gold">

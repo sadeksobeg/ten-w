@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
-import { GrowthChatThread } from "@/components/growth/chat/GrowthChatThread";
+import { GrowthPartnerChatHub } from "@/components/growth/chat/GrowthPartnerChatHub";
 import { ensureOpenConversation } from "@/lib/growth/chat-service";
+import { prisma } from "@/lib/prisma";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -19,13 +20,19 @@ export default async function GrowthPartnerChatPage({ params }: Props) {
   if (session.user.role === "ADMIN") {
     redirect(`/${locale}/growth/admin/chat`);
   }
-  const conv = await ensureOpenConversation(session.user.id);
+  const [conv, user] = await Promise.all([
+    ensureOpenConversation(session.user.id),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true, email: true },
+    }),
+  ]);
   const t = await getTranslations("Growth");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 growth-page-enter">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold">
+        <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold sm:text-3xl">
           {t("chat.nav")}
         </h1>
         <Link
@@ -35,18 +42,14 @@ export default async function GrowthPartnerChatPage({ params }: Props) {
           {t("chat.back")}
         </Link>
       </div>
-      <GlassCard className="overflow-hidden border border-white/12 bg-white/[0.03] p-0 sm:p-0">
-        <div className="h-[min(72vh,640px)]">
-          <GrowthChatThread
-            conversationId={conv.id}
-            viewerUserId={session.user.id}
-            isAdmin={false}
-            locale={locale}
-            embedded
-            partnerHistoryMode
-            className="h-full"
-          />
-        </div>
+      <GlassCard className="overflow-hidden border border-white/12 bg-white/[0.03] p-0">
+        <GrowthPartnerChatHub
+          locale={locale}
+          viewerUserId={session.user.id}
+          viewerEmail={user?.email ?? session.user.email ?? ""}
+          viewerName={user?.name ?? session.user.name ?? null}
+          supportConversationId={conv.id}
+        />
       </GlassCard>
     </div>
   );

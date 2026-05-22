@@ -1,3 +1,5 @@
+import { getLevelI18nKey } from "@/lib/growth/level-i18n";
+
 export type LevelVisual = {
   ringColor: string;
   gradientFrom: string;
@@ -6,44 +8,44 @@ export type LevelVisual = {
   isLegend?: boolean;
 };
 
-const BY_NAME: Record<string, LevelVisual> = {
-  Starter: {
-    ringColor: "#6b7280",
-    gradientFrom: "#374151",
-    gradientTo: "#1f2937",
-    pillClass: "border-gray-500/40 bg-gray-500/15 text-gray-200",
+const BY_CODE: Record<string, LevelVisual> = {
+  starter: {
+    ringColor: "#C9A061",
+    gradientFrom: "#B07D2B",
+    gradientTo: "#6B5344",
+    pillClass: "border-gold/40 bg-gold/10 text-[#E4B84D]",
   },
-  Hunter: {
-    ringColor: "#b07d2b",
-    gradientFrom: "#b07d2b",
+  hunter: {
+    ringColor: "#E4B84D",
+    gradientFrom: "#B07D2B",
     gradientTo: "#8a6322",
     pillClass: "border-[#B07D2B]/50 bg-[#B07D2B]/20 text-[#E4B84D]",
   },
-  Closer: {
-    ringColor: "#3b82f6",
+  closer: {
+    ringColor: "#60A5FA",
     gradientFrom: "#2563eb",
-    gradientTo: "#1d4ed8",
+    gradientTo: "#B07D2B",
     pillClass: "border-blue-500/40 bg-blue-500/15 text-blue-200",
   },
-  Pro: {
-    ringColor: "#3b6d11",
-    gradientFrom: "#3b6d11",
-    gradientTo: "#2d5010",
-    pillClass: "border-green-600/40 bg-green-600/15 text-green-200",
+  pro: {
+    ringColor: "#34D399",
+    gradientFrom: "#10B981",
+    gradientTo: "#B07D2B",
+    pillClass: "border-emerald-500/40 bg-emerald-500/15 text-emerald-200",
   },
-  Elite: {
-    ringColor: "#ea580c",
+  elite: {
+    ringColor: "#F97316",
     gradientFrom: "#ea580c",
-    gradientTo: "#c2410c",
+    gradientTo: "#E4B84D",
     pillClass: "border-orange-500/40 bg-orange-500/15 text-orange-200",
   },
-  Titan: {
-    ringColor: "#534ab7",
+  titan: {
+    ringColor: "#A78BFA",
     gradientFrom: "#534ab7",
-    gradientTo: "#4338ca",
+    gradientTo: "#E4B84D",
     pillClass: "border-purple-500/40 bg-purple-500/15 text-purple-200",
   },
-  Legend: {
+  legend: {
     ringColor: "#e4b84d",
     gradientFrom: "#e4b84d",
     gradientTo: "#a855f7",
@@ -52,13 +54,26 @@ const BY_NAME: Record<string, LevelVisual> = {
   },
 };
 
-const DEFAULT_LEVEL: LevelVisual = BY_NAME.Starter!;
+const LEGACY_NAME_TO_CODE: Record<string, string> = {
+  Starter: "starter",
+  Hunter: "hunter",
+  Closer: "closer",
+  Pro: "pro",
+  Elite: "elite",
+  Titan: "titan",
+  Legend: "legend",
+};
 
-export function getLevelVisual(levelName: string): LevelVisual {
-  return BY_NAME[levelName] ?? DEFAULT_LEVEL;
+const DEFAULT_LEVEL: LevelVisual = BY_CODE.starter!;
+
+export function getLevelVisual(levelNameOrCode: string, levelCode?: string | null): LevelVisual {
+  const key = levelCode
+    ? getLevelI18nKey(levelCode, levelNameOrCode)
+    : LEGACY_NAME_TO_CODE[levelNameOrCode] ?? getLevelI18nKey(null, levelNameOrCode);
+  return BY_CODE[key] ?? DEFAULT_LEVEL;
 }
 
 export function getLevelVisualByOrder(order: number): LevelVisual {
-  const names = ["Starter", "Hunter", "Closer", "Pro", "Elite", "Titan", "Legend"];
-  return getLevelVisual(names[order - 1] ?? "Starter");
+  const codes = ["starter", "hunter", "closer", "pro", "elite", "titan", "legend"];
+  return BY_CODE[codes[order - 1] ?? "starter"] ?? DEFAULT_LEVEL;
 }

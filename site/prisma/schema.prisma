@@ -100,10 +100,13 @@ model User {
   image            String?
   phone            String?
   avatarUrl        String?
+  avatarPreset     String?
   bio              String?
   publicSlug       String?   @unique
   isActive         Boolean   @default(true)
   role             UserRole  @default(PARTNER)
+  isVerifiedOfficial Boolean @default(false)
+  officialDisplayName String?
   marketingKitHits Int       @default(0)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
@@ -126,9 +129,12 @@ model User {
   demoSessions        DemoSession[]               @relation("DemoSessionCreator")
   chatConversationsAsPartner ChatConversation[]  @relation("ChatPartnerConversations")
   chatMessagesSent           ChatMessage[]        @relation("ChatMessageSender")
+  chatRoomMembers            ChatRoomMember[]
+  chatRoomMessagesSent       ChatRoomMessage[]    @relation("ChatRoomMessageSender")
   notifications              Notification[]
   eventsCreated              GrowthEvent[]        @relation("EventCreator")
   eventParticipants          EventParticipant[]
+  eventPosts                 EventPost[]
   activityDays               UserActivityDay[]
   adminAuditLogs             AdminAuditLog[]    @relation("AdminAuditActor")
 }
@@ -490,6 +496,51 @@ model ChatMessage {
   @@index([conversationId, createdAt])
 }
 
+enum ChatRoomType {
+  COMMUNITY
+}
+
+model ChatRoom {
+  id        String       @id @default(cuid())
+  slug      String       @unique
+  type      ChatRoomType @default(COMMUNITY)
+  title     String
+  isPublic  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+
+  members  ChatRoomMember[]
+  messages ChatRoomMessage[]
+}
+
+model ChatRoomMember {
+  roomId   String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  room ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([roomId, userId])
+  @@index([userId])
+}
+
+model ChatRoomMessage {
+  id           String   @id @default(cuid())
+  roomId       String
+  senderUserId String
+  body         String
+  kind         String   @default("TEXT")
+  metadata     Json?
+  isOfficial   Boolean  @default(false)
+  triggerKey   String?
+  createdAt    DateTime @default(now())
+
+  room   ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender User     @relation("ChatRoomMessageSender", fields: [senderUserId], references: [id])
+
+  @@index([roomId, createdAt])
+}
+
 model DemoEvent {
   id        String   @id @default(cuid())
   sessionId String
@@ -523,9 +574,34 @@ model GrowthEvent {
   participants EventParticipant[]
   milestones   EventMilestone[]
   eventNotifications EventNotification[]
+  posts        EventPost[]
 
   @@index([status])
   @@index([startAt])
+}
+
+enum EventPostKind {
+  POST
+  REPOST
+}
+
+model EventPost {
+  id         String        @id @default(cuid())
+  eventId    String
+  userId     String
+  body       String        @db.Text
+  kind       EventPostKind @default(POST)
+  repostOfId String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  event    GrowthEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repostOf EventPost?  @relation("EventRepost", fields: [repostOfId], references: [id], onDelete: SetNull)
+  reposts  EventPost[] @relation("EventRepost")
+
+  @@index([eventId, createdAt])
+  @@index([userId])
 }
 
 model EventParticipant {

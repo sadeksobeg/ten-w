@@ -98,9 +98,10 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
           );
         })}
       </nav>
-      {children}
+      <div className="growth-page-wrap growth-mobile-pad growth-stack">{children}</div>
       <nav
         className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-6 border-t border-white/10 bg-[#0A0A0F]/90 px-1 py-2 backdrop-blur-md lg:hidden"
+        style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom, 0px))" }}
         aria-label={t("mobileNavAria")}
       >
         {mobileNav.map((item) => {
@@ -128,7 +129,11 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
           );
         })}
       </nav>
-      <div className="h-16 lg:hidden" aria-hidden />
+      <div
+        className="lg:hidden"
+        style={{ height: "calc(var(--growth-mobile-nav-h) + env(safe-area-inset-bottom, 0px))" }}
+        aria-hidden
+      />
     </>
   );
 }

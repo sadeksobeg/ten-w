@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { EventStatus } from "@prisma/client";
+import { EventStatus, ParticipantStatus } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
@@ -8,7 +8,9 @@ import { prisma } from "@/lib/prisma";
 import { renderMarkdownLite } from "@/lib/growth/markdown-lite";
 import { JoinEventModal } from "@/components/growth/JoinEventModal";
 import { EventMilestoneTimeline } from "@/components/growth/events/EventMilestoneTimeline";
+import { EventMemberFeed } from "@/components/growth/events/EventMemberFeed";
 import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
+import { listEventPostsForMember } from "@/lib/growth/event-posts";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -41,6 +43,10 @@ export default async function GrowthEventDetailPage({ params }: Props) {
   });
 
   const rulesHtml = renderMarkdownLite(event.rules);
+  const isMember = myPart?.status === ParticipantStatus.ACCEPTED;
+  const memberPosts = isMember
+    ? await listEventPostsForMember(event.id, session.user.id)
+    : null;
   const canJoin =
     !myPart &&
     (event.status === EventStatus.PUBLISHED || event.status === EventStatus.ACTIVE) &&
@@ -73,13 +79,15 @@ export default async function GrowthEventDetailPage({ params }: Props) {
           </span>
         </div>
 
-        {myPart ? (
+        {isMember ? (
           <div className="mt-6">
-            <div className="text-sm font-semibold text-gold">{t("eventProgress")}: {myPart.progress}%</div>
+            <div className="text-sm font-semibold text-gold">{t("eventProgress")}: {myPart!.progress}%</div>
             <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full bg-gold transition-all" style={{ width: `${myPart.progress}%` }} />
+              <div className="h-full bg-gold transition-all" style={{ width: `${myPart!.progress}%` }} />
             </div>
           </div>
+        ) : myPart ? (
+          <p className="mt-4 text-sm text-white/55">{t("joinedLocked")}</p>
         ) : canJoin ? (
           <div className="mt-6">
             <JoinEventModal eventId={event.id} rulesHtml={rulesHtml} />
@@ -87,23 +95,25 @@ export default async function GrowthEventDetailPage({ params }: Props) {
         ) : null}
       </GlassCard>
 
-      <GlassCard className="p-6">
-        <h2 className="text-lg font-bold">{t("milestones")}</h2>
-        <div className="mt-4">
-          <EventMilestoneTimeline
-            locale={locale}
-            currentProgress={myPart?.progress ?? 0}
-            milestones={event.milestones.map((m) => ({
-              id: m.id,
-              title: m.title,
-              description: m.description,
-              requiredProgress: m.requiredProgress,
-              xpReward: m.xpReward,
-              reached: (myPart?.progress ?? 0) >= m.requiredProgress,
-            }))}
-          />
-        </div>
-      </GlassCard>
+      {isMember ? (
+        <GlassCard className="p-6">
+          <h2 className="text-lg font-bold">{t("milestones")}</h2>
+          <div className="mt-4">
+            <EventMilestoneTimeline
+              locale={locale}
+              currentProgress={myPart!.progress}
+              milestones={event.milestones.map((m) => ({
+                id: m.id,
+                title: m.title,
+                description: m.description,
+                requiredProgress: m.requiredProgress,
+                xpReward: m.xpReward,
+                reached: myPart!.progress >= m.requiredProgress,
+              }))}
+            />
+          </div>
+        </GlassCard>
+      ) : null}
 
       {event.participants.length > 0 ? (
         <GlassCard className="p-6">
@@ -122,12 +132,20 @@ export default async function GrowthEventDetailPage({ params }: Props) {
         </GlassCard>
       ) : null}
 
+      {isMember ? (
+        <EventMemberFeed eventId={event.id} posts={memberPosts ?? []} />
+      ) : null}
+
       <GlassCard className="p-6">
         <h2 className="text-lg font-bold">{t("rulesTitle")}</h2>
-        <div
-          className="mt-4 text-sm text-white/75"
-          dangerouslySetInnerHTML={{ __html: rulesHtml }}
-        />
+        {isMember ? (
+          <div
+            className="mt-4 text-sm text-white/75"
+            dangerouslySetInnerHTML={{ __html: rulesHtml }}
+          />
+        ) : (
+          <p className="mt-3 text-sm text-white/50">{t("joinedLocked")}</p>
+        )}
       </GlassCard>
     </div>
   );

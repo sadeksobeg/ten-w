@@ -23,6 +23,7 @@ export type PublicProfileData = {
   displayTitle: string | null;
   bio: string | null;
   avatarUrl: string | null;
+  avatarPreset: string | null;
   publicSlug: string;
   referralCode: string;
   levelName: string;
@@ -133,6 +134,7 @@ export async function getPublicProfileBySlug(
     displayTitle: user.partnerProfile.displayTitle,
     bio: user.bio,
     avatarUrl: user.avatarUrl ?? user.image,
+    avatarPreset: user.avatarPreset ?? null,
     publicSlug: user.publicSlug,
     referralCode: user.partnerProfile.referralCode,
     levelName: resolveLevelName(user.partnerProfile.currentLevel.name, locale),

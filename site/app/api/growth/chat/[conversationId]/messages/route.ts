@@ -3,6 +3,7 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import { appendMessage, listMessages } from "@/lib/growth/chat-service";
 import { getConversationForUser } from "@/lib/growth/chat-access";
+import { matchChatKeywords } from "@/lib/growth/chat-keywords";
 
 const postSchema = z.object({
   body: z.string().min(1).max(8000),
@@ -94,6 +95,20 @@ export async function POST(req: Request, ctx: RouteContext) {
     kind,
     metadata: role === "ADMIN" && body.metadata ? body.metadata : undefined,
   });
+
+  if (role === "PARTNER") {
+    const match = matchChatKeywords(body.body);
+    if (match) {
+      await appendMessage({
+        conversationId,
+        senderUserId: session.user.id,
+        body: "",
+        kind: "ACTION",
+        metadata: { links: match.links, triggerKey: match.triggerKey },
+      });
+    }
+  }
+
   return NextResponse.json({
     message: {
       id: msg.id,

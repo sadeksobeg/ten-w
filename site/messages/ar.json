@@ -1042,7 +1042,14 @@
       "tabJoined": "فعالياتي",
       "milestones": "المراحل",
       "back": "العودة للفعاليات",
-      "participantsPreview": "المشاركون"
+      "participantsPreview": "المشاركون",
+      "memberHub": "مساحة الأعضاء",
+      "memberOnlyHint": "منشورات وإعادات نشر من المشاركين في هذه الفعالية فقط.",
+      "postPlaceholder": "شارك تقدّمك أو فكرة مع الفريق…",
+      "postSubmit": "نشر",
+      "repost": "إعادة نشر",
+      "feedEmpty": "لا منشورات بعد — كن أول من يشارك.",
+      "joinedLocked": "انضم للفعالية لعرض التفاصيل الكاملة وخلاصة الأعضاء."
     },
     "publicProfile": {
       "pending": "قيد المتابعة",
@@ -1062,14 +1069,20 @@
       "teamSubtitle": "شبكة الإحالة حتى 3 مستويات — شركاء نشطون"
     },
     "network": {
-      "title": "شبكة الإحالة",
-      "empty": "لا إحالات مباشرة بعد.",
+      "title": "شبكتي",
+      "empty": "لا يوجد شركاء تحتك بعد. شارك رمز الإحالة.",
       "directList": "الإحالات المباشرة",
       "tree": {
         "loading": "جاري تحميل الشبكة…",
         "empty": "لا يوجد فريق بعد — شارك كود الإحالة.",
         "stats": "مباشر: {direct} · الإجمالي: {total} · العمق: {depth}"
       }
+    },
+    "networkAnalytics": {
+      "downlines": "الشركاء المباشرون",
+      "yourCloses": "صفقاتك المغلقة",
+      "activityIndex": "مؤشر النشاط",
+      "codeHint": "شارك الرمز {code} لتوسيع شبكتك"
     },
     "profileShare": {
       "title": "بطاقة المشاركة",
@@ -1146,10 +1159,6 @@
         "closed": "مغلقة",
         "lost": "خاسرة"
       }
-    },
-    "network": {
-      "title": "شبكتي",
-      "empty": "لا يوجد شركاء تحتك بعد. شارك رمز الإحالة."
     },
     "earnings": {
       "title": "الأرباح",
@@ -1278,13 +1287,13 @@
       "empty": "لا أحداث حديثة بعد."
     },
     "levels": {
-      "starter": { "name": "مبتدئ", "color": "#8a8490" },
-      "hunter": { "name": "صياد", "color": "#3b6d11" },
-      "closer": { "name": "مُغلق", "color": "#3b82f6" },
-      "pro": { "name": "محترف", "color": "#534ab7" },
-      "elite": { "name": "نخبة", "color": "#e4b84d" },
-      "titan": { "name": "عملاق", "color": "#22d3ee" },
-      "legend": { "name": "أسطورة", "color": "#a855f7" }
+      "starter": { "name": "باحث", "color": "#C9A061" },
+      "hunter": { "name": "صياد", "color": "#B07D2B" },
+      "closer": { "name": "مُنهٍ", "color": "#3b82f6" },
+      "pro": { "name": "طليعة", "color": "#10B981" },
+      "elite": { "name": "فارس", "color": "#F97316" },
+      "titan": { "name": "عملاق", "color": "#8B5CF6" },
+      "legend": { "name": "أسطورة", "color": "#E4B84D" }
     },
     "deal_status": {
       "PENDING": "قيد المراجعة",
@@ -1726,6 +1735,13 @@
         "referralOptional": "كود إحالة (اختياري)",
         "createSubmit": "إنشاء الحساب",
         "created": "تم إنشاء الشريك بنجاح",
+        "createdWithPassword": "تم الإنشاء. كلمة المرور (احفظها الآن — لا تُعرض لاحقاً):",
+        "credentialsTitle": "البريد وكلمة المرور",
+        "credentialsHint": "لا يمكن استرجاع كلمة المرور المخزّنة. عيّن كلمة مرور جديدة إن لزم.",
+        "newPassword": "كلمة مرور جديدة (اختياري)",
+        "newPasswordPlaceholder": "اتركه فارغاً للإبقاء على الحالية",
+        "updateCredentials": "حفظ البريد / كلمة المرور",
+        "credentialsSaved": "تم تحديث بيانات الدخول",
         "empty": "لا يوجد شركاء",
         "active": "نشط",
         "inactive": "معطّل",
@@ -1990,6 +2006,8 @@
       "registerTitle": "إنشاء حساب شريك",
       "email": "البريد",
       "password": "كلمة المرور",
+      "showPassword": "إظهار",
+      "hidePassword": "إخفاء",
       "name": "الاسم",
       "referral": "رمز إحالة (اختياري)",
       "submit": "متابعة",
