@@ -3,7 +3,10 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { GROWTH_MOBILE_NAV_ICONS } from "@/components/growth/icons/GrowthNavIcons";
+import {
+  GROWTH_DESKTOP_NAV_ICONS,
+  GROWTH_MOBILE_NAV_ICONS,
+} from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   children: ReactNode;
@@ -62,10 +65,10 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
     };
   }, [refreshUnread]);
 
-  const linkClass = (active: boolean) =>
-    `whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold transition ${
+  const desktopLinkClass = (active: boolean) =>
+    `relative inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold transition focus-visible:ring-2 focus-visible:ring-gold/40 ${
       active
-        ? "bg-gold/20 text-gold ring-1 ring-gold/40"
+        ? "bg-gold/15 text-gold before:absolute before:inset-y-1 before:start-0 before:w-[3px] before:rounded-full before:bg-gold"
         : "text-white/60 hover:bg-white/[0.06] hover:text-white"
     }`;
 
@@ -79,24 +82,25 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
         className="mb-4 hidden gap-2 overflow-x-auto border-b border-white/10 pb-3 lg:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label={t("navAria")}
       >
-        {NAV.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`relative ${linkClass(isActive(pathname, item.href, "exact" in item ? item.exact : false))}`}
-          >
-            {t(item.key)}
-            {item.key === "chat" && chatUnread > 0 ? (
-              <span className="absolute -top-1 end-0 flex min-w-[1rem] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-black text-white">
-                {chatUnread > 99 ? "99+" : chatUnread}
-              </span>
-            ) : null}
-          </Link>
-        ))}
+        {NAV.map((item) => {
+          const Icon = GROWTH_DESKTOP_NAV_ICONS[item.key];
+          const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
+          return (
+            <Link key={item.href} href={item.href} className={desktopLinkClass(active)}>
+              {Icon ? <Icon size={18} className="shrink-0" /> : null}
+              {t(item.key)}
+              {item.key === "chat" && chatUnread > 0 ? (
+                <span className="ms-1 flex min-w-[1rem] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-black text-white">
+                  {chatUnread > 99 ? "99+" : chatUnread}
+                </span>
+              ) : null}
+            </Link>
+          );
+        })}
       </nav>
       {children}
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-6 border-t border-white/10 bg-[#0A0A0F]/95 px-1 py-2 backdrop-blur-md lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-6 border-t border-white/10 bg-[#0A0A0F]/90 px-1 py-2 backdrop-blur-md lg:hidden"
         aria-label={t("mobileNavAria")}
       >
         {mobileNav.map((item) => {
@@ -106,11 +110,14 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
             <Link
               key={item.href}
               href={item.href}
-              className={`relative flex min-w-0 flex-col items-center gap-0.5 px-1 py-1 text-center text-[10px] font-semibold ${
+              className={`relative flex min-w-0 flex-col items-center gap-0.5 px-1 py-1 text-center text-[10px] font-semibold focus-visible:ring-2 focus-visible:ring-gold/40 ${
                 active ? "text-gold" : "text-white/55"
               }`}
             >
-              <Icon className="size-6" />
+              {active ? (
+                <span className="absolute -top-0.5 size-1.5 rounded-full bg-gold motion-safe:animate-pulse motion-reduce:animate-none" aria-hidden />
+              ) : null}
+              <Icon size={22} />
               <span className="truncate">{t(item.key)}</span>
               {item.key === "chat" && chatUnread > 0 ? (
                 <span className="absolute end-1/4 top-0 flex size-4 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white">

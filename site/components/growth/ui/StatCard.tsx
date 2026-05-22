@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { AnimatedNumber } from "@/components/growth/ui/AnimatedNumber";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { IconTrending } from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   label: string;
@@ -28,7 +29,10 @@ export function StatCard({
   const numeric = typeof value === "number";
 
   return (
-    <GlassCard className="bg-[linear-gradient(135deg,#1A1A24,#111118)] p-5">
+    <GlassCard
+      variant="elevated"
+      className="bg-[linear-gradient(135deg,#1A1A24,#111118)] p-5 transition-transform hover:-translate-y-0.5"
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--growth-text-sub)]">
@@ -49,13 +53,18 @@ export function StatCard({
             <p
               className={`mt-1 text-xs font-semibold ${trend.delta >= 0 ? "text-emerald-400" : "text-rose-400"}`}
             >
-              {trend.delta >= 0 ? "↑" : "↓"} {Math.abs(trend.delta)}
+              <IconTrending
+                size={12}
+                className={`inline ${trend.delta < 0 ? "rotate-180" : ""}`}
+                aria-hidden
+              />{" "}
+              {Math.abs(trend.delta)}
               {trend.label ? ` ${trend.label}` : ""}
             </p>
           ) : null}
         </div>
         {icon ? (
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--growth-border)] bg-white/[0.04] text-lg">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-[var(--growth-border)] bg-white/[0.04]">
             {icon}
           </div>
         ) : null}

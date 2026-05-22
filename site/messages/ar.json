@@ -1045,6 +1045,10 @@
       "participantsPreview": "المشاركون"
     },
     "publicProfile": {
+      "pending": "قيد المتابعة",
+      "streak": "سلسلة النشاط",
+      "views": "مشاهدات",
+      "memberDays": "أيام العضوية",
       "closedDeals": "صفقات مُغلقة",
       "badges": "شارات",
       "badgesTitle": "الشارات",
@@ -1214,6 +1218,9 @@
       "resetsIn": "تُعاد خلال {h}س {m}د"
     },
     "dashboard": {
+      "heroWelcome": "مرحباً،",
+      "heroNext": "المستوى التالي:",
+      "heroMaxLevel": "أعلى مستوى",
       "expand": "عرض",
       "collapse": "إخفاء",
       "heatmap": {
@@ -1270,12 +1277,56 @@
       "title": "زخم مباشر",
       "empty": "لا أحداث حديثة بعد."
     },
+    "levels": {
+      "starter": { "name": "مبتدئ", "color": "#8a8490" },
+      "hunter": { "name": "صياد", "color": "#3b6d11" },
+      "closer": { "name": "مُغلق", "color": "#3b82f6" },
+      "pro": { "name": "محترف", "color": "#534ab7" },
+      "elite": { "name": "نخبة", "color": "#e4b84d" },
+      "titan": { "name": "عملاق", "color": "#22d3ee" },
+      "legend": { "name": "أسطورة", "color": "#a855f7" }
+    },
+    "deal_status": {
+      "PENDING": "قيد المراجعة",
+      "APPROVED": "موافق عليها",
+      "CLOSED": "مغلقة",
+      "REJECTED": "مرفوضة",
+      "CANCELLED": "ملغاة"
+    },
+    "payout_status": {
+      "PENDING": "قيد المعالجة",
+      "APPROVED": "موافق عليها",
+      "PAID": "مدفوعة",
+      "REJECTED": "مرفوضة"
+    },
+    "participant_status": {
+      "INVITED": "مدعو",
+      "JOINED": "منضم",
+      "COMPLETED": "مكتمل",
+      "DROPPED": "منسحب"
+    },
+    "event_status": {
+      "DRAFT": "مسودة",
+      "PUBLISHED": "منشورة",
+      "ACTIVE": "نشطة",
+      "COMPLETED": "مكتملة",
+      "CANCELLED": "ملغاة"
+    },
+    "empty": {
+      "deals": { "title": "لا صفقات بعد", "subtitle": "أضف أول عميل محتمل لبدء خط الأنابيب." },
+      "events": { "title": "لا فعاليات", "subtitle": "تابعنا لفعاليات الشركاء القادمة." },
+      "earningsChart": { "title": "لا بيانات أرباح", "subtitle": "أغلق صفقات لرؤية الاتجاه الشهري." },
+      "notifications": { "title": "لا إشعارات جديدة", "subtitle": "لا توجد إشعارات في هذا التصفية." }
+    },
     "badges": {
       "title": "الشارات",
       "empty": "لا شارات بعد — أغلق صفقات ووسّع شبكتك.",
       "hiddenTag": "مخفية",
       "lockedLabel": "مقفل",
       "locked": "مقفل",
+      "mystery": "???",
+      "badge_count": "{earned} / {total} مكتسبة",
+      "rarity": "الندرة",
       "rarityCommon": "عادي",
       "rarityRare": "نادر",
       "rarityEpic": "ملحمي",

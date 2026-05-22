@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
+import { IconBadge, IconEvent, IconNetwork, IconXp } from "@/components/growth/icons/GrowthIcons";
 
 export type EventCardData = {
   slug: string;
@@ -27,6 +28,12 @@ type Props = {
   viewLabel: string;
 };
 
+function coverGradient(slug: string): string {
+  let h = 0;
+  for (let i = 0; i < slug.length; i += 1) h = (h * 31 + slug.charCodeAt(i)) % 360;
+  return `linear-gradient(135deg, hsl(${h} 40% 18%), hsl(${(h + 60) % 360} 50% 28%))`;
+}
+
 export function EventCard({ event, joinLabel, progressLabel, viewLabel }: Props) {
   const href = `/${event.locale}/growth/events/${event.slug}`;
   const desc =
@@ -41,8 +48,11 @@ export function EventCard({ event, joinLabel, progressLabel, viewLabel }: Props)
           // eslint-disable-next-line @next/next/no-img-element
           <img src={event.coverImage} alt="" className="size-full object-cover" />
         ) : (
-          <div className="flex size-full items-center justify-center bg-gradient-to-br from-[#1A1A24] to-[#534AB7]/30 text-4xl opacity-40">
-            🎯
+          <div
+            className="flex size-full items-center justify-center text-gold/50"
+            style={{ background: coverGradient(event.slug) }}
+          >
+            <IconEvent size={48} />
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -64,10 +74,19 @@ export function EventCard({ event, joinLabel, progressLabel, viewLabel }: Props)
       <div className="p-5">
         <h3 className="text-lg font-bold">{event.title}</h3>
         <p className="mt-2 line-clamp-2 text-sm text-[var(--growth-text-sub)]">{desc}</p>
-        <div className="mt-3 flex flex-wrap gap-3 text-xs text-[var(--growth-text-sub)]">
-          <span>👥 {event.participantCount}</span>
-          <span>🏆 {event.milestoneCount}</span>
-          <span>⚡ {event.totalXp} XP</span>
+        <div className="mt-3 flex flex-wrap gap-4 text-xs text-[var(--growth-text-sub)]">
+          <span className="inline-flex items-center gap-1">
+            <IconNetwork size={14} className="text-gold/80" />
+            {event.participantCount}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <IconBadge size={14} className="text-gold/80" />
+            {event.milestoneCount}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <IconXp size={14} className="text-gold/80" />
+            {event.totalXp} XP
+          </span>
         </div>
         {event.joined && typeof event.progress === "number" ? (
           <div className="mt-4">

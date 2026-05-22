@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Link, usePathname } from "@/i18n/navigation";
 import type { PartnerChatSummary } from "@/lib/growth/chat-service";
 import { GrowthChatThread } from "@/components/growth/chat/GrowthChatThread";
+import { IconChat, IconClose, IconNotifications } from "@/components/growth/icons/GrowthIcons";
 
 const STORAGE_KEY = "growthChatOpen";
 
@@ -156,7 +157,7 @@ export function PartnerChatBubble({ locale, viewerUserId }: Props) {
               aria-label={t("toggleSound")}
               title={t("toggleSound")}
             >
-              🔔
+              <IconNotifications size={14} aria-hidden />
             </button>
             <Link
               href="/growth/chat"
@@ -170,7 +171,7 @@ export function PartnerChatBubble({ locale, viewerUserId }: Props) {
               aria-label={t("close")}
               onClick={() => setOpen(false)}
             >
-              ×
+              <IconClose size={16} aria-hidden />
             </button>
           </header>
           <div className="min-h-0 flex-1" style={{ height: "min(56vh, 480px)" }}>
@@ -200,7 +201,7 @@ export function PartnerChatBubble({ locale, viewerUserId }: Props) {
         aria-label={t("open")}
         className={`growth-chat-bubble-fab pointer-events-auto fixed bottom-[5.5rem] ${sideClass} flex size-14 items-center justify-center rounded-full bg-gradient-to-br from-gold/60 to-gold/25 text-2xl shadow-[var(--growth-chat-bubble-shadow)] ring-2 ring-gold/40 transition hover:scale-105 active:scale-95 lg:bottom-6`}
       >
-        <span aria-hidden>💬</span>
+        <IconChat size={26} aria-hidden />
         {unread > 0 ? (
           <span className="absolute -top-0.5 end-0 flex min-w-[1.25rem] items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-black text-white ring-2 ring-[#0a0a0f]">
             {unread > 99 ? "99+" : unread}

@@ -43,6 +43,7 @@ export async function GrowthHubView({
         email={userEmail}
         avatarUrl={avatarUrl}
         levelName={data.profile.levelName}
+        levelCode={data.profile.levelCode}
         levelOrder={data.profile.levelOrder}
         totalXp={data.profile.totalXp}
         currentLevelMinXp={data.currentLevelMinXp}
@@ -50,64 +51,68 @@ export async function GrowthHubView({
         nextLevelMinXp={data.nextLevel?.minXp ?? null}
       />
 
-      <LevelPerksCard current={data.currentLevelDetail} next={data.nextLevelDetail} />
+      <div className="-mx-1 overflow-x-auto px-1 pb-1 md:overflow-visible">
+        <DashboardStatsGrid data={data} />
+      </div>
 
-      <GrowthMotivationBar
-        primary={data.compete.motivationPrimary}
-        secondary={data.compete.motivationSecondary}
-      />
+      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="space-y-6">
+          <PartnerOnboardingChecklist locale={locale} data={data} userId={userId} />
+          <DashboardMissions missions={data.missions} />
+          {data.insights.length > 0 ? <PartnerInsightCarousel slides={data.insights} /> : null}
+          <GrowthCollapsibleSection title={t("activity.title")} defaultOpen={false}>
+            <ActivityHeatmap days={data.activityDays} memberDays={data.memberDays} />
+          </GrowthCollapsibleSection>
+        </div>
 
-      {data.insights.length > 0 ? <PartnerInsightCarousel slides={data.insights} /> : null}
-
-      <PartnerOnboardingChecklist locale={locale} data={data} userId={userId} />
-
-      <DashboardStatsGrid data={data} />
+        <div className="space-y-6">
+          <LevelPerksCard current={data.currentLevelDetail} next={data.nextLevelDetail} />
+          <GrowthMotivationBar
+            primary={data.compete.motivationPrimary}
+            secondary={data.compete.motivationSecondary}
+          />
+          <GrowthCollapsibleSection title={t("badges.title")} defaultOpen>
+            {await DashboardBadgesSection({ locale, badges: data.badges, userId, compact: true })}
+          </GrowthCollapsibleSection>
+          <GrowthCollapsibleSection title={t("leaderboard.title")}>
+            <DashboardLeaderboardPreview
+              weekly={data.leaderboard}
+              monthly={data.monthlyLeaderboard}
+              season={data.leaderboardSeason}
+              currentUserId={userId}
+            />
+          </GrowthCollapsibleSection>
+        </div>
+      </div>
 
       <HubSupportCard />
 
       <div className="flex flex-wrap gap-2">
         <Link
           href="/growth/deals"
-          className="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-semibold text-gold hover:bg-gold/20"
+          className="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-semibold text-gold transition hover:bg-gold/20 focus-visible:ring-2 focus-visible:ring-gold/40"
         >
           {t("hub.quickDeals")}
         </Link>
         <Link
           href="/growth/earnings"
-          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 hover:border-gold/30"
+          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-gold/30 focus-visible:ring-2 focus-visible:ring-gold/40"
         >
           {t("hub.quickEarnings")}
         </Link>
         <Link
           href="/growth/network"
-          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 hover:border-gold/30"
+          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-gold/30 focus-visible:ring-2 focus-visible:ring-gold/40"
         >
           {t("hub.quickNetwork")}
         </Link>
         <Link
           href="/growth/kit"
-          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 hover:border-gold/30"
+          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-gold/30 focus-visible:ring-2 focus-visible:ring-gold/40"
         >
           {t("hub.quickKit")}
         </Link>
       </div>
-
-      <DashboardMissions missions={data.missions} />
-
-      <GrowthCollapsibleSection title={t("badges.title")} defaultOpen>
-        {await DashboardBadgesSection({ locale, badges: data.badges, userId, compact: true })}
-      </GrowthCollapsibleSection>
-
-      <ActivityHeatmap days={data.activityDays} memberDays={data.memberDays} />
-
-      <GrowthCollapsibleSection title={t("leaderboard.title")}>
-        <DashboardLeaderboardPreview
-          weekly={data.leaderboard}
-          monthly={data.monthlyLeaderboard}
-          season={data.leaderboardSeason}
-          currentUserId={userId}
-        />
-      </GrowthCollapsibleSection>
 
       <div className="flex flex-wrap gap-3 text-xs text-white/70">
         <span className="rounded-full border border-purple-400/20 bg-purple-500/10 px-4 py-2 font-semibold text-purple-100">

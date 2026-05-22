@@ -3,7 +3,7 @@ import { GoldButton } from "@/components/growth/ui/GoldButton";
 
 export type EmptyIllustration = "rocket" | "trophy" | "calendar" | "chat" | "refresh";
 
-type Props = {
+type LegacyProps = {
   illustration: EmptyIllustration;
   message: string;
   actionLabel?: string;
@@ -11,6 +11,20 @@ type Props = {
   actionHref?: string;
   children?: ReactNode;
 };
+
+type ModernProps = {
+  icon: ReactNode;
+  title: string;
+  subtitle?: string;
+  action?: ReactNode;
+  children?: ReactNode;
+};
+
+type Props = LegacyProps | ModernProps;
+
+function isModern(p: Props): p is ModernProps {
+  return "icon" in p && "title" in p;
+}
 
 function Illustration({ kind }: { kind: EmptyIllustration }) {
   const stroke = "var(--growth-gold)";
@@ -73,14 +87,25 @@ function Illustration({ kind }: { kind: EmptyIllustration }) {
   }
 }
 
-export function EmptyState({
-  illustration,
-  message,
-  actionLabel,
-  onAction,
-  actionHref,
-  children,
-}: Props) {
+export function EmptyState(props: Props) {
+  if (isModern(props)) {
+    const { icon, title, subtitle, action, children } = props;
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <div className="flex size-16 items-center justify-center rounded-2xl border border-gold/20 bg-gold/5 text-gold">
+          {icon}
+        </div>
+        <p className="mt-4 text-base font-semibold text-[var(--growth-text)]">{title}</p>
+        {subtitle ? (
+          <p className="mt-1 max-w-sm text-sm text-[var(--growth-text-sub)]">{subtitle}</p>
+        ) : null}
+        {children}
+        {action ? <div className="mt-4">{action}</div> : null}
+      </div>
+    );
+  }
+
+  const { illustration, message, actionLabel, onAction, actionHref, children } = props;
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <Illustration kind={illustration} />

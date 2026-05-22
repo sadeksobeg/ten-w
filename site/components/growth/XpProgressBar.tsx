@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getXpBrandLabel, XP_BRAND } from "@/lib/growth/xp-brand";
+import { IconLevel } from "@/components/growth/icons/GrowthIcons";
 
 type LevelInfo = {
   name: string;
@@ -68,7 +69,10 @@ export function XpProgressBar({
       {showDetails ? (
         <div className="mt-2 text-xs text-white/50">
           {isMax ? (
-            <span>🏆 {locale === "ar" ? "المستوى الأعلى" : locale === "fr" ? "Niveau max" : "Max level"}</span>
+            <span className="inline-flex items-center gap-1">
+              <IconLevel size={14} className="text-gold" aria-hidden />
+              {locale === "ar" ? "المستوى الأعلى" : locale === "fr" ? "Niveau max" : "Max level"}
+            </span>
           ) : (
             <span>
               {locale === "ar" ? "الهدف التالي" : locale === "fr" ? "Prochain" : "Next"}: {nextLevel.minXp.toLocaleString()}{" "}

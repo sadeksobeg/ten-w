@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { AvatarSettingsForm } from "@/components/growth/settings/AvatarSettingsForm";
 import { PartnerProfileSettingsForm } from "@/components/growth/settings/PartnerProfileSettingsForm";
+import { PartnerSettingsLayout } from "@/components/growth/settings/PartnerSettingsLayout";
 import { ProfileShareExport } from "@/components/growth/ProfileShareExport";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
 import { SectionHeader } from "@/components/growth/ui/SectionHeader";
@@ -25,7 +26,11 @@ export default async function GrowthSettingsPage({ params }: Props) {
       publicSlug: true,
       bio: true,
       partnerProfile: {
-        select: { displayTitle: true, socialLinks: true },
+        select: {
+          displayTitle: true,
+          socialLinks: true,
+          currentLevel: { select: { name: true, code: true } },
+        },
       },
     },
   });
@@ -35,28 +40,41 @@ export default async function GrowthSettingsPage({ params }: Props) {
   const t = await getTranslations("Growth.settings");
 
   return (
-    <div className="mx-auto max-w-lg space-y-6 growth-page-enter">
+    <div className="mx-auto max-w-5xl space-y-6 growth-page-enter">
       <GrowthPageHeader title={t("title")} subtitle={t("subtitle")} />
-      <ProfileShareExport publicSlug={user.publicSlug!} locale={locale} />
-      <PartnerProfileSettingsForm
+      <PartnerSettingsLayout
+        name={user.name ?? session.user.name ?? ""}
+        email={user.email ?? session.user.email ?? ""}
+        avatarUrl={user.avatarUrl ?? ""}
+        levelName={user.partnerProfile?.currentLevel?.name ?? "Starter"}
+        levelCode={user.partnerProfile?.currentLevel?.code}
         locale={locale}
-        displayTitle={user.partnerProfile?.displayTitle ?? ""}
-        bio={user.bio ?? ""}
-        social={
-          (user.partnerProfile?.socialLinks as {
-            whatsapp?: string;
-            linkedin?: string;
-            twitter?: string;
-          } | null) ?? {}
-        }
-      />
-      <SectionHeader title={t("avatarSection")} />
-      <AvatarSettingsForm
-        locale={locale}
-        initialAvatar={user?.avatarUrl ?? ""}
-        name={user?.name ?? session.user.name ?? ""}
-        email={user?.email ?? session.user.email ?? ""}
-      />
+        previewFields={{
+          displayTitle: user.partnerProfile?.displayTitle ?? "",
+          bio: user.bio ?? "",
+        }}
+      >
+        <ProfileShareExport publicSlug={user.publicSlug!} locale={locale} />
+        <PartnerProfileSettingsForm
+          locale={locale}
+          displayTitle={user.partnerProfile?.displayTitle ?? ""}
+          bio={user.bio ?? ""}
+          social={
+            (user.partnerProfile?.socialLinks as {
+              whatsapp?: string;
+              linkedin?: string;
+              twitter?: string;
+            } | null) ?? {}
+          }
+        />
+        <SectionHeader title={t("avatarSection")} />
+        <AvatarSettingsForm
+          locale={locale}
+          initialAvatar={user?.avatarUrl ?? ""}
+          name={user?.name ?? session.user.name ?? ""}
+          email={user?.email ?? session.user.email ?? ""}
+        />
+      </PartnerSettingsLayout>
     </div>
   );
 }

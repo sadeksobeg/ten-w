@@ -2,6 +2,7 @@
 
 import { useToastStore } from "@/lib/growth/toast-store";
 import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
+import { IconAlert, IconCheck, IconClose, IconInfo } from "@/components/growth/icons/GrowthIcons";
 
 export function ToastHost() {
   const toasts = useToastStore((s) => s.toasts);
@@ -29,8 +30,14 @@ export function ToastHost() {
           {t.badgeKey ? (
             <BadgeIcon badgeKey={t.badgeKey} earned size="sm" showGlow />
           ) : (
-            <span className="text-lg" aria-hidden>
-              {t.type === "success" ? "✓" : t.type === "error" ? "✕" : "ℹ"}
+            <span className="text-gold" aria-hidden>
+              {t.type === "success" ? (
+                <IconCheck size={20} />
+              ) : t.type === "error" ? (
+                <IconAlert size={20} />
+              ) : (
+                <IconInfo size={20} />
+              )}
             </span>
           )}
           <div className="min-w-0 flex-1">
@@ -45,7 +52,7 @@ export function ToastHost() {
             className="shrink-0 text-xs text-white/40 hover:text-white"
             aria-label="Dismiss"
           >
-            ×
+            <IconClose size={14} />
           </button>
         </div>
       ))}

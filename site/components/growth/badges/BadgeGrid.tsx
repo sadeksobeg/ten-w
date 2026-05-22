@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { BadgeTooltip } from "@/components/growth/badges/BadgeTooltip";
 import { BadgeDetailDrawer } from "@/components/growth/badges/BadgeDetailDrawer";
+import { getBadgeVisual, RARITY_LABEL_KEYS } from "@/lib/growth/badge-visual";
 import type { BadgeProgress } from "@/lib/growth/badge-progress";
 
 export type BadgeGridItem = {
@@ -37,8 +38,13 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
 
   if (sorted.length === 0) return null;
 
+  const earnedCount = sorted.filter((b) => b.earned).length;
+
   return (
     <>
+      <p className="mb-3 text-xs font-semibold text-[var(--growth-text-sub)]">
+        {t("badge_count", { earned: earnedCount, total: sorted.length })}
+      </p>
       <ul className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {sorted.map((b) => (
           <li key={b.key} className="flex flex-col items-center gap-2">
@@ -61,8 +67,13 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
               </button>
             </BadgeTooltip>
             <span className="max-w-full truncate text-center text-[10px] font-semibold text-[var(--growth-text)]">
-              {b.name}
+              {b.earned ? b.name : t("mystery")}
             </span>
+            {b.earned ? (
+              <span className="rounded-full border border-gold/25 bg-gold/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-gold">
+                {t(RARITY_LABEL_KEYS[getBadgeVisual(b.key).rarity] as "rarityCommon")}
+              </span>
+            ) : null}
             {!b.earned && b.progress ? (
               <span className="text-[9px] text-white/45">
                 {b.progress.current}/{b.progress.target}

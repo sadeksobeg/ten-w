@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
 import { completeOnboardingStepFormAction } from "@/lib/growth/actions";
+import { IconCheck } from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   locale: string;
@@ -37,8 +38,12 @@ export function PartnerOnboardingChecklist({ data }: Props) {
       <ul className="mt-4 space-y-2">
         {steps.map((s) => (
           <li key={s.key} className="flex items-center justify-between gap-2 text-sm">
-            <span className={s.done ? "text-emerald-400" : "text-white/80"}>
-              {s.done ? "✓ " : "○ "}
+            <span className={`inline-flex items-center gap-2 ${s.done ? "text-emerald-400" : "text-white/80"}`}>
+              {s.done ? (
+                <IconCheck size={14} className="shrink-0" aria-hidden />
+              ) : (
+                <span className="size-3.5 shrink-0 rounded-full border border-white/30" aria-hidden />
+              )}
               {t(`steps.${s.key}`)}
             </span>
             {!s.done && s.href ? (

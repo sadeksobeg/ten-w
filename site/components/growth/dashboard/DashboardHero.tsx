@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
@@ -12,6 +13,7 @@ type Props = {
   email: string;
   avatarUrl?: string | null;
   levelName: string;
+  levelCode?: string;
   levelOrder: number;
   totalXp: number;
   currentLevelMinXp: number;
@@ -25,11 +27,13 @@ export function DashboardHero({
   email,
   avatarUrl,
   levelName,
+  levelCode,
   totalXp,
   currentLevelMinXp,
   nextLevelName,
   nextLevelMinXp,
 }: Props) {
+  const t = useTranslations("Growth.dashboard");
   const lv = getLevelVisual(levelName);
   const hasNext = nextLevelMinXp !== null && nextLevelMinXp > currentLevelMinXp;
   const target = hasNext ? nextLevelMinXp! : currentLevelMinXp + 1;
@@ -40,10 +44,20 @@ export function DashboardHero({
   const powerLabel = getXpBrandLabel(locale);
   const circumference = 2 * Math.PI * 34;
   const offset = circumference - (pct / 100) * circumference;
+  const ringColor = levelCode
+    ? `var(--growth-level-ring, ${lv.ringColor})`
+    : lv.ringColor;
 
   return (
-    <GlassCard variant="highlight" className="p-6 sm:p-8">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+    <GlassCard variant="highlight" className="relative overflow-hidden p-6 sm:p-8">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40 motion-safe:animate-[pulse_8s_ease-in-out_infinite] motion-reduce:opacity-30 motion-reduce:animate-none"
+        aria-hidden
+        style={{
+          background: `radial-gradient(ellipse 80% 60% at 20% 0%, ${lv.ringColor}33, transparent 55%), radial-gradient(ellipse 70% 50% at 90% 100%, ${lv.ringColor}22, transparent 50%)`,
+        }}
+      />
+      <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
         <div className="relative mx-auto shrink-0 sm:mx-0">
           <svg width="88" height="88" className="-rotate-90" aria-hidden>
             <circle cx="44" cy="44" r="34" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="4" />
@@ -52,7 +66,7 @@ export function DashboardHero({
               cy="44"
               r="34"
               fill="none"
-              stroke={lv.ringColor}
+              stroke={ringColor}
               strokeWidth="4"
               strokeDasharray={circumference}
               strokeDashoffset={offset}
@@ -65,15 +79,13 @@ export function DashboardHero({
           </div>
         </div>
         <div className="min-w-0 flex-1 text-center sm:text-start">
-          <p className="text-sm text-[var(--growth-text-sub)]">
-            {locale === "ar" ? "مرحباً،" : locale === "fr" ? "Bonjour," : "Welcome,"}
-          </p>
+          <p className="text-sm text-[var(--growth-text-sub)]">{t("heroWelcome")}</p>
           <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold">{name}</h1>
           <div className="mt-2 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-            <LevelBadge levelName={levelName} size="md" />
+            <LevelBadge levelName={levelName} levelCode={levelCode} locale={locale} size="md" />
             {nextLevelName ? (
               <span className="text-xs text-[var(--growth-text-sub)]">
-                · {locale === "ar" ? "المستوى التالي:" : "Next:"} {nextLevelName}
+                · {t("heroNext")} {nextLevelName}
               </span>
             ) : null}
           </div>
@@ -82,11 +94,7 @@ export function DashboardHero({
               <span>
                 {hasNext
                   ? `${powerLabel} — ${pct}%`
-                  : locale === "ar"
-                    ? `${powerLabel} — أعلى مستوى`
-                    : locale === "fr"
-                      ? `${powerLabel} — niveau max`
-                      : `${powerLabel} — max level`}
+                  : `${powerLabel} — ${t("heroMaxLevel")}`}
               </span>
               <span>
                 {hasNext

@@ -10,6 +10,7 @@ import type {
 import type { ChatSuggestionItem } from "@/lib/growth/chat-suggestions";
 import { suggestImpactDelta } from "@/lib/growth/chat-suggestions";
 import { GrowthChatMessageBubble } from "@/components/growth/chat/GrowthChatMessageBubble";
+import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
 import { GrowthChatQuickActionsBar } from "@/components/growth/chat/GrowthChatQuickActionsBar";
 import { playDemoChime } from "@/lib/demo/demo-sound";
 
@@ -759,9 +760,11 @@ export function GrowthChatThread({
               aria-label={t("send")}
               className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#B07D2B] to-[#E4B84D] text-lg font-bold text-black shadow-[0_0_20px_rgba(234,179,8,0.25)] transition hover:scale-105 active:scale-95 disabled:opacity-40"
             >
-              <span className={locale === "ar" ? "inline-block scale-x-[-1]" : ""} aria-hidden>
-                ➤
-              </span>
+              <IconChevronRight
+                size={20}
+                className={locale === "ar" ? "scale-x-[-1]" : ""}
+                aria-hidden
+              />
             </button>
           </div>
           <div className="mt-1 flex justify-between gap-2 text-[10px] text-white/35">

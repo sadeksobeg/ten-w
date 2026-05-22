@@ -3,6 +3,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import {
+  IconAlert,
+  IconBadge,
+  IconCheck,
+  IconDeals,
+  IconEarnings,
+  IconEvent,
+  IconLevel,
+  IconNotifications,
+  IconXp,
+} from "@/components/growth/icons/GrowthIcons";
 
 type NotificationRow = {
   id: string;
@@ -14,24 +25,24 @@ type NotificationRow = {
   createdAt: string;
 };
 
-function iconForType(type: string): string {
+function NotificationTypeIcon({ type, size = 16 }: { type: string; size?: number }) {
   switch (type) {
     case "EVENT_INVITE":
     case "EVENT_REMINDER":
     case "EVENT_MILESTONE":
-      return "🎯";
+      return <IconEvent size={size} />;
     case "BADGE_EARNED":
-      return "🏆";
+      return <IconBadge size={size} />;
     case "LEVEL_UP":
-      return "⬆";
+      return <IconLevel size={size} />;
     case "XP_BOOST":
-      return "⚡";
+      return <IconXp size={size} />;
     case "PAYOUT_UPDATE":
-      return "💰";
+      return <IconEarnings size={size} />;
     case "DEAL_CLOSED":
-      return "✓";
+      return <IconDeals size={size} />;
     default:
-      return "🔔";
+      return <IconAlert size={size} />;
   }
 }
 
@@ -132,11 +143,11 @@ export function NotificationBell({ locale }: Props) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-sm hover:border-gold/30"
+        className="relative rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-gold hover:border-gold/30 focus-visible:ring-2 focus-visible:ring-gold/40"
         aria-label={t("title")}
       >
-        <span className={unread > 0 ? "growth-bell-ring inline-block" : ""} aria-hidden>
-          🔔
+        <span className={unread > 0 ? "growth-bell-ring inline-flex" : "inline-flex"} aria-hidden>
+          <IconNotifications size={18} />
         </span>
         {unread > 0 ? (
           <span className="absolute -end-1 -top-1 flex size-5 items-center justify-center rounded-full bg-gold text-[10px] font-bold text-bg">
@@ -147,48 +158,52 @@ export function NotificationBell({ locale }: Props) {
 
       {open ? (
         <div
-          className="absolute end-0 top-full z-[80] mt-2 w-[min(100vw-2rem,360px)] overflow-hidden rounded-2xl border border-white/12 bg-[#0a1020] shadow-2xl"
+          className="absolute end-0 top-full z-[80] mt-2 w-[min(100vw-2rem,320px)] overflow-hidden rounded-2xl border border-white/12 bg-[#0a1020] shadow-2xl"
           dir={locale === "ar" ? "rtl" : "ltr"}
         >
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-            <span className="text-sm font-bold">{t("title")}</span>
+            <span className="inline-flex items-center gap-2 text-sm font-bold">
+              <IconNotifications size={16} className="text-gold" />
+              {t("title")}
+            </span>
             <button
               type="button"
               onClick={() => void markAll()}
-              className="text-[11px] font-semibold text-gold hover:text-gold-bright"
+              className="text-[11px] font-semibold text-gold hover:text-gold-bright focus-visible:ring-2 focus-visible:ring-gold/40"
             >
               {t("markAllRead")}
             </button>
           </div>
-          <div className="max-h-[400px] overflow-y-auto">
+          <ul className="max-h-80 overflow-y-auto">
             {items.length === 0 ? (
-              <p className="px-4 py-8 text-center text-sm text-white/50">{t("empty")}</p>
+              <li className="flex flex-col items-center gap-2 px-4 py-8 text-center text-sm text-white/50">
+                <IconNotifications size={32} className="text-gold/40" />
+                {t("empty")}
+              </li>
             ) : (
-              items.map((n) => (
-                <button
-                  key={n.id}
-                  type="button"
-                  onClick={() => void onClickItem(n)}
-                  className={
-                    n.isRead
-                      ? "flex w-full gap-3 border-b border-white/5 px-4 py-3 text-start hover:bg-white/[0.03]"
-                      : "flex w-full gap-3 border-b border-white/5 bg-gold/5 px-4 py-3 text-start hover:bg-gold/10"
-                  }
-                >
-                  <span className="text-lg" aria-hidden>
-                    {iconForType(n.type)}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-xs font-semibold text-white">{n.title}</span>
-                    <span className="mt-0.5 block truncate text-[11px] text-white/55">{n.body}</span>
-                    <span className="mt-1 block text-[10px] text-white/40">
-                      {timeAgo(n.createdAt, locale)}
+              items.slice(0, 12).map((n) => (
+                <li key={n.id}>
+                  <button
+                    type="button"
+                    onClick={() => void onClickItem(n)}
+                    className={`flex w-full gap-3 border-b border-white/5 px-3 py-2.5 text-start transition hover:bg-white/[0.04] focus-visible:ring-2 focus-visible:ring-gold/40 ${!n.isRead ? "border-s-[3px] border-s-gold bg-gold/[0.04]" : ""}`}
+                  >
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-gold">
+                      <NotificationTypeIcon type={n.type} />
                     </span>
-                  </span>
-                </button>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-xs font-bold">{n.title}</span>
+                      <span className="line-clamp-1 text-[10px] text-white/50">{n.body}</span>
+                      <span className="text-[9px] text-white/35">{timeAgo(n.createdAt, locale)}</span>
+                    </span>
+                    {!n.isRead ? (
+                      <IconCheck size={12} className="mt-1 shrink-0 text-gold" aria-hidden />
+                    ) : null}
+                  </button>
+                </li>
               ))
             )}
-          </div>
+          </ul>
         </div>
       ) : null}
     </div>

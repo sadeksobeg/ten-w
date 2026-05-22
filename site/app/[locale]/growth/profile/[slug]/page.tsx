@@ -14,6 +14,18 @@ import { getLevelVisual } from "@/lib/growth/level-visual";
 import { PartnerNetworkTree } from "@/components/growth/profile/PartnerNetworkTree";
 import { getPublicProfileBySlug } from "@/lib/growth/get-public-profile";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
+import {
+  IconBadge,
+  IconDeals,
+  IconMission,
+  IconQr,
+  IconRank,
+  IconStreak,
+  IconXp,
+  IconWhatsApp,
+  IconLinkedIn,
+  IconXSocial,
+} from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -86,17 +98,29 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
             ) : null}
             {data.socialLinks ? (
               <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
-                {Object.entries(data.socialLinks).map(([k, url]) => (
-                  <a
-                    key={k}
-                    href={url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-lg border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold capitalize hover:border-gold/30"
-                  >
-                    {k}
-                  </a>
-                ))}
+                {Object.entries(data.socialLinks).map(([k, url]) => {
+                  const key = k.toLowerCase();
+                  const Icon =
+                    key.includes("whatsapp")
+                      ? IconWhatsApp
+                      : key.includes("linkedin")
+                        ? IconLinkedIn
+                        : key === "x" || key.includes("twitter")
+                          ? IconXSocial
+                          : null;
+                  return (
+                    <a
+                      key={k}
+                      href={url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold hover:border-gold/30 focus-visible:ring-2 focus-visible:ring-gold/40"
+                    >
+                      {Icon ? <Icon size={14} /> : null}
+                      {k}
+                    </a>
+                  );
+                })}
               </div>
             ) : null}
           </div>
@@ -104,31 +128,19 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {[
-          { label: xpLabel, value: String(data.totalXp), icon: "⚡" },
-          { label: t("closedDeals"), value: String(data.closedDeals), icon: "🤝" },
-          {
-            label: locale === "ar" ? "قيد المتابعة" : "Pending",
-            value: String(data.pendingDeals),
-            icon: "📋",
-          },
-          {
-            label: locale === "ar" ? "سلسلة النشاط" : "Streak",
-            value: String(data.streakCurrent),
-            icon: "🔥",
-          },
-          {
-            label: locale === "ar" ? "أيام العضوية" : "Member days",
-            value: String(data.memberDays),
-            icon: "📅",
-          },
-          { label: t("badges"), value: String(data.badgeCount), icon: "🏆" },
-          { label: locale === "ar" ? "مشاهدات" : "Views", value: String(data.profileViews), icon: "👁" },
-        ].map((s) => (
+        {(
+          [
+            { label: xpLabel, value: String(data.totalXp), Icon: IconXp },
+            { label: t("closedDeals"), value: String(data.closedDeals), Icon: IconDeals },
+            { label: t("pending"), value: String(data.pendingDeals), Icon: IconMission },
+            { label: t("streak"), value: String(data.streakCurrent), Icon: IconStreak },
+            { label: t("memberDays"), value: String(data.memberDays), Icon: IconRank },
+            { label: t("badges"), value: String(data.badgeCount), Icon: IconBadge },
+            { label: t("views"), value: String(data.profileViews), Icon: IconRank },
+          ] as const
+        ).map((s) => (
           <GlassCard key={s.label} className="p-4 text-center">
-            <span className="text-lg" aria-hidden>
-              {s.icon}
-            </span>
+            <s.Icon size={22} className="mx-auto text-gold/80" aria-hidden />
             <div className="mt-1 text-xl font-extrabold text-gold">{s.value}</div>
             <div className="text-[10px] text-[var(--growth-text-sub)]">{s.label}</div>
           </GlassCard>
@@ -169,7 +181,7 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
         </GlassCard>
       </section>
 
-      <GlassCard className="mt-8 p-6 text-center sm:text-start">
+      <GlassCard variant="highlight" className="mt-8 p-6 text-center sm:text-start">
         <h2 className="text-lg font-bold">{t("ctaTitle")}</h2>
         <p className="mt-2 text-sm text-[var(--growth-text-sub)]">{t("ctaBody")}</p>
         <Link href={registerHref} className="mt-4 inline-block">
@@ -178,6 +190,8 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
       </GlassCard>
 
       <GlassCard className="mt-6 flex flex-col items-center gap-4 p-6 text-center">
+        <IconQr size={40} className="text-gold/60" aria-hidden />
+        <p className="text-xs text-[var(--growth-text-sub)]">{t("qrSoon")}</p>
         <ProfileShareButton
           title={data.name}
           url={`https://tenegta.com/${locale}/growth/profile/${data.publicSlug}`}

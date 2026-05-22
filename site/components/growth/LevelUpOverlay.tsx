@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
+import { IconStarFilled } from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   levelName: string;
@@ -43,9 +44,7 @@ export function LevelUpOverlay({ levelName, previousName, onDone }: Props) {
             aria-hidden
           />
         ))}
-        <p className="text-4xl" aria-hidden>
-          🎉
-        </p>
+        <IconStarFilled size={48} className="mx-auto text-gold" aria-hidden />
         <h2 className="mt-2 font-[family-name:var(--font-cairo)] text-2xl font-extrabold">
           {t("title")}
         </h2>

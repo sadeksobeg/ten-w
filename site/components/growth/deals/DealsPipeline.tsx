@@ -5,6 +5,7 @@ import { DealStatus } from "@prisma/client";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { EmptyState } from "@/components/growth/ui/EmptyState";
+import { IconCheck, IconChevronDown, IconClose, IconDeals } from "@/components/growth/icons/GrowthIcons";
 import { DealJourneyRow } from "@/components/growth/DealJourneyRow";
 import type { DashboardDeal } from "@/lib/growth/get-dashboard";
 
@@ -135,14 +136,10 @@ export function DealsPipeline({ deals, journeyLabels }: Props) {
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-sm font-semibold text-white">{d.productName}</span>
                       {d.status === DealStatus.CLOSED ? (
-                        <span className="text-emerald-400" aria-hidden>
-                          ✓
-                        </span>
+                        <IconCheck size={14} className="text-emerald-400" aria-hidden />
                       ) : null}
                       {d.status === DealStatus.LOST ? (
-                        <span className="text-rose-400" aria-hidden>
-                          ×
-                        </span>
+                        <IconClose size={14} className="text-rose-400" aria-hidden />
                       ) : null}
                     </div>
                     <div className="mt-1 text-xs text-white/55">

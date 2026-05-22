@@ -128,6 +128,7 @@ export type DashboardData = {
     referralCode: string;
     totalXp: number;
     levelName: string;
+    levelCode: string;
     levelOrder: number;
     onboardingSteps?: Record<string, boolean> | null;
   };
@@ -469,6 +470,7 @@ export async function getPartnerDashboard(
       referralCode: profile.referralCode,
       totalXp: profile.totalXp,
       levelName: resolveLevelName(profile.currentLevel.name, locale),
+      levelCode: profile.currentLevel.code,
       levelOrder: profile.currentLevel.order,
       onboardingSteps:
         profile.onboardingSteps && typeof profile.onboardingSteps === "object"

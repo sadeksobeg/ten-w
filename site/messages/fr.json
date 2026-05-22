@@ -1320,12 +1320,56 @@
       "title": "Live momentum",
       "empty": "No recent events yet."
     },
+    "levels": {
+      "starter": { "name": "Débutant", "color": "#8a8490" },
+      "hunter": { "name": "Chasseur", "color": "#3b6d11" },
+      "closer": { "name": "Closer", "color": "#3b82f6" },
+      "pro": { "name": "Pro", "color": "#534ab7" },
+      "elite": { "name": "Élite", "color": "#e4b84d" },
+      "titan": { "name": "Titan", "color": "#22d3ee" },
+      "legend": { "name": "Légende", "color": "#a855f7" }
+    },
+    "deal_status": {
+      "PENDING": "En attente",
+      "APPROVED": "Approuvé",
+      "CLOSED": "Clôturé",
+      "REJECTED": "Rejeté",
+      "CANCELLED": "Annulé"
+    },
+    "payout_status": {
+      "PENDING": "En attente",
+      "APPROVED": "Approuvé",
+      "PAID": "Payé",
+      "REJECTED": "Rejeté"
+    },
+    "participant_status": {
+      "INVITED": "Invité",
+      "JOINED": "Inscrit",
+      "COMPLETED": "Terminé",
+      "DROPPED": "Abandonné"
+    },
+    "event_status": {
+      "DRAFT": "Brouillon",
+      "PUBLISHED": "Publié",
+      "ACTIVE": "Actif",
+      "COMPLETED": "Terminé",
+      "CANCELLED": "Annulé"
+    },
+    "empty": {
+      "deals": { "title": "Aucune affaire", "subtitle": "Ajoutez votre premier prospect." },
+      "events": { "title": "Aucun événement", "subtitle": "Revenez pour les prochains événements partenaires." },
+      "earningsChart": { "title": "Pas de données", "subtitle": "Clôturez des affaires pour voir les tendances." },
+      "notifications": { "title": "À jour", "subtitle": "Aucune notification dans ce filtre." }
+    },
     "badges": {
       "title": "Badges",
       "empty": "No badges yet — close deals and grow your network.",
       "hiddenTag": "hidden",
       "lockedLabel": "Verrouillé",
       "locked": "Locked",
+      "mystery": "???",
+      "badge_count": "{earned} / {total} obtenus",
+      "rarity": "Rareté",
       "rarityCommon": "COMMON",
       "rarityRare": "RARE",
       "rarityEpic": "EPIC",

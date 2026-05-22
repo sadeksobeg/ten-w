@@ -1021,6 +1021,9 @@
     "notifications": {
       "title": "Notifications",
       "markAllRead": "Mark all read",
+      "groupToday": "Today",
+      "groupYesterday": "Yesterday",
+      "groupWeek": "This week",
       "empty": "No new notifications",
       "filterAll": "All",
       "filterUnread": "Unread",
@@ -1045,6 +1048,8 @@
       "tabAll": "All",
       "tabJoined": "My events",
       "milestones": "Milestones",
+      "milestoneLocked": "Locked",
+      "milestoneComplete": "Complete",
       "back": "Back to events",
       "participantsPreview": "Participants",
       "status": {
@@ -1056,6 +1061,10 @@
       }
     },
     "publicProfile": {
+      "pending": "Pending",
+      "streak": "Streak",
+      "views": "Profile views",
+      "memberDays": "Member days",
       "closedDeals": "Closed deals",
       "badges": "Badges",
       "badgesTitle": "Badges",
@@ -1239,6 +1248,9 @@
       }
     },
     "dashboard": {
+      "heroWelcome": "Welcome,",
+      "heroNext": "Next:",
+      "heroMaxLevel": "Max level",
       "expand": "Show",
       "collapse": "Hide",
       "heatmap": {
@@ -1287,16 +1299,73 @@
       "title": "Live momentum",
       "empty": "No recent events yet."
     },
+    "levels": {
+      "starter": { "name": "Starter", "color": "#8a8490" },
+      "hunter": { "name": "Hunter", "color": "#3b6d11" },
+      "closer": { "name": "Closer", "color": "#3b82f6" },
+      "pro": { "name": "Pro", "color": "#534ab7" },
+      "elite": { "name": "Elite", "color": "#e4b84d" },
+      "titan": { "name": "Titan", "color": "#22d3ee" },
+      "legend": { "name": "Legend", "color": "#a855f7" }
+    },
+    "deal_status": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "CLOSED": "Closed",
+      "REJECTED": "Rejected",
+      "CANCELLED": "Cancelled"
+    },
+    "payout_status": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "PAID": "Paid",
+      "REJECTED": "Rejected"
+    },
+    "participant_status": {
+      "INVITED": "Invited",
+      "JOINED": "Joined",
+      "COMPLETED": "Completed",
+      "DROPPED": "Dropped"
+    },
+    "event_status": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published",
+      "ACTIVE": "Active",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "empty": {
+      "deals": { "title": "No deals yet", "subtitle": "Add your first lead to start the pipeline." },
+      "events": { "title": "No events", "subtitle": "Check back for new partner events." },
+      "earningsChart": { "title": "No earnings data", "subtitle": "Close deals to see monthly trends." },
+      "notifications": { "title": "All caught up", "subtitle": "No notifications in this filter." }
+    },
     "badges": {
       "title": "Badges",
       "empty": "No badges yet — close deals and grow your network.",
       "hiddenTag": "hidden",
       "lockedLabel": "Locked",
       "locked": "Locked",
+      "mystery": "???",
+      "badge_count": "{earned} / {total} earned",
+      "rarity": "Rarity",
       "howTo": "How to earn",
       "earned": "Earned",
       "earnedOn": "Earned {date}",
+      "earned_on": "Earned {date}",
       "close": "Close",
+      "first_deal": { "label": "First Deal", "desc": "Close your first deal." },
+      "deals_5": { "label": "Deal Hunter", "desc": "Close 5 deals." },
+      "deals_10": { "label": "Deal Master", "desc": "Close 10 deals." },
+      "first_referral": { "label": "First Referral", "desc": "Refer your first partner." },
+      "network_builder": { "label": "Network Builder", "desc": "Grow a strong referral tree." },
+      "ai_seller": { "label": "AI Seller", "desc": "Use the marketing kit effectively." },
+      "fast_closer": { "label": "Fast Closer", "desc": "Close deals quickly." },
+      "top_performer": { "label": "Top Performer", "desc": "Rank among top partners." },
+      "elite_pulse": { "label": "Elite Pulse", "desc": "Sustain elite activity." },
+      "trusted_partner": { "label": "Trusted Partner", "desc": "Earn team trust." },
+      "vip_seller": { "label": "VIP Seller", "desc": "VIP sales performance." },
+      "strategic_agent": { "label": "Strategic Agent", "desc": "Strategic deal execution." },
       "progress": {
         "deals": "{current} / {target} closed deals",
         "downlines": "{current} / {target} referrals",
@@ -1434,6 +1503,9 @@
       "back": "Back to dashboard",
       "nav": "Support chat",
       "threadTitle": "Conversation",
+      "dateToday": "Today",
+      "dateYesterday": "Yesterday",
+      "online": "Online",
       "empty": "No messages yet — write the first line.",
       "placeholder": "Message…",
       "send": "Send",
@@ -1442,6 +1514,8 @@
       "partnerTag": "Partner",
       "youLabel": "You",
       "supportLabel": "TENEGTA Support",
+      "dateToday": "Today",
+      "dateYesterday": "Yesterday",
       "message": {
         "kindBonus": "Bonus",
         "kindBadge": "Badge",

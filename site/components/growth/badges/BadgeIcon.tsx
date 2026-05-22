@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useTranslations } from "next-intl";
+import { IconLock } from "@/components/growth/icons/GrowthIcons";
 import {
   getBadgeVisual,
   RARITY_COLORS,
@@ -24,10 +25,10 @@ export type BadgeIconProps = {
 };
 
 const SIZE_PX: Record<BadgeIconSize, number> = {
-  sm: 40,
-  md: 64,
+  sm: 48,
+  md: 72,
   lg: 96,
-  xl: 128,
+  xl: 120,
 };
 
 function IconPath({ id, color }: { id: BadgeIconId; color: string }) {
@@ -201,11 +202,14 @@ export function BadgeIcon({
       title={!earned ? lockText : undefined}
     >
       <div
-        className={`relative motion-safe:transition-transform motion-safe:group-hover:scale-105 ${animate ? "growth-badge-earn" : ""} ${!earned ? "opacity-40 grayscale" : ""}`}
+        className={`relative motion-safe:transition-transform motion-safe:group-hover:scale-105 ${animate ? "growth-badge-earn" : ""} ${earned ? "growth-badge-pulse" : "opacity-40 grayscale"}`}
         style={{ width: px, height: px, ...glowStyle }}
       >
         <svg width={px} height={px} viewBox={`0 0 ${px} ${px}`} aria-hidden>
           <defs>
+            <filter id={`badge-glow-${badgeKey}`} x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor={meta.glowColor} floodOpacity="0.6" />
+            </filter>
             <ShapeMask rarity={meta.rarity} size={px} />
             <clipPath id={clipId}>
               {(() => {
@@ -224,6 +228,7 @@ export function BadgeIcon({
             fill="none"
             stroke={earned ? RARITY_COLORS[meta.rarity] : "#4b5563"}
             strokeWidth={2}
+            filter={earned ? `url(#badge-glow-${badgeKey})` : undefined}
           />
           <g clipPath={`url(#${clipId})`}>
             <rect width={px} height={px} fill={earned ? `${color}22` : "#1a1a24"} />
@@ -233,13 +238,8 @@ export function BadgeIcon({
           </g>
         </svg>
         {!earned ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <svg width={px * 0.35} height={px * 0.35} viewBox="0 0 24 24" aria-hidden>
-              <path
-                fill="rgba(255,255,255,0.7)"
-                d="M12 2a5 5 0 00-5 5v3H6v13h12V10h-1V7a5 5 0 00-5-5zm-3 8V7a3 3 0 116 0v3H9z"
-              />
-            </svg>
+          <div className="absolute inset-0 flex items-center justify-center text-white/70">
+            <IconLock size={Math.round(px * 0.32)} />
           </div>
         ) : null}
       </div>

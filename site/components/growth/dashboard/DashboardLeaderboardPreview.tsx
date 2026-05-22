@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
+import { IconStarFilled } from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   weekly: DashboardData["leaderboard"];
@@ -11,11 +12,15 @@ type Props = {
   currentUserId: string;
 };
 
-function medal(i: number): string {
-  if (i === 0) return "🥇";
-  if (i === 1) return "🥈";
-  if (i === 2) return "🥉";
-  return "";
+function MedalIcon({ i }: { i: number }) {
+  if (i > 2) return null;
+  return (
+    <IconStarFilled
+      size={16}
+      className={i === 0 ? "text-gold" : i === 1 ? "text-white/70" : "text-amber-700"}
+      aria-hidden
+    />
+  );
 }
 
 export function DashboardLeaderboardPreview({ weekly, monthly, season, currentUserId }: Props) {
@@ -61,7 +66,9 @@ export function DashboardLeaderboardPreview({ weekly, monthly, season, currentUs
               } ${idx < 3 ? `growth-podium-${idx + 1}` : ""}`}
             >
               <div className="text-sm text-white/80">
-                <span className="me-2">{medal(idx)}</span>
+                <span className="me-2 inline-flex w-4 justify-center">
+                  <MedalIcon i={idx} />
+                </span>
                 <span className="text-white/40">#{idx + 1}</span> {row.name ?? "—"}
               </div>
               <div className="text-sm font-semibold text-gold/90">

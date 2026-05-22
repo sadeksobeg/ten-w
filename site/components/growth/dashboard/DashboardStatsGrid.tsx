@@ -3,7 +3,12 @@
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { StatCard } from "@/components/growth/ui/StatCard";
-import { GrowthIcon } from "@/components/growth/icons/GrowthIcon";
+import {
+  IconDeals,
+  IconEarnings,
+  IconRank,
+  IconStreak,
+} from "@/components/growth/icons/GrowthIcons";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
 
 type Props = {
@@ -34,7 +39,7 @@ export function DashboardStatsGrid({ data }: Props) {
         label={t("totalEarnings")}
         value={data.earningsCents / 100}
         sub={t("thisMonth", { amount: money(data.earningsThisMonthCents, locale) })}
-        icon={<GrowthIcon name="earnings" />}
+        icon={<IconEarnings size={32} className="text-gold" />}
         animateValue
         valueFormat={(n) => money(Math.round(n * 100), locale)}
       />
@@ -42,20 +47,20 @@ export function DashboardStatsGrid({ data }: Props) {
         label={t("deals")}
         value={data.closedDeals}
         sub={t("dealsSub", { closed: data.closedDeals, pending: data.pendingDeals })}
-        icon={<GrowthIcon name="deals" />}
+        icon={<IconDeals size={32} className="text-gold" />}
       />
       <StatCard
         label={t("rank")}
         value={rankDisplay}
         sub={t("rankSub", { n: data.compete.weeklyClosed })}
-        icon={<GrowthIcon name="rank" />}
+        icon={<IconRank size={32} className="text-gold" />}
         animateValue={false}
       />
       <StatCard
         label={t("streak")}
         value={data.streak?.current ?? 0}
         sub={streakSub}
-        icon={<GrowthIcon name="streak" />}
+        icon={<IconStreak size={32} className="text-gold" />}
       />
     </div>
   );
