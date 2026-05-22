@@ -1263,6 +1263,45 @@
       "rejected": "Non approuvée",
       "resetsIn": "Réinitialisation dans {h}h {m}m"
     },
+    "dashboard": {
+      "expand": "Afficher",
+      "collapse": "Masquer",
+      "heatmap": {
+        "title": "Activité (30 j)",
+        "subtitle": "Membre {memberDays}j · {activeDays} jours actifs"
+      },
+      "stats": {
+        "totalEarnings": "Revenus totaux",
+        "thisMonth": "Ce mois : {amount}",
+        "deals": "Deals",
+        "dealsSub": "{closed} clôturés · {pending} en cours",
+        "rank": "Classement hebdo",
+        "unranked": "Non classé",
+        "rankSub": "{n} clôtures cette semaine",
+        "streak": "Série",
+        "streakSub": "Série de {n} jours"
+      },
+      "leaderboard": {
+        "title": "Top partenaires",
+        "weights": "Composite : deals {deals}% · XP {xp}% · série {streak}%",
+        "week": "Semaine",
+        "month": "Mois",
+        "dealsUnit": "deals"
+      }
+    },
+    "onboarding": {
+      "title": "Premiers pas",
+      "progress": "{done} / {total} terminé",
+      "go": "Aller",
+      "markDone": "Marquer fait",
+      "steps": {
+        "profile": "Compléter le profil",
+        "firstLead": "Ajouter un premier lead",
+        "firstClose": "Clôturer un premier deal",
+        "network": "Développer le réseau",
+        "kit": "Ouvrir le kit marketing"
+      }
+    },
     "hub": {
       "quickDeals": "Pipeline affaires",
       "quickEarnings": "Revenus & paiement",
@@ -1423,7 +1462,9 @@
       "send": "Send",
       "sendError": "Could not send. Try again.",
       "adminTag": "Admin",
-      "partnerTag": "Team",
+      "partnerTag": "Partenaire",
+      "youLabel": "Vous",
+      "supportLabel": "Support TENEGTA",
       "message": {
         "kindBonus": "Bonus",
         "kindBadge": "Badge",

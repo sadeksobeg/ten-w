@@ -1213,6 +1213,45 @@
       "rejected": "لم تُوافق عليها",
       "resetsIn": "تُعاد خلال {h}س {m}د"
     },
+    "dashboard": {
+      "expand": "عرض",
+      "collapse": "إخفاء",
+      "heatmap": {
+        "title": "النشاط (30 يوماً)",
+        "subtitle": "عضو منذ {memberDays} يوماً · {activeDays} أيام نشطة"
+      },
+      "stats": {
+        "totalEarnings": "إجمالي الأرباح",
+        "thisMonth": "هذا الشهر: {amount}",
+        "deals": "الصفقات",
+        "dealsSub": "{closed} مغلقة · {pending} قيد المتابعة",
+        "rank": "الترتيب الأسبوعي",
+        "unranked": "غير مصنّف",
+        "rankSub": "{n} إغلاقات هذا الأسبوع",
+        "streak": "سلسلة النشاط",
+        "streakSub": "سلسلة {n} يوماً"
+      },
+      "leaderboard": {
+        "title": "أفضل الشركاء",
+        "weights": "مركّب: صفقات {deals}% · XP {xp}% · سلسلة {streak}%",
+        "week": "أسبوع",
+        "month": "شهر",
+        "dealsUnit": "صفقة"
+      }
+    },
+    "onboarding": {
+      "title": "البداية السريعة",
+      "progress": "{done} / {total} مكتمل",
+      "go": "انتقل",
+      "markDone": "تحديد كمكتمل",
+      "steps": {
+        "profile": "أكمل ملفك الشخصي",
+        "firstLead": "أضف أول عميل محتمل",
+        "firstClose": "أغلق أول صفقة",
+        "network": "وسّع شبكتك",
+        "kit": "افتح حزمة التسويق"
+      }
+    },
     "hub": {
       "quickDeals": "مسار الصفقات",
       "quickEarnings": "الأرباح والصرف",
@@ -1373,7 +1412,9 @@
       "send": "إرسال",
       "sendError": "تعذر الإرسال. حاول مرة أخرى.",
       "adminTag": "الإدارة",
-      "partnerTag": "الفريق",
+      "partnerTag": "شريك",
+      "youLabel": "أنت",
+      "supportLabel": "دعم TENEGTA",
       "message": {
         "kindBonus": "مكافأة",
         "kindBadge": "شارة",

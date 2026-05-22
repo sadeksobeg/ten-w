@@ -1439,7 +1439,9 @@
       "send": "Send",
       "sendError": "Could not send. Try again.",
       "adminTag": "Admin",
-      "partnerTag": "Team",
+      "partnerTag": "Partner",
+      "youLabel": "You",
+      "supportLabel": "TENEGTA Support",
       "message": {
         "kindBonus": "Bonus",
         "kindBadge": "Badge",

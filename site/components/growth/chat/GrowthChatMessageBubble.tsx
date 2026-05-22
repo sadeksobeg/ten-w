@@ -10,8 +10,10 @@ type Props = {
   locale: string;
   showAvatarRow: boolean;
   kindLabel: (kind: string) => string;
-  partnerTag: string;
-  adminTag: string;
+  youLabel: string;
+  supportLabel: string;
+  partnerLabel: string;
+  adminLabel: string;
   avatarLabel?: string;
 };
 
@@ -52,6 +54,23 @@ function avatarInitial(label: string): string {
   return label.slice(0, 2).toUpperCase();
 }
 
+/** Outgoing (mine) on visual right; incoming on visual left — LTR and RTL. */
+function messageRowLayout(locale: string, mine: boolean) {
+  const rtl = locale === "ar";
+  if (mine) {
+    return {
+      row: rtl ? "justify-start" : "justify-end",
+      inner: rtl ? "flex-row" : "flex-row-reverse",
+      labelAlign: "text-end",
+    };
+  }
+  return {
+    row: rtl ? "justify-end" : "justify-start",
+    inner: "flex-row",
+    labelAlign: "text-start",
+  };
+}
+
 export function GrowthChatMessageBubble({
   message: m,
   viewerUserId,
@@ -59,8 +78,10 @@ export function GrowthChatMessageBubble({
   locale,
   showAvatarRow,
   kindLabel,
-  partnerTag,
-  adminTag,
+  youLabel,
+  supportLabel,
+  partnerLabel,
+  adminLabel,
   avatarLabel,
 }: Props) {
   const mine = m.senderUserId === viewerUserId;
@@ -74,7 +95,16 @@ export function GrowthChatMessageBubble({
   }).format(new Date(m.createdAt));
 
   const label =
-    avatarLabel ?? (mine ? (isAdmin ? adminTag : partnerTag) : isAdmin ? partnerTag : adminTag);
+    avatarLabel ??
+    (mine
+      ? isAdmin
+        ? adminLabel
+        : youLabel
+      : isAdmin
+        ? partnerLabel
+        : supportLabel);
+
+  const layout = messageRowLayout(locale, mine);
 
   const [bonusFlash, setBonusFlash] = useState(kindUpper === "BONUS");
   useEffect(() => {
@@ -122,55 +152,52 @@ export function GrowthChatMessageBubble({
   }
 
   const toneExtra = textToneClass(m.metadata);
-
   const archived = Boolean(m.archivedSession);
 
   return (
     <div
-      className={`flex gap-2 py-0.5 ${mine ? "flex-row-reverse" : "flex-row"} ${
-        showAvatarRow ? "pt-2" : "pt-0.5"
-      } ${archived ? "opacity-60" : ""}`}
+      className={`flex w-full py-0.5 ${layout.row} ${showAvatarRow ? "pt-2" : "pt-0.5"} ${
+        archived ? "opacity-60" : ""
+      }`}
     >
-      {showAvatarRow ? (
-        <div
-          className={`flex size-8 shrink-0 items-center justify-center rounded-full text-[10px] font-black ${
-            mine
-              ? "bg-[#B07D2B]/90 text-white"
-              : "bg-white/12 text-white/80 ring-1 ring-white/15"
-          }`}
-          aria-hidden
-        >
-          {avatarInitial(label)}
-        </div>
-      ) : (
-        <div className="size-8 shrink-0" aria-hidden />
-      )}
-      <div
-        className={`max-w-[min(78%,380px)] ${mine ? "items-end" : "items-start"} flex flex-col`}
-      >
+      <div className={`flex max-w-[min(82%,400px)] gap-2 ${layout.inner}`}>
         {showAvatarRow ? (
-          <span
-            className={`mb-0.5 px-1 text-[10px] font-semibold text-white/40 ${
-              mine ? "text-end" : "text-start"
-            }`}
-          >
-            {label}
-          </span>
-        ) : null}
-        <div
-          className={`px-3.5 py-2 text-sm shadow-md ${
-            mine
-              ? "rounded-[18px] rounded-ee-[4px] bg-[linear-gradient(135deg,#B07D2B,#E4B84D)] text-black shadow-md"
-              : `rounded-[18px] rounded-es-[4px] border border-white/10 bg-white/[0.06] text-[var(--growth-text)] backdrop-blur-[8px] ${toneExtra}`
-          }`}
-        >
-          <div className="whitespace-pre-wrap break-words leading-relaxed">{m.body}</div>
           <div
-            className={`mt-1 text-[10px] ${mine ? "text-white/55" : "text-white/40"} ${
-              mine ? "text-end" : "text-start"
+            className={`flex size-8 shrink-0 items-center justify-center rounded-full text-[10px] font-black ${
+              mine
+                ? "bg-[#B07D2B]/90 text-white"
+                : "bg-white/12 text-white/80 ring-1 ring-white/15"
+            }`}
+            aria-hidden
+          >
+            {avatarInitial(label)}
+          </div>
+        ) : (
+          <div className="size-8 shrink-0" aria-hidden />
+        )}
+        <div className="min-w-0 flex flex-col">
+          {showAvatarRow ? (
+            <span
+              className={`mb-0.5 px-1 text-[10px] font-semibold text-white/45 ${layout.labelAlign}`}
+            >
+              {label}
+            </span>
+          ) : null}
+          <div
+            className={`px-3.5 py-2 text-sm shadow-md ${
+              mine
+                ? "rounded-[18px] rounded-ee-[4px] bg-[linear-gradient(135deg,#B07D2B,#E4B84D)] text-black shadow-[0_2px_12px_rgba(176,125,43,0.35)]"
+                : `rounded-[18px] rounded-es-[4px] border border-white/10 bg-[#121a2e] text-[var(--growth-text)] backdrop-blur-[8px] ${toneExtra}`
             }`}
           >
-            {time}
+            <div className="whitespace-pre-wrap break-words leading-relaxed">{m.body}</div>
+            <div
+              className={`mt-1 text-[10px] tabular-nums ${
+                mine ? "text-black/50" : "text-white/40"
+              } ${layout.labelAlign}`}
+            >
+              {time}
+            </div>
           </div>
         </div>
       </div>

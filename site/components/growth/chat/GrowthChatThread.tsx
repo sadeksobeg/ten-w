@@ -518,14 +518,6 @@ export function GrowthChatThread({
           }).format(dayDate);
 
     const mine = m.senderUserId === viewerUserId;
-    const avatarLabel = mine
-      ? isAdmin
-        ? t("adminTag")
-        : t("partnerTag")
-      : isAdmin
-        ? t("partnerTag")
-        : t("adminTag");
-
     const row = (
       <GrowthChatMessageBubble
         key={m.id}
@@ -535,9 +527,10 @@ export function GrowthChatThread({
         locale={locale}
         showAvatarRow={showAvatarRow(idx, list)}
         kindLabel={kindLabel}
-        partnerTag={t("partnerTag")}
-        adminTag={t("adminTag")}
-        avatarLabel={avatarLabel}
+        youLabel={t("youLabel")}
+        supportLabel={t("supportLabel")}
+        partnerLabel={t("partnerTag")}
+        adminLabel={t("adminTag")}
       />
     );
 
@@ -743,7 +736,9 @@ export function GrowthChatThread({
               ) : null}
             </div>
           ) : null}
-          <div className="flex items-end gap-2">
+          <div
+            className={`flex items-end gap-2 ${locale === "ar" ? "flex-row-reverse" : "flex-row"}`}
+          >
             <textarea
               value={body}
               onChange={(e) => setBody(e.target.value.slice(0, MAX_BODY))}
@@ -762,9 +757,11 @@ export function GrowthChatThread({
               disabled={busy || !body.trim()}
               onClick={() => void onSend()}
               aria-label={t("send")}
-              className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gold/50 to-gold/20 text-lg font-bold text-white shadow-[0_0_20px_rgba(234,179,8,0.25)] transition hover:scale-105 active:scale-95 disabled:opacity-40"
+              className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#B07D2B] to-[#E4B84D] text-lg font-bold text-black shadow-[0_0_20px_rgba(234,179,8,0.25)] transition hover:scale-105 active:scale-95 disabled:opacity-40"
             >
-              ↑
+              <span className={locale === "ar" ? "inline-block scale-x-[-1]" : ""} aria-hidden>
+                ➤
+              </span>
             </button>
           </div>
           <div className="mt-1 flex justify-between gap-2 text-[10px] text-white/35">
