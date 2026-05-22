@@ -9,6 +9,8 @@ import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { updatePartnerAvatarAction } from "@/lib/growth/actions";
 import { useToast } from "@/hooks/useToast";
 import { AVATAR_PRESETS } from "@/lib/growth/avatar-presets";
+import { AvatarPresetFace } from "@/components/growth/ui/AvatarPresetFace";
+import { usePartnerPreview } from "@/components/growth/settings/PartnerSettingsLayout";
 
 type Props = {
   locale: string;
@@ -25,6 +27,7 @@ export function AvatarSettingsForm({
   email,
 }: Props) {
   const t = useTranslations("Growth.settings");
+  const { setPreview } = usePartnerPreview();
   const [avatar, setAvatar] = useState(initialAvatar);
   const [preset, setPreset] = useState(initialPreset ?? "");
   const [state, formAction, pending] = useActionState(updatePartnerAvatarAction, null);
@@ -66,6 +69,11 @@ export function AvatarSettingsForm({
                   onClick={() => {
                     setPreset(p.id);
                     setAvatar("");
+                    setPreview((prev) => ({
+                      ...prev,
+                      avatarPreset: p.id,
+                      avatarUrl: "",
+                    }));
                   }}
                   className={`growth-touch-target rounded-xl border p-1 transition focus-visible:ring-2 focus-visible:ring-gold/40 ${
                     active ? "border-gold ring-2 ring-gold/40" : "border-white/10 hover:border-gold/30"
@@ -73,10 +81,7 @@ export function AvatarSettingsForm({
                   aria-pressed={active}
                   aria-label={t(p.labelKey as "presetGold1")}
                 >
-                  <div
-                    className="mx-auto size-10 rounded-full font-bold text-white"
-                    style={{ background: p.gradient }}
-                  />
+                  <AvatarPresetFace preset={p} size={40} className="mx-auto ring-0 ring-offset-0" />
                 </button>
               );
             })}
@@ -87,6 +92,11 @@ export function AvatarSettingsForm({
           onChange={(v) => {
             setAvatar(v);
             if (v) setPreset("");
+            setPreview((prev) => ({
+              ...prev,
+              avatarUrl: v,
+              avatarPreset: v ? "" : prev.avatarPreset,
+            }));
           }}
           aspectRatio="1/1"
           placeholder={t("uploadHint")}

@@ -114,10 +114,29 @@ function segmentFor(
   return "standard";
 }
 
+function pickPreferredConversation<T extends { partnerUserId: string; status: string; updatedAt: Date }>(
+  rows: T[],
+): T[] {
+  const byPartner = new Map<string, T>();
+  for (const row of rows) {
+    const existing = byPartner.get(row.partnerUserId);
+    if (!existing) {
+      byPartner.set(row.partnerUserId, row);
+      continue;
+    }
+    const score = (r: T) =>
+      (r.status === "OPEN" ? 2 : 1) * 1e15 + r.updatedAt.getTime();
+    if (score(row) > score(existing)) {
+      byPartner.set(row.partnerUserId, row);
+    }
+  }
+  return [...byPartner.values()].sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+}
+
 export async function listAdminConversations(): Promise<ChatConversationListItem[]> {
-  const rows = await prisma.chatConversation.findMany({
+  const rawRows = await prisma.chatConversation.findMany({
     orderBy: [{ updatedAt: "desc" }],
-    take: 80,
+    take: 120,
     include: {
       partner: { select: { email: true, name: true } },
       messages: {
@@ -127,6 +146,7 @@ export async function listAdminConversations(): Promise<ChatConversationListItem
       },
     },
   });
+  const rows = pickPreferredConversation(rawRows).slice(0, 80);
   const partnerIds = [...new Set(rows.map((r) => r.partnerUserId))];
   if (partnerIds.length === 0) return [];
 

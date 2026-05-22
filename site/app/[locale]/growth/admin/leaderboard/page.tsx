@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { AdminLeaderboardClient } from "@/components/growth/admin/AdminLeaderboardClient";
 import {
-  compositeLeaderboard,
+  compositeLeaderboardAll,
   getActiveLeaderboardSeason,
 } from "@/lib/growth/leaderboard";
 
@@ -11,15 +11,11 @@ export default async function GrowthAdminLeaderboardPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations("Growth.admin.nav");
   const season = await getActiveLeaderboardSeason();
-  const preview = await compositeLeaderboard(
-    season.windowMs,
-    {
-      weightDeals: season.weightDeals,
-      weightXp: season.weightXp,
-      weightStreak: season.weightStreak,
-    },
-    10,
-  );
+  const rows = await compositeLeaderboardAll(season.windowMs, {
+    weightDeals: season.weightDeals,
+    weightXp: season.weightXp,
+    weightStreak: season.weightStreak,
+  });
 
   return (
     <div className="space-y-6">
@@ -33,7 +29,7 @@ export default async function GrowthAdminLeaderboardPage({ params }: Props) {
             : "Configure composite scoring weights for partners."}
         </p>
       </div>
-      <AdminLeaderboardClient locale={locale} season={season} preview={preview} />
+      <AdminLeaderboardClient locale={locale} season={season} rows={rows} />
       <p className="text-sm">
         <a href={`/${locale}/growth/admin/rewards`} className="text-gold/80 underline">
           {t("rewards")} →

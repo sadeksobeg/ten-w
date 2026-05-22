@@ -51,7 +51,6 @@ export function IconDeals(props: GrowthIconProps) {
       <circle cx="12" cy="12" r="9" />
       <circle cx="12" cy="12" r="5" />
       <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
-      <path d="M12 3v2M12 19v2M3 12h2M19 12h2" />
     </GrowthIconBase>
   );
 }
@@ -108,8 +107,8 @@ export function IconNotifications(props: GrowthIconProps) {
 export function IconSettings(props: GrowthIconProps) {
   return (
     <GrowthIconBase {...props}>
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+      <path d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" />
+      <path d="M19.4 13.5a7.2 7.2 0 00.1-3l2-1.2-2-3.5-2.3 1a7.4 7.4 0 00-2.6-1.5L14 2h-4l-.6 3.3a7.4 7.4 0 00-2.6 1.5l-2.3-1-2 3.5 2 1.2a7.2 7.2 0 00.1 3l-2 1.2 2 3.5 2.3-1a7.4 7.4 0 002.6 1.5L10 22h4l.6-3.3a7.4 7.4 0 002.6-1.5l2.3 1 2-3.5-2-1.2z" />
     </GrowthIconBase>
   );
 }
@@ -129,7 +128,7 @@ export function IconPlus(props: GrowthIconProps) {
   return (
     <GrowthIconBase {...props}>
       <circle cx="12" cy="12" r="9" />
-      <path d="M12 8v8M8 12h8" />
+      <path d="M12 8v8" strokeWidth={2.25} />
     </GrowthIconBase>
   );
 }
@@ -197,7 +196,8 @@ export function IconTrash(props: GrowthIconProps) {
 export function IconClose(props: GrowthIconProps) {
   return (
     <GrowthIconBase {...props}>
-      <path d="M6 6l12 12M18 6L6 18" />
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8 12h8" strokeWidth={2.25} />
     </GrowthIconBase>
   );
 }
@@ -340,10 +340,27 @@ export function IconBadge(props: GrowthIconProps) {
   );
 }
 
+/** @deprecated Use IconPartners or IconTrophy */
 export function IconRank(props: GrowthIconProps) {
+  return <IconTrophy {...props} />;
+}
+
+export function IconPartners(props: GrowthIconProps) {
   return (
     <GrowthIconBase {...props}>
-      <path d="M5 20h14M8 20V12H5V8h3V4h4v4h3v4h-3v8" />
+      <circle cx="9" cy="8" r="3" />
+      <circle cx="17" cy="9" r="2.5" />
+      <path d="M4 20c0-2.8 2.2-5 5-5s5 2.2 5 5M13 20c0-2.2 1.8-4 4-4" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconTrophy(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M8 5h8v4a4 4 0 01-8 0V5z" />
+      <path d="M6 5H4a2 2 0 002 2M18 5h2a2 2 0 01-2 2" />
+      <path d="M12 13v2M9 20h6M10 15h4" />
     </GrowthIconBase>
   );
 }
@@ -395,6 +412,24 @@ export function IconEvent(props: GrowthIconProps) {
   );
 }
 
+export function IconEye(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z" />
+      <circle cx="12" cy="12" r="3" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconCalendar(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <rect x="4" y="5" width="16" height="15" rx="2" />
+      <path d="M8 3v3M16 3v3M4 10h16" />
+    </GrowthIconBase>
+  );
+}
+
 export function IconQr(props: GrowthIconProps) {
   return (
     <GrowthIconBase {...props}>
@@ -429,7 +464,8 @@ export function IconLinkedIn(props: GrowthIconProps) {
 export function IconXSocial(props: GrowthIconProps) {
   return (
     <GrowthIconBase {...props}>
-      <path d="M5 5l14 14M19 5L5 19" strokeWidth={2} />
+      <rect x="5" y="5" width="14" height="14" rx="3" />
+      <path d="M9 9.5h6v1.2H9zm0 3.3h4.5v1.2H9z" fill="currentColor" stroke="none" />
     </GrowthIconBase>
   );
 }

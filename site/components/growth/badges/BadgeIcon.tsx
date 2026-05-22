@@ -227,9 +227,20 @@ export function BadgeIcon({
             r={px * 0.48}
             fill="none"
             stroke={earned ? "#e4b84d" : "#4b5563"}
-            strokeWidth={3}
-            opacity={0.85}
+            strokeWidth={4}
+            opacity={0.95}
           />
+          {earned ? (
+            <circle
+              cx={px / 2}
+              cy={px / 2}
+              r={px * 0.5}
+              fill="none"
+              stroke={RARITY_COLORS[meta.rarity]}
+              strokeWidth={1}
+              opacity={0.35}
+            />
+          ) : null}
           <circle
             cx={px / 2}
             cy={px / 2}

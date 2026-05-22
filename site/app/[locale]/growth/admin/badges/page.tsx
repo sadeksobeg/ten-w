@@ -11,9 +11,12 @@ export default async function GrowthAdminBadgesPage() {
     prisma.badgeDefinition.findMany({
       where: { type: BadgeType.ADMIN },
       orderBy: { key: "asc" },
-      select: { key: true, name: true },
+      select: { key: true, name: true, description: true, type: true },
     }),
-    prisma.badgeDefinition.findMany({ orderBy: { key: "asc" } }),
+    prisma.badgeDefinition.findMany({
+      orderBy: { key: "asc" },
+      select: { key: true, name: true, description: true },
+    }),
   ]);
 
   return (
@@ -45,8 +48,8 @@ export default async function GrowthAdminBadgesPage() {
               className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
             >
               {allBadges.map((b) => (
-                <option key={b.id} value={b.key}>
-                  {b.key}
+                <option key={b.key} value={b.key}>
+                  {b.name} ({b.key})
                 </option>
               ))}
             </select>

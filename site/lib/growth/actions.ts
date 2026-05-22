@@ -572,6 +572,39 @@ export async function saveLeaderboardSeasonAction(formData: FormData): Promise<v
   revalidatePath("/");
 }
 
+export async function adminSetLeaderboardBonusFormAction(formData: FormData): Promise<void> {
+  await adminSetLeaderboardBonusAction(formData);
+}
+
+export async function adminSetLeaderboardBonusAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const partnerId = String(formData.get("partnerId") ?? "").trim();
+  const bonusRaw = Number(formData.get("scoreBonus") ?? 0);
+  if (!partnerId || !Number.isFinite(bonusRaw)) {
+    return { ok: false, error: "invalid_input" };
+  }
+  const scoreBonus = Math.min(500, Math.max(-500, Math.round(bonusRaw)));
+
+  const profile = await prisma.partnerProfile.findUnique({
+    where: { userId: partnerId },
+  });
+  if (!profile) return { ok: false, error: "not_found" };
+
+  await prisma.partnerProfile.update({
+    where: { userId: partnerId },
+    data: { leaderboardScoreBonus: scoreBonus },
+  });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
 const overrideSchema = z.object({
   partnerEmail: z.string().email(),
   productSlug: z.string().max(64).optional().or(z.literal("")),

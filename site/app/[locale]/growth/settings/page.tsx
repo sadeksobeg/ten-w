@@ -53,6 +53,8 @@ export default async function GrowthSettingsPage({ params }: Props) {
         previewFields={{
           displayTitle: user.partnerProfile?.displayTitle ?? "",
           bio: user.bio ?? "",
+          avatarUrl: user.avatarUrl ?? "",
+          avatarPreset: user.avatarPreset ?? "",
         }}
       >
         <ProfileShareExport publicSlug={user.publicSlug!} locale={locale} />

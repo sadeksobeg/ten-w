@@ -7,7 +7,7 @@ import {
   IconBadge,
   IconEvent,
   IconNotifications,
-  IconPlus,
+  IconPartners,
 } from "@/components/growth/icons/GrowthIcons";
 import type { ReactNode } from "react";
 
@@ -15,7 +15,7 @@ export function AdminOverviewClient() {
   const t = useTranslations("Growth.admin.overview");
 
   const actions: { href: string; label: string; icon: ReactNode }[] = [
-    { href: "/growth/admin/partners", label: t("actionCreatePartner"), icon: <IconPlus size={16} /> },
+    { href: "/growth/admin/partners", label: t("actionCreatePartner"), icon: <IconPartners size={16} /> },
     { href: "/growth/admin/events", label: t("actionNewEvent"), icon: <IconEvent size={16} /> },
     {
       href: "/growth/admin/notifications",

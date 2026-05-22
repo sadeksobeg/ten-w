@@ -1,6 +1,7 @@
 "use client";
 
 import { getAvatarPreset } from "@/lib/growth/avatar-presets";
+import { AvatarPresetFace } from "@/components/growth/ui/AvatarPresetFace";
 
 type Size = "sm" | "md" | "lg";
 
@@ -60,14 +61,13 @@ export function GrowthAvatar({
   }
 
   if (preset) {
+    const px = size === "sm" ? 32 : size === "lg" ? 64 : 44;
     return (
-      <div
-        aria-hidden
-        className={`${sizeMap[size]} flex shrink-0 items-center justify-center rounded-full font-black text-white ${ring} ${className}`}
-        style={{ background: preset.gradient }}
-      >
-        {label}
-      </div>
+      <AvatarPresetFace
+        preset={preset}
+        size={px}
+        className={`${className}`}
+      />
     );
   }
 

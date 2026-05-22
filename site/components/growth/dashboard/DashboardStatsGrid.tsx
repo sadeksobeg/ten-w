@@ -6,7 +6,7 @@ import { StatCard } from "@/components/growth/ui/StatCard";
 import {
   IconDeals,
   IconEarnings,
-  IconRank,
+  IconTrophy,
   IconStreak,
 } from "@/components/growth/icons/GrowthIcons";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
@@ -53,7 +53,7 @@ export function DashboardStatsGrid({ data }: Props) {
         label={t("rank")}
         value={rankDisplay}
         sub={t("rankSub", { n: data.compete.weeklyClosed })}
-        icon={<IconRank size={32} className="text-gold" />}
+        icon={<IconTrophy size={32} className="text-gold" />}
         animateValue={false}
       />
       <StatCard

@@ -21,7 +21,8 @@ import {
   IconDeals,
   IconMission,
   IconQr,
-  IconRank,
+  IconCalendar,
+  IconEye,
   IconStreak,
   IconXp,
   IconWhatsApp,
@@ -167,9 +168,9 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
             { label: t("closedDeals"), value: String(data.closedDeals), Icon: IconDeals },
             { label: t("pending"), value: String(data.pendingDeals), Icon: IconMission },
             { label: t("streak"), value: String(data.streakCurrent), Icon: IconStreak },
-            { label: t("memberDays"), value: String(data.memberDays), Icon: IconRank },
+            { label: t("memberDays"), value: String(data.memberDays), Icon: IconCalendar },
             { label: t("badges"), value: String(data.badgeCount), Icon: IconBadge },
-            { label: t("views"), value: String(data.profileViews), Icon: IconRank },
+            { label: t("views"), value: String(data.profileViews), Icon: IconEye },
           ] as const
         ).map((s) => (
           <GlassCard key={s.label} className="p-4 text-center">

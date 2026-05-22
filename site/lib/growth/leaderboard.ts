@@ -18,6 +18,8 @@ export type CompositeLeaderboardRow = {
   userId: string;
   name: string | null;
   score: number;
+  systemScore: number;
+  scoreBonus: number;
   closedDeals: number;
   totalXp: number;
   streak: number;
@@ -84,7 +86,9 @@ export async function compositeLeaderboard(
     select: {
       id: true,
       name: true,
-      partnerProfile: { select: { totalXp: true } },
+      partnerProfile: {
+        select: { totalXp: true, leaderboardScoreBonus: true },
+      },
       streak: { select: { currentStreak: true } },
     },
   });
@@ -108,12 +112,16 @@ export async function compositeLeaderboard(
     const closedDeals = dealsArr[i]!;
     const totalXp = xpArr[i]!;
     const streak = streakArr[i]!;
-    const score =
+    const systemScore =
       100 *
       (wD * (normDeals.get(i) ?? 0) + wX * (normXp.get(i) ?? 0) + wS * (normStreak.get(i) ?? 0));
+    const scoreBonus = p.partnerProfile?.leaderboardScoreBonus ?? 0;
+    const score = systemScore + scoreBonus;
     return {
       userId: p.id,
       name: p.name,
+      systemScore: Math.round(systemScore * 10) / 10,
+      scoreBonus,
       score: Math.round(score * 10) / 10,
       closedDeals,
       totalXp,
@@ -122,9 +130,15 @@ export async function compositeLeaderboard(
   });
 
   return scored
-    .filter((r) => r.closedDeals > 0 || r.totalXp > 0 || r.streak > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
+}
+
+export async function compositeLeaderboardAll(
+  windowMs: number,
+  weights: { weightDeals: number; weightXp: number; weightStreak: number },
+): Promise<CompositeLeaderboardRow[]> {
+  return compositeLeaderboard(windowMs, weights, 500);
 }
 
 export async function partnerCompositeRank(

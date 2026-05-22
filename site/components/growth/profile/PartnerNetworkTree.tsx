@@ -43,7 +43,7 @@ function NodeRow({
             className="flex size-5 shrink-0 items-center justify-center rounded text-[10px] text-white/50 hover:bg-white/10"
             aria-expanded={open}
           >
-            {open ? "−" : "+"}
+            {open ? "▾" : "▸"}
           </button>
         ) : (
           <span className="size-5 shrink-0" aria-hidden />

@@ -66,8 +66,10 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
                 <BadgeIcon badgeKey={b.key} earned={b.earned} size={size} lockedLabel={t("locked")} />
               </button>
             </BadgeTooltip>
-            <span className="max-w-full truncate text-center text-[10px] font-semibold text-[var(--growth-text)]">
-              {b.earned ? b.name : t("mystery")}
+            <span
+              className={`max-w-full truncate text-center text-[10px] font-semibold ${b.earned ? "text-[var(--growth-text)]" : "text-white/45"}`}
+            >
+              {b.name}
             </span>
             {b.earned ? (
               <span className="rounded-full border border-gold/25 bg-gold/10 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-gold">

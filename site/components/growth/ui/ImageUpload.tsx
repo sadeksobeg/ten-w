@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type Aspect = "16/9" | "1/1" | "4/3";
 
@@ -27,6 +28,7 @@ export function ImageUpload({
   placeholder,
   hint,
 }: Props) {
+  const t = useTranslations("Growth.settings");
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState(value ?? "");
@@ -99,7 +101,7 @@ export function ImageUpload({
           onClick={remove}
           className="mt-2 text-xs font-semibold text-rose-300 hover:text-rose-200"
         >
-          × {hint ? "Remove" : "Remove image"}
+          {t("removeImage")}
         </button>
       ) : null}
       {error ? <p className="mt-1 text-xs text-rose-400">{error}</p> : null}

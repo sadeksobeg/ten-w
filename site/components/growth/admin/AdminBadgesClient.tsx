@@ -1,27 +1,48 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useMemo, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { useToast } from "@/hooks/useToast";
 import { assignAdminBadgeAction } from "@/lib/growth/actions";
+import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
 
-type BadgeOption = { key: string; name: string };
+export type AdminBadgeOption = {
+  key: string;
+  name: string;
+  description: string | null;
+  type: string;
+};
 
 type Props = {
-  adminBadges: BadgeOption[];
+  adminBadges: AdminBadgeOption[];
 };
 
 export function AdminBadgesClient({ adminBadges }: Props) {
   const t = useTranslations("Growth.admin.badgesPage");
+  const locale = useLocale();
   const { showToast } = useToast();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [email, setEmail] = useState("");
   const [badgeKey, setBadgeKey] = useState(adminBadges[0]?.key ?? "");
   const [partnerLabel, setPartnerLabel] = useState("");
   const [pending, setPending] = useState(false);
+
+  const options = useMemo(
+    () =>
+      adminBadges.map((b) => {
+        const copy = resolveBadgeCopy(b.key, locale, {
+          name: b.name,
+          description: b.description,
+        });
+        return { ...b, label: copy.name, valueText: copy.description || b.description || "" };
+      }),
+    [adminBadges, locale],
+  );
+
+  const selected = options.find((o) => o.key === badgeKey) ?? options[0];
 
   function openConfirm(e: React.FormEvent) {
     e.preventDefault();
@@ -58,7 +79,7 @@ export function AdminBadgesClient({ adminBadges }: Props) {
   return (
     <>
       <GlassCard>
-        <form onSubmit={openConfirm} className="grid gap-3 sm:grid-cols-12">
+        <form onSubmit={openConfirm} className="grid gap-4 sm:grid-cols-12">
           <label className="sm:col-span-5">
             <span className="text-xs text-[var(--growth-text-sub)]">{t("email")}</span>
             <input
@@ -69,7 +90,7 @@ export function AdminBadgesClient({ adminBadges }: Props) {
               className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
             />
           </label>
-          <label className="sm:col-span-4">
+          <label className="sm:col-span-7">
             <span className="text-xs text-[var(--growth-text-sub)]">{t("badgeKey")}</span>
             <select
               required
@@ -77,15 +98,25 @@ export function AdminBadgesClient({ adminBadges }: Props) {
               onChange={(e) => setBadgeKey(e.target.value)}
               className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
             >
-              {adminBadges.map((b) => (
+              {options.map((b) => (
                 <option key={b.key} value={b.key}>
-                  {b.key}
+                  {b.label}
                 </option>
               ))}
             </select>
           </label>
-          <div className="flex items-end sm:col-span-3">
-            <GoldButton type="submit" className="w-full">
+          {selected ? (
+            <div className="sm:col-span-12 flex flex-col gap-3 rounded-xl border border-gold/20 bg-gold/5 p-4 sm:flex-row sm:items-center">
+              <BadgeIcon badgeKey={selected.key} earned size="lg" showGlow />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold text-gold">{selected.label}</p>
+                <p className="mt-1 text-xs text-white/60">{t("badgeValueHint")}</p>
+                <p className="mt-2 text-sm text-white/80">{selected.valueText || "—"}</p>
+              </div>
+            </div>
+          ) : null}
+          <div className="flex items-end sm:col-span-12">
+            <GoldButton type="submit" className="w-full sm:w-auto">
               {t("submit")}
             </GoldButton>
           </div>
@@ -100,8 +131,16 @@ export function AdminBadgesClient({ adminBadges }: Props) {
           <BadgeIcon badgeKey={badgeKey} earned size="xl" showGlow animate />
           <h3 className="mt-4 text-lg font-bold">{t("confirmTitle")}</h3>
           <p className="mt-2 text-sm text-[var(--growth-text-sub)]">
-            {t("confirmBody", { badge: badgeKey, partner: partnerLabel })}
+            {t("confirmBody", {
+              badge: selected?.label ?? badgeKey,
+              partner: partnerLabel,
+            })}
           </p>
+          {selected?.valueText ? (
+            <p className="mt-3 rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-xs text-white/70">
+              {selected.valueText}
+            </p>
+          ) : null}
           <div className="mt-6 flex w-full gap-3">
             <GoldButton
               variant="ghost"

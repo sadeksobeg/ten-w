@@ -16,7 +16,8 @@ import {
   IconMission,
   IconNotifications,
   IconPayout,
-  IconRank,
+  IconPartners,
+  IconTrophy,
   IconSettings,
   type GrowthIconProps,
 } from "@/components/growth/icons/GrowthIcons";
@@ -30,7 +31,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { href: "/growth/admin", labelKey: "overview", Icon: IconDashboard },
       { href: "/growth/admin/deals", labelKey: "deals", Icon: IconDeals },
       { href: "/growth/admin/payouts", labelKey: "payouts", Icon: IconPayout },
-      { href: "/growth/admin/partners", labelKey: "partners", Icon: IconRank },
+      { href: "/growth/admin/partners", labelKey: "partners", Icon: IconPartners },
       { href: "/growth/admin/chat", labelKey: "chat", Icon: IconChat },
     ],
   },
@@ -41,7 +42,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { href: "/growth/admin/badges", labelKey: "badges", Icon: IconBadge },
       { href: "/growth/admin/levels", labelKey: "levels", Icon: IconLevel },
       { href: "/growth/admin/tiers", labelKey: "tiers", Icon: IconEarnings },
-      { href: "/growth/admin/leaderboard", labelKey: "leaderboard", Icon: IconRank },
+      { href: "/growth/admin/leaderboard", labelKey: "leaderboard", Icon: IconTrophy },
       { href: "/growth/admin/seasons", labelKey: "seasons", Icon: IconEvent },
       { href: "/growth/admin/rewards", labelKey: "rewards", Icon: IconEarnings },
       { href: "/growth/admin/missions", labelKey: "missions", Icon: IconMission },
@@ -115,7 +116,9 @@ export function GrowthAdminNav() {
                 className="mb-1 flex w-full items-center justify-between px-2 text-[10px] font-bold uppercase tracking-wider text-white/40 hover:text-white/60"
               >
                 {t(g.titleKey as "groupOperations")}
-                <span className="text-white/30">{isCollapsed ? "+" : "−"}</span>
+                <span className="text-white/30" aria-hidden>
+                  {isCollapsed ? "▸" : "▾"}
+                </span>
               </button>
               {!isCollapsed ? (
                 <ul className="space-y-0.5">

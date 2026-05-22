@@ -1,0 +1,1 @@
+ALTER TABLE "PartnerProfile" ADD COLUMN IF NOT EXISTS "leaderboardScoreBonus" INTEGER NOT NULL DEFAULT 0;

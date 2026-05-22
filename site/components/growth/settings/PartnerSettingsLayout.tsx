@@ -9,6 +9,8 @@ import { LevelBadge } from "@/components/growth/ui/LevelBadge";
 type PreviewState = {
   displayTitle: string;
   bio: string;
+  avatarUrl: string;
+  avatarPreset: string;
 };
 
 const PartnerPreviewContext = createContext<{
@@ -56,7 +58,13 @@ export function PartnerSettingsLayout({
             {t("live_preview")}
           </p>
           <div className="flex flex-col items-center gap-3 text-center">
-            <GrowthAvatar name={name} email={email} avatarUrl={avatarUrl || null} size="lg" />
+            <GrowthAvatar
+              name={name}
+              email={email}
+              avatarUrl={preview.avatarUrl || avatarUrl || null}
+              avatarPreset={preview.avatarPreset || null}
+              size="lg"
+            />
             <h3 className="text-lg font-bold">{name}</h3>
             {preview.displayTitle ? (
               <p className="text-sm text-gold/90">{preview.displayTitle}</p>
