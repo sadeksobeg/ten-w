@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
-import { IconStarFilled } from "@/components/growth/icons/GrowthIcons";
+import { IconChevronRight, IconStarFilled } from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   levelName: string;
@@ -53,8 +53,10 @@ export function LevelUpOverlay({ levelName, previousName, onDone }: Props) {
           <LevelBadge levelName={levelName} size="xl" />
         </div>
         {previousName ? (
-          <p className="mt-3 text-xs text-gold">
-            {previousName} → {levelName}
+          <p className="mt-3 inline-flex items-center justify-center gap-2 text-xs text-gold">
+            <span>{previousName}</span>
+            <IconChevronRight size={14} className="text-gold/80" aria-hidden />
+            <span>{levelName}</span>
           </p>
         ) : null}
       </div>

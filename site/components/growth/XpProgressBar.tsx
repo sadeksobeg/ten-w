@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { getXpBrandLabel, XP_BRAND } from "@/lib/growth/xp-brand";
 import { IconLevel } from "@/components/growth/icons/GrowthIcons";
 
@@ -25,6 +26,7 @@ export function XpProgressBar({
   nextLevel,
   showDetails = true,
 }: Props) {
+  const t = useTranslations("Growth.xp");
   const label = getXpBrandLabel(locale);
   const [width, setWidth] = useState(0);
 
@@ -41,6 +43,8 @@ export function XpProgressBar({
     return () => cancelAnimationFrame(id);
   }, [pct]);
 
+  const nf = locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US";
+
   return (
     <div className="rounded-xl border border-white/10 bg-black/25 p-4" dir={locale === "ar" ? "rtl" : "ltr"}>
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -52,13 +56,13 @@ export function XpProgressBar({
         </div>
         {showDetails ? (
           <div className="text-xs font-semibold text-white/55">
-            {currentXp.toLocaleString(locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US")}
+            {currentXp.toLocaleString(nf)}
           </div>
         ) : null}
       </div>
       <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-white/10">
         <div
-          className="h-full rounded-full transition-[width] duration-700 ease-out"
+          className="growth-shimmer h-full rounded-full transition-[width] duration-[1.2s] ease-[cubic-bezier(0.4,0,0.2,1)]"
           style={{
             width: `${width}%`,
             background: `linear-gradient(90deg, ${XP_BRAND.color}99, ${XP_BRAND.color})`,
@@ -71,12 +75,11 @@ export function XpProgressBar({
           {isMax ? (
             <span className="inline-flex items-center gap-1">
               <IconLevel size={14} className="text-gold" aria-hidden />
-              {locale === "ar" ? "المستوى الأعلى" : locale === "fr" ? "Niveau max" : "Max level"}
+              {t("max_level")}
             </span>
           ) : (
             <span>
-              {locale === "ar" ? "الهدف التالي" : locale === "fr" ? "Prochain" : "Next"}: {nextLevel.minXp.toLocaleString()}{" "}
-              ({nextLevel.name}) — {pct}%
+              {t("next_level", { name: nextLevel.name })} — {pct}%
             </span>
           )}
         </div>

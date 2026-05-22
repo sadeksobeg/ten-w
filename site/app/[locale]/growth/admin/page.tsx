@@ -6,16 +6,28 @@ import { StatCard } from "@/components/growth/ui/StatCard";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { fetchAdminOverviewStatsSafe } from "@/lib/growth/prisma-optional";
+import {
+  IconBadge,
+  IconDeals,
+  IconEarnings,
+  IconNotifications,
+} from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
-function activityIcon(kind: string): string {
-  if (kind.includes("deal") || kind.includes("DEAL")) return "🤝";
-  if (kind.includes("badge") || kind.includes("BADGE")) return "🏆";
-  if (kind.includes("payout") || kind.includes("PAYOUT")) return "💰";
-  return "📌";
+function ActivityKindIcon({ kind }: { kind: string }) {
+  if (kind.includes("deal") || kind.includes("DEAL")) {
+    return <IconDeals size={16} className="shrink-0 text-gold" aria-hidden />;
+  }
+  if (kind.includes("badge") || kind.includes("BADGE")) {
+    return <IconBadge size={16} className="shrink-0 text-violet-300" aria-hidden />;
+  }
+  if (kind.includes("payout") || kind.includes("PAYOUT")) {
+    return <IconEarnings size={16} className="shrink-0 text-amber-300" aria-hidden />;
+  }
+  return <IconNotifications size={16} className="shrink-0 text-white/50" aria-hidden />;
 }
 
 export default async function GrowthAdminHomePage({ params }: Props) {
@@ -84,7 +96,7 @@ export default async function GrowthAdminHomePage({ params }: Props) {
             ) : (
               activityRows.map((a) => (
                 <li key={a.id} className="flex gap-2 text-sm">
-                  <span aria-hidden>{activityIcon(a.kind)}</span>
+                  <ActivityKindIcon kind={a.kind} />
                   <span className="min-w-0 flex-1">
                     <span className="font-semibold">{a.headline}</span>
                     <span className="mt-0.5 block text-[10px] text-[var(--growth-text-sub)]">

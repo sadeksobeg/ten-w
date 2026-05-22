@@ -180,6 +180,28 @@
   max-height: min(85vh, 560px);
 }
 
+@keyframes growth-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.15);
+  }
+}
+
+.growth-pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--growth-gold-bright);
+  box-shadow: 0 0 8px rgba(228, 184, 77, 0.6);
+  animation: growth-pulse 1.8s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .growth-page-enter,
   .growth-shimmer,
@@ -187,7 +209,8 @@
   .growth-badge-pulse,
   .growth-bell-ring,
   .growth-skeleton-pulse,
-  .growth-toast-enter {
+  .growth-toast-enter,
+  .growth-pulse-dot {
     animation: none !important;
   }
   .growth-card-hover:hover {

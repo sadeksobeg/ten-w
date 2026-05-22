@@ -7,6 +7,7 @@ import { SectionHeader } from "@/components/growth/ui/SectionHeader";
 import type { DashboardMission } from "@/lib/growth/get-dashboard";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 import { useLocale } from "next-intl";
+import { IconCheck } from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   missions: DashboardMission[];
@@ -56,17 +57,24 @@ export function DashboardMissions({ missions }: Props) {
                     +{mission.xpReward} {powerLabel}
                   </span>
                 </div>
-                <p className="mt-1 text-xs text-[var(--growth-text-sub)]">
-                  {mission.progress}/{mission.target}
-                  {mission.completed && mission.rewardStatus === "pending"
-                    ? ` · ${t("pendingApproval")}`
-                    : mission.completed && mission.rewardStatus === "approved"
-                      ? ` · ${t("done")}`
-                      : mission.completed && mission.rewardStatus === "rejected"
-                        ? ` · ${t("rejected")}`
-                        : mission.completed
-                          ? ` · ${t("done")}`
-                          : ""}
+                <p className="mt-1 flex flex-wrap items-center gap-1 text-xs text-[var(--growth-text-sub)]">
+                  <span>
+                    {mission.progress}/{mission.target}
+                  </span>
+                  {mission.completed && mission.rewardStatus === "pending" ? (
+                    <span>· {t("pendingApproval")}</span>
+                  ) : null}
+                  {mission.completed &&
+                  (mission.rewardStatus === "approved" ||
+                    (!mission.rewardStatus && mission.completed)) ? (
+                    <span className="inline-flex items-center gap-1">
+                      · <IconCheck size={12} className="text-emerald-400" aria-hidden />
+                      {t("done")}
+                    </span>
+                  ) : null}
+                  {mission.completed && mission.rewardStatus === "rejected" ? (
+                    <span>· {t("rejected")}</span>
+                  ) : null}
                 </p>
                 <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
                   <div

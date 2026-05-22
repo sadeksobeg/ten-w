@@ -57,8 +57,6 @@ export default async function GrowthSettingsPage({ params }: Props) {
         <ProfileShareExport publicSlug={user.publicSlug!} locale={locale} />
         <PartnerProfileSettingsForm
           locale={locale}
-          displayTitle={user.partnerProfile?.displayTitle ?? ""}
-          bio={user.bio ?? ""}
           social={
             (user.partnerProfile?.socialLinks as {
               whatsapp?: string;

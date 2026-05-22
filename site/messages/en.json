@@ -1228,7 +1228,7 @@
       "title": "Daily missions",
       "empty": "No missions configured yet.",
       "progress": "{current} / {target}",
-      "done": "Approved ✓",
+      "done": "Approved",
       "pendingApproval": "Complete — awaiting admin approval",
       "rejected": "Not approved",
       "resetsIn": "Resets in {h}h {m}m"
@@ -1380,9 +1380,15 @@
       "unlockSubtitle": "Key: {key}",
       "unlockCta": "Continue"
     },
+    "xp": {
+      "max_level": "Max Level Reached",
+      "next_level": "Next: {name}",
+      "at_deals": "at {count} deals"
+    },
     "settings": {
       "title": "Profile settings",
       "subtitle": "Avatar appears on your dashboard and public profile.",
+      "live_preview": "Profile Preview",
       "avatarSection": "Profile photo",
       "uploadHint": "Drop image or click to upload",
       "save": "Save",
@@ -1393,6 +1399,9 @@
         "hint": "Title, bio, and social links appear on your public partner page.",
         "displayTitle": "Display title",
         "bio": "Bio",
+        "socialWhatsapp": "WhatsApp",
+        "socialLinkedin": "LinkedIn",
+        "socialTwitter": "X / Twitter",
         "save": "Save profile",
         "saved": "Profile saved",
         "error": "Could not save profile"
@@ -1407,6 +1416,7 @@
     },
     "kit": {
       "title": "Marketing kit",
+      "back_to_dashboard": "← Back to Dashboard",
       "record": "Record kit engagement (+AI Seller progress)",
       "audience": "Target audience",
       "pain": "Pain points",
@@ -1506,6 +1516,9 @@
       "dateToday": "Today",
       "dateYesterday": "Yesterday",
       "online": "Online",
+      "bonus_title": "Bonus",
+      "bonus_added": "Added to balance",
+      "badge_new": "New Badge!",
       "empty": "No messages yet — write the first line.",
       "placeholder": "Message…",
       "send": "Send",

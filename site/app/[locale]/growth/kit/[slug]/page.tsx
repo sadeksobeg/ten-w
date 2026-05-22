@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { getPartnerDashboard } from "@/lib/growth/get-dashboard";
 import { ProductMarketingPlaybook } from "@/components/growth/ProductMarketingPlaybook";
@@ -21,6 +22,7 @@ export default async function GrowthKitProductPage({ params }: Props) {
   const data = await getPartnerDashboard(session.user.id, locale);
   const product = data.products.find((p) => p.slug === slug);
   if (!product) notFound();
+  const t = await getTranslations("Growth.kit");
 
   return (
     <div className="space-y-5">
@@ -28,7 +30,7 @@ export default async function GrowthKitProductPage({ params }: Props) {
         href={`/${locale}/growth`}
         className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/75 hover:border-gold/30 hover:text-white"
       >
-        ← العودة للوحة
+        {t("back_to_dashboard")}
       </Link>
 
       <ProductMarketingPlaybook

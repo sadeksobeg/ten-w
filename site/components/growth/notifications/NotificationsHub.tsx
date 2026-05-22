@@ -4,16 +4,8 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { markAllNotificationsReadAction } from "@/lib/growth/actions";
-import {
-  IconAlert,
-  IconBadge,
-  IconDeals,
-  IconEarnings,
-  IconEvent,
-  IconLevel,
-  IconNotifications,
-  IconXp,
-} from "@/components/growth/icons/GrowthIcons";
+import { IconNotifications } from "@/components/growth/icons/GrowthIcons";
+import { NotificationTypeIcon } from "@/lib/growth/notification-styles";
 import { EmptyState } from "@/components/growth/ui/EmptyState";
 
 export type NotificationRow = {
@@ -30,27 +22,6 @@ type Props = {
   initial: NotificationRow[];
   locale: string;
 };
-
-function NotificationTypeIcon({ type, size = 18 }: { type: string; size?: number }) {
-  switch (type) {
-    case "EVENT_INVITE":
-    case "EVENT_REMINDER":
-    case "EVENT_MILESTONE":
-      return <IconEvent size={size} />;
-    case "BADGE_EARNED":
-      return <IconBadge size={size} />;
-    case "LEVEL_UP":
-      return <IconLevel size={size} />;
-    case "XP_BOOST":
-      return <IconXp size={size} />;
-    case "PAYOUT_UPDATE":
-      return <IconEarnings size={size} />;
-    case "DEAL_CLOSED":
-      return <IconDeals size={size} />;
-    default:
-      return <IconAlert size={size} />;
-  }
-}
 
 function dayGroup(iso: string): "today" | "yesterday" | "week" {
   const d = new Date(iso);
@@ -161,9 +132,7 @@ export function NotificationsHub({ initial, locale }: Props) {
                           : "border-s-[3px] border-s-gold border-white/10 bg-gold/5"
                       }`}
                     >
-                      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-gold">
-                        <NotificationTypeIcon type={n.type} />
-                      </span>
+                      <NotificationTypeIcon type={n.type} size={18} circleSize={36} />
                       <span className="min-w-0 flex-1">
                         <p className="text-sm font-semibold text-white">{n.title}</p>
                         <p className="line-clamp-2 text-xs text-white/50">{n.body}</p>

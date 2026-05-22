@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
+import { IconEarnings } from "@/components/growth/icons/GrowthIcons";
 import type { ChatMessageDTO } from "@/lib/growth/chat-service";
 
 type Props = {
@@ -17,12 +20,38 @@ type Props = {
   avatarLabel?: string;
 };
 
+function parseBadgeKey(
+  metadata: Record<string, unknown> | null,
+  body: string,
+): string | null {
+  const raw = metadata?.badgeKey;
+  if (typeof raw === "string" && raw.trim()) return raw.trim();
+  const match = body.match(/badge[_\s-]?key[:\s]+([a-z0-9_]+)/i);
+  if (match?.[1]) return match[1];
+  const keyMatch = body.match(/\b(first_deal|deals_\d+|first_referral|network_builder|ai_seller|fast_closer|top_performer|elite_pulse|trusted_partner|vip_seller|strategic_agent)\b/i);
+  return keyMatch?.[1]?.toLowerCase() ?? null;
+}
+
+function parseAmountCents(
+  metadata: Record<string, unknown> | null,
+  body: string,
+): number | null {
+  const raw = metadata?.amountCents;
+  if (typeof raw === "number" && Number.isFinite(raw)) return raw;
+  if (typeof raw === "string") {
+    const n = Number(raw);
+    if (Number.isFinite(n)) return n;
+  }
+  const match = body.match(/\$?\s*([\d,]+(?:\.\d{1,2})?)/);
+  if (match?.[1]) {
+    const n = Number.parseFloat(match[1].replace(/,/g, ""));
+    if (Number.isFinite(n)) return Math.round(n * 100);
+  }
+  return null;
+}
+
 function bubbleTone(kind: string): string {
   switch (kind) {
-    case "BONUS":
-      return "border-emerald-400/35 bg-emerald-500/10 text-emerald-50 shadow-[0_0_24px_rgba(16,185,129,0.18)]";
-    case "BADGE":
-      return "border-gold/40 bg-gold/10 text-white shadow-[0_0_26px_rgba(234,179,8,0.2)]";
     case "SYSTEM":
       return "border-white/12 bg-white/[0.06] text-white/90";
     case "WARNING":
@@ -54,7 +83,6 @@ function avatarInitial(label: string): string {
   return label.slice(0, 2).toUpperCase();
 }
 
-/** Outgoing (mine) on visual right; incoming on visual left — LTR and RTL. */
 function messageRowLayout(locale: string, mine: boolean) {
   const rtl = locale === "ar";
   if (mine) {
@@ -84,9 +112,10 @@ export function GrowthChatMessageBubble({
   adminLabel,
   avatarLabel,
 }: Props) {
+  const tChat = useTranslations("Growth.chat");
+  const tBadges = useTranslations("Growth.badges");
   const mine = m.senderUserId === viewerUserId;
   const kindUpper = m.kind.toUpperCase();
-  const rich = ["BONUS", "BADGE", "SYSTEM", "WARNING", "ACTION"].includes(kindUpper);
   const nf =
     locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US";
   const time = new Intl.DateTimeFormat(nf, {
@@ -127,9 +156,63 @@ export function GrowthChatMessageBubble({
     );
   }
 
-  if (rich) {
+  if (kindUpper === "BADGE") {
+    const badgeKey = parseBadgeKey(m.metadata, m.body) ?? "first_deal";
+    let badgeLabel = m.body;
+    try {
+      badgeLabel = tBadges(`${badgeKey}.label`);
+    } catch {
+      /* use body fallback */
+    }
+    return (
+      <div
+        className={`flex justify-center py-1 ${showAvatarRow ? "pt-2" : "pt-0.5"}`}
+      >
+        <div
+          className="mx-auto flex max-w-[240px] flex-col items-center gap-2 rounded-2xl border p-4 text-center"
+          style={{
+            borderColor: "rgba(139, 92, 246, 0.4)",
+            background: "rgba(139, 92, 246, 0.08)",
+          }}
+        >
+          <BadgeIcon badgeKey={badgeKey} earned size="md" animate showGlow />
+          <p className="text-sm font-bold text-white">{tChat("badge_new")}</p>
+          <p className="text-xs text-white/70">{badgeLabel}</p>
+          <p className="text-[10px] text-white/35">{time}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (kindUpper === "BONUS") {
+    const cents = parseAmountCents(m.metadata, m.body) ?? 0;
+    const amountStr = `$${(cents / 100).toFixed(2)}`;
+    return (
+      <div
+        className={`flex justify-center py-1 ${showAvatarRow ? "pt-2" : "pt-0.5"}`}
+      >
+        <div
+          className={`mx-auto flex max-w-[240px] flex-col items-center gap-2 rounded-2xl border p-4 text-center transition-shadow duration-500 ${
+            bonusFlash ? "shadow-[0_0_40px_rgba(234,179,8,0.55)] ring-2 ring-gold/50" : ""
+          }`}
+          style={{
+            borderColor: "rgba(176, 125, 43, 0.4)",
+            background: "rgba(176, 125, 43, 0.08)",
+          }}
+        >
+          <IconEarnings size={32} className="text-gold" />
+          <p className="text-sm font-bold text-gold">{tChat("bonus_title")}</p>
+          <p className="text-xl font-extrabold tabular-nums text-white">{amountStr}</p>
+          <p className="text-xs text-white/60">{tChat("bonus_added")}</p>
+          <p className="text-[10px] text-white/35">{time}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const richKinds = ["WARNING", "ACTION"];
+  if (richKinds.includes(kindUpper)) {
     const tone = bubbleTone(kindUpper);
-    const flash = kindUpper === "BONUS" && bonusFlash;
     return (
       <div
         className={`motion-safe:animate-in motion-safe:fade-in flex justify-center py-1 ${
@@ -137,9 +220,7 @@ export function GrowthChatMessageBubble({
         }`}
       >
         <div
-          className={`max-w-[min(92%,420px)] rounded-2xl border px-4 py-2.5 text-sm transition-shadow duration-500 ${tone} ${
-            flash ? "shadow-[0_0_40px_rgba(234,179,8,0.55)] ring-2 ring-gold/50" : ""
-          }`}
+          className={`max-w-[min(92%,420px)] rounded-2xl border px-4 py-2.5 text-sm ${tone}`}
         >
           <div className="text-[10px] font-semibold uppercase tracking-wide text-white/50">
             {kindLabel(kindUpper)}

@@ -3,17 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import {
-  IconAlert,
-  IconBadge,
-  IconCheck,
-  IconDeals,
-  IconEarnings,
-  IconEvent,
-  IconLevel,
-  IconNotifications,
-  IconXp,
-} from "@/components/growth/icons/GrowthIcons";
+import { IconCheck, IconNotifications } from "@/components/growth/icons/GrowthIcons";
+import { NotificationTypeIcon } from "@/lib/growth/notification-styles";
+import { relativeDate } from "@/lib/growth/relative-date";
 
 type NotificationRow = {
   id: string;
@@ -24,37 +16,6 @@ type NotificationRow = {
   isRead: boolean;
   createdAt: string;
 };
-
-function NotificationTypeIcon({ type, size = 16 }: { type: string; size?: number }) {
-  switch (type) {
-    case "EVENT_INVITE":
-    case "EVENT_REMINDER":
-    case "EVENT_MILESTONE":
-      return <IconEvent size={size} />;
-    case "BADGE_EARNED":
-      return <IconBadge size={size} />;
-    case "LEVEL_UP":
-      return <IconLevel size={size} />;
-    case "XP_BOOST":
-      return <IconXp size={size} />;
-    case "PAYOUT_UPDATE":
-      return <IconEarnings size={size} />;
-    case "DEAL_CLOSED":
-      return <IconDeals size={size} />;
-    default:
-      return <IconAlert size={size} />;
-  }
-}
-
-function timeAgo(iso: string, locale: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const min = Math.floor(diff / 60000);
-  if (min < 1) return locale === "ar" ? "الآن" : "now";
-  if (min < 60) return locale === "ar" ? `منذ ${min} د` : `${min}m`;
-  const h = Math.floor(min / 60);
-  if (h < 24) return locale === "ar" ? `منذ ${h} س` : `${h}h`;
-  return locale === "ar" ? `منذ ${Math.floor(h / 24)} ي` : `${Math.floor(h / 24)}d`;
-}
 
 type Props = { locale: string };
 
@@ -188,13 +149,13 @@ export function NotificationBell({ locale }: Props) {
                     onClick={() => void onClickItem(n)}
                     className={`flex w-full gap-3 border-b border-white/5 px-3 py-2.5 text-start transition hover:bg-white/[0.04] focus-visible:ring-2 focus-visible:ring-gold/40 ${!n.isRead ? "border-s-[3px] border-s-gold bg-gold/[0.04]" : ""}`}
                   >
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-gold">
-                      <NotificationTypeIcon type={n.type} />
-                    </span>
+                    <NotificationTypeIcon type={n.type} size={16} circleSize={36} />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-xs font-bold">{n.title}</span>
                       <span className="line-clamp-1 text-[10px] text-white/50">{n.body}</span>
-                      <span className="text-[9px] text-white/35">{timeAgo(n.createdAt, locale)}</span>
+                      <span className="text-[9px] text-white/35">
+                        {relativeDate(n.createdAt, locale)}
+                      </span>
                     </span>
                     {!n.isRead ? (
                       <IconCheck size={12} className="mt-1 shrink-0 text-gold" aria-hidden />

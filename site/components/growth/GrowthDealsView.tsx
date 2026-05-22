@@ -23,7 +23,12 @@ export async function GrowthDealsView({ locale, data }: Props) {
     <div className="space-y-8 growth-page-enter">
       <GlassCard className="border border-white/12 bg-white/[0.03] p-6">
         <AddLeadDealForm
-          products={data.products.map((p) => ({ id: p.id, name: p.name }))}
+          products={data.products.map((p) => ({
+            id: p.id,
+            name: p.name,
+            priceCents: p.priceCents,
+            commissionBaseCents: p.commissionBaseCents,
+          }))}
           referralCode={data.profile.referralCode}
         />
       </GlassCard>

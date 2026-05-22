@@ -11,6 +11,8 @@ import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
 import { getLevelVisual } from "@/lib/growth/level-visual";
+import { getLevelI18nKey, LEVEL_COLORS } from "@/lib/growth/level-i18n";
+import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
 import { PartnerNetworkTree } from "@/components/growth/profile/PartnerNetworkTree";
 import { getPublicProfileBySlug } from "@/lib/growth/get-public-profile";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
@@ -57,6 +59,8 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
   const xpLabel = getXpBrandLabel(locale);
   const registerHref = `/${locale}/growth/register?ref=${encodeURIComponent(data.referralCode)}`;
   const lv = getLevelVisual(data.levelName);
+  const levelKey = getLevelI18nKey(data.levelCode, data.levelName);
+  const heroColor = LEVEL_COLORS[levelKey] ?? LEVEL_COLORS.starter;
 
   return (
     <>
@@ -65,7 +69,7 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
       <div
         className="overflow-hidden rounded-2xl border border-[var(--growth-border)]"
         style={{
-          background: `linear-gradient(135deg, ${lv.gradientFrom}33, var(--growth-surface) 55%, ${lv.gradientTo}22)`,
+          background: `linear-gradient(135deg, ${heroColor}33, var(--growth-surface) 55%, ${heroColor}22)`,
         }}
       >
         <div className="flex flex-col items-center gap-4 px-6 py-10 text-center sm:flex-row sm:text-start">
@@ -90,7 +94,7 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
               <p className="mt-1 text-sm text-gold/90">{data.displayTitle}</p>
             ) : null}
             <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-              <LevelBadge levelName={data.levelName} size="lg" />
+              <LevelBadge levelName={data.levelName} levelCode={data.levelCode} locale={locale} size="lg" />
               <span className="text-xs text-[var(--growth-text-sub)]">T.E.N.E.G.T.A</span>
             </div>
             {data.bio ? (
@@ -185,7 +189,10 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
         <h2 className="text-lg font-bold">{t("ctaTitle")}</h2>
         <p className="mt-2 text-sm text-[var(--growth-text-sub)]">{t("ctaBody")}</p>
         <Link href={registerHref} className="mt-4 inline-block">
-          <GoldButton>{t("ctaButton")} ←</GoldButton>
+          <GoldButton className="inline-flex items-center gap-2">
+            {t("ctaButton")}
+            <IconChevronRight size={18} className={locale === "ar" ? "scale-x-[-1]" : ""} aria-hidden />
+          </GoldButton>
         </Link>
       </GlassCard>
 

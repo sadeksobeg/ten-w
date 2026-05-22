@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { renderMarkdownLite } from "@/lib/growth/markdown-lite";
 import { JoinEventModal } from "@/components/growth/JoinEventModal";
 import { EventMilestoneTimeline } from "@/components/growth/events/EventMilestoneTimeline";
+import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -47,8 +48,16 @@ export default async function GrowthEventDetailPage({ params }: Props) {
 
   return (
     <div className="space-y-6">
-      <Link href={`/${locale}/growth/events`} className="text-xs text-gold hover:underline">
-        ← {t("back")}
+      <Link
+        href={`/${locale}/growth/events`}
+        className="inline-flex items-center gap-1 text-xs font-semibold text-gold hover:underline"
+      >
+        <IconChevronRight
+          size={14}
+          className={locale === "ar" ? "rotate-180" : ""}
+          aria-hidden
+        />
+        {t("back")}
       </Link>
 
       <GlassCard className="p-6">

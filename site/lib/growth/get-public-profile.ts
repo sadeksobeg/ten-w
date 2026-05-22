@@ -26,6 +26,7 @@ export type PublicProfileData = {
   publicSlug: string;
   referralCode: string;
   levelName: string;
+  levelCode: string;
   levelOrder: number;
   currentLevelMinXp: number;
   nextLevel: { name: string; minXp: number } | null;
@@ -135,6 +136,7 @@ export async function getPublicProfileBySlug(
     publicSlug: user.publicSlug,
     referralCode: user.partnerProfile.referralCode,
     levelName: resolveLevelName(user.partnerProfile.currentLevel.name, locale),
+    levelCode: user.partnerProfile.currentLevel.code,
     levelOrder: user.partnerProfile.currentLevel.order,
     currentLevelMinXp: user.partnerProfile.currentLevel.minXp,
     nextLevel: nextLevel

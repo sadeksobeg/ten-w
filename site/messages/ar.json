@@ -1335,9 +1335,15 @@
       "unlockSubtitle": "المفتاح: {key}",
       "unlockCta": "متابعة"
     },
+    "xp": {
+      "max_level": "أنت في أعلى مستوى",
+      "next_level": "المستوى التالي: {name}",
+      "at_deals": "عند {count} صفقة"
+    },
     "settings": {
       "title": "إعدادات الملف",
       "subtitle": "صورة الملف الشخصي تظهر في لوحتك وبروفايلك العام.",
+      "live_preview": "معاينة الملف",
       "avatarSection": "الصورة الشخصية",
       "uploadHint": "اسحب صورة أو انقر للرفع",
       "save": "حفظ",
@@ -1348,6 +1354,9 @@
         "hint": "العنوان والنبذة وروابط التواصل تظهر في صفحة البروفايل العام.",
         "displayTitle": "العنوان الظاهر",
         "bio": "نبذة",
+        "socialWhatsapp": "واتساب",
+        "socialLinkedin": "لينكدإن",
+        "socialTwitter": "X / تويتر",
         "save": "حفظ الملف",
         "saved": "تم حفظ الملف",
         "error": "تعذّر حفظ الملف"
@@ -1362,6 +1371,7 @@
     },
     "kit": {
       "title": "حزمة التسويق",
+      "back_to_dashboard": "← العودة للوحة",
       "record": "تسجيل تفاعل مع الحزمة (يُسجّل تقدّم شارة «بائع ذكاء»)",
       "audience": "الفئة المستهدفة",
       "pain": "نقاط الألم",
@@ -1466,6 +1476,10 @@
       "partnerTag": "شريك",
       "youLabel": "أنت",
       "supportLabel": "دعم TENEGTA",
+      "online": "متصل",
+      "bonus_title": "مكافأة",
+      "bonus_added": "أُضيفت للرصيد",
+      "badge_new": "شارة جديدة!",
       "message": {
         "kindBonus": "مكافأة",
         "kindBadge": "شارة",

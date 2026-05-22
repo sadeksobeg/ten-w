@@ -46,6 +46,8 @@ export function EventsHubTabs({
     }
   }, [all, tab, invitedSet, joinedSet, completedSet]);
 
+  const invitedCount = invitedSlugs.length;
+
   const tabs: { key: Tab; label: string }[] = [
     { key: "ALL", label: t("tabAll") },
     { key: "INVITED", label: t("invited") },
@@ -56,20 +58,32 @@ export function EventsHubTabs({
   return (
     <div className="space-y-6">
       <div className="flex gap-2 overflow-x-auto border-b border-white/10 pb-1">
-        {tabs.map(({ key, label }) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setTab(key)}
-            className={`shrink-0 border-b-2 px-3 py-2 text-xs font-bold transition ${
-              tab === key
-                ? "border-gold text-gold"
-                : "border-transparent text-white/50 hover:text-white"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+        {tabs.map(({ key, label }) => {
+          const active = tab === key;
+          const showInvitedPulse = key === "INVITED" && invitedCount > 0;
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setTab(key)}
+              className={`inline-flex shrink-0 items-center gap-2 border-b-2 px-3 py-2 text-xs font-bold transition ${
+                active
+                  ? "border-gold text-gold"
+                  : "border-transparent text-white/50 hover:text-white"
+              }`}
+            >
+              {label}
+              {showInvitedPulse ? (
+                <>
+                  <span className="rounded-full bg-gold/20 px-1.5 py-0.5 text-[10px] font-extrabold text-gold">
+                    {invitedCount}
+                  </span>
+                  <span className="growth-pulse-dot" aria-hidden />
+                </>
+              ) : null}
+            </button>
+          );
+        })}
       </div>
       {filtered.length === 0 ? (
         <EmptyState illustration="calendar" message={t("empty")} />

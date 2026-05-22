@@ -1378,9 +1378,15 @@
       "unlockSubtitle": "Key: {key}",
       "unlockCta": "Continue"
     },
+    "xp": {
+      "max_level": "Niveau maximum",
+      "next_level": "Prochain: {name}",
+      "at_deals": "à {count} affaires"
+    },
     "settings": {
       "title": "Paramètres du profil",
       "subtitle": "L'avatar apparaît sur votre tableau de bord et profil public.",
+      "live_preview": "Aperçu du profil",
       "avatarSection": "Photo de profil",
       "uploadHint": "Déposez une image ou cliquez",
       "save": "Enregistrer",
@@ -1391,6 +1397,9 @@
         "hint": "Titre, bio et réseaux sociaux sur votre page partenaire.",
         "displayTitle": "Titre affiché",
         "bio": "Bio",
+        "socialWhatsapp": "WhatsApp",
+        "socialLinkedin": "LinkedIn",
+        "socialTwitter": "X / Twitter",
         "save": "Enregistrer le profil",
         "saved": "Profil enregistré",
         "error": "Impossible d'enregistrer le profil"
@@ -1405,6 +1414,7 @@
     },
     "kit": {
       "title": "Marketing kit",
+      "back_to_dashboard": "← Retour au tableau de bord",
       "record": "Record kit engagement (+AI Seller progress)",
       "audience": "Target audience",
       "pain": "Pain points",
@@ -1509,6 +1519,10 @@
       "partnerTag": "Partenaire",
       "youLabel": "Vous",
       "supportLabel": "Support TENEGTA",
+      "online": "En ligne",
+      "bonus_title": "Prime",
+      "bonus_added": "Ajouté au solde",
+      "badge_new": "Nouveau badge!",
       "message": {
         "kindBonus": "Bonus",
         "kindBadge": "Badge",

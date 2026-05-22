@@ -10,6 +10,7 @@ import type {
 import type { ChatSuggestionItem } from "@/lib/growth/chat-suggestions";
 import { suggestImpactDelta } from "@/lib/growth/chat-suggestions";
 import { GrowthChatMessageBubble } from "@/components/growth/chat/GrowthChatMessageBubble";
+import { Link } from "@/i18n/navigation";
 import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
 import { GrowthChatQuickActionsBar } from "@/components/growth/chat/GrowthChatQuickActionsBar";
 import { playDemoChime } from "@/lib/demo/demo-sound";
@@ -625,8 +626,33 @@ export function GrowthChatThread({
         }
       >
         {!embedded && !hideThreadTitle ? (
-          <div className="border-b border-white/10 px-4 py-2.5 text-xs font-semibold text-white/50">
-            {t("threadTitle")}
+          <div className="flex items-center gap-3 border-b border-[var(--growth-border)] bg-[var(--growth-surface)] px-4 py-3">
+            <div
+              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#B07D2B] to-[#E4B84D] text-base font-bold text-black"
+              aria-hidden
+            >
+              T
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold text-[var(--growth-text)]">{t("supportLabel")}</p>
+              <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-[var(--growth-text-sub)]">
+                <span
+                  className="inline-block size-2 shrink-0 rounded-full bg-emerald-500"
+                  aria-hidden
+                />
+                {t("online")}
+              </p>
+            </div>
+            <Link
+              href="/growth"
+              className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/10 text-gold transition hover:border-gold/40 focus-visible:ring-2 focus-visible:ring-gold/40"
+              aria-label={t("back")}
+            >
+              <IconChevronRight
+                size={18}
+                className={locale === "ar" ? "scale-x-[-1]" : ""}
+              />
+            </Link>
           </div>
         ) : null}
 

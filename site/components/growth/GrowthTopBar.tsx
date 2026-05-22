@@ -74,7 +74,7 @@ export async function GrowthTopBar({ locale, variant }: Props) {
                 target="_blank"
                 rel="noreferrer"
               >
-                {locale === "ar" ? "بروفايلي" : locale === "fr" ? "Mon profil" : "My profile"}
+                {t("myProfile")}
               </Link>
             ) : null}
           </>

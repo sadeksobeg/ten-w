@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { getLevelVisual } from "@/lib/growth/level-visual";
-import { resolveLevelName } from "@/lib/growth/level-i18n";
+import { getLevelI18nKey, resolveLevelName } from "@/lib/growth/level-i18n";
 
 type Size = "sm" | "md" | "lg" | "xl";
 
@@ -30,16 +30,14 @@ export function LevelBadge({
 }: Props) {
   const t = useTranslations("Growth.levels");
   const v = getLevelVisual(levelName);
-  const code = levelCode?.toLowerCase();
-  let label = levelName;
-  if (code) {
-    try {
-      label = t(`${code}.name`);
-    } catch {
-      label = resolveLevelName(levelName, locale);
-    }
-  } else {
-    label = resolveLevelName(levelName, locale);
+  const key = getLevelI18nKey(levelCode, levelName);
+  const i18nKey = `${key}.name` as const;
+  let label = resolveLevelName(levelName, locale);
+  try {
+    const translated = t(i18nKey);
+    if (translated && translated !== i18nKey) label = translated;
+  } catch {
+    /* use resolveLevelName fallback */
   }
 
   return (

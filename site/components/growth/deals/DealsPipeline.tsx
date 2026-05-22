@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/growth/ui/EmptyState";
 import { IconCheck, IconChevronDown, IconClose, IconDeals } from "@/components/growth/icons/GrowthIcons";
 import { DealJourneyRow } from "@/components/growth/DealJourneyRow";
 import type { DashboardDeal } from "@/lib/growth/get-dashboard";
+import { relativeDate } from "@/lib/growth/relative-date";
 
 type Tab = DealStatus;
 
@@ -15,13 +16,6 @@ type Props = {
   deals: DashboardDeal[];
   journeyLabels: Record<string, string>;
 };
-
-function daysAgo(date: Date, locale: string): string {
-  const d = Math.floor((Date.now() - date.getTime()) / 86400000);
-  if (locale === "ar") return d < 1 ? "اليوم" : `منذ ${d} ي`;
-  if (locale === "fr") return d < 1 ? "aujourd'hui" : `il y a ${d} j`;
-  return d < 1 ? "today" : `${d}d ago`;
-}
 
 function borderClass(status: DealStatus): string {
   switch (status) {
@@ -96,7 +90,7 @@ export function DealsPipeline({ deals, journeyLabels }: Props) {
         placeholder={t("searchPh")}
         className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-white outline-none focus:border-gold/40"
       />
-      <div className="flex gap-2 overflow-x-auto border-b border-white/10 pb-1">
+      <div className="flex gap-1 overflow-x-auto rounded-xl border border-[var(--growth-border)] bg-white/[0.04] p-1">
         {tabs.map(({ key, label }) => {
           const n = counts[key];
           const active = tab === key;
@@ -105,13 +99,20 @@ export function DealsPipeline({ deals, journeyLabels }: Props) {
               key={key}
               type="button"
               onClick={() => setTab(key)}
-              className={`shrink-0 border-b-2 px-3 py-2 text-xs font-bold transition ${
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition ${
                 active
-                  ? "border-gold text-gold"
-                  : "border-transparent text-white/50 hover:text-white"
+                  ? "bg-gradient-to-r from-gold/90 via-gold to-gold-bright text-bg shadow-sm"
+                  : "bg-transparent text-white/50 hover:bg-white/[0.04] hover:text-white"
               }`}
             >
-              {label} ({n})
+              {label}
+              <span
+                className={`rounded-full px-1.5 py-0.5 text-[10px] font-extrabold ${
+                  active ? "bg-black/20 text-bg" : "bg-white/10 text-white/60"
+                }`}
+              >
+                {n}
+              </span>
             </button>
           );
         })}
@@ -129,7 +130,7 @@ export function DealsPipeline({ deals, journeyLabels }: Props) {
               >
                 <button
                   type="button"
-                  className="flex w-full flex-col gap-2 p-4 text-start sm:flex-row sm:items-start sm:justify-between"
+                  className="flex w-full items-start gap-2 p-4 text-start"
                   onClick={() => setExpanded(open ? null : d.id)}
                 >
                   <div className="min-w-0 flex-1">
@@ -146,16 +147,23 @@ export function DealsPipeline({ deals, journeyLabels }: Props) {
                       {t("client")}: {d.clientLabel ?? t("noClient")}
                     </div>
                     <div className="mt-1 text-xs text-white/45">
-                      {t("value")}: {fmt(d.saleAmountCents)} · {daysAgo(d.createdAt, locale)}
+                      {t("value")}: {fmt(d.saleAmountCents)} · {relativeDate(d.createdAt, locale)}
                     </div>
                   </div>
-                  <span className="shrink-0 text-[10px] font-bold uppercase text-gold/80">
-                    {d.status === DealStatus.CLOSED
-                      ? t("status.closed")
-                      : d.status === DealStatus.LOST
-                        ? t("status.lost")
-                        : t("status.pending")}
-                  </span>
+                  <div className="flex shrink-0 flex-col items-end gap-2">
+                    <span className="text-[10px] font-bold uppercase text-gold/80">
+                      {d.status === DealStatus.CLOSED
+                        ? t("status.closed")
+                        : d.status === DealStatus.LOST
+                          ? t("status.lost")
+                          : t("status.pending")}
+                    </span>
+                    <IconChevronDown
+                      size={18}
+                      className={`text-white/40 transition-transform ${open ? "rotate-180" : ""}`}
+                      aria-hidden
+                    />
+                  </div>
                 </button>
                 {open ? (
                   <div className="border-t border-white/10 px-4 pb-4 pt-3">
