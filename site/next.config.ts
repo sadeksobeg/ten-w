@@ -37,7 +37,7 @@ const nextConfig: NextConfig = {
       "@react-three/fiber",
     ],
     serverActions: {
-      bodySizeLimit: "4mb",
+      bodySizeLimit: "8mb",
     },
   },
   async redirects() {

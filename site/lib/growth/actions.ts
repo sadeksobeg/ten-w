@@ -1302,7 +1302,7 @@ export async function adminCreateEventAction(
   const coverRaw = String(formData.get("coverImage") ?? "").trim();
   let coverImage: string | null = null;
   if (coverRaw) {
-    if (coverRaw.length > 400_000) return { ok: false, error: "image_too_large" };
+    if (coverRaw.length > 1_500_000) return { ok: false, error: "image_too_large" };
     if (!coverRaw.startsWith("data:image/")) return { ok: false, error: "invalid_image" };
     coverImage = coverRaw;
   }
@@ -1497,7 +1497,7 @@ export async function adminUpdateEventAction(
   if (coverRaw === "__keep__") {
     /* omit */
   } else if (coverRaw) {
-    if (coverRaw.length > 2_800_000) return { ok: false, error: "image_too_large" };
+    if (coverRaw.length > 1_500_000) return { ok: false, error: "image_too_large" };
     if (!coverRaw.startsWith("data:image/")) return { ok: false, error: "invalid_image" };
     coverPatch = { coverImage: coverRaw };
   } else {

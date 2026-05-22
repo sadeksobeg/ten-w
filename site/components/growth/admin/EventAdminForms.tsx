@@ -12,6 +12,11 @@ import {
   adminDeleteEventAction,
   adminUpdateEventAction,
 } from "@/lib/growth/actions";
+import {
+  EVENT_COVER_COMPRESS_OPTS,
+  EVENT_COVER_MAX_BASE64,
+  shrinkDataUrl,
+} from "@/lib/growth/compress-image-client";
 
 type MilestoneDraft = {
   title: string;
@@ -75,7 +80,21 @@ export function CreateEventForm({ locale }: { locale: string }) {
     fd.set("endAt", endAt);
     fd.set("maxParticipants", maxParticipants);
     fd.set("status", eventStatus);
-    if (coverImage) fd.set("coverImage", coverImage);
+    if (coverImage) {
+      try {
+        const cover = await shrinkDataUrl(coverImage, EVENT_COVER_COMPRESS_OPTS);
+        if (cover.length > EVENT_COVER_MAX_BASE64) {
+          setStatus(eventErrorText(t, "image_too_large"));
+          setPending(false);
+          return;
+        }
+        fd.set("coverImage", cover);
+      } catch {
+        setStatus(eventErrorText(t, "image_too_large"));
+        setPending(false);
+        return;
+      }
+    }
     fd.set(
       "milestonesJson",
       JSON.stringify(
@@ -123,10 +142,12 @@ export function CreateEventForm({ locale }: { locale: string }) {
               value={coverImage}
               onChange={setCoverImage}
               aspectRatio="16/9"
-              maxEdge={640}
-              jpegQuality={0.78}
+              forceJpeg
+              maxEdge={1280}
+              jpegQuality={0.85}
+              maxBase64Len={EVENT_COVER_MAX_BASE64 - 50_000}
               placeholder={t("coverPlaceholder")}
-              hint="PNG, JPG · 2MB"
+              hint={t("coverHint")}
             />
           </div>
         </label>
@@ -346,7 +367,16 @@ export function EditEventForm({ event, locale }: { event: AdminEventRow; locale:
     fd.set("startAt", startAt);
     fd.set("endAt", endAt);
     fd.set("maxParticipants", maxParticipants);
-    fd.set("coverImage", coverImage || "__keep__");
+    if (coverImage && coverImage !== (event.coverImage ?? "")) {
+      try {
+        const cover = await shrinkDataUrl(coverImage, EVENT_COVER_COMPRESS_OPTS);
+        fd.set("coverImage", cover.length > EVENT_COVER_MAX_BASE64 ? "__keep__" : cover);
+      } catch {
+        fd.set("coverImage", "__keep__");
+      }
+    } else {
+      fd.set("coverImage", coverImage || "__keep__");
+    }
     fd.set(
       "milestonesJson",
       JSON.stringify(
@@ -419,7 +449,12 @@ export function EditEventForm({ event, locale }: { event: AdminEventRow; locale:
             value={coverImage}
             onChange={setCoverImage}
             aspectRatio="16/9"
+            forceJpeg
+            maxEdge={1280}
+            jpegQuality={0.85}
+            maxBase64Len={EVENT_COVER_MAX_BASE64 - 50_000}
             placeholder={t("coverPlaceholder")}
+            hint={t("coverHint")}
           />
           {status === "ok" ? <p className="text-xs text-emerald-300">{t("updated")}</p> : null}
           {status && status !== "ok" ? <p className="text-xs text-rose-300">{status}</p> : null}

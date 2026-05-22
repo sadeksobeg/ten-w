@@ -2,6 +2,10 @@
 
 import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import {
+  compressImageFile,
+  type CompressImageOptions,
+} from "@/lib/growth/compress-image-client";
 
 type Aspect = "16/9" | "1/1" | "4/3";
 
@@ -11,10 +15,10 @@ type Props = {
   aspectRatio?: Aspect;
   placeholder?: string;
   hint?: string;
-  /** Max width/height after compress (default 512). */
   maxEdge?: number;
-  /** JPEG quality 0–1 when not PNG (default 0.82). */
   jpegQuality?: number;
+  forceJpeg?: boolean;
+  maxBase64Len?: number;
 };
 
 const aspectClass: Record<Aspect, string> = {
@@ -23,30 +27,7 @@ const aspectClass: Record<Aspect, string> = {
   "4/3": "aspect-[4/3]",
 };
 
-const MAX_BYTES = 2 * 1024 * 1024;
-
-async function compressImageFile(
-  file: File,
-  maxEdge: number,
-  jpegQuality: number,
-): Promise<string> {
-  const bitmap = await createImageBitmap(file);
-  const scale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));
-  const w = Math.max(1, Math.round(bitmap.width * scale));
-  const h = Math.max(1, Math.round(bitmap.height * scale));
-  const canvas = document.createElement("canvas");
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("canvas");
-  ctx.drawImage(bitmap, 0, 0, w, h);
-  bitmap.close();
-  const out =
-    file.type === "image/png"
-      ? canvas.toDataURL("image/png")
-      : canvas.toDataURL("image/jpeg", jpegQuality);
-  return out;
-}
+const MAX_BYTES = 8 * 1024 * 1024;
 
 export function ImageUpload({
   value,
@@ -56,12 +37,21 @@ export function ImageUpload({
   hint,
   maxEdge = 512,
   jpegQuality = 0.82,
+  forceJpeg = false,
+  maxBase64Len,
 }: Props) {
   const t = useTranslations("Growth.settings");
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState(value ?? "");
   const [busy, setBusy] = useState(false);
+
+  const compressOpts: CompressImageOptions = {
+    maxEdge,
+    jpegQuality,
+    forceJpeg,
+    maxBase64Len,
+  };
 
   async function onFile(file: File | undefined) {
     if (!file) return;
@@ -71,12 +61,12 @@ export function ImageUpload({
       return;
     }
     if (file.size > MAX_BYTES) {
-      setError("< 2MB");
+      setError("< 8MB");
       return;
     }
     setBusy(true);
     try {
-      const result = await compressImageFile(file, maxEdge, jpegQuality);
+      const result = await compressImageFile(file, compressOpts);
       setPreview(result);
       onChange(result);
     } catch {

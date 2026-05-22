@@ -1861,6 +1861,7 @@
         "updateProgress": "تحديث",
         "coverImage": "صورة الغلاف",
         "coverPlaceholder": "اسحب صورة أو انقر للرفع",
+        "coverHint": "PNG أو JPG حتى 8MB — تُضغط تلقائياً للحفاظ على الجودة",
         "livePreview": "معاينة مباشرة",
         "previewTitle": "عنوان الفعالية",
         "previewDesc": "وصف مختصر يظهر للشركاء",
