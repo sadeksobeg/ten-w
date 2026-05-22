@@ -1111,7 +1111,8 @@
       "previewError": "Could not load card preview.",
       "previewFallbackHint": "You can still download the card using the buttons above.",
       "downloadError": "Could not download the card. Try again.",
-      "retryPreview": "Try again"
+      "retryPreview": "Try again",
+      "loadingPreview": "Preparing preview…"
     },
     "nextLevel": "Next: {name} at {n} closed deals",
     "maxLevel": "You are at the top level path — keep compounding performance.",
@@ -1925,6 +1926,7 @@
           "invalid_milestones": "Invalid milestone data.",
           "invalid_image": "Invalid cover image.",
           "image_too_large": "Cover image is too large — use a smaller file.",
+          "slug_taken": "Could not allocate a unique URL — change the title and try again.",
           "unauthorized": "Unauthorized.",
           "server_error": "Server error. Try again later."
         }

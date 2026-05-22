@@ -28,6 +28,7 @@ export async function getShareCardProfileBySlug(
     },
     include: {
       partnerProfile: { include: { currentLevel: true } },
+      _count: { select: { userBadges: true } },
       userBadges: {
         take: 5,
         orderBy: { grantedAt: "desc" },
@@ -53,7 +54,7 @@ export async function getShareCardProfileBySlug(
     levelName: resolveLevelName(user.partnerProfile.currentLevel.name, locale),
     totalXp: user.partnerProfile.totalXp,
     closedDeals,
-    badgeCount: user.userBadges.length,
+    badgeCount: user._count.userBadges,
     topBadges,
   };
 }

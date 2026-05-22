@@ -1296,13 +1296,13 @@ export async function adminCreateEventAction(
   for (let i = 0; i < 10; i += 1) {
     const exists = await prisma.growthEvent.findUnique({ where: { slug } });
     if (!exists) break;
-    slug = eventSlugFromTitle(title);
+    slug = `event-${randomSlugSuffix()}`;
   }
 
   const coverRaw = String(formData.get("coverImage") ?? "").trim();
   let coverImage: string | null = null;
   if (coverRaw) {
-    if (coverRaw.length > 900_000) return { ok: false, error: "image_too_large" };
+    if (coverRaw.length > 400_000) return { ok: false, error: "image_too_large" };
     if (!coverRaw.startsWith("data:image/")) return { ok: false, error: "invalid_image" };
     coverImage = coverRaw;
   }
@@ -1337,25 +1337,32 @@ export async function adminCreateEventAction(
     return ev;
   });
 
-  if (status === EventStatus.PUBLISHED) {
-    try {
-      await createNotificationsForAllActivePartners({
-        type: NotificationType.EVENT_INVITE,
-        title: `فعالية جديدة: ${title}`,
-        body: description.slice(0, 200),
-        link: `/growth/events/${slug}`,
-        eventId: event.id,
-      });
-    } catch (notifyErr) {
-      console.error("[adminCreateEvent] notify partners", notifyErr);
-    }
+  try {
+    revalidateGrowth();
+  } catch (revalidateErr) {
+    console.error("[adminCreateEvent] revalidate", revalidateErr);
   }
 
-  revalidateGrowth();
+  if (status === EventStatus.PUBLISHED) {
+    void createNotificationsForAllActivePartners({
+      type: NotificationType.EVENT_INVITE,
+      title: `فعالية جديدة: ${title}`,
+      body: description.slice(0, 200),
+      link: `/growth/events/${slug}`,
+      eventId: event.id,
+    }).catch((notifyErr) => {
+      console.error("[adminCreateEvent] notify partners", notifyErr);
+    });
+  }
+
   return { ok: true, eventId: event.id };
   } catch (err) {
     console.error("[adminCreateEvent]", err);
-    return { ok: false, error: "server_error" };
+    const code =
+      err && typeof err === "object" && "code" in err && (err as { code: string }).code === "P2002"
+        ? "slug_taken"
+        : "server_error";
+    return { ok: false, error: code };
   }
 }
 

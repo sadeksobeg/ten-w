@@ -11,6 +11,10 @@ type Props = {
   aspectRatio?: Aspect;
   placeholder?: string;
   hint?: string;
+  /** Max width/height after compress (default 512). */
+  maxEdge?: number;
+  /** JPEG quality 0–1 when not PNG (default 0.82). */
+  jpegQuality?: number;
 };
 
 const aspectClass: Record<Aspect, string> = {
@@ -20,11 +24,14 @@ const aspectClass: Record<Aspect, string> = {
 };
 
 const MAX_BYTES = 2 * 1024 * 1024;
-const MAX_EDGE = 512;
 
-async function compressImageFile(file: File): Promise<string> {
+async function compressImageFile(
+  file: File,
+  maxEdge: number,
+  jpegQuality: number,
+): Promise<string> {
   const bitmap = await createImageBitmap(file);
-  const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
+  const scale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));
   const w = Math.max(1, Math.round(bitmap.width * scale));
   const h = Math.max(1, Math.round(bitmap.height * scale));
   const canvas = document.createElement("canvas");
@@ -37,7 +44,7 @@ async function compressImageFile(file: File): Promise<string> {
   const out =
     file.type === "image/png"
       ? canvas.toDataURL("image/png")
-      : canvas.toDataURL("image/jpeg", 0.82);
+      : canvas.toDataURL("image/jpeg", jpegQuality);
   return out;
 }
 
@@ -47,6 +54,8 @@ export function ImageUpload({
   aspectRatio = "16/9",
   placeholder,
   hint,
+  maxEdge = 512,
+  jpegQuality = 0.82,
 }: Props) {
   const t = useTranslations("Growth.settings");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +76,7 @@ export function ImageUpload({
     }
     setBusy(true);
     try {
-      const result = await compressImageFile(file);
+      const result = await compressImageFile(file, maxEdge, jpegQuality);
       setPreview(result);
       onChange(result);
     } catch {

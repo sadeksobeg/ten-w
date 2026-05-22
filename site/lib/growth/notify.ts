@@ -49,27 +49,27 @@ export async function createNotificationsForAllActivePartners(params: {
     where: { role: UserRole.PARTNER, isActive: true },
     select: { id: true },
   });
+  if (partners.length === 0) return 0;
+
+  const CHUNK = 150;
   let count = 0;
-  for (const p of partners) {
-    const n = await createNotification(prisma, {
-      userId: p.id,
-      type: params.type,
-      title: params.title,
-      body: params.body,
-      link: params.link,
-      metadata: params.metadata,
-    });
-    if (n && params.eventId) {
-      const ec = prisma as unknown as {
-        eventNotification?: { create: (a: object) => Promise<unknown> };
-      };
-      if (typeof ec.eventNotification?.create === "function") {
-        await ec.eventNotification.create({
-          data: { eventId: params.eventId, notificationId: n.id },
-        });
-      }
+  try {
+    for (let i = 0; i < partners.length; i += CHUNK) {
+      const slice = partners.slice(i, i + CHUNK);
+      const result = await prisma.notification.createMany({
+        data: slice.map((p) => ({
+          userId: p.id,
+          type: params.type,
+          title: params.title,
+          body: params.body,
+          link: params.link ?? null,
+        })),
+      });
+      count += result.count;
     }
-    if (n) count += 1;
+  } catch (err) {
+    console.error("[notify] createMany partners", err);
+    return 0;
   }
   return count;
 }

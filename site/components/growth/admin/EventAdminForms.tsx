@@ -123,6 +123,8 @@ export function CreateEventForm({ locale }: { locale: string }) {
               value={coverImage}
               onChange={setCoverImage}
               aspectRatio="16/9"
+              maxEdge={640}
+              jpegQuality={0.78}
               placeholder={t("coverPlaceholder")}
               hint="PNG, JPG · 2MB"
             />
@@ -152,7 +154,6 @@ export function CreateEventForm({ locale }: { locale: string }) {
           <textarea
             value={rules}
             onChange={(e) => setRules(e.target.value)}
-            required
             rows={6}
             className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 font-mono text-xs text-white"
             placeholder="Markdown"
