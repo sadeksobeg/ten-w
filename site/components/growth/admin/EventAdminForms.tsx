@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { ImageUpload } from "@/components/growth/ui/ImageUpload";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
@@ -19,9 +20,22 @@ type MilestoneDraft = {
   requiredProgress: number;
 };
 
+function eventErrorText(t: (k: string) => string, code: string) {
+  const key = `errors.${code}`;
+  try {
+    const msg = t(key as "errors.invalid_input");
+    if (msg && msg !== key) return msg;
+  } catch {
+    /* fallback */
+  }
+  return code;
+}
+
 export function CreateEventForm({ locale }: { locale: string }) {
   const t = useTranslations("Growth.admin.events");
+  const router = useRouter();
   const [status, setStatus] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [rules, setRules] = useState("");
@@ -52,6 +66,7 @@ export function CreateEventForm({ locale }: { locale: string }) {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus(null);
+    setPending(true);
     const fd = new FormData();
     fd.set("title", title);
     fd.set("description", description);
@@ -69,9 +84,19 @@ export function CreateEventForm({ locale }: { locale: string }) {
           .map((m, order) => ({ ...m, order })),
       ),
     );
-    const res = await adminCreateEventAction(fd);
-    if (res.ok) setStatus("ok");
-    else setStatus(res.error);
+    try {
+      const res = await adminCreateEventAction(fd);
+      if (res.ok) {
+        setStatus("ok");
+        router.refresh();
+      } else {
+        setStatus(eventErrorText(t, res.error));
+      }
+    } catch {
+      setStatus(eventErrorText(t, "server_error"));
+    } finally {
+      setPending(false);
+    }
   }
 
   const preview: EventCardData = {
@@ -246,8 +271,14 @@ export function CreateEventForm({ locale }: { locale: string }) {
           </div>
         </div>
         {status === "ok" ? <p className="text-sm text-emerald-300">{t("created")}</p> : null}
-        {status && status !== "ok" ? <p className="text-sm text-rose-300">{status}</p> : null}
-        <GoldButton type="submit">{t("createSubmit")}</GoldButton>
+        {status && status !== "ok" ? (
+          <p className="text-sm text-rose-300" role="alert">
+            {status}
+          </p>
+        ) : null}
+        <GoldButton type="submit" disabled={pending}>
+          {pending ? "…" : t("createSubmit")}
+        </GoldButton>
       </form>
 
       <div className="lg:sticky lg:top-24">

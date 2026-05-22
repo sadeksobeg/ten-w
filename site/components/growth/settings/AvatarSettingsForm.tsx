@@ -22,6 +22,7 @@ type Props = {
 };
 
 export function AvatarSettingsForm({
+  locale,
   initialAvatar,
   initialPreset,
   name,
@@ -59,6 +60,7 @@ export function AvatarSettingsForm({
         </div>
       </div>
       <form action={formAction} className="space-y-4">
+        <input type="hidden" name="locale" value={locale} readOnly />
         <input type="hidden" name="avatarUrl" value={avatar} readOnly />
         <input type="hidden" name="avatarPreset" value={preset} readOnly />
         <div>

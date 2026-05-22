@@ -1061,7 +1061,7 @@
     "errors": {
       "eyebrow": "Growth Engine",
       "title": "Something went wrong",
-      "body": "Could not load Growth. On the server run: unset DATABASE_URL, then bash scripts/server-repair-growth-0003.sh --force, bash scripts/run-seed.sh, and restart the app.",
+      "body": "Impossible de charger Growth. Réessayez ou contactez le support.",
       "retry": "Try again",
       "home": "Home"
     },
@@ -1122,7 +1122,10 @@
       "hint": "Image prête pour les réseaux sociaux",
       "downloadLandscape": "Télécharger post (1200×630)",
       "downloadStory": "Télécharger story (1080×1080)",
-      "previewAlt": "Aperçu"
+      "previewAlt": "Aperçu",
+      "previewError": "Impossible de charger l’aperçu.",
+      "downloadError": "Échec du téléchargement. Réessayez.",
+      "retryPreview": "Réessayer"
     },
     "nextLevel": "Next: {name} at {n} closed deals",
     "maxLevel": "You are at the top level path — keep compounding performance.",
@@ -1729,6 +1732,7 @@
       "enter": "Admin",
       "nav": {
         "adminNavAria": "Growth admin navigation",
+        "navAria": "Growth admin navigation",
         "jumpTo": "Jump to",
         "groupOperations": "Operations",
         "groupCatalog": "Configuration",
@@ -1792,7 +1796,7 @@
           "self": "Impossible de s'assigner soi-même",
           "invalid_input": "Check the fields (valid email, password at least 8 characters).",
           "missing_seed": "Database not initialized — run seed on the server.",
-          "server_error": "Server error (often the database). Check logs or run repair 0003.",
+          "server_error": "Erreur serveur. Réessayez plus tard.",
           "unauthorized": "Unauthorized",
           "unknown": "Something went wrong"
         }

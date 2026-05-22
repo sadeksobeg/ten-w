@@ -1236,15 +1236,17 @@ export async function adminCreateEventAction(
     return { ok: false, error: "unauthorized" };
   }
 
+  try {
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
-  const rules = String(formData.get("rules") ?? "").trim();
+  const rulesRaw = String(formData.get("rules") ?? "").trim();
+  const rules = rulesRaw || "—";
   const startAtRaw = String(formData.get("startAt") ?? "").trim();
   const endAtRaw = String(formData.get("endAt") ?? "").trim();
   const maxRaw = String(formData.get("maxParticipants") ?? "").trim();
   const statusRaw = String(formData.get("status") ?? "DRAFT").trim();
 
-  if (!title || !description || !rules || !startAtRaw) {
+  if (!title || !description || !startAtRaw) {
     return { ok: false, error: "invalid_input" };
   }
 
@@ -1300,7 +1302,7 @@ export async function adminCreateEventAction(
   const coverRaw = String(formData.get("coverImage") ?? "").trim();
   let coverImage: string | null = null;
   if (coverRaw) {
-    if (coverRaw.length > 2_800_000) return { ok: false, error: "image_too_large" };
+    if (coverRaw.length > 900_000) return { ok: false, error: "image_too_large" };
     if (!coverRaw.startsWith("data:image/")) return { ok: false, error: "invalid_image" };
     coverImage = coverRaw;
   }
@@ -1336,17 +1338,25 @@ export async function adminCreateEventAction(
   });
 
   if (status === EventStatus.PUBLISHED) {
-    await createNotificationsForAllActivePartners({
-      type: NotificationType.EVENT_INVITE,
-      title: `فعالية جديدة: ${title}`,
-      body: description.slice(0, 200),
-      link: `/growth/events/${slug}`,
-      eventId: event.id,
-    });
+    try {
+      await createNotificationsForAllActivePartners({
+        type: NotificationType.EVENT_INVITE,
+        title: `فعالية جديدة: ${title}`,
+        body: description.slice(0, 200),
+        link: `/growth/events/${slug}`,
+        eventId: event.id,
+      });
+    } catch (notifyErr) {
+      console.error("[adminCreateEvent] notify partners", notifyErr);
+    }
   }
 
   revalidateGrowth();
   return { ok: true, eventId: event.id };
+  } catch (err) {
+    console.error("[adminCreateEvent]", err);
+    return { ok: false, error: "server_error" };
+  }
 }
 
 export async function adminUpdateEventStatusFormAction(formData: FormData): Promise<void> {
@@ -1885,33 +1895,42 @@ export async function updatePartnerAvatarAction(
   if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
     return { ok: false, error: "unauthorized" };
   }
-  const preset = String(formData.get("avatarPreset") ?? "").trim() || null;
-  const raw = String(formData.get("avatarUrl") ?? "").trim();
-  if (!raw && preset) {
+  try {
+    const preset = String(formData.get("avatarPreset") ?? "").trim() || null;
+    const raw = String(formData.get("avatarUrl") ?? "").trim();
+    const locale = String(formData.get("locale") ?? "ar").trim() || "ar";
+    if (!raw && preset) {
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { avatarUrl: null, avatarPreset: preset },
+      });
+      revalidateGrowth();
+      revalidatePath(`/${locale}/growth/settings`);
+      return { ok: true };
+    }
+    if (!raw) {
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { avatarUrl: null, avatarPreset: null },
+      });
+      revalidateGrowth();
+      revalidatePath(`/${locale}/growth/settings`);
+      return { ok: true };
+    }
+    if (raw.length > 900_000 || !raw.startsWith("data:image/")) {
+      return { ok: false, error: "invalid_image" };
+    }
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { avatarUrl: null, avatarPreset: preset },
+      data: { avatarUrl: raw, avatarPreset: preset },
     });
     revalidateGrowth();
+    revalidatePath(`/${locale}/growth/settings`);
     return { ok: true };
+  } catch (err) {
+    console.error("[updatePartnerAvatar]", err);
+    return { ok: false, error: "server_error" };
   }
-  if (!raw) {
-    await prisma.user.update({
-      where: { id: session.user.id },
-      data: { avatarUrl: null, avatarPreset: null },
-    });
-    revalidateGrowth();
-    return { ok: true };
-  }
-  if (raw.length > 900_000 || !raw.startsWith("data:image/")) {
-    return { ok: false, error: "invalid_image" };
-  }
-  await prisma.user.update({
-    where: { id: session.user.id },
-    data: { avatarUrl: raw, avatarPreset: preset },
-  });
-  revalidateGrowth();
-  return { ok: true };
 }
 
 export async function adminUpdateOfficialProfileAction(

@@ -18,6 +18,8 @@ export type ShareCardInput = {
   locale?: string;
   topBadges?: string[];
   format?: ShareCardFormat;
+  /** PNG data URL from server-side QR (no external fetch). */
+  qrDataUrl?: string;
 };
 
 export function generatePartnerShareCard(input: ShareCardInput) {
@@ -25,8 +27,8 @@ export function generatePartnerShareCard(input: ShareCardInput) {
   const { width, height } = sizes[format];
   const isRtl = input.locale === "ar";
   const dir = isRtl ? "rtl" : "ltr";
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(input.profileUrl)}`;
   const badges = (input.topBadges ?? []).slice(0, 3);
+  const qrSize = format === "story" ? 240 : 200;
 
   return new ImageResponse(
     (
@@ -119,7 +121,34 @@ export function generatePartnerShareCard(input: ShareCardInput) {
               </div>
             ) : null}
           </div>
-          <img src={qrUrl} width={format === "story" ? 240 : 200} height={format === "story" ? 240 : 200} alt="" />
+          {input.qrDataUrl ? (
+            <img src={input.qrDataUrl} width={qrSize} height={qrSize} alt="" />
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                width: qrSize,
+                height: qrSize,
+                padding: 16,
+                borderRadius: 16,
+                background: "rgba(255,255,255,0.06)",
+                border: "2px dashed rgba(228,184,77,0.45)",
+                fontSize: 13,
+                color: "rgba(255,255,255,0.7)",
+                textAlign: "center",
+                wordBreak: "break-all",
+                lineHeight: 1.35,
+              }}
+            >
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", marginBottom: 8 }}>
+                {isRtl ? "رابط البروفايل" : "Profile link"}
+              </span>
+              <span>{input.profileUrl.replace(/^https?:\/\//, "")}</span>
+            </div>
+          )}
         </div>
 
         <div

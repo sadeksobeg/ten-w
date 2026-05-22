@@ -999,7 +999,7 @@
     "errors": {
       "eyebrow": "Growth Engine",
       "title": "Something went wrong",
-      "body": "Could not load Growth. On the server run: unset DATABASE_URL, then bash scripts/server-repair-growth-0003.sh --force, bash scripts/run-seed.sh, and restart the app.",
+      "body": "Could not load Growth. Try again or contact support if this continues.",
       "retry": "Try again",
       "home": "Home"
     },
@@ -1108,7 +1108,10 @@
       "downloadLandscape": "Download post (1200×630)",
       "downloadStory": "Download story (1080×1080)",
       "previewAlt": "Card preview",
-      "previewError": "Could not load card preview — deploy the latest build and run database migrations."
+      "previewError": "Could not load card preview.",
+      "previewFallbackHint": "You can still download the card using the buttons above.",
+      "downloadError": "Could not download the card. Try again.",
+      "retryPreview": "Try again"
     },
     "nextLevel": "Next: {name} at {n} closed deals",
     "maxLevel": "You are at the top level path — keep compounding performance.",
@@ -1884,7 +1887,7 @@
           "invalid_upline_scope": "Upline must be the network owner or one of their direct referrals only.",
           "invalid_input": "Check the fields (valid email, password at least 8 characters).",
           "missing_seed": "Database not initialized — run seed on the server.",
-          "server_error": "Server error (often the database). Check logs or run repair 0003.",
+          "server_error": "Server error. Try again later or contact support.",
           "unauthorized": "Unauthorized",
           "unknown": "Something went wrong"
         }
@@ -1914,7 +1917,17 @@
         "deleteEvent": "Delete event",
         "deleteConfirm": "Permanent delete? Confirm if participants exist.",
         "deleteYes": "Yes, delete",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "errors": {
+          "invalid_input": "Fill in title, description, and start date.",
+          "invalid_date": "Check start/end dates.",
+          "invalid_max": "Invalid max participants.",
+          "invalid_milestones": "Invalid milestone data.",
+          "invalid_image": "Invalid cover image.",
+          "image_too_large": "Cover image is too large — use a smaller file.",
+          "unauthorized": "Unauthorized.",
+          "server_error": "Server error. Try again later."
+        }
       },
       "notifications": {
         "title": "Notifications",

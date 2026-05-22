@@ -124,10 +124,15 @@ export async function getPublicProfileBySlug(
     Math.floor((Date.now() - user.createdAt.getTime()) / (24 * 60 * 60 * 1000)),
   );
 
-  const { tree: networkTree, stats: networkStats } = await getPartnerNetworkTree(user.id, {
-    locale,
-    maxDepth: 3,
-  });
+  let networkTree: NetworkNode[] = [];
+  let networkStats: NetworkStats = { directCount: 0, totalCount: 0, maxDepth: 0 };
+  try {
+    const net = await getPartnerNetworkTree(user.id, { locale, maxDepth: 3 });
+    networkTree = net.tree;
+    networkStats = net.stats;
+  } catch (err) {
+    console.error("[getPublicProfile] network tree", err);
+  }
 
   return {
     name: user.name ?? "Partner",
