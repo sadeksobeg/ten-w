@@ -1,21 +1,8 @@
 "use client";
 
+import { GameIcon } from "@/components/growth/icons/GameIcon";
 import type { AvatarPreset } from "@/lib/growth/avatar-presets";
-
-const GLYPHS: Record<string, string> = {
-  "gold-1": "👑",
-  "gold-2": "⚔️",
-  "violet-1": "🔮",
-  "violet-2": "✦",
-  "emerald-1": "🎯",
-  "emerald-2": "🏹",
-  "crimson-1": "🔥",
-  "crimson-2": "💎",
-  "cyan-1": "🌊",
-  "cyan-2": "⚡",
-  "slate-1": "🛡️",
-  "slate-2": "🦅",
-};
+import { getAvatarTierRing } from "@/lib/growth/avatar-presets";
 
 type Props = {
   preset: AvatarPreset;
@@ -24,31 +11,37 @@ type Props = {
 };
 
 export function AvatarPresetFace({ preset, size = 40, className = "" }: Props) {
-  const glyph = GLYPHS[preset.id] ?? "★";
+  const ring = getAvatarTierRing(preset.tier);
+  const iconSize = Math.round(size * 0.48);
+  const isLegend = preset.tier === "legend";
+
   return (
     <div
       aria-hidden
-      className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-full font-black text-white ring-2 ring-gold/40 ring-offset-2 ring-offset-[#050816] ${className}`}
+      className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-full font-black text-white ${isLegend ? "growth-avatar-legend-ring" : ""} ${className}`}
       style={{
         width: size,
         height: size,
         background: preset.gradient,
-        boxShadow: `0 0 20px ${preset.accent}55, inset 0 0 12px rgba(255,255,255,0.15)`,
+        boxShadow: `0 0 24px ${preset.accent}66, 0 0 0 3px ${ring}, 0 0 0 5px rgba(5,8,22,0.9), inset 0 0 16px rgba(255,255,255,0.12)`,
       }}
     >
-      <span
-        className="select-none"
-        style={{ fontSize: Math.round(size * 0.42), filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.45))" }}
-      >
-        {glyph}
-      </span>
+      <GameIcon slug={preset.portraitSlug} size={iconSize} color="#fff" glow={isLegend} />
       <span
         className="pointer-events-none absolute inset-0 rounded-full"
         style={{
           background:
-            "linear-gradient(145deg, rgba(255,255,255,0.35) 0%, transparent 42%, rgba(0,0,0,0.25) 100%)",
+            "linear-gradient(145deg, rgba(255,255,255,0.4) 0%, transparent 38%, rgba(0,0,0,0.35) 100%)",
         }}
       />
+      {isLegend ? (
+        <span
+          className="pointer-events-none absolute -inset-0.5 rounded-full growth-shimmer opacity-40"
+          style={{
+            background: "conic-gradient(from 0deg, #e4b84d, #a855f7, #22d3ee, #e4b84d)",
+          }}
+        />
+      ) : null}
     </div>
   );
 }

@@ -74,6 +74,56 @@
   }
 }
 
+.growth-badge-holo {
+  animation: growthBadgeHolo 4s linear infinite;
+}
+
+@keyframes growthBadgeHolo {
+  0% {
+    filter: drop-shadow(0 0 8px rgba(228, 184, 77, 0.5)) hue-rotate(0deg);
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.65)) hue-rotate(25deg);
+  }
+  100% {
+    filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5)) hue-rotate(0deg);
+  }
+}
+
+.growth-avatar-legend-ring {
+  animation: growthAvatarLegend 3s ease-in-out infinite;
+}
+
+@keyframes growthAvatarLegend {
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(228, 184, 77, 0.5),
+      0 0 0 3px #e4b84d,
+      0 0 0 5px rgba(5, 8, 22, 0.9);
+  }
+  50% {
+    box-shadow:
+      0 0 28px rgba(168, 85, 247, 0.55),
+      0 0 0 3px #a855f7,
+      0 0 0 5px rgba(5, 8, 22, 0.9);
+  }
+}
+
+.growth-rank-legend {
+  animation: growthRankLegend 2.5s ease-in-out infinite;
+}
+
+@keyframes growthRankLegend {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(228, 184, 77, 0.45));
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.55));
+  }
+}
+
 @keyframes growthBadgeEarn {
   0% {
     transform: scale(0) rotate(-180deg);

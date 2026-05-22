@@ -99,8 +99,9 @@ model User {
   name             String?
   image            String?
   phone            String?
-  avatarUrl        String?
+  avatarUrl        String?   @db.Text
   avatarPreset     String?
+  lastSeenAt       DateTime?
   bio              String?
   publicSlug       String?   @unique
   isActive         Boolean   @default(true)

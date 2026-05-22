@@ -191,6 +191,32 @@ export async function setPartnerUpline(
   });
 }
 
+/** Direct referrals (children) of a partner — for scoped upline assignment. */
+export async function listDirectReferralUserIds(parentUserId: string): Promise<string[]> {
+  const rows = await prisma.partnerProfile.findMany({
+    where: { parentUserId, user: { isActive: true, role: "PARTNER" } },
+    select: { userId: true },
+    orderBy: { createdAt: "asc" },
+  });
+  return rows.map((r) => r.userId);
+}
+
+/** Map owner userId → direct referral userIds (for admin create-partner UI). */
+export async function buildReferralChildrenMap(): Promise<Record<string, string[]>> {
+  const rows = await prisma.partnerProfile.findMany({
+    where: { parentUserId: { not: null }, user: { isActive: true, role: "PARTNER" } },
+    select: { userId: true, parentUserId: true },
+  });
+  const map: Record<string, string[]> = {};
+  for (const r of rows) {
+    const parent = r.parentUserId;
+    if (!parent) continue;
+    if (!map[parent]) map[parent] = [];
+    map[parent].push(r.userId);
+  }
+  return map;
+}
+
 /** Active partners for admin picker (excludes self when provided). */
 export async function listPartnersForPicker(excludeUserId?: string) {
   const rows = await prisma.user.findMany({

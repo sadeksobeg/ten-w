@@ -1,15 +1,17 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   adminAdjustPartnerXpFormAction,
   adminCreatePartnerAction,
   adminSetPartnerLevelFormAction,
   adminSetPartnerUplineAction,
+  adminSetPartnerVerifiedAction,
   adminUpdatePartnerCredentialsAction,
   togglePartnerActiveFormAction,
 } from "@/lib/growth/actions";
+import { VerifiedBadge } from "@/components/growth/ui/VerifiedBadge";
 import { PasswordInput } from "@/components/growth/ui/PasswordInput";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { AdminOpenChatLink } from "@/components/growth/admin/AdminOpenChatLink";
@@ -41,6 +43,8 @@ type PartnerRow = {
   uplineSlug: string | null;
   directCount: number;
   totalCount: number;
+  isVerifiedOfficial: boolean;
+  officialDisplayName: string | null;
 };
 
 function createErrorText(t: (k: string) => string, code: string) {
@@ -61,6 +65,8 @@ function createErrorText(t: (k: string) => string, code: string) {
       return t("errors.cycle");
     case "self":
       return t("errors.self");
+    case "invalid_upline_scope":
+      return t("errors.invalid_upline_scope");
     default:
       return t("errors.unknown");
   }
@@ -69,12 +75,27 @@ function createErrorText(t: (k: string) => string, code: string) {
 const fieldClass =
   "mt-1.5 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2.5 text-sm text-white outline-none transition focus:border-gold/40 focus:ring-1 focus:ring-gold/20";
 
-export function CreatePartnerForm({ pickerOptions }: { pickerOptions: PickerOption[] }) {
+export function CreatePartnerForm({
+  pickerOptions,
+  referralChildren,
+}: {
+  pickerOptions: PickerOption[];
+  referralChildren: Record<string, string[]>;
+}) {
   const t = useTranslations("Growth.admin.partners");
   const [state, action] = useActionState(adminCreatePartnerAction, undefined);
+  const [networkOwnerId, setNetworkOwnerId] = useState("");
   const [parentId, setParentId] = useState("");
   const [password, setPassword] = useState("");
   const [lastCreatedPassword, setLastCreatedPassword] = useState<string | null>(null);
+
+  const uplineOptions = useMemo(() => {
+    if (!networkOwnerId) return pickerOptions;
+    const childIds = new Set(referralChildren[networkOwnerId] ?? []);
+    return pickerOptions.filter(
+      (p) => p.userId === networkOwnerId || childIds.has(p.userId),
+    );
+  }, [networkOwnerId, pickerOptions, referralChildren]);
 
   return (
     <form action={action} className="space-y-5">
@@ -107,6 +128,26 @@ export function CreatePartnerForm({ pickerOptions }: { pickerOptions: PickerOpti
           <input name="phone" type="tel" className={fieldClass} />
         </label>
         <label className="block sm:col-span-2">
+          <span className="text-xs font-semibold text-white/55">{t("networkOwnerPicker")}</span>
+          <select
+            name="networkOwnerUserId"
+            className={fieldClass}
+            value={networkOwnerId}
+            onChange={(e) => {
+              setNetworkOwnerId(e.target.value);
+              setParentId("");
+            }}
+          >
+            <option value="">{t("networkOwnerAny")}</option>
+            {pickerOptions.map((p) => (
+              <option key={p.userId} value={p.userId}>
+                {p.name} ({p.referralCode})
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-[10px] text-white/40">{t("networkOwnerHint")}</p>
+        </label>
+        <label className="block sm:col-span-2">
           <span className="text-xs font-semibold text-white/55">{t("uplinePicker")}</span>
           <select
             name="parentUserId"
@@ -123,12 +164,15 @@ export function CreatePartnerForm({ pickerOptions }: { pickerOptions: PickerOpti
             }}
           >
             <option value="">{t("uplineNone")}</option>
-            {pickerOptions.map((p) => (
+            {uplineOptions.map((p) => (
               <option key={p.userId} value={p.userId}>
                 {p.name} ({p.referralCode})
               </option>
             ))}
           </select>
+          {networkOwnerId ? (
+            <p className="mt-1 text-[10px] text-amber-200/70">{t("uplineScopedHint")}</p>
+          ) : null}
         </label>
         <label className="block">
           <span className="text-xs font-semibold text-white/55">{t("referralOptional")}</span>
@@ -210,6 +254,60 @@ function PartnerXpControls({ partnerId, levels }: { partnerId: string; levels: L
         </button>
       </form>
     </div>
+  );
+}
+
+function PartnerVerifiedForm({
+  partnerId,
+  isVerified,
+  officialDisplayName,
+}: {
+  partnerId: string;
+  isVerified: boolean;
+  officialDisplayName: string | null;
+}) {
+  const t = useTranslations("Growth.admin.partners");
+  const [state, action] = useActionState(adminSetPartnerVerifiedAction, undefined);
+
+  return (
+    <form action={action} className="mt-3 space-y-2 rounded-xl border border-amber-500/25 bg-amber-950/25 p-3">
+      <p className="text-[10px] font-semibold text-amber-100/90">{t("verifiedTitle")}</p>
+      <p className="text-[10px] text-white/45">{t("verifiedHint")}</p>
+      <input type="hidden" name="partnerId" value={partnerId} />
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          name="isVerifiedOfficial"
+          defaultChecked={isVerified}
+          className="size-4 rounded border-white/20"
+        />
+        <span className="text-xs text-white/80">{t("verifiedToggle")}</span>
+        {isVerified ? <VerifiedBadge label={t("verifiedBadge")} variant="gold" /> : null}
+      </label>
+      <label className="block">
+        <span className="text-[10px] text-white/50">{t("verifiedDisplayName")}</span>
+        <input
+          name="officialDisplayName"
+          defaultValue={officialDisplayName ?? ""}
+          className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-2 py-1.5 text-xs text-white"
+          placeholder={t("verifiedDisplayNamePlaceholder")}
+        />
+      </label>
+      {state && typeof state === "object" && "ok" in state && state.ok === false ? (
+        <p className="text-xs text-rose-300" role="alert">
+          {createErrorText(t, String((state as { error?: string }).error ?? ""))}
+        </p>
+      ) : null}
+      {state && typeof state === "object" && "ok" in state && state.ok === true ? (
+        <p className="text-xs text-emerald-300">{t("verifiedSaved")}</p>
+      ) : null}
+      <button
+        type="submit"
+        className="rounded-lg border border-gold/35 bg-gold/10 px-3 py-1.5 text-xs font-bold text-gold"
+      >
+        {t("verifiedSave")}
+      </button>
+    </form>
   );
 }
 
@@ -339,7 +437,12 @@ export function PartnerList({
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 className="truncate text-base font-bold text-white">{p.name}</h3>
+                    <h3 className="flex flex-wrap items-center gap-2 truncate text-base font-bold text-white">
+                      <span className="truncate">{p.name}</span>
+                      {p.isVerifiedOfficial ? (
+                        <VerifiedBadge label={t("verifiedBadge")} variant="gold" />
+                      ) : null}
+                    </h3>
                     <p className="mt-0.5 truncate text-sm text-white/55">{p.email}</p>
                     {p.phone ? <p className="text-xs text-white/45">{p.phone}</p> : null}
                   </div>
@@ -405,6 +508,11 @@ export function PartnerList({
                     </a>
                   ) : null}
                 </div>
+                <PartnerVerifiedForm
+                  partnerId={p.userId}
+                  isVerified={p.isVerifiedOfficial}
+                  officialDisplayName={p.officialDisplayName}
+                />
                 <PartnerCredentialsForm partnerId={p.userId} email={p.email} />
                 <PartnerUplineForm
                   partnerId={p.userId}

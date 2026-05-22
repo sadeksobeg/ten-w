@@ -1,16 +1,17 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { GameIcon } from "@/components/growth/icons/GameIcon";
 import { getLevelI18nKey, LEVEL_COLORS } from "@/lib/growth/level-i18n";
 import { getLevelVisual } from "@/lib/growth/level-visual";
 
 type Size = "sm" | "md" | "lg" | "xl";
 
 const sizeMap: Record<Size, { box: string; text: string; icon: number }> = {
-  sm: { box: "size-10", text: "text-[8px]", icon: 10 },
-  md: { box: "size-14", text: "text-[9px]", icon: 12 },
-  lg: { box: "size-20", text: "text-[10px]", icon: 14 },
-  xl: { box: "size-28", text: "text-xs", icon: 18 },
+  sm: { box: "size-10", text: "text-[8px]", icon: 22 },
+  md: { box: "size-14", text: "text-[9px]", icon: 28 },
+  lg: { box: "size-20", text: "text-[10px]", icon: 36 },
+  xl: { box: "size-28", text: "text-xs", icon: 48 },
 };
 
 type Props = {
@@ -40,7 +41,7 @@ export function RankEmblem({
       title={label}
     >
       <span
-        className={`${s.box} relative flex items-center justify-center`}
+        className={`${s.box} relative flex items-center justify-center ${visual.isLegend ? "growth-rank-legend" : ""}`}
         style={{
           clipPath:
             "polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%)",
@@ -53,15 +54,15 @@ export function RankEmblem({
           style={{
             clipPath:
               "polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%)",
-            background: "rgba(0,0,0,0.35)",
+            background: "rgba(0,0,0,0.4)",
           }}
         >
-          <svg viewBox="0 0 24 24" width={s.icon} height={s.icon} aria-hidden>
-            <path
-              fill={color}
-              d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L6 21l2.3-7-6-4.6h7.6z"
-            />
-          </svg>
+          <GameIcon
+            slug={visual.iconSlug}
+            size={s.icon}
+            color={color}
+            glow={visual.isLegend}
+          />
         </span>
       </span>
       <span

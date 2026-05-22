@@ -1,6 +1,7 @@
 import { ChatRoomType, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { matchChatKeywords } from "@/lib/growth/chat-keywords";
+import { touchLastSeen } from "@/lib/growth/presence";
 
 export const COMMUNITY_ROOM_SLUG = "community";
 
@@ -166,12 +167,13 @@ export async function appendRoomMessage(input: {
 }
 
 export async function postCommunityMessage(senderUserId: string, body: string) {
+  await touchLastSeen(prisma, senderUserId);
   const room = await ensureCommunityMember(senderUserId);
   const user = await prisma.user.findUnique({
     where: { id: senderUserId },
     select: { isVerifiedOfficial: true, role: true },
   });
-  const isOfficial = Boolean(user?.isVerifiedOfficial && user.role === "ADMIN");
+  const isOfficial = Boolean(user?.isVerifiedOfficial);
 
   const message = await appendRoomMessage({
     roomId: room.id,

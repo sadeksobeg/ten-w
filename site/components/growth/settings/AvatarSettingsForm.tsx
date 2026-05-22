@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { ImageUpload } from "@/components/growth/ui/ImageUpload";
@@ -27,6 +28,7 @@ export function AvatarSettingsForm({
   email,
 }: Props) {
   const t = useTranslations("Growth.settings");
+  const router = useRouter();
   const { setPreview } = usePartnerPreview();
   const [avatar, setAvatar] = useState(initialAvatar);
   const [preset, setPreset] = useState(initialPreset ?? "");
@@ -35,9 +37,11 @@ export function AvatarSettingsForm({
 
   useEffect(() => {
     if (!state) return;
-    if (state.ok) showToast({ type: "success", title: t("saved") });
-    else showToast({ type: "error", title: t("error") });
-  }, [state, showToast, t]);
+    if (state.ok) {
+      showToast({ type: "success", title: t("saved") });
+      router.refresh();
+    } else showToast({ type: "error", title: t("error") });
+  }, [state, showToast, t, router]);
 
   return (
     <GlassCard className="space-y-6">

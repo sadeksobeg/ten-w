@@ -20,6 +20,26 @@ const aspectClass: Record<Aspect, string> = {
 };
 
 const MAX_BYTES = 2 * 1024 * 1024;
+const MAX_EDGE = 512;
+
+async function compressImageFile(file: File): Promise<string> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
+  const w = Math.max(1, Math.round(bitmap.width * scale));
+  const h = Math.max(1, Math.round(bitmap.height * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("canvas");
+  ctx.drawImage(bitmap, 0, 0, w, h);
+  bitmap.close();
+  const out =
+    file.type === "image/png"
+      ? canvas.toDataURL("image/png")
+      : canvas.toDataURL("image/jpeg", 0.82);
+  return out;
+}
 
 export function ImageUpload({
   value,
@@ -32,8 +52,9 @@ export function ImageUpload({
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState(value ?? "");
+  const [busy, setBusy] = useState(false);
 
-  function onFile(file: File | undefined) {
+  async function onFile(file: File | undefined) {
     if (!file) return;
     setError(null);
     if (!file.type.startsWith("image/")) {
@@ -44,13 +65,16 @@ export function ImageUpload({
       setError("< 2MB");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = String(reader.result ?? "");
+    setBusy(true);
+    try {
+      const result = await compressImageFile(file);
       setPreview(result);
       onChange(result);
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      setError(t("error"));
+    } finally {
+      setBusy(false);
+    }
   }
 
   function remove() {
@@ -63,13 +87,14 @@ export function ImageUpload({
     <div>
       <button
         type="button"
+        disabled={busy}
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
-          onFile(e.dataTransfer.files[0]);
+          void onFile(e.dataTransfer.files[0]);
         }}
-        className={`relative w-full overflow-hidden rounded-xl border border-dashed border-[var(--growth-border)] bg-black/30 ${aspectClass[aspectRatio]}`}
+        className={`relative w-full overflow-hidden rounded-xl border border-dashed border-[var(--growth-border)] bg-black/30 ${aspectClass[aspectRatio]} ${busy ? "opacity-60" : ""}`}
       >
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -93,7 +118,7 @@ export function ImageUpload({
         type="file"
         accept="image/png,image/jpeg,image/webp"
         className="sr-only"
-        onChange={(e) => onFile(e.target.files?.[0])}
+        onChange={(e) => void onFile(e.target.files?.[0])}
       />
       {preview ? (
         <button

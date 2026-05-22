@@ -1,5 +1,6 @@
 export type BadgeRarity = "common" | "rare" | "epic" | "legendary";
 
+/** @deprecated use iconSlug — kept for legacy IconPath fallback */
 export type BadgeIconId =
   | "lightning"
   | "target"
@@ -12,7 +13,6 @@ export type BadgeIconId =
   | "sparkle"
   | "star";
 
-/** Unique silhouette per badge (not only rarity). */
 export type BadgeShapeId =
   | "circle"
   | "hexagon"
@@ -26,28 +26,107 @@ export type BadgeShapeId =
 
 export type BadgeVisualMeta = {
   rarity: BadgeRarity;
+  iconSlug: string;
   iconId: BadgeIconId;
   glowColor: string;
   shapeId: BadgeShapeId;
+  /** Animated holo on legendary */
+  holo?: boolean;
 };
 
 const BADGE_VISUAL: Record<string, BadgeVisualMeta> = {
-  first_deal: { rarity: "rare", iconId: "lightning", glowColor: "#e4b84d", shapeId: "shield" },
-  deals_5: { rarity: "epic", iconId: "target", glowColor: "#534ab7", shapeId: "hexagon" },
-  deals_10: { rarity: "legendary", iconId: "diamond", glowColor: "#22d3ee", shapeId: "star16" },
-  first_referral: { rarity: "rare", iconId: "link", glowColor: "#3b6d11", shapeId: "circle" },
-  network_builder: { rarity: "epic", iconId: "globe", glowColor: "#3b82f6", shapeId: "octagon" },
-  ai_seller: { rarity: "rare", iconId: "robot", glowColor: "#534ab7", shapeId: "pentagon" },
-  fast_closer: { rarity: "epic", iconId: "bolt_clock", glowColor: "#e4b84d", shapeId: "diamond_frame" },
-  top_performer: { rarity: "legendary", iconId: "crown", glowColor: "#e4b84d", shapeId: "medal" },
-  elite_pulse: { rarity: "legendary", iconId: "sparkle", glowColor: "#a855f7", shapeId: "crest" },
-  trusted_partner: { rarity: "epic", iconId: "crown", glowColor: "#e4b84d", shapeId: "shield" },
-  vip_seller: { rarity: "rare", iconId: "diamond", glowColor: "#e4b84d", shapeId: "medal" },
-  strategic_agent: { rarity: "rare", iconId: "target", glowColor: "#534ab7", shapeId: "hexagon" },
+  first_deal: {
+    rarity: "rare",
+    iconSlug: "trophy",
+    iconId: "lightning",
+    glowColor: "#e4b84d",
+    shapeId: "shield",
+  },
+  deals_5: {
+    rarity: "epic",
+    iconSlug: "bullseye",
+    iconId: "target",
+    glowColor: "#60a5fa",
+    shapeId: "hexagon",
+  },
+  deals_10: {
+    rarity: "legendary",
+    iconSlug: "cut-diamond",
+    iconId: "diamond",
+    glowColor: "#22d3ee",
+    shapeId: "star16",
+    holo: true,
+  },
+  first_referral: {
+    rarity: "rare",
+    iconSlug: "chain",
+    iconId: "link",
+    glowColor: "#34d399",
+    shapeId: "circle",
+  },
+  network_builder: {
+    rarity: "epic",
+    iconSlug: "network",
+    iconId: "globe",
+    glowColor: "#3b82f6",
+    shapeId: "octagon",
+  },
+  ai_seller: {
+    rarity: "rare",
+    iconSlug: "robot",
+    iconId: "robot",
+    glowColor: "#a78bfa",
+    shapeId: "pentagon",
+  },
+  fast_closer: {
+    rarity: "epic",
+    iconSlug: "stopwatch",
+    iconId: "bolt_clock",
+    glowColor: "#fbbf24",
+    shapeId: "diamond_frame",
+  },
+  top_performer: {
+    rarity: "legendary",
+    iconSlug: "crown",
+    iconId: "crown",
+    glowColor: "#e4b84d",
+    shapeId: "medal",
+    holo: true,
+  },
+  elite_pulse: {
+    rarity: "legendary",
+    iconSlug: "pulse",
+    iconId: "sparkle",
+    glowColor: "#a855f7",
+    shapeId: "crest",
+    holo: true,
+  },
+  trusted_partner: {
+    rarity: "epic",
+    iconSlug: "shield",
+    iconId: "crown",
+    glowColor: "#e4b84d",
+    shapeId: "shield",
+  },
+  vip_seller: {
+    rarity: "rare",
+    iconSlug: "vip",
+    iconId: "diamond",
+    glowColor: "#f472b6",
+    shapeId: "medal",
+  },
+  strategic_agent: {
+    rarity: "rare",
+    iconSlug: "chess",
+    iconId: "target",
+    glowColor: "#534ab7",
+    shapeId: "hexagon",
+  },
 };
 
 const DEFAULT_META: BadgeVisualMeta = {
   rarity: "common",
+  iconSlug: "star",
   iconId: "star",
   glowColor: "#8a8490",
   shapeId: "circle",
@@ -60,7 +139,7 @@ export function getBadgeVisual(badgeKey: string): BadgeVisualMeta {
 export const RARITY_COLORS: Record<BadgeRarity, string> = {
   common: "#8a8490",
   rare: "#3b82f6",
-  epic: "#534ab7",
+  epic: "#a855f7",
   legendary: "#e4b84d",
 };
 

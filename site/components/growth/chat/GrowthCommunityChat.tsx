@@ -126,7 +126,8 @@ export function GrowthCommunityChat({
           }
 
           const mine = m.senderUserId === viewerUserId;
-          const official = m.isOfficial || m.isVerifiedOfficial;
+          const official = m.isOfficial;
+          const verified = m.isVerifiedOfficial;
 
           return (
             <div
@@ -145,7 +146,10 @@ export function GrowthCommunityChat({
                   className={`mb-0.5 flex flex-wrap items-center gap-1.5 ${mine ? "justify-end" : "justify-start"}`}
                 >
                   <span className="text-[11px] font-bold text-white/80">{m.senderName}</span>
-                  {official ? <VerifiedBadge label={t("verifiedOfficial")} /> : null}
+                  {official ? <VerifiedBadge label={t("verifiedOfficial")} variant="gold" /> : null}
+                  {!official && verified ? (
+                    <VerifiedBadge label={t("verifiedPartner")} variant="gold" />
+                  ) : null}
                   {m.senderLevelCode && !official ? (
                     <RankEmblem
                       levelCode={m.senderLevelCode}

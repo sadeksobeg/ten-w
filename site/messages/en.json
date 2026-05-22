@@ -1107,7 +1107,8 @@
       "hint": "Ready-to-post image for social media",
       "downloadLandscape": "Download post (1200×630)",
       "downloadStory": "Download story (1080×1080)",
-      "previewAlt": "Card preview"
+      "previewAlt": "Card preview",
+      "previewError": "Could not load card preview — deploy the latest build and run database migrations."
     },
     "nextLevel": "Next: {name} at {n} closed deals",
     "maxLevel": "You are at the top level path — keep compounding performance.",
@@ -1408,6 +1409,10 @@
       "presetCyan2": "Teal",
       "presetSlate1": "Slate",
       "presetSlate2": "Steel",
+      "presetLegend1": "Legend — Crown",
+      "presetLegend2": "Legend — Diamond",
+      "presetAgent1": "Agent — AI",
+      "presetAgent2": "Agent — Network",
       "avatarSection": "Profile photo",
       "uploadHint": "Drop image or click to upload",
       "removeImage": "Remove image",
@@ -1554,6 +1559,11 @@
       "communityWelcome": "Welcome to the TENEGTA partner community. Ask about deals, earnings, or events.",
       "communityLoadError": "Could not load community chat.",
       "verifiedOfficial": "Official",
+      "verifiedPartner": "Verified",
+      "presenceOnline": "Online now",
+      "presenceJustNow": "Last seen: just now",
+      "presenceMinutesAgo": "Last seen: {n} min ago",
+      "presenceLastSeen": "Last seen: {when}",
       "keywordPaths": "Suggested paths",
       "keywords": {
         "deals": "Deals pipeline",
@@ -1762,7 +1772,8 @@
         "hideContext": "Hide",
         "loadError": "Could not load conversations. Refresh the page.",
         "openPartnerError": "Could not open partner chat.",
-        "openingPartner": "Opening conversation…"
+        "openingPartner": "Opening conversation…",
+        "tabSupportInbox": "Partner support"
       }
     },
     "admin": {
@@ -1841,8 +1852,20 @@
         "active": "Active",
         "inactive": "Inactive",
         "setLevel": "Set level",
+        "networkOwnerPicker": "Network owner (who they brought)",
+        "networkOwnerAny": "— any network —",
+        "networkOwnerHint": "Pick the partner whose downline this member belongs to; upline is limited to them and their direct referrals.",
+        "uplineScopedHint": "Only the network owner and their direct referrals are listed.",
         "uplinePicker": "Upline partner (network)",
         "uplineNone": "No upline",
+        "verifiedTitle": "Gold verification badge",
+        "verifiedHint": "Shown next to the name in community chat and support threads.",
+        "verifiedToggle": "Verified partner",
+        "verifiedBadge": "Verified",
+        "verifiedDisplayName": "Display name (optional)",
+        "verifiedDisplayNamePlaceholder": "e.g. Sadek — Strategic rep",
+        "verifiedSave": "Save verification",
+        "verifiedSaved": "Verification updated",
         "uplineLabel": "Under:",
         "referralOrPicker": "Or type referral code",
         "networkColumn": "Network",
@@ -1858,6 +1881,7 @@
           "invalid_referral": "Invalid referral code",
           "cycle": "Invalid assignment — network cycle",
           "self": "Cannot assign partner under themselves",
+          "invalid_upline_scope": "Upline must be the network owner or one of their direct referrals only.",
           "invalid_input": "Check the fields (valid email, password at least 8 characters).",
           "missing_seed": "Database not initialized — run seed on the server.",
           "server_error": "Server error (often the database). Check logs or run repair 0003.",
@@ -1991,7 +2015,17 @@
         "kitSave": "Save kit JSON"
       },
       "badgesPage": {
-        "title": "Assign admin badge",
+        "createTitle": "Create new badge",
+        "createHint": "Define name and meaning, then grant it to any partner below.",
+        "createKey": "Key (English)",
+        "createName": "Display name",
+        "createType": "Type",
+        "typeAdmin": "Manual (admin)",
+        "typeAuto": "Automatic",
+        "createDescription": "Description / value",
+        "createSubmit": "Create badge",
+        "createSuccess": "Badge created: {key}",
+        "title": "Grant badge",
         "email": "User email",
         "submit": "Grant badge",
         "badgeKey": "Select badge",
@@ -2003,6 +2037,7 @@
         "toastSuccess": "Badge granted",
         "errors": {
           "badge_already_granted": "Badge already granted",
+          "key_taken": "Key already exists",
           "unknown": "Something went wrong"
         },
         "revokeTitle": "Revoke badge",

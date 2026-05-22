@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/auth";
-import { appendMessage, listMessages } from "@/lib/growth/chat-service";
+import { appendMessage, getConversationThreadMeta, listMessages } from "@/lib/growth/chat-service";
+import { touchLastSeen } from "@/lib/growth/presence";
+import { prisma } from "@/lib/prisma";
 import { getConversationForUser } from "@/lib/growth/chat-access";
 import { matchChatKeywords } from "@/lib/growth/chat-keywords";
 
@@ -43,12 +45,14 @@ export async function GET(req: Request, ctx: RouteContext) {
   }
   const takeRaw = url.searchParams.get("take");
   const take = takeRaw ? Number(takeRaw) : undefined;
+  await touchLastSeen(prisma, session.user.id);
   const items = await listMessages(conversationId, {
     after,
     before,
     take: take && Number.isFinite(take) ? take : undefined,
   });
-  return NextResponse.json({ items });
+  const meta = await getConversationThreadMeta(conversationId);
+  return NextResponse.json({ items, meta });
 }
 
 export async function POST(req: Request, ctx: RouteContext) {

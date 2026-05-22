@@ -29,6 +29,8 @@ export default async function GrowthAdminChatPage({ params, searchParams }: Prop
       <GrowthAdminChatClient
         locale={locale}
         adminUserId={session.user.id}
+        adminEmail={session.user.email ?? ""}
+        adminName={session.user.name ?? null}
         initialConversationId={sp.conversationId ?? null}
         initialPartnerUserId={sp.partnerUserId ?? null}
       />

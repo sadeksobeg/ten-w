@@ -4,9 +4,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import type {
   ChatMessageDTO,
+  ChatThreadMeta,
   ChatTimelineItem,
   ChatTimelineSegmentKind,
 } from "@/lib/growth/chat-service";
+import { formatLastSeenLabel } from "@/lib/growth/presence";
+import { VerifiedBadge } from "@/components/growth/ui/VerifiedBadge";
 import type { ChatSuggestionItem } from "@/lib/growth/chat-suggestions";
 import { suggestImpactDelta } from "@/lib/growth/chat-suggestions";
 import { GrowthChatMessageBubble } from "@/components/growth/chat/GrowthChatMessageBubble";
@@ -142,6 +145,7 @@ export function GrowthChatThread({
   const lastTsRef = useRef<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [sseDead, setSseDead] = useState(false);
+  const [threadMeta, setThreadMeta] = useState<ChatThreadMeta | null>(null);
   const dir = locale === "ar" ? "rtl" : "ltr";
   const nfDate =
     locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US";
@@ -230,10 +234,33 @@ export function GrowthChatThread({
 
   const displayMessages = partnerHistoryMode ? rowsToMessages(rows) : items;
 
+  const presenceLabels = {
+    online: t("presenceOnline"),
+    justNow: t("presenceJustNow"),
+    minutesAgo: (n: number) => t("presenceMinutesAgo", { n }),
+    lastSeen: (when: string) => t("presenceLastSeen", { when }),
+  };
+
+  const presenceLine = threadMeta
+    ? isAdmin
+      ? formatLastSeenLabel(threadMeta.partnerLastSeenAt, locale, presenceLabels)
+      : formatLastSeenLabel(threadMeta.supportLastSeenAt, locale, presenceLabels)
+    : t("online");
+
+  const presenceOnline = threadMeta
+    ? isAdmin
+      ? threadMeta.partnerIsOnline
+      : threadMeta.supportIsOnline
+    : true;
+
   const reloadAllMessages = useCallback(async () => {
     const res = await fetch(`/api/growth/chat/${conversationId}/messages`);
     if (!res.ok) return;
-    const data = (await res.json()) as { items: ChatMessageDTO[] };
+    const data = (await res.json()) as {
+      items: ChatMessageDTO[];
+      meta?: ChatThreadMeta | null;
+    };
+    setThreadMeta(data.meta ?? null);
     setItems(data.items);
     if (data.items.length > 0) {
       lastTsRef.current = data.items[data.items.length - 1]!.createdAt;
@@ -520,6 +547,10 @@ export function GrowthChatThread({
           }).format(dayDate);
 
     const mine = m.senderUserId === viewerUserId;
+    const senderVerified = Boolean(
+      threadMeta?.partnerIsVerified &&
+        m.senderUserId === threadMeta.partnerUserId,
+    );
     const row = (
       <GrowthChatMessageBubble
         key={m.id}
@@ -533,6 +564,8 @@ export function GrowthChatThread({
         supportLabel={t("supportLabel")}
         partnerLabel={t("partnerTag")}
         adminLabel={t("adminTag")}
+        senderIsVerified={senderVerified}
+        verifiedLabel={t("verifiedPartner")}
       />
     );
 
@@ -625,6 +658,16 @@ export function GrowthChatThread({
             : "rounded-2xl border border-white/10 bg-[#050816]/80 shadow-[0_0_30px_rgba(0,0,0,0.35)] backdrop-blur-xl"
         }
       >
+        {hideThreadTitle && threadMeta ? (
+          <div className="flex shrink-0 items-center gap-2 border-b border-white/10 bg-black/20 px-3 py-2 text-[11px] text-white/55">
+            <span
+              className={`inline-block size-2 shrink-0 rounded-full ${presenceOnline ? "bg-emerald-500" : "bg-white/25"}`}
+              aria-hidden
+            />
+            <span>{presenceLine}</span>
+          </div>
+        ) : null}
+
         {!embedded && !hideThreadTitle ? (
           <div className="flex items-center gap-3 border-b border-[var(--growth-border)] bg-[var(--growth-surface)] px-4 py-3">
             <div
@@ -637,10 +680,10 @@ export function GrowthChatThread({
               <p className="text-sm font-bold text-[var(--growth-text)]">{t("supportLabel")}</p>
               <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-[var(--growth-text-sub)]">
                 <span
-                  className="inline-block size-2 shrink-0 rounded-full bg-emerald-500"
+                  className={`inline-block size-2 shrink-0 rounded-full ${presenceOnline ? "bg-emerald-500" : "bg-white/25"}`}
                   aria-hidden
                 />
-                {t("online")}
+                {presenceLine}
               </p>
             </div>
             <Link

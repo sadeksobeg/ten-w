@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
+import { VerifiedBadge } from "@/components/growth/ui/VerifiedBadge";
 import { IconEarnings } from "@/components/growth/icons/GrowthIcons";
 import type { ChatMessageDTO } from "@/lib/growth/chat-service";
 
@@ -19,6 +20,8 @@ type Props = {
   partnerLabel: string;
   adminLabel: string;
   avatarLabel?: string;
+  senderIsVerified?: boolean;
+  verifiedLabel?: string;
 };
 
 function parseBadgeKey(
@@ -112,6 +115,8 @@ export function GrowthChatMessageBubble({
   partnerLabel,
   adminLabel,
   avatarLabel,
+  senderIsVerified = false,
+  verifiedLabel,
 }: Props) {
   const tChat = useTranslations("Growth.chat");
   const tBadges = useTranslations("Growth.badges");
@@ -295,9 +300,12 @@ export function GrowthChatMessageBubble({
         <div className="min-w-0 flex flex-col">
           {showAvatarRow ? (
             <span
-              className={`mb-0.5 px-1 text-[10px] font-semibold text-white/45 ${layout.labelAlign}`}
+              className={`mb-0.5 flex flex-wrap items-center gap-1 px-1 text-[10px] font-semibold text-white/45 ${layout.labelAlign}`}
             >
-              {label}
+              <span>{label}</span>
+              {senderIsVerified ? (
+                <VerifiedBadge label={verifiedLabel} variant="gold" />
+              ) : null}
             </span>
           ) : null}
           <div

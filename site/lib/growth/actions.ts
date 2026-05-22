@@ -486,7 +486,7 @@ export async function assignAdminBadgeAction(
   const badge = await prisma.badgeDefinition.findUnique({
     where: { key: parsed.data.badgeKey },
   });
-  if (!badge || badge.type !== BadgeType.ADMIN) {
+  if (!badge) {
     return { ok: false, error: "invalid_badge" };
   }
 
@@ -836,6 +836,15 @@ export async function adminCreatePartnerAction(
 
   let parentUserId: string | null = null;
   const parentFromForm = String(formData.get("parentUserId") ?? "").trim();
+  const networkOwnerId = String(formData.get("networkOwnerUserId") ?? "").trim();
+  if (networkOwnerId && parentFromForm) {
+    const { listDirectReferralUserIds } = await import("@/lib/growth/partner-network");
+    const children = await listDirectReferralUserIds(networkOwnerId);
+    const allowed = new Set([networkOwnerId, ...children]);
+    if (!allowed.has(parentFromForm)) {
+      return { ok: false, error: "invalid_upline_scope" };
+    }
+  }
   if (parentFromForm) {
     const parentProfile = await prisma.partnerProfile.findUnique({
       where: { userId: parentFromForm },
@@ -949,6 +958,82 @@ export async function adminUpdatePartnerCredentialsAction(
 
   revalidateGrowth();
   return { ok: true };
+}
+
+const adminSetPartnerVerifiedSchema = z.object({
+  partnerId: z.string().min(1),
+  officialDisplayName: z.string().max(80).optional().or(z.literal("")),
+});
+
+export async function adminSetPartnerVerifiedAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = adminSetPartnerVerifiedSchema.safeParse({
+    partnerId: formData.get("partnerId"),
+    officialDisplayName: formData.get("officialDisplayName") ?? "",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const user = await prisma.user.findUnique({ where: { id: parsed.data.partnerId } });
+  if (!user || user.role !== UserRole.PARTNER) return { ok: false, error: "not_found" };
+
+  const verified = formData.get("isVerifiedOfficial") === "on";
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      isVerifiedOfficial: verified,
+      officialDisplayName: parsed.data.officialDisplayName?.trim() || null,
+    },
+  });
+  revalidateGrowth();
+  return { ok: true };
+}
+
+const adminCreateBadgeSchema = z.object({
+  key: z
+    .string()
+    .min(2)
+    .max(64)
+    .regex(/^[a-z][a-z0-9_]*$/),
+  name: z.string().min(1).max(120),
+  description: z.string().max(500).optional().or(z.literal("")),
+  type: z.enum(["ADMIN", "AUTO"]),
+});
+
+export async function adminCreateBadgeDefinitionAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true; key: string } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = adminCreateBadgeSchema.safeParse({
+    key: formData.get("key"),
+    name: formData.get("name"),
+    description: formData.get("description") ?? "",
+    type: formData.get("type") ?? "ADMIN",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const exists = await prisma.badgeDefinition.findUnique({ where: { key: parsed.data.key } });
+  if (exists) return { ok: false, error: "key_taken" };
+
+  await prisma.badgeDefinition.create({
+    data: {
+      key: parsed.data.key,
+      name: parsed.data.name,
+      description: parsed.data.description?.trim() || null,
+      type: parsed.data.type === "AUTO" ? BadgeType.AUTO : BadgeType.ADMIN,
+    },
+  });
+  revalidateGrowth();
+  return { ok: true, key: parsed.data.key };
 }
 
 export async function togglePartnerActiveFormAction(formData: FormData): Promise<void> {
@@ -1818,7 +1903,7 @@ export async function updatePartnerAvatarAction(
     revalidateGrowth();
     return { ok: true };
   }
-  if (raw.length > 2_800_000 || !raw.startsWith("data:image/")) {
+  if (raw.length > 900_000 || !raw.startsWith("data:image/")) {
     return { ok: false, error: "invalid_image" };
   }
   await prisma.user.update({

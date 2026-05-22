@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 
 type Props = {
@@ -24,15 +24,22 @@ export function ProfileShareExport({ publicSlug, locale }: Props) {
   const t = useTranslations("Growth.profileShare");
   const [cacheBust] = useState(() => Date.now());
   const [downloading, setDownloading] = useState<string | null>(null);
+  const [origin, setOrigin] = useState("");
+  const [previewError, setPreviewError] = useState(false);
 
-  const base = useMemo(
-    () =>
-      `/api/growth/profile/${encodeURIComponent(publicSlug)}/share-card?locale=${encodeURIComponent(locale)}&v=${cacheBust}`,
-    [publicSlug, locale, cacheBust],
-  );
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
+
+  const base = useMemo(() => {
+    if (!origin) return "";
+    const host = window.location.host;
+    return `${origin}/api/growth/profile/${encodeURIComponent(publicSlug)}/share-card?locale=${encodeURIComponent(locale)}&host=${encodeURIComponent(host)}&v=${cacheBust}`;
+  }, [publicSlug, locale, cacheBust, origin]);
 
   const onDownload = useCallback(
     async (format: "landscape" | "story") => {
+      if (!base) return;
       const key = format;
       setDownloading(key);
       try {
@@ -54,7 +61,7 @@ export function ProfileShareExport({ publicSlug, locale }: Props) {
       <div className="mt-4 flex flex-wrap gap-2">
         <button
           type="button"
-          disabled={downloading !== null}
+          disabled={downloading !== null || !base}
           onClick={() => onDownload("landscape")}
           className="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-bold text-gold hover:bg-gold/20 disabled:opacity-50"
         >
@@ -62,7 +69,7 @@ export function ProfileShareExport({ publicSlug, locale }: Props) {
         </button>
         <button
           type="button"
-          disabled={downloading !== null}
+          disabled={downloading !== null || !base}
           onClick={() => onDownload("story")}
           className="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-bold text-gold hover:bg-gold/20 disabled:opacity-50"
         >
@@ -70,12 +77,19 @@ export function ProfileShareExport({ publicSlug, locale }: Props) {
         </button>
       </div>
       <div className="mt-4 overflow-hidden rounded-xl border border-gold/20 shadow-[0_0_40px_rgba(176,125,43,0.12)]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={`${base}&format=landscape`}
-          alt={t("previewAlt")}
-          className="w-full"
-        />
+        {base && !previewError ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={`${base}&format=landscape`}
+            alt={t("previewAlt")}
+            className="w-full"
+            onError={() => setPreviewError(true)}
+          />
+        ) : (
+          <p className="px-4 py-8 text-center text-xs text-rose-200/90" role="alert">
+            {t("previewError")}
+          </p>
+        )}
       </div>
     </div>
   );

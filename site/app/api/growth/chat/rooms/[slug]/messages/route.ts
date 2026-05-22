@@ -8,6 +8,7 @@ import {
   postCommunityMessage,
   seedOfficialWelcomeIfEmpty,
 } from "@/lib/growth/chat-room-service";
+import { touchLastSeen } from "@/lib/growth/presence";
 import { prisma } from "@/lib/prisma";
 
 const postSchema = z.object({
@@ -27,6 +28,7 @@ export async function GET(req: Request, ctx: RouteContext) {
   }
 
   const room = await ensureCommunityMember(session.user.id);
+  await touchLastSeen(prisma, session.user.id);
   const url = new URL(req.url);
   const afterRaw = url.searchParams.get("after");
   const after = afterRaw ? new Date(afterRaw) : undefined;

@@ -3,10 +3,10 @@
 import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { IconLock } from "@/components/growth/icons/GrowthIcons";
+import { GameIcon } from "@/components/growth/icons/GameIcon";
 import {
   getBadgeVisual,
   RARITY_COLORS,
-  type BadgeIconId,
 } from "@/lib/growth/badge-visual";
 import { badgeShapeElement } from "@/lib/growth/badge-shape";
 
@@ -30,99 +30,6 @@ const SIZE_PX: Record<BadgeIconSize, number> = {
   lg: 96,
   xl: 120,
 };
-
-function IconPath({ id, color }: { id: BadgeIconId; color: string }) {
-  const s = { stroke: color, fill: "none", strokeWidth: 2, strokeLinecap: "round" as const };
-  switch (id) {
-    case "lightning":
-      return (
-        <path
-          {...s}
-          fill={color}
-          fillOpacity={0.2}
-          d="M28 8L18 36h12l-4 24 20-28H34l6-24z"
-        />
-      );
-    case "target":
-      return (
-        <>
-          <circle {...s} cx="32" cy="32" r="22" />
-          <circle {...s} cx="32" cy="32" r="12" />
-          <circle fill={color} cx="32" cy="32" r="4" />
-        </>
-      );
-    case "diamond":
-      return (
-        <path
-          {...s}
-          fill={color}
-          fillOpacity={0.15}
-          d="M32 6l22 26H10L32 6zm0 52L10 32h44L32 58z"
-        />
-      );
-    case "link":
-      return (
-        <path
-          {...s}
-          d="M20 32a12 12 0 0112-12h6M44 32a12 12 0 01-12 12h-6M26 38l12-12M38 26L26 38"
-        />
-      );
-    case "globe":
-      return (
-        <>
-          <circle {...s} cx="32" cy="32" r="22" />
-          <path {...s} d="M10 32h44M32 10c8 8 8 36 0 44M32 10c-8 8-8 36 0 44" />
-        </>
-      );
-    case "robot":
-      return (
-        <>
-          <rect {...s} x="14" y="18" width="36" height="32" rx="6" />
-          <circle fill={color} cx="24" cy="32" r="3" />
-          <circle fill={color} cx="40" cy="32" r="3" />
-          <path {...s} d="M22 44h20M32 10v8" />
-        </>
-      );
-    case "bolt_clock":
-      return (
-        <>
-          <path
-            {...s}
-            fill={color}
-            fillOpacity={0.2}
-            d="M34 10L26 30h10l-6 22 18-24H38l-4-18z"
-          />
-          <circle {...s} cx="48" cy="48" r="10" />
-          <path {...s} d="M48 44v6l4 2" />
-        </>
-      );
-    case "crown":
-      return (
-        <path
-          {...s}
-          fill={color}
-          fillOpacity={0.2}
-          d="M8 40l8-20 8 12 8-16 8 16 8-12 8 20H8z"
-        />
-      );
-    case "sparkle":
-      return (
-        <>
-          <path {...s} d="M32 6v12M32 46v12M6 32h12M46 32h12M14 14l8 8M42 42l8 8M50 14l-8 8M22 42l-8 8" />
-          <circle fill={color} cx="32" cy="32" r="6" />
-        </>
-      );
-    default:
-      return (
-        <path
-          {...s}
-          fill={color}
-          fillOpacity={0.2}
-          d="M32 8l6 18h18l-14 10 6 18-16-12-16 12 6-18-14-10h18l6-18z"
-        />
-      );
-  }
-}
 
 function ShapeMask({ rarity, size }: { rarity: string; size: number }) {
   const id = `badge-shape-${rarity}-${size}`;
@@ -202,7 +109,7 @@ export function BadgeIcon({
       title={!earned ? lockText : undefined}
     >
       <div
-        className={`relative motion-safe:transition-transform motion-safe:group-hover:scale-105 ${animate ? "growth-badge-earn" : ""} ${earned ? "growth-badge-pulse" : "opacity-40 grayscale"}`}
+        className={`relative motion-safe:transition-transform motion-safe:group-hover:scale-105 ${animate ? "growth-badge-earn" : ""} ${earned ? "growth-badge-pulse" : "opacity-40 grayscale"} ${earned && meta.holo ? "growth-badge-holo" : ""}`}
         style={{ width: px, height: px, ...glowStyle }}
       >
         <svg width={px} height={px} viewBox={`0 0 ${px} ${px}`} aria-hidden>
@@ -252,9 +159,16 @@ export function BadgeIcon({
           />
           <g clipPath={`url(#${clipId})`}>
             <rect width={px} height={px} fill={earned ? `${color}22` : "#1a1a24"} />
-            <g transform={`translate(${px * 0.12}, ${px * 0.12}) scale(${(px * 0.76) / 64})`}>
-              <IconPath id={meta.iconId} color={color} />
-            </g>
+            <foreignObject
+              x={px * 0.18}
+              y={px * 0.18}
+              width={px * 0.64}
+              height={px * 0.64}
+            >
+              <div className="flex size-full items-center justify-center">
+                <GameIcon slug={meta.iconSlug} size={Math.round(px * 0.52)} color={color} glow={earned} />
+              </div>
+            </foreignObject>
           </g>
         </svg>
         {!earned ? (

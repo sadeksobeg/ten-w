@@ -6,6 +6,7 @@ import { CreatePartnerForm, PartnerList } from "@/components/growth/admin/Partne
 import {
   getPartnerUpline,
   getPartnerNetworkTree,
+  buildReferralChildrenMap,
   listPartnersForPicker,
 } from "@/lib/growth/partner-network";
 
@@ -15,7 +16,7 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations("Growth.admin.partners");
 
-  const [partners, levels, pickerOptions] = await Promise.all([
+  const [partners, levels, pickerOptions, referralChildren] = await Promise.all([
     prisma.user.findMany({
       where: { role: UserRole.PARTNER },
       orderBy: { createdAt: "desc" },
@@ -25,6 +26,7 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
     }),
     prisma.levelDefinition.findMany({ orderBy: { order: "asc" }, select: { id: true, name: true } }),
     listPartnersForPicker(),
+    buildReferralChildrenMap(),
   ]);
 
   const filtered = partners.filter((u) => u.partnerProfile);
@@ -50,6 +52,8 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
         uplineSlug: upline?.publicSlug ?? null,
         directCount: stats.directCount,
         totalCount: stats.totalCount,
+        isVerifiedOfficial: u.isVerifiedOfficial,
+        officialDisplayName: u.officialDisplayName,
       };
     }),
   );
@@ -68,7 +72,10 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
         <h2 className="text-lg font-bold text-white">{t("createTitle")}</h2>
         <p className="mt-1 text-xs text-white/45">{t("createHint")}</p>
         <div className="mt-6">
-          <CreatePartnerForm pickerOptions={pickerOptions} />
+          <CreatePartnerForm
+            pickerOptions={pickerOptions}
+            referralChildren={referralChildren}
+          />
         </div>
       </GlassCard>
 

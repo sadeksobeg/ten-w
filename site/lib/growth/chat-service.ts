@@ -2,6 +2,7 @@ import { DealStatus } from "@prisma/client";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { explainCloseProbability } from "@/lib/growth/deal-close-probability";
+import { presenceFromUser, touchLastSeen } from "@/lib/growth/presence";
 
 export type ChatMessageDTO = {
   id: string;
@@ -65,6 +66,18 @@ export type ChatConversationListItem = {
   lastMessageSenderId: string | null;
   /** Open thread where the partner sent the last message — admin should reply. */
   needsAdminReply: boolean;
+  partnerIsVerified: boolean;
+  partnerIsOnline: boolean;
+  partnerLastSeenAt: string | null;
+};
+
+export type ChatThreadMeta = {
+  partnerUserId: string;
+  partnerIsVerified: boolean;
+  partnerIsOnline: boolean;
+  partnerLastSeenAt: string | null;
+  supportIsOnline: boolean;
+  supportLastSeenAt: string | null;
 };
 
 export async function ensureOpenConversation(partnerUserId: string) {
@@ -138,7 +151,14 @@ export async function listAdminConversations(): Promise<ChatConversationListItem
     orderBy: [{ updatedAt: "desc" }],
     take: 120,
     include: {
-      partner: { select: { email: true, name: true } },
+      partner: {
+        select: {
+          email: true,
+          name: true,
+          isVerifiedOfficial: true,
+          lastSeenAt: true,
+        },
+      },
       messages: {
         orderBy: { createdAt: "desc" },
         take: 1,
@@ -275,13 +295,48 @@ export async function listAdminConversations(): Promise<ChatConversationListItem
       lastMessageSenderId != null &&
       lastMessageSenderId === pid;
 
+    const presence = presenceFromUser(r.partner);
+
     return {
       ...listShape,
       timeToActMinutes: timeToActMinutesForInbox(listShape),
       lastMessageSenderId,
       needsAdminReply,
+      partnerIsVerified: r.partner.isVerifiedOfficial,
+      partnerIsOnline: presence.isOnline,
+      partnerLastSeenAt: presence.lastSeenAt,
     };
   });
+}
+
+export async function getConversationThreadMeta(
+  conversationId: string,
+): Promise<ChatThreadMeta | null> {
+  const conv = await prisma.chatConversation.findUnique({
+    where: { id: conversationId },
+    select: {
+      partnerUserId: true,
+      partner: {
+        select: { isVerifiedOfficial: true, lastSeenAt: true },
+      },
+    },
+  });
+  if (!conv) return null;
+  const presence = presenceFromUser(conv.partner);
+  const admin = await prisma.user.findFirst({
+    where: { role: "ADMIN", isActive: true },
+    orderBy: { lastSeenAt: "desc" },
+    select: { lastSeenAt: true },
+  });
+  const supportPresence = presenceFromUser(admin ?? { lastSeenAt: null });
+  return {
+    partnerUserId: conv.partnerUserId,
+    partnerIsVerified: conv.partner.isVerifiedOfficial,
+    partnerIsOnline: presence.isOnline,
+    partnerLastSeenAt: presence.lastSeenAt,
+    supportIsOnline: supportPresence.isOnline,
+    supportLastSeenAt: supportPresence.lastSeenAt,
+  };
 }
 
 export async function listMessages(
@@ -479,6 +534,7 @@ export async function appendMessage(input: {
   metadata?: Record<string, unknown> | null;
 }) {
   const now = new Date();
+  await touchLastSeen(prisma, input.senderUserId);
   const msg = await prisma.chatMessage.create({
     data: {
       conversationId: input.conversationId,
