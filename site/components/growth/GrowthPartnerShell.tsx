@@ -16,10 +16,10 @@ type Props = {
 const NAV = [
   { href: "/growth", key: "dashboard" as const, exact: true },
   { href: "/growth/deals", key: "deals" as const },
+  { href: "/growth/events", key: "events" as const },
   { href: "/growth/earnings", key: "earnings" as const },
   { href: "/growth/network", key: "network" as const },
   { href: "/growth/leaderboard", key: "leaderboard" as const },
-  { href: "/growth/events", key: "events" as const },
   { href: "/growth/chat", key: "chat" as const },
   { href: "/growth/notifications", key: "notifications" as const },
   { href: "/growth/settings", key: "settings" as const },
@@ -28,6 +28,7 @@ const NAV = [
 const MOBILE_KEYS = [
   "dashboard",
   "deals",
+  "events",
   "earnings",
   "leaderboard",
   "chat",
@@ -80,7 +81,7 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
   return (
     <>
       <nav
-        className="mb-4 hidden gap-2 overflow-x-auto border-b border-white/10 pb-3 lg:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="mb-4 hidden gap-2 overflow-x-auto border-b border-white/10 pb-3 md:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label={t("navAria")}
       >
         {NAV.map((item) => {
@@ -101,7 +102,7 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
       </nav>
       <div className="growth-page-wrap growth-mobile-pad growth-stack">{children}</div>
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-6 border-t border-white/10 bg-[#0A0A0F]/90 px-1 py-2 backdrop-blur-md lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-7 border-t border-white/10 bg-[#0A0A0F]/90 px-1 py-2 backdrop-blur-md md:hidden"
         style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom, 0px))" }}
         aria-label={t("mobileNavAria")}
       >
@@ -131,7 +132,7 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
         })}
       </nav>
       <div
-        className="lg:hidden"
+        className="md:hidden"
         style={{ height: "calc(var(--growth-mobile-nav-h) + env(safe-area-inset-bottom, 0px))" }}
         aria-hidden
       />

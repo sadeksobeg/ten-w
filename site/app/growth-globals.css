@@ -334,7 +334,7 @@
   padding-bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 0.5rem);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .growth-mobile-pad {
     padding-bottom: 0;
   }
