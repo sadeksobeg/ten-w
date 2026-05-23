@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { IconLock } from "@/components/growth/icons/GrowthIcons";
 import { GameIcon } from "@/components/growth/icons/GameIcon";
@@ -10,7 +11,7 @@ import {
 } from "@/lib/growth/badge-visual";
 import { badgeShapeElement } from "@/lib/growth/badge-shape";
 
-export type BadgeIconSize = "sm" | "md" | "lg" | "xl";
+export type BadgeIconSize = "sm" | "md" | "lg" | "xl" | "xxl";
 
 export type BadgeIconProps = {
   badgeKey: string;
@@ -22,6 +23,8 @@ export type BadgeIconProps = {
   animate?: boolean;
   className?: string;
   lockedLabel?: string;
+  /** Compact chip for chat name row */
+  chip?: boolean;
 };
 
 const SIZE_PX: Record<BadgeIconSize, number> = {
@@ -29,6 +32,7 @@ const SIZE_PX: Record<BadgeIconSize, number> = {
   md: 72,
   lg: 96,
   xl: 120,
+  xxl: 152,
 };
 
 function ShapeMask({ rarity, size }: { rarity: string; size: number }) {
@@ -78,6 +82,79 @@ function ShapeMask({ rarity, size }: { rarity: string; size: number }) {
   );
 }
 
+function LegacyBadgeSvg({
+  badgeKey,
+  earned,
+  px,
+  meta,
+  color,
+  clipId,
+}: {
+  badgeKey: string;
+  earned: boolean;
+  px: number;
+  meta: ReturnType<typeof getBadgeVisual>;
+  color: string;
+  clipId: string;
+}) {
+  return (
+    <svg width={px} height={px} viewBox={`0 0 ${px} ${px}`} aria-hidden>
+      <defs>
+        <filter id={`badge-glow-${badgeKey}`} x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor={meta.glowColor} floodOpacity="0.6" />
+        </filter>
+        <ShapeMask rarity={meta.rarity} size={px} />
+        <clipPath id={clipId}>
+          {(() => {
+            const shape = badgeShapeElement(meta.shapeId, px);
+            if (shape.type === "polygon") {
+              return <polygon points={shape.points} />;
+            }
+            return <path d={shape.d} />;
+          })()}
+        </clipPath>
+      </defs>
+      <circle
+        cx={px / 2}
+        cy={px / 2}
+        r={px * 0.48}
+        fill="none"
+        stroke={earned ? "#e4b84d" : "#4b5563"}
+        strokeWidth={4}
+        opacity={0.95}
+      />
+      {earned ? (
+        <circle
+          cx={px / 2}
+          cy={px / 2}
+          r={px * 0.5}
+          fill="none"
+          stroke={RARITY_COLORS[meta.rarity]}
+          strokeWidth={1}
+          opacity={0.35}
+        />
+      ) : null}
+      <circle
+        cx={px / 2}
+        cy={px / 2}
+        r={px * 0.44}
+        fill="none"
+        stroke={earned ? RARITY_COLORS[meta.rarity] : "#4b5563"}
+        strokeWidth={2}
+        filter={earned ? `url(#badge-glow-${badgeKey})` : undefined}
+      />
+      <g clipPath={`url(#${clipId})`}>
+        <rect width={px} height={px} fill={earned ? `${color}22` : "#1a1a24"} />
+        <foreignObject x={px * 0.18} y={px * 0.18} width={px * 0.64} height={px * 0.64}>
+          <div className="flex size-full items-center justify-center">
+            <GameIcon slug={meta.iconSlug} size={Math.round(px * 0.52)} color={color} glow={earned} />
+          </div>
+        </foreignObject>
+      </g>
+    </svg>
+  );
+}
+
 export function BadgeIcon({
   badgeKey,
   earned,
@@ -88,20 +165,51 @@ export function BadgeIcon({
   animate,
   className = "",
   lockedLabel,
+  chip = false,
 }: BadgeIconProps) {
   const t = useTranslations("Growth.badges");
   const lockText = lockedLabel ?? t("lockedLabel");
-  const px = SIZE_PX[size];
+  const px = chip ? 20 : SIZE_PX[size];
   const meta = getBadgeVisual(badgeKey);
   const color = earned ? meta.glowColor : "#6b7280";
   const clipId = useMemo(() => `clip-${badgeKey}-${size}`, [badgeKey, size]);
+  const useAsset = Boolean(meta.assetPath);
 
   const glowStyle =
-    earned && showGlow
+    earned && showGlow && !chip
       ? {
           filter: `drop-shadow(0 0 8px ${meta.glowColor}) drop-shadow(0 0 20px ${meta.glowColor}66)`,
         }
       : undefined;
+
+  const tierClass =
+    meta.tier === "legendary"
+      ? "growth-badge-legendary-shimmer"
+      : meta.tier === "gold"
+        ? "growth-badge-medal"
+        : "";
+
+  if (chip) {
+    return (
+      <span
+        className={`growth-badge-chat-chip inline-flex shrink-0 ${earned ? "" : "opacity-40 grayscale"} ${className}`}
+        title={name ?? badgeKey}
+      >
+        {useAsset ? (
+          <Image
+            src={meta.assetPath!}
+            alt=""
+            width={px}
+            height={px}
+            className="size-5 object-contain"
+            unoptimized
+          />
+        ) : (
+          <GameIcon slug={meta.iconSlug} size={px} color={color} glow={earned} />
+        )}
+      </span>
+    );
+  }
 
   return (
     <div
@@ -109,68 +217,29 @@ export function BadgeIcon({
       title={!earned ? lockText : undefined}
     >
       <div
-        className={`relative motion-safe:transition-transform motion-safe:group-hover:scale-105 ${animate ? "growth-badge-earn" : ""} ${earned ? "growth-badge-pulse" : "opacity-40 grayscale"} ${earned && meta.holo ? "growth-badge-holo" : ""}`}
+        className={`relative motion-safe:transition-transform motion-safe:group-hover:scale-105 ${animate ? "growth-badge-earn" : ""} ${earned ? "growth-badge-pulse" : "opacity-40 grayscale"} ${earned && meta.holo ? "growth-badge-holo" : ""} ${earned ? tierClass : ""} growth-badge-medal-wrap`}
         style={{ width: px, height: px, ...glowStyle }}
       >
-        <svg width={px} height={px} viewBox={`0 0 ${px} ${px}`} aria-hidden>
-          <defs>
-            <filter id={`badge-glow-${badgeKey}`} x="-50%" y="-50%" width="200%" height="200%">
-              <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor={meta.glowColor} floodOpacity="0.6" />
-            </filter>
-            <ShapeMask rarity={meta.rarity} size={px} />
-            <clipPath id={clipId}>
-              {(() => {
-                const shape = badgeShapeElement(meta.shapeId, px);
-                if (shape.type === "polygon") {
-                  return <polygon points={shape.points} />;
-                }
-                return <path d={shape.d} />;
-              })()}
-            </clipPath>
-          </defs>
-          <circle
-            cx={px / 2}
-            cy={px / 2}
-            r={px * 0.48}
-            fill="none"
-            stroke={earned ? "#e4b84d" : "#4b5563"}
-            strokeWidth={4}
-            opacity={0.95}
+        {useAsset ? (
+          <Image
+            src={meta.assetPath!}
+            alt=""
+            width={px}
+            height={px}
+            className="size-full object-contain"
+            priority={size === "xxl" || size === "xl"}
+            unoptimized
           />
-          {earned ? (
-            <circle
-              cx={px / 2}
-              cy={px / 2}
-              r={px * 0.5}
-              fill="none"
-              stroke={RARITY_COLORS[meta.rarity]}
-              strokeWidth={1}
-              opacity={0.35}
-            />
-          ) : null}
-          <circle
-            cx={px / 2}
-            cy={px / 2}
-            r={px * 0.44}
-            fill="none"
-            stroke={earned ? RARITY_COLORS[meta.rarity] : "#4b5563"}
-            strokeWidth={2}
-            filter={earned ? `url(#badge-glow-${badgeKey})` : undefined}
+        ) : (
+          <LegacyBadgeSvg
+            badgeKey={badgeKey}
+            earned={earned}
+            px={px}
+            meta={meta}
+            color={color}
+            clipId={clipId}
           />
-          <g clipPath={`url(#${clipId})`}>
-            <rect width={px} height={px} fill={earned ? `${color}22` : "#1a1a24"} />
-            <foreignObject
-              x={px * 0.18}
-              y={px * 0.18}
-              width={px * 0.64}
-              height={px * 0.64}
-            >
-              <div className="flex size-full items-center justify-center">
-                <GameIcon slug={meta.iconSlug} size={Math.round(px * 0.52)} color={color} glow={earned} />
-              </div>
-            </foreignObject>
-          </g>
-        </svg>
+        )}
         {!earned ? (
           <div className="absolute inset-0 flex items-center justify-center text-white/70">
             <IconLock size={Math.round(px * 0.32)} />

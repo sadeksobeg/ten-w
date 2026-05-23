@@ -15,20 +15,20 @@ export function ProfileShowcaseStrip({ locale, keys, earnedBadges, title }: Prop
   if (visible.length === 0) return null;
 
   return (
-    <section className="mt-6">
+    <section className="mt-8">
       <h2 className="text-sm font-bold text-gold/90">{title}</h2>
-      <div className="mt-3 flex flex-wrap gap-3">
+      <div className="mt-4 flex gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {visible.map((key) => {
           const meta = earnedBadges.find((b) => b.key === key);
           const copy = resolveBadgeCopy(key, locale, { name: meta?.name ?? key });
           return (
             <div
               key={key}
-              className="flex flex-col items-center gap-1 rounded-2xl border border-gold/25 bg-gold/5 px-3 py-2"
+              className="flex min-w-[9rem] shrink-0 flex-col items-center gap-2 rounded-2xl border border-gold/30 bg-gradient-to-b from-gold/10 to-transparent px-4 py-4 shadow-[0_0_32px_-12px_rgba(228,184,77,0.45)]"
               title={copy.name}
             >
-              <BadgeIcon badgeKey={key} earned size="md" showGlow />
-              <span className="max-w-[5rem] truncate text-[10px] font-semibold text-white/70">
+              <BadgeIcon badgeKey={key} earned size="xl" showGlow />
+              <span className="max-w-[7rem] truncate text-center text-[11px] font-semibold text-white/80">
                 {copy.name}
               </span>
             </div>

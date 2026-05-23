@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="night_owl">
+  <defs>
+    <linearGradient id="holo-night_owl" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#E0E7FF"/>
+          <stop offset="50%" stop-color="#6366F1"/>
+          <stop offset="100%" stop-color="#3730A3"/>
+        </linearGradient>
+    <radialGradient id="rim-night_owl" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#E0E7FF" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#3730A3"/>
+    </radialGradient>
+    <filter id="glow-night_owl" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#6366F1" flood-opacity="0.65"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    <clipPath id="hex-night_owl">
+      <path d="M64 8 L110 32 L110 80 L64 104 L18 80 L18 32 Z"/>
+    </clipPath>
+  </defs>
+  <g filter="url(#glow-night_owl)">
+    <circle cx="64" cy="64" r="58" fill="none" stroke="url(#rim-night_owl)" stroke-width="6"/>
+    <circle cx="64" cy="64" r="50" fill="#0a0a0f" stroke="#6366F1" stroke-width="2" opacity="0.9"/>
+    <g clip-path="url(#hex-night_owl)">
+      <rect width="128" height="128" fill="url(#holo-night_owl)"/>
+      <path d="M64 14 L100 34 L100 78 L64 98 L28 78 L28 34 Z" fill="none" stroke="#E0E7FF" stroke-width="1.5" opacity="0.55"/>
+      <ellipse cx="64" cy="42" rx="28" ry="12" fill="white" opacity="0.12"/>
+    </g>
+    <text x="64" y="72" text-anchor="middle" font-family="Georgia, serif" font-weight="900" font-size="36" fill="#E0E7FF" stroke="#3730A3" stroke-width="0.5">☾</text>
+    <circle cx="64" cy="64" r="52" fill="none" stroke="#6366F1" stroke-width="1" opacity="0.35"/>
+  </g>
+</svg>

@@ -994,12 +994,12 @@
   },
   "Ascend": {
     "meta": {
-      "title": "TENEGTA ASCEND — بنية نمو gamified",
+      "title": "TENEGTA ASCEND — بنية نمو تفاعلية",
       "description": "نظام التشغيل لشبكات الشركاء القائمة على الأداء. XP ومستويات ولوحات متصدرين وعمولات في مساحة عمل حية."
     },
     "hero": {
       "eyebrow": "منتج · نظام نمو الشركاء",
-      "tagline": "بنية نمو gamified للمؤسسات الحديثة.",
+      "tagline": "بنية نمو تفاعلية للمؤسسات الحديثة.",
       "subtagline": "نظام التشغيل لشبكات الشركاء القائمة على الأداء.",
       "ctaPrimary": "ابدأ الصعود",
       "ctaSecondary": "دخول الشريك",
@@ -1040,7 +1040,7 @@
     "positioning": {
       "eyebrow": "لماذا ASCEND",
       "quote": "ليس CRM. ليس إضافة affiliate. نظام تشغيل للنمو.",
-      "body": "TENEGTA ASCEND يوحّد العمولات والgamification وشبكات الشركاء — ليتراكم الأداء بدلاً من إعادة الضبط كل ربع."
+      "body": "TENEGTA ASCEND يوحّد العمولات والتحفيز التفاعلي وشبكات الشركاء — ليتراكم الأداء بدلاً من إعادة الضبط كل ربع."
     },
     "cta": {
       "title": "مستعد للصعود؟",
@@ -1136,6 +1136,9 @@
       "repost": "إعادة نشر",
       "feedEmpty": "لا منشورات بعد — كن أول من يشارك.",
       "joinedLocked": "انضم للفعالية لعرض التفاصيل الكاملة وخلاصة الأعضاء.",
+      "tabChat": "المحادثة",
+      "tabProgress": "التقدم",
+      "tabPosts": "المنشورات",
       "status": {
         "DRAFT": "مسودة",
         "PUBLISHED": "منشورة",
@@ -1162,6 +1165,7 @@
       "teamSubtitle": "شبكة الإحالة حتى 3 مستويات — شركاء نشطون",
       "activityTitle": "النشاط الأخير",
       "showcaseTitle": "شارات مميزة",
+      "moreStats": "إحصائيات إضافية",
       "appreciation": {
         "cta": "أرسل تقديراً",
         "sending": "جاري الإرسال…",
@@ -1183,8 +1187,28 @@
       "downlines": "الشركاء المباشرون",
       "yourCloses": "صفقاتك المغلقة",
       "activityIndex": "مؤشر النشاط",
-      "codeHint": "شارك الرمز {code} لتوسيع شبكتك"
+      "codeHint": "شارك الرمز {code} لتوسيع شبكتك",
+      "copyUtm": "نسخ رابط الإحالة مع UTM",
+      "copied": "تم النسخ!"
     },
+    "leaderboardPage": {
+      "title": "لوحة المتصدرين",
+      "subtitle": "ترتيب أسبوعي وشهري وموسمي",
+      "you": "أنت",
+      "anonymous": "شريك",
+      "tabs": { "week": "هذا الأسبوع", "month": "هذا الشهر", "season": "الموسم" },
+      "deals": "صفقات",
+      "xp": "XP",
+      "streak": "سلسلة"
+    },
+    "seasonPass": {
+      "eyebrow": "تذكرة الموسم",
+      "weights": "النقاط: صفقات ×{deals} · XP ×{xp} · سلسلة ×{streak}",
+      "yourRank": "ترتيبك هذا الأسبوع: #{rank}",
+      "cta": "لوحة المتصدرين الكاملة"
+    },
+    "commandPalette": { "hint": "تنقل سريع — Esc للإغلاق" },
+    "push": { "enable": "تفعيل تنبيهات الدفع", "enabled": "التنبيهات مفعّلة" },
     "profileShare": {
       "title": "بطاقة المشاركة",
       "hint": "صورة جاهزة للنشر على وسائل التواصل",
@@ -1237,7 +1261,9 @@
       "client": "العميل / وصف",
       "clientPh": "مثال: عيادة د. علي",
       "notes": "ملاحظات",
-      "notesPh": "تفاصيل اختيارية عن العميل أو الصفقة"
+      "notesPh": "تفاصيل اختيارية عن العميل أو الصفقة",
+      "commission": "العمولة",
+      "estimate": "عند الإغلاق: ~{commission} عمولة · ~{xp} نقاط قوة"
     },
     "deals": {
       "title": "صفقاتي",
@@ -1254,6 +1280,17 @@
       "openChat": "فتح محادثة الدعم",
       "journeyLost": "توقفت الصفقة — استخلص الدرس وتابع.",
       "toastLeadAdded": "تمت إضافة العميل المحتمل",
+      "toastLeadUpdated": "تم تحديث العميل المحتمل",
+      "toastLeadDeleted": "تم حذف العميل المحتمل",
+      "toastLeadLost": "تم وضع علامة «خسارة»",
+      "editLead": "تعديل العميل المحتمل",
+      "editProduct": "المنتج",
+      "saveLead": "حفظ التعديلات",
+      "cancelEdit": "إلغاء",
+      "deleteLead": "حذف العميل المحتمل",
+      "deleteConfirm": "حذف هذا العميل المحتمل نهائياً؟",
+      "deleteLeadConfirm": "نعم، احذف",
+      "markLost": "وضع علامة خسارة",
       "errors": {
         "invalid_input": "تعذّر الإضافة — تحقق من الحقول."
       },
@@ -1449,7 +1486,23 @@
       "rarityLegendary": "أسطوري",
       "unlockTitle": "شارة جديدة",
       "unlockSubtitle": "المفتاح: {key}",
-      "unlockCta": "متابعة"
+      "unlockCta": "متابعة",
+      "howTo": "كيف تكسبها",
+      "earned": "مكتسبة",
+      "earnedOn": "مكتسبة {date}",
+      "earned_on": "مكتسبة {date}",
+      "close": "إغلاق",
+      "progress": {
+        "deals": "{current} / {target} صفقة مغلقة",
+        "downlines": "{current} / {target} إحالة",
+        "kitHits": "{current} / {target} فتحات الحقيبة",
+        "unknown": "قيد التقدم"
+      },
+      "showcase": {
+        "hint": "اختر حتى 5 شارات مكتسبة لعرضها في بروفايلك العام.",
+        "save": "حفظ العرض",
+        "saved": "تم حفظ العرض"
+      }
     },
     "xp": {
       "max_level": "أنت في أعلى مستوى",
@@ -1611,6 +1664,8 @@
       "communityPlaceholder": "رسالة للمجتمع…",
       "communityWelcome": "مرحباً بك في مجتمع شركاء T.E.N.E.G.T.A. شارك التقدّم أو اسأل عن الصفقات والأرباح.",
       "communityLoadError": "تعذّر تحميل المجتمع. أعد تحميل الصفحة.",
+      "eventChatHint": "لأعضاء الفعالية فقط — الشارات تظهر بجانب الأسماء.",
+      "eventChatPlaceholder": "رسالة لفريق الفعالية…",
       "verifiedOfficial": "رسمي",
       "verifiedPartner": "موثّق",
       "presenceOnline": "متصل الآن",
@@ -2141,6 +2196,24 @@
         "revokeHint": "يزيل أي شارة (بما فيها التلقائية) من المستخدم.",
         "revokeSubmit": "سحب",
         "revokeBadgeKey": "مفتاح الشارة"
+      },
+      "grantStudio": {
+        "eyebrow": "حفل منح الشارة",
+        "title": "منح باحتفال",
+        "hint": "الشارات المميزة تظهر في محادثة الفعالية بجانب الاسم.",
+        "email": "بريد الشريك",
+        "emailPh": "partner@example.com",
+        "badgeKey": "الشارة",
+        "submit": "منح باحتفال",
+        "confirmTitle": "تأكيد المنح",
+        "confirmBody": "منح «{badge}» لـ {partner}؟",
+        "cancel": "إلغاء",
+        "confirmSubmit": "منح الآن",
+        "toastCeremony": "تم منح الشارة باحتفال",
+        "errors": {
+          "badge_already_granted": "الشارة ممنوحة مسبقاً",
+          "unknown": "حدث خطأ"
+        }
       },
       "rewardsPage": {
         "title": "مكافآت الترتيب الشهرية",

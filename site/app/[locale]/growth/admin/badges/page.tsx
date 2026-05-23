@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { AdminBadgeGrantStudio } from "@/components/growth/admin/AdminBadgeGrantStudio";
 import { AdminBadgesClient } from "@/components/growth/admin/AdminBadgesClient";
 import { AdminCreateBadgeForm } from "@/components/growth/admin/AdminCreateBadgeForm";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
@@ -23,6 +24,8 @@ export default async function GrowthAdminBadgesPage() {
       <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold sm:text-3xl">
         {t("admin.badgesPage.title")}
       </h1>
+
+      <AdminBadgeGrantStudio adminBadges={allBadges} />
 
       <AdminCreateBadgeForm />
 

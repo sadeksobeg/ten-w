@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { ChatRoomMessageDTO } from "@/lib/growth/chat-room-service";
+import { COMMUNITY_ROOM_SLUG } from "@/lib/growth/chat-room-service";
+import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { VerifiedBadge } from "@/components/growth/ui/VerifiedBadge";
 import { RankEmblem } from "@/components/growth/ui/RankEmblem";
@@ -13,25 +15,33 @@ type Props = {
   viewerUserId: string;
   viewerEmail: string;
   viewerName: string | null;
+  roomSlug?: string;
+  hintKey?: "communityHint" | "eventChatHint";
+  placeholderKey?: "communityPlaceholder" | "eventChatPlaceholder";
 };
 
 export function GrowthCommunityChat({
-  locale,
+  locale: _locale,
   viewerUserId,
-  viewerEmail,
-  viewerName,
+  viewerEmail: _viewerEmail,
+  viewerName: _viewerName,
+  roomSlug = COMMUNITY_ROOM_SLUG,
+  hintKey = "communityHint",
+  placeholderKey = "communityPlaceholder",
 }: Props) {
   const t = useTranslations("Growth.chat");
   const tKw = useTranslations("Growth.chat.keywords");
+  const enableKeywords = roomSlug === COMMUNITY_ROOM_SLUG;
   const [messages, setMessages] = useState<ChatRoomMessageDTO[]>([]);
   const [body, setBody] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const apiPath = `/api/growth/chat/rooms/${encodeURIComponent(roomSlug)}/messages`;
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch("/api/growth/chat/rooms/community/messages");
+      const res = await fetch(apiPath);
       if (!res.ok) {
         setError(t("communityLoadError"));
         return;
@@ -42,7 +52,7 @@ export function GrowthCommunityChat({
     } catch {
       setError(t("communityLoadError"));
     }
-  }, [t]);
+  }, [apiPath, t]);
 
   useEffect(() => {
     void load();
@@ -59,7 +69,7 @@ export function GrowthCommunityChat({
     if (!text || sending) return;
     setSending(true);
     try {
-      const res = await fetch("/api/growth/chat/rooms/community/messages", {
+      const res = await fetch(apiPath, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body: text }),
@@ -80,7 +90,7 @@ export function GrowthCommunityChat({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="shrink-0 border-b border-white/10 bg-gold/5 px-4 py-2 text-center text-[11px] text-gold/90">
-        {t("communityHint")}
+        {t(hintKey)}
       </div>
       {error ? (
         <p className="shrink-0 bg-rose-500/10 px-3 py-2 text-center text-xs text-rose-200" role="alert">
@@ -89,7 +99,7 @@ export function GrowthCommunityChat({
       ) : null}
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-4">
         {messages.map((m) => {
-          if (m.kind === "ACTION" && m.metadata?.links) {
+          if (enableKeywords && m.kind === "ACTION" && m.metadata?.links) {
             const links = m.metadata.links as { labelKey: string; href: string }[];
             return (
               <div key={m.id} className="flex justify-center py-1">
@@ -146,6 +156,9 @@ export function GrowthCommunityChat({
                   className={`mb-0.5 flex flex-wrap items-center gap-1.5 ${mine ? "justify-end" : "justify-start"}`}
                 >
                   <span className="text-[11px] font-bold text-white/80">{m.senderName}</span>
+                  {m.senderChatBadges?.map((key) => (
+                    <BadgeIcon key={key} badgeKey={key} earned chip name={key} />
+                  ))}
                   {official ? <VerifiedBadge label={t("verifiedOfficial")} variant="gold" /> : null}
                   {!official && verified ? (
                     <VerifiedBadge label={t("verifiedPartner")} variant="gold" />
@@ -186,7 +199,7 @@ export function GrowthCommunityChat({
           <input
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            placeholder={t("communityPlaceholder")}
+            placeholder={t(placeholderKey)}
             className="min-h-[var(--growth-touch-min)] flex-1 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-gold/40"
             maxLength={8000}
           />

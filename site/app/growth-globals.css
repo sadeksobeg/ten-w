@@ -90,6 +90,46 @@
   }
 }
 
+.growth-badge-medal-wrap {
+  position: relative;
+}
+
+.growth-badge-medal {
+  filter: drop-shadow(0 0 10px rgba(228, 184, 77, 0.45));
+}
+
+.growth-badge-legendary-shimmer {
+  animation: growthBadgeLegendaryShimmer 3.5s ease-in-out infinite;
+}
+
+@keyframes growthBadgeLegendaryShimmer {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 12px rgba(228, 184, 77, 0.55)) brightness(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.7)) brightness(1.08);
+  }
+}
+
+.growth-badge-chat-chip {
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.growth-podium-1 {
+  transform: scale(1.08);
+  z-index: 3;
+}
+
+.growth-podium-2 {
+  z-index: 2;
+}
+
+.growth-podium-3 {
+  z-index: 1;
+}
+
 .growth-avatar-legend-ring {
   animation: growthAvatarLegend 3s ease-in-out infinite;
 }

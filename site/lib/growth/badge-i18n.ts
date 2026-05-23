@@ -82,6 +82,16 @@ const AR: Record<string, BadgeCopy> = {
     description: "تسجيل حضور بعد منتصف الليل.",
     howTo: "سجّل حضورك بعد منتصف الليل.",
   },
+  content_creator: {
+    name: "صانع محتوى",
+    description: "شريك مميز في إنشاء المحتوى والترويج.",
+    howTo: "يمنحها فريق T.E.N.E.G.T.A للمبدعين المميزين.",
+  },
+  verified_partner: {
+    name: "شريك موثّق",
+    description: "شريك موثّق رسمياً من T.E.N.E.G.T.A.",
+    howTo: "يمنحها الإدارة أو تُكتسب بعد إنجازات مميزة.",
+  },
 };
 
 const EN: Record<string, BadgeCopy> = {
@@ -160,6 +170,16 @@ const EN: Record<string, BadgeCopy> = {
     description: "Checked in after midnight.",
     howTo: "Daily check-in after midnight.",
   },
+  content_creator: {
+    name: "Content Creator",
+    description: "Featured partner creating growth content.",
+    howTo: "Granted by T.E.N.E.G.T.A for standout creators.",
+  },
+  verified_partner: {
+    name: "Verified Partner",
+    description: "Officially verified T.E.N.E.G.T.A partner.",
+    howTo: "Granted by admin or earned through milestones.",
+  },
 };
 
 const FR: Record<string, BadgeCopy> = {
@@ -237,6 +257,16 @@ const FR: Record<string, BadgeCopy> = {
     name: "Oiseau de nuit",
     description: "Check-in après minuit.",
     howTo: "Check-in quotidien après minuit.",
+  },
+  content_creator: {
+    name: "Créateur de contenu",
+    description: "Partenaire créateur de contenu mis en avant.",
+    howTo: "Accordé par T.E.N.E.G.T.A aux créateurs remarquables.",
+  },
+  verified_partner: {
+    name: "Partenaire vérifié",
+    description: "Partenaire officiellement vérifié.",
+    howTo: "Accordé par l'admin ou via jalons.",
   },
 };
 

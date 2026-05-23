@@ -190,6 +190,100 @@ export async function addLeadDealAction(
   return { ok: true };
 }
 
+export async function updatePendingLeadAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const dealId = String(formData.get("dealId") ?? "").trim();
+  const parsed = addLeadSchema.safeParse({
+    productId: formData.get("productId"),
+    clientLabel: formData.get("clientLabel") ?? "",
+    notes: formData.get("notes") ?? "",
+  });
+  if (!dealId || !parsed.success) return { ok: false, error: "invalid_input" };
+
+  const deal = await prisma.deal.findFirst({
+    where: { id: dealId, partnerId: session.user.id, status: DealStatus.PENDING },
+  });
+  if (!deal) return { ok: false, error: "not_found" };
+
+  const product = await prisma.product.findUnique({ where: { id: parsed.data.productId } });
+  if (!product || !product.active) return { ok: false, error: "invalid_input" };
+
+  await prisma.deal.update({
+    where: { id: deal.id },
+    data: {
+      productId: product.id,
+      saleAmountCents: product.priceCents,
+      clientLabel: parsed.data.clientLabel?.trim() || null,
+      notes: parsed.data.notes?.trim() || null,
+    },
+  });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function deletePendingLeadAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const dealId = String(formData.get("dealId") ?? "").trim();
+  if (!dealId) return { ok: false, error: "invalid_input" };
+
+  const deal = await prisma.deal.findFirst({
+    where: { id: dealId, partnerId: session.user.id, status: DealStatus.PENDING },
+  });
+  if (!deal) return { ok: false, error: "not_found" };
+
+  await prisma.deal.delete({ where: { id: deal.id } });
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function markPendingLeadLostAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const dealId = String(formData.get("dealId") ?? "").trim();
+  if (!dealId) return { ok: false, error: "invalid_input" };
+
+  const deal = await prisma.deal.findFirst({
+    where: { id: dealId, partnerId: session.user.id, status: DealStatus.PENDING },
+  });
+  if (!deal) return { ok: false, error: "not_found" };
+
+  await prisma.deal.update({
+    where: { id: deal.id },
+    data: { status: DealStatus.LOST, lostAt: new Date() },
+  });
+
+  await logActivityEvent(prisma, {
+    kind: "deal_lost",
+    actorUserId: session.user.id,
+    headline: `Lead marked lost: ${deal.clientLabel ?? deal.id}`,
+    metadata: { dealId: deal.id },
+  });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
 const CLOSE_REQUEST_TAG = "[CLOSE REQUEST]";
 
 export async function requestDealCloseAction(
@@ -1817,6 +1911,10 @@ export async function joinEventAction(
       acceptedAt: new Date(),
     },
   });
+
+  const { ensureEventRoom, ensureEventMember } = await import("@/lib/growth/chat-room-service");
+  const room = await ensureEventRoom(eventId);
+  await ensureEventMember(session.user.id, room.id);
 
   await notifyAdmins({
     type: NotificationType.ADMIN_MESSAGE,

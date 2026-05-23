@@ -8,6 +8,8 @@ import { prisma } from "@/lib/prisma";
 import { renderMarkdownLite } from "@/lib/growth/markdown-lite";
 import { JoinEventModal } from "@/components/growth/JoinEventModal";
 import { EventMilestoneTimeline } from "@/components/growth/events/EventMilestoneTimeline";
+import { EventChatPanel } from "@/components/growth/events/EventChatPanel";
+import { EventMemberTabs } from "@/components/growth/events/EventMemberTabs";
 import { EventMemberFeed } from "@/components/growth/events/EventMemberFeed";
 import { EventCoverImage } from "@/components/growth/events/EventCoverImage";
 import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
@@ -100,23 +102,43 @@ export default async function GrowthEventDetailPage({ params }: Props) {
       </GlassCard>
 
       {isMember ? (
-        <GlassCard className="p-6">
-          <h2 className="text-lg font-bold">{t("milestones")}</h2>
-          <div className="mt-4">
-            <EventMilestoneTimeline
+        <EventMemberTabs
+          chat={
+            <EventChatPanel
               locale={locale}
-              currentProgress={myPart!.progress}
-              milestones={event.milestones.map((m) => ({
-                id: m.id,
-                title: m.title,
-                description: m.description,
-                requiredProgress: m.requiredProgress,
-                xpReward: m.xpReward,
-                reached: myPart!.progress >= m.requiredProgress,
-              }))}
+              eventSlug={event.slug}
+              viewerUserId={session.user.id}
+              viewerEmail={session.user.email ?? ""}
+              viewerName={session.user.name ?? null}
             />
-          </div>
-        </GlassCard>
+          }
+          progress={
+            <>
+              <div className="text-sm font-semibold text-gold">
+                {t("eventProgress")}: {myPart!.progress}%
+              </div>
+              <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/10">
+                <div className="h-full bg-gold transition-all" style={{ width: `${myPart!.progress}%` }} />
+              </div>
+              <div className="mt-6">
+                <h3 className="text-lg font-bold">{t("milestones")}</h3>
+                <EventMilestoneTimeline
+                  locale={locale}
+                  currentProgress={myPart!.progress}
+                  milestones={event.milestones.map((m) => ({
+                    id: m.id,
+                    title: m.title,
+                    description: m.description,
+                    requiredProgress: m.requiredProgress,
+                    xpReward: m.xpReward,
+                    reached: myPart!.progress >= m.requiredProgress,
+                  }))}
+                />
+              </div>
+            </>
+          }
+          posts={<EventMemberFeed eventId={event.id} posts={memberPosts ?? []} />}
+        />
       ) : null}
 
       {event.participants.length > 0 ? (
@@ -134,10 +156,6 @@ export default async function GrowthEventDetailPage({ params }: Props) {
             ))}
           </div>
         </GlassCard>
-      ) : null}
-
-      {isMember ? (
-        <EventMemberFeed eventId={event.id} posts={memberPosts ?? []} />
       ) : null}
 
       <GlassCard className="p-6">

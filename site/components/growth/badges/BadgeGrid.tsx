@@ -22,7 +22,7 @@ export type BadgeGridItem = {
 type Props = {
   badges: BadgeGridItem[];
   locale?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   showLocked?: boolean;
 };
 

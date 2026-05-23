@@ -286,6 +286,20 @@ async function main() {
       category: BadgeCategory.BEHAVIORAL,
       description: "Awarded by admin.",
     },
+    {
+      key: "content_creator",
+      name: "Content Creator",
+      type: BadgeType.ADMIN,
+      category: BadgeCategory.SOCIAL,
+      description: "Featured content creator — shown in event chat.",
+    },
+    {
+      key: "verified_partner",
+      name: "Verified Partner",
+      type: BadgeType.ADMIN,
+      category: BadgeCategory.META,
+      description: "Official verified partner badge.",
+    },
   ];
 
   for (const b of badgeDefs) {
@@ -429,7 +443,7 @@ async function main() {
       },
       {
         slug: "website",
-        name: "الموقع",
+        name: "عقد الموقع",
         priceCents: 4500_00,
         commissionBaseCents: 500_00,
         marketingKit: kit("website"),

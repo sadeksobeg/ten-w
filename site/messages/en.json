@@ -1170,6 +1170,9 @@
       "repost": "Repost",
       "feedEmpty": "No posts yet — be the first to share.",
       "joinedLocked": "Join the event to unlock full details and the member feed.",
+      "tabChat": "Chat",
+      "tabProgress": "Progress",
+      "tabPosts": "Posts",
       "status": {
         "DRAFT": "Draft",
         "PUBLISHED": "Published",
@@ -1198,6 +1201,7 @@
       "teamSubtitle": "Referral network up to 3 levels — active partners only",
       "activityTitle": "Recent activity",
       "showcaseTitle": "Featured badges",
+      "moreStats": "More stats",
       "appreciation": {
         "cta": "Send appreciation",
         "sending": "Sending…",
@@ -1228,7 +1232,10 @@
       "subtitle": "Weekly, monthly, and season rankings",
       "you": "you",
       "anonymous": "Partner",
-      "tabs": { "week": "This week", "month": "This month", "season": "Season" }
+      "tabs": { "week": "This week", "month": "This month", "season": "Season" },
+      "deals": "deals",
+      "xp": "XP",
+      "streak": "streak"
     },
     "seasonPass": {
       "eyebrow": "Season pass",
@@ -1291,6 +1298,7 @@
       "clientPh": "e.g. Dr. Ali Clinic",
       "notes": "Notes",
       "notesPh": "Optional context",
+      "commission": "Commission",
       "estimate": "On close: ~{commission} commission · ~{xp} Power Points"
     },
     "deals": {
@@ -1311,6 +1319,17 @@
       "closeRequestSent": "Close request sent",
       "journeyLost": "Deal stopped — capture the lesson and re-aim.",
       "toastLeadAdded": "Lead added",
+      "toastLeadUpdated": "Lead updated",
+      "toastLeadDeleted": "Lead removed",
+      "toastLeadLost": "Marked as lost",
+      "editLead": "Edit lead",
+      "editProduct": "Product",
+      "saveLead": "Save changes",
+      "cancelEdit": "Cancel",
+      "deleteLead": "Delete lead",
+      "deleteConfirm": "Delete this lead permanently?",
+      "deleteLeadConfirm": "Yes, delete",
+      "markLost": "Mark as lost",
       "errors": {
         "invalid_input": "Could not add lead — check the form."
       },
@@ -1713,6 +1732,8 @@
       "communityPlaceholder": "Message the community…",
       "communityWelcome": "Welcome to the TENEGTA partner community. Ask about deals, earnings, or events.",
       "communityLoadError": "Could not load community chat.",
+      "eventChatHint": "Event members only — badges appear beside names.",
+      "eventChatPlaceholder": "Message your event team…",
       "verifiedOfficial": "Official",
       "verifiedPartner": "Verified",
       "presenceOnline": "Online now",
@@ -2237,6 +2258,24 @@
         "revokeHint": "Removes any badge (including auto badges) from the user.",
         "revokeSubmit": "Revoke",
         "revokeBadgeKey": "Badge key"
+      },
+      "grantStudio": {
+        "eyebrow": "Badge ceremony",
+        "title": "Grant with ceremony",
+        "hint": "Featured badges appear in event chat beside partner names.",
+        "email": "Partner email",
+        "emailPh": "partner@example.com",
+        "badgeKey": "Badge",
+        "submit": "Grant with ceremony",
+        "confirmTitle": "Confirm ceremony grant",
+        "confirmBody": "Award «{badge}» to {partner}?",
+        "cancel": "Cancel",
+        "confirmSubmit": "Grant now",
+        "toastCeremony": "Badge granted with ceremony",
+        "errors": {
+          "badge_already_granted": "Badge already granted",
+          "unknown": "Something went wrong"
+        }
       },
       "rewardsPage": {
         "title": "Leaderboard rewards",

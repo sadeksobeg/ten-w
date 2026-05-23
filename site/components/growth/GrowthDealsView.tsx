@@ -21,7 +21,7 @@ export async function GrowthDealsView({ locale, data }: Props) {
 
   return (
     <div className="space-y-8 growth-page-enter">
-      <GlassCard className="border border-white/12 bg-white/[0.03] p-6">
+      <GlassCard variant="highlight" className="border border-white/12 p-6">
         <AddLeadDealForm
           products={data.products.map((p) => ({
             id: p.id,
@@ -36,7 +36,16 @@ export async function GrowthDealsView({ locale, data }: Props) {
       <GlassCard className="p-6">
         <h2 className="font-[family-name:var(--font-cairo)] text-lg font-bold">{t("deals.listTitle")}</h2>
         <div className="mt-5">
-          <DealsPipeline deals={data.deals} journeyLabels={journeyLabels} />
+          <DealsPipeline
+            deals={data.deals}
+            journeyLabels={journeyLabels}
+            products={data.products.map((p) => ({
+              id: p.id,
+              name: p.name,
+              priceCents: p.priceCents,
+              commissionBaseCents: p.commissionBaseCents,
+            }))}
+          />
         </div>
       </GlassCard>
     </div>

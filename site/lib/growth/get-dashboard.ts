@@ -38,6 +38,7 @@ import {
 export type DashboardDeal = {
   id: string;
   status: DealStatus;
+  productId: string;
   clientLabel: string | null;
   productName: string;
   saleAmountCents: number;
@@ -213,6 +214,7 @@ export async function getPartnerDashboard(
         select: {
           id: true,
           status: true,
+          productId: true,
           clientLabel: true,
           saleAmountCents: true,
           notes: true,
@@ -519,6 +521,7 @@ export async function getPartnerDashboard(
     deals: deals.map((d) => ({
       id: d.id,
       status: d.status,
+      productId: d.productId,
       clientLabel: d.clientLabel,
       productName: d.product.name,
       saleAmountCents: d.saleAmountCents,

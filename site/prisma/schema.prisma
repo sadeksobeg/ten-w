@@ -503,6 +503,7 @@ model ChatMessage {
 
 enum ChatRoomType {
   COMMUNITY
+  EVENT
 }
 
 model ChatRoom {
@@ -511,8 +512,10 @@ model ChatRoom {
   type      ChatRoomType @default(COMMUNITY)
   title     String
   isPublic  Boolean      @default(true)
+  eventId   String?      @unique
   createdAt DateTime     @default(now())
 
+  event    GrowthEvent? @relation(fields: [eventId], references: [id], onDelete: Cascade)
   members  ChatRoomMember[]
   messages ChatRoomMessage[]
 }
@@ -580,6 +583,7 @@ model GrowthEvent {
   milestones   EventMilestone[]
   eventNotifications EventNotification[]
   posts        EventPost[]
+  chatRoom     ChatRoom?
 
   @@index([status])
   @@index([startAt])

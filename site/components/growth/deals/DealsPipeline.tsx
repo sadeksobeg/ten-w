@@ -7,15 +7,24 @@ import { Link } from "@/i18n/navigation";
 import { EmptyState } from "@/components/growth/ui/EmptyState";
 import { IconCheck, IconChevronDown, IconClose, IconDeals } from "@/components/growth/icons/GrowthIcons";
 import { DealJourneyRow } from "@/components/growth/DealJourneyRow";
+import { PendingLeadManage } from "@/components/growth/deals/PendingLeadManage";
 import { RequestDealCloseButton } from "@/components/growth/deals/RequestDealCloseButton";
 import type { DashboardDeal } from "@/lib/growth/get-dashboard";
 import { relativeDate } from "@/lib/growth/relative-date";
 
 type Tab = DealStatus;
 
+type ProductOption = {
+  id: string;
+  name: string;
+  priceCents: number;
+  commissionBaseCents: number;
+};
+
 type Props = {
   deals: DashboardDeal[];
   journeyLabels: Record<string, string>;
+  products: ProductOption[];
 };
 
 function borderClass(status: DealStatus): string {
@@ -31,7 +40,7 @@ function borderClass(status: DealStatus): string {
   }
 }
 
-export function DealsPipeline({ deals, journeyLabels }: Props) {
+export function DealsPipeline({ deals, journeyLabels, products }: Props) {
   const t = useTranslations("Growth.deals");
   const locale = useLocale();
   const [tab, setTab] = useState<Tab>(DealStatus.PENDING);
@@ -186,7 +195,16 @@ export function DealsPipeline({ deals, journeyLabels }: Props) {
                       lostLabel={t("journeyLost")}
                     />
                     {d.status === DealStatus.PENDING ? (
-                      <RequestDealCloseButton dealId={d.id} />
+                      <>
+                        <PendingLeadManage
+                          dealId={d.id}
+                          productId={d.productId}
+                          clientLabel={d.clientLabel}
+                          notes={d.notes}
+                          products={products}
+                        />
+                        <RequestDealCloseButton dealId={d.id} />
+                      </>
                     ) : null}
                     <Link
                       href="/growth/chat"

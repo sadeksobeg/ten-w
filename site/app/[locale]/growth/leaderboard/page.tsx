@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
-import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { LeaderboardPodium } from "@/components/growth/leaderboard/LeaderboardPodium";
 import { requirePartnerDashboard } from "@/lib/growth/partner-page";
 import {
   MONTH_MS,
@@ -42,38 +42,17 @@ export default async function GrowthLeaderboardPage({ params, searchParams }: Pr
           <a
             key={key}
             href={`?tab=${key}`}
-            className={`rounded-full px-4 py-2 text-xs font-semibold ${
+            className={`rounded-full border px-5 py-2.5 text-xs font-bold transition ${
               tab === key
-                ? "bg-gold/20 text-gold"
-                : "border border-white/10 text-white/60 hover:text-white"
+                ? "border-gold/50 bg-gradient-to-r from-gold/25 to-gold/10 text-gold shadow-[0_0_24px_-8px_rgba(228,184,77,0.6)]"
+                : "border-white/10 text-white/60 hover:border-gold/30 hover:text-white"
             }`}
           >
             {t(`tabs.${key}`)}
           </a>
         ))}
       </div>
-      <GlassCard className="overflow-hidden p-0">
-        <ol className="divide-y divide-white/10">
-          {rows.map((row, i) => {
-            const isMe = row.userId === userId;
-            return (
-              <li
-                key={row.userId}
-                className={`flex items-center justify-between gap-3 px-4 py-3 text-sm ${
-                  isMe ? "bg-gold/10" : ""
-                }`}
-              >
-                <span className="font-bold text-gold/90">#{i + 1}</span>
-                <span className="min-w-0 flex-1 truncate font-semibold">
-                  {row.name ?? t("anonymous")}
-                  {isMe ? ` (${t("you")})` : ""}
-                </span>
-                <span className="text-xs text-white/55">{Math.round(row.score)}</span>
-              </li>
-            );
-          })}
-        </ol>
-      </GlassCard>
+      <LeaderboardPodium locale={locale} rows={rows} viewerUserId={userId} />
     </div>
   );
 }

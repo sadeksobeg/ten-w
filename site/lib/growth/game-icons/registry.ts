@@ -99,6 +99,15 @@ export const GAME_ICONS: Record<string, GameIconDef> = {
   rank_legend: {
     d: "M256 8l64 176h176l-140 104 52 180-152-112-152 112 52-180L16 184h176L256 8z",
   },
+  moon: {
+    d: "M320 96a160 160 0 11-224 224 192 192 0 01224-224zm-64 32a128 128 0 10128 128 128 128 0 00-128-128z",
+  },
+  "hat-trick": {
+    d: "M96 352l32-128h64l32 96 64-96 32 128 64-192-64 192-64-192zM256 64l48 96h96l-80 64 32 128-96-80-96 80 32-128-80-64h96L256 64z",
+  },
+  banknote: {
+    d: "M64 128h384v256H64V128zm48 64v128h288V192H112zm144 32a48 48 0 1048 48 48 48 0 00-48-48zm96 64H160v32h192v-32z",
+  },
 };
 
 export type GameIconSlug = keyof typeof GAME_ICONS;

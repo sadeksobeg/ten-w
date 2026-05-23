@@ -1182,6 +1182,9 @@
       "repost": "Republier",
       "feedEmpty": "Aucune publication pour l'instant.",
       "joinedLocked": "Rejoignez l'événement pour voir les détails complets.",
+      "tabChat": "Chat",
+      "tabProgress": "Progrès",
+      "tabPosts": "Publications",
       "status": {
         "DRAFT": "Brouillon",
         "PUBLISHED": "Publié",
@@ -1204,6 +1207,7 @@
       "teamSubtitle": "Réseau sur 3 niveaux — partenaires actifs uniquement",
       "activityTitle": "Activité récente",
       "showcaseTitle": "Badges en vedette",
+      "moreStats": "Plus de stats",
       "appreciation": {
         "cta": "Envoyer un encouragement",
         "sending": "Envoi…",
@@ -1218,6 +1222,24 @@
         "stats": "Direct: {direct} · Total: {total} · Profondeur: {depth}"
       }
     },
+    "leaderboardPage": {
+      "title": "Classement",
+      "subtitle": "Classements hebdo, mensuel et saisonnier",
+      "you": "vous",
+      "anonymous": "Partenaire",
+      "tabs": { "week": "Cette semaine", "month": "Ce mois", "season": "Saison" },
+      "deals": "affaires",
+      "xp": "XP",
+      "streak": "série"
+    },
+    "seasonPass": {
+      "eyebrow": "Passe saison",
+      "weights": "Score: deals ×{deals} · XP ×{xp} · série ×{streak}",
+      "yourRank": "Votre rang cette semaine: #{rank}",
+      "cta": "Classement complet"
+    },
+    "commandPalette": { "hint": "Navigation rapide — Esc pour fermer" },
+    "push": { "enable": "Activer les alertes push", "enabled": "Push activé" },
     "profileShare": {
       "title": "Carte de partage",
       "hint": "Image prête pour les réseaux sociaux",
@@ -1268,7 +1290,9 @@
       "client": "Client / label",
       "clientPh": "e.g. Dr. Ali Clinic",
       "notes": "Notes",
-      "notesPh": "Optional context"
+      "notesPh": "Optional context",
+      "commission": "Commission",
+      "estimate": "À la clôture: ~{commission} commission · ~{xp} Power Points"
     },
     "deals": {
       "title": "Mes deals",
@@ -1285,6 +1309,17 @@
       "openChat": "Ouvrir le chat support",
       "journeyLost": "Deal arrêté — tirez la leçon et continuez.",
       "toastLeadAdded": "Lead ajouté",
+      "toastLeadUpdated": "Lead mis à jour",
+      "toastLeadDeleted": "Lead supprimé",
+      "toastLeadLost": "Marqué comme perdu",
+      "editLead": "Modifier le lead",
+      "editProduct": "Produit",
+      "saveLead": "Enregistrer",
+      "cancelEdit": "Annuler",
+      "deleteLead": "Supprimer le lead",
+      "deleteConfirm": "Supprimer ce lead définitivement ?",
+      "deleteLeadConfirm": "Oui, supprimer",
+      "markLost": "Marquer perdu",
       "errors": {
         "invalid_input": "Impossible d'ajouter — vérifiez le formulaire."
       },
@@ -1481,7 +1516,23 @@
       "rarityLegendary": "LEGENDARY",
       "unlockTitle": "BADGE UNLOCKED",
       "unlockSubtitle": "Key: {key}",
-      "unlockCta": "Continue"
+      "unlockCta": "Continue",
+      "howTo": "Comment l'obtenir",
+      "earned": "Obtenu",
+      "earnedOn": "Obtenu {date}",
+      "earned_on": "Obtenu {date}",
+      "close": "Fermer",
+      "progress": {
+        "deals": "{current} / {target} affaires clôturées",
+        "downlines": "{current} / {target} parrainages",
+        "kitHits": "{current} / {target} ouvertures kit",
+        "unknown": "En cours"
+      },
+      "showcase": {
+        "hint": "Choisissez jusqu'à 5 badges pour votre profil public.",
+        "save": "Enregistrer la vitrine",
+        "saved": "Vitrine enregistrée"
+      }
     },
     "xp": {
       "max_level": "Niveau maximum",
@@ -1626,6 +1677,14 @@
       "placeholder": "Message…",
       "send": "Send",
       "sendError": "Could not send. Try again.",
+      "communityHint": "Salon partenaires public — noms visibles pour tous les membres.",
+      "communityPlaceholder": "Message à la communauté…",
+      "communityWelcome": "Bienvenue dans la communauté TENEGTA.",
+      "communityLoadError": "Impossible de charger le chat.",
+      "eventChatHint": "Membres de l'événement uniquement — badges à côté des noms.",
+      "eventChatPlaceholder": "Message à l'équipe…",
+      "verifiedOfficial": "Officiel",
+      "verifiedPartner": "Vérifié",
       "adminTag": "Admin",
       "partnerTag": "Partenaire",
       "youLabel": "Vous",
@@ -2071,6 +2130,24 @@
         "revokeHint": "Removes any badge (including auto badges) from the user.",
         "revokeSubmit": "Revoke",
         "revokeBadgeKey": "Badge key"
+      },
+      "grantStudio": {
+        "eyebrow": "Cérémonie de badge",
+        "title": "Accorder avec cérémonie",
+        "hint": "Les badges vedettes apparaissent dans le chat événement.",
+        "email": "E-mail partenaire",
+        "emailPh": "partner@example.com",
+        "badgeKey": "Badge",
+        "submit": "Accorder avec cérémonie",
+        "confirmTitle": "Confirmer l'attribution",
+        "confirmBody": "Accorder «{badge}» à {partner} ?",
+        "cancel": "Annuler",
+        "confirmSubmit": "Accorder",
+        "toastCeremony": "Badge accordé avec cérémonie",
+        "errors": {
+          "badge_already_granted": "Badge déjà accordé",
+          "unknown": "Une erreur est survenue"
+        }
       },
       "rewardsPage": {
         "title": "Leaderboard rewards",
