@@ -1129,6 +1129,15 @@
       "navAria": "Partner navigation",
       "mobileNavAria": "Mobile navigation"
     },
+    "navShort": {
+      "dashboard": "Home",
+      "deals": "Deals",
+      "events": "Events",
+      "earnings": "Pay",
+      "leaderboard": "Ranks",
+      "chat": "Chat",
+      "settings": "Setup"
+    },
     "notifications": {
       "title": "Notifications",
       "markAllRead": "Mark all read",

@@ -136,7 +136,7 @@ export function PartnerChatBubble({ locale, viewerUserId }: Props) {
           role="dialog"
           aria-modal="true"
           aria-label={t("panelTitle")}
-          className={`growth-chat-bubble-panel pointer-events-auto fixed bottom-[5.5rem] ${sideClass} flex w-[min(100vw-1.5rem,400px)] flex-col overflow-hidden rounded-2xl border border-white/12 bg-[#050816]/98 shadow-[var(--growth-chat-bubble-shadow)] backdrop-blur-xl lg:bottom-6`}
+          className={`growth-chat-bubble-panel pointer-events-auto fixed ${sideClass} flex w-[min(100vw-1.5rem,400px)] flex-col overflow-hidden rounded-2xl border border-white/12 bg-[#050816]/98 shadow-[var(--growth-chat-bubble-shadow)] backdrop-blur-xl`}
         >
           <header className="flex shrink-0 items-center gap-2 border-b border-white/10 px-3 py-2.5">
             <div className="min-w-0 flex-1">
@@ -199,7 +199,7 @@ export function PartnerChatBubble({ locale, viewerUserId }: Props) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={t("open")}
-        className={`growth-chat-bubble-fab pointer-events-auto fixed bottom-[5.5rem] ${sideClass} flex size-14 items-center justify-center rounded-full bg-gradient-to-br from-gold/60 to-gold/25 text-2xl shadow-[var(--growth-chat-bubble-shadow)] ring-2 ring-gold/40 transition hover:scale-105 active:scale-95 lg:bottom-6`}
+        className={`growth-chat-bubble-fab pointer-events-auto fixed ${sideClass} flex size-14 items-center justify-center rounded-full bg-gradient-to-br from-gold/60 to-gold/25 text-2xl shadow-[var(--growth-chat-bubble-shadow)] ring-2 ring-gold/40 transition hover:scale-105 active:scale-95`}
       >
         <IconChat size={26} aria-hidden />
         {unread > 0 ? (

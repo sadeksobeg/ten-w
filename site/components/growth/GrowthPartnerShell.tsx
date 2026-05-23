@@ -42,6 +42,7 @@ function isActive(pathname: string, href: string, exact?: boolean) {
 
 export function GrowthPartnerShell({ children, locale: _locale }: Props) {
   const t = useTranslations("Growth.nav");
+  const tShort = useTranslations("Growth.navShort");
   const pathname = usePathname();
   const [chatUnread, setChatUnread] = useState(0);
 
@@ -81,14 +82,14 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
   return (
     <>
       <nav
-        className="mb-4 hidden gap-2 overflow-x-auto border-b border-white/10 pb-3 md:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="growth-partner-nav-desktop mb-4 flex-nowrap border-b border-white/10 pb-3"
         aria-label={t("navAria")}
       >
         {NAV.map((item) => {
           const Icon = GROWTH_DESKTOP_NAV_ICONS[item.key];
           const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
           return (
-            <Link key={item.href} href={item.href} className={desktopLinkClass(active)}>
+            <Link key={item.href} href={item.href} className={`${desktopLinkClass(active)} shrink-0`}>
               {Icon ? <Icon size={18} className="shrink-0" /> : null}
               {t(item.key)}
               {item.key === "chat" && chatUnread > 0 ? (
@@ -101,11 +102,7 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
         })}
       </nav>
       <div className="growth-page-wrap growth-mobile-pad growth-stack">{children}</div>
-      <nav
-        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-7 border-t border-white/10 bg-[#0A0A0F]/90 px-1 py-2 backdrop-blur-md md:hidden"
-        style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom, 0px))" }}
-        aria-label={t("mobileNavAria")}
-      >
+      <nav className="growth-partner-nav-mobile" aria-label={t("mobileNavAria")}>
         {mobileNav.map((item) => {
           const Icon = GROWTH_MOBILE_NAV_ICONS[item.key as keyof typeof GROWTH_MOBILE_NAV_ICONS];
           const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
@@ -113,15 +110,15 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
             <Link
               key={item.href}
               href={item.href}
-              className={`relative flex min-w-0 flex-col items-center gap-0.5 px-1 py-1 text-center text-[10px] font-semibold focus-visible:ring-2 focus-visible:ring-gold/40 ${
+              className={`relative flex min-h-[var(--growth-touch-min)] min-w-0 flex-col items-center justify-center gap-0.5 px-0.5 py-1 text-center text-[9px] font-semibold leading-tight focus-visible:ring-2 focus-visible:ring-gold/40 sm:text-[10px] ${
                 active ? "text-gold" : "text-white/55"
               }`}
             >
               {active ? (
-                <span className="absolute -top-0.5 size-1.5 rounded-full bg-gold motion-safe:animate-pulse motion-reduce:animate-none" aria-hidden />
+                <span className="absolute top-0.5 size-1.5 rounded-full bg-gold motion-safe:animate-pulse motion-reduce:animate-none" aria-hidden />
               ) : null}
-              <Icon size={22} />
-              <span className="truncate">{t(item.key)}</span>
+              <Icon size={20} className="shrink-0" />
+              <span className="max-w-full truncate">{tShort(item.key)}</span>
               {item.key === "chat" && chatUnread > 0 ? (
                 <span className="absolute end-1/4 top-0 flex size-4 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white">
                   {chatUnread > 9 ? "9+" : chatUnread}

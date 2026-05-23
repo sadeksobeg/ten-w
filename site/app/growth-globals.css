@@ -2,7 +2,7 @@
 .growth-root {
   --growth-page-max: 72rem;
   --growth-touch-min: 44px;
-  --growth-mobile-nav-h: 4rem;
+  --growth-mobile-nav-h: 4.5rem;
   --growth-safe-bottom: env(safe-area-inset-bottom, 0px);
   --growth-gold: #b07d2b;
   --growth-gold-bright: #e4b84d;
@@ -331,12 +331,65 @@
 }
 
 .growth-mobile-pad {
-  padding-bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 0.5rem);
+  padding-bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 0.75rem);
 }
 
 @media (min-width: 768px) {
   .growth-mobile-pad {
     padding-bottom: 0;
+  }
+}
+
+.growth-partner-nav-desktop {
+  display: none;
+  gap: 0.5rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.growth-partner-nav-desktop::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .growth-partner-nav-desktop {
+    display: flex;
+  }
+}
+
+.growth-partner-nav-mobile {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 10, 15, 0.92);
+  padding: 0.35rem 0.15rem;
+  padding-bottom: max(0.35rem, env(safe-area-inset-bottom, 0px));
+  backdrop-filter: blur(12px);
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 768px) {
+  .growth-partner-nav-mobile {
+    display: none;
+  }
+}
+
+.growth-chat-bubble-fab,
+.growth-chat-bubble-panel {
+  bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 0.75rem);
+}
+
+@media (min-width: 768px) {
+  .growth-chat-bubble-fab,
+  .growth-chat-bubble-panel {
+    bottom: 1.5rem;
   }
 }
 

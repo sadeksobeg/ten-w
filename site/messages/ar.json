@@ -1097,6 +1097,15 @@
       "navAria": "قائمة الشريك",
       "mobileNavAria": "تنقل سفلي"
     },
+    "navShort": {
+      "dashboard": "لوحة",
+      "deals": "صفقات",
+      "events": "فعاليات",
+      "earnings": "أرباح",
+      "leaderboard": "متصدرون",
+      "chat": "محادثة",
+      "settings": "إعدادات"
+    },
     "notifications": {
       "title": "الإشعارات",
       "markAllRead": "تحديد الكل كمقروء",

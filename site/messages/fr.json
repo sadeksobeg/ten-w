@@ -1144,11 +1144,28 @@
       "user_not_found": "Utilisateur introuvable"
     },
     "nav": {
-      "dashboard": "Dashboard",
+      "dashboard": "Tableau",
       "leaderboard": "Classement",
-      "events": "Events",
+      "deals": "Affaires",
+      "earnings": "Gains",
+      "network": "Réseau",
+      "events": "Événements",
       "chat": "Chat",
-      "signOut": "Sign out"
+      "notifications": "Alertes",
+      "settings": "Réglages",
+      "signOut": "Déconnexion",
+      "myProfile": "Mon profil",
+      "navAria": "Navigation partenaire",
+      "mobileNavAria": "Navigation mobile"
+    },
+    "navShort": {
+      "dashboard": "Accueil",
+      "deals": "Deals",
+      "events": "Events",
+      "earnings": "Gains",
+      "leaderboard": "Rang",
+      "chat": "Chat",
+      "settings": "Régl."
     },
     "notifications": {
       "title": "Notifications",
