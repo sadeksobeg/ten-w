@@ -109,6 +109,7 @@ model User {
   isVerifiedOfficial Boolean @default(false)
   officialDisplayName String?
   marketingKitHits Int       @default(0)
+  pushSubscription String?   @db.Text
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
@@ -148,7 +149,8 @@ model PartnerProfile {
   currentLevelId String
   totalXp        Int      @default(0)
   displayTitle   String?
-  socialLinks    Json?
+  socialLinks      Json?
+  showcasedBadges  String[] @default([])
   profileViews     Int      @default(0)
   leaderboardScoreBonus Int @default(0)
   onboardingSteps  Json?
@@ -283,7 +285,8 @@ model UserStreak {
   userId          String    @id
   currentStreak   Int       @default(0)
   longestStreak   Int       @default(0)
-  lastActiveDate  DateTime?
+  lastActiveDate   DateTime?
+  lastCheckInDate  DateTime?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

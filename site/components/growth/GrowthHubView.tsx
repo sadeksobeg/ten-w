@@ -2,6 +2,8 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
 import { DashboardHero } from "@/components/growth/dashboard/DashboardHero";
+import { DailyCheckIn } from "@/components/growth/dashboard/DailyCheckIn";
+import { SeasonPassCard } from "@/components/growth/seasons/SeasonPassCard";
 import { DashboardStatsGrid } from "@/components/growth/dashboard/DashboardStatsGrid";
 import { DashboardMissions } from "@/components/growth/dashboard/DashboardMissions";
 import { DashboardBadgesSection } from "@/components/growth/dashboard/DashboardBadgesSection";
@@ -49,6 +51,16 @@ export async function GrowthHubView({
         currentLevelMinXp={data.currentLevelMinXp}
         nextLevelName={data.nextLevel?.name ?? null}
         nextLevelMinXp={data.nextLevel?.minXp ?? null}
+      />
+
+      <DailyCheckIn available={data.checkIn.available} totalCheckIns={data.checkIn.totalCheckIns} />
+
+      <SeasonPassCard
+        seasonName={data.leaderboardSeason.name}
+        weightDeals={data.leaderboardSeason.weightDeals}
+        weightXp={data.leaderboardSeason.weightXp}
+        weightStreak={data.leaderboardSeason.weightStreak}
+        weeklyRank={data.compete.weeklyRank}
       />
 
       <div className="-mx-1 overflow-x-auto px-1 pb-1 md:overflow-visible">

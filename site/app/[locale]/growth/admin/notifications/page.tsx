@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { AdminToastForm } from "@/components/growth/admin/AdminToastForm";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { prisma } from "@/lib/prisma";
 import { adminSendNotificationFormAction } from "@/lib/growth/actions";
@@ -20,7 +21,7 @@ export default async function GrowthAdminNotificationsPage() {
 
       <GlassCard className="p-4 sm:p-6">
         <h2 className="text-lg font-bold">{t("sendTitle")}</h2>
-        <form action={adminSendNotificationFormAction} className="mt-5 grid gap-3 sm:grid-cols-12">
+        <AdminToastForm action={adminSendNotificationFormAction} className="mt-5 grid gap-3 sm:grid-cols-12">
           <label className="sm:col-span-4">
             <span className="text-xs text-white/55">{t("emailOptional")}</span>
             <input
@@ -47,7 +48,7 @@ export default async function GrowthAdminNotificationsPage() {
               {t("sendSubmit")}
             </button>
           </div>
-        </form>
+        </AdminToastForm>
       </GlassCard>
 
       <GlassCard className="overflow-hidden p-0">

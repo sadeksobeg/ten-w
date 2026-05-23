@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { AdminToastForm } from "@/components/growth/admin/AdminToastForm";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { updateLevelAdminAction } from "@/lib/growth/actions";
 import { prisma } from "@/lib/prisma";
@@ -29,7 +30,7 @@ export default async function GrowthAdminLevelsPage() {
                 </div>
               </div>
             </div>
-            <form action={updateLevelAdminAction} className="mt-5 grid gap-3 sm:grid-cols-12">
+            <AdminToastForm action={updateLevelAdminAction} className="mt-5 grid gap-3 sm:grid-cols-12">
               <input type="hidden" name="levelId" value={lvl.id} />
               <label className="sm:col-span-4">
                 <span className="text-xs text-white/55">{t("admin.levelsPage.minDeals")}</span>
@@ -59,7 +60,7 @@ export default async function GrowthAdminLevelsPage() {
                   {t("admin.levelsPage.save")}
                 </button>
               </div>
-            </form>
+            </AdminToastForm>
           </GlassCard>
         ))}
       </div>

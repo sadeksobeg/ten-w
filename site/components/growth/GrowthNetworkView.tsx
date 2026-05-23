@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
@@ -15,6 +16,10 @@ type Props = {
 export async function GrowthNetworkView({ locale, data, userId }: Props) {
   const t = await getTranslations("Growth");
   const { tree, stats } = await getPartnerNetworkTree(userId, { locale, maxDepth: 3 });
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
+  const proto = h.get("x-forwarded-proto") ?? "https";
+  const baseUrl = `${proto}://${host}/${locale}/growth/register`;
 
   return (
     <div className="space-y-6 growth-page-enter">
@@ -23,6 +28,7 @@ export async function GrowthNetworkView({ locale, data, userId }: Props) {
         networkSize={data.network.length}
         closedDeals={data.closedDeals}
         referralCode={data.profile.referralCode}
+        baseUrl={baseUrl}
       />
       <GlassCard className="p-6 growth-card-hover">
         <h2 className="text-sm font-bold text-gold">{t("publicProfile.teamTitle")}</h2>

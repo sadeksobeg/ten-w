@@ -53,10 +53,13 @@ export async function GET(_req: Request, ctx: RouteContext) {
         }
       };
 
+      const heartbeatMs = 25_000;
+      const maxTicks = 720;
       try {
-        for (let i = 0; i < 900; i++) {
+        for (let i = 0; i < maxTicks; i++) {
           await tick();
-          await new Promise((r) => setTimeout(r, 2000));
+          controller.enqueue(encoder.encode(`: heartbeat ${Date.now()}\n\n`));
+          await new Promise((r) => setTimeout(r, heartbeatMs));
         }
       } catch {
         /* client disconnected */

@@ -18,6 +18,7 @@ const NAV = [
   { href: "/growth/deals", key: "deals" as const },
   { href: "/growth/earnings", key: "earnings" as const },
   { href: "/growth/network", key: "network" as const },
+  { href: "/growth/leaderboard", key: "leaderboard" as const },
   { href: "/growth/events", key: "events" as const },
   { href: "/growth/chat", key: "chat" as const },
   { href: "/growth/notifications", key: "notifications" as const },

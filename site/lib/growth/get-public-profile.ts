@@ -45,6 +45,8 @@ export type PublicProfileData = {
   activityDaysCount: number;
   networkTree: NetworkNode[];
   networkStats: NetworkStats;
+  showcasedBadges: string[];
+  publicActivity: { headline: string; createdAt: string }[];
 };
 
 export async function getPublicProfileBySlug(
@@ -72,7 +74,9 @@ export async function getPublicProfileBySlug(
   });
   if (!user?.partnerProfile || !user.publicSlug) return null;
 
-  const [closedDeals, pendingDeals, allBadgeDefs, nextLevel, activityCount] =
+  const publicKinds = ["level_up", "deal_closed", "badge_earned", "manual_bonus"] as const;
+
+  const [closedDeals, pendingDeals, allBadgeDefs, nextLevel, activityCount, publicActivityRows] =
     await Promise.all([
       prisma.deal.count({
         where: { partnerId: user.id, status: DealStatus.CLOSED },
@@ -90,6 +94,14 @@ export async function getPublicProfileBySlug(
         orderBy: { order: "asc" },
       }),
       prisma.userActivityDay.count({ where: { userId: user.id } }).catch(() => 0),
+      prisma.activityEvent
+        .findMany({
+          where: { actorUserId: user.id, kind: { in: [...publicKinds] } },
+          orderBy: { createdAt: "desc" },
+          take: 12,
+          select: { headline: true, createdAt: true },
+        })
+        .catch(() => []),
     ]);
 
   const earnedMap = new Map(
@@ -168,5 +180,10 @@ export async function getPublicProfileBySlug(
     activityDaysCount: activityCount,
     networkTree,
     networkStats,
+    showcasedBadges: user.partnerProfile.showcasedBadges ?? [],
+    publicActivity: publicActivityRows.map((e) => ({
+      headline: e.headline,
+      createdAt: e.createdAt.toISOString(),
+    })),
   };
 }

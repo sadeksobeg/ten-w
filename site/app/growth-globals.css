@@ -310,3 +310,20 @@
     display: none !important;
   }
 }
+
+@keyframes growth-particle-burst {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(calc(var(--particle-i) * 30deg)) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(calc(var(--particle-i) * 30deg)) translateY(-72px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .growth-particle {
+    animation: growth-particle-burst 1.2s ease-out forwards;
+  }
+}

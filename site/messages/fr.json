@@ -1065,8 +1065,30 @@
       "retry": "Try again",
       "home": "Home"
     },
+    "checkIn": {
+      "title": "Check-in quotidien",
+      "subtitle": "Réclamez vos points du jour",
+      "doneToday": "Déjà enregistré aujourd'hui",
+      "totalDays": "{n} jours",
+      "cta": "Check-in",
+      "checked": "Fait",
+      "checking": "…",
+      "success": "+{xp} pts · jour {days}",
+      "errors": {
+        "rate_limited": "Trop de tentatives",
+        "unauthorized": "Non autorisé",
+        "already_checked_in": "Déjà fait"
+      }
+    },
+    "formErrors": {
+      "rate_limited": "Trop de requêtes",
+      "invalid_input": "Vérifiez les champs",
+      "unauthorized": "Non autorisé",
+      "user_not_found": "Utilisateur introuvable"
+    },
     "nav": {
       "dashboard": "Dashboard",
+      "leaderboard": "Classement",
       "events": "Events",
       "chat": "Chat",
       "signOut": "Sign out"

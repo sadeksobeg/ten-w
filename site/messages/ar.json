@@ -1003,8 +1003,30 @@
       "retry": "إعادة المحاولة",
       "home": "الرئيسية"
     },
+    "checkIn": {
+      "title": "تسجيل يومي",
+      "subtitle": "احصل على دفعة نقاط القوة اليومية",
+      "doneToday": "سجّلت اليوم — نراك غداً",
+      "totalDays": "{n} يوم تسجيل",
+      "cta": "تسجيل اليوم",
+      "checked": "تم لليوم",
+      "checking": "جاري التسجيل…",
+      "success": "+{xp} نقطة قوة · اليوم {days}",
+      "errors": {
+        "rate_limited": "محاولات كثيرة — حاول لاحقاً",
+        "unauthorized": "سجّل دخولك كشريك",
+        "already_checked_in": "سجّلت اليوم مسبقاً"
+      }
+    },
+    "formErrors": {
+      "rate_limited": "طلبات كثيرة — انتظر قليلاً",
+      "invalid_input": "تحقق من الحقول",
+      "unauthorized": "غير مسموح",
+      "user_not_found": "المستخدم غير موجود"
+    },
     "nav": {
       "dashboard": "لوحة التحكم",
+      "leaderboard": "المتصدرون",
       "deals": "الصفقات",
       "earnings": "الأرباح",
       "network": "الشبكة",

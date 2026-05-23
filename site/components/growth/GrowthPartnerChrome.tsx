@@ -7,6 +7,7 @@ import { resolveLevelName } from "@/lib/growth/level-i18n";
 import { GrowthPartnerHeader } from "@/components/growth/GrowthPartnerHeader";
 import { GrowthPartnerShell } from "@/components/growth/GrowthPartnerShell";
 import { PartnerChatBubble } from "@/components/growth/chat/PartnerChatBubble";
+import { CommandPalette } from "@/components/growth/CommandPalette";
 
 type Props = {
   locale: string;
@@ -41,6 +42,7 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
         publicSlug={user?.publicSlug ?? null}
       />
       {children}
+      <CommandPalette />
       <Suspense fallback={null}>
         <PartnerChatBubble locale={locale} viewerUserId={session.user.id} />
       </Suspense>

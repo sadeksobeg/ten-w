@@ -13,7 +13,7 @@ import {
   partnerRankInWindow,
   type CompositeLeaderboardRow,
 } from "@/lib/growth/leaderboard";
-import { getActivityDays } from "@/lib/growth/streak";
+import { getActivityDays, isDailyCheckInAvailable } from "@/lib/growth/streak";
 import { GrowthRewardStatus } from "@prisma/client";
 import { missionTargetFromCriteria, utcDayKey } from "@/lib/growth/missions";
 import {
@@ -160,6 +160,7 @@ export type DashboardData = {
   memberDays: number;
   monthlyRank: { closedInWindow: number; rank: number | null; fieldSize: number };
   streak: { current: number; longest: number } | null;
+  checkIn: { available: boolean; totalCheckIns: number };
   compete: {
     weeklyRank: number | null;
     weeklyClosed: number;
@@ -224,6 +225,8 @@ export async function getPartnerDashboard(
       }),
       prisma.partnerProfile.findMany({
         where: { parentUserId: userId },
+        take: 50,
+        orderBy: { createdAt: "desc" },
         include: { user: { select: { id: true, name: true, email: true } } },
       }),
       prisma.commissionLedger.findMany({
@@ -566,6 +569,14 @@ export async function getPartnerDashboard(
     streak: streak
       ? { current: streak.currentStreak, longest: streak.longestStreak }
       : null,
+    checkIn: {
+      available: isDailyCheckInAvailable(
+        (streak as { lastCheckInDate?: Date | null } | null)?.lastCheckInDate ?? null,
+      ),
+      totalCheckIns: await prisma.xpEvent.count({
+        where: { userId, reason: "daily_check_in" },
+      }),
+    },
     leaderboard: lb,
     monthlyLeaderboard: monthlyLb,
     leaderboardSeason: {

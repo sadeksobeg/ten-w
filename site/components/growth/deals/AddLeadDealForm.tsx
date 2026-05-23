@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { addLeadDealAction } from "@/lib/growth/actions";
+import { GAME_CONFIG } from "@/lib/growth/game-config";
 import { useToast } from "@/hooks/useToast";
 import { IconCheck, IconChevronDown, IconPlus } from "@/components/growth/icons/GrowthIcons";
 
@@ -156,6 +157,14 @@ export function AddLeadDealForm({ products, referralCode }: Props) {
           placeholder={t("lead.notesPh")}
         />
       </label>
+      {selected ? (
+        <p className="sm:col-span-12 text-xs text-white/50">
+          {t("lead.estimate", {
+            commission: fmt(selected.commissionBaseCents),
+            xp: GAME_CONFIG.dealCloseXpEstimate,
+          })}
+        </p>
+      ) : null}
       <div className="sm:col-span-12">
         <button
           type="submit"

@@ -74,6 +74,11 @@
       "title": "Featured projects",
       "viewAll": "All projects"
     },
+    "featuredPartners": {
+      "title": "Growth Engine partners",
+      "subtitle": "Top performers from our partner network",
+      "closedDeals": "{n} closed deals"
+    },
     "cta": {
       "title": "Have a project or pilot in mind?",
       "subtitle": "Tell us your goals — we respond on business days.",
@@ -1003,8 +1008,30 @@
       "retry": "Try again",
       "home": "Home"
     },
+    "checkIn": {
+      "title": "Daily check-in",
+      "subtitle": "Claim your daily Power Points boost",
+      "doneToday": "You already checked in today — see you tomorrow",
+      "totalDays": "{n} check-in days",
+      "cta": "Check in",
+      "checked": "Done for today",
+      "checking": "Checking in…",
+      "success": "+{xp} Power Points · day {days}",
+      "errors": {
+        "rate_limited": "Too many attempts — try again later",
+        "unauthorized": "Sign in as a partner",
+        "already_checked_in": "Already checked in today"
+      }
+    },
+    "formErrors": {
+      "rate_limited": "Too many requests — wait a moment and try again",
+      "invalid_input": "Please check the fields",
+      "unauthorized": "Not allowed",
+      "user_not_found": "User not found"
+    },
     "nav": {
       "dashboard": "Dashboard",
+      "leaderboard": "Leaderboard",
       "deals": "Deals",
       "earnings": "Earnings",
       "network": "Network",
@@ -1084,7 +1111,8 @@
       "linkCopied": "Link copied",
       "lockedBadge": "Hidden badge — complete achievements to unlock",
       "teamTitle": "My team",
-      "teamSubtitle": "Referral network up to 3 levels — active partners only"
+      "teamSubtitle": "Referral network up to 3 levels — active partners only",
+      "activityTitle": "Recent activity"
     },
     "network": {
       "title": "My network",
@@ -1100,8 +1128,25 @@
       "downlines": "Direct partners",
       "yourCloses": "Your closed deals",
       "activityIndex": "Activity index",
-      "codeHint": "Share code {code} to grow your tree"
+      "codeHint": "Share code {code} to grow your tree",
+      "copyUtm": "Copy referral link with UTM",
+      "copied": "Copied!"
     },
+    "leaderboardPage": {
+      "title": "Leaderboard",
+      "subtitle": "Weekly, monthly, and season rankings",
+      "you": "you",
+      "anonymous": "Partner",
+      "tabs": { "week": "This week", "month": "This month", "season": "Season" }
+    },
+    "seasonPass": {
+      "eyebrow": "Season pass",
+      "weights": "Score: deals ×{deals} · XP ×{xp} · streak ×{streak}",
+      "yourRank": "Your rank this week: #{rank}",
+      "cta": "Full leaderboard"
+    },
+    "commandPalette": { "hint": "Quick navigation — Esc to close" },
+    "push": { "enable": "Enable push alerts", "enabled": "Push enabled (stored)" },
     "profileShare": {
       "title": "Share card",
       "hint": "Ready-to-post image for social media",
@@ -1154,7 +1199,8 @@
       "client": "Client / label",
       "clientPh": "e.g. Dr. Ali Clinic",
       "notes": "Notes",
-      "notesPh": "Optional context"
+      "notesPh": "Optional context",
+      "estimate": "On close: ~{commission} commission · ~{xp} Power Points"
     },
     "deals": {
       "title": "My deals",
@@ -1170,6 +1216,8 @@
       "notes": "Notes",
       "commission": "Commission",
       "openChat": "Open support chat",
+      "requestClose": "Request close",
+      "closeRequestSent": "Close request sent",
       "journeyLost": "Deal stopped — capture the lesson and re-aim.",
       "toastLeadAdded": "Lead added",
       "errors": {
@@ -1389,7 +1437,12 @@
       "rarityLegendary": "LEGENDARY",
       "unlockTitle": "BADGE UNLOCKED",
       "unlockSubtitle": "Key: {key}",
-      "unlockCta": "Continue"
+      "unlockCta": "Continue",
+      "showcase": {
+        "hint": "Pick up to 5 earned badges for your public profile.",
+        "save": "Save showcase",
+        "saved": "Showcase updated"
+      }
     },
     "xp": {
       "max_level": "Max Level Reached",
@@ -1399,6 +1452,8 @@
     "settings": {
       "title": "Profile settings",
       "subtitle": "Avatar appears on your dashboard and public profile.",
+      "badgeShowcase": "Profile badge showcase",
+      "notificationsSection": "Notifications",
       "live_preview": "Profile Preview",
       "avatarPresets": "Choose avatar style",
       "presetGold1": "Gold",
@@ -2011,7 +2066,8 @@
         "markLost": "Mark lost",
         "createTitle": "Create pending deal",
         "createSubmit": "Create",
-        "clientLabel": "Client label"
+        "clientLabel": "Client label",
+        "closeRequest": "Close requested"
       },
       "payoutsPage": {
         "title": "Payout requests",

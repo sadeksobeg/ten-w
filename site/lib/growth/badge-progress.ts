@@ -50,6 +50,9 @@ export async function evaluateBadgeProgress(
   }
 }
 
+/** Alias for UI tooltip progress. */
+export const getBadgeProgress = evaluateBadgeProgress;
+
 export async function evaluateBadgeProgressMap(
   keys: string[],
   userId: string,

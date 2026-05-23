@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
+import { AuraRing } from "@/components/growth/ui/AuraRing";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { getLevelVisual } from "@/lib/growth/level-visual";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
@@ -42,12 +43,6 @@ export function DashboardHero({
     ? Math.min(100, Math.max(0, Math.round(((totalXp - currentLevelMinXp) / span) * 100)))
     : 100;
   const powerLabel = getXpBrandLabel(locale);
-  const circumference = 2 * Math.PI * 34;
-  const offset = circumference - (pct / 100) * circumference;
-  const ringColor = levelCode
-    ? `var(--growth-level-ring, ${lv.ringColor})`
-    : lv.ringColor;
-
   return (
     <GlassCard variant="highlight" className="relative overflow-hidden p-6 sm:p-8">
       <div
@@ -59,24 +54,9 @@ export function DashboardHero({
       />
       <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
         <div className="relative mx-auto shrink-0 sm:mx-0">
-          <svg width="88" height="88" className="-rotate-90" aria-hidden>
-            <circle cx="44" cy="44" r="34" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="4" />
-            <circle
-              cx="44"
-              cy="44"
-              r="34"
-              fill="none"
-              stroke={ringColor}
-              strokeWidth="4"
-              strokeDasharray={circumference}
-              strokeDashoffset={offset}
-              strokeLinecap="round"
-              className="transition-[stroke-dashoffset] duration-[1.5s] ease-[cubic-bezier(0.4,0,0.2,1)]"
-            />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center p-2">
+          <AuraRing percent={pct} levelCode={levelCode} levelName={levelName}>
             <GrowthAvatar name={name} email={email} avatarUrl={avatarUrl} size="lg" />
-          </div>
+          </AuraRing>
         </div>
         <div className="min-w-0 flex-1 text-center sm:text-start">
           <p className="text-sm text-[var(--growth-text-sub)]">{t("heroWelcome")}</p>

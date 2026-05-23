@@ -9,6 +9,7 @@ import { grantAdminBadge } from "@/lib/growth/badges";
 import { logAdminAudit } from "@/lib/growth/audit-log";
 import { logActivityEvent } from "@/lib/growth/activity";
 import { leaderboardRewardModelsAvailable } from "@/lib/growth/prisma-optional";
+import { revalidatePartnerSurfaces } from "@/lib/growth/revalidate-partner";
 
 function periodKeyMonthly(d = new Date()): string {
   return `m-${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
@@ -46,6 +47,7 @@ export async function applyMonthlyLeaderboardBonuses(
 
   const pk = periodKeyMonthly();
   let granted = 0;
+  const revalidateSlugs = new Set<string>();
 
   await logAdminAudit(actorUserId, "apply_monthly_bonuses", "leaderboard", pk, {
     seasonId: season.id,
@@ -101,7 +103,18 @@ export async function applyMonthlyLeaderboardBonuses(
         metadata: { periodKey: pk, compositeScore: row.score },
       });
     }
+
+    const slugRow = await prisma.user.findUnique({
+      where: { id: row.userId },
+      select: { publicSlug: true },
+    });
+    if (slugRow?.publicSlug) revalidateSlugs.add(slugRow.publicSlug);
+
     granted += 1;
+  }
+
+  for (const slug of revalidateSlugs) {
+    revalidatePartnerSurfaces({ publicSlug: slug });
   }
 
   return { ok: true, granted };

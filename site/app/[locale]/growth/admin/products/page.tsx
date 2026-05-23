@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { AdminToastForm } from "@/components/growth/admin/AdminToastForm";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { updateProductAdminAction, updateProductMarketingKitAdminAction } from "@/lib/growth/actions";
 import { prisma } from "@/lib/prisma";
@@ -20,7 +21,7 @@ export default async function GrowthAdminProductsPage() {
           <GlassCard key={p.id} className="p-4 sm:p-6">
             <div className="text-sm font-extrabold">{p.name}</div>
             <div className="mt-1 text-xs text-white/45">{p.slug}</div>
-            <form action={updateProductAdminAction} className="mt-5 grid gap-3 sm:grid-cols-12">
+            <AdminToastForm action={updateProductAdminAction} className="mt-5 grid gap-3 sm:grid-cols-12">
               <input type="hidden" name="productId" value={p.id} />
               <label className="sm:col-span-4">
                 <span className="text-xs text-white/55">{t("admin.productsPage.priceUsd")}</span>
@@ -54,8 +55,8 @@ export default async function GrowthAdminProductsPage() {
                   {t("admin.productsPage.save")}
                 </button>
               </div>
-            </form>
-            <form action={updateProductMarketingKitAdminAction} className="mt-6 grid gap-3">
+            </AdminToastForm>
+            <AdminToastForm action={updateProductMarketingKitAdminAction} className="mt-6 grid gap-3">
               <input type="hidden" name="productId" value={p.id} />
               <label className="block">
                 <span className="text-xs text-white/55">{t("admin.productsPage.kitJson")}</span>
@@ -73,7 +74,7 @@ export default async function GrowthAdminProductsPage() {
               >
                 {t("admin.productsPage.kitSave")}
               </button>
-            </form>
+            </AdminToastForm>
           </GlassCard>
         ))}
       </div>

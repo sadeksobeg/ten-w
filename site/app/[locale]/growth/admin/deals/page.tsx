@@ -90,6 +90,11 @@ export default async function GrowthAdminDealsPage() {
                   {t("admin.dealsPage.partner")}: {d.partner.name ?? d.partner.email}
                 </div>
                 <div className="mt-1 text-xs text-white/45">{d.clientLabel ?? "—"}</div>
+                {d.notes?.includes("[CLOSE REQUEST]") ? (
+                  <span className="mt-2 inline-block rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-200">
+                    {t("admin.dealsPage.closeRequest")}
+                  </span>
+                ) : null}
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <AdminOpenChatLink partnerUserId={d.partner.id} />

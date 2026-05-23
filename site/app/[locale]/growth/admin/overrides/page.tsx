@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { AdminToastForm } from "@/components/growth/admin/AdminToastForm";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { upsertPartnerCommissionOverrideAction } from "@/lib/growth/actions";
 
@@ -12,7 +13,7 @@ export default async function GrowthAdminOverridesPage() {
       </h1>
       <p className="max-w-2xl text-sm text-white/65">{t("admin.overridesPage.hint")}</p>
       <GlassCard className="p-4 sm:p-6">
-        <form action={upsertPartnerCommissionOverrideAction} className="grid gap-3 sm:grid-cols-12">
+        <AdminToastForm action={upsertPartnerCommissionOverrideAction} className="grid gap-3 sm:grid-cols-12">
           <label className="sm:col-span-4">
             <span className="text-xs text-white/55">{t("admin.overridesPage.email")}</span>
             <input
@@ -55,7 +56,7 @@ export default async function GrowthAdminOverridesPage() {
               {t("admin.overridesPage.submit")}
             </button>
           </div>
-        </form>
+        </AdminToastForm>
       </GlassCard>
     </div>
   );

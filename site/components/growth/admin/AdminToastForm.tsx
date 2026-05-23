@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function AdminToastForm({ action, children, className, successKey }: Props) {
-  const t = useTranslations("Growth.admin");
+  const t = useTranslations("Growth");
   const { showToast } = useToast();
   const [state, formAction, pending] = useActionState(action, null);
 
@@ -23,10 +23,14 @@ export function AdminToastForm({ action, children, className, successKey }: Prop
     if (state.ok) {
       showToast({
         type: "success",
-        title: successKey ? t(successKey as "toastDealClosed") : t("toastSaved"),
+        title: successKey ? t(`admin.${successKey}` as "admin.toastSaved") : t("admin.toastSaved"),
       });
     } else {
-      showToast({ type: "error", title: state.error });
+      const key = `formErrors.${state.error}` as "formErrors.invalid_input";
+      showToast({
+        type: "error",
+        title: t.has(key) ? t(key) : state.error,
+      });
     }
   }, [state, showToast, t, successKey]);
 

@@ -14,6 +14,7 @@ import { getLevelVisual } from "@/lib/growth/level-visual";
 import { getLevelI18nKey, LEVEL_COLORS } from "@/lib/growth/level-i18n";
 import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
 import { PartnerNetworkTree } from "@/components/growth/profile/PartnerNetworkTree";
+import { BusinessCard } from "@/components/growth/profile/BusinessCard";
 import { getPublicProfileBySlug } from "@/lib/growth/get-public-profile";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 import {
@@ -32,6 +33,7 @@ import {
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
+  searchParams: Promise<{ print?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -51,14 +53,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PublicPartnerProfilePage({ params }: Props) {
+export default async function PublicPartnerProfilePage({ params, searchParams }: Props) {
   const { locale, slug } = await params;
+  const sp = await searchParams;
   const t = await getTranslations("Growth.publicProfile");
   const data = await getPublicProfileBySlug(slug, locale);
   if (!data) notFound();
 
   const xpLabel = getXpBrandLabel(locale);
   const registerHref = `/${locale}/growth/register?ref=${encodeURIComponent(data.referralCode)}`;
+  const profileUrl = `https://tenegta.com/${locale}/growth/profile/${data.publicSlug}`;
+  if (sp.print === "card") {
+    return (
+      <div className="min-h-screen bg-[#0a0a0f] p-8 print:bg-white">
+        <BusinessCard
+          name={data.name}
+          title={data.displayTitle}
+          levelName={data.levelName}
+          referralCode={data.referralCode}
+          profileUrl={profileUrl}
+        />
+      </div>
+    );
+  }
   const lv = getLevelVisual(data.levelName, data.levelCode);
   const levelKey = getLevelI18nKey(data.levelCode, data.levelName);
   const heroColor = LEVEL_COLORS[levelKey] ?? LEVEL_COLORS.starter;
@@ -207,6 +224,21 @@ export default async function PublicPartnerProfilePage({ params }: Props) {
           url={`https://tenegta.com/${locale}/growth/profile/${data.publicSlug}`}
         />
       </div>
+
+      {data.publicActivity.length > 0 ? (
+        <section className="mt-8 growth-page-enter">
+          <h2 className="font-[family-name:var(--font-cairo)] text-lg font-bold text-gold">
+            {t("activityTitle")}
+          </h2>
+          <GlassCard className="mt-4 divide-y divide-white/10 p-0">
+            {data.publicActivity.map((a, i) => (
+              <div key={i} className="px-4 py-3 text-sm text-white/75">
+                {a.headline}
+              </div>
+            ))}
+          </GlassCard>
+        </section>
+      ) : null}
 
       <section className="mt-8 growth-page-enter">
         <h2 className="font-[family-name:var(--font-cairo)] text-lg font-bold text-gold">

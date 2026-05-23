@@ -71,6 +71,11 @@ export async function touchActivityDay(userId: string) {
   }
 }
 
+export function isDailyCheckInAvailable(lastCheckInDate: Date | null | undefined): boolean {
+  if (!lastCheckInDate) return true;
+  return utcDayStart(lastCheckInDate) !== utcDayStart(new Date());
+}
+
 export async function getActivityDays(userId: string, limit = 30): Promise<string[]> {
   try {
     const rows = await prisma.userActivityDay.findMany({

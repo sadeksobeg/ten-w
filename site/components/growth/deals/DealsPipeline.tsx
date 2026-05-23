@@ -7,6 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { EmptyState } from "@/components/growth/ui/EmptyState";
 import { IconCheck, IconChevronDown, IconClose, IconDeals } from "@/components/growth/icons/GrowthIcons";
 import { DealJourneyRow } from "@/components/growth/DealJourneyRow";
+import { RequestDealCloseButton } from "@/components/growth/deals/RequestDealCloseButton";
 import type { DashboardDeal } from "@/lib/growth/get-dashboard";
 import { relativeDate } from "@/lib/growth/relative-date";
 
@@ -184,6 +185,9 @@ export function DealsPipeline({ deals, journeyLabels }: Props) {
                       labels={journeyLabels}
                       lostLabel={t("journeyLost")}
                     />
+                    {d.status === DealStatus.PENDING ? (
+                      <RequestDealCloseButton dealId={d.id} />
+                    ) : null}
                     <Link
                       href="/growth/chat"
                       className="mt-3 inline-block text-xs font-semibold text-gold hover:underline"

@@ -5,6 +5,7 @@ import { HomeContactBand } from "@/components/home/HomeContactBand";
 import { HomeLazySections } from "@/components/home/HomeLazySections";
 import { SystemVisualizerSection } from "@/components/home/SystemVisualizerSection";
 import { Container } from "@/components/ui/Container";
+import { HomeFeaturedPartners } from "@/components/growth/HomeFeaturedPartners";
 import { LogoMarquee } from "@/components/home/LogoMarquee";
 import { MetricsBand } from "@/components/home/MetricsBand";
 import { ProblemSolutionSection } from "@/components/home/ProblemSolutionSection";
@@ -82,6 +83,7 @@ export default async function HomePage({ params }: Props) {
         />
 
         <LogoMarquee />
+        <HomeFeaturedPartners locale={loc} />
         <ProblemSolutionSection />
         <MetricsBand />
 

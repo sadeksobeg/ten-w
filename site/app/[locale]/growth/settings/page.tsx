@@ -7,7 +7,10 @@ import { PartnerSettingsLayout } from "@/components/growth/settings/PartnerSetti
 import { ProfileShareExport } from "@/components/growth/ProfileShareExport";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
 import { SectionHeader } from "@/components/growth/ui/SectionHeader";
+import { BadgeShowcase } from "@/components/growth/badges/BadgeShowcase";
+import { PushNotificationPermission } from "@/components/growth/PushNotificationPermission";
 import { prisma } from "@/lib/prisma";
+import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -30,8 +33,12 @@ export default async function GrowthSettingsPage({ params }: Props) {
         select: {
           displayTitle: true,
           socialLinks: true,
+          showcasedBadges: true,
           currentLevel: { select: { name: true, code: true } },
         },
+      },
+      userBadges: {
+        include: { badge: { select: { key: true, name: true } } },
       },
     },
   });
@@ -68,6 +75,16 @@ export default async function GrowthSettingsPage({ params }: Props) {
             } | null) ?? {}
           }
         />
+        <SectionHeader title={t("badgeShowcase")} />
+        <BadgeShowcase
+          earnedBadges={user.userBadges.map((ub) => {
+            const copy = resolveBadgeCopy(ub.badge.key, locale, { name: ub.badge.name });
+            return { key: ub.badge.key, name: copy.name, earned: true };
+          })}
+          showcasedKeys={user.partnerProfile?.showcasedBadges ?? []}
+        />
+        <SectionHeader title={t("notificationsSection")} />
+        <PushNotificationPermission />
         <SectionHeader title={t("avatarSection")} />
         <AvatarSettingsForm
           locale={locale}

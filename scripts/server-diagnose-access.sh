@@ -6,13 +6,23 @@ echo "==> nginx listening"
 ss -tlnp | grep -E ':80|:443' || true
 
 echo ""
-echo "==> local HTTPS smoke"
-curl -sI -o /dev/null -w "localhost: %{http_code}\n" https://127.0.0.1/ar -k --resolve tenegta.com:443:127.0.0.1 2>/dev/null || \
-  curl -sI -o /dev/null -w "tenegta.com: %{http_code}\n" https://tenegta.com/ar 2>/dev/null || echo "curl failed"
+echo "==> local HTTPS smoke (tenegta.com → nginx → app)"
+curl -sI -o /dev/null -w "https://tenegta.com/ar: %{http_code}\n" \
+  -H "Host: tenegta.com" https://127.0.0.1/ar -k --resolve tenegta.com:443:127.0.0.1 2>/dev/null || \
+  curl -sI -o /dev/null -w "https://tenegta.com/ar: %{http_code}\n" https://tenegta.com/ar 2>/dev/null || \
+  echo "curl failed"
 
 echo ""
-echo "==> PM2 / port 3100"
-ss -tlnp | grep 3100 || true
+echo "==> nginx upstream ports (3100 = TENEGTA app in repo; 3101 = wrong if nothing listens)"
+grep -Rhn "127.0.0.1:310" /etc/nginx/sites-enabled/ /etc/nginx/sites-available/ 2>/dev/null | grep -v ".bak" || true
+if grep -Rq "127.0.0.1:3101" /etc/nginx/sites-enabled/ /etc/nginx/sites-available/ 2>/dev/null; then
+  echo "WARNING: nginx proxies to :3101 but PM2 usually runs on :3100 — run: bash scripts/server-nginx-tenegta.sh"
+fi
+
+echo ""
+echo "==> PM2 / app port"
+ss -tlnp | grep -E '3100|3101' || true
+pm2 list 2>/dev/null | head -20 || true
 
 echo ""
 echo "==> UFW (if installed)"

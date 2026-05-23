@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { AdminToastForm } from "@/components/growth/admin/AdminToastForm";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { updateCommissionTierAdminAction } from "@/lib/growth/actions";
 import { prisma } from "@/lib/prisma";
@@ -21,7 +22,7 @@ export default async function GrowthAdminTiersPage() {
       <p className="max-w-3xl text-sm text-white/65">{t("admin.tiersPage.hint")}</p>
 
       <GlassCard className="p-4 sm:p-6">
-        <form action={updateCommissionTierAdminAction} className="grid gap-3 sm:grid-cols-12">
+        <AdminToastForm action={updateCommissionTierAdminAction} className="grid gap-3 sm:grid-cols-12">
           <input type="hidden" name="id" value={cfg.id} />
           <label className="sm:col-span-3">
             <span className="text-xs text-white/55">{t("admin.tiersPage.tier1")}</span>
@@ -61,7 +62,7 @@ export default async function GrowthAdminTiersPage() {
               {t("admin.tiersPage.save")}
             </button>
           </div>
-        </form>
+        </AdminToastForm>
       </GlassCard>
     </div>
   );

@@ -241,6 +241,31 @@ async function main() {
       criteria: { kind: "hidden_manual" },
     },
     {
+      key: "night_owl",
+      name: "Night Owl",
+      type: BadgeType.AUTO,
+      category: BadgeCategory.BEHAVIORAL,
+      hidden: true,
+      description: "Checked in after midnight UTC.",
+      criteria: { kind: "night_checkin" },
+    },
+    {
+      key: "triple_close_day",
+      name: "Hat Trick",
+      type: BadgeType.AUTO,
+      category: BadgeCategory.FINANCIAL,
+      description: "Closed 3 deals in one day.",
+      criteria: { kind: "closes_same_day", value: 3 },
+    },
+    {
+      key: "revenue_10k",
+      name: "Revenue Milestone",
+      type: BadgeType.AUTO,
+      category: BadgeCategory.FINANCIAL,
+      description: "$10k+ commission earned.",
+      criteria: { kind: "commission_cents", value: 1_000_000 },
+    },
+    {
       key: "trusted_partner",
       name: "Trusted Partner",
       type: BadgeType.ADMIN,
@@ -460,6 +485,7 @@ async function main() {
       currentLevelId: starter.id,
       displayTitle: "Elite Partner",
       socialLinks: { whatsapp: "+966511111111", linkedin: "https://linkedin.com" },
+      showcasedBadges: ["first_deal", "deals_5"],
     },
   });
 

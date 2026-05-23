@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { effectiveCommissionBaseCents } from "@/lib/growth/commission-base";
 import { evaluateAutoBadgesForUser, grantFastCloserIfEligible } from "@/lib/growth/badges";
 import { logActivityEvent } from "@/lib/growth/activity";
-import { resolveLevelForClosedDeals } from "@/lib/growth/levels";
+import { syncPartnerLevel } from "@/lib/growth/levels";
+import { revalidatePartnerSurfaces } from "@/lib/growth/revalidate-partner";
 import { applyMissionProgress } from "@/lib/growth/missions";
 import { createNotification } from "@/lib/growth/notify";
 import { NotificationType } from "@prisma/client";
@@ -147,19 +148,6 @@ export async function closeDealAsAdmin(params: {
       data: { totalXp: { increment: xpAmount } },
     });
 
-    const closedCount = await tx.deal.count({
-      where: { partnerId: u1, status: DealStatus.CLOSED },
-    });
-    const nextLevel = await tx.levelDefinition.findFirst({
-      where: { minClosedDeals: { lte: closedCount } },
-      orderBy: { order: "desc" },
-    });
-    if (nextLevel) {
-      await tx.partnerProfile.update({
-        where: { userId: u1 },
-        data: { currentLevelId: nextLevel.id },
-      });
-    }
   });
 
   await grantFastCloserIfEligible(prisma, u1, deal.createdAt, now);
@@ -167,17 +155,12 @@ export async function closeDealAsAdmin(params: {
   if (u2) await evaluateAutoBadgesForUser(prisma, u2);
   if (u3) await evaluateAutoBadgesForUser(prisma, u3);
 
-  // Ensure level matches closed count after all writes
-  const closedCount = await prisma.deal.count({
-    where: { partnerId: u1, status: DealStatus.CLOSED },
+  const closerSlug = await prisma.user.findUnique({
+    where: { id: u1 },
+    select: { publicSlug: true },
   });
-  const lvl = await resolveLevelForClosedDeals(prisma, closedCount);
-  if (lvl) {
-    await prisma.partnerProfile.update({
-      where: { userId: u1 },
-      data: { currentLevelId: lvl.id },
-    });
-  }
+  await syncPartnerLevel(prisma, u1);
+  revalidatePartnerSurfaces({ publicSlug: closerSlug?.publicSlug ?? null });
 
   await applyMissionProgress(prisma, u1, "close_deal", 1);
 
