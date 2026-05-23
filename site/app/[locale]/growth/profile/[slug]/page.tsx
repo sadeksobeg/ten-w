@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { UserRole } from "@prisma/client";
+import { auth } from "@/auth";
 import { BadgeGrid } from "@/components/growth/badges/BadgeGrid";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { ProfileViewTracker } from "@/components/growth/ProfileViewTracker";
@@ -14,6 +16,9 @@ import { getLevelVisual } from "@/lib/growth/level-visual";
 import { getLevelI18nKey, LEVEL_COLORS } from "@/lib/growth/level-i18n";
 import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
 import { PartnerNetworkTree } from "@/components/growth/profile/PartnerNetworkTree";
+import { ProfileActivityList } from "@/components/growth/profile/ProfileActivityList";
+import { ProfileAppreciationButton } from "@/components/growth/profile/ProfileAppreciationButton";
+import { ProfileShowcaseStrip } from "@/components/growth/profile/ProfileShowcaseStrip";
 import { BusinessCard } from "@/components/growth/profile/BusinessCard";
 import { getPublicProfileBySlug } from "@/lib/growth/get-public-profile";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
@@ -57,8 +62,14 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
   const { locale, slug } = await params;
   const sp = await searchParams;
   const t = await getTranslations("Growth.publicProfile");
+  const session = await auth();
   const data = await getPublicProfileBySlug(slug, locale);
   if (!data) notFound();
+
+  const canAppreciate =
+    session?.user?.id &&
+    session.user.role === UserRole.PARTNER &&
+    session.user.id !== data.userId;
 
   const xpLabel = getXpBrandLabel(locale);
   const registerHref = `/${locale}/growth/register?ref=${encodeURIComponent(data.referralCode)}`;
@@ -174,6 +185,11 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
                 })}
               </div>
             ) : null}
+            {canAppreciate ? (
+              <div className="mt-4 flex justify-center sm:justify-start">
+                <ProfileAppreciationButton slug={slug} partnerName={data.name} />
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -197,6 +213,13 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
           </GlassCard>
         ))}
       </div>
+
+      <ProfileShowcaseStrip
+        locale={locale}
+        keys={data.showcasedBadges}
+        earnedBadges={data.earnedBadges.map((b) => ({ key: b.key, name: b.name }))}
+        title={t("showcaseTitle")}
+      />
 
       <section className="mt-8">
         <h2 className="text-lg font-bold">{t("badgesTitle")}</h2>
@@ -231,11 +254,7 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
             {t("activityTitle")}
           </h2>
           <GlassCard className="mt-4 divide-y divide-white/10 p-0">
-            {data.publicActivity.map((a, i) => (
-              <div key={i} className="px-4 py-3 text-sm text-white/75">
-                {a.headline}
-              </div>
-            ))}
+            <ProfileActivityList items={data.publicActivity} />
           </GlassCard>
         </section>
       ) : null}

@@ -9,7 +9,7 @@
     "team": "Team",
     "investors": "Investors",
     "blog": "Blog",
-    "growth": "Growth Engine",
+    "ascend": "TENEGTA Ascend",
     "contact": "Contact",
     "legal": "Legal",
     "openMenu": "Open menu",
@@ -1054,12 +1054,69 @@
     "ctaContact": "Contact us",
     "ctaEngagement": "Engagement models"
   },
+  "Ascend": {
+    "meta": {
+      "title": "TENEGTA ASCEND — Infrastructure de croissance gamifiée",
+      "description": "Le système d'exploitation des réseaux de partenaires orientés performance. XP, niveaux, classements et commissions dans un espace live."
+    },
+    "hero": {
+      "eyebrow": "Produit · OS croissance partenaires",
+      "tagline": "Une infrastructure de croissance gamifiée pour les organisations modernes.",
+      "subtagline": "Le système d'exploitation des réseaux de partenaires orientés performance.",
+      "ctaPrimary": "Commencer à ascendre",
+      "ctaSecondary": "Connexion partenaire",
+      "note": "Inscription gratuite · Conçu pour les opérateurs disciplinés"
+    },
+    "preview": {
+      "label": "Espace live",
+      "title": "Votre centre de commande — pas un tableur",
+      "statXp": "Power Points",
+      "statRank": "Rang hebdo",
+      "statStreak": "Série",
+      "missionTitle": "Mission du jour",
+      "missionHint": "72 % — une affaire pour le bonus XP",
+      "leaderboardTitle": "Pulse du classement"
+    },
+    "stats": {
+      "partners": { "value": "∞", "label": "Échelle réseau" },
+      "deals": { "value": "3×", "label": "Cycles de clôture" },
+      "levels": { "value": "7+", "label": "Niveaux de rang" },
+      "uptime": { "value": "24/7", "label": "Moteur live" }
+    },
+    "features": {
+      "title": "Conçu comme un jeu. Tourne comme une infra.",
+      "subtitle": "Chaque mécanique se cumule — rang, réputation et revenus avancent ensemble.",
+      "xp": { "title": "Power Points & XP", "body": "Chaque action génère une progression mesurable." },
+      "levels": { "title": "Niveaux & avantages", "body": "Échelons clairs avec vrais perks — splits, visibilité, privilèges." },
+      "leaderboard": { "title": "Classements & saisons", "body": "Compétition hebdo, mensuelle et saisonnière avec score composite." },
+      "deals": { "title": "Pipeline d'affaires", "body": "Suivi des leads à la clôture avec commissions et validation admin." },
+      "network": { "title": "Réseau partenaires", "body": "Arbres de parrainage multi-niveaux et analytics réseau." },
+      "badges": { "title": "Badges & missions", "body": "Badges auto/manuels, missions quotidiennes, vitrine profil public." }
+    },
+    "steps": {
+      "title": "Comment les partenaires ascendent",
+      "join": { "title": "Rejoindre le réseau", "body": "Inscrivez-vous, complétez votre profil, ouvrez votre dashboard." },
+      "perform": { "title": "Performez & cumulez", "body": "Clôturez, développez le réseau, missions — XP et rang montent." },
+      "ascend": { "title": "Ascendez & menez", "body": "Dominez le classement, gagnez des badges, devenez un opérateur visible." }
+    },
+    "positioning": {
+      "eyebrow": "Pourquoi ASCEND",
+      "quote": "Pas un CRM. Pas un plugin affiliate. Un OS de croissance.",
+      "body": "TENEGTA ASCEND unifie commissions, gamification et réseaux — la performance se cumule au lieu de repartir de zéro."
+    },
+    "cta": {
+      "title": "Prêt à ascendre ?",
+      "body": "Rejoignez le réseau ou parlez-nous du déploiement ASCEND pour votre organisation.",
+      "primary": "Créer un compte partenaire",
+      "secondary": "Parler à TENEGTA"
+    }
+  },
   "Growth": {
     "signOut": "Sign out",
     "powerPointsLine": "{label}: {n}",
     "powerPoints": "Power Points",
     "errors": {
-      "eyebrow": "Growth Engine",
+      "eyebrow": "TENEGTA ASCEND",
       "title": "Something went wrong",
       "body": "Impossible de charger Growth. Réessayez ou contactez le support.",
       "retry": "Try again",
@@ -1144,7 +1201,15 @@
       "qrSoon": "QR code — coming soon",
       "lockedBadge": "Badge caché — complétez les objectifs",
       "teamTitle": "Mon équipe",
-      "teamSubtitle": "Réseau sur 3 niveaux — partenaires actifs uniquement"
+      "teamSubtitle": "Réseau sur 3 niveaux — partenaires actifs uniquement",
+      "activityTitle": "Activité récente",
+      "showcaseTitle": "Badges en vedette",
+      "appreciation": {
+        "cta": "Envoyer un encouragement",
+        "sending": "Envoi…",
+        "sent": "Encouragement envoyé à {name}",
+        "rateLimited": "Veuillez patienter avant de renvoyer"
+      }
     },
     "network": {
       "tree": {
@@ -1325,7 +1390,8 @@
         "weights": "Composite : deals {deals}% · XP {xp}% · série {streak}%",
         "week": "Semaine",
         "month": "Mois",
-        "dealsUnit": "deals"
+        "dealsUnit": "deals",
+        "viewAll": "Classement complet"
       }
     },
     "onboarding": {
@@ -1425,12 +1491,18 @@
     "settings": {
       "title": "Paramètres du profil",
       "subtitle": "L'avatar apparaît sur votre tableau de bord et profil public.",
+      "badgeShowcase": "Vitrine de badges",
+      "notificationsSection": "Notifications",
       "live_preview": "Aperçu du profil",
       "avatarSection": "Photo de profil",
       "uploadHint": "Déposez une image ou cliquez",
       "save": "Enregistrer",
       "saved": "Enregistré",
       "error": "Échec de l'enregistrement",
+      "notificationSound": {
+        "on": "Son activé",
+        "off": "Son désactivé"
+      },
       "profile": {
         "title": "Profil public",
         "hint": "Titre, bio et réseaux sociaux sur votre page partenaire.",
@@ -1762,10 +1834,18 @@
       "toastDealClosed": "Deal clôturé",
       "toastDealLost": "Deal marqué perdu",
       "toastPayoutUpdated": "Paiement mis à jour",
+      "statsBar": {
+        "aria": "Statistiques admin rapides",
+        "partners": "Partenaires",
+        "pendingDeals": "Affaires en attente",
+        "pendingPayouts": "Paiements en attente",
+        "openChats": "Chats ouverts"
+      },
       "activeEvents": "Active events",
       "eventParticipants": "Event participants",
       "unreadNotifications": "Unread notifications",
       "enter": "Admin",
+      "productName": "TENEGTA ASCEND",
       "nav": {
         "adminNavAria": "Growth admin navigation",
         "navAria": "Growth admin navigation",
@@ -1959,7 +2039,19 @@
         "priceUsd": "Price (USD)",
         "commissionUsd": "Commission base (USD)",
         "kitJson": "Marketing kit (JSON)",
-        "kitSave": "Save kit JSON"
+        "kitSave": "Save kit JSON",
+        "kitEditor": {
+          "visualMode": "Éditeur visuel",
+          "jsonMode": "Éditeur JSON",
+          "headline": "Titre",
+          "pitch": "Pitch",
+          "bullets": "Points (un par ligne)",
+          "bulletsPh": "Avantage 1\nAvantage 2",
+          "scriptDirect": "Script direct",
+          "scriptWhatsapp": "Script WhatsApp",
+          "scriptConsultative": "Script consultatif",
+          "save": "Enregistrer le kit"
+        }
       },
       "badgesPage": {
         "title": "Assign admin badge",
@@ -2046,7 +2138,12 @@
         "title": "Level thresholds",
         "save": "Save",
         "minDeals": "Min closed deals",
-        "salaryUsd": "Salary (USD/month, 0 clears)"
+        "salaryUsd": "Salary (USD/month, 0 clears)",
+        "perksEditor": {
+          "label": "Avantages du niveau (un par ligne)",
+          "placeholder": "Commission plus élevée\nSupport prioritaire",
+          "save": "Enregistrer les avantages"
+        }
       },
       "tiersPage": {
         "title": "Multi-level commission (basis points)",
@@ -2071,8 +2168,8 @@
       "switchToRegister": "Need an account? Register",
       "switchToSignIn": "Already have an account? Sign in",
       "registerIntro": "Create your partner profile to start earning when deals close.",
-      "signInHeroEyebrow": "T.E.N.E.G.T.A Growth Engine",
-      "signInHeroTitle": "Your command center for partner income",
+      "signInHeroEyebrow": "TENEGTA ASCEND",
+      "signInHeroTitle": "Votre centre de commande performance partenaire",
       "signInHeroLine1": "Commissions, levels, and XP — unified in one live workspace.",
       "signInHeroLine2": "Build rank and reputation that compound instead of one-off hustle.",
       "signInHeroLine3": "Network-aware payouts built for operators who scale with discipline.",

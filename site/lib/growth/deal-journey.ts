@@ -6,6 +6,7 @@ export type DealJourneyStep = {
   key: DealJourneyStepKey;
   done: boolean;
   current: boolean;
+  at?: string | null;
 };
 
 function ageDays(createdAt: Date): number {
@@ -36,16 +37,25 @@ export function buildDealJourney(input: {
       key,
       done: i < 2,
       current: i === 2,
+      at: i === 0 ? input.createdAt.toISOString() : i === 2 ? input.lostAt?.toISOString() ?? null : null,
     }));
     return { steps };
   }
 
   if (input.status === DealStatus.CLOSED) {
     const paidReady = input.ledgerCount > 0;
+    const closedIso = input.closedAt?.toISOString() ?? null;
     const steps: DealJourneyStep[] = keys.map((key, i) => {
-      if (i <= 2) return { key, done: true, current: false };
-      if (i === 3) return { key, done: true, current: !paidReady };
-      return { key, done: paidReady, current: paidReady };
+      if (i <= 2) {
+        return {
+          key,
+          done: true,
+          current: false,
+          at: i === 0 ? input.createdAt.toISOString() : null,
+        };
+      }
+      if (i === 3) return { key, done: true, current: !paidReady, at: closedIso };
+      return { key, done: paidReady, current: paidReady, at: paidReady ? closedIso : null };
     });
     return { steps };
   }
@@ -56,6 +66,7 @@ export function buildDealJourney(input: {
     key,
     done: i < currentIndex,
     current: i === currentIndex,
+    at: i === 0 ? input.createdAt.toISOString() : null,
   }));
   return { steps };
 }

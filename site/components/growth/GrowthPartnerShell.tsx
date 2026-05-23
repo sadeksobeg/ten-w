@@ -29,7 +29,7 @@ const MOBILE_KEYS = [
   "dashboard",
   "deals",
   "earnings",
-  "events",
+  "leaderboard",
   "chat",
   "settings",
 ] as const;

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
+import { ParticleEffect } from "@/components/growth/ui/ParticleEffect";
 import { IconChevronRight, IconStarFilled } from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
@@ -32,18 +33,7 @@ export function LevelUpOverlay({ levelName, previousName, onDone }: Props) {
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm">
       <div className="growth-page-enter relative max-w-md rounded-2xl border border-gold/40 bg-[var(--growth-surface-2)] p-8 text-center">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <span
-            key={i}
-            className="pointer-events-none absolute size-2 rounded-full bg-gold/60"
-            style={{
-              left: `${10 + (i * 17) % 80}%`,
-              top: `${5 + (i * 23) % 70}%`,
-              animation: `growthBadgeEarn ${1 + (i % 5) * 0.2}s ease-out infinite`,
-            }}
-            aria-hidden
-          />
-        ))}
+        <ParticleEffect />
         <IconStarFilled size={48} className="mx-auto text-gold" aria-hidden />
         <h2 className="mt-2 font-[family-name:var(--font-cairo)] text-2xl font-extrabold">
           {t("title")}

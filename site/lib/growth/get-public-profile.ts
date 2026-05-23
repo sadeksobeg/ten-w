@@ -19,6 +19,7 @@ export type PublicProfileBadge = {
 };
 
 export type PublicProfileData = {
+  userId: string;
   name: string;
   displayTitle: string | null;
   bio: string | null;
@@ -147,6 +148,7 @@ export async function getPublicProfileBySlug(
   }
 
   return {
+    userId: user.id,
     name: user.name ?? "Partner",
     displayTitle: user.partnerProfile.displayTitle,
     bio: user.bio,

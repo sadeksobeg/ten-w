@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
+import { ILLUSTRATION_MAP } from "@/components/growth/ui/illustrations";
 
 export type EmptyIllustration = "rocket" | "trophy" | "calendar" | "chat" | "refresh";
 
@@ -27,6 +28,8 @@ function isModern(p: Props): p is ModernProps {
 }
 
 function Illustration({ kind }: { kind: EmptyIllustration }) {
+  const Shared = ILLUSTRATION_MAP[kind as keyof typeof ILLUSTRATION_MAP];
+  if (Shared) return <Shared />;
   const stroke = "var(--growth-gold)";
   switch (kind) {
     case "rocket":

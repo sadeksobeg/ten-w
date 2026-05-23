@@ -42,6 +42,31 @@ export async function evaluateAutoBadgesForUser(db: Db, userId: string) {
   if (downlines >= 1) await grantIfMissing(db, userId, "first_referral");
   if (downlines >= 3) await grantIfMissing(db, userId, "network_builder");
   if (kitHits >= 3) await grantIfMissing(db, userId, "ai_seller");
+
+  const revenue = await db.commissionLedger.aggregate({
+    where: { userId },
+    _sum: { amountCents: true },
+  });
+  const revenueCents = revenue._sum.amountCents ?? 0;
+  if (revenueCents >= 1_000_000) await grantIfMissing(db, userId, "revenue_10k");
+
+  const todayStart = new Date();
+  todayStart.setUTCHours(0, 0, 0, 0);
+  const closedToday = await db.deal.count({
+    where: {
+      partnerId: userId,
+      status: "CLOSED",
+      closedAt: { gte: todayStart },
+    },
+  });
+  if (closedToday >= 3) await grantIfMissing(db, userId, "triple_close_day");
+}
+
+export async function grantNightOwlIfEligible(db: Db, userId: string, at: Date = new Date()) {
+  const hour = at.getUTCHours();
+  if (hour >= 0 && hour < 5) {
+    await grantIfMissing(db, userId, "night_owl");
+  }
 }
 
 export async function grantFastCloserIfEligible(

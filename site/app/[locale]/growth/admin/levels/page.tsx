@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { LevelPerksEditor } from "@/components/growth/admin/LevelPerksEditor";
 import { AdminToastForm } from "@/components/growth/admin/AdminToastForm";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { updateLevelAdminAction } from "@/lib/growth/actions";
@@ -61,6 +62,7 @@ export default async function GrowthAdminLevelsPage() {
                 </button>
               </div>
             </AdminToastForm>
+            <LevelPerksEditor levelId={lvl.id} perksJson={lvl.perksJson} />
           </GlassCard>
         ))}
       </div>

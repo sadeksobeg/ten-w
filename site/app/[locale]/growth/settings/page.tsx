@@ -9,6 +9,7 @@ import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
 import { SectionHeader } from "@/components/growth/ui/SectionHeader";
 import { BadgeShowcase } from "@/components/growth/badges/BadgeShowcase";
 import { PushNotificationPermission } from "@/components/growth/PushNotificationPermission";
+import { NotificationSoundToggle } from "@/components/growth/settings/NotificationSoundToggle";
 import { prisma } from "@/lib/prisma";
 import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
 
@@ -84,7 +85,10 @@ export default async function GrowthSettingsPage({ params }: Props) {
           showcasedKeys={user.partnerProfile?.showcasedBadges ?? []}
         />
         <SectionHeader title={t("notificationsSection")} />
-        <PushNotificationPermission />
+        <div className="flex flex-wrap items-center gap-3">
+          <PushNotificationPermission />
+          <NotificationSoundToggle />
+        </div>
         <SectionHeader title={t("avatarSection")} />
         <AvatarSettingsForm
           locale={locale}

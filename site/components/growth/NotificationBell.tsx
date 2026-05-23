@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { IconCheck, IconNotifications } from "@/components/growth/icons/GrowthIcons";
 import { NotificationTypeIcon } from "@/lib/growth/notification-styles";
 import { relativeDate } from "@/lib/growth/relative-date";
+import { playNotificationSound } from "@/lib/growth/notification-sound";
 
 type NotificationRow = {
   id: string;
@@ -26,6 +27,7 @@ export function NotificationBell({ locale }: Props) {
   const [items, setItems] = useState<NotificationRow[]>([]);
   const [unread, setUnread] = useState(0);
   const panelRef = useRef<HTMLDivElement>(null);
+  const prevUnreadRef = useRef<number | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -35,6 +37,10 @@ export function NotificationBell({ locale }: Props) {
         notifications: NotificationRow[];
         unreadCount: number;
       };
+      if (prevUnreadRef.current !== null && data.unreadCount > prevUnreadRef.current) {
+        playNotificationSound();
+      }
+      prevUnreadRef.current = data.unreadCount;
       setItems(data.notifications);
       setUnread(data.unreadCount);
     } catch {

@@ -122,6 +122,30 @@ const BADGE_VISUAL: Record<string, BadgeVisualMeta> = {
     glowColor: "#534ab7",
     shapeId: "hexagon",
   },
+  night_owl: {
+    rarity: "epic",
+    iconSlug: "moon",
+    iconId: "sparkle",
+    glowColor: "#6366f1",
+    shapeId: "crest",
+    holo: true,
+  },
+  triple_close_day: {
+    rarity: "legendary",
+    iconSlug: "hat-trick",
+    iconId: "lightning",
+    glowColor: "#f59e0b",
+    shapeId: "star16",
+    holo: true,
+  },
+  revenue_10k: {
+    rarity: "legendary",
+    iconSlug: "banknote",
+    iconId: "diamond",
+    glowColor: "#22c55e",
+    shapeId: "medal",
+    holo: true,
+  },
 };
 
 const DEFAULT_META: BadgeVisualMeta = {

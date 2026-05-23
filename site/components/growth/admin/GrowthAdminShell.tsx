@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { NotificationBell } from "@/components/growth/NotificationBell";
+import { AdminStatsBar } from "@/components/growth/admin/AdminStatsBar";
 import { GrowthAdminNav } from "@/components/growth/admin/GrowthAdminNav";
 import { growthSignOutAction } from "@/lib/growth/actions";
 
@@ -20,7 +21,7 @@ export async function GrowthAdminShell({ children, locale }: Props) {
             {t("admin.enter")}
           </p>
           <p className="mt-1 font-[family-name:var(--font-cairo)] text-lg font-extrabold text-white">
-            Growth
+            {t("admin.productName")}
           </p>
           <div className="mt-4">
             <GrowthAdminNav />
@@ -39,7 +40,10 @@ export async function GrowthAdminShell({ children, locale }: Props) {
           </div>
         </div>
       </aside>
-      <main className="min-w-0 flex-1">{children}</main>
+      <main className="min-w-0 flex-1">
+        <AdminStatsBar />
+        {children}
+      </main>
     </div>
   );
 }

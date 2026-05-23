@@ -16,20 +16,16 @@ import { z } from "zod";
 import { auth, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { closeDealAsAdmin } from "@/lib/growth/commission";
-import { grantAdminBadge } from "@/lib/growth/badges";
+import { evaluateAutoBadgesForUser, grantAdminBadge, grantNightOwlIfEligible } from "@/lib/growth/badges";
 import { applyMissionProgress } from "@/lib/growth/missions";
 import { logActivityEvent } from "@/lib/growth/activity";
 import { applyMonthlyLeaderboardBonuses } from "@/lib/growth/rewards";
 import { partnerOverrideModelsAvailable } from "@/lib/growth/prisma-optional";
 import { createNotification, createNotificationsForAllActivePartners, notifyAdmins } from "@/lib/growth/notify";
 import { uniquePublicSlug } from "@/lib/growth/public-slug";
-import {
-  PartnerNetworkError,
-  setPartnerUpline,
-} from "@/lib/growth/partner-network";
+import { PartnerNetworkError, setPartnerUpline } from "@/lib/growth/partner-network";
 import { logAdminAudit } from "@/lib/growth/audit-log";
 import { syncPartnerLevel } from "@/lib/growth/levels";
-import { evaluateAutoBadgesForUser } from "@/lib/growth/badges";
 import { revalidatePartnerSurfaces } from "@/lib/growth/revalidate-partner";
 import { rateLimitGrowthAction } from "@/lib/growth/growth-rate-limit";
 import { GAME_CONFIG } from "@/lib/growth/game-config";
@@ -941,6 +937,31 @@ export async function updateLevelAdminAction(
     },
   });
 
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function updateLevelPerksAdminAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const levelId = String(formData.get("levelId") ?? "").trim();
+  const perksRaw = String(formData.get("perksLines") ?? "");
+  if (!levelId) return { ok: false, error: "invalid_input" };
+
+  const perks = perksRaw
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+
+  await prisma.levelDefinition.update({
+    where: { id: levelId },
+    data: { perksJson: perks },
+  });
   revalidateGrowth();
   return { ok: true };
 }
@@ -2359,6 +2380,7 @@ export async function dailyCheckInAction(
   await touchActivityDay(userId);
   await syncPartnerLevel(prisma, userId);
   await evaluateAutoBadgesForUser(prisma, userId);
+  await grantNightOwlIfEligible(prisma, userId, new Date());
 
   const user = await prisma.user.findUnique({
     where: { id: userId },

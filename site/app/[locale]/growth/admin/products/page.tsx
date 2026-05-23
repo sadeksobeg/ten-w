@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
+import { MarketingKitEditor } from "@/components/growth/admin/MarketingKitEditor";
 import { AdminToastForm } from "@/components/growth/admin/AdminToastForm";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
-import { updateProductAdminAction, updateProductMarketingKitAdminAction } from "@/lib/growth/actions";
+import { updateProductAdminAction } from "@/lib/growth/actions";
 import { prisma } from "@/lib/prisma";
 
 export default async function GrowthAdminProductsPage() {
@@ -56,25 +57,10 @@ export default async function GrowthAdminProductsPage() {
                 </button>
               </div>
             </AdminToastForm>
-            <AdminToastForm action={updateProductMarketingKitAdminAction} className="mt-6 grid gap-3">
-              <input type="hidden" name="productId" value={p.id} />
-              <label className="block">
-                <span className="text-xs text-white/55">{t("admin.productsPage.kitJson")}</span>
-                <textarea
-                  name="marketingKitJson"
-                  rows={12}
-                  defaultValue={JSON.stringify(p.marketingKit ?? {}, null, 2)}
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 font-mono text-xs text-white outline-none focus:border-gold/40"
-                  required
-                />
-              </label>
-              <button
-                type="submit"
-                className="rounded-xl border border-gold/30 bg-gold/10 px-4 py-3 text-sm font-semibold text-gold hover:border-gold/50"
-              >
-                {t("admin.productsPage.kitSave")}
-              </button>
-            </AdminToastForm>
+            <MarketingKitEditor
+              productId={p.id}
+              initialKit={(p.marketingKit as Record<string, unknown>) ?? {}}
+            />
           </GlassCard>
         ))}
       </div>

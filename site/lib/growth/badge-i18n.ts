@@ -67,6 +67,21 @@ const AR: Record<string, BadgeCopy> = {
     description: "أداء استراتيجي مميز.",
     howTo: "يمنحها فريق T.E.N.E.G.T.A.",
   },
+  revenue_10k: {
+    name: "10K إيراد",
+    description: "تجاوزت 10,000 دولار عمولات.",
+    howTo: "حقّق 10,000$ إجمالي عمولات.",
+  },
+  triple_close_day: {
+    name: "ثلاث إغلاقات",
+    description: "3 صفقات مغلقة في يوم واحد.",
+    howTo: "أغلق 3 صفقات في نفس اليوم.",
+  },
+  night_owl: {
+    name: "بومة الليل",
+    description: "تسجيل حضور بعد منتصف الليل.",
+    howTo: "سجّل حضورك بعد منتصف الليل.",
+  },
 };
 
 const EN: Record<string, BadgeCopy> = {
@@ -130,6 +145,21 @@ const EN: Record<string, BadgeCopy> = {
     description: "Strategic performance.",
     howTo: "Granted by T.E.N.E.G.T.A team.",
   },
+  revenue_10k: {
+    name: "$10K Revenue",
+    description: "Earned $10,000+ in commissions.",
+    howTo: "Reach $10,000 total commission.",
+  },
+  triple_close_day: {
+    name: "Triple Close",
+    description: "Closed 3 deals in one day.",
+    howTo: "Close 3 deals on the same day.",
+  },
+  night_owl: {
+    name: "Night Owl",
+    description: "Checked in after midnight.",
+    howTo: "Daily check-in after midnight.",
+  },
 };
 
 const FR: Record<string, BadgeCopy> = {
@@ -192,6 +222,21 @@ const FR: Record<string, BadgeCopy> = {
     name: "Agent stratégique",
     description: "Performance stratégique.",
     howTo: "Par l'équipe T.E.N.E.G.T.A.",
+  },
+  revenue_10k: {
+    name: "10K revenus",
+    description: "Plus de 10 000 $ de commissions.",
+    howTo: "Atteindre 10 000 $ de commissions.",
+  },
+  triple_close_day: {
+    name: "Triple clôture",
+    description: "3 affaires le même jour.",
+    howTo: "Clôturer 3 affaires le même jour.",
+  },
+  night_owl: {
+    name: "Oiseau de nuit",
+    description: "Check-in après minuit.",
+    howTo: "Check-in quotidien après minuit.",
   },
 };
 

@@ -16,6 +16,7 @@ const staticPaths = [
   "/solutions/intelligent-systems",
   "/demo/explore",
   "/engagement",
+  "/ascend",
   "/partners",
   "/careers",
   "/case-studies",

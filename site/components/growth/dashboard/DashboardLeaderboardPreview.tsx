@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import type { DashboardData } from "@/lib/growth/get-dashboard";
 import { IconStarFilled } from "@/components/growth/icons/GrowthIcons";
 
@@ -81,6 +82,12 @@ export function DashboardLeaderboardPreview({ weekly, monthly, season, currentUs
           ))
         )}
       </div>
+      <Link
+        href="/growth/leaderboard"
+        className="mt-4 inline-flex text-xs font-semibold text-gold hover:underline"
+      >
+        {t("viewAll")} →
+      </Link>
     </div>
   );
 }

@@ -15,6 +15,8 @@ import { GrowthCollapsibleSection } from "@/components/growth/ui/GrowthCollapsib
 import { PartnerOnboardingChecklist } from "@/components/growth/PartnerOnboardingChecklist";
 import { HubSupportCard } from "@/components/growth/HubSupportCard";
 import { LevelPerksCard } from "@/components/growth/LevelPerksCard";
+import { GrowthHubDeferred } from "@/components/growth/dashboard/GrowthHubDeferred";
+import { SkeletonStatGrid } from "@/components/growth/ui/GrowthSkeleton";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 
 type Props = {
@@ -67,6 +69,7 @@ export async function GrowthHubView({
         <DashboardStatsGrid data={data} />
       </div>
 
+      <GrowthHubDeferred fallback={<SkeletonStatGrid count={4} />}>
       <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-6">
           <PartnerOnboardingChecklist locale={locale} data={data} userId={userId} />
@@ -96,6 +99,7 @@ export async function GrowthHubView({
           </GrowthCollapsibleSection>
         </div>
       </div>
+      </GrowthHubDeferred>
 
       <HubSupportCard />
 
