@@ -13,6 +13,9 @@ type Props = {
   viewerUserId: string;
   viewerEmail: string;
   viewerName: string | null;
+  viewerDisplayName?: string;
+  viewerAvatarUrl?: string | null;
+  viewerAvatarPreset?: string | null;
   supportConversationId: string;
   isCreatorRoomMember?: boolean;
   initialTab?: Tab;
@@ -23,6 +26,9 @@ export function GrowthPartnerChatHub({
   viewerUserId,
   viewerEmail,
   viewerName,
+  viewerDisplayName,
+  viewerAvatarUrl,
+  viewerAvatarPreset,
   supportConversationId,
   isCreatorRoomMember = false,
   initialTab = "community",
@@ -61,6 +67,9 @@ export function GrowthPartnerChatHub({
             viewerUserId={viewerUserId}
             viewerEmail={viewerEmail}
             viewerName={viewerName}
+            viewerDisplayName={viewerDisplayName}
+            viewerAvatarUrl={viewerAvatarUrl}
+            viewerAvatarPreset={viewerAvatarPreset}
           />
         ) : tab === "creators" ? (
           <GrowthCommunityChat
@@ -68,6 +77,9 @@ export function GrowthPartnerChatHub({
             viewerUserId={viewerUserId}
             viewerEmail={viewerEmail}
             viewerName={viewerName}
+            viewerDisplayName={viewerDisplayName}
+            viewerAvatarUrl={viewerAvatarUrl}
+            viewerAvatarPreset={viewerAvatarPreset}
             roomSlug={CREATOR_ROOM_SLUG}
             hintKey="creatorChatHint"
             placeholderKey="creatorChatPlaceholder"

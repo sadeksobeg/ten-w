@@ -14,6 +14,7 @@ import { EventMemberFeed } from "@/components/growth/events/EventMemberFeed";
 import { EventCoverImage } from "@/components/growth/events/EventCoverImage";
 import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
 import { listEventPostsForMember } from "@/lib/growth/event-posts";
+import { resolveChatSenderName, VIEWER_CHAT_PROFILE_SELECT } from "@/lib/growth/chat-display";
 import { findGrowthEventByRouteSlug } from "@/lib/growth/resolve-event";
 import { normalizeEventRouteSlug } from "@/lib/growth/event-slug";
 
@@ -46,6 +47,12 @@ export default async function GrowthEventDetailPage({ params }: Props) {
   const isMember = myPart?.status === ParticipantStatus.ACCEPTED;
   const memberPosts = isMember
     ? await listEventPostsForMember(event.id, session.user.id)
+    : null;
+  const viewerProfile = isMember
+    ? await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: VIEWER_CHAT_PROFILE_SELECT,
+      })
     : null;
   const canJoin =
     !myPart &&
@@ -108,8 +115,15 @@ export default async function GrowthEventDetailPage({ params }: Props) {
               locale={locale}
               eventSlug={event.slug}
               viewerUserId={session.user.id}
-              viewerEmail={session.user.email ?? ""}
-              viewerName={session.user.name ?? null}
+              viewerEmail={viewerProfile?.email ?? session.user.email ?? ""}
+              viewerName={viewerProfile?.name ?? session.user.name ?? null}
+              viewerDisplayName={
+                viewerProfile
+                  ? resolveChatSenderName(viewerProfile)
+                  : (session.user.email ?? "")
+              }
+              viewerAvatarUrl={viewerProfile?.avatarUrl ?? null}
+              viewerAvatarPreset={viewerProfile?.avatarPreset ?? null}
             />
           }
           progress={

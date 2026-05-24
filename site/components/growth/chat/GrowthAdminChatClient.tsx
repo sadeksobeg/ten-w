@@ -20,6 +20,9 @@ type Props = {
   adminUserId: string;
   adminEmail: string;
   adminName: string | null;
+  adminDisplayName?: string;
+  adminAvatarUrl?: string | null;
+  adminAvatarPreset?: string | null;
   initialConversationId?: string | null;
   initialPartnerUserId?: string | null;
 };
@@ -29,6 +32,9 @@ export function GrowthAdminChatClient({
   adminUserId,
   adminEmail,
   adminName,
+  adminDisplayName,
+  adminAvatarUrl,
+  adminAvatarPreset,
   initialConversationId = null,
   initialPartnerUserId = null,
 }: Props) {
@@ -172,6 +178,9 @@ export function GrowthAdminChatClient({
             viewerUserId={adminUserId}
             viewerEmail={adminEmail}
             viewerName={adminName}
+            viewerDisplayName={adminDisplayName}
+            viewerAvatarUrl={adminAvatarUrl}
+            viewerAvatarPreset={adminAvatarPreset}
           />
         </div>
       ) : (

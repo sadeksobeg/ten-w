@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GrowthPartnerChatHub } from "@/components/growth/chat/GrowthPartnerChatHub";
 import { CREATOR_ROOM_SLUG, userIsCreatorRoomMember } from "@/lib/growth/creator-program";
+import { resolveChatSenderName, VIEWER_CHAT_PROFILE_SELECT } from "@/lib/growth/chat-display";
 import { ensureOpenConversation } from "@/lib/growth/chat-service";
 import { prisma } from "@/lib/prisma";
 
@@ -27,7 +28,7 @@ export default async function GrowthPartnerChatPage({ params, searchParams }: Pr
     ensureOpenConversation(session.user.id),
     prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { name: true, email: true },
+      select: VIEWER_CHAT_PROFILE_SELECT,
     }),
     userIsCreatorRoomMember(session.user.id),
   ]);
@@ -57,6 +58,9 @@ export default async function GrowthPartnerChatPage({ params, searchParams }: Pr
           viewerUserId={session.user.id}
           viewerEmail={user?.email ?? session.user.email ?? ""}
           viewerName={user?.name ?? session.user.name ?? null}
+          viewerDisplayName={user ? resolveChatSenderName(user) : (session.user.email ?? "")}
+          viewerAvatarUrl={user?.avatarUrl ?? null}
+          viewerAvatarPreset={user?.avatarPreset ?? null}
           supportConversationId={conv.id}
           isCreatorRoomMember={isCreatorRoomMember}
           initialTab={initialTab}

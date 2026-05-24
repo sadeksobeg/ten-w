@@ -7,6 +7,7 @@ import {
   userIsCreatorRoomMember,
 } from "@/lib/growth/creator-program";
 import { matchChatKeywords } from "@/lib/growth/chat-keywords";
+import { resolveChatSenderName } from "@/lib/growth/chat-display";
 import { touchLastSeen } from "@/lib/growth/presence";
 
 export const COMMUNITY_ROOM_SLUG = "community";
@@ -16,6 +17,7 @@ export type ChatRoomMessageDTO = {
   roomId: string;
   senderUserId: string;
   senderName: string;
+  senderEmail: string;
   senderAvatarUrl: string | null;
   senderAvatarPreset: string | null;
   senderLevelCode: string | null;
@@ -156,6 +158,7 @@ function mapSender(user: {
 }): Pick<
   ChatRoomMessageDTO,
   | "senderName"
+  | "senderEmail"
   | "senderAvatarUrl"
   | "senderAvatarPreset"
   | "senderLevelCode"
@@ -163,10 +166,8 @@ function mapSender(user: {
   | "officialDisplayName"
 > {
   return {
-    senderName:
-      user.isVerifiedOfficial && user.officialDisplayName?.trim()
-        ? user.officialDisplayName.trim()
-        : user.name?.trim() || user.email,
+    senderName: resolveChatSenderName(user),
+    senderEmail: user.email,
     senderAvatarUrl: user.avatarUrl,
     senderAvatarPreset: user.avatarPreset,
     senderLevelCode: user.partnerProfile?.currentLevel.code ?? null,

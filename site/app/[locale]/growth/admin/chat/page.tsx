@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { GrowthAdminChatClient } from "@/components/growth/chat/GrowthAdminChatClient";
+import { resolveChatSenderName, VIEWER_CHAT_PROFILE_SELECT } from "@/lib/growth/chat-display";
+import { prisma } from "@/lib/prisma";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -19,6 +21,10 @@ export default async function GrowthAdminChatPage({ params, searchParams }: Prop
     redirect(`/${locale}/growth`);
   }
   const t = await getTranslations("Growth.chat.admin");
+  const adminUser = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: VIEWER_CHAT_PROFILE_SELECT,
+  });
 
   return (
     <div className="space-y-4">
@@ -29,8 +35,13 @@ export default async function GrowthAdminChatPage({ params, searchParams }: Prop
       <GrowthAdminChatClient
         locale={locale}
         adminUserId={session.user.id}
-        adminEmail={session.user.email ?? ""}
-        adminName={session.user.name ?? null}
+        adminEmail={adminUser?.email ?? session.user.email ?? ""}
+        adminName={adminUser?.name ?? session.user.name ?? null}
+        adminDisplayName={
+          adminUser ? resolveChatSenderName(adminUser) : (session.user.email ?? "")
+        }
+        adminAvatarUrl={adminUser?.avatarUrl ?? null}
+        adminAvatarPreset={adminUser?.avatarPreset ?? null}
         initialConversationId={sp.conversationId ?? null}
         initialPartnerUserId={sp.partnerUserId ?? null}
       />

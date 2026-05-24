@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { ChatRoomMessageDTO } from "@/lib/growth/chat-room-service";
 import { COMMUNITY_ROOM_SLUG } from "@/lib/growth/chat-room-service";
+import { mergeChatRoomMessages } from "@/lib/growth/chat-display";
 import { PartnerNameBadges } from "@/components/growth/badges/PartnerNameBadges";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { VerifiedBadge } from "@/components/growth/ui/VerifiedBadge";
@@ -18,24 +19,26 @@ type Props = {
   viewerUserId: string;
   viewerEmail: string;
   viewerName: string | null;
+  viewerDisplayName?: string;
+  viewerAvatarUrl?: string | null;
+  viewerAvatarPreset?: string | null;
   roomSlug?: string;
   hintKey?: "communityHint" | "eventChatHint" | "creatorChatHint";
   placeholderKey?: "communityPlaceholder" | "eventChatPlaceholder" | "creatorChatPlaceholder";
 };
 
 function mergeMessages(prev: ChatRoomMessageDTO[], incoming: ChatRoomMessageDTO[]): ChatRoomMessageDTO[] {
-  const map = new Map(prev.map((m) => [m.id, m]));
-  for (const m of incoming) map.set(m.id, m);
-  return [...map.values()].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  );
+  return mergeChatRoomMessages(prev, incoming);
 }
 
 export function GrowthCommunityChat({
   locale: _locale,
   viewerUserId,
-  viewerEmail: _viewerEmail,
+  viewerEmail,
   viewerName: _viewerName,
+  viewerDisplayName,
+  viewerAvatarUrl,
+  viewerAvatarPreset,
   roomSlug = COMMUNITY_ROOM_SLUG,
   hintKey = "communityHint",
   placeholderKey = "communityPlaceholder",
@@ -289,6 +292,10 @@ export function GrowthCommunityChat({
           const official = m.isOfficial;
           const verified = m.isVerifiedOfficial;
           const editing = editingId === m.id;
+          const label = mine && viewerDisplayName ? viewerDisplayName : m.senderName;
+          const avatarUrl = mine && viewerAvatarUrl ? viewerAvatarUrl : m.senderAvatarUrl;
+          const avatarPreset =
+            mine && viewerAvatarPreset ? viewerAvatarPreset : m.senderAvatarPreset;
 
           return (
             <div
@@ -296,17 +303,17 @@ export function GrowthCommunityChat({
               className={`group flex gap-2 ${mine ? "flex-row-reverse" : "flex-row"}`}
             >
               <GrowthAvatar
-                name={m.senderName}
-                email={m.senderUserId}
-                avatarUrl={m.senderAvatarUrl}
-                avatarPreset={m.senderAvatarPreset}
+                name={label}
+                email={m.senderEmail || viewerEmail}
+                avatarUrl={avatarUrl}
+                avatarPreset={avatarPreset}
                 size="sm"
               />
               <div className={`max-w-[78%] min-w-0 ${mine ? "text-end" : "text-start"}`}>
                 <div
                   className={`mb-0.5 flex flex-wrap items-center gap-1.5 ${mine ? "justify-end" : "justify-start"}`}
                 >
-                  <span className="text-[11px] font-bold text-white/80">{m.senderName}</span>
+                  <span className="text-[11px] font-bold text-white/80">{label}</span>
                   <PartnerNameBadges badgeKeys={m.senderChatBadges ?? []} size="xs" />
                   {official ? <VerifiedBadge label={t("verifiedOfficial")} variant="gold" /> : null}
                   {!official && verified ? (
