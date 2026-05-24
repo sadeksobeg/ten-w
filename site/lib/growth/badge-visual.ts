@@ -1,215 +1,783 @@
-export type BadgeRarity = "common" | "rare" | "epic" | "legendary";
-export type BadgeTier = "bronze" | "silver" | "gold" | "legendary";
+import type { BadgeShape } from "@/lib/growth/badge-shapes";
+import { getRarityStarCount, getShapePath } from "@/lib/growth/badge-shapes";
 
-/** @deprecated use iconSlug — kept for legacy IconPath fallback */
-export type BadgeIconId =
-  | "lightning"
-  | "target"
-  | "diamond"
-  | "link"
-  | "globe"
-  | "robot"
-  | "bolt_clock"
-  | "crown"
-  | "sparkle"
-  | "star";
+export type { BadgeShape };
+export { getShapePath, getRarityStarCount };
 
-export type BadgeShapeId =
-  | "circle"
-  | "hexagon"
-  | "pentagon"
-  | "star16"
-  | "shield"
-  | "medal"
-  | "diamond_frame"
-  | "octagon"
-  | "crest";
+export type BadgeRarity = "common" | "rare" | "epic" | "legendary" | "mythic";
 
+export type BadgeDef = {
+  rarity: BadgeRarity;
+  shape: BadgeShape;
+  primaryColor: string;
+  glowColor: string;
+  gradientFrom: string;
+  gradientTo: string;
+  innerPath: string;
+  innerStroke: string;
+  innerStrokeWidth: number;
+  particleColor: string;
+  labelAr: string;
+  labelEn: string;
+  labelFr: string;
+  descAr: string;
+  descEn: string;
+  descFr: string;
+  howToAr: string;
+  howToEn: string;
+  howToFr: string;
+  adminOnly?: boolean;
+  showBorder?: boolean;
+  showInChat?: boolean;
+  hidden?: boolean;
+};
+
+type Locale = "ar" | "en" | "fr";
+
+function b(partial: BadgeDef): BadgeDef {
+  return partial;
+}
+
+export const BADGE_DEFS: Record<string, BadgeDef> = {
+  first_deal: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#E4B84D",
+    glowColor: "#B07D2B",
+    gradientFrom: "#2A1F0A",
+    gradientTo: "#4A3515",
+    innerPath: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
+    innerStroke: "#E4B84D",
+    innerStrokeWidth: 1.5,
+    particleColor: "#E4B84D",
+    labelAr: "الصفقة الأولى",
+    labelEn: "First Deal",
+    labelFr: "Première affaire",
+    descAr: "أغلقت أول صفقة في مسيرتك — البداية الحقيقية",
+    descEn: "Closed your first ever deal — the real beginning",
+    descFr: "Clôturé votre première affaire",
+    howToAr: "أغلق صفقة واحدة على الأقل.",
+    howToEn: "Close at least one deal.",
+    howToFr: "Conclure au moins une affaire.",
+  }),
+  deals_5: b({
+    rarity: "epic",
+    shape: "shield",
+    primaryColor: "#818CF8",
+    glowColor: "#4F46E5",
+    gradientFrom: "#1E1B4B",
+    gradientTo: "#312E81",
+    innerPath:
+      "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-6a4 4 0 100-8 4 4 0 000 8zm0-2a2 2 0 110-4 2 2 0 010 4zm0-8v2m0 8v2M4 12h2m8 0h2",
+    innerStroke: "#A5B4FC",
+    innerStrokeWidth: 1.5,
+    particleColor: "#818CF8",
+    labelAr: "5 صفقات",
+    labelEn: "5 Deals",
+    labelFr: "5 Affaires",
+    descAr: "أثبتت نفسك — 5 صفقات ناجحة",
+    descEn: "You proved yourself — 5 successful deals",
+    descFr: "5 affaires réussies",
+    howToAr: "أغلق 5 صفقات بنجاح.",
+    howToEn: "Close 5 deals.",
+    howToFr: "Conclure 5 affaires.",
+  }),
+  deals_10: b({
+    rarity: "legendary",
+    shape: "star",
+    primaryColor: "#06B6D4",
+    glowColor: "#0891B2",
+    gradientFrom: "#0C4A6E",
+    gradientTo: "#082F49",
+    innerPath: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+    innerStroke: "#67E8F9",
+    innerStrokeWidth: 1.5,
+    particleColor: "#06B6D4",
+    labelAr: "صانع الصفقات",
+    labelEn: "Deal Maker",
+    labelFr: "Faiseur d'affaires",
+    descAr: "10 صفقات — أنت تسير على طريق الأبطال",
+    descEn: "10 deals — you walk the champion's path",
+    descFr: "10 affaires — chemin des champions",
+    howToAr: "أغلق 10 صفقات.",
+    howToEn: "Close 10 deals.",
+    howToFr: "Conclure 10 affaires.",
+  }),
+  fast_closer: b({
+    rarity: "epic",
+    shape: "hexagon",
+    primaryColor: "#FB923C",
+    glowColor: "#EA580C",
+    gradientFrom: "#431407",
+    gradientTo: "#7C2D12",
+    innerPath:
+      "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm-1-8l-3-3 1.5-1.5L11 11l4-4 1.5 1.5L12 14z",
+    innerStroke: "#FDBA74",
+    innerStrokeWidth: 1.5,
+    particleColor: "#FB923C",
+    labelAr: "المغلق الخاطف",
+    labelEn: "Lightning Closer",
+    labelFr: "Clôtureur éclair",
+    descAr: "أغلقت صفقة خلال 24 ساعة — ردود فعل الصاعقة",
+    descEn: "Closed a deal in under 24 hours",
+    descFr: "Clôturé en moins de 24h",
+    howToAr: "أغلق صفقة خلال يوم من فتحها.",
+    howToEn: "Close within 24h of opening.",
+    howToFr: "Clôturer en 24h.",
+  }),
+  first_referral: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#4ADE80",
+    glowColor: "#16A34A",
+    gradientFrom: "#052E16",
+    gradientTo: "#14532D",
+    innerPath:
+      "M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71",
+    innerStroke: "#86EFAC",
+    innerStrokeWidth: 2,
+    particleColor: "#4ADE80",
+    labelAr: "البداية الشبكية",
+    labelEn: "Network Starter",
+    labelFr: "Démarreur réseau",
+    descAr: "أحلت أول شريك — شبكتك تبدأ هنا",
+    descEn: "Referred your first partner",
+    descFr: "Premier partenaire référé",
+    howToAr: "سجّل شريكاً عبر رمز إحالتك.",
+    howToEn: "Refer a partner with your code.",
+    howToFr: "Parrainer un partenaire.",
+  }),
+  network_builder: b({
+    rarity: "epic",
+    shape: "shield",
+    primaryColor: "#38BDF8",
+    glowColor: "#0284C7",
+    gradientFrom: "#0C4A6E",
+    gradientTo: "#0369A1",
+    innerPath:
+      "M12 6a2 2 0 100-4 2 2 0 000 4zm-6 14a2 2 0 100-4 2 2 0 000 4zm12 0a2 2 0 100-4 2 2 0 000 4zM6 18l6-8m0 0l6 8M12 10V6",
+    innerStroke: "#7DD3FC",
+    innerStrokeWidth: 1.75,
+    particleColor: "#38BDF8",
+    labelAr: "بناء الشبكة",
+    labelEn: "Network Builder",
+    labelFr: "Constructeur réseau",
+    descAr: "بنيت شبكة من 5 شركاء — مؤثر حقيقي",
+    descEn: "Built a 5-partner network",
+    descFr: "Réseau de 5 partenaires",
+    howToAr: "اجذب 3 شركاء نشطين.",
+    howToEn: "Recruit 3 active partners.",
+    howToFr: "Recruter 3 partenaires.",
+  }),
+  network_10: b({
+    rarity: "epic",
+    shape: "shield",
+    primaryColor: "#22D3EE",
+    glowColor: "#0E7490",
+    gradientFrom: "#083344",
+    gradientTo: "#164E63",
+    innerPath:
+      "M12 6a2 2 0 100-4 2 2 0 000 4zm-6 14a2 2 0 100-4 2 2 0 000 4zm12 0a2 2 0 100-4 2 2 0 000 4zM6 18l6-8m0 0l6 8",
+    innerStroke: "#A5F3FC",
+    innerStrokeWidth: 1.75,
+    particleColor: "#22D3EE",
+    labelAr: "شبكة عشرة",
+    labelEn: "Network of Ten",
+    labelFr: "Réseau de dix",
+    descAr: "10 شركاء في شبكتك — قوة حقيقية",
+    descEn: "10 partners in your network",
+    descFr: "10 partenaires dans votre réseau",
+    howToAr: "اجذب 10 شركاء.",
+    howToEn: "Recruit 10 partners.",
+    howToFr: "Recruter 10 partenaires.",
+  }),
+  ai_seller: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#A78BFA",
+    glowColor: "#7C3AED",
+    gradientFrom: "#2E1065",
+    gradientTo: "#4C1D95",
+    innerPath:
+      "M9 3H7a2 2 0 00-2 2v2m4-4h6m-6 0V1m6 2h2a2 2 0 012 2v2m-4-4V1M3 9v6m18-6v6M9 21H7a2 2 0 01-2-2v-2m4 4h6m-6 0v2m6-2h2a2 2 0 002-2v-2m-4 4v2M9 9h6v6H9V9z",
+    innerStroke: "#C4B5FD",
+    innerStrokeWidth: 1.5,
+    particleColor: "#A78BFA",
+    labelAr: "بائع الذكاء",
+    labelEn: "AI Seller",
+    labelFr: "Vendeur IA",
+    descAr: "استخدمت حزمة الذكاء الاصطناعي 3 مرات",
+    descEn: "Used the AI marketing kit 3 times",
+    descFr: "Kit IA utilisé 3 fois",
+    howToAr: "افتح 3 مواد من الحقيبة.",
+    howToEn: "Open 3 kit assets.",
+    howToFr: "Ouvrir 3 ressources kit.",
+  }),
+  top_performer: b({
+    rarity: "legendary",
+    shape: "star",
+    primaryColor: "#FBBF24",
+    glowColor: "#D97706",
+    gradientFrom: "#451A03",
+    gradientTo: "#78350F",
+    innerPath: "M3 19h18M5 19l2-8 4 4 3-6 3 6 4-4 2 8",
+    innerStroke: "#FDE68A",
+    innerStrokeWidth: 2,
+    particleColor: "#FBBF24",
+    labelAr: "الأفضل أداءً",
+    labelEn: "Top Performer",
+    labelFr: "Meilleur performeur",
+    descAr: "تصدّرت لوحة المتصدرين — هذا المكان لك",
+    descEn: "Topped the leaderboard",
+    descFr: "En tête du classement",
+    howToAr: "حقّق أعلى نقاط في الأسبوع.",
+    howToEn: "Top composite score this week.",
+    howToFr: "Meilleur score de la semaine.",
+  }),
+  elite_pulse: b({
+    rarity: "legendary",
+    shape: "diamond",
+    primaryColor: "#F472B6",
+    glowColor: "#DB2777",
+    gradientFrom: "#500724",
+    gradientTo: "#831843",
+    innerPath:
+      "M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83",
+    innerStroke: "#FBCFE8",
+    innerStrokeWidth: 2,
+    particleColor: "#F472B6",
+    hidden: true,
+    labelAr: "نبض النخبة",
+    labelEn: "Elite Pulse",
+    labelFr: "Pouls élite",
+    descAr: "النخبة لا تُوصف — أنت تعرف لماذا",
+    descEn: "Elite is not described — you know why",
+    descFr: "L'élite ne se décrit pas",
+    howToAr: "حافظ على سلسلة نشاط طويلة.",
+    howToEn: "Maintain a long activity streak.",
+    howToFr: "Longue série d'activité.",
+  }),
+  verified_partner: b({
+    rarity: "legendary",
+    shape: "star",
+    primaryColor: "#E4B84D",
+    glowColor: "#B07D2B",
+    gradientFrom: "#1C1400",
+    gradientTo: "#3D2B00",
+    innerPath:
+      "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
+    innerStroke: "#FDE68A",
+    innerStrokeWidth: 2,
+    particleColor: "#E4B84D",
+    adminOnly: true,
+    showBorder: true,
+    showInChat: true,
+    labelAr: "شريك موثّق",
+    labelEn: "Verified Partner",
+    labelFr: "Partenaire vérifié",
+    descAr: "شريك معتمد رسمياً من T.E.N.E.G.T.A",
+    descEn: "Officially verified by T.E.N.E.G.T.A",
+    descFr: "Officiellement vérifié",
+    howToAr: "يمنحها الإدارة.",
+    howToEn: "Granted by admin.",
+    howToFr: "Accordé par l'admin.",
+  }),
+  content_creator: b({
+    rarity: "epic",
+    shape: "shield",
+    primaryColor: "#FF6B6B",
+    glowColor: "#DC2626",
+    gradientFrom: "#450A0A",
+    gradientTo: "#7F1D1D",
+    innerPath:
+      "M15 10l4.553-2.532A1 1 0 0121 8.382v7.236a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z",
+    innerStroke: "#FCA5A5",
+    innerStrokeWidth: 2,
+    particleColor: "#FF6B6B",
+    adminOnly: true,
+    showInChat: true,
+    labelAr: "صانع محتوى",
+    labelEn: "Content Creator",
+    labelFr: "Créateur de contenu",
+    descAr: "تنشر محتوى عن T.E.N.E.G.T.A وتُلهم الآخرين",
+    descEn: "Creating content and inspiring others",
+    descFr: "Créez du contenu inspirant",
+    howToAr: "يمنحها فريق T.E.N.E.G.T.A للمبدعين.",
+    howToEn: "Granted to standout creators.",
+    howToFr: "Pour créateurs remarquables.",
+  }),
+  founding_partner: b({
+    rarity: "mythic",
+    shape: "star",
+    primaryColor: "#E4B84D",
+    glowColor: "#92400E",
+    gradientFrom: "#1C0A00",
+    gradientTo: "#431407",
+    innerPath:
+      "M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z",
+    innerStroke: "#FDE68A",
+    innerStrokeWidth: 2,
+    particleColor: "#F59E0B",
+    adminOnly: true,
+    showBorder: true,
+    labelAr: "الشريك المؤسس",
+    labelEn: "Founding Partner",
+    labelFr: "Partenaire fondateur",
+    descAr: "كنت هنا من البداية — التاريخ يذكرك",
+    descEn: "You were here from the beginning",
+    descFr: "Vous étiez là depuis le début",
+    howToAr: "يمنحها الإدارة للشركاء الأوائل.",
+    howToEn: "Granted to founding partners.",
+    howToFr: "Pour partenaires fondateurs.",
+  }),
+  trusted_partner: b({
+    rarity: "epic",
+    shape: "shield",
+    primaryColor: "#E4B84D",
+    glowColor: "#B07D2B",
+    gradientFrom: "#1C1400",
+    gradientTo: "#3D2B00",
+    innerPath:
+      "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
+    innerStroke: "#FDE68A",
+    innerStrokeWidth: 2,
+    particleColor: "#E4B84D",
+    adminOnly: true,
+    showInChat: true,
+    labelAr: "شريك موثوق",
+    labelEn: "Trusted Partner",
+    labelFr: "Partenaire de confiance",
+    descAr: "منحت من الإدارة لثقتك المستمرة",
+    descEn: "Awarded by admin for sustained trust",
+    descFr: "Attribué par l'admin",
+    howToAr: "يمنحها فريق T.E.N.E.G.T.A.",
+    howToEn: "Granted by T.E.N.E.G.T.A team.",
+    howToFr: "Par l'équipe T.E.N.E.G.T.A.",
+  }),
+  vip_seller: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#F472B6",
+    glowColor: "#DB2777",
+    gradientFrom: "#500724",
+    gradientTo: "#831843",
+    innerPath: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+    innerStroke: "#FBCFE8",
+    innerStrokeWidth: 1.5,
+    particleColor: "#F472B6",
+    adminOnly: true,
+    labelAr: "بائع VIP",
+    labelEn: "VIP Seller",
+    labelFr: "Vendeur VIP",
+    descAr: "تميز في المبيعات",
+    descEn: "Sales excellence",
+    descFr: "Excellence commerciale",
+    howToAr: "يمنحها فريق T.E.N.E.G.T.A.",
+    howToEn: "Granted by T.E.N.E.G.T.A team.",
+    howToFr: "Par l'équipe T.E.N.E.G.T.A.",
+  }),
+  strategic_agent: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#534ab7",
+    glowColor: "#4338CA",
+    gradientFrom: "#1E1B4B",
+    gradientTo: "#312E81",
+    innerPath:
+      "M12 6a2 2 0 100-4 2 2 0 000 4zm-6 14a2 2 0 100-4 2 2 0 000 4zm12 0a2 2 0 100-4 2 2 0 000 4z",
+    innerStroke: "#C4B5FD",
+    innerStrokeWidth: 1.5,
+    particleColor: "#534ab7",
+    adminOnly: true,
+    labelAr: "وكيل استراتيجي",
+    labelEn: "Strategic Agent",
+    labelFr: "Agent stratégique",
+    descAr: "أداء استراتيجي مميز",
+    descEn: "Strategic performance",
+    descFr: "Performance stratégique",
+    howToAr: "يمنحها فريق T.E.N.E.G.T.A.",
+    howToEn: "Granted by T.E.N.E.G.T.A team.",
+    howToFr: "Par l'équipe T.E.N.E.G.T.A.",
+  }),
+  streak_7: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#F97316",
+    glowColor: "#EA580C",
+    gradientFrom: "#431407",
+    gradientTo: "#7C2D12",
+    innerPath:
+      "M12 2c0 0-5 4-5 9a5 5 0 0010 0c0-5-5-9-5-9zm0 12a3 3 0 01-3-3c0-2 1.5-4 3-6 1.5 2 3 4 3 6a3 3 0 01-3 3z",
+    innerStroke: "#FDBA74",
+    innerStrokeWidth: 1.5,
+    particleColor: "#F97316",
+    labelAr: "أسبوع لا يتوقف",
+    labelEn: "Unstoppable Week",
+    labelFr: "Semaine imparable",
+    descAr: "7 أيام متواصلة — اللهيب يشتعل",
+    descEn: "7 consecutive days — flame burns bright",
+    descFr: "7 jours consécutifs",
+    howToAr: "سجّل حضورك 7 أيام متتالية.",
+    howToEn: "Check in 7 days in a row.",
+    howToFr: "7 check-ins consécutifs.",
+  }),
+  streak_30: b({
+    rarity: "epic",
+    shape: "shield",
+    primaryColor: "#F59E0B",
+    glowColor: "#D97706",
+    gradientFrom: "#451A03",
+    gradientTo: "#78350F",
+    innerPath:
+      "M12 2c-4 0-7 3-7 7s3 5 7 5 7-1 7-5-3-7-7-7zm0 18c-3 0-6-1-6-4s3-4 6-4 6 1 6 4-3 4-6 4z",
+    innerStroke: "#FDE68A",
+    innerStrokeWidth: 1.75,
+    particleColor: "#F59E0B",
+    labelAr: "لا يُطفأ",
+    labelEn: "Unquenchable",
+    labelFr: "Inextinguible",
+    descAr: "30 يوماً متواصلاً — قوة لا تتوقف",
+    descEn: "30 consecutive days — unstoppable force",
+    descFr: "30 jours consécutifs",
+    howToAr: "سجّل حضورك 30 يوماً متتالياً.",
+    howToEn: "Check in 30 days in a row.",
+    howToFr: "30 check-ins consécutifs.",
+  }),
+  night_owl: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#818CF8",
+    glowColor: "#4338CA",
+    gradientFrom: "#1E1B4B",
+    gradientTo: "#3730A3",
+    innerPath:
+      "M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z",
+    innerStroke: "#C7D2FE",
+    innerStrokeWidth: 2,
+    particleColor: "#818CF8",
+    hidden: true,
+    labelAr: "بومة الليل",
+    labelEn: "Night Owl",
+    labelFr: "Oiseau de nuit",
+    descAr: "أغلقت صفقة في منتصف الليل",
+    descEn: "Closed a deal at midnight",
+    descFr: "Clôturé à minuit",
+    howToAr: "سجّل حضورك بعد منتصف الليل.",
+    howToEn: "Check in after midnight UTC.",
+    howToFr: "Check-in après minuit.",
+  }),
+  triple_close_day: b({
+    rarity: "epic",
+    shape: "shield",
+    primaryColor: "#34D399",
+    glowColor: "#059669",
+    gradientFrom: "#022C22",
+    gradientTo: "#064E3B",
+    innerPath: "M7 2l-3 8h4l-2 12 12-14H13l3-6H7zm5 4l-2 4h3l-2 6 6-8H13l2-2h-3z",
+    innerStroke: "#6EE7B7",
+    innerStrokeWidth: 1.5,
+    particleColor: "#34D399",
+    labelAr: "اليوم المجنون",
+    labelEn: "Triple Close Day",
+    labelFr: "Jour triple",
+    descAr: "3 صفقات في يوم واحد — هذا فن",
+    descEn: "3 deals in one day — it's art",
+    descFr: "3 affaires en un jour",
+    howToAr: "أغلق 3 صفقات في نفس اليوم.",
+    howToEn: "Close 3 deals the same day.",
+    howToFr: "3 affaires le même jour.",
+  }),
+  revenue_1k: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#E4B84D",
+    glowColor: "#B07D2B",
+    gradientFrom: "#1C1400",
+    gradientTo: "#3D2B00",
+    innerPath:
+      "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+    innerStroke: "#FDE68A",
+    innerStrokeWidth: 2,
+    particleColor: "#E4B84D",
+    labelAr: "الألف الأولى",
+    labelEn: "First Thousand",
+    labelFr: "Premier millier",
+    descAr: "حققت $1,000 عمولات",
+    descEn: "Earned $1,000 in commissions",
+    descFr: "$1,000 de commissions",
+    howToAr: "حقّق 1000$ إجمالي عمولات.",
+    howToEn: "Reach $1,000 total commission.",
+    howToFr: "Atteindre 1 000 $ de commissions.",
+  }),
+  revenue_10k: b({
+    rarity: "legendary",
+    shape: "star",
+    primaryColor: "#22C55E",
+    glowColor: "#15803D",
+    gradientFrom: "#052E16",
+    gradientTo: "#14532D",
+    innerPath:
+      "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+    innerStroke: "#86EFAC",
+    innerStrokeWidth: 2,
+    particleColor: "#22C55E",
+    labelAr: "عشرة آلاف",
+    labelEn: "Ten Thousand",
+    labelFr: "Dix mille",
+    descAr: "تجاوزت $10,000 عمولات",
+    descEn: "Earned $10,000+ in commissions",
+    descFr: "Plus de 10 000 $ de commissions",
+    howToAr: "حقّق 10,000$ إجمالي عمولات.",
+    howToEn: "Reach $10,000 total commission.",
+    howToFr: "Atteindre 10 000 $ de commissions.",
+  }),
+  events_5: b({
+    rarity: "rare",
+    shape: "circle",
+    primaryColor: "#A855F7",
+    glowColor: "#7E22CE",
+    gradientFrom: "#2E1065",
+    gradientTo: "#4C1D95",
+    innerPath:
+      "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z",
+    innerStroke: "#D8B4FE",
+    innerStrokeWidth: 1.5,
+    particleColor: "#A855F7",
+    labelAr: "محترف الفعاليات",
+    labelEn: "Event Pro",
+    labelFr: "Pro des événements",
+    descAr: "شاركت في 5 فعاليات",
+    descEn: "Joined 5 events",
+    descFr: "5 événements rejoints",
+    howToAr: "انضم لـ 5 فعاليات.",
+    howToEn: "Join 5 events.",
+    howToFr: "Rejoindre 5 événements.",
+  }),
+  speed_demon: b({
+    rarity: "epic",
+    shape: "hexagon",
+    primaryColor: "#EF4444",
+    glowColor: "#B91C1C",
+    gradientFrom: "#450A0A",
+    gradientTo: "#7F1D1D",
+    innerPath: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
+    innerStroke: "#FCA5A5",
+    innerStrokeWidth: 1.5,
+    particleColor: "#EF4444",
+    labelAr: "شيطان السرعة",
+    labelEn: "Speed Demon",
+    labelFr: "Démon de vitesse",
+    descAr: "أغلقت صفقة خلال 12 ساعة",
+    descEn: "Closed a deal in under 12 hours",
+    descFr: "Clôturé en moins de 12h",
+    howToAr: "أغلق صفقة خلال 12 ساعة.",
+    howToEn: "Close within 12 hours.",
+    howToFr: "Clôturer en 12h.",
+  }),
+  perfect_week: b({
+    rarity: "epic",
+    shape: "shield",
+    primaryColor: "#10B981",
+    glowColor: "#047857",
+    gradientFrom: "#022C22",
+    gradientTo: "#064E3B",
+    innerPath:
+      "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
+    innerStroke: "#6EE7B7",
+    innerStrokeWidth: 1.75,
+    particleColor: "#10B981",
+    labelAr: "أسبوع مثالي",
+    labelEn: "Perfect Week",
+    labelFr: "Semaine parfaite",
+    descAr: "7 أيام نشاط متواصل",
+    descEn: "7 days of consistent activity",
+    descFr: "7 jours d'activité",
+    howToAr: "كن نشطاً 7 أيام متتالية.",
+    howToEn: "Stay active 7 days straight.",
+    howToFr: "7 jours d'activité.",
+  }),
+  comeback_king: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#F59E0B",
+    glowColor: "#D97706",
+    gradientFrom: "#451A03",
+    gradientTo: "#78350F",
+    innerPath: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15",
+    innerStroke: "#FDE68A",
+    innerStrokeWidth: 1.5,
+    particleColor: "#F59E0B",
+    labelAr: "ملك العودة",
+    labelEn: "Comeback King",
+    labelFr: "Roi du comeback",
+    descAr: "عدت بقوة بعد غياب",
+    descEn: "Came back strong after absence",
+    descFr: "Retour en force",
+    howToAr: "عد للنشاط بعد 14+ يوم غياب.",
+    howToEn: "Return after 14+ days away.",
+    howToFr: "Revenir après 14+ jours.",
+  }),
+  beta_tester: b({
+    rarity: "epic",
+    shape: "diamond",
+    primaryColor: "#60A5FA",
+    glowColor: "#2563EB",
+    gradientFrom: "#1E3A8A",
+    gradientTo: "#1E40AF",
+    innerPath:
+      "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
+    innerStroke: "#93C5FD",
+    innerStrokeWidth: 1.5,
+    particleColor: "#60A5FA",
+    adminOnly: true,
+    labelAr: "مختبر بيتا",
+    labelEn: "Beta Tester",
+    labelFr: "Testeur bêta",
+    descAr: "ساعدت في اختبار المنصة مبكراً",
+    descEn: "Helped test the platform early",
+    descFr: "Testé la plateforme tôt",
+    howToAr: "يمنحها الإدارة.",
+    howToEn: "Granted by admin.",
+    howToFr: "Accordé par l'admin.",
+  }),
+  mvp_quarter: b({
+    rarity: "legendary",
+    shape: "star",
+    primaryColor: "#E4B84D",
+    glowColor: "#B07D2B",
+    gradientFrom: "#1C1400",
+    gradientTo: "#3D2B00",
+    innerPath: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+    innerStroke: "#FDE68A",
+    innerStrokeWidth: 2,
+    particleColor: "#E4B84D",
+    adminOnly: true,
+    labelAr: "نجم الربع",
+    labelEn: "MVP Quarter",
+    labelFr: "MVP du trimestre",
+    descAr: "أفضل شريك في الربع",
+    descEn: "Top partner of the quarter",
+    descFr: "Meilleur partenaire du trimestre",
+    howToAr: "يمنحها الإدارة.",
+    howToEn: "Granted by admin.",
+    howToFr: "Accordé par l'admin.",
+  }),
+  referral_chain: b({
+    rarity: "rare",
+    shape: "hexagon",
+    primaryColor: "#2DD4BF",
+    glowColor: "#0F766E",
+    gradientFrom: "#042F2E",
+    gradientTo: "#134E4A",
+    innerPath:
+      "M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1",
+    innerStroke: "#5EEAD4",
+    innerStrokeWidth: 1.5,
+    particleColor: "#2DD4BF",
+    labelAr: "سلسلة الإحالات",
+    labelEn: "Referral Chain",
+    labelFr: "Chaîne de parrainage",
+    descAr: "شبكة بعمق مستويين أو أكثر",
+    descEn: "Network depth of 2+ levels",
+    descFr: "Réseau de profondeur 2+",
+    howToAr: "ابنِ شبكة بعمق مستويين.",
+    howToEn: "Build a 2-level deep network.",
+    howToFr: "Réseau sur 2 niveaux.",
+  }),
+  appreciation_received: b({
+    rarity: "rare",
+    shape: "circle",
+    primaryColor: "#EC4899",
+    glowColor: "#BE185D",
+    gradientFrom: "#500724",
+    gradientTo: "#831843",
+    innerPath:
+      "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z",
+    innerStroke: "#F9A8D4",
+    innerStrokeWidth: 1.5,
+    particleColor: "#EC4899",
+    labelAr: "محبوب",
+    labelEn: "Appreciated",
+    labelFr: "Apprécié",
+    descAr: "تلقيت 5 تقديرات على بروفايلك",
+    descEn: "Received 5 profile appreciations",
+    descFr: "5 appréciations reçues",
+    howToAr: "احصل على 5 تقديرات.",
+    howToEn: "Receive 5 appreciations.",
+    howToFr: "Recevoir 5 appréciations.",
+  }),
+};
+
+const DEFAULT_DEF: BadgeDef = {
+  rarity: "common",
+  shape: "circle",
+  primaryColor: "#8a8490",
+  glowColor: "#6b7280",
+  gradientFrom: "#1a1a24",
+  gradientTo: "#111118",
+  innerPath: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+  innerStroke: "#9ca3af",
+  innerStrokeWidth: 1.5,
+  particleColor: "#8a8490",
+  labelAr: "شارة",
+  labelEn: "Badge",
+  labelFr: "Badge",
+  descAr: "",
+  descEn: "",
+  descFr: "",
+  howToAr: "",
+  howToEn: "",
+  howToFr: "",
+};
+
+export function getBadgeDef(badgeKey: string): BadgeDef {
+  return BADGE_DEFS[badgeKey] ?? DEFAULT_DEF;
+}
+
+export function getBadgeLabel(badgeKey: string, locale: string): string {
+  const d = getBadgeDef(badgeKey);
+  if (locale === "ar") return d.labelAr;
+  if (locale === "fr") return d.labelFr;
+  return d.labelEn;
+}
+
+export function getBadgeDesc(badgeKey: string, locale: string): string {
+  const d = getBadgeDef(badgeKey);
+  if (locale === "ar") return d.descAr;
+  if (locale === "fr") return d.descFr;
+  return d.descEn;
+}
+
+export function getBadgeHowTo(badgeKey: string, locale: string): string {
+  const d = getBadgeDef(badgeKey);
+  if (locale === "ar") return d.howToAr;
+  if (locale === "fr") return d.howToFr;
+  return d.howToEn;
+}
+
+export const BADGE_DEF_KEYS = Object.keys(BADGE_DEFS);
+
+/** Legacy compat for components still using visual meta shape */
 export type BadgeVisualMeta = {
   rarity: BadgeRarity;
-  iconSlug: string;
-  iconId: BadgeIconId;
   glowColor: string;
-  shapeId: BadgeShapeId;
-  /** Animated holo on legendary */
   holo?: boolean;
-  /** Premium SVG medal in /public/badges */
   assetPath?: string;
-  tier?: BadgeTier;
-  /** Mini badge chip beside name in event chat */
   showInChat?: boolean;
 };
 
-type BadgeVisualInput = Omit<BadgeVisualMeta, "assetPath"> &
-  Partial<Pick<BadgeVisualMeta, "assetPath">>;
-
-function medal(key: string, meta: BadgeVisualInput): BadgeVisualMeta {
-  return { ...meta, assetPath: meta.assetPath ?? `/badges/${key}.svg` };
-}
-
-const BADGE_VISUAL: Record<string, BadgeVisualMeta> = {
-  first_deal: medal("first_deal", {
-    rarity: "rare",
-    iconSlug: "trophy",
-    iconId: "lightning",
-    glowColor: "#e4b84d",
-    shapeId: "shield",
-    tier: "bronze",
-  }),
-  deals_5: medal("deals_5", {
-    rarity: "epic",
-    iconSlug: "bullseye",
-    iconId: "target",
-    glowColor: "#60a5fa",
-    shapeId: "hexagon",
-    tier: "silver",
-  }),
-  deals_10: medal("deals_10", {
-    rarity: "legendary",
-    iconSlug: "cut-diamond",
-    iconId: "diamond",
-    glowColor: "#22d3ee",
-    shapeId: "star16",
-    holo: true,
-    tier: "gold",
-  }),
-  first_referral: medal("first_referral", {
-    rarity: "rare",
-    iconSlug: "chain",
-    iconId: "link",
-    glowColor: "#34d399",
-    shapeId: "circle",
-    tier: "bronze",
-  }),
-  network_builder: medal("network_builder", {
-    rarity: "epic",
-    iconSlug: "network",
-    iconId: "globe",
-    glowColor: "#3b82f6",
-    shapeId: "octagon",
-    tier: "silver",
-  }),
-  ai_seller: medal("ai_seller", {
-    rarity: "rare",
-    iconSlug: "robot",
-    iconId: "robot",
-    glowColor: "#a78bfa",
-    shapeId: "pentagon",
-    tier: "bronze",
-  }),
-  fast_closer: medal("fast_closer", {
-    rarity: "epic",
-    iconSlug: "stopwatch",
-    iconId: "bolt_clock",
-    glowColor: "#fbbf24",
-    shapeId: "diamond_frame",
-    tier: "silver",
-  }),
-  top_performer: medal("top_performer", {
-    rarity: "legendary",
-    iconSlug: "crown",
-    iconId: "crown",
-    glowColor: "#e4b84d",
-    shapeId: "medal",
-    holo: true,
-    tier: "legendary",
-  }),
-  elite_pulse: medal("elite_pulse", {
-    rarity: "legendary",
-    iconSlug: "pulse",
-    iconId: "sparkle",
-    glowColor: "#a855f7",
-    shapeId: "crest",
-    holo: true,
-    tier: "legendary",
-  }),
-  trusted_partner: medal("trusted_partner", {
-    rarity: "epic",
-    iconSlug: "shield",
-    iconId: "crown",
-    glowColor: "#e4b84d",
-    shapeId: "shield",
-    tier: "gold",
-    showInChat: true,
-  }),
-  vip_seller: medal("vip_seller", {
-    rarity: "rare",
-    iconSlug: "vip",
-    iconId: "diamond",
-    glowColor: "#f472b6",
-    shapeId: "medal",
-    tier: "silver",
-  }),
-  strategic_agent: medal("strategic_agent", {
-    rarity: "rare",
-    iconSlug: "chess",
-    iconId: "target",
-    glowColor: "#534ab7",
-    shapeId: "hexagon",
-    tier: "silver",
-  }),
-  night_owl: medal("night_owl", {
-    rarity: "epic",
-    iconSlug: "moon",
-    iconId: "sparkle",
-    glowColor: "#6366f1",
-    shapeId: "crest",
-    holo: true,
-    tier: "gold",
-  }),
-  triple_close_day: medal("triple_close_day", {
-    rarity: "legendary",
-    iconSlug: "hat-trick",
-    iconId: "lightning",
-    glowColor: "#f59e0b",
-    shapeId: "star16",
-    holo: true,
-    tier: "legendary",
-  }),
-  revenue_10k: medal("revenue_10k", {
-    rarity: "legendary",
-    iconSlug: "banknote",
-    iconId: "diamond",
-    glowColor: "#22c55e",
-    shapeId: "medal",
-    holo: true,
-    tier: "legendary",
-  }),
-  content_creator: medal("content_creator", {
-    rarity: "legendary",
-    iconSlug: "sparkles",
-    iconId: "crown",
-    glowColor: "#e4b84d",
-    shapeId: "medal",
-    holo: true,
-    tier: "legendary",
-    showInChat: true,
-  }),
-  verified_partner: medal("verified_partner", {
-    rarity: "epic",
-    iconSlug: "shield",
-    iconId: "crown",
-    glowColor: "#38bdf8",
-    shapeId: "shield",
-    tier: "gold",
-    showInChat: true,
-  }),
-};
-
-const DEFAULT_META: BadgeVisualMeta = {
-  rarity: "common",
-  iconSlug: "star",
-  iconId: "star",
-  glowColor: "#8a8490",
-  shapeId: "circle",
-  tier: "bronze",
-};
-
 export function getBadgeVisual(badgeKey: string): BadgeVisualMeta {
-  return BADGE_VISUAL[badgeKey] ?? DEFAULT_META;
+  const d = getBadgeDef(badgeKey);
+  return {
+    rarity: d.rarity === "mythic" ? "legendary" : d.rarity,
+    glowColor: d.glowColor,
+    holo: d.rarity === "legendary" || d.rarity === "mythic",
+    assetPath: `/badges/${badgeKey}.svg`,
+    showInChat: d.showInChat,
+  };
 }
 
-export const CHAT_BADGE_KEYS = Object.entries(BADGE_VISUAL)
+export const CHAT_BADGE_KEYS = Object.entries(BADGE_DEFS)
   .filter(([, m]) => m.showInChat)
   .map(([k]) => k);
 
@@ -218,6 +786,7 @@ export const RARITY_COLORS: Record<BadgeRarity, string> = {
   rare: "#3b82f6",
   epic: "#a855f7",
   legendary: "#e4b84d",
+  mythic: "#e4b84d",
 };
 
 export const RARITY_LABEL_KEYS: Record<BadgeRarity, string> = {
@@ -225,4 +794,10 @@ export const RARITY_LABEL_KEYS: Record<BadgeRarity, string> = {
   rare: "rarityRare",
   epic: "rarityEpic",
   legendary: "rarityLegendary",
+  mythic: "rarityMythic",
 };
+
+export function toLocale(locale: string): Locale {
+  if (locale === "ar" || locale === "fr") return locale;
+  return "en";
+}

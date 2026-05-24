@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { growthSignOutAction } from "@/lib/growth/actions";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { NotificationBell } from "@/components/growth/NotificationBell";
+import { BadgeIdentityPill } from "@/components/growth/badges/BadgeIdentityPill";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
   avatarUrl: string | null;
   levelName: string;
   publicSlug: string | null;
+  earnedBadgeKeys?: string[];
 };
 
 export function GrowthPartnerHeader({
@@ -23,8 +25,10 @@ export function GrowthPartnerHeader({
   avatarUrl,
   levelName,
   publicSlug,
+  earnedBadgeKeys = [],
 }: Props) {
   const t = useTranslations("Growth.nav");
+  const verified = earnedBadgeKeys.includes("verified_partner");
   const linkClass =
     "whitespace-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[11px] font-semibold text-white/80 hover:border-gold/30 hover:text-white sm:text-xs";
 
@@ -33,7 +37,10 @@ export function GrowthPartnerHeader({
       <div className="flex min-w-0 items-center gap-3">
         <GrowthAvatar name={name} email={email} avatarUrl={avatarUrl} size="md" />
         <div className="min-w-0">
-          <p className="truncate font-semibold text-white">{name ?? email}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="truncate font-semibold text-white">{name ?? email}</p>
+            {verified ? <BadgeIdentityPill variant="verified" locale={locale} /> : null}
+          </div>
           <LevelBadge levelName={levelName} size="sm" />
         </div>
       </div>

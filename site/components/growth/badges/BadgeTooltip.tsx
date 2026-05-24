@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import {
-  getBadgeVisual,
+  getBadgeDef,
   RARITY_COLORS,
   RARITY_LABEL_KEYS,
   type BadgeRarity,
@@ -36,8 +36,7 @@ export function BadgeTooltip({
   const t = useTranslations("Growth.badges");
   const intlLocale = useLocale();
   const locale = localeProp ?? intlLocale;
-  const meta = getBadgeVisual(badgeKey);
-  const rarity = meta.rarity as BadgeRarity;
+  const rarity = getBadgeDef(badgeKey).rarity as BadgeRarity;
   const dateStr =
     earned && grantedAt
       ? new Date(grantedAt).toLocaleDateString(

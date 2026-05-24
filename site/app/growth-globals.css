@@ -78,6 +78,40 @@
   animation: growthBadgeHolo 4s linear infinite;
 }
 
+@keyframes growth-mythic-glow {
+  0% {
+    filter: drop-shadow(0 0 12px #e4b84d);
+  }
+  25% {
+    filter: drop-shadow(0 0 12px #ec4899);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px #818cf8);
+  }
+  75% {
+    filter: drop-shadow(0 0 12px #34d399);
+  }
+  100% {
+    filter: drop-shadow(0 0 12px #e4b84d);
+  }
+}
+
+.growth-mythic {
+  animation: growth-mythic-glow 3s linear infinite;
+}
+
+.growth-mythic-ring {
+  animation: growth-mythic-glow 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .growth-mythic,
+  .growth-mythic-ring {
+    animation: none;
+    filter: drop-shadow(0 0 12px #e4b84d);
+  }
+}
+
 @keyframes growthBadgeHolo {
   0% {
     filter: drop-shadow(0 0 8px rgba(228, 184, 77, 0.5)) hue-rotate(0deg);

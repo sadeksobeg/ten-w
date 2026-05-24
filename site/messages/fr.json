@@ -1220,6 +1220,8 @@
       "ctaButton": "Join now",
       "qrSoon": "QR code — coming soon",
       "lockedBadge": "Badge caché — complétez les objectifs",
+      "secret": "Badge secret",
+      "secretHint": "Découvrez-le en l'obtenant",
       "teamTitle": "Mon équipe",
       "teamSubtitle": "Réseau sur 3 niveaux — partenaires actifs uniquement",
       "activityTitle": "Activité récente",
@@ -1531,6 +1533,19 @@
       "rarityRare": "RARE",
       "rarityEpic": "EPIC",
       "rarityLegendary": "LEGENDARY",
+      "rarityMythic": "MYTHIQUE",
+      "secret": "Badge secret",
+      "secretHint": "Découvrez-le en l'obtenant",
+      "featured": "Badges en vitrine",
+      "how_to_earn": "Comment l'obtenir",
+      "add_to_showcase": "Ajouter à la vitrine",
+      "filter": {
+        "all": "Tous",
+        "rare": "Rare",
+        "epic": "Épique",
+        "legendary": "Légendaire",
+        "mythic": "Mythique"
+      },
       "unlockTitle": "BADGE UNLOCKED",
       "unlockSubtitle": "Key: {key}",
       "unlockCta": "Continue",
@@ -1543,6 +1558,8 @@
         "deals": "{current} / {target} affaires clôturées",
         "downlines": "{current} / {target} parrainages",
         "kitHits": "{current} / {target} ouvertures kit",
+        "streak": "{current} / {target} jours de suite",
+        "events": "{current} / {target} événements",
         "unknown": "En cours"
       },
       "showcase": {

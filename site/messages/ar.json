@@ -1170,6 +1170,8 @@
       "ctaButton": "انضم الآن",
       "qrSoon": "رمز QR — قريباً",
       "lockedBadge": "شارة مخفية — أكمل الإنجازات لفتحها",
+      "secret": "شارة سرية",
+      "secretHint": "اكتشفها بنفسك عند كسبها",
       "teamTitle": "فريقي",
       "teamSubtitle": "شبكة الإحالة حتى 3 مستويات — شركاء نشطون",
       "activityTitle": "النشاط الأخير",
@@ -1493,6 +1495,19 @@
       "rarityRare": "نادر",
       "rarityEpic": "ملحمي",
       "rarityLegendary": "أسطوري",
+      "rarityMythic": "خرافية",
+      "secret": "شارة سرية",
+      "secretHint": "اكتشفها بنفسك عند كسبها",
+      "featured": "الشارات المميزة",
+      "how_to_earn": "كيف تكسبها",
+      "add_to_showcase": "أضف للعرض",
+      "filter": {
+        "all": "الكل",
+        "rare": "نادرة",
+        "epic": "ملحمية",
+        "legendary": "أسطورية",
+        "mythic": "خرافية"
+      },
       "unlockTitle": "شارة جديدة",
       "unlockSubtitle": "المفتاح: {key}",
       "unlockCta": "متابعة",
@@ -1505,6 +1520,8 @@
         "deals": "{current} / {target} صفقة مغلقة",
         "downlines": "{current} / {target} إحالة",
         "kitHits": "{current} / {target} فتحات الحقيبة",
+        "streak": "{current} / {target} يوم متتالي",
+        "events": "{current} / {target} فعالية",
         "unknown": "قيد التقدم"
       },
       "showcase": {

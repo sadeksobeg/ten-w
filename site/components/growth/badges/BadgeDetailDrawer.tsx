@@ -51,7 +51,7 @@ export function BadgeDetailDrawer({
         className="relative w-full max-w-md rounded-2xl border border-white/15 bg-[#12121a] p-6 shadow-2xl"
       >
         <div className="flex flex-col items-center text-center">
-          <BadgeIcon badgeKey={badgeKey} earned={earned} size="lg" lockedLabel={t("locked")} />
+          <BadgeIcon badgeKey={badgeKey} earned={earned} size="xl" animate={earned} showGlow lockedLabel={t("locked")} />
           <h3 className="mt-4 text-lg font-bold text-white">{name}</h3>
           {description ? <p className="mt-2 text-sm text-white/65">{description}</p> : null}
           {howTo ? (

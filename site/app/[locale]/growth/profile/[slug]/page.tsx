@@ -16,6 +16,7 @@ import { PartnerNetworkTree } from "@/components/growth/profile/PartnerNetworkTr
 import { ProfileActivityList } from "@/components/growth/profile/ProfileActivityList";
 import { ProfileShowcaseStrip } from "@/components/growth/profile/ProfileShowcaseStrip";
 import { BusinessCard } from "@/components/growth/profile/BusinessCard";
+import { getBadgeDisplay } from "@/lib/growth/badge-display";
 import { getPublicProfileBySlug } from "@/lib/growth/get-public-profile";
 
 type Props = {
@@ -87,15 +88,22 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
         <GlassCard className="mt-4">
           <BadgeGrid
             locale={locale}
-            badges={data.allBadges.map((b) => ({
-              key: b.key,
-              name: b.earned ? b.name : "???",
-              description: b.earned ? b.description : t("lockedBadge"),
-              howTo: b.howTo,
-              earned: b.earned,
-              grantedAt: b.grantedAt,
-              hidden: b.hidden,
-            }))}
+            badges={data.allBadges.map((b) => {
+              const display = getBadgeDisplay(b.key, locale, {
+                earned: b.earned,
+                hidden: b.hidden,
+                dbFallback: { name: b.name, description: b.description },
+              });
+              return {
+                key: b.key,
+                name: display.secret ? t("secret") : display.name,
+                description: display.secret ? t("secretHint") : display.description || t("lockedBadge"),
+                howTo: display.howTo,
+                earned: b.earned,
+                grantedAt: b.grantedAt,
+                hidden: b.hidden,
+              };
+            })}
             size="xl"
             showLocked
           />

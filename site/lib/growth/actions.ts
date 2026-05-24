@@ -369,6 +369,9 @@ export async function appreciationAction(
     metadata: { targetUserId: target.id },
   });
 
+  const { evaluateAutoBadgesForUser } = await import("@/lib/growth/badges");
+  await evaluateAutoBadgesForUser(prisma, target.id);
+
   revalidateGrowth();
   return { ok: true };
 }

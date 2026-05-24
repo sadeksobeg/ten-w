@@ -24,7 +24,11 @@ export function ProfileShowcaseStrip({ locale, keys, earnedBadges, title }: Prop
           return (
             <div
               key={key}
-              className="flex min-w-[9rem] shrink-0 flex-col items-center gap-2 rounded-2xl border border-gold/30 bg-gradient-to-b from-gold/10 to-transparent px-4 py-4 shadow-[0_0_32px_-12px_rgba(228,184,77,0.45)]"
+              className={`flex min-w-[9rem] shrink-0 flex-col items-center gap-2 rounded-2xl border bg-gradient-to-b from-gold/10 to-transparent px-4 py-4 shadow-[0_0_32px_-12px_rgba(228,184,77,0.45)] ${
+                key === "verified_partner"
+                  ? "border-gold ring-2 ring-gold/40"
+                  : "border-gold/30"
+              }`}
               title={copy.name}
             >
               <BadgeIcon badgeKey={key} earned size="xl" showGlow />

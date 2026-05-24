@@ -1,6 +1,6 @@
 import { DealStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
+import { getBadgeDisplay } from "@/lib/growth/badge-display";
 import { resolveLevelName } from "@/lib/growth/level-i18n";
 import {
   getPartnerNetworkTree,
@@ -47,6 +47,7 @@ export type PublicProfileData = {
   networkTree: NetworkNode[];
   networkStats: NetworkStats;
   showcasedBadges: string[];
+  earnedBadgeKeys: string[];
   publicActivity: { headline: string; createdAt: string }[];
 };
 
@@ -110,12 +111,16 @@ export async function getPublicProfileBySlug(
   );
 
   const mapBadge = (key: string, name: string, desc: string | null, hidden: boolean, earned: boolean) => {
-    const copy = resolveBadgeCopy(key, locale, { name, description: desc });
+    const display = getBadgeDisplay(key, locale, {
+      earned,
+      hidden,
+      dbFallback: { name, description: desc },
+    });
     return {
       key,
-      name: copy.name,
-      description: copy.description,
-      howTo: copy.howTo,
+      name: display.secret ? name : display.name,
+      description: display.secret ? "" : display.description,
+      howTo: display.howTo,
       hidden,
       earned,
       grantedAt: earnedMap.get(key) ?? null,
@@ -183,6 +188,7 @@ export async function getPublicProfileBySlug(
     networkTree,
     networkStats,
     showcasedBadges: user.partnerProfile.showcasedBadges ?? [],
+    earnedBadgeKeys: user.userBadges.map((b) => b.badge.key),
     publicActivity: publicActivityRows.map((e) => ({
       headline: e.headline,
       createdAt: e.createdAt.toISOString(),

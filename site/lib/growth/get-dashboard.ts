@@ -447,10 +447,12 @@ export async function getPartnerDashboard(
   );
   const badgesData: DashboardBadge[] = allBadgeDefs.map((def) => {
     const earned = earnedMap.get(def.key);
-    const copy = resolveBadgeCopy(def.key, locale, {
-      name: def.name,
-      description: def.description,
-    });
+    const copy = resolveBadgeCopy(
+      def.key,
+      locale,
+      { name: def.name, description: def.description },
+      { earned: !!earned, hidden: def.hidden },
+    );
     return {
       key: def.key,
       name: copy.name,

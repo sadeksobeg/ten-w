@@ -9,7 +9,15 @@ type Criteria = {
 export type BadgeProgress = {
   current: number;
   target: number;
-  labelKey: "deals" | "downlines" | "kitHits" | "revenue" | "closesToday" | "unknown";
+  labelKey:
+    | "deals"
+    | "downlines"
+    | "kitHits"
+    | "revenue"
+    | "closesToday"
+    | "streak"
+    | "events"
+    | "unknown";
 };
 
 export async function evaluateBadgeProgress(
@@ -50,8 +58,10 @@ export async function evaluateBadgeProgress(
         where: { userId },
         _sum: { amountCents: true },
       });
-      const current = agg._sum.amountCents ?? 0;
-      return { current: Math.floor(current / 100), target: Math.floor(target / 100), labelKey: "revenue" };
+      const currentCents = agg._sum.amountCents ?? 0;
+      const current = Math.floor(currentCents / 100);
+      const targetDollars = Math.floor(target / 100);
+      return { current, target: targetDollars, labelKey: "revenue" };
     }
     case "closes_same_day": {
       const todayStart = new Date();
@@ -64,6 +74,15 @@ export async function evaluateBadgeProgress(
         },
       });
       return { current, target, labelKey: "closesToday" };
+    }
+    case "streak_days": {
+      const streak = await prisma.userStreak.findUnique({ where: { userId } });
+      const current = streak?.currentStreak ?? 0;
+      return { current, target, labelKey: "streak" };
+    }
+    case "event_joins": {
+      const current = await prisma.eventParticipant.count({ where: { userId } });
+      return { current, target, labelKey: "events" };
     }
     default:
       return null;

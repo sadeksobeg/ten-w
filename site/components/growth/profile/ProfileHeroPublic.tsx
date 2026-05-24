@@ -20,6 +20,7 @@ import {
 } from "@/components/growth/icons/GrowthIcons";
 import { getLevelVisual } from "@/lib/growth/level-visual";
 import { getLevelI18nKey, LEVEL_COLORS } from "@/lib/growth/level-i18n";
+import { BadgeIdentityPill } from "@/components/growth/badges/BadgeIdentityPill";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 import type { PublicProfileData } from "@/lib/growth/get-public-profile";
 
@@ -35,6 +36,10 @@ export async function ProfileHeroPublic({ locale, data, canAppreciate }: Props) 
   const lv = getLevelVisual(data.levelName, data.levelCode);
   const levelKey = getLevelI18nKey(data.levelCode, data.levelName);
   const heroColor = LEVEL_COLORS[levelKey] ?? LEVEL_COLORS.starter;
+  const keys = new Set(data.earnedBadgeKeys);
+  const isVerified = keys.has("verified_partner");
+  const isCreator = keys.has("content_creator");
+  const isFounding = keys.has("founding_partner");
 
   const xpPercent = data.nextLevel
     ? Math.min(
@@ -76,6 +81,7 @@ export async function ProfileHeroPublic({ locale, data, canAppreciate }: Props) 
             percent={xpPercent}
             levelCode={data.levelCode}
             levelName={data.levelName}
+            className={isFounding ? "rounded-full p-[3px] [background:linear-gradient(135deg,#B07D2B,#E4B84D,#B07D2B)]" : undefined}
           >
             <GrowthAvatar
               name={data.name}
@@ -90,9 +96,13 @@ export async function ProfileHeroPublic({ locale, data, canAppreciate }: Props) 
             <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gold/70">
               T.E.N.E.G.T.A Partner
             </p>
-            <h1 className="mt-1 font-[family-name:var(--font-cairo)] text-3xl font-extrabold sm:text-4xl">
-              {data.name}
-            </h1>
+            <div className="mt-1 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+              <h1 className="font-[family-name:var(--font-cairo)] text-3xl font-extrabold sm:text-4xl">
+                {data.name}
+              </h1>
+              {isVerified ? <BadgeIdentityPill variant="verified" locale={locale} size="md" /> : null}
+              {isCreator ? <BadgeIdentityPill variant="creator" locale={locale} size="md" /> : null}
+            </div>
             {data.displayTitle ? (
               <p className="mt-2 text-base font-semibold text-[var(--growth-gold-bright)]">
                 {data.displayTitle}

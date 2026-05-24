@@ -18,13 +18,19 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
   const session = await auth();
   if (!session?.user?.id) return <>{children}</>;
 
-  const [user, profile] = await Promise.all([
+  const [user, profile, earnedBadgeRows] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.user.id },
       select: { name: true, email: true, avatarUrl: true, publicSlug: true },
     }),
     ensurePartnerProfile(session.user.id),
+    prisma.userBadge.findMany({
+      where: { userId: session.user.id },
+      select: { badge: { select: { key: true } } },
+    }),
   ]);
+
+  const earnedBadgeKeys = earnedBadgeRows.map((r) => r.badge.key);
 
   const levelName =
     profile?.currentLevel != null
@@ -40,6 +46,7 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
         avatarUrl={user?.avatarUrl ?? session.user.image ?? null}
         levelName={levelName}
         publicSlug={user?.publicSlug ?? null}
+        earnedBadgeKeys={earnedBadgeKeys}
       />
       {children}
       <CommandPalette />
