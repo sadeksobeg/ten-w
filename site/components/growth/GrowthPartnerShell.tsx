@@ -21,6 +21,8 @@ const BASE_NAV = [
   { href: "/growth/earnings", key: "earnings" as const },
   { href: "/growth/network", key: "network" as const },
   { href: "/growth/leaderboard", key: "leaderboard" as const },
+  { href: "/growth/map", key: "map" as const },
+  { href: "/growth/legends", key: "legends" as const },
   { href: "/growth/chat", key: "chat" as const },
   { href: "/growth/notifications", key: "notifications" as const },
   { href: "/growth/settings", key: "settings" as const },

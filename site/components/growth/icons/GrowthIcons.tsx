@@ -470,6 +470,46 @@ export function IconXSocial(props: GrowthIconProps) {
   );
 }
 
+export function IconMap(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M12 2C8.5 6 5 9.8 5 14a7 7 0 1014 0c0-4.2-3.5-8-7-12z" />
+      <circle cx="12" cy="14" r="2.5" fill="currentColor" stroke="none" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconOracle(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <circle cx="12" cy="12" r="8" />
+      <circle cx="12" cy="12" r="4" fill="currentColor" fillOpacity={0.15} stroke="none" />
+      <path d="M12 4v2M12 18v2M4 12h2M18 12h2" />
+      <path d="M8.5 8.5l7 7M15.5 8.5l-7 7" opacity={0.45} />
+    </GrowthIconBase>
+  );
+}
+
+export function IconRival(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M6 4l3 16M18 4l-3 16" />
+      <path d="M4 8h6M14 8h6M5 16h5M14 16h5" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconLegends(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M5 18h14" />
+      <path d="M7 18l1.5-7 3.5 4 3.5-4L17 18" />
+      <path d="M5 10l2.5-4 4.5 3 4.5-3L19 10l-2 2H7l-2-2z" />
+      <circle cx="12" cy="7" r="1.5" fill="currentColor" stroke="none" />
+    </GrowthIconBase>
+  );
+}
+
 /** Mobile bottom nav mapping */
 export const GROWTH_MOBILE_NAV_ICONS = {
   dashboard: IconDashboard,
@@ -493,4 +533,6 @@ export const GROWTH_DESKTOP_NAV_ICONS: Record<string, ComponentType<GrowthIconPr
   chat: IconChat,
   notifications: IconNotifications,
   settings: IconSettings,
+  map: IconMap,
+  legends: IconLegends,
 };

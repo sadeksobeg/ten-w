@@ -26,7 +26,8 @@
     "whyUs": "لماذا نحن",
     "partners": "المنظومة التقنية",
     "careers": "الوظائف",
-    "techRadar": "رادار التقنيات"
+    "techRadar": "رادار التقنيات",
+    "legends": "قاعة الأساطير"
   },
   "HomePage": {
     "meta": {
@@ -1092,6 +1093,8 @@
       "chat": "المحادثات",
       "notifications": "التنبيهات",
       "settings": "الإعدادات",
+      "map": "خريطة الحرب",
+      "legends": "قاعة الأساطير",
       "kit": "الحزمة",
       "signOut": "تسجيل الخروج",
       "myProfile": "ملفي الشخصي",
@@ -1106,6 +1109,114 @@
       "leaderboard": "متصدرون",
       "chat": "محادثة",
       "settings": "إعدادات"
+    },
+    "dna": {
+      "title": "بصمتك",
+      "sales": "مبيعات",
+      "network": "شبكة",
+      "content": "محتوى",
+      "speed": "سرعة",
+      "archetype": "نمطك",
+      "rival_archetype": "نقيضك",
+      "share": "شارك بصمتك",
+      "weekly_change": "هذا الأسبوع",
+      "sharePrefix": "DNA بصمتي في T.E.N.E.G.T.A:",
+      "shareJoin": "انضم:",
+      "archetypes": {
+        "social_hunter": "الصياد الاجتماعي",
+        "silent_analyst": "المحلل الهادئ",
+        "content_king": "ملك المحتوى",
+        "network_weaver": "حائك الشبكة",
+        "speed_dealer": "الخاطف",
+        "rising_star": "النجم الصاعد",
+        "steady_builder": "البنّاء الثابت"
+      }
+    },
+    "rival": {
+      "title": "غريمك هذا الأسبوع",
+      "you": "أنت",
+      "ahead_by": "يتقدم عليك بـ {n} صفقة",
+      "behind_by": "تتقدم عليه بـ {n} صفقة",
+      "tied": "تعادل — من يغلق أولاً؟",
+      "gap_1": "صفقة واحدة تغير كل شيء",
+      "gap_many": "الفارق {n} — ابدأ الآن",
+      "viewProfile": "عرض ملفه"
+    },
+    "map": {
+      "title": "خريطة الحرب",
+      "my_territory": "مملكتك",
+      "unclaimed": "أرض غير مفتوحة",
+      "claim": "افتح هذه المنطقة",
+      "controlled_by": "يسيطر عليها {name}",
+      "rival_territory": "منطقة غريمك",
+      "my_territory_stat": "أنت تسيطر على {city}",
+      "pick_territory": "اختر منطقتك من الإعدادات",
+      "legendTitle": "دليل الخريطة",
+      "legendControlled": "ذهبي — منطقة مسيطر عليها",
+      "legendUnclaimed": "رمادي — أرض غير مفتوحة",
+      "legendRival": "أحمر — منطقة غريمك",
+      "territoryLeaders": "قادة المناطق",
+      "territorySaved": "تم حفظ منطقتك",
+      "territoryError": "تعذّر الحفظ",
+      "saveTerritory": "حفظ المنطقة",
+      "territories": {
+        "damascus": "دمشق",
+        "aleppo": "حلب",
+        "beirut": "بيروت",
+        "riyadh": "الرياض",
+        "dubai": "دبي",
+        "cairo": "القاهرة",
+        "amman": "عمّان",
+        "baghdad": "بغداد",
+        "kuwait": "الكويت",
+        "doha": "الدوحة",
+        "casablanca": "الدار البيضاء",
+        "tunis": "تونس"
+      }
+    },
+    "partnerCard": {
+      "brand": "T.E.N.E.G.T.A",
+      "cardNumber": "البطاقة #{n}",
+      "flipHint": "حرّك المؤشر للتدوير"
+    },
+    "card": {
+      "title": "بطاقتي",
+      "number": "البطاقة #{n}",
+      "flip": "اضغط للتدوير",
+      "download": "تحميل البطاقة",
+      "share": "مشاركة البطاقة"
+    },
+    "oracle": {
+      "title": "Oracle — رؤية مستقبلك",
+      "days_to_level": "{n} يوم للمستوى التالي",
+      "monthly_earnings": "أرباح شهرية متوقعة",
+      "top3_probability": "احتمال TOP 3",
+      "deals_prediction": "صفقات متوقعة (30 يوم)",
+      "weekly_target": "هدف الأسبوع",
+      "weekly_progress": "تقدمك",
+      "refreshes": "يتجدد كل أسبوع",
+      "levelCloseTitle": "أنت على بُعد {n} صفقات من {level}",
+      "levelCloseBody": "أغلق {n} صفقات هذا الأسبوع وتغير كل شيء",
+      "rivalCloseTitle": "{name} قريب منك",
+      "rivalCloseBody": "الفارق {gap} صفقات فقط — لا تتوقف",
+      "streakTitle": "سلسلة {n} أيام",
+      "streakBody": "حافظ على الزخم",
+      "risingTitle": "زخم صاعد",
+      "risingBody": "أداؤك يتسارع — استمر",
+      "reengageTitle": "عد للمنافسة",
+      "reengageBody": "صفقة واحدة تنعش ترتيبك",
+      "steadyTitle": "مسار ثابت",
+      "steadyBody": "الاستمرارية تبني الأساطير"
+    },
+    "legends": {
+      "title": "قاعة الأساطير",
+      "since": "T.E.N.E.G.T.A · منذ {year}",
+      "empty_slot": "المقعد #{n} ينتظر صاحبه",
+      "how_to_join": "كيف تدخل قاعة الأساطير؟",
+      "how_to_join_body": "إنجاز استثنائي يختاره فريق T.E.N.E.G.T.A — شهرياً.",
+      "join_cta": "انضم كشريك",
+      "motivational": "قاعة الأساطير تنتظر أسطورتها القادمة",
+      "founding": "المؤسس الأول"
     },
     "notifications": {
       "title": "الإشعارات",
@@ -1177,6 +1288,8 @@
       "teamSubtitle": "شبكة الإحالة حتى 3 مستويات — شركاء نشطون",
       "activityTitle": "النشاط الأخير",
       "showcaseTitle": "شارات مميزة",
+      "cardTitle": "بطاقتي",
+      "cardFullView": "عرض البطاقة كاملة",
       "moreStats": "إحصائيات إضافية",
       "appreciation": {
         "cta": "أرسل تقديراً",
@@ -2000,7 +2113,7 @@
         "chatModerators": "مشرفو الدردشة",
         "partners": "الشركاء",
         "events": "الفعاليات",
-        "creators": "صناع المحتوى",
+        "legends": "قاعة الأساطير",
         "notifications": "الإشعارات"
       },
       "chatModerators": {
@@ -2014,6 +2127,19 @@
         "toastOn": "تم تفعيل صلاحية المشرف",
         "toastOff": "تم إلغاء صلاحية المشرف",
         "toastError": "تعذّر الحفظ"
+      },
+      "legends": {
+        "pageTitle": "قاعة الأساطير",
+        "hint": "10 مقاعد دائمة — إضافة شهرية فقط.",
+        "count": "{count} / 10 أساطير",
+        "formTitle": "إضافة أسطورة",
+        "partner": "الشريك",
+        "selectPartner": "اختر شريكاً",
+        "achievement": "الإنجاز",
+        "quote": "اقتباس (اختياري)",
+        "submit": "إضافة للقاعة",
+        "toastOk": "تمت الإضافة",
+        "toastError": "تعذّر الإضافة"
       },
       "creatorsPage": {
         "title": "برنامج صناع المحتوى",

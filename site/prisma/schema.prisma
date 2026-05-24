@@ -140,6 +140,8 @@ model User {
   eventPosts                 EventPost[]
   activityDays               UserActivityDay[]
   adminAuditLogs             AdminAuditLog[]    @relation("AdminAuditActor")
+  hallOfLegendEntry          HallOfLegend?
+  hallOfLegendsAdded         HallOfLegend[]     @relation("HallOfLegendAddedBy")
 }
 
 model PartnerProfile {
@@ -155,6 +157,10 @@ model PartnerProfile {
   profileViews     Int      @default(0)
   leaderboardScoreBonus Int @default(0)
   onboardingSteps  Json?
+  territory        String?
+  cardNumber       Int?     @unique
+  dnaSnapshot      Json?
+  dnaSnapshotAt    DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -423,6 +429,22 @@ model LeaderboardGrantLog {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, periodKey])
+}
+
+model HallOfLegend {
+  id          String   @id @default(cuid())
+  partnerId   String   @unique
+  rank        Int      @unique
+  monthAdded  String
+  achievement String
+  quote       String?
+  addedById   String
+  createdAt   DateTime @default(now())
+
+  partner User @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  addedBy User @relation("HallOfLegendAddedBy", fields: [addedById], references: [id])
+
+  @@index([rank])
 }
 
 model PartnerCommissionOverride {

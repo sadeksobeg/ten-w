@@ -2,6 +2,7 @@ import { DealStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getBadgeDisplay } from "@/lib/growth/badge-display";
 import { resolveLevelName } from "@/lib/growth/level-i18n";
+import { calculateDnaProfile, type DnaProfile } from "@/lib/growth/dna-score";
 import {
   getPartnerNetworkTree,
   type NetworkNode,
@@ -49,6 +50,8 @@ export type PublicProfileData = {
   showcasedBadges: string[];
   earnedBadgeKeys: string[];
   publicActivity: { headline: string; createdAt: string }[];
+  cardNumber: number | null;
+  dnaProfile: DnaProfile;
 };
 
 export async function getPublicProfileBySlug(
@@ -152,6 +155,8 @@ export async function getPublicProfileBySlug(
     console.error("[getPublicProfile] network tree", err);
   }
 
+  const dnaProfile = await calculateDnaProfile(user.id);
+
   return {
     userId: user.id,
     name: user.name ?? "Partner",
@@ -193,5 +198,7 @@ export async function getPublicProfileBySlug(
       headline: e.headline,
       createdAt: e.createdAt.toISOString(),
     })),
+    cardNumber: user.partnerProfile.cardNumber,
+    dnaProfile,
   };
 }

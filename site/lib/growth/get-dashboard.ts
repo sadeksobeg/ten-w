@@ -23,6 +23,13 @@ import {
 } from "@/lib/growth/prisma-optional";
 import { buildDealJourney, type DealJourneyStep } from "@/lib/growth/deal-journey";
 import { buildPartnerInsightSlides, type PartnerInsightSlide } from "@/lib/growth/partner-insights";
+import type { DnaProfile } from "@/lib/growth/dna-score";
+import type { RivalData } from "@/lib/growth/rival";
+import type { OraclePrediction } from "@/lib/growth/oracle";
+import { calculateDnaProfile } from "@/lib/growth/dna-score";
+import { getPartnerRival } from "@/lib/growth/rival";
+import { calculateOraclePrediction } from "@/lib/growth/oracle";
+import { isPartnerInHall } from "@/lib/growth/hall-of-legends";
 import { ensurePartnerProfile } from "@/lib/growth/ensure-partner-profile";
 import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
 import { resolveMissionTitle } from "@/lib/growth/mission-i18n";
@@ -172,6 +179,10 @@ export type DashboardData = {
     motivationSecondary: MotivationLine | null;
   };
   insights: PartnerInsightSlide[];
+  dnaProfile: DnaProfile;
+  rivalData: RivalData | null;
+  oracle: OraclePrediction;
+  inHallOfLegends: boolean;
 };
 
 export async function getPartnerDashboard(
@@ -385,6 +396,27 @@ export async function getPartnerDashboard(
     weeklyRank: weeklyCompete.rank ?? 0,
     weeklyFieldSize: weeklyCompete.fieldSize,
     weeklyClosed: weeklyCompete.closedInWindow,
+  });
+
+  const [dnaProfile, rivalData, inHallOfLegends] = await Promise.all([
+    calculateDnaProfile(userId),
+    getPartnerRival(userId),
+    isPartnerInHall(userId),
+  ]);
+
+  const oracle = await calculateOraclePrediction({
+    userId,
+    closedDeals,
+    totalXp: profile.totalXp,
+    memberDays,
+    streakCurrent,
+    nextLevel: nextLevel
+      ? { minClosedDeals: nextLevel.minClosedDeals, name: resolveLevelName(nextLevel.name, locale) }
+      : null,
+    weeklyClosed: weeklyCompete.closedInWindow,
+    weeklyRank: compositeRank.rank ?? weeklyCompete.rank,
+    rivalData,
+    dnaProfile,
   });
 
   let motivationPrimary: MotivationLine = { key: "defaultPrimary" };
@@ -602,5 +634,9 @@ export async function getPartnerDashboard(
       motivationSecondary,
     },
     insights,
+    dnaProfile,
+    rivalData,
+    oracle,
+    inHallOfLegends,
   };
 }

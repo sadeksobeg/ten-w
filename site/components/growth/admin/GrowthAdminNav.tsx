@@ -18,6 +18,7 @@ import {
   IconPayout,
   IconPartners,
   IconTrophy,
+  IconLegends,
   IconStar,
   IconSettings,
   type GrowthIconProps,
@@ -57,6 +58,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
     titleKey: "groupPrograms",
     items: [
       { href: "/growth/admin/creators", labelKey: "creators", Icon: IconStar },
+      { href: "/growth/admin/legends", labelKey: "legends", Icon: IconLegends },
       { href: "/growth/admin/events", labelKey: "events", Icon: IconEvent },
       { href: "/growth/admin/notifications", labelKey: "notifications", Icon: IconNotifications },
       { href: "/growth/admin/insights", labelKey: "insights", Icon: IconInfo },

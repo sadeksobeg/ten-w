@@ -18,6 +18,9 @@ import { LevelPerksCard } from "@/components/growth/LevelPerksCard";
 import { GrowthHubDeferred } from "@/components/growth/dashboard/GrowthHubDeferred";
 import { SkeletonStatGrid } from "@/components/growth/ui/GrowthSkeleton";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
+import { DnaCard } from "@/components/growth/dna/DnaCard";
+import { RivalCard } from "@/components/growth/rivals/RivalCard";
+import { OracleCard } from "@/components/growth/oracle/OracleCard";
 
 type Props = {
   locale: string;
@@ -55,7 +58,15 @@ export async function GrowthHubView({
         nextLevelMinXp={data.nextLevel?.minXp ?? null}
       />
 
+      <DnaCard
+        partnerName={userName || userEmail}
+        referralCode={data.profile.referralCode}
+        dna={data.dnaProfile}
+      />
+
       <DailyCheckIn available={data.checkIn.available} totalCheckIns={data.checkIn.totalCheckIns} />
+
+      <OracleCard oracle={data.oracle} />
 
       <SeasonPassCard
         seasonName={data.leaderboardSeason.name}
@@ -81,6 +92,7 @@ export async function GrowthHubView({
         </div>
 
         <div className="space-y-6">
+          {data.rivalData ? <RivalCard rivalData={data.rivalData} /> : null}
           <LevelPerksCard current={data.currentLevelDetail} next={data.nextLevelDetail} />
           <GrowthMotivationBar
             primary={data.compete.motivationPrimary}
@@ -102,6 +114,15 @@ export async function GrowthHubView({
       </GrowthHubDeferred>
 
       <HubSupportCard />
+
+      {!data.inHallOfLegends ? (
+        <Link
+          href="/growth/legends"
+          className="block rounded-2xl border border-gold/25 bg-gradient-to-r from-gold/10 to-transparent px-4 py-3 text-center text-sm font-semibold text-gold hover:bg-gold/15"
+        >
+          {t("legends.motivational")}
+        </Link>
+      ) : null}
 
       <div className="flex flex-wrap gap-2">
         <Link

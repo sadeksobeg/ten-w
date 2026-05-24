@@ -17,11 +17,12 @@ import { ProfileActivityList } from "@/components/growth/profile/ProfileActivity
 import { ProfileShowcaseStrip } from "@/components/growth/profile/ProfileShowcaseStrip";
 import { BusinessCard } from "@/components/growth/profile/BusinessCard";
 import { getBadgeDisplay } from "@/lib/growth/badge-display";
+import { PartnerCard } from "@/components/growth/cards/PartnerCard";
 import { getPublicProfileBySlug } from "@/lib/growth/get-public-profile";
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
-  searchParams: Promise<{ print?: string }>;
+  searchParams: Promise<{ print?: string; view?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -56,15 +57,25 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
 
   const registerHref = `/${locale}/growth/register?ref=${encodeURIComponent(data.referralCode)}`;
   const profileUrl = `https://tenegta.com/${locale}/growth/profile/${data.publicSlug}`;
-  if (sp.print === "card") {
+  if (sp.view === "card" || sp.print === "card") {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] p-8 print:bg-white">
-        <BusinessCard
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0a0f] p-8">
+        <PartnerCard
           name={data.name}
-          title={data.displayTitle}
+          email={data.userId}
+          displayTitle={data.displayTitle}
+          levelCode={data.levelCode}
           levelName={data.levelName}
-          referralCode={data.referralCode}
-          profileUrl={profileUrl}
+          locale={locale}
+          cardNumber={data.cardNumber ?? 0}
+          totalXp={data.totalXp}
+          closedDeals={data.closedDeals}
+          badgeCount={data.badgeCount}
+          showcasedBadges={data.showcasedBadges}
+          dnaDimensions={data.dnaProfile.dimensions}
+          archetype={data.dnaProfile.archetype}
+          avatarUrl={data.avatarUrl}
+          avatarPreset={data.avatarPreset}
         />
       </div>
     );
@@ -82,6 +93,33 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
         earnedBadges={data.earnedBadges.map((b) => ({ key: b.key, name: b.name }))}
         title={t("showcaseTitle")}
       />
+
+      <section className="mt-8 flex flex-col items-center">
+        <h2 className="mb-4 text-lg font-bold">{t("cardTitle")}</h2>
+        <PartnerCard
+          name={data.name}
+          email={data.userId}
+          displayTitle={data.displayTitle}
+          levelCode={data.levelCode}
+          levelName={data.levelName}
+          locale={locale}
+          cardNumber={data.cardNumber ?? 0}
+          totalXp={data.totalXp}
+          closedDeals={data.closedDeals}
+          badgeCount={data.badgeCount}
+          showcasedBadges={data.showcasedBadges}
+          dnaDimensions={data.dnaProfile.dimensions}
+          archetype={data.dnaProfile.archetype}
+          avatarUrl={data.avatarUrl}
+          avatarPreset={data.avatarPreset}
+        />
+        <Link
+          href={`/${locale}/growth/profile/${data.publicSlug}?view=card`}
+          className="mt-3 text-xs font-semibold text-gold hover:underline"
+        >
+          {t("cardFullView")}
+        </Link>
+      </section>
 
       <section className="mt-8">
         <h2 className="text-lg font-bold">{t("badgesTitle")}</h2>

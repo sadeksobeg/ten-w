@@ -10,6 +10,7 @@ import { SectionHeader } from "@/components/growth/ui/SectionHeader";
 import { BadgeShowcase } from "@/components/growth/badges/BadgeShowcase";
 import { PushNotificationPermission } from "@/components/growth/PushNotificationPermission";
 import { NotificationSoundToggle } from "@/components/growth/settings/NotificationSoundToggle";
+import { TerritorySettingsForm } from "@/components/growth/settings/TerritorySettingsForm";
 import { prisma } from "@/lib/prisma";
 import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
 
@@ -35,6 +36,7 @@ export default async function GrowthSettingsPage({ params }: Props) {
           displayTitle: true,
           socialLinks: true,
           showcasedBadges: true,
+          territory: true,
           currentLevel: { select: { name: true, code: true } },
         },
       },
@@ -75,6 +77,10 @@ export default async function GrowthSettingsPage({ params }: Props) {
               twitter?: string;
             } | null) ?? {}
           }
+        />
+        <TerritorySettingsForm
+          locale={locale}
+          currentTerritory={user.partnerProfile?.territory ?? null}
         />
         <SectionHeader title={t("badgeShowcase")} />
         <BadgeShowcase

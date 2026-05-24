@@ -26,7 +26,8 @@
     "whyUs": "Why us",
     "partners": "Ecosystem",
     "careers": "Careers",
-    "techRadar": "Tech radar"
+    "techRadar": "Tech radar",
+    "legends": "Hall of Legends"
   },
   "HomePage": {
     "meta": {
@@ -1124,6 +1125,8 @@
       "chat": "Chat",
       "notifications": "Alerts",
       "settings": "Settings",
+      "map": "War map",
+      "legends": "Hall of Legends",
       "kit": "Kit",
       "signOut": "Sign out",
       "myProfile": "My profile",
@@ -1138,6 +1141,114 @@
       "leaderboard": "Ranks",
       "chat": "Chat",
       "settings": "Setup"
+    },
+    "dna": {
+      "title": "Your DNA",
+      "sales": "Sales",
+      "network": "Network",
+      "content": "Content",
+      "speed": "Speed",
+      "archetype": "Your type",
+      "rival_archetype": "Your opposite",
+      "share": "Share your DNA",
+      "weekly_change": "This week",
+      "sharePrefix": "My DNA on T.E.N.E.G.T.A:",
+      "shareJoin": "Join:",
+      "archetypes": {
+        "social_hunter": "Social Hunter",
+        "silent_analyst": "Silent Analyst",
+        "content_king": "Content King",
+        "network_weaver": "Network Weaver",
+        "speed_dealer": "Speed Dealer",
+        "rising_star": "Rising Star",
+        "steady_builder": "Steady Builder"
+      }
+    },
+    "rival": {
+      "title": "Your weekly rival",
+      "you": "You",
+      "ahead_by": "Ahead by {n} deals",
+      "behind_by": "You lead by {n} deals",
+      "tied": "Tied — who closes first?",
+      "gap_1": "One deal changes everything",
+      "gap_many": "Gap is {n} — start now",
+      "viewProfile": "View profile"
+    },
+    "map": {
+      "title": "War map",
+      "my_territory": "Your territory",
+      "unclaimed": "Unclaimed land",
+      "claim": "Claim this region",
+      "controlled_by": "Controlled by {name}",
+      "rival_territory": "Rival territory",
+      "my_territory_stat": "You control {city}",
+      "pick_territory": "Pick your region in settings",
+      "legendTitle": "Map legend",
+      "legendControlled": "Gold — controlled",
+      "legendUnclaimed": "Gray — unclaimed",
+      "legendRival": "Red — rival",
+      "territoryLeaders": "Territory leaders",
+      "territorySaved": "Territory saved",
+      "territoryError": "Could not save",
+      "saveTerritory": "Save territory",
+      "territories": {
+        "damascus": "Damascus",
+        "aleppo": "Aleppo",
+        "beirut": "Beirut",
+        "riyadh": "Riyadh",
+        "dubai": "Dubai",
+        "cairo": "Cairo",
+        "amman": "Amman",
+        "baghdad": "Baghdad",
+        "kuwait": "Kuwait",
+        "doha": "Doha",
+        "casablanca": "Casablanca",
+        "tunis": "Tunis"
+      }
+    },
+    "partnerCard": {
+      "brand": "T.E.N.E.G.T.A",
+      "cardNumber": "Card #{n}",
+      "flipHint": "Move mouse to tilt"
+    },
+    "card": {
+      "title": "My card",
+      "number": "Card #{n}",
+      "flip": "Tap to flip",
+      "download": "Download card",
+      "share": "Share card"
+    },
+    "oracle": {
+      "title": "Oracle — your forecast",
+      "days_to_level": "{n} days to next level",
+      "monthly_earnings": "Est. monthly earnings",
+      "top3_probability": "TOP 3 chance",
+      "deals_prediction": "Deals in 30 days",
+      "weekly_target": "Weekly target",
+      "weekly_progress": "Your progress",
+      "refreshes": "Refreshes weekly",
+      "levelCloseTitle": "{n} deals to {level}",
+      "levelCloseBody": "Close {n} deals this week",
+      "rivalCloseTitle": "{name} is close",
+      "rivalCloseBody": "Only {gap} deals apart",
+      "streakTitle": "{n}-day streak",
+      "streakBody": "Keep the momentum",
+      "risingTitle": "Rising momentum",
+      "risingBody": "You are accelerating",
+      "reengageTitle": "Come back",
+      "reengageBody": "One deal revives your rank",
+      "steadyTitle": "Steady path",
+      "steadyBody": "Consistency builds legends"
+    },
+    "legends": {
+      "title": "Hall of Legends",
+      "since": "T.E.N.E.G.T.A · since {year}",
+      "empty_slot": "Seat #{n} awaits its legend",
+      "how_to_join": "How to enter the Hall?",
+      "how_to_join_body": "Exceptional achievement chosen by T.E.N.E.G.T.A — monthly.",
+      "join_cta": "Join as partner",
+      "motivational": "The Hall awaits its next legend",
+      "founding": "Founding legend"
     },
     "notifications": {
       "title": "Notifications",
@@ -1213,6 +1324,8 @@
       "teamSubtitle": "Referral network up to 3 levels — active partners only",
       "activityTitle": "Recent activity",
       "showcaseTitle": "Featured badges",
+      "cardTitle": "My card",
+      "cardFullView": "Full card view",
       "moreStats": "More stats",
       "appreciation": {
         "cta": "Send appreciation",
@@ -2069,6 +2182,7 @@
         "partners": "Partners",
         "events": "Events",
         "creators": "Creators",
+        "legends": "Hall of Legends",
         "notifications": "Notifications"
       },
       "chatModerators": {
@@ -2082,6 +2196,19 @@
         "toastOn": "Moderator enabled",
         "toastOff": "Moderator revoked",
         "toastError": "Could not save"
+      },
+      "legends": {
+        "pageTitle": "Hall of Legends",
+        "hint": "10 permanent seats — add monthly only.",
+        "count": "{count} / 10 legends",
+        "formTitle": "Add legend",
+        "partner": "Partner",
+        "selectPartner": "Select partner",
+        "achievement": "Achievement",
+        "quote": "Quote (optional)",
+        "submit": "Add to Hall",
+        "toastOk": "Added",
+        "toastError": "Could not add"
       },
       "creatorsPage": {
         "title": "Content creators program",

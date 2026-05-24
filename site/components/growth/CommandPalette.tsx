@@ -10,6 +10,8 @@ const ROUTES = [
   { href: "/growth/earnings", key: "earnings" },
   { href: "/growth/network", key: "network" },
   { href: "/growth/leaderboard", key: "leaderboard" },
+  { href: "/growth/map", key: "map" },
+  { href: "/growth/legends", key: "legends" },
   { href: "/growth/events", key: "events" },
   { href: "/growth/chat", key: "chat" },
   { href: "/growth/notifications", key: "notifications" },

@@ -26,7 +26,8 @@
     "whyUs": "Why us",
     "partners": "Ecosystem",
     "careers": "Careers",
-    "techRadar": "Tech radar"
+    "techRadar": "Tech radar",
+    "legends": "Temple des Légendes"
   },
   "HomePage": {
     "meta": {
@@ -1154,6 +1155,8 @@
       "chat": "Chat",
       "notifications": "Alertes",
       "settings": "Réglages",
+      "map": "Carte de guerre",
+      "legends": "Temple des Légendes",
       "signOut": "Déconnexion",
       "myProfile": "Mon profil",
       "navAria": "Navigation partenaire",
@@ -1167,6 +1170,114 @@
       "leaderboard": "Rang",
       "chat": "Chat",
       "settings": "Régl."
+    },
+    "dna": {
+      "title": "Votre ADN",
+      "sales": "Ventes",
+      "network": "Réseau",
+      "content": "Contenu",
+      "speed": "Vitesse",
+      "archetype": "Votre profil",
+      "rival_archetype": "Votre opposé",
+      "share": "Partager votre ADN",
+      "weekly_change": "Cette semaine",
+      "sharePrefix": "Mon ADN sur T.E.N.E.G.T.A :",
+      "shareJoin": "Rejoindre :",
+      "archetypes": {
+        "social_hunter": "Chasseur social",
+        "silent_analyst": "Analyste discret",
+        "content_king": "Roi du contenu",
+        "network_weaver": "Tisseur de réseau",
+        "speed_dealer": "Frappe rapide",
+        "rising_star": "Étoile montante",
+        "steady_builder": "Bâtisseur constant"
+      }
+    },
+    "rival": {
+      "title": "Votre rival de la semaine",
+      "you": "Vous",
+      "ahead_by": "En avance de {n} affaires",
+      "behind_by": "Vous menez de {n} affaires",
+      "tied": "Égalité — qui conclut en premier ?",
+      "gap_1": "Une affaire change tout",
+      "gap_many": "Écart de {n} — agissez",
+      "viewProfile": "Voir le profil"
+    },
+    "map": {
+      "title": "Carte de guerre",
+      "my_territory": "Votre territoire",
+      "unclaimed": "Terre libre",
+      "claim": "Revendiquer cette région",
+      "controlled_by": "Contrôlé par {name}",
+      "rival_territory": "Territoire rival",
+      "my_territory_stat": "Vous contrôlez {city}",
+      "pick_territory": "Choisissez votre région dans les réglages",
+      "legendTitle": "Légende",
+      "legendControlled": "Or — contrôlé",
+      "legendUnclaimed": "Gris — libre",
+      "legendRival": "Rouge — rival",
+      "territoryLeaders": "Leaders territoriaux",
+      "territorySaved": "Territoire enregistré",
+      "territoryError": "Enregistrement impossible",
+      "saveTerritory": "Enregistrer",
+      "territories": {
+        "damascus": "Damas",
+        "aleppo": "Alep",
+        "beirut": "Beyrouth",
+        "riyadh": "Riyad",
+        "dubai": "Dubaï",
+        "cairo": "Le Caire",
+        "amman": "Amman",
+        "baghdad": "Bagdad",
+        "kuwait": "Koweït",
+        "doha": "Doha",
+        "casablanca": "Casablanca",
+        "tunis": "Tunis"
+      }
+    },
+    "partnerCard": {
+      "brand": "T.E.N.E.G.T.A",
+      "cardNumber": "Carte n°{n}",
+      "flipHint": "Survolez pour incliner"
+    },
+    "card": {
+      "title": "Ma carte",
+      "number": "Carte n°{n}",
+      "flip": "Appuyer pour retourner",
+      "download": "Télécharger la carte",
+      "share": "Partager la carte"
+    },
+    "oracle": {
+      "title": "Oracle — votre prévision",
+      "days_to_level": "{n} jours avant le niveau suivant",
+      "monthly_earnings": "Gains mensuels estimés",
+      "top3_probability": "Chance TOP 3",
+      "deals_prediction": "Affaires sur 30 jours",
+      "weekly_target": "Objectif hebdo",
+      "weekly_progress": "Votre progression",
+      "refreshes": "Actualisé chaque semaine",
+      "levelCloseTitle": "{n} affaires pour {level}",
+      "levelCloseBody": "Concluez {n} affaires cette semaine",
+      "rivalCloseTitle": "{name} est proche",
+      "rivalCloseBody": "Seulement {gap} affaires d'écart",
+      "streakTitle": "Série de {n} jours",
+      "streakBody": "Gardez l'élan",
+      "risingTitle": "Élan en hausse",
+      "risingBody": "Vous accélérez",
+      "reengageTitle": "Revenez en lice",
+      "reengageBody": "Une affaire relance votre rang",
+      "steadyTitle": "Cap stable",
+      "steadyBody": "La régularité forge les légendes"
+    },
+    "legends": {
+      "title": "Temple des Légendes",
+      "since": "T.E.N.E.G.T.A · depuis {year}",
+      "empty_slot": "La place n°{n} attend sa légende",
+      "how_to_join": "Comment entrer au Temple ?",
+      "how_to_join_body": "Exploit exceptionnel choisi par T.E.N.E.G.T.A — chaque mois.",
+      "join_cta": "Devenir partenaire",
+      "motivational": "Le Temple attend sa prochaine légende",
+      "founding": "Légende fondatrice"
     },
     "notifications": {
       "title": "Notifications",
@@ -1227,6 +1338,8 @@
       "teamSubtitle": "Réseau sur 3 niveaux — partenaires actifs uniquement",
       "activityTitle": "Activité récente",
       "showcaseTitle": "Badges en vedette",
+      "cardTitle": "Ma carte",
+      "cardFullView": "Vue carte complète",
       "moreStats": "Plus de stats",
       "appreciation": {
         "cta": "Envoyer un encouragement",
@@ -2004,7 +2117,21 @@
         "partners": "Partners",
         "events": "Events",
         "creators": "Creators",
+        "legends": "Temple des Légendes",
         "notifications": "Notifications"
+      },
+      "legends": {
+        "pageTitle": "Temple des Légendes",
+        "hint": "10 places permanentes — ajout mensuel uniquement.",
+        "count": "{count} / 10 légendes",
+        "formTitle": "Ajouter une légende",
+        "partner": "Partenaire",
+        "selectPartner": "Choisir un partenaire",
+        "achievement": "Exploit",
+        "quote": "Citation (optionnel)",
+        "submit": "Ajouter au Temple",
+        "toastOk": "Ajouté",
+        "toastError": "Ajout impossible"
       },
       "chatModerators": {
         "pageTitle": "Modérateurs chat",

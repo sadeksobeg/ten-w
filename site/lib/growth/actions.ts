@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import {
   Prisma,
   UserRole,
@@ -28,6 +28,10 @@ import { logAdminAudit } from "@/lib/growth/audit-log";
 import { syncPartnerLevel } from "@/lib/growth/levels";
 import { revalidatePartnerSurfaces } from "@/lib/growth/revalidate-partner";
 import { rateLimitGrowthAction } from "@/lib/growth/growth-rate-limit";
+import { nextPartnerCardNumber } from "@/lib/growth/partner-card-number";
+import { TERRITORY_KEYS, isTerritoryKey } from "@/lib/growth/territories";
+import { nextLegendRank } from "@/lib/growth/hall-of-legends";
+import { rivalCacheTag } from "@/lib/growth/rival";
 import {
   addUserToCreatorRoom,
   CONTENT_CREATOR_BADGE,
@@ -115,6 +119,7 @@ export async function registerPartnerAction(
   const referralCode = await uniqueReferralCode();
 
   await prisma.$transaction(async (tx) => {
+    const cardNumber = await nextPartnerCardNumber(tx);
     const user = await tx.user.create({
       data: {
         email,
@@ -130,6 +135,7 @@ export async function registerPartnerAction(
         referralCode,
         parentUserId,
         currentLevelId: starter.id,
+        cardNumber,
       },
     });
   });
@@ -622,12 +628,21 @@ export async function closeDealAdminAction(
     return { ok: false, error: "unauthorized" };
   }
 
+  const deal = await prisma.deal.findUnique({
+    where: { id: dealId },
+    select: { partnerId: true },
+  });
+
   const res = await closeDealAsAdmin({
     dealId,
     actorUserId: session.user.id,
   });
   if (!res.ok) {
     return { ok: false, error: res.error };
+  }
+
+  if (deal?.partnerId) {
+    revalidateTag(rivalCacheTag(deal.partnerId), "max");
   }
 
   revalidatePath("/");
@@ -1330,6 +1345,7 @@ export async function adminCreatePartnerAction(
     const publicSlug = await uniquePublicSlug(prisma, parsed.data.name);
 
     const user = await prisma.$transaction(async (tx) => {
+      const cardNumber = await nextPartnerCardNumber(tx);
       const u = await tx.user.create({
         data: {
           email,
@@ -1347,6 +1363,7 @@ export async function adminCreatePartnerAction(
           referralCode,
           parentUserId,
           currentLevelId: starter.id,
+          cardNumber,
         },
       });
       return u;
@@ -2661,4 +2678,95 @@ export async function adminCloseSeasonFormAction(formData: FormData): Promise<vo
   const { closeLeaderboardSeason } = await import("@/lib/growth/season-archive");
   await closeLeaderboardSeason(seasonId, session.user.id);
   revalidateGrowth();
+}
+
+const territorySchema = z.object({
+  locale: z.string().min(2).max(5),
+  territory: z.string().min(1).max(32),
+});
+
+export async function updatePartnerTerritoryAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const parsed = territorySchema.safeParse({
+    locale: formData.get("locale"),
+    territory: formData.get("territory"),
+  });
+  if (!parsed.success || !isTerritoryKey(parsed.data.territory)) {
+    return { ok: false, error: "invalid_input" };
+  }
+
+  await prisma.partnerProfile.update({
+    where: { userId: session.user.id },
+    data: { territory: parsed.data.territory },
+  });
+
+  revalidatePath(`/${parsed.data.locale}/growth/map`);
+  revalidatePath(`/${parsed.data.locale}/growth/settings`);
+  return { ok: true };
+}
+
+const hallLegendSchema = z.object({
+  partnerUserId: z.string().min(1),
+  achievement: z.string().min(2).max(200),
+  quote: z.string().max(300).optional().or(z.literal("")),
+  locale: z.string().min(2).max(5),
+});
+
+export async function addToHallOfLegendAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const parsed = hallLegendSchema.safeParse({
+    partnerUserId: formData.get("partnerUserId"),
+    achievement: formData.get("achievement"),
+    quote: formData.get("quote") ?? "",
+    locale: formData.get("locale"),
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const count = await prisma.hallOfLegend.count();
+  if (count >= 10) return { ok: false, error: "hall_full" };
+
+  const existing = await prisma.hallOfLegend.findUnique({
+    where: { partnerId: parsed.data.partnerUserId },
+  });
+  if (existing) return { ok: false, error: "already_in_hall" };
+
+  const rank = await nextLegendRank();
+  const monthAdded = new Date().toISOString().slice(0, 7);
+
+  await prisma.hallOfLegend.create({
+    data: {
+      partnerId: parsed.data.partnerUserId,
+      rank,
+      monthAdded,
+      achievement: parsed.data.achievement.trim(),
+      quote: parsed.data.quote?.trim() || null,
+      addedById: session.user.id,
+    },
+  });
+
+  await createNotification(prisma, {
+    userId: parsed.data.partnerUserId,
+    type: NotificationType.SYSTEM,
+    title: "قاعة الأساطير",
+    body: "تم إدخالك في قاعة أساطير T.E.N.E.G.T.A",
+    link: "/growth/legends",
+  });
+
+  revalidatePath(`/${parsed.data.locale}/growth/legends`);
+  revalidatePath(`/${parsed.data.locale}/growth/admin/legends`);
+  return { ok: true };
 }

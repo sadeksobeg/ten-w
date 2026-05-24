@@ -32,6 +32,9 @@ export async function Footer() {
           <Link href="/partners" className="text-muted hover:text-gold">
             {t("partners")}
           </Link>
+          <Link href="/growth/legends" className="text-muted hover:text-gold">
+            {t("legends")}
+          </Link>
           <Link href="/careers" className="text-muted hover:text-gold">
             {t("careers")}
           </Link>
