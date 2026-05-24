@@ -18,6 +18,7 @@ import {
   IconPayout,
   IconPartners,
   IconTrophy,
+  IconStar,
   IconSettings,
   type GrowthIconProps,
 } from "@/components/growth/icons/GrowthIcons";
@@ -54,6 +55,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
   {
     titleKey: "groupPrograms",
     items: [
+      { href: "/growth/admin/creators", labelKey: "creators", Icon: IconStar },
       { href: "/growth/admin/events", labelKey: "events", Icon: IconEvent },
       { href: "/growth/admin/notifications", labelKey: "notifications", Icon: IconNotifications },
       { href: "/growth/admin/insights", labelKey: "insights", Icon: IconInfo },

@@ -8,6 +8,7 @@ import { GrowthPartnerHeader } from "@/components/growth/GrowthPartnerHeader";
 import { GrowthPartnerShell } from "@/components/growth/GrowthPartnerShell";
 import { PartnerChatBubble } from "@/components/growth/chat/PartnerChatBubble";
 import { CommandPalette } from "@/components/growth/CommandPalette";
+import { userHasContentCreatorBadge } from "@/lib/growth/creator-program";
 
 type Props = {
   locale: string;
@@ -18,7 +19,7 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
   const session = await auth();
   if (!session?.user?.id) return <>{children}</>;
 
-  const [user, profile, earnedBadgeRows] = await Promise.all([
+  const [user, profile, earnedBadgeRows, showCreatorsProgram] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.user.id },
       select: { name: true, email: true, avatarUrl: true, publicSlug: true },
@@ -28,6 +29,7 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
       where: { userId: session.user.id },
       select: { badge: { select: { key: true } } },
     }),
+    userHasContentCreatorBadge(session.user.id),
   ]);
 
   const earnedBadgeKeys = earnedBadgeRows.map((r) => r.badge.key);
@@ -38,7 +40,7 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
       : "—";
 
   return (
-    <GrowthPartnerShell locale={locale}>
+    <GrowthPartnerShell locale={locale} showCreatorsProgram={showCreatorsProgram}>
       <GrowthPartnerHeader
         locale={locale}
         name={user?.name ?? null}

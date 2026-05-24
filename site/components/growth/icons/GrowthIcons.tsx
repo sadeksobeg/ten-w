@@ -489,6 +489,7 @@ export const GROWTH_DESKTOP_NAV_ICONS: Record<string, ComponentType<GrowthIconPr
   network: IconNetwork,
   leaderboard: IconTrophy,
   events: IconEvents,
+  creators: IconStar,
   chat: IconChat,
   notifications: IconNotifications,
   settings: IconSettings,

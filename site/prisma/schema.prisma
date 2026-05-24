@@ -504,6 +504,7 @@ model ChatMessage {
 enum ChatRoomType {
   COMMUNITY
   EVENT
+  CREATOR
 }
 
 model ChatRoom {

@@ -28,6 +28,11 @@ import { logAdminAudit } from "@/lib/growth/audit-log";
 import { syncPartnerLevel } from "@/lib/growth/levels";
 import { revalidatePartnerSurfaces } from "@/lib/growth/revalidate-partner";
 import { rateLimitGrowthAction } from "@/lib/growth/growth-rate-limit";
+import {
+  addUserToCreatorRoom,
+  CONTENT_CREATOR_BADGE,
+  removeUserFromCreatorRoom,
+} from "@/lib/growth/creator-program";
 import { GAME_CONFIG } from "@/lib/growth/game-config";
 import { touchActivityDay } from "@/lib/growth/streak";
 
@@ -742,12 +747,19 @@ export async function assignAdminBadgeAction(
   const granted = await grantAdminBadge(prisma, user.id, badge.key, session.user.id);
   if (!granted) return { ok: false, error: "badge_already_granted" };
 
+  if (badge.key === CONTENT_CREATOR_BADGE) {
+    await addUserToCreatorRoom(user.id);
+  }
+
   await createNotification(prisma, {
     userId: user.id,
     type: NotificationType.BADGE_EARNED,
-    title: "شارة جديدة",
-    body: badge.name,
-    link: "/growth",
+    title: badge.key === CONTENT_CREATOR_BADGE ? "برنامج صناع المحتوى" : "شارة جديدة",
+    body:
+      badge.key === CONTENT_CREATOR_BADGE
+        ? "تم قبولك في برنامج الشراكة مع صناع المحتوى — اكتشف مزاياك الآن."
+        : badge.name,
+    link: badge.key === CONTENT_CREATOR_BADGE ? "/growth/creators" : "/growth",
     metadata: { badgeKey: badge.key },
   });
   revalidateGrowth();
@@ -781,7 +793,61 @@ export async function revokeAdminBadgeAction(formData: FormData): Promise<void> 
   await prisma.userBadge.deleteMany({
     where: { userId: user.id, badgeId: badge.id },
   });
+  if (badge.key === CONTENT_CREATOR_BADGE) {
+    await removeUserFromCreatorRoom(user.id);
+  }
   revalidatePath("/");
+}
+
+const creatorRoomMemberSchema = z.object({
+  userId: z.string().min(1),
+});
+
+export async function adminAddCreatorRoomMemberAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = creatorRoomMemberSchema.safeParse({
+    userId: formData.get("userId"),
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const user = await prisma.user.findUnique({
+    where: { id: parsed.data.userId },
+    select: { id: true },
+  });
+  if (!user) return { ok: false, error: "user_not_found" };
+
+  await addUserToCreatorRoom(user.id);
+  await createNotification(prisma, {
+    userId: user.id,
+    type: NotificationType.SYSTEM,
+    title: "مجموعة صناع المحتوى",
+    body: "تمت إضافتك إلى مجموعة الدردشة الخاصة لصناع المحتوى.",
+    link: "/growth/chat?room=content-creators",
+  });
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function adminRemoveCreatorRoomMemberAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = creatorRoomMemberSchema.safeParse({
+    userId: formData.get("userId"),
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  await removeUserFromCreatorRoom(parsed.data.userId);
+  revalidateGrowth();
+  return { ok: true };
 }
 
 export async function applyMonthlyRewardsAdminAction(_formData: FormData): Promise<void> {

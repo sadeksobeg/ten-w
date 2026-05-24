@@ -4,15 +4,18 @@ import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GrowthPartnerChatHub } from "@/components/growth/chat/GrowthPartnerChatHub";
+import { CREATOR_ROOM_SLUG, userIsCreatorRoomMember } from "@/lib/growth/creator-program";
 import { ensureOpenConversation } from "@/lib/growth/chat-service";
 import { prisma } from "@/lib/prisma";
 
 type Props = {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ room?: string }>;
 };
 
-export default async function GrowthPartnerChatPage({ params }: Props) {
+export default async function GrowthPartnerChatPage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const { room: roomParam } = await searchParams;
   const session = await auth();
   if (!session?.user?.id) {
     redirect(`/${locale}/growth/sign-in`);
@@ -20,14 +23,20 @@ export default async function GrowthPartnerChatPage({ params }: Props) {
   if (session.user.role === "ADMIN") {
     redirect(`/${locale}/growth/admin/chat`);
   }
-  const [conv, user] = await Promise.all([
+  const [conv, user, isCreatorRoomMember] = await Promise.all([
     ensureOpenConversation(session.user.id),
     prisma.user.findUnique({
       where: { id: session.user.id },
       select: { name: true, email: true },
     }),
+    userIsCreatorRoomMember(session.user.id),
   ]);
   const t = await getTranslations("Growth");
+
+  const initialTab =
+    roomParam === CREATOR_ROOM_SLUG && isCreatorRoomMember
+      ? ("creators" as const)
+      : ("community" as const);
 
   return (
     <div className="space-y-6 growth-page-enter">
@@ -49,6 +58,8 @@ export default async function GrowthPartnerChatPage({ params }: Props) {
           viewerEmail={user?.email ?? session.user.email ?? ""}
           viewerName={user?.name ?? session.user.name ?? null}
           supportConversationId={conv.id}
+          isCreatorRoomMember={isCreatorRoomMember}
+          initialTab={initialTab}
         />
       </GlassCard>
     </div>

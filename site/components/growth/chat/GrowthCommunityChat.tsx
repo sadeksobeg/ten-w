@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { ChatRoomMessageDTO } from "@/lib/growth/chat-room-service";
 import { COMMUNITY_ROOM_SLUG } from "@/lib/growth/chat-room-service";
-import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
+import { PartnerNameBadges } from "@/components/growth/badges/PartnerNameBadges";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { VerifiedBadge } from "@/components/growth/ui/VerifiedBadge";
 import { RankEmblem } from "@/components/growth/ui/RankEmblem";
@@ -16,8 +16,8 @@ type Props = {
   viewerEmail: string;
   viewerName: string | null;
   roomSlug?: string;
-  hintKey?: "communityHint" | "eventChatHint";
-  placeholderKey?: "communityPlaceholder" | "eventChatPlaceholder";
+  hintKey?: "communityHint" | "eventChatHint" | "creatorChatHint";
+  placeholderKey?: "communityPlaceholder" | "eventChatPlaceholder" | "creatorChatPlaceholder";
 };
 
 export function GrowthCommunityChat({
@@ -156,9 +156,7 @@ export function GrowthCommunityChat({
                   className={`mb-0.5 flex flex-wrap items-center gap-1.5 ${mine ? "justify-end" : "justify-start"}`}
                 >
                   <span className="text-[11px] font-bold text-white/80">{m.senderName}</span>
-                  {m.senderChatBadges?.map((key) => (
-                    <BadgeIcon key={key} badgeKey={key} earned chip name={key} />
-                  ))}
+                  <PartnerNameBadges badgeKeys={m.senderChatBadges ?? []} size="xs" />
                   {official ? <VerifiedBadge label={t("verifiedOfficial")} variant="gold" /> : null}
                   {!official && verified ? (
                     <VerifiedBadge label={t("verifiedPartner")} variant="gold" />

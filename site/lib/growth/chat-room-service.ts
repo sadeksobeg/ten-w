@@ -1,6 +1,11 @@
 import { ChatRoomType, ParticipantStatus, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { CHAT_BADGE_KEYS } from "@/lib/growth/badge-visual";
+import { CHAT_BADGE_KEYS, sortBadgeKeysForDisplay } from "@/lib/growth/badge-visual";
+import {
+  CREATOR_ROOM_SLUG,
+  ensureCreatorRoom,
+  userIsCreatorRoomMember,
+} from "@/lib/growth/creator-program";
 import { matchChatKeywords } from "@/lib/growth/chat-keywords";
 import { touchLastSeen } from "@/lib/growth/presence";
 
@@ -124,6 +129,9 @@ async function chatBadgeMap(userIds: string[]): Promise<Map<string, string[]>> {
     const list = map.get(row.userId) ?? [];
     list.push(row.badge.key);
     map.set(row.userId, list);
+  }
+  for (const [uid, list] of map) {
+    map.set(uid, sortBadgeKeysForDisplay(list));
   }
   return map;
 }
@@ -258,6 +266,13 @@ export async function resolveChatRoomForUser(slug: string, userId: string) {
     return { room, kind: "community" as const };
   }
 
+  if (slug === CREATOR_ROOM_SLUG) {
+    const isMember = await userIsCreatorRoomMember(userId);
+    if (!isMember) throw new Error("not_creator_member");
+    const room = await ensureCreatorRoom();
+    return { room, kind: "creator" as const };
+  }
+
   if (slug.startsWith("event-")) {
     const eventSlug = slug.slice("event-".length);
     const room = await ensureEventRoomBySlug(eventSlug);
@@ -316,6 +331,22 @@ export async function postEventRoomMessage(senderUserId: string, roomSlug: strin
     body,
   });
 }
+
+export async function postCreatorRoomMessage(senderUserId: string, body: string) {
+  await touchLastSeen(prisma, senderUserId);
+  const resolved = await resolveChatRoomForUser(CREATOR_ROOM_SLUG, senderUserId);
+  if (!resolved || resolved.kind !== "creator") {
+    throw new Error("forbidden");
+  }
+
+  return appendRoomMessage({
+    roomId: resolved.room.id,
+    senderUserId,
+    body,
+  });
+}
+
+export { CREATOR_ROOM_SLUG };
 
 export async function seedOfficialWelcomeIfEmpty(roomId: string, adminUserId: string) {
   const count = await prisma.chatRoomMessage.count({ where: { roomId } });

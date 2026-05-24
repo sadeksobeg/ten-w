@@ -11,9 +11,10 @@ import {
 type Props = {
   children: ReactNode;
   locale: string;
+  showCreatorsProgram?: boolean;
 };
 
-const NAV = [
+const BASE_NAV = [
   { href: "/growth", key: "dashboard" as const, exact: true },
   { href: "/growth/deals", key: "deals" as const },
   { href: "/growth/events", key: "events" as const },
@@ -24,6 +25,8 @@ const NAV = [
   { href: "/growth/notifications", key: "notifications" as const },
   { href: "/growth/settings", key: "settings" as const },
 ] as const;
+
+const CREATORS_NAV = { href: "/growth/creators", key: "creators" as const };
 
 const MOBILE_KEYS = [
   "dashboard",
@@ -40,11 +43,19 @@ function isActive(pathname: string, href: string, exact?: boolean) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function GrowthPartnerShell({ children, locale: _locale }: Props) {
+export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProgram = false }: Props) {
   const t = useTranslations("Growth.nav");
   const tShort = useTranslations("Growth.navShort");
   const pathname = usePathname();
   const [chatUnread, setChatUnread] = useState(0);
+
+  const navItems = showCreatorsProgram
+    ? [
+        ...BASE_NAV.slice(0, 3),
+        CREATORS_NAV,
+        ...BASE_NAV.slice(3),
+      ]
+    : [...BASE_NAV];
 
   const refreshUnread = useCallback(async () => {
     try {
@@ -75,7 +86,7 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
         : "text-white/60 hover:bg-white/[0.06] hover:text-white"
     }`;
 
-  const mobileNav = NAV.filter((n) =>
+  const mobileNav = navItems.filter((n) =>
     (MOBILE_KEYS as readonly string[]).includes(n.key),
   );
 
@@ -85,7 +96,7 @@ export function GrowthPartnerShell({ children, locale: _locale }: Props) {
         className="growth-partner-nav-desktop mb-4 flex-nowrap border-b border-white/10 pb-3"
         aria-label={t("navAria")}
       >
-        {NAV.map((item) => {
+        {navItems.map((item) => {
           const Icon = GROWTH_DESKTOP_NAV_ICONS[item.key];
           const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
           return (

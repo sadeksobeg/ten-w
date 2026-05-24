@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { growthSignOutAction } from "@/lib/growth/actions";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { NotificationBell } from "@/components/growth/NotificationBell";
+import { PartnerNameBadges } from "@/components/growth/badges/PartnerNameBadges";
 import { BadgeIdentityPill } from "@/components/growth/badges/BadgeIdentityPill";
 import { LevelBadge } from "@/components/growth/ui/LevelBadge";
 
@@ -28,7 +29,7 @@ export function GrowthPartnerHeader({
   earnedBadgeKeys = [],
 }: Props) {
   const t = useTranslations("Growth.nav");
-  const verified = earnedBadgeKeys.includes("verified_partner");
+  const isCreator = earnedBadgeKeys.includes("content_creator");
   const linkClass =
     "whitespace-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[11px] font-semibold text-white/80 hover:border-gold/30 hover:text-white sm:text-xs";
 
@@ -39,7 +40,8 @@ export function GrowthPartnerHeader({
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <p className="truncate font-semibold text-white">{name ?? email}</p>
-            {verified ? <BadgeIdentityPill variant="verified" locale={locale} /> : null}
+            <PartnerNameBadges badgeKeys={earnedBadgeKeys} size="xs" />
+            {isCreator ? <BadgeIdentityPill variant="creator" locale={locale} /> : null}
           </div>
           <LevelBadge levelName={levelName} size="sm" />
         </div>

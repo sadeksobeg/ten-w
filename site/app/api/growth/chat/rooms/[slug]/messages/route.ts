@@ -3,8 +3,10 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import {
   COMMUNITY_ROOM_SLUG,
+  CREATOR_ROOM_SLUG,
   listRoomMessages,
   postCommunityMessage,
+  postCreatorRoomMessage,
   postEventRoomMessage,
   resolveChatRoomForUser,
   seedOfficialWelcomeIfEmpty,
@@ -75,7 +77,9 @@ export async function POST(req: Request, ctx: RouteContext) {
     const message =
       slug === COMMUNITY_ROOM_SLUG
         ? await postCommunityMessage(session.user.id, body.body)
-        : await postEventRoomMessage(session.user.id, slug, body.body);
+        : slug === CREATOR_ROOM_SLUG
+          ? await postCreatorRoomMessage(session.user.id, body.body)
+          : await postEventRoomMessage(session.user.id, slug, body.body);
     return NextResponse.json({ message });
   } catch {
     return NextResponse.json({ error: "forbidden" }, { status: 403 });

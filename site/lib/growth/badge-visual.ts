@@ -320,6 +320,7 @@ export const BADGE_DEFS: Record<string, BadgeDef> = {
     particleColor: "#F59E0B",
     adminOnly: true,
     showBorder: true,
+    showInChat: true,
     labelAr: "الشريك المؤسس",
     labelEn: "Founding Partner",
     labelFr: "Partenaire fondateur",
@@ -366,6 +367,7 @@ export const BADGE_DEFS: Record<string, BadgeDef> = {
     innerStrokeWidth: 1.5,
     particleColor: "#F472B6",
     adminOnly: true,
+    showInChat: true,
     labelAr: "بائع VIP",
     labelEn: "VIP Seller",
     labelFr: "Vendeur VIP",
@@ -389,6 +391,7 @@ export const BADGE_DEFS: Record<string, BadgeDef> = {
     innerStrokeWidth: 1.5,
     particleColor: "#534ab7",
     adminOnly: true,
+    showInChat: true,
     labelAr: "وكيل استراتيجي",
     labelEn: "Strategic Agent",
     labelFr: "Agent stratégique",
@@ -630,6 +633,7 @@ export const BADGE_DEFS: Record<string, BadgeDef> = {
     innerStrokeWidth: 1.5,
     particleColor: "#60A5FA",
     adminOnly: true,
+    showInChat: true,
     labelAr: "مختبر بيتا",
     labelEn: "Beta Tester",
     labelFr: "Testeur bêta",
@@ -652,6 +656,7 @@ export const BADGE_DEFS: Record<string, BadgeDef> = {
     innerStrokeWidth: 2,
     particleColor: "#E4B84D",
     adminOnly: true,
+    showInChat: true,
     labelAr: "نجم الربع",
     labelEn: "MVP Quarter",
     labelFr: "MVP du trimestre",
@@ -780,6 +785,29 @@ export function getBadgeVisual(badgeKey: string): BadgeVisualMeta {
 export const CHAT_BADGE_KEYS = Object.entries(BADGE_DEFS)
   .filter(([, m]) => m.showInChat)
   .map(([k]) => k);
+
+/** Display order for identity chips beside partner names */
+export const NAME_BADGE_PRIORITY = [
+  "founding_partner",
+  "verified_partner",
+  "content_creator",
+  "mvp_quarter",
+  "beta_tester",
+  "trusted_partner",
+  "vip_seller",
+  "strategic_agent",
+] as const;
+
+export function sortBadgeKeysForDisplay(keys: string[]): string[] {
+  const set = new Set(keys);
+  const ordered: string[] = NAME_BADGE_PRIORITY.filter((k) => set.has(k));
+  for (const k of keys) {
+    if (!ordered.includes(k) && CHAT_BADGE_KEYS.includes(k)) {
+      ordered.push(k);
+    }
+  }
+  return ordered;
+}
 
 export const RARITY_COLORS: Record<BadgeRarity, string> = {
   common: "#8a8490",
