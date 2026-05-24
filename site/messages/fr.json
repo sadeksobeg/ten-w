@@ -2210,24 +2210,36 @@
         "revokeTitle": "Revoke badge",
         "revokeHint": "Removes any badge (including auto badges) from the user.",
         "revokeSubmit": "Revoke",
-        "revokeBadgeKey": "Badge key"
-      },
-      "grantStudio": {
-        "eyebrow": "Cérémonie de badge",
-        "title": "Accorder avec cérémonie",
-        "hint": "Les badges vedettes apparaissent dans le chat événement.",
-        "email": "E-mail partenaire",
-        "emailPh": "partner@example.com",
-        "badgeKey": "Badge",
-        "submit": "Accorder avec cérémonie",
-        "confirmTitle": "Confirmer l'attribution",
-        "confirmBody": "Accorder «{badge}» à {partner} ?",
-        "cancel": "Annuler",
-        "confirmSubmit": "Accorder",
-        "toastCeremony": "Badge accordé avec cérémonie",
-        "errors": {
-          "badge_already_granted": "Badge déjà accordé",
-          "unknown": "Une erreur est survenue"
+        "revokeBadgeKey": "Badge key",
+        "grantStudio": {
+          "eyebrow": "Cérémonie de badge",
+          "title": "Accorder avec cérémonie",
+          "hint": "Choisissez le badge et les partenaires — aperçu chat et profil.",
+          "email": "E-mail partenaire",
+          "emailPh": "partner@example.com",
+          "badgeKey": "Badge",
+          "submit": "Accorder le badge",
+          "confirmTitle": "Confirmer l'attribution",
+          "confirmBody": "Accorder «{badge}» à {partner} ?",
+          "confirmBatchBody": "Accorder «{badge}» à {count} partenaires ?",
+          "cancel": "Annuler",
+          "confirmSubmit": "Accorder",
+          "toastCeremony": "Badge accordé",
+          "toastBatchResult": "Accordés : {granted} · Ignorés : {skipped}",
+          "selectPartners": "Sélectionner les partenaires",
+          "partnerSearch": "Rechercher nom ou e-mail…",
+          "selectAll": "Tout sélectionner",
+          "clearSelection": "Effacer",
+          "noPartners": "Aucun partenaire",
+          "alreadyHas": "A déjà le badge",
+          "livePreviewTitle": "Aperçu en direct",
+          "previewChat": "Dans le chat",
+          "previewProfile": "Sur le profil",
+          "previewSampleMessage": "Bonjour à tous 👋",
+          "errors": {
+            "badge_already_granted": "Badge déjà accordé",
+            "unknown": "Une erreur est survenue"
+          }
         }
       },
       "rewardsPage": {
@@ -2250,9 +2262,14 @@
         "chainBadge": "Bonus chaîne"
       },
       "auditPage": {
-        "title": "Journal d'audit admin",
-        "hint": "Historique des actions admin (deals, badges, règles, saisons, missions).",
-        "empty": "Aucune entrée."
+        "title": "Audit et activité partenaires",
+        "hint": "Connexions et activité des partenaires, plus actions admin.",
+        "empty": "Aucune entrée admin.",
+        "tabPartners": "Activité partenaires",
+        "tabAdmin": "Actions admin",
+        "emptyPartners": "Aucune activité — les connexions apparaîtront désormais.",
+        "searchPlaceholder": "Rechercher nom, e-mail ou activité…",
+        "unknownActor": "Utilisateur inconnu"
       },
       "seasonsPage": {
         "title": "Saisons du classement",

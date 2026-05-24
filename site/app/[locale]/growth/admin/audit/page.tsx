@@ -1,48 +1,67 @@
 import { getTranslations } from "next-intl/server";
+import { AdminAuditClient } from "@/components/growth/admin/AdminAuditClient";
 import { prisma } from "@/lib/prisma";
 
 export default async function GrowthAdminAuditPage() {
   const t = await getTranslations("Growth.admin.auditPage");
-  let logs: {
-    id: string;
-    action: string;
-    entity: string;
-    entityId: string | null;
-    createdAt: Date;
-    actor: { email: string; name: string | null };
-  }[] = [];
-  try {
-    logs = await prisma.adminAuditLog.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 100,
-      include: { actor: { select: { email: true, name: true } } },
-    });
-  } catch {
-    logs = [];
-  }
+
+  const [adminRows, activityRows] = await Promise.all([
+    prisma.adminAuditLog
+      .findMany({
+        orderBy: { createdAt: "desc" },
+        take: 120,
+        include: { actor: { select: { email: true, name: true } } },
+      })
+      .catch(() => []),
+    prisma.activityEvent
+      .findMany({
+        orderBy: { createdAt: "desc" },
+        take: 200,
+      })
+      .catch(() => []),
+  ]);
+
+  const actorIds = [
+    ...new Set(activityRows.map((e) => e.actorUserId).filter((id): id is string => Boolean(id))),
+  ];
+  const actors =
+    actorIds.length > 0
+      ? await prisma.user.findMany({
+          where: { id: { in: actorIds } },
+          select: { id: true, email: true, name: true },
+        })
+      : [];
+  const actorMap = new Map(actors.map((u) => [u.id, u]));
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold">{t("title")}</h1>
-      <p className="text-sm text-white/65">{t("hint")}</p>
-      <ul className="space-y-2">
-        {logs.length === 0 ? (
-          <li className="text-sm text-white/50">{t("empty")}</li>
-        ) : (
-          logs.map((l) => (
-            <li key={l.id} className="rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm">
-              <span className="font-semibold text-gold">{l.action}</span>{" "}
-              <span className="text-white/60">
-                {l.entity}
-                {l.entityId ? ` · ${l.entityId}` : ""}
-              </span>
-              <div className="mt-1 text-xs text-white/45">
-                {l.actor.name ?? l.actor.email} · {l.createdAt.toLocaleString()}
-              </div>
-            </li>
-          ))
-        )}
-      </ul>
+      <div>
+        <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold">{t("title")}</h1>
+        <p className="mt-2 text-sm text-white/65">{t("hint")}</p>
+      </div>
+      <AdminAuditClient
+        adminLogs={adminRows.map((l) => ({
+          id: l.id,
+          action: l.action,
+          entity: l.entity,
+          entityId: l.entityId,
+          createdAt: l.createdAt.toISOString(),
+          actorEmail: l.actor.email,
+          actorName: l.actor.name,
+        }))}
+        partnerActivity={activityRows.map((e) => {
+          const actor = e.actorUserId ? actorMap.get(e.actorUserId) : null;
+          return {
+            id: e.id,
+            kind: e.kind,
+            headline: e.headline,
+            createdAt: e.createdAt.toISOString(),
+            actorUserId: e.actorUserId,
+            actorEmail: actor?.email ?? null,
+            actorName: actor?.name ?? null,
+          };
+        })}
+      />
     </div>
   );
 }

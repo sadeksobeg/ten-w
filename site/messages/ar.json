@@ -2266,24 +2266,36 @@
         "revokeTitle": "سحب شارة",
         "revokeHint": "يزيل أي شارة (بما فيها التلقائية) من المستخدم.",
         "revokeSubmit": "سحب",
-        "revokeBadgeKey": "مفتاح الشارة"
-      },
-      "grantStudio": {
-        "eyebrow": "حفل منح الشارة",
-        "title": "منح باحتفال",
-        "hint": "الشارات المميزة تظهر في محادثة الفعالية بجانب الاسم.",
-        "email": "بريد الشريك",
-        "emailPh": "partner@example.com",
-        "badgeKey": "الشارة",
-        "submit": "منح باحتفال",
-        "confirmTitle": "تأكيد المنح",
-        "confirmBody": "منح «{badge}» لـ {partner}؟",
-        "cancel": "إلغاء",
-        "confirmSubmit": "منح الآن",
-        "toastCeremony": "تم منح الشارة باحتفال",
-        "errors": {
-          "badge_already_granted": "الشارة ممنوحة مسبقاً",
-          "unknown": "حدث خطأ"
+        "revokeBadgeKey": "مفتاح الشارة",
+        "grantStudio": {
+          "eyebrow": "حفل منح الشارة",
+          "title": "منح باحتفال",
+          "hint": "اختر الشارة والشركاء — معاينة حية لظهورها في المحادثة والملف الشخصي.",
+          "email": "بريد الشريك",
+          "emailPh": "partner@example.com",
+          "badgeKey": "الشارة",
+          "submit": "منح الشارة",
+          "confirmTitle": "تأكيد المنح",
+          "confirmBody": "منح «{badge}» لـ {partner}؟",
+          "confirmBatchBody": "منح «{badge}» لـ {count} شريك؟",
+          "cancel": "إلغاء",
+          "confirmSubmit": "منح الآن",
+          "toastCeremony": "تم منح الشارة",
+          "toastBatchResult": "تم المنح: {granted} · تخطّي: {skipped}",
+          "selectPartners": "اختر الشركاء",
+          "partnerSearch": "ابحث بالاسم أو البريد…",
+          "selectAll": "تحديد المعروض",
+          "clearSelection": "إلغاء التحديد",
+          "noPartners": "لا يوجد شركاء",
+          "alreadyHas": "لديه الشارة",
+          "livePreviewTitle": "معاينة الظهور الفعلي",
+          "previewChat": "في المحادثة",
+          "previewProfile": "في الملف الشخصي",
+          "previewSampleMessage": "مرحباً بالجميع 👋",
+          "errors": {
+            "badge_already_granted": "الشارة ممنوحة مسبقاً",
+            "unknown": "حدث خطأ"
+          }
         }
       },
       "rewardsPage": {
@@ -2306,9 +2318,14 @@
         "chainBadge": "مكافأة سلسلة"
       },
       "auditPage": {
-        "title": "سجل تدقيق الإدارة",
-        "hint": "سجل ثابت لتغييرات الإدارة (صفقات، شارات، قواعد، مواسم، مكافآت المهام).",
-        "empty": "لا توجد سجلات بعد."
+        "title": "سجل التدقيق والنشاط",
+        "hint": "تسجيلات دخول الشركاء ونشاطهم، بالإضافة إلى إجراءات الإدارة.",
+        "empty": "لا توجد سجلات إدارية بعد.",
+        "tabPartners": "نشاط الشركاء",
+        "tabAdmin": "إجراءات الإدارة",
+        "emptyPartners": "لا يوجد نشاط مسجّل بعد — سيظهر تسجيل الدخول من الآن.",
+        "searchPlaceholder": "ابحث بالاسم، البريد، أو نوع النشاط…",
+        "unknownActor": "مستخدم غير معروف"
       },
       "seasonsPage": {
         "title": "مواسم لوحة المتصدرين",

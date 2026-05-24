@@ -1,23 +1,44 @@
+import { UserRole } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
-import { AdminBadgeGrantStudio } from "@/components/growth/admin/AdminBadgeGrantStudio";
-import { AdminBadgesClient } from "@/components/growth/admin/AdminBadgesClient";
+import {
+  AdminBadgeGrantStudio,
+} from "@/components/growth/admin/AdminBadgeGrantStudio";
 import { AdminCreateBadgeForm } from "@/components/growth/admin/AdminCreateBadgeForm";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { revokeAdminBadgeAction } from "@/lib/growth/actions";
+import { ensureAdminBadgeDefinitions } from "@/lib/growth/ensure-admin-badges";
 import { prisma } from "@/lib/prisma";
 
 export default async function GrowthAdminBadgesPage() {
   const t = await getTranslations("Growth");
-  const [allBadges, revokeBadges] = await Promise.all([
+
+  await ensureAdminBadgeDefinitions();
+
+  const [allBadges, partners] = await Promise.all([
     prisma.badgeDefinition.findMany({
       orderBy: { key: "asc" },
       select: { key: true, name: true, description: true, type: true },
     }),
-    prisma.badgeDefinition.findMany({
-      orderBy: { key: "asc" },
-      select: { key: true, name: true, description: true },
+    prisma.user.findMany({
+      where: { role: UserRole.PARTNER, partnerProfile: { isNot: null }, isActive: true },
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        userBadges: { select: { badge: { select: { key: true } } } },
+      },
     }),
   ]);
+
+  const partnerOptions = partners.map((p) => ({
+    userId: p.id,
+    email: p.email,
+    name: p.name,
+    avatarUrl: p.avatarUrl,
+    earnedBadgeKeys: p.userBadges.map((ub) => ub.badge.key),
+  }));
 
   return (
     <div className="space-y-6">
@@ -25,11 +46,9 @@ export default async function GrowthAdminBadgesPage() {
         {t("admin.badgesPage.title")}
       </h1>
 
-      <AdminBadgeGrantStudio adminBadges={allBadges} />
+      <AdminBadgeGrantStudio adminBadges={allBadges} partners={partnerOptions} />
 
       <AdminCreateBadgeForm />
-
-      <AdminBadgesClient adminBadges={allBadges} />
 
       <GlassCard>
         <h2 className="text-lg font-bold">{t("admin.badgesPage.revokeTitle")}</h2>
@@ -51,7 +70,7 @@ export default async function GrowthAdminBadgesPage() {
               required
               className="mt-2 w-full rounded-xl border border-white/10 bg-black/40 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
             >
-              {revokeBadges.map((b) => (
+              {allBadges.map((b) => (
                 <option key={b.key} value={b.key}>
                   {b.name} ({b.key})
                 </option>

@@ -36,7 +36,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+      if (user?.id && trigger === "signIn") {
+        const email = typeof user.email === "string" ? user.email : "";
+        const role = (user as { role?: string }).role;
+        if (role === "PARTNER") {
+          const { logPartnerSignIn } = await import("@/lib/growth/partner-activity-log");
+          await logPartnerSignIn(user.id, email);
+        }
+      }
       if (user && "role" in user) {
         token.role = user.role as "PARTNER" | "ADMIN";
         if (user.id) token.sub = user.id;

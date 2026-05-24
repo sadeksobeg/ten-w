@@ -2328,24 +2328,36 @@
         "revokeTitle": "Revoke badge",
         "revokeHint": "Removes any badge (including auto badges) from the user.",
         "revokeSubmit": "Revoke",
-        "revokeBadgeKey": "Badge key"
-      },
-      "grantStudio": {
-        "eyebrow": "Badge ceremony",
-        "title": "Grant with ceremony",
-        "hint": "Featured badges appear in event chat beside partner names.",
-        "email": "Partner email",
-        "emailPh": "partner@example.com",
-        "badgeKey": "Badge",
-        "submit": "Grant with ceremony",
-        "confirmTitle": "Confirm ceremony grant",
-        "confirmBody": "Award «{badge}» to {partner}?",
-        "cancel": "Cancel",
-        "confirmSubmit": "Grant now",
-        "toastCeremony": "Badge granted with ceremony",
-        "errors": {
-          "badge_already_granted": "Badge already granted",
-          "unknown": "Something went wrong"
+        "revokeBadgeKey": "Badge key",
+        "grantStudio": {
+          "eyebrow": "Badge ceremony",
+          "title": "Grant with ceremony",
+          "hint": "Pick badge and partners — live preview for chat and profile.",
+          "email": "Partner email",
+          "emailPh": "partner@example.com",
+          "badgeKey": "Badge",
+          "submit": "Grant badge",
+          "confirmTitle": "Confirm grant",
+          "confirmBody": "Award «{badge}» to {partner}?",
+          "confirmBatchBody": "Award «{badge}» to {count} partners?",
+          "cancel": "Cancel",
+          "confirmSubmit": "Grant now",
+          "toastCeremony": "Badge granted",
+          "toastBatchResult": "Granted: {granted} · Skipped: {skipped}",
+          "selectPartners": "Select partners",
+          "partnerSearch": "Search name or email…",
+          "selectAll": "Select visible",
+          "clearSelection": "Clear",
+          "noPartners": "No partners found",
+          "alreadyHas": "Has badge",
+          "livePreviewTitle": "Live appearance preview",
+          "previewChat": "In chat",
+          "previewProfile": "On profile",
+          "previewSampleMessage": "Hello everyone 👋",
+          "errors": {
+            "badge_already_granted": "Badge already granted",
+            "unknown": "Something went wrong"
+          }
         }
       },
       "rewardsPage": {
@@ -2373,9 +2385,14 @@
         "chainBadge": "Chain bonus"
       },
       "auditPage": {
-        "title": "Admin audit log",
-        "hint": "Immutable record of admin changes (deals, badges, rules, seasons).",
-        "empty": "No audit entries yet."
+        "title": "Audit & partner activity",
+        "hint": "Partner sign-ins and site activity, plus admin actions.",
+        "empty": "No admin entries yet.",
+        "tabPartners": "Partner activity",
+        "tabAdmin": "Admin actions",
+        "emptyPartners": "No activity logged yet — sign-ins will appear from now on.",
+        "searchPlaceholder": "Search name, email, or activity…",
+        "unknownActor": "Unknown user"
       },
       "seasonsPage": {
         "title": "Leaderboard seasons",

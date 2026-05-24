@@ -766,6 +766,72 @@ export async function assignAdminBadgeAction(
   return { ok: true, badgeName: badge.name, badgeKey: badge.key };
 }
 
+export async function assignAdminBadgesBatchAction(
+  userIds: string[],
+  badgeKey: string,
+): Promise<
+  | { ok: true; granted: number; skipped: number; badgeName: string }
+  | { ok: false; error: string }
+> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  if (userIds.length === 0 || !badgeKey) return { ok: false, error: "invalid_input" };
+
+  const badge = await prisma.badgeDefinition.findUnique({ where: { key: badgeKey } });
+  if (!badge) return { ok: false, error: "invalid_badge" };
+
+  let granted = 0;
+  let skipped = 0;
+
+  for (const userId of userIds) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, email: true },
+    });
+    if (!user) {
+      skipped += 1;
+      continue;
+    }
+
+    const didGrant = await grantAdminBadge(prisma, user.id, badge.key, session.user.id);
+    if (!didGrant) {
+      skipped += 1;
+      continue;
+    }
+    granted += 1;
+
+    if (badge.key === CONTENT_CREATOR_BADGE) {
+      await addUserToCreatorRoom(user.id);
+    }
+
+    await createNotification(prisma, {
+      userId: user.id,
+      type: NotificationType.BADGE_EARNED,
+      title: badge.key === CONTENT_CREATOR_BADGE ? "برنامج صناع المحتوى" : "شارة جديدة",
+      body:
+        badge.key === CONTENT_CREATOR_BADGE
+          ? "تم قبولك في برنامج الشراكة مع صناع المحتوى — اكتشف مزاياك الآن."
+          : badge.name,
+      link: badge.key === CONTENT_CREATOR_BADGE ? "/growth/creators" : "/growth",
+      metadata: { badgeKey: badge.key },
+    });
+  }
+
+  if (granted > 0) {
+    await logAdminAudit(session.user.id, "grant_badge_batch", "BadgeDefinition", badge.id, {
+      badgeKey,
+      granted,
+      skipped,
+      userIds,
+    });
+  }
+
+  revalidateGrowth();
+  return { ok: true, granted, skipped, badgeName: badge.name };
+}
+
 const revokeBadgeSchema = z.object({
   email: z.string().email(),
   badgeKey: z.string().min(2).max(64),
