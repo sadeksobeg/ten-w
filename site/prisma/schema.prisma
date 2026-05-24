@@ -615,6 +615,7 @@ model GrowthEvent {
   milestones   EventMilestone[]
   eventNotifications EventNotification[]
   posts        EventPost[]
+  contactLeads EventContactLead[]
   chatRoom     ChatRoom?
 
   @@index([status])
@@ -675,6 +676,29 @@ model EventPostComment {
 
   @@index([postId, createdAt])
   @@index([userId])
+}
+
+enum EventContactStatus {
+  PENDING
+  CONTACTED
+}
+
+model EventContactLead {
+  id             String             @id @default(cuid())
+  eventId        String
+  normalizedKey  String
+  name           String
+  handle         String?
+  status         EventContactStatus @default(PENDING)
+  sourcePostId   String?
+  isManual       Boolean            @default(false)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  event GrowthEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, normalizedKey])
+  @@index([eventId, status])
 }
 
 model EventParticipant {

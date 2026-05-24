@@ -1362,6 +1362,19 @@
       "tabChat": "Chat",
       "tabProgress": "Progrès",
       "tabPosts": "Publications",
+      "assistant": {
+        "title": "Assistant intelligent",
+        "subtitle": "Noms extraits des publications — suivez qui a été contacté.",
+        "open": "Ouvrir l'assistant",
+        "close": "Fermer",
+        "pendingCount": "En attente {n}",
+        "contactedCount": "Contactés {n}",
+        "statusPending": "Pas encore contacté",
+        "statusContacted": "Contacté",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "save": "Enregistrer"
+      },
       "status": {
         "DRAFT": "Brouillon",
         "PUBLISHED": "Publié",

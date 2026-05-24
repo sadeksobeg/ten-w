@@ -4,15 +4,19 @@ import { useActionState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { createEventPostAction } from "@/lib/growth/actions";
 import { EventPostCard } from "@/components/growth/events/EventPostCard";
+import { EventContactAssistantBubble } from "@/components/growth/events/EventContactAssistantBubble";
 import type { EventPostRow } from "@/lib/growth/event-posts";
+import type { EventContactLeadRow } from "@/lib/growth/event-contact-assistant";
 
 type Props = {
   eventId: string;
   posts: EventPostRow[];
   currentUserId: string;
+  contactLeads: EventContactLeadRow[];
+  isAdmin: boolean;
 };
 
-export function EventMemberFeed({ eventId, posts, currentUserId }: Props) {
+export function EventMemberFeed({ eventId, posts, currentUserId, contactLeads, isAdmin }: Props) {
   const t = useTranslations("Growth.events");
   const [postState, postAction, postPending] = useActionState(createEventPostAction, null);
 
@@ -24,7 +28,8 @@ export function EventMemberFeed({ eventId, posts, currentUserId }: Props) {
   }, [postState, eventId]);
 
   return (
-    <div className="space-y-6">
+    <>
+      <div className="space-y-6">
       <div className="relative overflow-hidden rounded-3xl border border-gold/25 bg-gradient-to-br from-gold/[0.12] via-[#0a0c14] to-violet-950/30 p-px shadow-[0_0_60px_-20px_rgba(228,184,77,0.35)]">
         <div className="relative rounded-[23px] bg-[#080a10]/95 p-5 sm:p-6">
           <div
@@ -79,6 +84,9 @@ export function EventMemberFeed({ eventId, posts, currentUserId }: Props) {
           ))
         )}
       </div>
-    </div>
+      </div>
+
+      <EventContactAssistantBubble eventId={eventId} leads={contactLeads} isAdmin={isAdmin} />
+    </>
   );
 }

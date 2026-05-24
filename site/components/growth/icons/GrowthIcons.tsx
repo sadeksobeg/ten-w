@@ -510,6 +510,47 @@ export function IconLegends(props: GrowthIconProps) {
   );
 }
 
+export function IconHeart(props: GrowthIconProps & { filled?: boolean }) {
+  const { filled, ...rest } = props;
+  return (
+    <GrowthIconBase {...rest}>
+      <path
+        d="M12 21s-6.5-4.35-9-8.5C1.5 9.5 3.5 5 7.5 5c2 0 3.2 1.2 4.5 2.8C13.3 6.2 14.5 5 16.5 5 20.5 5 22.5 9.5 21 12.5 18.5 16.65 12 21 12 21z"
+        fill={filled ? "currentColor" : "none"}
+      />
+    </GrowthIconBase>
+  );
+}
+
+export function IconComment(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M4 5h16v11H8l-4 4V5z" />
+      <path d="M8 10h8M8 13h5" opacity={0.55} />
+    </GrowthIconBase>
+  );
+}
+
+export function IconRepost(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M7 7h11v6" />
+      <path d="M17 7l-3-3M17 13H6V7" />
+      <path d="M6 13l3 3" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconSparkle(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M12 3l1.2 4.2L17.5 8.5 13.2 9.7 12 14l-1.2-4.3L6.5 8.5l4.3-1.3L12 3z" />
+      <path d="M5 16l.7 2.3L8 19l-2.3.7L5 22l-.7-2.3L2 19l2.3-.7L5 16z" opacity={0.7} />
+      <path d="M19 14l.5 1.7L21 16l-1.5.3L19 18l-.5-1.7L17 16l1.5-.3L19 14z" opacity={0.55} />
+    </GrowthIconBase>
+  );
+}
+
 /** Mobile bottom nav mapping */
 export const GROWTH_MOBILE_NAV_ICONS = {
   dashboard: IconDashboard,

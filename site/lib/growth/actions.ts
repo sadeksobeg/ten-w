@@ -2286,6 +2286,76 @@ export async function deleteEventPostCommentAction(
   return { ok: true };
 }
 
+export async function toggleEventContactLeadAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id) return { ok: false, error: "unauthorized" };
+
+  const leadId = String(formData.get("leadId") ?? "").trim();
+  if (!leadId) return { ok: false, error: "invalid_input" };
+
+  const lead = await prisma.eventContactLead.findUnique({ where: { id: leadId } });
+  if (!lead) return { ok: false, error: "not_found" };
+
+  const { isAcceptedEventMember } = await import("@/lib/growth/event-posts");
+  const member = await isAcceptedEventMember(lead.eventId, session.user.id);
+  if (!member && session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  await prisma.eventContactLead.update({
+    where: { id: leadId },
+    data: {
+      status: lead.status === "CONTACTED" ? "PENDING" : "CONTACTED",
+    },
+  });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function updateEventContactLeadAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const leadId = String(formData.get("leadId") ?? "").trim();
+  const name = String(formData.get("name") ?? "").trim();
+  if (!leadId || !name || name.length > 120) return { ok: false, error: "invalid_input" };
+
+  await prisma.eventContactLead.update({
+    where: { id: leadId },
+    data: { name, isManual: true },
+  });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function deleteEventContactLeadAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const leadId = String(formData.get("leadId") ?? "").trim();
+  if (!leadId) return { ok: false, error: "invalid_input" };
+
+  await prisma.eventContactLead.delete({ where: { id: leadId } });
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
 const sendNotifSchema = z.object({
   email: z.string().email().optional().or(z.literal("")),
   title: z.string().min(1).max(200),

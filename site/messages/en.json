@@ -1342,6 +1342,19 @@
       "tabChat": "Chat",
       "tabProgress": "Progress",
       "tabPosts": "Posts",
+      "assistant": {
+        "title": "Your smart assistant",
+        "subtitle": "Names extracted from team posts — track outreach for each influencer.",
+        "open": "Open name assistant",
+        "close": "Close",
+        "pendingCount": "Pending {n}",
+        "contactedCount": "Contacted {n}",
+        "statusPending": "Not contacted — tap when done",
+        "statusContacted": "Contacted",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save"
+      },
       "status": {
         "DRAFT": "Draft",
         "PUBLISHED": "Published",

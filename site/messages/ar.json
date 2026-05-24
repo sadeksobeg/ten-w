@@ -1308,6 +1308,19 @@
       "tabChat": "المحادثة",
       "tabProgress": "التقدم",
       "tabPosts": "المنشورات",
+      "assistant": {
+        "title": "مساعدكم الذكي",
+        "subtitle": "استخرجت الأسماء من منشورات الفريق — نظّم حالة التواصل مع كل مشهور.",
+        "open": "فتح مساعد الأسماء",
+        "close": "إغلاق",
+        "pendingCount": "بانتظار {n}",
+        "contactedCount": "تم التواصل {n}",
+        "statusPending": "لم يُتواصل بعد — اضغط عند الإنجاز",
+        "statusContacted": "تم التواصل",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "save": "حفظ"
+      },
       "status": {
         "DRAFT": "مسودة",
         "PUBLISHED": "منشورة",

@@ -12,6 +12,7 @@ import {
   updateEventPostCommentAction,
 } from "@/lib/growth/actions";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
+import { IconComment, IconHeart, IconRepost } from "@/components/growth/icons/GrowthIcons";
 import type { EventPostRow } from "@/lib/growth/event-posts";
 
 type Props = {
@@ -158,11 +159,11 @@ export function EventPostCard({ eventId, post, currentUserId }: Props) {
                   disabled={likePending}
                   className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition motion-safe:active:scale-95 ${
                     post.likedByMe
-                      ? "border-rose-400/40 bg-rose-500/15 text-rose-300 shadow-[0_0_16px_-4px_rgba(244,63,94,0.5)]"
-                      : "border-white/10 bg-white/[0.04] text-white/65 hover:border-rose-400/30 hover:text-rose-200"
+                      ? "border-gold/45 bg-gold/15 text-gold shadow-[0_0_16px_-4px_rgba(228,184,77,0.55)]"
+                      : "border-white/10 bg-white/[0.04] text-white/65 hover:border-gold/35 hover:text-gold"
                   }`}
                 >
-                  <span aria-hidden>{post.likedByMe ? "♥" : "♡"}</span>
+                  <IconHeart size={16} filled={post.likedByMe} className={post.likedByMe ? "text-gold" : "text-white/55"} />
                   {post.likeCount > 0 ? post.likeCount : t("like")}
                 </button>
               </form>
@@ -170,9 +171,9 @@ export function EventPostCard({ eventId, post, currentUserId }: Props) {
               <button
                 type="button"
                 onClick={() => setCommentsOpen((v) => !v)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-bold text-white/65 hover:border-sky-400/30 hover:text-sky-200"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-bold text-white/65 hover:border-gold/30 hover:text-gold"
               >
-                <span aria-hidden>💬</span>
+                <IconComment size={16} className="text-white/55 group-hover:text-gold" />
                 {post.comments.length > 0 ? post.comments.length : t("comment")}
               </button>
 
@@ -184,7 +185,8 @@ export function EventPostCard({ eventId, post, currentUserId }: Props) {
                     type="submit"
                     className="inline-flex items-center gap-1 rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 text-xs font-bold text-violet-200 hover:bg-violet-500/20"
                   >
-                    ↻ {t("repost")}
+                    <IconRepost size={14} />
+                    {t("repost")}
                   </button>
                 </form>
               ) : null}

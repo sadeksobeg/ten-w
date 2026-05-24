@@ -14,6 +14,7 @@ import { EventMemberFeed } from "@/components/growth/events/EventMemberFeed";
 import { EventCoverImage } from "@/components/growth/events/EventCoverImage";
 import { IconChevronRight } from "@/components/growth/icons/GrowthIcons";
 import { listEventPostsForMember } from "@/lib/growth/event-posts";
+import { syncEventContactLeads } from "@/lib/growth/event-contact-assistant";
 import { resolveChatSenderName, VIEWER_CHAT_PROFILE_SELECT } from "@/lib/growth/chat-display";
 import { findGrowthEventByRouteSlug } from "@/lib/growth/resolve-event";
 import { normalizeEventRouteSlug } from "@/lib/growth/event-slug";
@@ -48,6 +49,14 @@ export default async function GrowthEventDetailPage({ params }: Props) {
   const memberPosts = isMember
     ? await listEventPostsForMember(event.id, session.user.id)
     : null;
+  const contactLeads =
+    isMember && memberPosts
+      ? await syncEventContactLeads(
+          event.id,
+          memberPosts.map((p) => ({ id: p.id, body: p.body })),
+        )
+      : [];
+  const isAdmin = session.user.role === "ADMIN";
   const viewerProfile = isMember
     ? await prisma.user.findUnique({
         where: { id: session.user.id },
@@ -156,6 +165,8 @@ export default async function GrowthEventDetailPage({ params }: Props) {
               eventId={event.id}
               posts={memberPosts ?? []}
               currentUserId={session.user.id}
+              contactLeads={contactLeads}
+              isAdmin={isAdmin}
             />
           }
         />
