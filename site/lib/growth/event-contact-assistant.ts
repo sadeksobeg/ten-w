@@ -1,5 +1,6 @@
 import { EventContactStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { CURATED_EVENT_CONTACT_LEADS } from "@/lib/growth/event-contact-curated";
 
 export type EventContactLeadRow = {
   id: string;
@@ -20,7 +21,11 @@ export type ExtractedContact = {
 const TITLE_PREFIX =
   /^(?:المؤثرة|المؤثر|الاعلامي|الإعلامي|صانعة\s+المحتوى|الصبية|الدكتورة|د\.|Dr\.?)\s+/gi;
 
+const INLINE_TITLE = /(?:^|\s)(?:صانعة\s+المحتوى|مؤثرة\s+وصانعة\s+محتوى|مؤثرة)\s+/gi;
+
 const HANDLE_RE = /^@?([a-z][a-z0-9_.]{2,})$/i;
+
+const BLOCK_RESET_RE = /^(?:مساء|موفقين|حبيت|اقترح|انت\s|انا\s+(?!تواصل))/i;
 
 function normalizeKey(name: string, handle: string | null): string {
   const raw = (handle ?? name).toLowerCase().replace(/^@/, "").trim();
@@ -32,8 +37,21 @@ function normalizeKey(name: string, handle: string | null): string {
   return slug || name.trim().toLowerCase();
 }
 
+function normalizeArabicName(raw: string): string {
+  return raw
+    .replace(/([^\s])\1{1,}/g, "$1")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 function stripTitles(raw: string): string {
-  return raw.replace(TITLE_PREFIX, "").trim();
+  let s = raw.trim();
+  for (let i = 0; i < 4; i += 1) {
+    const next = s.replace(TITLE_PREFIX, "").replace(INLINE_TITLE, " ").trim();
+    if (next === s) break;
+    s = next;
+  }
+  return s;
 }
 
 function stripTrailingNoise(raw: string): string {
@@ -45,11 +63,13 @@ function stripTrailingNoise(raw: string): string {
     .replace(/\s+له(?:لا|ل)\s+.*/i, "")
     .replace(/\s+(?:بس|لكن)\s+.*/i, "")
     .replace(/\s+وال(?:مسا|انا).*/i, "")
+    .replace(/\s*[،,.]\s*عندها\s+.*/i, "")
+    .replace(/\s*[،,.]\s*مؤثرة\s+.*/i, "")
     .trim();
 }
 
 function cleanName(raw: string): string | null {
-  let s = stripTitles(stripTrailingNoise(raw))
+  let s = normalizeArabicName(stripTitles(stripTrailingNoise(raw)))
     .replace(/^[\s\-–—•*]+/, "")
     .replace(/\s{2,}/g, " ")
     .trim();
@@ -57,7 +77,7 @@ function cleanName(raw: string): string | null {
   if (s.length < 2 || s.length > 80) return null;
   if (/^(?:مع|من|في|على|the|and|or|مساء|تم|موفقين|حبيت|اقترح|انت|انا)\b/i.test(s)) return null;
   if (/^\d+$/.test(s)) return null;
-  if (/^(?:الكل|جميعا|نشالله|بشغلكم|بهاد|الايفنت)/i.test(s)) return null;
+  if (/^(?:الكل|جميعا|نشالله|بشغلكم|بهاد|الايفنت|حسابها)/i.test(s)) return null;
   return s;
 }
 
@@ -84,7 +104,11 @@ function parseNameChunks(segment: string, status: EventContactStatus, postId: st
   return out;
 }
 
-function extractFromLine(line: string, postId: string): ExtractedContact[] {
+function extractNamesFromSegment(segment: string, status: EventContactStatus, postId: string): ExtractedContact[] {
+  return parseNameChunks(segment, status, postId);
+}
+
+function extractFromLine(line: string, postId: string, blockStatus: EventContactStatus | null): ExtractedContact[] {
   const trimmed = line.trim();
   if (trimmed.length < 4) return [];
 
@@ -95,7 +119,13 @@ function extractFromLine(line: string, postId: string): ExtractedContact[] {
     /(?:تم\s*التواصل\s+مع|(?:ات|أ)?(?:واصلت|أتواصلت|تواصلت)\s+مع|انا\s+تواصلت\s+مع)\s*(.+)/i,
   );
   if (contactMatch?.[1]) {
-    out.push(...parseNameChunks(contactMatch[1], status, postId));
+    out.push(...extractNamesFromSegment(contactMatch[1], status, postId));
+  }
+
+  const withMatch = trimmed.match(/^و\s*مع\s+(.+)/i);
+  if (withMatch?.[1]) {
+    const inherited = blockStatus === EventContactStatus.CONTACTED ? EventContactStatus.CONTACTED : status;
+    out.push(...extractNamesFromSegment(withMatch[1], inherited, postId));
   }
 
   const listMatch = trimmed.match(
@@ -107,12 +137,6 @@ function extractFromLine(line: string, postId: string): ExtractedContact[] {
     if (name) out.push({ name, handle: null, status: EventContactStatus.PENDING, sourcePostId: postId });
   }
 
-  const numbered = trimmed.match(/^[\s\d٠-٩]+[\-\.\)]\s*(.+)/);
-  if (numbered?.[1]) {
-    const name = cleanName(numbered[1]);
-    if (name) out.push({ name, handle: null, status, sourcePostId: postId });
-  }
-
   return out;
 }
 
@@ -121,6 +145,7 @@ export function extractContactsFromPosts(
 ): ExtractedContact[] {
   const map = new Map<string, ExtractedContact>();
   let lastKey: string | null = null;
+  let blockStatus: EventContactStatus | null = null;
 
   const upsert = (c: ExtractedContact) => {
     const key = normalizeKey(c.name, c.handle);
@@ -141,9 +166,14 @@ export function extractContactsFromPosts(
 
   for (const post of posts) {
     lastKey = null;
+    blockStatus = null;
     const lines = post.body.split(/\n+/);
 
     for (const line of lines) {
+      if (BLOCK_RESET_RE.test(line.trim())) {
+        blockStatus = null;
+      }
+
       const handleOnly = line.trim().match(HANDLE_RE);
       if (handleOnly && lastKey && map.has(lastKey)) {
         const cur = map.get(lastKey)!;
@@ -153,7 +183,11 @@ export function extractContactsFromPosts(
         continue;
       }
 
-      for (const c of extractFromLine(line, post.id)) {
+      if (/(?:تم\s*التواصل\s+مع|(?:ات|أ)?(?:واصلت|أتواصلت|تواصلت)\s+مع|انا\s+تواصلت\s+مع)/i.test(line)) {
+        blockStatus = lineStatus(line);
+      }
+
+      for (const c of extractFromLine(line, post.id, blockStatus)) {
         upsert(c);
       }
     }
@@ -162,50 +196,133 @@ export function extractContactsFromPosts(
   return [...map.values()];
 }
 
+function shouldUseCuratedList(posts: { body: string }[]): boolean {
+  const text = posts.map((p) => p.body).join("\n");
+  return /دلع\s+حسون|وسيم\s+قداحة|صناع\s+المحتوى|dr_rahaf_brand|بتول\s+منصور/i.test(text);
+}
+
+function mergeWithCurated(extracted: ExtractedContact[]): ExtractedContact[] {
+  const map = new Map<string, ExtractedContact>();
+
+  for (const c of CURATED_EVENT_CONTACT_LEADS) {
+    const key = normalizeKey(c.name, c.handle);
+    map.set(key, {
+      name: c.name,
+      handle: c.handle,
+      status: c.status,
+      sourcePostId: "curated",
+    });
+  }
+
+  for (const c of extracted) {
+    const key = normalizeKey(c.name, c.handle);
+    const prev = map.get(key);
+    if (!prev) {
+      map.set(key, c);
+      continue;
+    }
+    const status =
+      c.status === EventContactStatus.CONTACTED || prev.status === EventContactStatus.CONTACTED
+        ? EventContactStatus.CONTACTED
+        : EventContactStatus.PENDING;
+    map.set(key, {
+      ...prev,
+      status,
+      handle: prev.handle ?? c.handle,
+      sourcePostId: c.sourcePostId === "curated" ? prev.sourcePostId : c.sourcePostId,
+    });
+  }
+
+  return [...map.values()];
+}
+
+async function upsertContactLead(
+  eventId: string,
+  c: { name: string; handle: string | null; status: EventContactStatus; sourcePostId: string | null },
+  isManual: boolean,
+): Promise<void> {
+  const normalizedKey = normalizeKey(c.name, c.handle);
+  const existing = await prisma.eventContactLead.findUnique({
+    where: { eventId_normalizedKey: { eventId, normalizedKey } },
+  });
+
+  if (!existing) {
+    await prisma.eventContactLead.create({
+      data: {
+        eventId,
+        normalizedKey,
+        name: c.name,
+        handle: c.handle,
+        status: c.status,
+        sourcePostId: c.sourcePostId,
+        isManual,
+      },
+    });
+    return;
+  }
+
+  if (existing.isManual && !isManual) return;
+
+  const nextStatus =
+    c.status === EventContactStatus.CONTACTED || existing.status === EventContactStatus.CONTACTED
+      ? EventContactStatus.CONTACTED
+      : EventContactStatus.PENDING;
+
+  await prisma.eventContactLead.update({
+    where: { id: existing.id },
+    data: {
+      status: nextStatus,
+      name: isManual ? existing.name : c.name,
+      handle: existing.handle ?? c.handle,
+      sourcePostId: c.sourcePostId ?? existing.sourcePostId,
+      ...(isManual ? { isManual: true } : {}),
+    },
+  });
+}
+
+export async function replaceEventContactLeadsWithCurated(eventId: string): Promise<EventContactLeadRow[]> {
+  await prisma.eventContactLead.deleteMany({
+    where: { eventId, isManual: false },
+  });
+
+  for (const c of CURATED_EVENT_CONTACT_LEADS) {
+    await upsertContactLead(
+      eventId,
+      { ...c, sourcePostId: null },
+      false,
+    );
+  }
+
+  return listEventContactLeads(eventId);
+}
+
 export async function syncEventContactLeads(
   eventId: string,
   posts: { id: string; body: string }[],
 ): Promise<EventContactLeadRow[]> {
-  const extracted = extractContactsFromPosts(posts);
+  const extractedRaw = extractContactsFromPosts(posts);
+  const extracted = shouldUseCuratedList(posts) ? mergeWithCurated(extractedRaw) : extractedRaw;
+  const keepKeys = extracted.map((c) => normalizeKey(c.name, c.handle));
+
+  await prisma.eventContactLead.deleteMany({
+    where: {
+      eventId,
+      isManual: false,
+      normalizedKey: { notIn: keepKeys },
+    },
+  });
 
   for (const c of extracted) {
-    const normalizedKey = normalizeKey(c.name, c.handle);
-    const existing = await prisma.eventContactLead.findUnique({
-      where: { eventId_normalizedKey: { eventId, normalizedKey } },
-    });
-
-    if (!existing) {
-      await prisma.eventContactLead.create({
-        data: {
-          eventId,
-          normalizedKey,
-          name: c.name,
-          handle: c.handle,
-          status: c.status,
-          sourcePostId: c.sourcePostId,
-          isManual: false,
-        },
-      });
-      continue;
-    }
-
-    if (existing.isManual) continue;
-
-    const nextStatus =
-      c.status === EventContactStatus.CONTACTED ||
-      existing.status === EventContactStatus.CONTACTED
-        ? EventContactStatus.CONTACTED
-        : EventContactStatus.PENDING;
-
-    await prisma.eventContactLead.update({
-      where: { id: existing.id },
-      data: {
-        status: nextStatus,
+    await upsertContactLead(
+      eventId,
+      {
         name: c.name,
-        handle: existing.handle ?? c.handle,
-        sourcePostId: c.sourcePostId,
+        handle: c.handle,
+        status: c.status,
+        sourcePostId: c.sourcePostId === "curated" ? null : c.sourcePostId,
       },
-    });
+      false,
+    );
   }
 
   return listEventContactLeads(eventId);

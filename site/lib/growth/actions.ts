@@ -2397,8 +2397,13 @@ export async function resyncEventContactLeadsAction(
     orderBy: { createdAt: "asc" },
   });
 
-  const { syncEventContactLeads } = await import("@/lib/growth/event-contact-assistant");
-  await syncEventContactLeads(eventId, posts);
+  const { replaceEventContactLeadsWithCurated, syncEventContactLeads } = await import(
+    "@/lib/growth/event-contact-assistant"
+  );
+  await replaceEventContactLeadsWithCurated(eventId);
+  if (posts.length > 0) {
+    await syncEventContactLeads(eventId, posts);
+  }
 
   revalidateGrowth();
   return { ok: true };
