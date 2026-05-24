@@ -138,6 +138,8 @@ model User {
   eventsCreated              GrowthEvent[]        @relation("EventCreator")
   eventParticipants          EventParticipant[]
   eventPosts                 EventPost[]
+  eventPostLikes             EventPostLike[]
+  eventPostComments          EventPostComment[]
   activityDays               UserActivityDay[]
   adminAuditLogs             AdminAuditLog[]    @relation("AdminAuditActor")
   hallOfLegendEntry          HallOfLegend?
@@ -631,6 +633,7 @@ model EventPost {
   body       String        @db.Text
   kind       EventPostKind @default(POST)
   repostOfId String?
+  deletedAt  DateTime?
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 
@@ -638,8 +641,39 @@ model EventPost {
   user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   repostOf EventPost?  @relation("EventRepost", fields: [repostOfId], references: [id], onDelete: SetNull)
   reposts  EventPost[] @relation("EventRepost")
+  likes    EventPostLike[]
+  comments EventPostComment[]
 
   @@index([eventId, createdAt])
+  @@index([userId])
+}
+
+model EventPostLike {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post EventPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@index([postId])
+}
+
+model EventPostComment {
+  id        String    @id @default(cuid())
+  postId    String
+  userId    String
+  body      String    @db.Text
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  post EventPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
   @@index([userId])
 }
 

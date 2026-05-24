@@ -2,20 +2,19 @@
 
 import { useActionState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { createEventPostAction, repostEventPostAction } from "@/lib/growth/actions";
-import { GlassCard } from "@/components/growth/ui/GlassCard";
-import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
+import { createEventPostAction } from "@/lib/growth/actions";
+import { EventPostCard } from "@/components/growth/events/EventPostCard";
 import type { EventPostRow } from "@/lib/growth/event-posts";
 
 type Props = {
   eventId: string;
   posts: EventPostRow[];
+  currentUserId: string;
 };
 
-export function EventMemberFeed({ eventId, posts }: Props) {
+export function EventMemberFeed({ eventId, posts, currentUserId }: Props) {
   const t = useTranslations("Growth.events");
   const [postState, postAction, postPending] = useActionState(createEventPostAction, null);
-  const [, repostAction] = useActionState(repostEventPostAction, null);
 
   useEffect(() => {
     if (postState && "ok" in postState && postState.ok) {
@@ -25,85 +24,61 @@ export function EventMemberFeed({ eventId, posts }: Props) {
   }, [postState, eventId]);
 
   return (
-    <GlassCard className="p-6">
-      <h2 className="text-lg font-bold text-gold">{t("memberHub")}</h2>
-      <p className="mt-1 text-xs text-white/50">{t("memberOnlyHint")}</p>
+    <div className="space-y-6">
+      <div className="relative overflow-hidden rounded-3xl border border-gold/25 bg-gradient-to-br from-gold/[0.12] via-[#0a0c14] to-violet-950/30 p-px shadow-[0_0_60px_-20px_rgba(228,184,77,0.35)]">
+        <div className="relative rounded-[23px] bg-[#080a10]/95 p-5 sm:p-6">
+          <div
+            className="pointer-events-none absolute -end-10 -top-10 size-32 rounded-full bg-gold/20 blur-3xl"
+            aria-hidden
+          />
+          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold/80">
+            {t("feedBadge")}
+          </p>
+          <h2 className="mt-1 font-[family-name:var(--font-cairo)] text-xl font-extrabold text-white sm:text-2xl">
+            {t("memberHub")}
+          </h2>
+          <p className="mt-2 text-sm text-white/55">{t("memberOnlyHint")}</p>
 
-      <form
-        id={`event-post-${eventId}`}
-        action={postAction}
-        className="mt-4 space-y-3"
-      >
-        <input type="hidden" name="eventId" value={eventId} />
-        <textarea
-          name="body"
-          required
-          maxLength={4000}
-          rows={3}
-          disabled={postPending}
-          placeholder={t("postPlaceholder")}
-          className="w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
-        />
-        <button
-          type="submit"
-          disabled={postPending}
-          className="rounded-full border border-gold/35 bg-gold/15 px-5 py-2 text-xs font-bold text-gold hover:bg-gold/25 disabled:opacity-50"
-        >
-          {t("postSubmit")}
-        </button>
-      </form>
+          <form
+            id={`event-post-${eventId}`}
+            action={postAction}
+            className="relative mt-5 space-y-3"
+          >
+            <input type="hidden" name="eventId" value={eventId} />
+            <textarea
+              name="body"
+              required
+              maxLength={4000}
+              rows={3}
+              disabled={postPending}
+              placeholder={t("postPlaceholder")}
+              className="w-full resize-none rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white shadow-inner outline-none transition focus:border-gold/45 focus:shadow-[0_0_24px_-8px_rgba(228,184,77,0.4)]"
+            />
+            <button
+              type="submit"
+              disabled={postPending}
+              className="w-full rounded-full bg-gradient-to-r from-[#B07D2B] to-[#E4B84D] py-2.5 text-sm font-extrabold text-black shadow-[0_0_28px_-6px_rgba(228,184,77,0.55)] transition hover:brightness-110 disabled:opacity-50 sm:w-auto sm:px-8"
+            >
+              {postPending ? "…" : t("postSubmit")}
+            </button>
+          </form>
+        </div>
+      </div>
 
-      <div className="mt-6 space-y-4">
+      <div className="space-y-5">
         {posts.length === 0 ? (
-          <p className="text-sm text-white/50">{t("feedEmpty")}</p>
+          <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.02] px-6 py-12 text-center">
+            <p className="text-4xl opacity-40" aria-hidden>
+              ✦
+            </p>
+            <p className="mt-3 text-sm font-semibold text-white/50">{t("feedEmpty")}</p>
+          </div>
         ) : (
           posts.map((p) => (
-            <article
-              key={p.id}
-              className="rounded-xl border border-white/10 bg-black/25 p-4"
-            >
-              <div className="flex items-start gap-3">
-                <GrowthAvatar
-                  name={p.authorName}
-                  email=""
-                  avatarUrl={p.authorImage}
-                  size="sm"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm font-bold text-white">{p.authorName}</span>
-                    {p.kind === "REPOST" ? (
-                      <span className="rounded-md bg-purple-500/20 px-2 py-0.5 text-[10px] font-bold text-purple-200">
-                        {t("repost")}
-                      </span>
-                    ) : null}
-                    <time className="text-[10px] text-white/40">
-                      {new Date(p.createdAt).toLocaleString()}
-                    </time>
-                  </div>
-                  {p.repostOf ? (
-                    <blockquote className="mt-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-white/65">
-                      <span className="font-semibold text-white/80">{p.repostOf.authorName}</span>
-                      <p className="mt-1 whitespace-pre-wrap">{p.repostOf.body}</p>
-                    </blockquote>
-                  ) : null}
-                  <p className="mt-2 whitespace-pre-wrap text-sm text-white/80">{p.body}</p>
-                  <form action={repostAction} className="mt-2">
-                    <input type="hidden" name="eventId" value={eventId} />
-                    <input type="hidden" name="repostOfId" value={p.id} />
-                    <button
-                      type="submit"
-                      className="text-[10px] font-bold text-gold hover:underline"
-                    >
-                      {t("repost")}
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </article>
+            <EventPostCard key={p.id} eventId={eventId} post={p} currentUserId={currentUserId} />
           ))
         )}
       </div>
-    </GlassCard>
+    </div>
   );
 }

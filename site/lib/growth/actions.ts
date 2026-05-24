@@ -2163,6 +2163,129 @@ export async function repostEventPostAction(
   return { ok: true };
 }
 
+export async function toggleEventPostLikeAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const postId = String(formData.get("postId") ?? "").trim();
+  if (!postId) return { ok: false, error: "invalid_input" };
+
+  const { toggleEventPostLike } = await import("@/lib/growth/event-posts");
+  const result = await toggleEventPostLike(postId, session.user.id);
+  if (!result.ok) return result;
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function createEventPostCommentAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const postId = String(formData.get("postId") ?? "").trim();
+  const body = String(formData.get("body") ?? "");
+  if (!postId) return { ok: false, error: "invalid_input" };
+
+  const { createEventPostComment } = await import("@/lib/growth/event-posts");
+  const result = await createEventPostComment(postId, session.user.id, body);
+  if (!result.ok) return result;
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function updateEventPostAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const postId = String(formData.get("postId") ?? "").trim();
+  const body = String(formData.get("body") ?? "");
+  if (!postId) return { ok: false, error: "invalid_input" };
+
+  const { updateEventPost } = await import("@/lib/growth/event-posts");
+  const result = await updateEventPost(postId, session.user.id, body);
+  if (!result.ok) return result;
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function deleteEventPostAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const postId = String(formData.get("postId") ?? "").trim();
+  if (!postId) return { ok: false, error: "invalid_input" };
+
+  const { deleteEventPost } = await import("@/lib/growth/event-posts");
+  const result = await deleteEventPost(postId, session.user.id);
+  if (!result.ok) return result;
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function updateEventPostCommentAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const commentId = String(formData.get("commentId") ?? "").trim();
+  const body = String(formData.get("body") ?? "");
+  if (!commentId) return { ok: false, error: "invalid_input" };
+
+  const { updateEventPostComment } = await import("@/lib/growth/event-posts");
+  const result = await updateEventPostComment(commentId, session.user.id, body);
+  if (!result.ok) return result;
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
+export async function deleteEventPostCommentAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const commentId = String(formData.get("commentId") ?? "").trim();
+  if (!commentId) return { ok: false, error: "invalid_input" };
+
+  const { deleteEventPostComment } = await import("@/lib/growth/event-posts");
+  const result = await deleteEventPostComment(commentId, session.user.id);
+  if (!result.ok) return result;
+
+  revalidateGrowth();
+  return { ok: true };
+}
+
 const sendNotifSchema = z.object({
   email: z.string().email().optional().or(z.literal("")),
   title: z.string().min(1).max(200),

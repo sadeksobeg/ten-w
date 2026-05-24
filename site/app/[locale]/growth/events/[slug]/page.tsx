@@ -151,7 +151,13 @@ export default async function GrowthEventDetailPage({ params }: Props) {
               </div>
             </>
           }
-          posts={<EventMemberFeed eventId={event.id} posts={memberPosts ?? []} />}
+          posts={
+            <EventMemberFeed
+              eventId={event.id}
+              posts={memberPosts ?? []}
+              currentUserId={session.user.id}
+            />
+          }
         />
       ) : null}
 
