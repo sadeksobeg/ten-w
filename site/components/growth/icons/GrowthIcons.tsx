@@ -514,6 +514,7 @@ export function IconLegends(props: GrowthIconProps) {
 export const GROWTH_MOBILE_NAV_ICONS = {
   dashboard: IconDashboard,
   deals: IconDeals,
+  events: IconEvents,
   map: IconMap,
   chat: IconChat,
   settings: IconSettings,

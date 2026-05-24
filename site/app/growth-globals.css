@@ -415,14 +415,29 @@
   inset-inline: 0;
   bottom: 0;
   z-index: 40;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(10, 10, 15, 0.92);
-  padding: 0.35rem 0.15rem;
+  background: rgba(10, 10, 15, 0.94);
+  padding: 0.35rem 0.25rem;
   padding-bottom: max(0.35rem, env(safe-area-inset-bottom, 0px));
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
   box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.growth-partner-nav-mobile::-webkit-scrollbar {
+  display: none;
+}
+
+.growth-partner-nav-mobile > a {
+  flex: 1 0 4.5rem;
+  max-width: 5.5rem;
+  min-width: 4.25rem;
 }
 
 @media (min-width: 768px) {

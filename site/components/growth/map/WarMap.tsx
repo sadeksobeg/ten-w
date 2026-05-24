@@ -48,7 +48,7 @@ export function WarMap({ data, locale: _locale, onClaim }: Props) {
   );
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-gold/20 bg-[#04060c] shadow-[0_0_80px_-24px_rgba(228,184,77,0.35)]">
+    <div className="relative overflow-hidden rounded-3xl border border-gold/25 bg-[#030508] shadow-[0_0_120px_-30px_rgba(228,184,77,0.45),inset_0_1px_0_rgba(255,255,255,0.06)]">
       <div
         className="pointer-events-none absolute inset-0 opacity-60 motion-safe:animate-[pulse_12s_ease-in-out_infinite] motion-reduce:opacity-40 motion-reduce:animate-none"
         style={{
@@ -148,9 +148,15 @@ export function WarMap({ data, locale: _locale, onClaim }: Props) {
             d={SYRIA_OUTLINE_PATH}
             fill="url(#wmSyriaFill)"
             stroke="url(#wmSyriaStroke)"
-            strokeWidth={2.5}
+            strokeWidth={3}
+            filter="url(#wmGlowGold)"
+          />
+          <path
+            d={SYRIA_OUTLINE_PATH}
+            fill="none"
+            stroke="rgba(228,184,77,0.15)"
+            strokeWidth={8}
             className="motion-safe:animate-[pulse_10s_ease-in-out_infinite] motion-reduce:animate-none"
-            style={{ transformOrigin: "center" }}
           />
 
           {data.networkLines.map((line) => {

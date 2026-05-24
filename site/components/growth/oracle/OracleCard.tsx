@@ -108,6 +108,7 @@ export function OracleCard({ oracle, locale = "en" }: Props) {
             }}
           />
         </div>
+        <p className="mt-2 text-end text-[10px] text-white/40">{t("refreshes")}</p>
       </div>
     </GlassCard>
   );

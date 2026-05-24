@@ -1,0 +1,78 @@
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import {
+  GROWTH_DESKTOP_NAV_ICONS,
+} from "@/components/growth/icons/GrowthIcons";
+
+const EXPLORE_KEYS = [
+  "deals",
+  "events",
+  "map",
+  "earnings",
+  "network",
+  "leaderboard",
+  "chat",
+  "legends",
+] as const;
+
+const HREF: Record<(typeof EXPLORE_KEYS)[number], string> = {
+  deals: "/growth/deals",
+  events: "/growth/events",
+  map: "/growth/map",
+  earnings: "/growth/earnings",
+  network: "/growth/network",
+  leaderboard: "/growth/leaderboard",
+  chat: "/growth/chat",
+  legends: "/growth/legends",
+};
+
+export async function GrowthHubExploreNav() {
+  const tNav = await getTranslations("Growth.nav");
+  const tDesc = await getTranslations("Growth.navDesc");
+
+  return (
+    <section className="space-y-3">
+      <h2 className="text-sm font-bold text-gold">{tDesc("sectionTitle")}</h2>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        {EXPLORE_KEYS.map((key) => {
+          const Icon = GROWTH_DESKTOP_NAV_ICONS[key];
+          const featured = key === "map";
+          return (
+            <Link
+              key={key}
+              href={HREF[key]}
+              className={`group relative overflow-hidden rounded-2xl border p-3 transition focus-visible:ring-2 focus-visible:ring-gold/40 ${
+                featured
+                  ? "border-gold/40 bg-gradient-to-br from-gold/20 via-gold/5 to-violet-500/10 hover:border-gold/60"
+                  : "border-white/10 bg-white/[0.03] hover:border-gold/25 hover:bg-white/[0.06]"
+              }`}
+            >
+              {featured ? (
+                <div
+                  className="pointer-events-none absolute -end-6 -top-6 size-20 rounded-full bg-gold/25 blur-2xl motion-safe:animate-pulse motion-reduce:animate-none"
+                  aria-hidden
+                />
+              ) : null}
+              <div className="relative flex items-start gap-2">
+                {Icon ? (
+                  <Icon
+                    size={20}
+                    className={`shrink-0 ${featured ? "text-gold" : "text-white/70 group-hover:text-gold"}`}
+                  />
+                ) : null}
+                <div className="min-w-0">
+                  <p className={`truncate text-xs font-bold ${featured ? "text-gold" : "text-white"}`}>
+                    {tNav(key)}
+                  </p>
+                  <p className="mt-0.5 line-clamp-2 text-[10px] leading-snug text-white/50">
+                    {tDesc(key)}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

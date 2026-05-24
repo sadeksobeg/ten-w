@@ -33,6 +33,7 @@ const CREATORS_NAV = { href: "/growth/creators", key: "creators" as const };
 const MOBILE_KEYS = [
   "dashboard",
   "deals",
+  "events",
   "map",
   "chat",
   "settings",
@@ -46,6 +47,7 @@ function isActive(pathname: string, href: string, exact?: boolean) {
 export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProgram = false }: Props) {
   const t = useTranslations("Growth.nav");
   const tShort = useTranslations("Growth.navShort");
+  const tDesc = useTranslations("Growth.navDesc");
   const pathname = usePathname();
   const [chatUnread, setChatUnread] = useState(0);
 
@@ -130,6 +132,7 @@ export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProg
               ) : null}
               <Icon size={20} className="shrink-0" />
               <span className="max-w-full truncate">{tShort(item.key)}</span>
+              <span className="sr-only">{tDesc(item.key)}</span>
               {item.key === "chat" && chatUnread > 0 ? (
                 <span className="absolute end-1/4 top-0 flex size-4 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white">
                   {chatUnread > 9 ? "9+" : chatUnread}

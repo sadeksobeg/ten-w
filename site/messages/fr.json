@@ -1155,7 +1155,7 @@
       "chat": "Chat",
       "notifications": "Alertes",
       "settings": "Réglages",
-      "map": "Carte de guerre",
+      "map": "Atlas Ascend",
       "legends": "Temple des Légendes",
       "signOut": "Déconnexion",
       "myProfile": "Mon profil",
@@ -1165,9 +1165,26 @@
     "navShort": {
       "dashboard": "Accueil",
       "deals": "Deals",
-      "map": "Carte",
+      "events": "Events",
+      "map": "Atlas",
       "chat": "Chat",
       "settings": "Régl."
+    },
+    "navDesc": {
+      "sectionTitle": "Explorer Ascend",
+      "dashboard": "Centre de commande — ADN, Oracle, rival",
+      "deals": "Conclure des affaires et monter",
+      "events": "Événements exclusifs et défis",
+      "map": "Atlas Ascend — votre gouvernorat en Syrie",
+      "earnings": "Gains et retraits",
+      "network": "Réseau sur 3 niveaux",
+      "leaderboard": "Classements hebdo et mensuel",
+      "chat": "Communauté et support",
+      "legends": "Temple des Légendes — 10 places",
+      "notifications": "Alertes et succès",
+      "settings": "Profil, territoire, badges",
+      "creators": "Programme créateurs",
+      "kit": "Kit marketing"
     },
     "dna": {
       "title": "Votre ADN",
@@ -1202,9 +1219,9 @@
       "viewProfile": "Voir le profil"
     },
     "map": {
-      "title": "Carte de guerre",
-      "subtitle": "Revendiquez votre gouvernorat en Syrie — votre réseau relie les régions en or.",
-      "syriaBadge": "Syrie · Gouvernorats",
+      "title": "Atlas Ascend",
+      "subtitle": "Carte TENEGTA ASCEND de la Syrie — revendiquez votre gouvernorat, reliez votre réseau en or.",
+      "syriaBadge": "TENEGTA ASCEND · Syrie",
       "ariaLabel": "Carte interactive de la Syrie pour partenaires",
       "my_territory": "Votre territoire",
       "unclaimed": "Terre libre",
@@ -1259,6 +1276,12 @@
     },
     "oracle": {
       "title": "Oracle — votre prévision",
+      "eyebrow": "TENEGTA ASCEND · Oracle",
+      "daysToLevel": "Jours niveau",
+      "monthlyEarnings": "Gains mensuels",
+      "top3Chance": "Chance TOP 3",
+      "deals30d": "Affaires (30j)",
+      "weeklyProgress": "Progrès hebdo",
       "days_to_level": "{n} jours avant le niveau suivant",
       "monthly_earnings": "Gains mensuels estimés",
       "top3_probability": "Chance TOP 3",
@@ -1266,6 +1289,12 @@
       "weekly_target": "Objectif hebdo",
       "weekly_progress": "Votre progression",
       "refreshes": "Actualisé chaque semaine",
+      "momentum": {
+        "rising": "En hausse",
+        "steady": "Stable",
+        "slowing": "Ralentit",
+        "new": "Nouveau départ"
+      },
       "levelCloseTitle": "{n} affaires pour {level}",
       "levelCloseBody": "Concluez {n} affaires cette semaine",
       "rivalCloseTitle": "{name} est proche",

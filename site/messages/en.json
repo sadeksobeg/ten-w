@@ -1125,7 +1125,7 @@
       "chat": "Chat",
       "notifications": "Alerts",
       "settings": "Settings",
-      "map": "War map",
+      "map": "Ascend Atlas",
       "legends": "Hall of Legends",
       "kit": "Kit",
       "signOut": "Sign out",
@@ -1136,9 +1136,26 @@
     "navShort": {
       "dashboard": "Home",
       "deals": "Deals",
-      "map": "Map",
+      "events": "Events",
+      "map": "Atlas",
       "chat": "Chat",
       "settings": "Setup"
+    },
+    "navDesc": {
+      "sectionTitle": "Explore Ascend",
+      "dashboard": "Your command center — DNA, Oracle, rival",
+      "deals": "Close deals and level up",
+      "events": "Exclusive events and team challenges",
+      "map": "Ascend Atlas — claim your Syrian governorate",
+      "earnings": "Earnings and payouts",
+      "network": "Referral network up to 3 levels",
+      "leaderboard": "Weekly and monthly ranks",
+      "chat": "Partner community and support",
+      "legends": "Hall of Legends — 10 seats only",
+      "notifications": "Alerts and achievements",
+      "settings": "Profile, territory, badges",
+      "creators": "Creator program",
+      "kit": "Ready-made marketing kit"
     },
     "dna": {
       "title": "Your DNA",
@@ -1173,9 +1190,9 @@
       "viewProfile": "View profile"
     },
     "map": {
-      "title": "War map",
-      "subtitle": "Claim your Syrian governorate — your network links regions with golden lines.",
-      "syriaBadge": "Syria · Governorates",
+      "title": "Ascend Atlas",
+      "subtitle": "TENEGTA ASCEND map of Syria — claim your governorate, link your network in gold, dominate your market.",
+      "syriaBadge": "TENEGTA ASCEND · Syria",
       "ariaLabel": "Interactive Syria partner war map",
       "my_territory": "Your territory",
       "unclaimed": "Unclaimed land",
@@ -1230,6 +1247,12 @@
     },
     "oracle": {
       "title": "Oracle — your forecast",
+      "eyebrow": "TENEGTA ASCEND · Oracle",
+      "daysToLevel": "Days to level",
+      "monthlyEarnings": "Est. monthly",
+      "top3Chance": "TOP 3 chance",
+      "deals30d": "Deals (30d)",
+      "weeklyProgress": "Weekly progress",
       "days_to_level": "{n} days to next level",
       "monthly_earnings": "Est. monthly earnings",
       "top3_probability": "TOP 3 chance",
@@ -1237,6 +1260,12 @@
       "weekly_target": "Weekly target",
       "weekly_progress": "Your progress",
       "refreshes": "Refreshes weekly",
+      "momentum": {
+        "rising": "Rising",
+        "steady": "Steady",
+        "slowing": "Slowing",
+        "new": "New path"
+      },
       "levelCloseTitle": "{n} deals to {level}",
       "levelCloseBody": "Close {n} deals this week",
       "rivalCloseTitle": "{name} is close",

@@ -1093,7 +1093,7 @@
       "chat": "المحادثات",
       "notifications": "التنبيهات",
       "settings": "الإعدادات",
-      "map": "خريطة الحرب",
+      "map": "أطلس الصعود",
       "legends": "قاعة الأساطير",
       "kit": "الحزمة",
       "signOut": "تسجيل الخروج",
@@ -1104,9 +1104,26 @@
     "navShort": {
       "dashboard": "لوحة",
       "deals": "صفقات",
-      "map": "الخريطة",
+      "events": "فعاليات",
+      "map": "الأطلس",
       "chat": "محادثة",
       "settings": "إعدادات"
+    },
+    "navDesc": {
+      "sectionTitle": "استكشف منصة الصعود",
+      "dashboard": "لوحتك المركزية — DNA، Oracle، وغريمك",
+      "deals": "أغلق الصفقات وارفع مستواك",
+      "events": "فعاليات حصرية وتحديات جماعية",
+      "map": "أطلس الصعود — سيطر على محافظتك في سوريا",
+      "earnings": "أرباحك وسحوباتك",
+      "network": "فريق الإحالة حتى 3 مستويات",
+      "leaderboard": "تنافس أسبوعي وشهري",
+      "chat": "مجتمع الشركاء والدعم",
+      "legends": "قاعة الأساطير — 10 مقاعد فقط",
+      "notifications": "تنبيهاتك وإنجازاتك",
+      "settings": "ملفك، منطقتك، وشاراتك",
+      "creators": "برنامج صناع المحتوى",
+      "kit": "حزمة التسويق الجاهزة"
     },
     "dna": {
       "title": "بصمتك",
@@ -1141,9 +1158,9 @@
       "viewProfile": "عرض ملفه"
     },
     "map": {
-      "title": "خريطة الحرب",
-      "subtitle": "سيطر على محافظتك في سوريا — شبكة فريقك تربط المناطق بخطوط ذهبية.",
-      "syriaBadge": "سوريا · محافظات",
+      "title": "أطلس الصعود",
+      "subtitle": "خريطة TENEGTA ASCEND لسوريا — احتل محافظتك، اربط شبكتك بخطوط ذهبية، وابهر السوق.",
+      "syriaBadge": "TENEGTA ASCEND · سوريا",
       "ariaLabel": "خريطة سوريا التفاعلية للشركاء",
       "my_territory": "مملكتك",
       "unclaimed": "أرض غير مفتوحة",
@@ -1198,6 +1215,12 @@
     },
     "oracle": {
       "title": "Oracle — رؤية مستقبلك",
+      "eyebrow": "TENEGTA ASCEND · Oracle",
+      "daysToLevel": "أيام للمستوى",
+      "monthlyEarnings": "أرباح شهرية متوقعة",
+      "top3Chance": "احتمال TOP 3",
+      "deals30d": "صفقات (30 يوم)",
+      "weeklyProgress": "تقدم الأسبوع",
       "days_to_level": "{n} يوم للمستوى التالي",
       "monthly_earnings": "أرباح شهرية متوقعة",
       "top3_probability": "احتمال TOP 3",
@@ -1205,6 +1228,12 @@
       "weekly_target": "هدف الأسبوع",
       "weekly_progress": "تقدمك",
       "refreshes": "يتجدد كل أسبوع",
+      "momentum": {
+        "rising": "زخم صاعد",
+        "steady": "مسار ثابت",
+        "slowing": "تباطؤ",
+        "new": "بداية جديدة"
+      },
       "levelCloseTitle": "أنت على بُعد {n} صفقات من {level}",
       "levelCloseBody": "أغلق {n} صفقات هذا الأسبوع وتغير كل شيء",
       "rivalCloseTitle": "{name} قريب منك",

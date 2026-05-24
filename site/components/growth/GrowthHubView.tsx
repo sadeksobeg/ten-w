@@ -21,6 +21,7 @@ import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 import { DnaCard } from "@/components/growth/dna/DnaCard";
 import { RivalCard } from "@/components/growth/rivals/RivalCard";
 import { OracleCard } from "@/components/growth/oracle/OracleCard";
+import { GrowthHubExploreNav } from "@/components/growth/dashboard/GrowthHubExploreNav";
 
 type Props = {
   locale: string;
@@ -124,32 +125,7 @@ export async function GrowthHubView({
         </Link>
       ) : null}
 
-      <div className="flex flex-wrap gap-2">
-        <Link
-          href="/growth/deals"
-          className="rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-semibold text-gold transition hover:bg-gold/20 focus-visible:ring-2 focus-visible:ring-gold/40"
-        >
-          {t("hub.quickDeals")}
-        </Link>
-        <Link
-          href="/growth/earnings"
-          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-gold/30 focus-visible:ring-2 focus-visible:ring-gold/40"
-        >
-          {t("hub.quickEarnings")}
-        </Link>
-        <Link
-          href="/growth/network"
-          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-gold/30 focus-visible:ring-2 focus-visible:ring-gold/40"
-        >
-          {t("hub.quickNetwork")}
-        </Link>
-        <Link
-          href="/growth/kit"
-          className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-gold/30 focus-visible:ring-2 focus-visible:ring-gold/40"
-        >
-          {t("hub.quickKit")}
-        </Link>
-      </div>
+      <GrowthHubExploreNav />
 
       <div className="flex flex-wrap gap-3 text-xs text-white/70">
         <span className="rounded-full border border-purple-400/20 bg-purple-500/10 px-4 py-2 font-semibold text-purple-100">
