@@ -33,6 +33,7 @@ import {
   CONTENT_CREATOR_BADGE,
   removeUserFromCreatorRoom,
 } from "@/lib/growth/creator-program";
+import { setChatModerator } from "@/lib/growth/chat-moderation";
 import { GAME_CONFIG } from "@/lib/growth/game-config";
 import { touchActivityDay } from "@/lib/growth/streak";
 
@@ -912,6 +913,32 @@ export async function adminRemoveCreatorRoomMemberAction(
   if (!parsed.success) return { ok: false, error: "invalid_input" };
 
   await removeUserFromCreatorRoom(parsed.data.userId);
+  revalidateGrowth();
+  return { ok: true };
+}
+
+const chatModeratorSchema = z.object({
+  userId: z.string().min(1),
+  enabled: z.enum(["0", "1"]),
+});
+
+export async function adminSetChatModeratorAction(
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = chatModeratorSchema.safeParse({
+    userId: formData.get("userId"),
+    enabled: formData.get("enabled"),
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  await setChatModerator(parsed.data.userId, parsed.data.enabled === "1");
+  await logAdminAudit(session.user.id, "set_chat_moderator", "User", parsed.data.userId, {
+    enabled: parsed.data.enabled === "1",
+  });
   revalidateGrowth();
   return { ok: true };
 }

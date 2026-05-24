@@ -108,6 +108,7 @@ model User {
   role             UserRole  @default(PARTNER)
   isVerifiedOfficial Boolean @default(false)
   officialDisplayName String?
+  chatModerator      Boolean @default(false)
   marketingKitHits Int       @default(0)
   pushSubscription String?   @db.Text
   createdAt        DateTime  @default(now())
@@ -487,13 +488,16 @@ model ChatConversation {
 }
 
 model ChatMessage {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   conversationId String
   senderUserId   String
   body           String
-  kind           String   @default("TEXT")
+  kind           String    @default("TEXT")
   metadata       Json?
-  createdAt      DateTime @default(now())
+  deletedAt      DateTime?
+  editedAt       DateTime?
+  editedById     String?
+  createdAt      DateTime  @default(now())
 
   conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender       User             @relation("ChatMessageSender", fields: [senderUserId], references: [id])
@@ -534,15 +538,18 @@ model ChatRoomMember {
 }
 
 model ChatRoomMessage {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   roomId       String
   senderUserId String
   body         String
-  kind         String   @default("TEXT")
+  kind         String    @default("TEXT")
   metadata     Json?
-  isOfficial   Boolean  @default(false)
+  isOfficial   Boolean   @default(false)
   triggerKey   String?
-  createdAt    DateTime @default(now())
+  deletedAt    DateTime?
+  editedAt     DateTime?
+  editedById   String?
+  createdAt    DateTime  @default(now())
 
   room   ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
   sender User     @relation("ChatRoomMessageSender", fields: [senderUserId], references: [id])

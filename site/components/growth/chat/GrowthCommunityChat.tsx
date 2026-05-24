@@ -10,6 +10,9 @@ import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { VerifiedBadge } from "@/components/growth/ui/VerifiedBadge";
 import { RankEmblem } from "@/components/growth/ui/RankEmblem";
 
+const PAGE_SIZE = 35;
+const POLL_MS = 8000;
+
 type Props = {
   locale: string;
   viewerUserId: string;
@@ -19,6 +22,14 @@ type Props = {
   hintKey?: "communityHint" | "eventChatHint" | "creatorChatHint";
   placeholderKey?: "communityPlaceholder" | "eventChatPlaceholder" | "creatorChatPlaceholder";
 };
+
+function mergeMessages(prev: ChatRoomMessageDTO[], incoming: ChatRoomMessageDTO[]): ChatRoomMessageDTO[] {
+  const map = new Map(prev.map((m) => [m.id, m]));
+  for (const m of incoming) map.set(m.id, m);
+  return [...map.values()].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  );
+}
 
 export function GrowthCommunityChat({
   locale: _locale,
@@ -33,43 +44,124 @@ export function GrowthCommunityChat({
   const tKw = useTranslations("Growth.chat.keywords");
   const enableKeywords = roomSlug === COMMUNITY_ROOM_SLUG;
   const [messages, setMessages] = useState<ChatRoomMessageDTO[]>([]);
+  const [hasMoreOlder, setHasMoreOlder] = useState(false);
+  const [loadingInitial, setLoadingInitial] = useState(true);
+  const [loadingOlder, setLoadingOlder] = useState(false);
   const [body, setBody] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [canModerate, setCanModerate] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState("");
+  const scrollRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const apiPath = `/api/growth/chat/rooms/${encodeURIComponent(roomSlug)}/messages`;
+  const stickBottomRef = useRef(true);
+  const messagesRef = useRef<ChatRoomMessageDTO[]>([]);
+  const apiBase = `/api/growth/chat/rooms/${encodeURIComponent(roomSlug)}/messages`;
 
-  const load = useCallback(async () => {
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
+  const scrollToBottom = useCallback((smooth: boolean) => {
+    bottomRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto" });
+  }, []);
+
+  const loadInitial = useCallback(async () => {
     try {
-      const res = await fetch(apiPath);
+      const res = await fetch(`${apiBase}?limit=${PAGE_SIZE}`);
       if (!res.ok) {
         setError(t("communityLoadError"));
         return;
       }
       setError(null);
-      const data = (await res.json()) as { items: ChatRoomMessageDTO[] };
+      const data = (await res.json()) as {
+        items: ChatRoomMessageDTO[];
+        hasMore: boolean;
+        canModerate?: boolean;
+      };
       setMessages(data.items);
+      setHasMoreOlder(data.hasMore);
+      setCanModerate(Boolean(data.canModerate));
+      stickBottomRef.current = true;
     } catch {
       setError(t("communityLoadError"));
+    } finally {
+      setLoadingInitial(false);
     }
-  }, [apiPath, t]);
+  }, [apiBase, t]);
+
+  const pollNew = useCallback(async () => {
+    const list = messagesRef.current;
+    const last = list[list.length - 1];
+    const qs = last ? `?after=${encodeURIComponent(last.createdAt)}&limit=50` : `?limit=${PAGE_SIZE}`;
+    try {
+      const res = await fetch(`${apiBase}${qs}`);
+      if (!res.ok) return;
+      const data = (await res.json()) as { items: ChatRoomMessageDTO[] };
+      if (data.items.length === 0) return;
+      setMessages((prev) => mergeMessages(prev, data.items));
+      if (stickBottomRef.current) scrollToBottom(false);
+    } catch {
+      /* ignore */
+    }
+  }, [apiBase, scrollToBottom]);
+
+  const loadOlder = useCallback(async () => {
+    const list = messagesRef.current;
+    const first = list[0];
+    if (!first || loadingOlder || !hasMoreOlder) return;
+    setLoadingOlder(true);
+    const el = scrollRef.current;
+    const prevHeight = el?.scrollHeight ?? 0;
+    try {
+      const res = await fetch(
+        `${apiBase}?before=${encodeURIComponent(first.createdAt)}&limit=${PAGE_SIZE}`,
+      );
+      if (!res.ok) return;
+      const data = (await res.json()) as { items: ChatRoomMessageDTO[]; hasMore: boolean };
+      setMessages((prev) => mergeMessages(data.items, prev));
+      setHasMoreOlder(data.hasMore);
+      requestAnimationFrame(() => {
+        if (el) el.scrollTop = el.scrollHeight - prevHeight;
+      });
+    } finally {
+      setLoadingOlder(false);
+    }
+  }, [apiBase, loadingOlder, hasMoreOlder]);
 
   useEffect(() => {
-    void load();
-    const id = window.setInterval(() => void load(), 4000);
+    void loadInitial();
+  }, [loadInitial]);
+
+  useEffect(() => {
+    if (loadingInitial) return;
+    const id = window.setInterval(() => {
+      if (document.visibilityState === "visible") void pollNew();
+    }, POLL_MS);
     return () => window.clearInterval(id);
-  }, [load]);
+  }, [loadingInitial, pollNew]);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length]);
+    if (loadingInitial || !stickBottomRef.current) return;
+    scrollToBottom(messages.length > 1);
+  }, [messages.length, loadingInitial, scrollToBottom]);
+
+  function onScroll() {
+    const el = scrollRef.current;
+    if (!el) return;
+    stickBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    if (el.scrollTop < 48 && hasMoreOlder && !loadingOlder) {
+      void loadOlder();
+    }
+  }
 
   async function send() {
     const text = body.trim();
     if (!text || sending) return;
     setSending(true);
     try {
-      const res = await fetch(apiPath, {
+      const res = await fetch(apiBase, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body: text }),
@@ -79,11 +171,43 @@ export function GrowthCommunityChat({
         return;
       }
       setBody("");
-      await load();
+      stickBottomRef.current = true;
+      await pollNew();
     } catch {
       setError(t("sendError"));
     } finally {
       setSending(false);
+    }
+  }
+
+  async function deleteMessage(id: string) {
+    if (!canModerate || !window.confirm(t("moderateConfirmDelete"))) return;
+    const res = await fetch(`${apiBase}/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === id ? { ...m, isDeleted: true, kind: "DELETED", body: "" } : m,
+        ),
+      );
+    }
+  }
+
+  async function saveEdit(id: string) {
+    const text = editDraft.trim();
+    if (!text) return;
+    const res = await fetch(`${apiBase}/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ body: text }),
+    });
+    if (res.ok) {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === id ? { ...m, body: text, editedAt: new Date().toISOString() } : m,
+        ),
+      );
+      setEditingId(null);
+      setEditDraft("");
     }
   }
 
@@ -97,7 +221,25 @@ export function GrowthCommunityChat({
           {error}
         </p>
       ) : null}
-      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-4">
+      <div
+        ref={scrollRef}
+        onScroll={onScroll}
+        className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-4"
+      >
+        {loadingOlder ? (
+          <p className="py-2 text-center text-[10px] text-white/40">{t("loadingOlder")}</p>
+        ) : hasMoreOlder ? (
+          <button
+            type="button"
+            className="mx-auto block text-[10px] font-semibold text-gold/80 hover:text-gold"
+            onClick={() => void loadOlder()}
+          >
+            {t("loadOlder")}
+          </button>
+        ) : null}
+        {loadingInitial ? (
+          <p className="py-8 text-center text-xs text-white/45">{t("loadingMessages")}</p>
+        ) : null}
         {messages.map((m) => {
           if (enableKeywords && m.kind === "ACTION" && m.metadata?.links) {
             const links = m.metadata.links as { labelKey: string; href: string }[];
@@ -135,14 +277,23 @@ export function GrowthCommunityChat({
             );
           }
 
+          if (m.isDeleted || m.kind === "DELETED") {
+            return (
+              <div key={m.id} className="flex justify-center py-0.5">
+                <p className="text-[10px] italic text-white/35">{t("messageDeleted")}</p>
+              </div>
+            );
+          }
+
           const mine = m.senderUserId === viewerUserId;
           const official = m.isOfficial;
           const verified = m.isVerifiedOfficial;
+          const editing = editingId === m.id;
 
           return (
             <div
               key={m.id}
-              className={`flex gap-2 ${mine ? "flex-row-reverse" : "flex-row"}`}
+              className={`group flex gap-2 ${mine ? "flex-row-reverse" : "flex-row"}`}
             >
               <GrowthAvatar
                 name={m.senderName}
@@ -168,18 +319,73 @@ export function GrowthCommunityChat({
                       className="!flex-row scale-75"
                     />
                   ) : null}
+                  {m.editedAt ? (
+                    <span className="text-[9px] text-white/35">{t("editedLabel")}</span>
+                  ) : null}
                 </div>
-                <div
-                  className={`inline-block rounded-2xl px-3 py-2 text-sm ${
-                    official
-                      ? "border border-gold/40 bg-gradient-to-br from-gold/20 to-gold/5 text-white"
-                      : mine
-                        ? "bg-gold/20 text-white"
-                        : "border border-white/10 bg-white/[0.06] text-white/90"
-                  }`}
-                >
-                  {m.body}
-                </div>
+                {editing ? (
+                  <div className="space-y-2">
+                    <textarea
+                      value={editDraft}
+                      onChange={(e) => setEditDraft(e.target.value)}
+                      className="w-full rounded-xl border border-gold/30 bg-black/40 px-3 py-2 text-sm text-white"
+                      rows={2}
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        className="rounded-lg bg-gold/20 px-2 py-1 text-[10px] font-bold text-gold"
+                        onClick={() => void saveEdit(m.id)}
+                      >
+                        {t("moderateSave")}
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-lg px-2 py-1 text-[10px] text-white/50"
+                        onClick={() => setEditingId(null)}
+                      >
+                        {t("moderateCancel")}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative inline-block">
+                    <div
+                      className={`rounded-2xl px-3 py-2 text-sm ${
+                        official
+                          ? "border border-gold/40 bg-gradient-to-br from-gold/20 to-gold/5 text-white"
+                          : mine
+                            ? "bg-gold/20 text-white"
+                            : "border border-white/10 bg-white/[0.06] text-white/90"
+                      }`}
+                    >
+                      {m.body}
+                    </div>
+                    {canModerate && m.kind === "TEXT" ? (
+                      <div
+                        className={`mt-1 flex gap-2 opacity-0 transition group-hover:opacity-100 ${mine ? "justify-end" : "justify-start"}`}
+                      >
+                        <button
+                          type="button"
+                          className="text-[9px] font-bold text-sky-300 hover:underline"
+                          onClick={() => {
+                            setEditingId(m.id);
+                            setEditDraft(m.body);
+                          }}
+                        >
+                          {t("moderateEdit")}
+                        </button>
+                        <button
+                          type="button"
+                          className="text-[9px] font-bold text-rose-300 hover:underline"
+                          onClick={() => void deleteMessage(m.id)}
+                        >
+                          {t("moderateDelete")}
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
               </div>
             </div>
           );

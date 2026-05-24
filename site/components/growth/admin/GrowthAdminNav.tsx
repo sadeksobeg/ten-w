@@ -34,6 +34,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { href: "/growth/admin/payouts", labelKey: "payouts", Icon: IconPayout },
       { href: "/growth/admin/partners", labelKey: "partners", Icon: IconPartners },
       { href: "/growth/admin/chat", labelKey: "chat", Icon: IconChat },
+      { href: "/growth/admin/chat/moderators", labelKey: "chatModerators", Icon: IconChat },
     ],
   },
   {

@@ -28,7 +28,16 @@ export type ChatRoomMessageDTO = {
   isOfficial: boolean;
   triggerKey: string | null;
   createdAt: string;
+  editedAt: string | null;
+  isDeleted: boolean;
 };
+
+export type RoomMessagesPage = {
+  items: ChatRoomMessageDTO[];
+  hasMore: boolean;
+};
+
+const DEFAULT_PAGE_SIZE = 35;
 
 export function eventRoomSlug(eventSlug: string): string {
   return `event-${eventSlug}`;
@@ -166,47 +175,113 @@ function mapSender(user: {
   };
 }
 
-export async function listRoomMessages(
-  roomId: string,
-  opts?: { after?: Date; take?: number },
-): Promise<ChatRoomMessageDTO[]> {
-  const rows = await prisma.chatRoomMessage.findMany({
-    where: {
-      roomId,
-      ...(opts?.after ? { createdAt: { gt: opts.after } } : {}),
-    },
-    orderBy: { createdAt: "asc" },
-    take: opts?.take ?? 120,
-    include: {
-      sender: {
-        select: {
-          name: true,
-          email: true,
-          avatarUrl: true,
-          avatarPreset: true,
-          isVerifiedOfficial: true,
-          officialDisplayName: true,
-          partnerProfile: { select: { currentLevel: { select: { code: true } } } },
-        },
-      },
-    },
-  });
-
-  const badges = await chatBadgeMap([...new Set(rows.map((m) => m.senderUserId))]);
-
-  return rows.map((m) => ({
+function mapRowToDto(
+  m: {
+    id: string;
+    roomId: string;
+    senderUserId: string;
+    body: string;
+    kind: string;
+    metadata: unknown;
+    isOfficial: boolean;
+    triggerKey: string | null;
+    createdAt: Date;
+    editedAt: Date | null;
+    deletedAt: Date | null;
+    sender: Parameters<typeof mapSender>[0];
+  },
+  badges: Map<string, string[]>,
+): ChatRoomMessageDTO {
+  return {
     id: m.id,
     roomId: m.roomId,
     senderUserId: m.senderUserId,
     ...mapSender(m.sender),
     senderChatBadges: badges.get(m.senderUserId) ?? [],
-    body: m.body,
-    kind: m.kind,
+    body: m.deletedAt ? "" : m.body,
+    kind: m.deletedAt ? "DELETED" : m.kind,
     metadata: (m.metadata as Record<string, unknown> | null) ?? null,
     isOfficial: m.isOfficial,
     triggerKey: m.triggerKey,
     createdAt: m.createdAt.toISOString(),
-  }));
+    editedAt: m.editedAt?.toISOString() ?? null,
+    isDeleted: Boolean(m.deletedAt),
+  };
+}
+
+const senderInclude = {
+  sender: {
+    select: {
+      name: true,
+      email: true,
+      avatarUrl: true,
+      avatarPreset: true,
+      isVerifiedOfficial: true,
+      officialDisplayName: true,
+      partnerProfile: { select: { currentLevel: { select: { code: true } } } },
+    },
+  },
+} as const;
+
+export async function listRoomMessages(
+  roomId: string,
+  opts?: { after?: Date; before?: Date; take?: number },
+): Promise<ChatRoomMessageDTO[]> {
+  const page = await listRoomMessagesPage(roomId, opts);
+  return page.items;
+}
+
+export async function listRoomMessagesPage(
+  roomId: string,
+  opts?: { after?: Date; before?: Date; take?: number },
+): Promise<RoomMessagesPage> {
+  const take = opts?.take ?? DEFAULT_PAGE_SIZE;
+
+  if (opts?.after) {
+    const rows = await prisma.chatRoomMessage.findMany({
+      where: { roomId, createdAt: { gt: opts.after } },
+      orderBy: { createdAt: "asc" },
+      take,
+      include: senderInclude,
+    });
+    const badges = await chatBadgeMap([...new Set(rows.map((m) => m.senderUserId))]);
+    return {
+      items: rows.map((m) => mapRowToDto(m, badges)),
+      hasMore: false,
+    };
+  }
+
+  if (opts?.before) {
+    const rows = await prisma.chatRoomMessage.findMany({
+      where: { roomId, createdAt: { lt: opts.before } },
+      orderBy: { createdAt: "desc" },
+      take: take + 1,
+      include: senderInclude,
+    });
+    const hasMore = rows.length > take;
+    const slice = hasMore ? rows.slice(0, take) : rows;
+    const ordered = [...slice].reverse();
+    const badges = await chatBadgeMap([...new Set(ordered.map((m) => m.senderUserId))]);
+    return {
+      items: ordered.map((m) => mapRowToDto(m, badges)),
+      hasMore,
+    };
+  }
+
+  const rows = await prisma.chatRoomMessage.findMany({
+    where: { roomId },
+    orderBy: { createdAt: "desc" },
+    take: take + 1,
+    include: senderInclude,
+  });
+  const hasMore = rows.length > take;
+  const slice = hasMore ? rows.slice(0, take) : rows;
+  const ordered = [...slice].reverse();
+  const badges = await chatBadgeMap([...new Set(ordered.map((m) => m.senderUserId))]);
+  return {
+    items: ordered.map((m) => mapRowToDto(m, badges)),
+    hasMore,
+  };
 }
 
 export async function appendRoomMessage(input: {
@@ -228,36 +303,12 @@ export async function appendRoomMessage(input: {
       isOfficial: input.isOfficial ?? false,
       triggerKey: input.triggerKey ?? null,
     },
-    include: {
-      sender: {
-        select: {
-          name: true,
-          email: true,
-          avatarUrl: true,
-          avatarPreset: true,
-          isVerifiedOfficial: true,
-          officialDisplayName: true,
-          partnerProfile: { select: { currentLevel: { select: { code: true } } } },
-        },
-      },
-    },
+    include: senderInclude,
   });
 
   const badgeList = (await chatBadgeMap([msg.senderUserId])).get(msg.senderUserId) ?? [];
 
-  return {
-    id: msg.id,
-    roomId: msg.roomId,
-    senderUserId: msg.senderUserId,
-    ...mapSender(msg.sender),
-    senderChatBadges: badgeList,
-    body: msg.body,
-    kind: msg.kind,
-    metadata: (msg.metadata as Record<string, unknown> | null) ?? null,
-    isOfficial: msg.isOfficial,
-    triggerKey: msg.triggerKey,
-    createdAt: msg.createdAt.toISOString(),
-  } satisfies ChatRoomMessageDTO;
+  return mapRowToDto({ ...msg, deletedAt: null }, new Map([[msg.senderUserId, badgeList]]));
 }
 
 export async function resolveChatRoomForUser(slug: string, userId: string) {

@@ -343,7 +343,7 @@ export async function listMessages(
   conversationId: string,
   opts?: { after?: Date; before?: Date; take?: number },
 ): Promise<ChatMessageDTO[]> {
-  const take = opts?.take ?? (opts?.before || opts?.after ? 50 : 200);
+  const take = opts?.take ?? (opts?.before || opts?.after ? 50 : 40);
   const rows = await prisma.chatMessage.findMany({
     where: {
       conversationId,

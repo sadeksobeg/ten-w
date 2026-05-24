@@ -4,13 +4,14 @@ import { auth } from "@/auth";
 import {
   COMMUNITY_ROOM_SLUG,
   CREATOR_ROOM_SLUG,
-  listRoomMessages,
+  listRoomMessagesPage,
   postCommunityMessage,
   postCreatorRoomMessage,
   postEventRoomMessage,
   resolveChatRoomForUser,
   seedOfficialWelcomeIfEmpty,
 } from "@/lib/growth/chat-room-service";
+import { getChatModerationStatus } from "@/lib/growth/chat-moderation";
 import { touchLastSeen } from "@/lib/growth/presence";
 import { prisma } from "@/lib/prisma";
 
@@ -46,12 +47,28 @@ export async function GET(req: Request, ctx: RouteContext) {
     return NextResponse.json({ error: "invalid_after" }, { status: 400 });
   }
 
+  const limitRaw = url.searchParams.get("limit");
+  const beforeRaw = url.searchParams.get("before");
+  const before = beforeRaw ? new Date(beforeRaw) : undefined;
+  const limit = limitRaw ? Number(limitRaw) : undefined;
+  if (beforeRaw && (before === undefined || Number.isNaN(before.getTime()))) {
+    return NextResponse.json({ error: "invalid_before" }, { status: 400 });
+  }
+
   if (slug === COMMUNITY_ROOM_SLUG && session.user.role === "ADMIN") {
     await seedOfficialWelcomeIfEmpty(room.id, session.user.id);
   }
 
-  const items = await listRoomMessages(room.id, { after, take: 150 });
-  return NextResponse.json({ roomId: room.id, items });
+  const page = await listRoomMessagesPage(room.id, {
+    after,
+    before,
+    take: limit && Number.isFinite(limit) ? limit : undefined,
+  });
+  const mod = await getChatModerationStatus(
+    session.user.id,
+    session.user.role === "ADMIN" ? "ADMIN" : "PARTNER",
+  );
+  return NextResponse.json({ roomId: room.id, ...page, canModerate: mod.canModerate });
 }
 
 export async function POST(req: Request, ctx: RouteContext) {
