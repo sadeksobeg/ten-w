@@ -1351,9 +1351,7 @@
         "contactedCount": "Contacted {n}",
         "statusPending": "Not contacted — tap when done",
         "statusContacted": "Contacted",
-        "edit": "Edit",
-        "delete": "Delete",
-        "save": "Save"
+        "empty": "No names yet — they will be extracted from team posts automatically"
       },
       "status": {
         "DRAFT": "Draft",
@@ -2242,6 +2240,7 @@
         "chatModerators": "Chat moderators",
         "partners": "Partners",
         "events": "Events",
+        "eventContacts": "Contact assistant",
         "creators": "Creators",
         "legends": "Hall of Legends",
         "notifications": "Notifications"
@@ -2256,6 +2255,34 @@
         "revoke": "Revoke",
         "toastOn": "Moderator enabled",
         "toastOff": "Moderator revoked",
+        "toastError": "Could not save"
+      },
+      "eventContacts": {
+        "pageTitle": "Contact assistant — Events",
+        "hint": "Add or edit influencer names and outreach status. You can also re-extract from team posts.",
+        "noEvents": "No events yet — create an event first.",
+        "selectEvent": "Select event",
+        "resync": "Re-extract from posts",
+        "addTitle": "Add name",
+        "listTitle": "Name list",
+        "count": "{count} names",
+        "empty": "No names — add manually or post outreach updates in the event.",
+        "name": "Name",
+        "handle": "Instagram handle",
+        "status": "Status",
+        "statusPending": "Pending outreach",
+        "statusContacted": "Contacted",
+        "actions": "Actions",
+        "addSubmit": "Add",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel",
+        "manual": "Manual",
+        "toastAdded": "Added",
+        "toastSaved": "Saved",
+        "toastDeleted": "Deleted",
+        "toastSynced": "List updated from posts",
         "toastError": "Could not save"
       },
       "legends": {

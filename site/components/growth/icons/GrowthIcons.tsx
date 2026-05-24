@@ -551,6 +551,22 @@ export function IconSparkle(props: GrowthIconProps) {
   );
 }
 
+export function IconRobotAssistant(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <rect x="5" y="8" width="14" height="11" rx="3" fill="currentColor" opacity={0.15} />
+      <rect x="5" y="8" width="14" height="11" rx="3" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <circle cx="9.5" cy="13" r="1.5" fill="currentColor" />
+      <circle cx="14.5" cy="13" r="1.5" fill="currentColor" />
+      <path d="M10 17h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M12 4v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="12" cy="3" r="1.25" fill="currentColor" />
+      <path d="M3 12h2M19 12h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M5 10l-1.5-1M19 10l1.5-1" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" opacity={0.7} />
+    </GrowthIconBase>
+  );
+}
+
 /** Mobile bottom nav mapping */
 export const GROWTH_MOBILE_NAV_ICONS = {
   dashboard: IconDashboard,

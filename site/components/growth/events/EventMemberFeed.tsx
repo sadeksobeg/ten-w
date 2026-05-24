@@ -13,10 +13,9 @@ type Props = {
   posts: EventPostRow[];
   currentUserId: string;
   contactLeads: EventContactLeadRow[];
-  isAdmin: boolean;
 };
 
-export function EventMemberFeed({ eventId, posts, currentUserId, contactLeads, isAdmin }: Props) {
+export function EventMemberFeed({ eventId, posts, currentUserId, contactLeads }: Props) {
   const t = useTranslations("Growth.events");
   const [postState, postAction, postPending] = useActionState(createEventPostAction, null);
 
@@ -86,7 +85,7 @@ export function EventMemberFeed({ eventId, posts, currentUserId, contactLeads, i
       </div>
       </div>
 
-      <EventContactAssistantBubble eventId={eventId} leads={contactLeads} isAdmin={isAdmin} />
+      <EventContactAssistantBubble leads={contactLeads} />
     </>
   );
 }

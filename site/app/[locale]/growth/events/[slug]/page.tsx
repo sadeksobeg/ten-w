@@ -56,7 +56,6 @@ export default async function GrowthEventDetailPage({ params }: Props) {
           memberPosts.map((p) => ({ id: p.id, body: p.body })),
         )
       : [];
-  const isAdmin = session.user.role === "ADMIN";
   const viewerProfile = isMember
     ? await prisma.user.findUnique({
         where: { id: session.user.id },
@@ -166,7 +165,6 @@ export default async function GrowthEventDetailPage({ params }: Props) {
               posts={memberPosts ?? []}
               currentUserId={session.user.id}
               contactLeads={contactLeads}
-              isAdmin={isAdmin}
             />
           }
         />

@@ -60,6 +60,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { href: "/growth/admin/creators", labelKey: "creators", Icon: IconStar },
       { href: "/growth/admin/legends", labelKey: "legends", Icon: IconLegends },
       { href: "/growth/admin/events", labelKey: "events", Icon: IconEvent },
+      { href: "/growth/admin/event-contacts", labelKey: "eventContacts", Icon: IconPartners },
       { href: "/growth/admin/notifications", labelKey: "notifications", Icon: IconNotifications },
       { href: "/growth/admin/insights", labelKey: "insights", Icon: IconInfo },
       { href: "/growth/admin/demo", labelKey: "demo", Icon: IconDashboard },

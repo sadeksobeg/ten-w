@@ -17,10 +17,10 @@ export type ExtractedContact = {
   sourcePostId: string;
 };
 
-const CONTACTED_RE =
-  /تم\s*(?:ال)?تواصل|تواصل(?:ت|نا|وا)?\s*(?:مع)?|رد(?:ت|)?(?: علينا)?|أجاب(?:ت|)?|تواصلوا|تم\s*الرد/i;
-const PENDING_RE =
-  /لم\s*(?:يتم|يرد|ترد)|ما\s*رد|لم\s*ترد|بانتظار|لم\s*أتواصل|no\s*reply/i;
+const TITLE_PREFIX =
+  /^(?:المؤثرة|المؤثر|الاعلامي|الإعلامي|صانعة\s+المحتوى|الصبية|الدكتورة|د\.|Dr\.?)\s+/gi;
+
+const HANDLE_RE = /^@?([a-z][a-z0-9_.]{2,})$/i;
 
 function normalizeKey(name: string, handle: string | null): string {
   const raw = (handle ?? name).toLowerCase().replace(/^@/, "").trim();
@@ -32,47 +32,85 @@ function normalizeKey(name: string, handle: string | null): string {
   return slug || name.trim().toLowerCase();
 }
 
-function lineStatus(line: string): EventContactStatus | null {
-  if (CONTACTED_RE.test(line)) return EventContactStatus.CONTACTED;
-  if (PENDING_RE.test(line)) return EventContactStatus.PENDING;
-  return null;
+function stripTitles(raw: string): string {
+  return raw.replace(TITLE_PREFIX, "").trim();
+}
+
+function stripTrailingNoise(raw: string): string {
+  return raw
+    .replace(/\s+من\s+(?:محافظة\s+)?[^\n،,.]+$/i, "")
+    .replace(/\s+ساكن(?:ة)?\s+(?:ب(?:ال)?|في)?[^\n،,.]+$/i, "")
+    .replace(/\s+عندها\s+\d[\d٠-٩,\s]*(?:متابع|ف)?[^\n]*$/i, "")
+    .replace(/\s+وغالباً.*/i, "")
+    .replace(/\s+له(?:لا|ل)\s+.*/i, "")
+    .replace(/\s+(?:بس|لكن)\s+.*/i, "")
+    .replace(/\s+وال(?:مسا|انا).*/i, "")
+    .trim();
 }
 
 function cleanName(raw: string): string | null {
-  let s = raw
+  let s = stripTitles(stripTrailingNoise(raw))
     .replace(/^[\s\-–—•*]+/, "")
-    .replace(/^(?:د\.|Dr\.?|doctor)\s*/i, "")
+    .replace(/\s{2,}/g, " ")
     .trim();
-  s = s.split(/\(|@|–|—|-\s*(?=[a-zA-Z@])/)[0]?.trim() ?? s;
-  s = s.replace(/\s{2,}/g, " ").trim();
-  if (s.length < 3 || s.length > 80) return null;
-  if (/^(?:مع|من|في|على|the|and|or)\b/i.test(s)) return null;
+  s = s.replace(/@?[a-z][a-z0-9_.]+\s*$/i, "").trim();
+  if (s.length < 2 || s.length > 80) return null;
+  if (/^(?:مع|من|في|على|the|and|or|مساء|تم|موفقين|حبيت|اقترح|انت|انا)\b/i.test(s)) return null;
   if (/^\d+$/.test(s)) return null;
+  if (/^(?:الكل|جميعا|نشالله|بشغلكم|بهاد|الايفنت)/i.test(s)) return null;
   return s;
 }
 
-function extractFromLine(line: string, postId: string): ExtractedContact[] {
+function lineStatus(line: string): EventContactStatus {
+  if (/م(?:ا|ات)\s*تم\s*(?:ال)?رد|لم\s*(?:يتم|يرد|ترد)|ما\s*رد|ناطر(?:تا|ه)|ت(?:أ|ا)كد\s+من|بانتظار/i.test(line)) {
+    return EventContactStatus.PENDING;
+  }
+  if (/(?:ات)?(?:واصلت|أتواصلت)|تم\s*التواصل|تواصلوا/i.test(line)) {
+    return EventContactStatus.CONTACTED;
+  }
+  return EventContactStatus.PENDING;
+}
+
+function parseNameChunks(segment: string, status: EventContactStatus, postId: string): ExtractedContact[] {
   const out: ExtractedContact[] = [];
-  const status = lineStatus(line) ?? EventContactStatus.PENDING;
+  const chunks = segment.split(/\s+و\s+/);
 
-  const handleMatch = line.match(/\(([a-zA-Z0-9_.]+)\)|@([a-zA-Z0-9_.]+)/);
-  const handle = handleMatch ? (handleMatch[1] ?? handleMatch[2] ?? null) : null;
+  for (const chunk of chunks) {
+    const handleInline = chunk.match(/@?([a-z][a-z0-9_.]+)/i);
+    const handle = handleInline?.[1] ?? null;
+    const name = cleanName(chunk);
+    if (name) out.push({ name, handle, status, sourcePostId: postId });
+  }
+  return out;
+}
 
-  const numbered = line.replace(/^[\s\d٠-٩]+[\-\.\)]\s*/, "").trim();
-  const namePart = numbered.split(/[(@]/)[0]?.trim() ?? numbered;
-  const name = cleanName(namePart);
-  if (name) {
-    out.push({ name, handle, status, sourcePostId: postId });
+function extractFromLine(line: string, postId: string): ExtractedContact[] {
+  const trimmed = line.trim();
+  if (trimmed.length < 4) return [];
+
+  const status = lineStatus(trimmed);
+  const out: ExtractedContact[] = [];
+
+  const contactMatch = trimmed.match(
+    /(?:تم\s*التواصل\s+مع|(?:ات|أ)?(?:واصلت|أتواصلت|تواصلت)\s+مع|انا\s+تواصلت\s+مع)\s*(.+)/i,
+  );
+  if (contactMatch?.[1]) {
+    out.push(...parseNameChunks(contactMatch[1], status, postId));
   }
 
-  const withMatch = line.match(
-    /(?:مع|with)\s+([^\n،,.;]+?)(?:\s+و|\s+and|$|[،,.;])/i,
+  const listMatch = trimmed.match(
+    /^(?:أ?ولا|ثانيا|ثالث|رابع|خامس|سادس)[ً:]?\s*(?:الدكتورة|د\.)?\s*(.+)/i,
   );
-  if (withMatch?.[1]) {
-    for (const chunk of withMatch[1].split(/\s+و\s+|\s+and\s+/i)) {
-      const n = cleanName(chunk);
-      if (n) out.push({ name: n, handle: null, status, sourcePostId: postId });
-    }
+  if (listMatch?.[1]) {
+    const chunk = listMatch[1].split(/[،,.]/)[0] ?? listMatch[1];
+    const name = cleanName(chunk);
+    if (name) out.push({ name, handle: null, status: EventContactStatus.PENDING, sourcePostId: postId });
+  }
+
+  const numbered = trimmed.match(/^[\s\d٠-٩]+[\-\.\)]\s*(.+)/);
+  if (numbered?.[1]) {
+    const name = cleanName(numbered[1]);
+    if (name) out.push({ name, handle: null, status, sourcePostId: postId });
   }
 
   return out;
@@ -82,34 +120,41 @@ export function extractContactsFromPosts(
   posts: { id: string; body: string }[],
 ): ExtractedContact[] {
   const map = new Map<string, ExtractedContact>();
+  let lastKey: string | null = null;
+
+  const upsert = (c: ExtractedContact) => {
+    const key = normalizeKey(c.name, c.handle);
+    const prev = map.get(key);
+    if (!prev) {
+      map.set(key, c);
+      lastKey = key;
+      return;
+    }
+    if (c.status === EventContactStatus.CONTACTED && prev.status === EventContactStatus.PENDING) {
+      map.set(key, { ...prev, status: EventContactStatus.CONTACTED, sourcePostId: c.sourcePostId });
+    }
+    if (!prev.handle && c.handle) {
+      map.set(key, { ...prev, handle: c.handle });
+    }
+    lastKey = key;
+  };
 
   for (const post of posts) {
+    lastKey = null;
     const lines = post.body.split(/\n+/);
-    for (const line of lines) {
-      if (line.trim().length < 4) continue;
-      for (const c of extractFromLine(line, post.id)) {
-        const key = normalizeKey(c.name, c.handle);
-        const prev = map.get(key);
-        if (!prev) {
-          map.set(key, c);
-        } else if (
-          c.status === EventContactStatus.CONTACTED &&
-          prev.status === EventContactStatus.PENDING
-        ) {
-          map.set(key, { ...prev, status: EventContactStatus.CONTACTED, sourcePostId: post.id });
-        }
-      }
-    }
 
-    if (CONTACTED_RE.test(post.body)) {
-      for (const c of map.values()) {
-        if (post.body.includes(c.name)) {
-          const key = normalizeKey(c.name, c.handle);
-          const cur = map.get(key);
-          if (cur) {
-            map.set(key, { ...cur, status: EventContactStatus.CONTACTED, sourcePostId: post.id });
-          }
+    for (const line of lines) {
+      const handleOnly = line.trim().match(HANDLE_RE);
+      if (handleOnly && lastKey && map.has(lastKey)) {
+        const cur = map.get(lastKey)!;
+        if (!cur.handle) {
+          map.set(lastKey, { ...cur, handle: handleOnly[1] });
         }
+        continue;
+      }
+
+      for (const c of extractFromLine(line, post.id)) {
+        upsert(c);
       }
     }
   }
@@ -152,17 +197,15 @@ export async function syncEventContactLeads(
         ? EventContactStatus.CONTACTED
         : EventContactStatus.PENDING;
 
-    if (nextStatus !== existing.status || existing.name !== c.name) {
-      await prisma.eventContactLead.update({
-        where: { id: existing.id },
-        data: {
-          status: nextStatus,
-          name: existing.isManual ? existing.name : c.name,
-          handle: existing.handle ?? c.handle,
-          sourcePostId: c.sourcePostId,
-        },
-      });
-    }
+    await prisma.eventContactLead.update({
+      where: { id: existing.id },
+      data: {
+        status: nextStatus,
+        name: c.name,
+        handle: existing.handle ?? c.handle,
+        sourcePostId: c.sourcePostId,
+      },
+    });
   }
 
   return listEventContactLeads(eventId);
@@ -181,4 +224,53 @@ export async function listEventContactLeads(eventId: string): Promise<EventConta
     isManual: r.isManual,
     sourcePostId: r.sourcePostId,
   }));
+}
+
+export async function adminUpsertManualLead(input: {
+  eventId: string;
+  name: string;
+  handle?: string | null;
+  status: EventContactStatus;
+  leadId?: string;
+}): Promise<EventContactLeadRow> {
+  const name = input.name.trim();
+  const handle = input.handle?.trim().replace(/^@/, "") || null;
+  const normalizedKey = normalizeKey(name, handle);
+
+  if (input.leadId) {
+    const row = await prisma.eventContactLead.update({
+      where: { id: input.leadId },
+      data: { name, handle, status: input.status, isManual: true },
+    });
+    return {
+      id: row.id,
+      name: row.name,
+      handle: row.handle,
+      status: row.status,
+      isManual: row.isManual,
+      sourcePostId: row.sourcePostId,
+    };
+  }
+
+  const row = await prisma.eventContactLead.upsert({
+    where: { eventId_normalizedKey: { eventId: input.eventId, normalizedKey } },
+    create: {
+      eventId: input.eventId,
+      normalizedKey,
+      name,
+      handle,
+      status: input.status,
+      isManual: true,
+    },
+    update: { name, handle, status: input.status, isManual: true },
+  });
+
+  return {
+    id: row.id,
+    name: row.name,
+    handle: row.handle,
+    status: row.status,
+    isManual: row.isManual,
+    sourcePostId: row.sourcePostId,
+  };
 }
