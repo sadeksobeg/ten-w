@@ -394,13 +394,29 @@
   }
 }
 
+@keyframes war-map-dash {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.war-map-network-line {
+  animation: war-map-dash 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .war-map-network-line {
+    animation: none;
+  }
+}
+
 .growth-partner-nav-mobile {
   position: fixed;
   inset-inline: 0;
   bottom: 0;
   z-index: 40;
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(10, 10, 15, 0.92);
   padding: 0.35rem 0.15rem;

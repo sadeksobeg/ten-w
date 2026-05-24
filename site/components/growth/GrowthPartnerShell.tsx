@@ -33,9 +33,7 @@ const CREATORS_NAV = { href: "/growth/creators", key: "creators" as const };
 const MOBILE_KEYS = [
   "dashboard",
   "deals",
-  "events",
-  "earnings",
-  "leaderboard",
+  "map",
   "chat",
   "settings",
 ] as const;
