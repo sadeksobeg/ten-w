@@ -57,6 +57,7 @@ export function GrowthCommunityChat({
   const bottomRef = useRef<HTMLDivElement>(null);
   const stickBottomRef = useRef(true);
   const messagesRef = useRef<ChatRoomMessageDTO[]>([]);
+  const lastPollAtRef = useRef(new Date().toISOString());
   const apiBase = `/api/growth/chat/rooms/${encodeURIComponent(roomSlug)}/messages`;
 
   useEffect(() => {
@@ -94,11 +95,22 @@ export function GrowthCommunityChat({
   const pollNew = useCallback(async () => {
     const list = messagesRef.current;
     const last = list[list.length - 1];
-    const qs = last ? `?after=${encodeURIComponent(last.createdAt)}&limit=50` : `?limit=${PAGE_SIZE}`;
+    const deletedSince = encodeURIComponent(lastPollAtRef.current);
+    const qs = last
+      ? `?after=${encodeURIComponent(last.createdAt)}&limit=50&deletedSince=${deletedSince}`
+      : `?limit=${PAGE_SIZE}&deletedSince=${deletedSince}`;
     try {
       const res = await fetch(`${apiBase}${qs}`);
       if (!res.ok) return;
-      const data = (await res.json()) as { items: ChatRoomMessageDTO[] };
+      lastPollAtRef.current = new Date().toISOString();
+      const data = (await res.json()) as {
+        items: ChatRoomMessageDTO[];
+        deletedIds?: string[];
+      };
+      const removed = new Set(data.deletedIds ?? []);
+      if (removed.size > 0) {
+        setMessages((prev) => prev.filter((m) => !removed.has(m.id)));
+      }
       if (data.items.length === 0) return;
       setMessages((prev) => mergeMessages(prev, data.items));
       if (stickBottomRef.current) scrollToBottom(false);
@@ -184,11 +196,7 @@ export function GrowthCommunityChat({
     if (!canModerate || !window.confirm(t("moderateConfirmDelete"))) return;
     const res = await fetch(`${apiBase}/${id}`, { method: "DELETE" });
     if (res.ok) {
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === id ? { ...m, isDeleted: true, kind: "DELETED", body: "" } : m,
-        ),
-      );
+      setMessages((prev) => prev.filter((m) => m.id !== id));
     }
   }
 
@@ -240,7 +248,7 @@ export function GrowthCommunityChat({
         {loadingInitial ? (
           <p className="py-8 text-center text-xs text-white/45">{t("loadingMessages")}</p>
         ) : null}
-        {messages.map((m) => {
+        {messages.filter((m) => !m.isDeleted && m.kind !== "DELETED").map((m) => {
           if (enableKeywords && m.kind === "ACTION" && m.metadata?.links) {
             const links = m.metadata.links as { labelKey: string; href: string }[];
             return (
@@ -273,14 +281,6 @@ export function GrowthCommunityChat({
                 <p className="max-w-[90%] rounded-2xl border border-gold/30 bg-gold/10 px-4 py-2 text-center text-xs text-gold">
                   {welcome}
                 </p>
-              </div>
-            );
-          }
-
-          if (m.isDeleted || m.kind === "DELETED") {
-            return (
-              <div key={m.id} className="flex justify-center py-0.5">
-                <p className="text-[10px] italic text-white/35">{t("messageDeleted")}</p>
               </div>
             );
           }

@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import {
   COMMUNITY_ROOM_SLUG,
   CREATOR_ROOM_SLUG,
+  listDeletedRoomMessageIdsSince,
   listRoomMessagesPage,
   postCommunityMessage,
   postCreatorRoomMessage,
@@ -64,11 +65,19 @@ export async function GET(req: Request, ctx: RouteContext) {
     before,
     take: limit && Number.isFinite(limit) ? limit : undefined,
   });
+
+  const deletedSinceRaw = url.searchParams.get("deletedSince");
+  const deletedSince = deletedSinceRaw ? new Date(deletedSinceRaw) : undefined;
+  let deletedIds: string[] = [];
+  if (deletedSince && !Number.isNaN(deletedSince.getTime())) {
+    deletedIds = await listDeletedRoomMessageIdsSince(room.id, deletedSince);
+  }
+
   const mod = await getChatModerationStatus(
     session.user.id,
     session.user.role === "ADMIN" ? "ADMIN" : "PARTNER",
   );
-  return NextResponse.json({ roomId: room.id, ...page, canModerate: mod.canModerate });
+  return NextResponse.json({ roomId: room.id, ...page, deletedIds, canModerate: mod.canModerate });
 }
 
 export async function POST(req: Request, ctx: RouteContext) {

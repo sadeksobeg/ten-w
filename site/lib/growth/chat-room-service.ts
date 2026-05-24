@@ -239,7 +239,7 @@ export async function listRoomMessagesPage(
 
   if (opts?.after) {
     const rows = await prisma.chatRoomMessage.findMany({
-      where: { roomId, createdAt: { gt: opts.after } },
+      where: { roomId, deletedAt: null, createdAt: { gt: opts.after } },
       orderBy: { createdAt: "asc" },
       take,
       include: senderInclude,
@@ -253,7 +253,7 @@ export async function listRoomMessagesPage(
 
   if (opts?.before) {
     const rows = await prisma.chatRoomMessage.findMany({
-      where: { roomId, createdAt: { lt: opts.before } },
+      where: { roomId, deletedAt: null, createdAt: { lt: opts.before } },
       orderBy: { createdAt: "desc" },
       take: take + 1,
       include: senderInclude,
@@ -269,7 +269,7 @@ export async function listRoomMessagesPage(
   }
 
   const rows = await prisma.chatRoomMessage.findMany({
-    where: { roomId },
+    where: { roomId, deletedAt: null },
     orderBy: { createdAt: "desc" },
     take: take + 1,
     include: senderInclude,
@@ -282,6 +282,17 @@ export async function listRoomMessagesPage(
     items: ordered.map((m) => mapRowToDto(m, badges)),
     hasMore,
   };
+}
+
+export async function listDeletedRoomMessageIdsSince(
+  roomId: string,
+  since: Date,
+): Promise<string[]> {
+  const rows = await prisma.chatRoomMessage.findMany({
+    where: { roomId, deletedAt: { gt: since } },
+    select: { id: true },
+  });
+  return rows.map((r) => r.id);
 }
 
 export async function appendRoomMessage(input: {
