@@ -46,8 +46,8 @@ export function EventPostCard({ eventId, post, currentUserId }: Props) {
   const locale = typeof document !== "undefined" ? document.documentElement.lang || "ar" : "ar";
 
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] via-black/40 to-black/60 p-px shadow-[0_8px_32px_-12px_rgba(0,0,0,0.8)]">
-      <div className="relative rounded-[15px] bg-[#0a0c12]/90 p-4 sm:p-5">
+    <article className="group relative max-w-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] via-black/40 to-black/60 p-px shadow-[0_8px_32px_-12px_rgba(0,0,0,0.8)]">
+      <div className="relative rounded-[15px] bg-[#0a0c12]/90 p-3 sm:p-5">
         {post.kind === "REPOST" ? (
           <div
             className="pointer-events-none absolute -end-8 -top-8 size-24 rounded-full bg-violet-500/15 blur-2xl motion-safe:animate-pulse motion-reduce:animate-none"
@@ -78,7 +78,7 @@ export function EventPostCard({ eventId, post, currentUserId }: Props) {
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-[family-name:var(--font-cairo)] text-sm font-extrabold text-white">
+                  <span className="break-words font-[family-name:var(--font-cairo)] text-sm font-extrabold text-white">
                     {post.authorName}
                   </span>
                   {post.kind === "REPOST" ? (
@@ -115,7 +115,9 @@ export function EventPostCard({ eventId, post, currentUserId }: Props) {
             {post.repostOf ? (
               <blockquote className="mt-3 rounded-xl border border-violet-400/20 bg-violet-500/[0.06] px-3 py-2.5 text-xs">
                 <span className="font-bold text-violet-200">{post.repostOf.authorName}</span>
-                <p className="mt-1 whitespace-pre-wrap text-white/70">{post.repostOf.body}</p>
+                <p className="mt-1 break-words whitespace-pre-wrap text-white/70 [overflow-wrap:anywhere]">
+                  {post.repostOf.body}
+                </p>
               </blockquote>
             ) : null}
 
@@ -148,10 +150,12 @@ export function EventPostCard({ eventId, post, currentUserId }: Props) {
                 </div>
               </form>
             ) : (
-              <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-white/85">{post.body}</p>
+              <p className="mt-3 break-words text-sm leading-relaxed text-white/85 [overflow-wrap:anywhere]">
+                {post.body}
+              </p>
             )}
 
-            <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-white/[0.06] pt-3">
+            <div className="mt-4 flex flex-wrap items-center gap-1.5 border-t border-white/[0.06] pt-3 sm:gap-2">
               <form action={likeAction}>
                 <input type="hidden" name="postId" value={post.id} />
                 <button

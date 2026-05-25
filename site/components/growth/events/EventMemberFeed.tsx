@@ -28,9 +28,9 @@ export function EventMemberFeed({ eventId, posts, currentUserId, contactLeads }:
 
   return (
     <>
-      <div className="space-y-6">
+      <div className="space-y-6 overflow-x-hidden pb-24 sm:pb-0">
       <div className="relative overflow-hidden rounded-3xl border border-gold/25 bg-gradient-to-br from-gold/[0.12] via-[#0a0c14] to-violet-950/30 p-px shadow-[0_0_60px_-20px_rgba(228,184,77,0.35)]">
-        <div className="relative rounded-[23px] bg-[#080a10]/95 p-5 sm:p-6">
+        <div className="relative rounded-[23px] bg-[#080a10]/95 p-3 sm:p-6">
           <div
             className="pointer-events-none absolute -end-10 -top-10 size-32 rounded-full bg-gold/20 blur-3xl"
             aria-hidden
