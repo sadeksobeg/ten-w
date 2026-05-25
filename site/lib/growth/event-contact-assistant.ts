@@ -196,46 +196,6 @@ export function extractContactsFromPosts(
   return [...map.values()];
 }
 
-function shouldUseCuratedList(posts: { body: string }[]): boolean {
-  const text = posts.map((p) => p.body).join("\n");
-  return /دلع\s+حسون|وسيم\s+قداحة|صناع\s+المحتوى|dr_rahaf_brand|بتول\s+منصور/i.test(text);
-}
-
-function mergeWithCurated(extracted: ExtractedContact[]): ExtractedContact[] {
-  const map = new Map<string, ExtractedContact>();
-
-  for (const c of CURATED_EVENT_CONTACT_LEADS) {
-    const key = normalizeKey(c.name, c.handle);
-    map.set(key, {
-      name: c.name,
-      handle: c.handle,
-      status: c.status,
-      sourcePostId: "curated",
-    });
-  }
-
-  for (const c of extracted) {
-    const key = normalizeKey(c.name, c.handle);
-    const prev = map.get(key);
-    if (!prev) {
-      map.set(key, c);
-      continue;
-    }
-    const status =
-      c.status === EventContactStatus.CONTACTED || prev.status === EventContactStatus.CONTACTED
-        ? EventContactStatus.CONTACTED
-        : EventContactStatus.PENDING;
-    map.set(key, {
-      ...prev,
-      status,
-      handle: prev.handle ?? c.handle,
-      sourcePostId: c.sourcePostId === "curated" ? prev.sourcePostId : c.sourcePostId,
-    });
-  }
-
-  return [...map.values()];
-}
-
 async function upsertContactLead(
   eventId: string,
   c: { name: string; handle: string | null; status: EventContactStatus; sourcePostId: string | null },
@@ -261,7 +221,7 @@ async function upsertContactLead(
     return;
   }
 
-  if (existing.isManual && !isManual) return;
+  if (existing.isManual) return;
 
   const nextStatus =
     c.status === EventContactStatus.CONTACTED || existing.status === EventContactStatus.CONTACTED
@@ -300,17 +260,18 @@ export async function syncEventContactLeads(
   eventId: string,
   posts: { id: string; body: string }[],
 ): Promise<EventContactLeadRow[]> {
-  const extractedRaw = extractContactsFromPosts(posts);
-  const extracted = shouldUseCuratedList(posts) ? mergeWithCurated(extractedRaw) : extractedRaw;
+  const extracted = extractContactsFromPosts(posts);
   const keepKeys = extracted.map((c) => normalizeKey(c.name, c.handle));
 
-  await prisma.eventContactLead.deleteMany({
-    where: {
-      eventId,
-      isManual: false,
-      normalizedKey: { notIn: keepKeys },
-    },
-  });
+  if (keepKeys.length > 0) {
+    await prisma.eventContactLead.deleteMany({
+      where: {
+        eventId,
+        isManual: false,
+        normalizedKey: { notIn: keepKeys },
+      },
+    });
+  }
 
   for (const c of extracted) {
     await upsertContactLead(
@@ -319,7 +280,7 @@ export async function syncEventContactLeads(
         name: c.name,
         handle: c.handle,
         status: c.status,
-        sourcePostId: c.sourcePostId === "curated" ? null : c.sourcePostId,
+        sourcePostId: c.sourcePostId,
       },
       false,
     );
@@ -355,9 +316,19 @@ export async function adminUpsertManualLead(input: {
   const normalizedKey = normalizeKey(name, handle);
 
   if (input.leadId) {
+    const existing = await prisma.eventContactLead.findUnique({ where: { id: input.leadId } });
+    if (!existing) throw new Error("not_found");
+
+    const conflict = await prisma.eventContactLead.findUnique({
+      where: { eventId_normalizedKey: { eventId: existing.eventId, normalizedKey } },
+    });
+    if (conflict && conflict.id !== input.leadId) {
+      throw new Error("duplicate");
+    }
+
     const row = await prisma.eventContactLead.update({
       where: { id: input.leadId },
-      data: { name, handle, status: input.status, isManual: true },
+      data: { name, handle, status: input.status, normalizedKey, isManual: true },
     });
     return {
       id: row.id,

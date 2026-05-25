@@ -2309,6 +2309,7 @@ export async function toggleEventContactLeadAction(
     where: { id: leadId },
     data: {
       status: lead.status === "CONTACTED" ? "PENDING" : "CONTACTED",
+      isManual: true,
     },
   });
 
@@ -2330,20 +2331,27 @@ export async function updateEventContactLeadAction(
   const handleRaw = String(formData.get("handle") ?? "").trim();
   const statusRaw = String(formData.get("status") ?? "").trim();
   if (!leadId || !name || name.length > 120) return { ok: false, error: "invalid_input" };
+  if (statusRaw !== "CONTACTED" && statusRaw !== "PENDING") {
+    return { ok: false, error: "invalid_input" };
+  }
 
   const handle = handleRaw ? handleRaw.replace(/^@/, "") : null;
-  const status =
-    statusRaw === "CONTACTED" || statusRaw === "PENDING" ? statusRaw : undefined;
 
-  await prisma.eventContactLead.update({
-    where: { id: leadId },
-    data: {
+  const lead = await prisma.eventContactLead.findUnique({ where: { id: leadId } });
+  if (!lead) return { ok: false, error: "not_found" };
+
+  const { adminUpsertManualLead } = await import("@/lib/growth/event-contact-assistant");
+  try {
+    await adminUpsertManualLead({
+      eventId: lead.eventId,
+      leadId,
       name,
-      ...(handle !== undefined ? { handle: handle || null } : {}),
-      ...(status ? { status } : {}),
-      isManual: true,
-    },
-  });
+      handle,
+      status: statusRaw,
+    });
+  } catch {
+    return { ok: false, error: "duplicate" };
+  }
 
   revalidateGrowth();
   return { ok: true };
@@ -2397,13 +2405,8 @@ export async function resyncEventContactLeadsAction(
     orderBy: { createdAt: "asc" },
   });
 
-  const { replaceEventContactLeadsWithCurated, syncEventContactLeads } = await import(
-    "@/lib/growth/event-contact-assistant"
-  );
-  await replaceEventContactLeadsWithCurated(eventId);
-  if (posts.length > 0) {
-    await syncEventContactLeads(eventId, posts);
-  }
+  const { syncEventContactLeads } = await import("@/lib/growth/event-contact-assistant");
+  await syncEventContactLeads(eventId, posts);
 
   revalidateGrowth();
   return { ok: true };

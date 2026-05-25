@@ -39,25 +39,31 @@ export function AdminEventContactsClient({ events, eventId, leads }: Props) {
       showToast({ type: "success", title: t("toastAdded") });
       const form = document.getElementById("add-contact-lead") as HTMLFormElement | null;
       form?.reset();
+      router.refresh();
     } else if (addState && !addState.ok) showToast({ type: "error", title: t("toastError") });
-  }, [addState, showToast, t]);
+  }, [addState, showToast, t, router]);
 
   useEffect(() => {
     if (updateState?.ok) {
       showToast({ type: "success", title: t("toastSaved") });
       setEditingId(null);
+      router.refresh();
     } else if (updateState && !updateState.ok) showToast({ type: "error", title: t("toastError") });
-  }, [updateState, showToast, t]);
+  }, [updateState, showToast, t, router]);
 
   useEffect(() => {
-    if (deleteState?.ok) showToast({ type: "success", title: t("toastDeleted") });
-    else if (deleteState && !deleteState.ok) showToast({ type: "error", title: t("toastError") });
-  }, [deleteState, showToast, t]);
+    if (deleteState?.ok) {
+      showToast({ type: "success", title: t("toastDeleted") });
+      router.refresh();
+    } else if (deleteState && !deleteState.ok) showToast({ type: "error", title: t("toastError") });
+  }, [deleteState, showToast, t, router]);
 
   useEffect(() => {
-    if (syncState?.ok) showToast({ type: "success", title: t("toastSynced") });
-    else if (syncState && !syncState.ok) showToast({ type: "error", title: t("toastError") });
-  }, [syncState, showToast, t]);
+    if (syncState?.ok) {
+      showToast({ type: "success", title: t("toastSynced") });
+      router.refresh();
+    } else if (syncState && !syncState.ok) showToast({ type: "error", title: t("toastError") });
+  }, [syncState, showToast, t, router]);
 
   return (
     <div className="space-y-6">
