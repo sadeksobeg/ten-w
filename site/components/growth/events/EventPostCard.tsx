@@ -70,21 +70,26 @@ export function EventPostCard({ eventId, post, currentUserId }: Props) {
         </div>
 
         {isOwner ? (
-          <div className="event-post-card__owner-actions">
-            <button
-              type="button"
-              onClick={() => setEditingPost((v) => !v)}
-              className="event-post-card__owner-btn"
-            >
-              {t("postEdit")}
-            </button>
-            <form action={deletePostAction}>
-              <input type="hidden" name="postId" value={post.id} />
-              <button type="submit" className="event-post-card__owner-btn event-post-card__owner-btn--danger">
-                {t("postDelete")}
+          <details className="event-post-card__menu">
+            <summary className="event-post-card__menu-trigger" aria-label={t("postEdit")}>
+              ⋯
+            </summary>
+            <div className="event-post-card__menu-panel">
+              <button
+                type="button"
+                onClick={() => setEditingPost((v) => !v)}
+                className="event-post-card__menu-item"
+              >
+                {t("postEdit")}
               </button>
-            </form>
-          </div>
+              <form action={deletePostAction}>
+                <input type="hidden" name="postId" value={post.id} />
+                <button type="submit" className="event-post-card__menu-item event-post-card__menu-item--danger">
+                  {t("postDelete")}
+                </button>
+              </form>
+            </div>
+          </details>
         ) : null}
       </header>
 

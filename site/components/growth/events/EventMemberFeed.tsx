@@ -34,9 +34,6 @@ export function EventMemberFeed({ eventId, posts, currentUserId, contactLeads }:
           <div className="event-posts-composer__glow" aria-hidden />
 
           <div className="event-posts-composer__head">
-            <div className="event-posts-composer__icon" aria-hidden>
-              ✦
-            </div>
             <div className="min-w-0 flex-1">
               <p className="event-posts-composer__badge">{t("feedBadge")}</p>
               <h2

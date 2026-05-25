@@ -62,7 +62,8 @@ export default async function GrowthEventDetailPage({ params }: Props) {
     (event.maxParticipants == null || event._count.participants < event.maxParticipants);
 
   return (
-    <div className="growth-event-detail max-w-full space-y-6 overflow-x-hidden">
+    <div className="growth-event-detail growth-event-detail--immersive">
+      <div className="growth-event-detail__toolbar">
       <Link
         href={`/${locale}/growth/events`}
         className="inline-flex items-center gap-1 text-xs font-semibold text-gold hover:underline"
@@ -74,8 +75,9 @@ export default async function GrowthEventDetailPage({ params }: Props) {
         />
         {t("back")}
       </Link>
+      </div>
 
-      <GlassCard className="overflow-hidden p-0">
+      <GlassCard className="growth-event-detail__hero overflow-hidden p-0">
         <div className="relative aspect-[21/9] w-full bg-black/40">
           <EventCoverImage coverImage={event.coverImage} slug={event.slug} />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-black/30 to-transparent" />
@@ -94,12 +96,7 @@ export default async function GrowthEventDetailPage({ params }: Props) {
         </div>
 
         {isMember ? (
-          <div className="mt-6">
-            <div className="text-sm font-semibold text-gold">{t("eventProgress")}: {myPart!.progress}%</div>
-            <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full bg-gold transition-all" style={{ width: `${myPart!.progress}%` }} />
-            </div>
-          </div>
+          <p className="mt-4 text-xs text-white/45 md:hidden">{t("eventProgress")}: {myPart!.progress}%</p>
         ) : myPart ? (
           <p className="mt-4 text-sm text-white/55">{t("joinedLocked")}</p>
         ) : canJoin ? (
@@ -111,6 +108,7 @@ export default async function GrowthEventDetailPage({ params }: Props) {
       </GlassCard>
 
       {isMember ? (
+        <div className="growth-event-detail__hub">
         <EventMemberTabs
           chat={
             <EventChatPanel
@@ -162,10 +160,11 @@ export default async function GrowthEventDetailPage({ params }: Props) {
             />
           }
         />
+        </div>
       ) : null}
 
       {event.participants.length > 0 ? (
-        <GlassCard className="p-6">
+        <GlassCard className="growth-event-detail__section p-6">
           <h2 className="text-lg font-bold">{t("participantsPreview")}</h2>
           <div className="mt-3 flex -space-x-2">
             {event.participants.map((p) => (
@@ -181,7 +180,7 @@ export default async function GrowthEventDetailPage({ params }: Props) {
         </GlassCard>
       ) : null}
 
-      <GlassCard className="p-6">
+      <GlassCard className="growth-event-detail__section p-6">
         <h2 className="text-lg font-bold">{t("rulesTitle")}</h2>
         {isMember ? (
           <div
