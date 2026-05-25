@@ -43,9 +43,7 @@ export function EventMemberTabs({ chat, progress, posts }: Props) {
       <div className="max-w-full overflow-hidden">
         {tab === "chat" ? <div className="event-member-chat-shell">{chat}</div> : null}
         {tab === "progress" ? <div className="p-6">{progress}</div> : null}
-        {tab === "posts" ? (
-          <div className="overflow-x-hidden p-3 sm:p-5">{posts}</div>
-        ) : null}
+        {tab === "posts" ? <div className="event-posts-tab">{posts}</div> : null}
       </div>
     </GlassCard>
   );
