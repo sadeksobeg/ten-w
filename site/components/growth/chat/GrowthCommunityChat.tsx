@@ -300,7 +300,7 @@ export function GrowthCommunityChat({
           return (
             <div
               key={m.id}
-              className={`group flex gap-2 ${mine ? "flex-row-reverse" : "flex-row"}`}
+              className={`group flex max-w-full gap-2 ${mine ? "ms-auto flex-row-reverse" : "me-auto"}`}
             >
               <GrowthAvatar
                 name={label}
@@ -309,7 +309,7 @@ export function GrowthCommunityChat({
                 avatarPreset={avatarPreset}
                 size="sm"
               />
-              <div className={`max-w-[78%] min-w-0 ${mine ? "text-end" : "text-start"}`}>
+              <div className={`max-w-[min(78vw,280px)] min-w-0 sm:max-w-[78%] ${mine ? "text-end" : "text-start"}`}>
                 <div
                   className={`mb-0.5 flex flex-wrap items-center gap-1.5 ${mine ? "justify-end" : "justify-start"}`}
                 >
@@ -358,7 +358,7 @@ export function GrowthCommunityChat({
                 ) : (
                   <div className="relative inline-block">
                     <div
-                      className={`rounded-2xl px-3 py-2 text-sm ${
+                      className={`break-words rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap ${
                         official
                           ? "border border-gold/40 bg-gradient-to-br from-gold/20 to-gold/5 text-white"
                           : mine
@@ -400,24 +400,24 @@ export function GrowthCommunityChat({
         <div ref={bottomRef} />
       </div>
       <form
-        className="shrink-0 border-t border-white/10 p-3"
+        className="shrink-0 border-t border-white/10 p-2.5 sm:p-3"
         onSubmit={(e) => {
           e.preventDefault();
           void send();
         }}
       >
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-stretch">
           <input
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder={t(placeholderKey)}
-            className="min-h-[var(--growth-touch-min)] flex-1 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-gold/40"
+            className="min-h-[var(--growth-touch-min)] min-w-0 flex-1 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-gold/40"
             maxLength={8000}
           />
           <button
             type="submit"
             disabled={sending || !body.trim()}
-            className="growth-touch-target shrink-0 rounded-xl bg-gradient-to-r from-gold/80 to-gold-bright px-4 text-sm font-bold text-bg disabled:opacity-50"
+            className="growth-touch-target w-full shrink-0 rounded-xl bg-gradient-to-r from-gold/80 to-gold-bright px-4 py-2.5 text-sm font-bold text-bg disabled:opacity-50 sm:w-auto sm:py-0"
           >
             {t("send")}
           </button>

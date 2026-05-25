@@ -23,14 +23,14 @@ export function EventMemberTabs({ chat, progress, posts }: Props) {
   ];
 
   return (
-    <GlassCard className="overflow-hidden p-0">
+    <GlassCard className="max-w-full overflow-hidden p-0">
       <div className="flex border-b border-white/10">
         {tabs.map(({ key, label }) => (
           <button
             key={key}
             type="button"
             onClick={() => setTab(key)}
-            className={`flex-1 px-4 py-3 text-xs font-bold transition ${
+            className={`min-w-0 flex-1 px-2 py-2.5 text-[10px] font-bold transition sm:px-4 sm:py-3 sm:text-xs ${
               tab === key
                 ? "border-b-2 border-gold bg-gold/10 text-gold"
                 : "text-white/55 hover:text-white/80"
@@ -40,8 +40,8 @@ export function EventMemberTabs({ chat, progress, posts }: Props) {
           </button>
         ))}
       </div>
-      <div>
-        {tab === "chat" ? chat : null}
+      <div className="max-w-full overflow-hidden">
+        {tab === "chat" ? <div className="event-member-chat-shell">{chat}</div> : null}
         {tab === "progress" ? <div className="p-6">{progress}</div> : null}
         {tab === "posts" ? (
           <div className="overflow-x-hidden p-3 sm:p-5">{posts}</div>

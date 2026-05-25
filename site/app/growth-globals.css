@@ -451,10 +451,79 @@
   bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 0.75rem);
 }
 
+@media (max-width: 767px) {
+  .growth-chat-bubble-panel {
+    left: max(0.75rem, env(safe-area-inset-left, 0px)) !important;
+    right: max(0.75rem, env(safe-area-inset-right, 0px)) !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: min(78dvh, 520px);
+  }
+}
+
+.event-member-chat-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  height: min(68dvh, calc(100dvh - var(--growth-mobile-nav-h) - var(--growth-safe-bottom) - 10.5rem));
+  min-height: 300px;
+  max-height: 70dvh;
+}
+
+/* Physical right — inset-inline-end maps to LEFT in RTL */
+.event-assistant-fab,
+.event-assistant-panel {
+  inset-inline-end: unset;
+  left: auto;
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+}
+
+.event-assistant-fab {
+  bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 0.85rem);
+}
+
+.event-assistant-panel {
+  bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 5.25rem);
+  width: auto;
+  max-width: min(360px, calc(100vw - 1.5rem));
+}
+
+@media (max-width: 767px) {
+  .event-assistant-panel {
+    left: max(0.75rem, env(safe-area-inset-left, 0px));
+    right: max(0.75rem, env(safe-area-inset-right, 0px));
+    max-width: none;
+    max-height: min(78dvh, 560px);
+  }
+}
+
+@media (min-width: 768px) {
+  .event-assistant-fab {
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .event-assistant-panel {
+    bottom: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    max-height: min(70vh, 520px);
+  }
+}
+
 @media (min-width: 768px) {
   .growth-chat-bubble-fab,
   .growth-chat-bubble-panel {
     bottom: 1.5rem;
+  }
+
+  .event-member-chat-shell {
+    height: min(520px, 58vh);
+    min-height: 400px;
+    max-height: 560px;
   }
 }
 
@@ -505,31 +574,9 @@
     }
   }
 
-  .event-assistant-fab,
-  .event-assistant-panel {
-    inset-inline-end: max(0.75rem, env(safe-area-inset-right, 0px));
-  }
-
-  .event-assistant-fab {
-    bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 0.85rem);
-  }
-
-  .event-assistant-panel {
-    bottom: calc(var(--growth-mobile-nav-h) + var(--growth-safe-bottom) + 5.25rem);
-  }
-
   @media (min-width: 768px) {
     .event-assistant-fab {
-      bottom: auto;
-      top: 50%;
-      transform: translateY(-50%);
       animation: event-assistant-float-y 4s ease-in-out infinite;
-    }
-
-    .event-assistant-panel {
-      bottom: auto;
-      top: 50%;
-      transform: translateY(-50%);
     }
   }
 

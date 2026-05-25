@@ -4,7 +4,7 @@ import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { EventContactLeadRow } from "@/lib/growth/event-contact-assistant";
 import { toggleEventContactLeadAction } from "@/lib/growth/actions";
-import { IconRobotAssistant } from "@/components/growth/icons/GrowthIcons";
+import { IconClose, IconRobotAssistant } from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   leads: EventContactLeadRow[];
@@ -31,13 +31,21 @@ export function EventContactAssistantBubble({ leads }: Props) {
 
       {open ? (
         <div
-          className="event-assistant-panel fixed z-[50] flex max-h-[min(72dvh,560px)] w-[calc(100vw-1.5rem)] max-w-[360px] flex-col overflow-hidden rounded-3xl border border-gold/40 bg-[#070910]/98 shadow-[0_0_100px_-16px_rgba(228,184,77,0.65)] backdrop-blur-xl motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none md:max-h-[min(70vh,520px)]"
+          className="event-assistant-panel fixed z-[50] flex flex-col overflow-hidden rounded-3xl border border-gold/40 bg-[#070910]/98 shadow-[0_0_100px_-16px_rgba(228,184,77,0.65)] backdrop-blur-xl motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none"
           role="dialog"
           aria-modal="true"
           aria-labelledby="contact-assistant-title"
         >
           <div className="relative shrink-0 border-b border-gold/25 bg-gradient-to-br from-gold/20 via-violet-600/10 to-transparent px-3 py-3 sm:px-4 sm:py-4">
-            <div className="flex items-start gap-2.5 sm:gap-3">
+            <button
+              type="button"
+              className="absolute end-2 top-2 rounded-lg p-1.5 text-white/50 hover:bg-white/10 hover:text-white"
+              aria-label={t("close")}
+              onClick={() => setOpen(false)}
+            >
+              <IconClose size={18} aria-hidden />
+            </button>
+            <div className="flex items-start gap-2.5 pe-8 sm:gap-3 sm:pe-10">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-gold/40 bg-gold/15 sm:size-12 sm:rounded-2xl">
                 <IconRobotAssistant size={24} className="text-gold sm:hidden" />
                 <IconRobotAssistant size={28} className="hidden text-gold sm:block" />
