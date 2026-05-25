@@ -30,15 +30,24 @@ export function EventMemberFeed({ eventId, posts, currentUserId, contactLeads }:
     <>
       <div className="event-posts-feed">
         <section className="event-posts-composer" aria-labelledby="event-posts-composer-title">
+          <div className="event-posts-composer__mesh" aria-hidden />
           <div className="event-posts-composer__glow" aria-hidden />
-          <p className="event-posts-composer__badge">{t("feedBadge")}</p>
-          <h2
-            id="event-posts-composer-title"
-            className="event-posts-composer__title font-[family-name:var(--font-cairo)]"
-          >
-            {t("memberHub")}
-          </h2>
-          <p className="event-posts-composer__hint">{t("memberOnlyHint")}</p>
+
+          <div className="event-posts-composer__head">
+            <div className="event-posts-composer__icon" aria-hidden>
+              ✦
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="event-posts-composer__badge">{t("feedBadge")}</p>
+              <h2
+                id="event-posts-composer-title"
+                className="event-posts-composer__title font-[family-name:var(--font-cairo)]"
+              >
+                {t("memberHub")}
+              </h2>
+              <p className="event-posts-composer__hint">{t("memberOnlyHint")}</p>
+            </div>
+          </div>
 
           <form
             id={`event-post-${eventId}`}

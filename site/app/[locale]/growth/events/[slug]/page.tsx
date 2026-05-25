@@ -62,7 +62,7 @@ export default async function GrowthEventDetailPage({ params }: Props) {
     (event.maxParticipants == null || event._count.participants < event.maxParticipants);
 
   return (
-    <div className="max-w-full space-y-6 overflow-x-hidden">
+    <div className="growth-event-detail max-w-full space-y-6 overflow-x-hidden">
       <Link
         href={`/${locale}/growth/events`}
         className="inline-flex items-center gap-1 text-xs font-semibold text-gold hover:underline"
