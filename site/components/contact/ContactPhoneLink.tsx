@@ -2,7 +2,7 @@ import { ltrIsolate } from "@/lib/ltr-isolate";
 
 type Props = {
   tel: string;
-  /** Visible label (e.g. 0953562654); must be ASCII digits for correct RTL isolation */
+  /** Visible label (e.g. 0939448113); must be ASCII digits for correct RTL isolation */
   display: string;
 };
 

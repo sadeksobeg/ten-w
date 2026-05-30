@@ -547,10 +547,12 @@
       "subtitle": "We respond on business days (typically within 1–2 business days).",
       "slaNote": "For urgent security matters, state “urgent” in the subject line."
     },
-    "phoneLabel": "Phone",
-    "phoneRaw": "+963953562654",
-    "phoneDisplay": "+963 953 562 654",
-    "addressLine": "Salmieh — opposite Ibn al-Nafis Medical Complex",
+    "phoneLabel": "Téléphone",
+    "phoneRaw": "+963939448113",
+    "phoneDisplay": "+963 939 448 113",
+    "emailLabel": "E-mail",
+    "emailValue": "info@tenegta.com",
+    "addressLine": "Salmieh — en face du complexe médical Ibn al-Nafis",
     "regionalNote": "Global inquiries welcome — include your time zone for scheduling.",
     "formHeading": "Contact form",
     "form": {

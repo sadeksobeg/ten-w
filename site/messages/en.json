@@ -503,8 +503,10 @@
       "slaNote": "For urgent security matters, state “urgent” in the subject line."
     },
     "phoneLabel": "Phone",
-    "phoneRaw": "+963953562654",
-    "phoneDisplay": "+963 953 562 654",
+    "phoneRaw": "+963939448113",
+    "phoneDisplay": "+963 939 448 113",
+    "emailLabel": "Email",
+    "emailValue": "info@tenegta.com",
     "addressLine": "Salmieh — opposite Ibn al-Nafis Medical Complex",
     "regionalNote": "Global inquiries welcome — include your time zone for scheduling.",
     "formHeading": "Contact form",

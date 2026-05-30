@@ -35,6 +35,10 @@ export default async function ContactPage({ params, searchParams }: Props) {
     process.env.NEXT_PUBLIC_CONTACT_PHONE_RAW?.trim() || t("phoneRaw");
   const phoneDisplay =
     process.env.NEXT_PUBLIC_CONTACT_PHONE_DISPLAY?.trim() || t("phoneDisplay");
+  const contactEmail =
+    process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() ||
+    process.env.CONTACT_EMAIL_TO?.trim() ||
+    t("emailValue");
 
   return (
     <>
@@ -60,6 +64,17 @@ export default async function ContactPage({ params, searchParams }: Props) {
             />
           </div>
           <div className="space-y-6 text-sm text-muted">
+            <div>
+              <h3 className="text-sm font-semibold text-gold">{t("emailLabel")}</h3>
+              <p className="mt-2">
+                <a
+                  href={`mailto:${contactEmail}`}
+                  className="font-medium text-foreground underline decoration-gold/40 underline-offset-4 transition-colors hover:text-gold"
+                >
+                  {contactEmail}
+                </a>
+              </p>
+            </div>
             <div>
               <h3 className="text-sm font-semibold text-gold">{t("address")}</h3>
               <p className="mt-2 whitespace-pre-line">{t("addressLine")}</p>
