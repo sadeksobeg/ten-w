@@ -536,14 +536,122 @@
   },
   "ProjectsPage": {
     "meta": {
-      "title": "T.E.N.E.G.T.A projects – Success stories",
-      "description": "AI, security, and systems delivery across industries."
+      "title": "T.E.N.E.G.T.A – Client work",
+      "description": "Software systems, websites, and mobile apps — enterprise-scale delivery portfolio."
     },
-    "hero": { "title": "Projects", "subtitle": "Challenge, solution, measurable outcomes." },
+    "hero": {
+      "kicker": "Client work",
+      "title": "Projects we're proud to deliver",
+      "subtitle": "The same structure global consultancies use: clear challenge, practical approach, results in numbers — systems, websites, and mobile."
+    },
+    "listDisclaimer": "Client contexts below are representative archetypes for discussion — not endorsements of named clients unless stated otherwise.",
+    "stats": {
+      "projects": "Projects",
+      "languages": "Languages",
+      "delivery": "What we deliver",
+      "deliveryValue": "Systems · Websites · Mobile apps"
+    },
+    "sections": {
+      "website": "Websites & platforms",
+      "websiteDesc": "Corporate portals, SaaS products, and multilingual sites — fast and scalable.",
+      "mobile": "Mobile applications",
+      "mobileDesc": "iOS and Android for field teams and customers — online and offline.",
+      "system": "Enterprise systems",
+      "systemDesc": "Operations dashboards, integrations, and security — systems that run 24/7."
+    },
+    "previewChallenge": "Challenge",
+    "previewApproach": "Our approach",
+    "previewOutcome": "Outcome",
+    "readCaseStudy": "Read the project story",
     "readMore": "Details",
-    "challenge": "Challenge",
-    "solution": "Solution",
-    "results": "Results"
+    "backToList": "All projects",
+    "atAGlance": "At a glance",
+    "industry": "Industry",
+    "clientProfile": "Client profile",
+    "services": "Services",
+    "deliveryTypes": "Delivery type",
+    "technologies": "Technologies",
+    "context": "Context",
+    "challenge": "The challenge",
+    "approach": "Our approach",
+    "solution": "What we built",
+    "deliverables": "What we delivered",
+    "techStack": "Technology",
+    "results": "Results",
+    "timeline": "Timeline",
+    "scope": "Scope",
+    "relatedProjects": "Related projects",
+    "ctaDiscuss": "Discuss a similar project",
+    "ctaPillar": "Explore solution pillar",
+    "ctaBandTitle": "Facing a similar challenge?",
+    "ctaBandSubtitle": "We start by understanding your context, then outline a clear path — from idea to production-ready system.",
+    "detailDisclaimer": "These projects are illustrative delivery scenarios for discussion. They are not a guarantee of outcomes for your organization unless agreed separately.",
+    "quoteDisclaimer": "Representative feedback from a similar delivery context — not attributed to a named client unless stated otherwise.",
+    "featured": {
+      "kicker": "Flagship work",
+      "title": "Featured projects",
+      "subtitle": "High-impact programs where challenge, approach, and measurable outcomes are front and center — the same pattern leading consultancies use on their portfolio.",
+      "badge": "Featured"
+    },
+    "filters": {
+      "industry": "Filter by industry",
+      "format": "Filter by delivery type",
+      "allIndustries": "All industries",
+      "allFormats": "All types",
+      "showing": "Showing {count} projects",
+      "clear": "Clear filters"
+    },
+    "industries": {
+      "government": "Public sector",
+      "fintech": "FinTech",
+      "healthcare": "Healthcare",
+      "logistics": "Logistics",
+      "agriculture": "Agriculture",
+      "manufacturing": "Manufacturing",
+      "telecom": "Telecom",
+      "energy": "Energy",
+      "holding": "Holding / corporate",
+      "education": "Education",
+      "retail": "Retail / B2B",
+      "cyber": "Cybersecurity"
+    },
+    "trust": {
+      "outcomes": {
+        "title": "Outcomes first",
+        "desc": "Every story leads with measurable results — not buzzwords."
+      },
+      "scale": {
+        "title": "Enterprise scale",
+        "desc": "Thousands of users, millions of transactions, 24/7 operations."
+      },
+      "security": {
+        "title": "Security built in",
+        "desc": "Identity, audit trails, and compliance-ready delivery."
+      },
+      "languages": {
+        "title": "Trilingual delivery",
+        "desc": "Arabic, English, and French — content and interfaces."
+      }
+    },
+    "process": {
+      "title": "How we deliver",
+      "discover": {
+        "title": "Discover",
+        "desc": "Understand your context, users, and constraints — no assumptions."
+      },
+      "design": {
+        "title": "Design",
+        "desc": "Architecture, UX, and a clear roadmap with milestones."
+      },
+      "build": {
+        "title": "Build",
+        "desc": "Iterative delivery with testing, security, and observability."
+      },
+      "launch": {
+        "title": "Launch & scale",
+        "desc": "Production rollout, training, and continuous improvement."
+      }
+    }
   },
   "PilotsPage": {
     "meta": {

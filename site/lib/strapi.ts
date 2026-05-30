@@ -1,5 +1,6 @@
 import type { BlogPostCard, ProjectCard } from "./fallback-data";
 import { fallbackPosts, fallbackProjects } from "./fallback-data";
+import { getDeepProject, toProjectCard } from "./projects-data";
 import type { Locale } from "@/i18n/routing";
 
 const STRAPI_URL = process.env.STRAPI_URL?.replace(/\/$/, "") ?? "";
@@ -100,7 +101,8 @@ export async function getProjectBySlug(
   );
   const first = json?.data?.[0];
   if (!first) {
-    return fallbackProjects.find((p) => p.slug === slug) ?? null;
+    const deep = getDeepProject(slug);
+    return deep ? toProjectCard(deep) : null;
   }
   return mapProject(first, locale);
 }

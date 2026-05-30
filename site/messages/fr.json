@@ -581,17 +581,122 @@
   },
   "ProjectsPage": {
     "meta": {
-      "title": "T.E.N.E.G.T.A projects – Success stories",
-      "description": "AI, security, and systems delivery across industries."
+      "title": "T.E.N.E.G.T.A – Réalisations clients",
+      "description": "Systèmes logiciels, sites web et apps mobile — portfolio enterprise à grande échelle."
     },
     "hero": {
-      "title": "Projects",
-      "subtitle": "Challenge, solution, measurable outcomes."
+      "kicker": "Réalisations",
+      "title": "Projets dont nous sommes fiers",
+      "subtitle": "La même structure que les grandes cabinets : défi clair, approche concrète, résultats chiffrés — systèmes, sites et mobile."
     },
-    "readMore": "Details",
-    "challenge": "Challenge",
-    "solution": "Solution",
-    "results": "Results"
+    "listDisclaimer": "Les contextes clients sont des archétypes représentatifs — pas des références nommées sauf mention contraire.",
+    "stats": {
+      "projects": "Projets",
+      "languages": "Langues",
+      "delivery": "Ce que nous livrons",
+      "deliveryValue": "Systèmes · Sites web · Apps mobile"
+    },
+    "sections": {
+      "website": "Sites web & plateformes",
+      "websiteDesc": "Portails corporate, SaaS et sites multilingues — rapides et évolutifs.",
+      "mobile": "Applications mobile",
+      "mobileDesc": "iOS et Android pour équipes terrain et clients — online et offline.",
+      "system": "Systèmes enterprise",
+      "systemDesc": "Tableaux de bord, intégrations et sécurité — systèmes 24/7."
+    },
+    "previewChallenge": "Défi",
+    "previewApproach": "Notre approche",
+    "previewOutcome": "Résultat",
+    "readCaseStudy": "Lire le récit du projet",
+    "readMore": "Détails",
+    "backToList": "Tous les projets",
+    "atAGlance": "En bref",
+    "industry": "Secteur",
+    "clientProfile": "Profil client",
+    "services": "Services",
+    "deliveryTypes": "Type de livraison",
+    "technologies": "Technologies",
+    "context": "Contexte",
+    "challenge": "Le défi",
+    "approach": "Notre approche",
+    "solution": "Ce qui a été construit",
+    "deliverables": "Ce que nous avons livré",
+    "techStack": "Technologies",
+    "results": "Résultats",
+    "timeline": "Durée",
+    "scope": "Périmètre",
+    "relatedProjects": "Projets associés",
+    "ctaDiscuss": "Discuter d'un projet similaire",
+    "ctaPillar": "Explorer le pilier solution",
+    "ctaBandTitle": "Un défi similaire ?",
+    "ctaBandSubtitle": "Nous commençons par comprendre votre contexte, puis proposons un chemin clair — de l'idée au système en production.",
+    "detailDisclaimer": "Ces projets sont des scénarios illustratifs. Ils ne garantissent pas de résultats pour votre organisation sans accord séparé.",
+    "quoteDisclaimer": "Témoignage représentatif d'un contexte de livraison similaire — pas attribué à un client nommé sauf mention contraire.",
+    "featured": {
+      "kicker": "Réalisations phares",
+      "title": "Projets à la une",
+      "subtitle": "Programmes à fort impact — défi, approche et résultats mesurables, comme les grands cabinets de conseil.",
+      "badge": "À la une"
+    },
+    "filters": {
+      "industry": "Filtrer par secteur",
+      "format": "Filtrer par type",
+      "allIndustries": "Tous secteurs",
+      "allFormats": "Tous types",
+      "showing": "{count} projets affichés",
+      "clear": "Effacer les filtres"
+    },
+    "industries": {
+      "government": "Secteur public",
+      "fintech": "FinTech",
+      "healthcare": "Santé",
+      "logistics": "Logistique",
+      "agriculture": "Agriculture",
+      "manufacturing": "Industrie",
+      "telecom": "Télécom",
+      "energy": "Énergie",
+      "holding": "Holding / corporate",
+      "education": "Éducation",
+      "retail": "Commerce / B2B",
+      "cyber": "Cybersécurité"
+    },
+    "trust": {
+      "outcomes": {
+        "title": "Résultats d'abord",
+        "desc": "Chaque récit mène avec des chiffres mesurables — pas du jargon."
+      },
+      "scale": {
+        "title": "Échelle enterprise",
+        "desc": "Milliers d'utilisateurs, millions de transactions, 24/7."
+      },
+      "security": {
+        "title": "Sécurité intégrée",
+        "desc": "Identité, pistes d'audit, livraison conforme."
+      },
+      "languages": {
+        "title": "Livraison trilingue",
+        "desc": "Arabe, anglais et français — contenu et interfaces."
+      }
+    },
+    "process": {
+      "title": "Comment nous livrons",
+      "discover": {
+        "title": "Découvrir",
+        "desc": "Comprendre contexte, utilisateurs et contraintes."
+      },
+      "design": {
+        "title": "Concevoir",
+        "desc": "Architecture, UX et feuille de route claire."
+      },
+      "build": {
+        "title": "Construire",
+        "desc": "Livraison itérative avec tests, sécurité et observabilité."
+      },
+      "launch": {
+        "title": "Lancer & scale",
+        "desc": "Mise en production, formation et amélioration continue."
+      }
+    }
   },
   "PilotsPage": {
     "meta": {
