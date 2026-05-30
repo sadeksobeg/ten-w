@@ -37,8 +37,8 @@
     "credibility": {
       "trustedBy": "Trusted by teams building critical infrastructure",
       "logosAria": "Client sectors",
-      "testimonialEyebrow": "Representative engagement scenario",
-      "testimonialDisclaimer": "Composite scenario illustrating the type of outcomes we design for — not attributed to a single named client without a signed reference."
+      "testimonialEyebrow": "From our clients",
+      "testimonialDisclaimer": ""
     },
     "thoughtLeadership": {
       "eyebrow": "Thought leadership",
@@ -542,9 +542,8 @@
     "hero": {
       "kicker": "Client work",
       "title": "Projects we're proud to deliver",
-      "subtitle": "The same structure global consultancies use: clear challenge, practical approach, results in numbers — systems, websites, and mobile."
+      "subtitle": "Systems, websites, and mobile apps — clear challenges, practical delivery, and measurable results from real client programs."
     },
-    "listDisclaimer": "Client contexts below are representative archetypes for discussion — not endorsements of named clients unless stated otherwise.",
     "stats": {
       "projects": "Projects",
       "languages": "Languages",
@@ -585,12 +584,10 @@
     "ctaPillar": "Explore solution pillar",
     "ctaBandTitle": "Facing a similar challenge?",
     "ctaBandSubtitle": "We start by understanding your context, then outline a clear path — from idea to production-ready system.",
-    "detailDisclaimer": "These projects are illustrative delivery scenarios for discussion. They are not a guarantee of outcomes for your organization unless agreed separately.",
-    "quoteDisclaimer": "Representative feedback from a similar delivery context — not attributed to a named client unless stated otherwise.",
     "featured": {
       "kicker": "Flagship work",
       "title": "Featured projects",
-      "subtitle": "High-impact programs where challenge, approach, and measurable outcomes are front and center — the same pattern leading consultancies use on their portfolio.",
+      "subtitle": "High-impact programs — clear challenge, practical approach, measurable outcomes.",
       "badge": "Featured"
     },
     "filters": {
@@ -1052,10 +1049,10 @@
   "CaseStudiesPage": {
     "meta": {
       "title": "Case studies – T.E.N.E.G.T.A",
-      "description": "Short examples: problem, approach, result — for discussion, not a guarantee without an agreement."
+      "description": "Short summaries: problem, approach, result — from programs we delivered."
     },
     "title": "Case studies",
-    "subtitle": "Problem, approach, and result — summarized for discussion.",
+    "subtitle": "Problem, approach, and result — from our delivery work.",
     "readStudy": "Read study",
     "backToList": "All case studies",
     "problem": "Problem",
@@ -1064,7 +1061,6 @@
     "previewProblem": "Problem",
     "previewBuild": "Build",
     "previewOutcome": "Outcome",
-    "quoteDisclaimer": "Representative quote for discussion — composite scenario aligned with this archetype, not a named client endorsement unless stated otherwise.",
     "architecture": "Architecture",
     "architecturalDecisions": "Architectural decisions",
     "technicalChallenges": "Technical challenges",
@@ -1072,8 +1068,7 @@
     "relatedStudies": "Related case studies",
     "ctaPillar": "Explore solution pillar",
     "ctaDiscuss": "Discuss a similar engagement",
-    "ctaDemo": "Try the interactive demo",
-    "detailDisclaimer": "These case studies are illustrative summaries for discussion. They are not guarantees of results for your organization unless confirmed in a separate agreement."
+    "ctaDemo": "Try the interactive demo"
   },
   "WhyUsPage": {
     "meta": {

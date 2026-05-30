@@ -37,8 +37,8 @@
     "credibility": {
       "trustedBy": "Trusted by teams building critical infrastructure",
       "logosAria": "Client sectors",
-      "testimonialEyebrow": "Representative engagement scenario",
-      "testimonialDisclaimer": "Composite scenario illustrating the type of outcomes we design for — not attributed to a single named client without a signed reference."
+      "testimonialEyebrow": "Nos clients",
+      "testimonialDisclaimer": ""
     },
     "thoughtLeadership": {
       "eyebrow": "Thought leadership",
@@ -587,9 +587,8 @@
     "hero": {
       "kicker": "Réalisations",
       "title": "Projets dont nous sommes fiers",
-      "subtitle": "La même structure que les grandes cabinets : défi clair, approche concrète, résultats chiffrés — systèmes, sites et mobile."
+      "subtitle": "Systèmes, sites web et apps mobile — défis clairs, livraison concrète et résultats mesurables sur de vrais projets clients."
     },
-    "listDisclaimer": "Les contextes clients sont des archétypes représentatifs — pas des références nommées sauf mention contraire.",
     "stats": {
       "projects": "Projets",
       "languages": "Langues",
@@ -630,12 +629,10 @@
     "ctaPillar": "Explorer le pilier solution",
     "ctaBandTitle": "Un défi similaire ?",
     "ctaBandSubtitle": "Nous commençons par comprendre votre contexte, puis proposons un chemin clair — de l'idée au système en production.",
-    "detailDisclaimer": "Ces projets sont des scénarios illustratifs. Ils ne garantissent pas de résultats pour votre organisation sans accord séparé.",
-    "quoteDisclaimer": "Témoignage représentatif d'un contexte de livraison similaire — pas attribué à un client nommé sauf mention contraire.",
     "featured": {
       "kicker": "Réalisations phares",
       "title": "Projets à la une",
-      "subtitle": "Programmes à fort impact — défi, approche et résultats mesurables, comme les grands cabinets de conseil.",
+      "subtitle": "Programmes à fort impact — défi clair, approche concrète, résultats mesurables.",
       "badge": "À la une"
     },
     "filters": {
@@ -1106,10 +1103,10 @@
   "CaseStudiesPage": {
     "meta": {
       "title": "Case studies – T.E.N.E.G.T.A",
-      "description": "Short examples: problem, approach, result — for discussion, not a guarantee without an agreement."
+      "description": "Résumés courts : problème, approche, résultat — sur des projets que nous avons livrés."
     },
     "title": "Case studies",
-    "subtitle": "Problem, approach, and result — summarized for discussion.",
+    "subtitle": "Problème, approche et résultat — extraits de nos livraisons.",
     "readStudy": "Read study",
     "backToList": "All case studies",
     "problem": "Problem",
@@ -1118,7 +1115,6 @@
     "previewProblem": "Problem",
     "previewBuild": "Build",
     "previewOutcome": "Outcome",
-    "quoteDisclaimer": "Representative quote for discussion — composite scenario aligned with this archetype, not a named client endorsement unless stated otherwise.",
     "architecture": "Architecture",
     "architecturalDecisions": "Architectural decisions",
     "technicalChallenges": "Technical challenges",
@@ -1126,8 +1122,7 @@
     "relatedStudies": "Related case studies",
     "ctaPillar": "Explore solution pillar",
     "ctaDiscuss": "Discuss a similar engagement",
-    "ctaDemo": "Try the interactive demo",
-    "detailDisclaimer": "These case studies are illustrative summaries for discussion. They are not guarantees of results for your organization unless confirmed in a separate agreement."
+    "ctaDemo": "Try the interactive demo"
   },
   "WhyUsPage": {
     "meta": {

@@ -149,11 +149,7 @@ export default async function ProjectDetailPage({ params }: Props) {
             </SectionBlock>
 
             {project.clientQuote ? (
-              <ProjectQuoteBlock
-                quote={project.clientQuote}
-                locale={locale}
-                disclaimer={t("quoteDisclaimer")}
-              />
+              <ProjectQuoteBlock quote={project.clientQuote} locale={locale} />
             ) : null}
 
             <ProjectDeliveryProcess title={t("process.title")} steps={deliverySteps} />
@@ -193,7 +189,6 @@ export default async function ProjectDetailPage({ params }: Props) {
               </div>
             </SectionBlock>
 
-            <p className="py-8 text-sm text-white/45">{t("detailDisclaimer")}</p>
           </div>
 
           <div className="lg:pt-10">

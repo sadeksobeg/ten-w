@@ -4,10 +4,9 @@ import type { ProjectClientQuote } from "@/lib/projects-data";
 type Props = {
   quote: ProjectClientQuote;
   locale: string;
-  disclaimer: string;
 };
 
-export function ProjectQuoteBlock({ quote, locale, disclaimer }: Props) {
+export function ProjectQuoteBlock({ quote, locale }: Props) {
   return (
     <blockquote className="relative my-10 rounded-2xl border border-gold/25 bg-gradient-to-br from-gold/10 via-transparent to-transparent p-6 sm:p-8">
       <span
@@ -30,7 +29,6 @@ export function ProjectQuoteBlock({ quote, locale, disclaimer }: Props) {
           <p className="text-sm text-muted">{pickLocalized(quote.org, locale)}</p>
         </div>
       </footer>
-      <p className="mt-4 text-xs text-white/40">{disclaimer}</p>
     </blockquote>
   );
 }

@@ -101,7 +101,6 @@ export default async function ProjectsPage({ params }: Props) {
             {t("hero.title")}
           </h1>
           <p className="mt-3 text-muted md:text-lg">{t("hero.subtitle")}</p>
-          <p className="mt-2 text-sm text-white/45">{t("listDisclaimer")}</p>
         </div>
 
         <dl className="mt-10 grid gap-4 border-t border-white/10 pt-8 sm:grid-cols-3">

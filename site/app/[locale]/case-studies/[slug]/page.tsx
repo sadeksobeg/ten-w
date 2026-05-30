@@ -190,13 +190,8 @@ export default async function CaseStudyDetailPage({ params }: Props) {
               {pickLocalized(cs.clientQuote.org, locale)}
             </span>
           </footer>
-          <p className="mt-4 text-xs text-white/40">{t("quoteDisclaimer")}</p>
         </Section>
       ) : null}
-
-      <Section>
-        <p className="max-w-3xl text-sm text-muted">{t("detailDisclaimer")}</p>
-      </Section>
 
       {related.length > 0 ? (
         <Section>

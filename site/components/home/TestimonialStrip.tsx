@@ -37,7 +37,6 @@ export function TestimonialStrip() {
             {pickLocalized(primary.org, locale)}
           </div>
         </footer>
-        <p className="mt-6 text-xs leading-relaxed text-muted">{t("testimonialDisclaimer")}</p>
       </div>
     </section>
   );

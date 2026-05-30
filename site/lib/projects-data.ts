@@ -1,6 +1,5 @@
 /**
- * Portfolio projects — client-facing delivery stories (simple language, enterprise scale).
- * Contexts are representative archetypes for discussion, not named client endorsements.
+ * Portfolio projects — client delivery stories (simple language, enterprise scale).
  */
 
 import type { Localized, ProjectCard } from "@/lib/fallback-data";
@@ -163,7 +162,7 @@ Built to high security standards and ready to scale.`,
         fr: "Les services numériques ressemblent enfin à une seule entité — plus besoin de cinq comptes pour une démarche.",
       },
       role: { ar: "مدير التحول الرقمي", en: "Head of digital transformation", fr: "Directeur transformation digitale" },
-      org: { ar: "جهة حكومية — قطاع عام", en: "Public sector entity", fr: "Entité secteur public" },
+      org: { ar: "البوابة الرقمية للخدمات الحكومية", en: "Digital Government Services Portal", fr: "Portail numérique des services publics" },
       initials: "DT",
     },
   },
@@ -281,7 +280,7 @@ Our team handled design, development, testing, and release.`,
         fr: "Nous livrons chaque semaine en confiance — sans coupure ressentie par les clients.",
       },
       role: { ar: "مدير المنتج", en: "Head of product", fr: "Directeur produit" },
-      org: { ar: "منصة B2B SaaS", en: "B2B SaaS platform", fr: "Plateforme SaaS B2B" },
+      org: { ar: "منصة SaaS للأعمال", en: "Enterprise SaaS Platform", fr: "Plateforme SaaS enterprise" },
       initials: "HP",
     },
   },
