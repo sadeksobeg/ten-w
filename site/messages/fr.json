@@ -1422,8 +1422,21 @@
     },
     "notifications": {
       "title": "Notifications",
-      "markAllRead": "Mark all read",
-      "empty": "No new notifications"
+      "markAllRead": "Tout marquer lu",
+      "groupToday": "Aujourd'hui",
+      "groupYesterday": "Hier",
+      "groupWeek": "Cette semaine",
+      "empty": "Aucune notification",
+      "filterAll": "Tout",
+      "filterUnread": "Non lues",
+      "unread": "Nouveau",
+      "unreadCount": "{count} non lues",
+      "open": "Ouvrir",
+      "close": "Fermer",
+      "back": "Retour",
+      "backToList": "Retour à la liste",
+      "viewAll": "Toutes les notifications",
+      "readLabel": "Lu"
     },
     "events": {
       "title": "Events",

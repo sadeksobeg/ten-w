@@ -219,6 +219,81 @@
   animation: growthBellRing 2s ease-in-out 1s infinite;
 }
 
+.growth-notif-backdrop-enter {
+  animation: growthNotifFadeIn 0.22s ease-out forwards;
+}
+
+.growth-notif-sheet-enter {
+  animation: growthNotifSheetUp 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.growth-notif-detail-enter {
+  animation: growthNotifDetailIn 0.26s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes growthNotifFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes growthNotifSheetUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .growth-notif-sheet-enter {
+    animation: growthNotifDropIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
+
+@keyframes growthNotifDropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes growthNotifDetailIn {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[dir="rtl"] .growth-notif-detail-enter {
+  animation-name: growthNotifDetailInRtl;
+}
+
+@keyframes growthNotifDetailInRtl {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @keyframes growthBellRing {
   0%,
   100% {

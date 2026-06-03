@@ -1372,7 +1372,13 @@
       "filterAll": "الكل",
       "filterUnread": "غير المقروء",
       "unread": "جديد",
-      "open": "فتح"
+      "unreadCount": "{count} غير مقروء",
+      "open": "فتح",
+      "close": "إغلاق",
+      "back": "رجوع",
+      "backToList": "العودة للقائمة",
+      "viewAll": "كل الإشعارات",
+      "readLabel": "مقروء"
     },
     "events": {
       "title": "الفعاليات",

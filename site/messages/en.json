@@ -1404,7 +1404,13 @@
       "filterAll": "All",
       "filterUnread": "Unread",
       "unread": "New",
-      "open": "Open"
+      "unreadCount": "{count} unread",
+      "open": "Open",
+      "close": "Close",
+      "back": "Back",
+      "backToList": "Back to list",
+      "viewAll": "All notifications",
+      "readLabel": "Read"
     },
     "events": {
       "title": "Events",
