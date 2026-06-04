@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { requirePartnerDashboard } from "@/lib/growth/partner-page";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
+import { IconBattle } from "@/components/growth/icons/GrowthIcons";
 import { getPartnerBattles, hasActiveBattle } from "@/lib/growth/battles";
 import { BattleCard } from "@/components/growth/battles/BattleCard";
 import { BattleChallengeForm } from "@/components/growth/battles/BattleChallengeForm";
@@ -35,7 +36,12 @@ export default async function GrowthBattlesPage({ params }: Props) {
 
   return (
     <div className="space-y-6">
-      <GrowthPageHeader title={t("title")} subtitle={t("subtitle")} />
+      <GrowthPageHeader
+        variant="feature"
+        icon={<IconBattle size={28} />}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
       {canChallenge ? <BattleChallengeForm rivals={rivals} /> : null}
       <div className="space-y-4">
         {battles.length === 0 ? (

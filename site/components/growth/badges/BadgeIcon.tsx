@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { BadgeMedallion3D } from "@/components/growth/badges/BadgeMedallion3D";
 import { getBadgeDef } from "@/lib/growth/badge-visual";
 
-export type BadgeIconSize = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
+export type BadgeIconSize = "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "hero" | "showcase";
 
 export type BadgeIconProps = {
   badgeKey: string;
@@ -28,6 +28,8 @@ const SIZE_PX: Record<BadgeIconSize, number> = {
   lg: 96,
   xl: 128,
   xxl: 152,
+  hero: 200,
+  showcase: 176,
 };
 
 export function BadgeIcon({

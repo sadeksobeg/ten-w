@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { requirePartnerDashboard } from "@/lib/growth/partner-page";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
+import { IconConstellation } from "@/components/growth/icons/GrowthIcons";
 import { buildConstellationStars, constellationNameFromArchetype } from "@/lib/growth/constellation";
 import { StarMap } from "@/components/growth/constellation/StarMap";
 import { getPartnerRival } from "@/lib/growth/rival";
@@ -27,6 +28,8 @@ export default async function GrowthConstellationPage({ params }: Props) {
   return (
     <div className="space-y-6">
       <GrowthPageHeader
+        variant="feature"
+        icon={<IconConstellation size={28} />}
         title={t("title")}
         subtitle={t("name", { name })}
       />

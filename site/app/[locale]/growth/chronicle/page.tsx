@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { requirePartnerDashboard } from "@/lib/growth/partner-page";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
+import { IconChronicle } from "@/components/growth/icons/GrowthIcons";
 import { generateChronicle } from "@/lib/growth/chronicle";
 import { ChronicleShareButton } from "@/components/growth/chronicle/ChronicleShareButton";
 import { resolveChatSenderName } from "@/lib/growth/chat-display";
@@ -35,7 +36,12 @@ export default async function GrowthChroniclePage({ params }: Props) {
 
   return (
     <div className="space-y-8">
-      <GrowthPageHeader title={t("title")} subtitle={t("subtitle")} />
+      <GrowthPageHeader
+        variant="feature"
+        icon={<IconChronicle size={28} />}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
       <header className="border-b border-gold/25 pb-6 text-center">
         <h2 className="font-[family-name:var(--font-cairo)] text-3xl font-black text-gold">
           {t("recordOf", { name })}

@@ -20,6 +20,15 @@ const EXPLORE_KEYS = [
   "legends",
 ] as const;
 
+const FEATURED_KEYS = new Set<string>([
+  "chronicle",
+  "constellation",
+  "vault",
+  "battles",
+  "mentors",
+  "map",
+]);
+
 const HREF: Record<(typeof EXPLORE_KEYS)[number], string> = {
   deals: "/growth/deals",
   events: "/growth/events",
@@ -46,29 +55,34 @@ export async function GrowthHubExploreNav() {
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
         {EXPLORE_KEYS.map((key) => {
           const Icon = GROWTH_DESKTOP_NAV_ICONS[key];
-          const featured = key === "map";
+          const featured = FEATURED_KEYS.has(key);
           return (
             <Link
               key={key}
               href={HREF[key]}
               className={`group relative overflow-hidden rounded-2xl border p-3 transition focus-visible:ring-2 focus-visible:ring-gold/40 ${
                 featured
-                  ? "border-gold/40 bg-gradient-to-br from-gold/20 via-gold/5 to-violet-500/10 hover:border-gold/60"
+                  ? "border-gold/35 bg-gradient-to-br from-gold/15 via-violet-500/10 to-cyan-500/5 hover:border-gold/55 hover:shadow-[0_0_32px_-8px_rgba(228,184,77,0.45)]"
                   : "border-white/10 bg-white/[0.03] hover:border-gold/25 hover:bg-white/[0.06]"
               }`}
             >
               {featured ? (
                 <div
-                  className="pointer-events-none absolute -end-6 -top-6 size-20 rounded-full bg-gold/25 blur-2xl motion-safe:animate-pulse motion-reduce:animate-none"
+                  className="pointer-events-none absolute -end-8 -top-8 size-24 rounded-full bg-gold/20 blur-2xl motion-safe:animate-pulse motion-reduce:animate-none"
                   aria-hidden
                 />
               ) : null}
-              <div className="relative flex items-start gap-2">
+              <div className="relative flex items-start gap-2.5">
                 {Icon ? (
-                  <Icon
-                    size={20}
-                    className={`shrink-0 ${featured ? "text-gold" : "text-white/70 group-hover:text-gold"}`}
-                  />
+                  <span
+                    className={`flex size-9 shrink-0 items-center justify-center rounded-xl border ${
+                      featured
+                        ? "border-gold/30 bg-gold/10 text-gold"
+                        : "border-white/10 bg-white/[0.04] text-white/70 group-hover:border-gold/25 group-hover:text-gold"
+                    }`}
+                  >
+                    <Icon size={18} />
+                  </span>
                 ) : null}
                 <div className="min-w-0">
                   <p className={`truncate text-xs font-bold ${featured ? "text-gold" : "text-white"}`}>

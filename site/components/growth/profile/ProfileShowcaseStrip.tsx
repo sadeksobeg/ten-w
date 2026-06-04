@@ -1,5 +1,4 @@
-import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
-import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
+import { ProfileBadgeStack } from "@/components/growth/profile/ProfileBadgeStack";
 
 type Props = {
   locale: string;
@@ -15,30 +14,18 @@ export function ProfileShowcaseStrip({ locale, keys, earnedBadges, title }: Prop
   if (visible.length === 0) return null;
 
   return (
-    <section className="mt-8">
-      <h2 className="text-sm font-bold text-gold/90">{title}</h2>
-      <div className="mt-4 flex gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {visible.map((key) => {
-          const meta = earnedBadges.find((b) => b.key === key);
-          const copy = resolveBadgeCopy(key, locale, { name: meta?.name ?? key });
-          return (
-            <div
-              key={key}
-              className={`flex min-w-[9rem] shrink-0 flex-col items-center gap-2 rounded-2xl border bg-gradient-to-b from-gold/10 to-transparent px-4 py-4 shadow-[0_0_32px_-12px_rgba(228,184,77,0.45)] ${
-                key === "verified_partner"
-                  ? "border-gold ring-2 ring-gold/40"
-                  : "border-gold/30"
-              }`}
-              title={copy.name}
-            >
-              <BadgeIcon badgeKey={key} earned size="xl" showGlow />
-              <span className="max-w-[7rem] truncate text-center text-[11px] font-semibold text-white/80">
-                {copy.name}
-              </span>
-            </div>
-          );
-        })}
+    <section className="relative mt-8 overflow-hidden rounded-3xl border border-gold/20 bg-gradient-to-b from-gold/[0.08] via-[#0a0c14] to-[#050810] px-4 py-8 sm:px-8">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(228,184,77,0.12),transparent_55%)]" />
+      <div className="relative text-center">
+        <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-gold/70">Showcase</p>
+        <h2 className="mt-1 font-[family-name:var(--font-cairo)] text-xl font-bold text-gold">{title}</h2>
       </div>
+      <ProfileBadgeStack
+        locale={locale}
+        keys={keys}
+        earnedBadges={earnedBadges}
+        size="hero"
+      />
     </section>
   );
 }

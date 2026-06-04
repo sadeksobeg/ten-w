@@ -21,6 +21,7 @@ import {
 import { getLevelVisual } from "@/lib/growth/level-visual";
 import { getLevelI18nKey, LEVEL_COLORS } from "@/lib/growth/level-i18n";
 import { BadgeIdentityPill } from "@/components/growth/badges/BadgeIdentityPill";
+import { ProfileBadgeStack } from "@/components/growth/profile/ProfileBadgeStack";
 import { getXpBrandLabel } from "@/lib/growth/xp-brand";
 import type { PublicProfileData } from "@/lib/growth/get-public-profile";
 
@@ -75,7 +76,7 @@ export async function ProfileHeroPublic({ locale, data, canAppreciate }: Props) 
           boxShadow: `0 0 60px ${heroColor}22`,
         }}
       >
-        <div className="relative flex flex-col items-center gap-6 px-6 py-10 text-center sm:flex-row sm:items-center sm:text-start">
+        <div className="relative flex flex-col items-center gap-6 px-6 py-10 text-center lg:flex-row lg:items-center lg:justify-between lg:text-start">
           <AuraRing
             size={132}
             percent={xpPercent}
@@ -159,6 +160,18 @@ export async function ProfileHeroPublic({ locale, data, canAppreciate }: Props) 
               </div>
             ) : null}
           </div>
+
+          {data.showcasedBadges.length > 0 ? (
+            <div className="hidden shrink-0 lg:block lg:w-[min(100%,380px)]">
+              <ProfileBadgeStack
+                locale={locale}
+                keys={data.showcasedBadges}
+                earnedBadges={data.earnedBadges.map((b) => ({ key: b.key, name: b.name }))}
+                size="showcase"
+                compact
+              />
+            </div>
+          ) : null}
         </div>
       </GlassCard>
 

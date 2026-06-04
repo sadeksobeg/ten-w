@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { requirePartnerDashboard } from "@/lib/growth/partner-page";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
+import { IconMentor } from "@/components/growth/icons/GrowthIcons";
 import { MentorMarketClient, type MentorOfferView, type MentorshipRow } from "@/components/growth/mentors/MentorMarketClient";
 import { prisma } from "@/lib/prisma";
 import { resolveChatSenderName } from "@/lib/growth/chat-display";
@@ -63,7 +64,12 @@ export default async function GrowthMentorsPage({ params }: Props) {
 
   return (
     <div className="space-y-6">
-      <GrowthPageHeader title={t("title")} subtitle={t("subtitle")} />
+      <GrowthPageHeader
+        variant="feature"
+        icon={<IconMentor size={28} />}
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
       <MentorMarketClient
         offers={offers}
         myOffer={Boolean(myOffer)}

@@ -209,6 +209,56 @@
   box-shadow: inset 0 1px 0 rgba(228, 184, 77, 0.12);
 }
 
+/* Badge stack on profile */
+.growth-badge-stack-item--center {
+  animation: growthBadgeStackFloat 5s ease-in-out infinite;
+}
+
+@keyframes growthBadgeStackFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.growth-badge-holo-sheen .growth-badge-holo-layer {
+  animation: growthBadgeHoloSheen 4s linear infinite;
+}
+
+@keyframes growthBadgeHoloSheen {
+  0% {
+    transform: translateX(-30%);
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(30%);
+    opacity: 0.4;
+  }
+}
+
+.growth-badge-mythic-orbit {
+  animation: growthBadgeMythicOrbit 8s linear infinite;
+}
+
+@keyframes growthBadgeMythicOrbit {
+  from {
+    filter: drop-shadow(0 0 10px #e4b84d) hue-rotate(0deg);
+  }
+  to {
+    filter: drop-shadow(0 0 14px #a855f7) hue-rotate(360deg);
+  }
+}
+
+.growth-badge-stack-item:hover {
+  filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.55));
+}
+
 .growth-podium-1 {
   transform: scale(1.08);
   z-index: 3;
@@ -470,6 +520,9 @@
   .growth-badge-pulse,
   .growth-badge-3d-glow,
   .growth-capsule-float,
+  .growth-badge-holo-sheen .growth-badge-holo-layer,
+  .growth-badge-mythic-orbit,
+  .growth-badge-stack-item--center,
   .growth-bell-ring,
   .growth-skeleton-pulse,
   .growth-toast-enter,

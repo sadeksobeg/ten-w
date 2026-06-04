@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { requirePartnerDashboard } from "@/lib/growth/partner-page";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
+import { IconVault } from "@/components/growth/icons/GrowthIcons";
 import { VaultItemCard, type VaultItemView } from "@/components/growth/vault/VaultItemCard";
 import { prisma } from "@/lib/prisma";
 import {
@@ -69,6 +70,8 @@ export default async function GrowthVaultPage({ params }: Props) {
   return (
     <div className="space-y-6">
       <GrowthPageHeader
+        variant="feature"
+        icon={<IconVault size={28} />}
         title={t("title")}
         subtitle={t("subtitle", { unlocked: unlockedCount, total: items.length })}
       />
