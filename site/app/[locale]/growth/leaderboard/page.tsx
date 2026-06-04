@@ -1,7 +1,11 @@
 import { getTranslations } from "next-intl/server";
 import { GrowthPageHeader } from "@/components/growth/GrowthPageHeader";
 import { LeaderboardPodium } from "@/components/growth/leaderboard/LeaderboardPodium";
+import { GhostModePanel } from "@/components/growth/leaderboard/GhostModePanel";
+import { GhostLeaderboardRow } from "@/components/growth/leaderboard/GhostLeaderboardRow";
+import { BattleSidebar } from "@/components/growth/leaderboard/BattleSidebar";
 import { requirePartnerDashboard } from "@/lib/growth/partner-page";
+import { getGhostData } from "@/lib/growth/ghost";
 import {
   MONTH_MS,
   WEEK_MS,
@@ -32,11 +36,18 @@ export default async function GrowthLeaderboardPage({ params, searchParams }: Pr
     weightStreak: season.weightStreak,
   };
   const windowMs = tab === "month" ? MONTH_MS : tab === "season" ? season.windowMs : WEEK_MS;
-  const rows = await compositeLeaderboard(windowMs, weights, 50);
+  const [rows, ghost] = await Promise.all([
+    compositeLeaderboard(windowMs, weights, 50),
+    getGhostData(userId, locale),
+  ]);
 
   return (
     <div className="space-y-6">
       <GrowthPageHeader title={t("title")} subtitle={t("subtitle")} />
+      <GhostModePanel
+        ghost={ghost}
+        ghostRow={ghost ? <ul><GhostLeaderboardRow ghost={ghost} show /></ul> : null}
+      />
       <div className="flex flex-wrap gap-2">
         {(["week", "month", "season"] as const).map((key) => (
           <a
@@ -52,7 +63,10 @@ export default async function GrowthLeaderboardPage({ params, searchParams }: Pr
           </a>
         ))}
       </div>
-      <LeaderboardPodium locale={locale} rows={rows} viewerUserId={userId} />
+      <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
+        <LeaderboardPodium locale={locale} rows={rows} viewerUserId={userId} />
+        <BattleSidebar userId={userId} />
+      </div>
     </div>
   );
 }

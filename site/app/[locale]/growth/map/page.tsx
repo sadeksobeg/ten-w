@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { requirePartnerDashboard } from "@/lib/growth/partner-page";
 import { getWarMapData, getTerritoryLeaderboard } from "@/lib/growth/territory-service";
+import { getPartnerBattles } from "@/lib/growth/battles";
 import { WarMapClient } from "@/components/growth/map/WarMapClient";
 import { AscendAtlasBackdrop } from "@/components/growth/map/AscendAtlasBackdrop";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
@@ -15,11 +16,13 @@ export default async function GrowthMapPage({ params }: Props) {
   const session = await auth();
   await requirePartnerDashboard(locale);
   const userId = session!.user!.id;
-  const [data, leaderboard, t] = await Promise.all([
+  const [data, leaderboard, t, battles] = await Promise.all([
     getWarMapData(userId),
     getTerritoryLeaderboard(),
     getTranslations("Growth.map"),
+    getPartnerBattles(userId),
   ]);
+  const activeBattle = battles.find((b) => b.status === "ACTIVE");
 
   const claimedCount = data.cities.filter((c) => !c.isUnclaimed).length;
 
@@ -79,6 +82,16 @@ export default async function GrowthMapPage({ params }: Props) {
           <p className="text-[10px] font-semibold text-white/50">{t("statNetwork")}</p>
         </GlassCard>
       </div>
+
+      {activeBattle ? (
+        <div className="relative rounded-2xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
+          {t("battleActive", {
+            name: activeBattle.isChallenger
+              ? activeBattle.challenged.name
+              : activeBattle.challenger.name,
+          })}
+        </div>
+      ) : null}
 
       <div className="relative">
         <WarMapClient locale={locale} data={data} />

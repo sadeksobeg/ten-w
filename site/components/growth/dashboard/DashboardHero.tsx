@@ -20,6 +20,8 @@ type Props = {
   currentLevelMinXp: number;
   nextLevelName: string | null;
   nextLevelMinXp: number | null;
+  ghostXpPercent?: number | null;
+  ghostLegendName?: string | null;
 };
 
 export function DashboardHero({
@@ -33,8 +35,11 @@ export function DashboardHero({
   currentLevelMinXp,
   nextLevelName,
   nextLevelMinXp,
+  ghostXpPercent,
+  ghostLegendName,
 }: Props) {
   const t = useTranslations("Growth.dashboard");
+  const tGhost = useTranslations("Growth.ghost");
   const lv = getLevelVisual(levelName);
   const hasNext = nextLevelMinXp !== null && nextLevelMinXp > currentLevelMinXp;
   const target = hasNext ? nextLevelMinXp! : currentLevelMinXp + 1;
@@ -84,11 +89,22 @@ export function DashboardHero({
                     )}
               </span>
             </div>
-            <div className="h-3 overflow-hidden rounded-full bg-white/10">
+            <div className="relative h-3 overflow-hidden rounded-full bg-white/10">
               <div
                 className="growth-shimmer h-full rounded-full transition-[width] duration-[1.5s] ease-[cubic-bezier(0.4,0,0.2,1)]"
                 style={{ width: `${pct}%` }}
               />
+              {ghostXpPercent != null && ghostLegendName ? (
+                <span
+                  className="absolute top-1/2 z-10 size-3 -translate-y-1/2 rounded-full border border-dashed border-white/50 bg-violet-500/40 motion-safe:animate-pulse motion-reduce:animate-none"
+                  style={{
+                    insetInlineStart: `${Math.min(98, Math.max(2, ghostXpPercent))}%`,
+                    marginInlineStart: -6,
+                  }}
+                  title={tGhost("barTooltip", { name: ghostLegendName })}
+                  aria-label={tGhost("barTooltip", { name: ghostLegendName })}
+                />
+              ) : null}
             </div>
           </div>
         </div>

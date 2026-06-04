@@ -8,6 +8,7 @@ import { revalidatePartnerSurfaces } from "@/lib/growth/revalidate-partner";
 import { applyMissionProgress } from "@/lib/growth/missions";
 import { createNotification } from "@/lib/growth/notify";
 import { NotificationType } from "@prisma/client";
+import { grantMentorXpOnMenteeDeal } from "@/lib/growth/mentors";
 
 function splitAmount(baseCents: number, bps: number): number {
   return Math.floor((baseCents * bps) / 10_000);
@@ -185,6 +186,12 @@ export async function closeDealAsAdmin(params: {
     link: "/growth",
     metadata: { dealId: deal.id },
   });
+
+  try {
+    await grantMentorXpOnMenteeDeal(u1);
+  } catch {
+    /* mentorship optional */
+  }
 
   return { ok: true };
 }

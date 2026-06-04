@@ -49,6 +49,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { href: "/growth/admin/seasons", labelKey: "seasons", Icon: IconEvent },
       { href: "/growth/admin/rewards", labelKey: "rewards", Icon: IconEarnings },
       { href: "/growth/admin/missions", labelKey: "missions", Icon: IconMission },
+      { href: "/growth/admin/vault", labelKey: "vault", Icon: IconLegends },
       { href: "/growth/admin/audit", labelKey: "audit", Icon: IconInfo },
       { href: "/growth/admin/overrides", labelKey: "overrides", Icon: IconDeals },
       { href: "/growth/admin/bonuses", labelKey: "bonuses", Icon: IconEarnings },

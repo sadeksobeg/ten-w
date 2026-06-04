@@ -1280,3 +1280,48 @@
     }
   }
 }
+
+.growth-nav-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.growth-chronicle-parchment {
+  background: linear-gradient(180deg, rgba(28, 24, 16, 0.95), rgba(18, 16, 12, 0.9));
+}
+
+.growth-ghost-row {
+  backdrop-filter: blur(4px);
+}
+
+.growth-newspaper {
+  font-family: var(--font-cairo), system-ui, serif;
+}
+
+.star-twinkle {
+  animation: starTwinkle 3s ease-in-out infinite;
+}
+
+@keyframes starTwinkle {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star-twinkle,
+  .growth-chronicle-parchment .motion-safe\:animate-pulse {
+    animation: none !important;
+  }
+}

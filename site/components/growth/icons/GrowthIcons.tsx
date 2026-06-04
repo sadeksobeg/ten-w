@@ -567,6 +567,55 @@ export function IconRobotAssistant(props: GrowthIconProps) {
   );
 }
 
+export function IconChronicle({ size = 20, className = "" }: GrowthIconProps) {
+  return (
+    <GrowthIconBase size={size} className={className}>
+      <path d="M6 4h12v16H6z" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <path d="M9 8h6M9 12h6M9 16h4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconConstellation({ size = 20, className = "" }: GrowthIconProps) {
+  return (
+    <GrowthIconBase size={size} className={className}>
+      <path
+        d="M12 3l1.2 3.6L17 8l-3.6 1.2L12 13l-1.2-3.8L7 8l3.8-1.4L12 3z"
+        fill="currentColor"
+      />
+      <ellipse cx="12" cy="16" rx="7" ry="2.5" stroke="currentColor" strokeWidth="1" fill="none" opacity={0.5} />
+    </GrowthIconBase>
+  );
+}
+
+export function IconVault({ size = 20, className = "" }: GrowthIconProps) {
+  return (
+    <GrowthIconBase size={size} className={className}>
+      <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <path d="M8 10V8a4 4 0 018 0v2" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <circle cx="12" cy="15" r="1.5" fill="currentColor" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconBattle({ size = 20, className = "" }: GrowthIconProps) {
+  return (
+    <GrowthIconBase size={size} className={className}>
+      <path d="M5 5l4 14M19 5l-4 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconMentor({ size = 20, className = "" }: GrowthIconProps) {
+  return (
+    <GrowthIconBase size={size} className={className}>
+      <circle cx="9" cy="9" r="3" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <circle cx="16" cy="11" r="2.5" stroke="currentColor" strokeWidth="1.25" fill="none" />
+      <path d="M4 18c0-2.5 2-4 5-4M13 18c0-2 1.5-3.5 3.5-3.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+    </GrowthIconBase>
+  );
+}
+
 /** Mobile bottom nav mapping */
 export const GROWTH_MOBILE_NAV_ICONS = {
   dashboard: IconDashboard,
@@ -590,5 +639,10 @@ export const GROWTH_DESKTOP_NAV_ICONS: Record<string, ComponentType<GrowthIconPr
   notifications: IconNotifications,
   settings: IconSettings,
   map: IconMap,
+  chronicle: IconChronicle,
+  constellation: IconConstellation,
+  vault: IconVault,
+  battles: IconBattle,
+  mentors: IconMentor,
   legends: IconLegends,
 };

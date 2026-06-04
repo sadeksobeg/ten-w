@@ -22,6 +22,7 @@ import { DnaCard } from "@/components/growth/dna/DnaCard";
 import { RivalCard } from "@/components/growth/rivals/RivalCard";
 import { OracleCard } from "@/components/growth/oracle/OracleCard";
 import { GrowthHubExploreNav } from "@/components/growth/dashboard/GrowthHubExploreNav";
+import { EngagementHubExtras } from "@/components/growth/EngagementHubExtras";
 
 type Props = {
   locale: string;
@@ -57,7 +58,11 @@ export async function GrowthHubView({
         currentLevelMinXp={data.currentLevelMinXp}
         nextLevelName={data.nextLevel?.name ?? null}
         nextLevelMinXp={data.nextLevel?.minXp ?? null}
+        ghostXpPercent={data.engagement.ghostXpPercent}
+        ghostLegendName={data.engagement.ghostLegendName}
       />
+
+      <EngagementHubExtras locale={locale} data={data} userName={userName} />
 
       <DnaCard
         partnerName={userName || userEmail}

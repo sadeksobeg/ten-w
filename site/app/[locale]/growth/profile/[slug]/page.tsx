@@ -166,6 +166,25 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
         </section>
       ) : null}
 
+      {data.oath ? (
+        <GlassCard className="mt-8 border-gold/20 p-5 growth-page-enter">
+          <h2 className="text-sm font-bold text-gold">{t("oathTitle")}</h2>
+          {data.oathDate ? (
+            <p className="mt-1 text-xs text-white/50">
+              {t("oathOn", {
+                date: new Date(data.oathDate).toLocaleDateString(
+                  locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US",
+                ),
+              })}
+            </p>
+          ) : null}
+          <p className="mt-3 whitespace-pre-line text-sm italic text-white/75 line-clamp-4">
+            {data.oath.slice(0, 200)}
+            {data.oath.length > 200 ? "…" : ""}
+          </p>
+        </GlassCard>
+      ) : null}
+
       <section className="mt-8 growth-page-enter">
         <h2 className="font-[family-name:var(--font-cairo)] text-lg font-bold text-gold">
           {t("teamTitle")}
@@ -179,6 +198,24 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
           />
         </GlassCard>
       </section>
+
+      {data.oath ? (
+        <GlassCard className="mt-8 border-gold/20 p-6">
+          <h2 className="text-sm font-bold text-gold">{t("oathTitle")}</h2>
+          {data.oathDate ? (
+            <p className="mt-1 text-xs text-white/50">
+              {t("oathOn", {
+                date: new Date(data.oathDate).toLocaleDateString(
+                  locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US",
+                ),
+              })}
+            </p>
+          ) : null}
+          <p className="mt-3 whitespace-pre-line text-sm italic leading-relaxed text-white/75">
+            {data.oath.length > 200 ? `${data.oath.slice(0, 200)}…` : data.oath}
+          </p>
+        </GlassCard>
+      ) : null}
 
       <GlassCard variant="highlight" className="mt-8 p-6 text-center sm:text-start">
         <h2 className="text-lg font-bold">{t("ctaTitle")}</h2>

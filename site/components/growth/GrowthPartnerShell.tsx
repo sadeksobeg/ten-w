@@ -22,6 +22,11 @@ const BASE_NAV = [
   { href: "/growth/network", key: "network" as const },
   { href: "/growth/leaderboard", key: "leaderboard" as const },
   { href: "/growth/map", key: "map" as const },
+  { href: "/growth/chronicle", key: "chronicle" as const },
+  { href: "/growth/constellation", key: "constellation" as const },
+  { href: "/growth/vault", key: "vault" as const },
+  { href: "/growth/battles", key: "battles" as const },
+  { href: "/growth/mentors", key: "mentors" as const },
   { href: "/growth/legends", key: "legends" as const },
   { href: "/growth/chat", key: "chat" as const },
   { href: "/growth/notifications", key: "notifications" as const },
@@ -95,7 +100,7 @@ export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProg
   return (
     <>
       <nav
-        className="growth-partner-nav-desktop mb-4 flex-nowrap border-b border-white/10 pb-3"
+        className="growth-partner-nav-desktop growth-nav-scroll mb-4 flex-nowrap border-b border-white/10 pb-3"
         aria-label={t("navAria")}
       >
         {navItems.map((item) => {

@@ -144,6 +144,16 @@ model User {
   adminAuditLogs             AdminAuditLog[]    @relation("AdminAuditActor")
   hallOfLegendEntry          HallOfLegend?
   hallOfLegendsAdded         HallOfLegend[]     @relation("HallOfLegendAddedBy")
+  timeCapsule                TimeCapsule?
+  vaultUnlocks               UserVaultUnlock[]
+  battlesAsChallenger        PartnerBattle[]    @relation("BattleChallenger")
+  battlesAsChallenged        PartnerBattle[]    @relation("BattleChallenged")
+  battlesWon                 PartnerBattle[]    @relation("BattleWinner")
+  mentorOffer                MentorOffer?
+  mentorshipsAsMentor        MentorshipSession[] @relation("MentorshipMentor")
+  mentorshipsAsMentee        MentorshipSession[] @relation("MentorshipMentee")
+  weeklyChronicles           WeeklyChronicle[]
+  platformMemoryDeliveries   PlatformMemoryDelivery[]
 }
 
 model PartnerProfile {
@@ -163,6 +173,8 @@ model PartnerProfile {
   cardNumber       Int?     @unique
   dnaSnapshot      Json?
   dnaSnapshotAt    DateTime?
+  oath             String?  @db.Text
+  oathDate         DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -533,20 +545,24 @@ enum ChatRoomType {
   COMMUNITY
   EVENT
   CREATOR
+  MENTORSHIP
 }
 
 model ChatRoom {
-  id        String       @id @default(cuid())
-  slug      String       @unique
-  type      ChatRoomType @default(COMMUNITY)
-  title     String
-  isPublic  Boolean      @default(true)
-  eventId   String?      @unique
-  createdAt DateTime     @default(now())
+  id            String       @id @default(cuid())
+  slug          String       @unique
+  type          ChatRoomType @default(COMMUNITY)
+  title         String
+  isPublic      Boolean      @default(true)
+  eventId       String?      @unique
+  mentorUserId  String?
+  menteeUserId  String?
+  createdAt     DateTime     @default(now())
 
-  event    GrowthEvent? @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  members  ChatRoomMember[]
-  messages ChatRoomMessage[]
+  event              GrowthEvent?        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  mentorshipSession  MentorshipSession?
+  members            ChatRoomMember[]
+  messages           ChatRoomMessage[]
 }
 
 model ChatRoomMember {
@@ -761,4 +777,132 @@ model EventNotification {
   notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
 
   @@unique([eventId, notificationId])
+}
+
+model TimeCapsule {
+  id           String    @id @default(cuid())
+  userId       String    @unique
+  message      String    @db.Text
+  goals        Json?
+  createdAt    DateTime  @default(now())
+  openAt       DateTime
+  openedAt     DateTime?
+  wasDelivered Boolean   @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VaultItem {
+  id             String  @id @default(cuid())
+  slug           String  @unique
+  titleAr        String
+  titleEn        String
+  descAr         String  @db.Text
+  descEn         String  @db.Text
+  contentAr      String  @db.Text
+  contentEn      String  @db.Text
+  unlockCriteria Json
+  previewAr      String? @db.Text
+  previewEn      String? @db.Text
+  icon           String?
+  order          Int     @default(0)
+  isActive       Boolean @default(true)
+
+  unlocks UserVaultUnlock[]
+}
+
+model UserVaultUnlock {
+  id          String   @id @default(cuid())
+  userId      String
+  vaultItemId String
+  unlockedAt  DateTime @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vaultItem VaultItem @relation(fields: [vaultItemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, vaultItemId])
+  @@index([userId])
+}
+
+model PartnerBattle {
+  id                 String    @id @default(cuid())
+  challengerId       String
+  challengedId       String
+  status             String    @default("PENDING")
+  metric             String    @default("deals")
+  target             Int       @default(3)
+  stakesXp           Int       @default(500)
+  startedAt          DateTime?
+  endsAt             DateTime?
+  winnerId           String?
+  challengerProgress Int       @default(0)
+  challengedProgress Int       @default(0)
+  stakesDeducted     Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+
+  challenger User  @relation("BattleChallenger", fields: [challengerId], references: [id], onDelete: Cascade)
+  challenged User  @relation("BattleChallenged", fields: [challengedId], references: [id], onDelete: Cascade)
+  winner     User? @relation("BattleWinner", fields: [winnerId], references: [id], onDelete: SetNull)
+
+  @@index([challengerId, status])
+  @@index([challengedId, status])
+}
+
+model MentorOffer {
+  id                  String   @id @default(cuid())
+  mentorId            String   @unique
+  specialtyAr         String
+  specialtyEn         String
+  duration            Int      @default(30)
+  maxMentees          Int      @default(3)
+  isActive            Boolean  @default(true)
+  xpRewardPerMenteeDeal Int    @default(50)
+  createdAt           DateTime @default(now())
+
+  mentor   User                @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  sessions MentorshipSession[]
+}
+
+model MentorshipSession {
+  id          String    @id @default(cuid())
+  mentorId    String
+  menteeId    String
+  offerId     String
+  roomId      String?   @unique
+  status      String    @default("REQUESTED")
+  requestedAt DateTime  @default(now())
+  completedAt DateTime?
+
+  mentor User       @relation("MentorshipMentor", fields: [mentorId], references: [id], onDelete: Cascade)
+  mentee User       @relation("MentorshipMentee", fields: [menteeId], references: [id], onDelete: Cascade)
+  offer  MentorOffer @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  room   ChatRoom?  @relation(fields: [roomId], references: [id], onDelete: SetNull)
+
+  @@unique([mentorId, menteeId])
+  @@index([menteeId, status])
+}
+
+model WeeklyChronicle {
+  id        String   @id @default(cuid())
+  userId    String
+  weekKey   String
+  payload   Json
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, weekKey])
+  @@index([userId])
+}
+
+model PlatformMemoryDelivery {
+  id          String   @id @default(cuid())
+  userId      String
+  memoryKey   String
+  deliveredAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, memoryKey])
+  @@index([userId])
 }

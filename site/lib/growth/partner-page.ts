@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { getPartnerDashboard } from "@/lib/growth/get-dashboard";
 import { touchActivityDay, touchPartnerStreak } from "@/lib/growth/streak";
+import { runPartnerEngagementHooks } from "@/lib/growth/engagement-hooks";
 
 export async function requirePartnerDashboard(locale: string) {
   const session = await auth();
@@ -14,6 +15,7 @@ export async function requirePartnerDashboard(locale: string) {
 
   await touchPartnerStreak(session.user.id);
   await touchActivityDay(session.user.id);
+  await runPartnerEngagementHooks(session.user.id, locale);
 
   const data = await getPartnerDashboard(session.user.id, locale);
 

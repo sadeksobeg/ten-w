@@ -1232,6 +1232,11 @@
       "settings": "Settings",
       "map": "Ascend Atlas",
       "legends": "Hall of Legends",
+      "chronicle": "My chronicle",
+      "constellation": "My constellation",
+      "vault": "The vault",
+      "battles": "Battles",
+      "mentors": "Mentors",
       "kit": "Kit",
       "signOut": "Sign out",
       "myProfile": "My profile",
@@ -1260,7 +1265,126 @@
       "notifications": "Alerts and achievements",
       "settings": "Profile, territory, badges",
       "creators": "Creator program",
-      "kit": "Ready-made marketing kit"
+      "kit": "Ready-made marketing kit",
+      "chronicle": "Your epic chronicle — chapters from real data",
+      "constellation": "Referral network as a star map",
+      "vault": "Achievement-gated exclusive content",
+      "battles": "Challenge a partner 1v1",
+      "mentors": "Guidance from network elites"
+    },
+    "chronicle": {
+      "title": "Living chronicle",
+      "subtitle": "Your journey as narrative — from real metrics",
+      "recordOf": "Chronicle of {name}",
+      "memberSince": "Partner since {date}",
+      "chapter": "Chapter {n}",
+      "ongoing": "Still writing...",
+      "share": "Share chronicle"
+    },
+    "ghost": {
+      "title": "Ghost mode",
+      "toggle": "Enable ghost",
+      "racing": "Racing ghost of {name}",
+      "sameStage": "Same stage of the journey",
+      "deals": "Deals",
+      "vs": "You {mine} · Ghost {ghost}",
+      "streak": "Streak",
+      "rowTitle": "Ghost {name} — day {day} of their path",
+      "dealsShort": "deals",
+      "barTooltip": "Ghost {name} was here at this stage"
+    },
+    "constellation": {
+      "title": "Your constellation",
+      "name": "Constellation {name}",
+      "stars": "{n} stars in your network",
+      "legendMe": "You",
+      "legendRival": "Rival",
+      "legendNetwork": "Network",
+      "zoom": "Zoom",
+      "dealsShort": "deals",
+      "viewProfile": "Profile"
+    },
+    "vault": {
+      "title": "The vault",
+      "subtitle": "{unlocked} of {total} unlocked",
+      "locked": "Unlocks at: {criteria}",
+      "unlocked": "Unlocked"
+    },
+    "battles": {
+      "title": "Battles",
+      "subtitle": "1v1 challenges — XP stakes",
+      "challenge": "Challenge a partner",
+      "pickRival": "Pick rival",
+      "select": "— Select —",
+      "target": "Target (deals)",
+      "stakes": "Stakes (XP)",
+      "sendChallenge": "Send challenge",
+      "incoming": "Incoming challenge!",
+      "challengeDesc": "First to {target} ({metric}) — stake {stakes} XP",
+      "accept": "Accept",
+      "decline": "Decline",
+      "active": "Battle in progress",
+      "you": "You",
+      "ends": "Ends {date}",
+      "won": "You won",
+      "lost": "You lost — prepare for the next battle",
+      "empty": "No battles yet"
+    },
+    "mentors": {
+      "title": "Mentor market",
+      "subtitle": "Learn from Elite+ partners",
+      "offer": "Offer mentorship",
+      "request": "Request mentor",
+      "specialtyAr": "Specialty (AR)",
+      "specialtyEn": "Specialty (EN)",
+      "publishOffer": "Publish offer",
+      "available": "Available mentors",
+      "noOffers": "No offers this week",
+      "minutes": "min",
+      "slots": "slots",
+      "mySessions": "My sessions",
+      "accept": "Accept",
+      "decline": "Decline"
+    },
+    "oath": {
+      "title": "Partner oath",
+      "prompt": "Type your name to confirm",
+      "nameLabel": "Your name",
+      "continue": "Continue",
+      "oathBody": "I, {name}\npledge to build with integrity\nand grow with discipline\nand carry the T.E.N.E.G.T.A banner\nwith all I have",
+      "swear": "I swear and begin",
+      "complete": "Oath complete",
+      "welcome": "Welcome to TENEGTA ASCEND"
+    },
+    "capsule": {
+      "writeTitle": "Letter to your future self",
+      "writeHint": "Delivered on {date}",
+      "placeholder": "Write to future you...",
+      "goalDeals": "Deals",
+      "goalLevel": "Level",
+      "goalLevelAny": "Any",
+      "goalEarnings": "Earnings $",
+      "send": "Send to the future",
+      "later": "Later",
+      "lockedTitle": "Sealed message",
+      "lockedBody": "Opens in {days} days",
+      "errors": {
+        "unauthorized": "Unauthorized",
+        "already_exists": "You already have a capsule",
+        "invalid_input": "Check your input"
+      }
+    },
+    "weeklyChronicle": {
+      "sectionTitle": "Your paper — {range}",
+      "weekLine": "Week {n} · {range}",
+      "paperOf": "{name}'s weekly",
+      "yourWeek": "Your week",
+      "rivalSays": "Rival watch",
+      "closed": "{n} deals",
+      "xp": "{n} XP",
+      "checkIns": "{n} check-in days",
+      "dealsLabel": "deals",
+      "oracle": "Oracle"
     },
     "dna": {
       "title": "Your DNA",
@@ -1297,6 +1421,7 @@
     "map": {
       "title": "Ascend Atlas",
       "subtitle": "TENEGTA ASCEND map of Syria — claim your governorate, link your network in gold, dominate your market.",
+      "battleActive": "Active battle vs {name} — track progress in Battles",
       "syriaBadge": "TENEGTA ASCEND · Syria",
       "ariaLabel": "Interactive Syria partner war map",
       "my_territory": "Your territory",
@@ -1497,6 +1622,8 @@
       "cardTitle": "My card",
       "cardFullView": "Full card view",
       "moreStats": "More stats",
+      "oathTitle": "Partner oath",
+      "oathOn": "Sworn on {date}",
       "appreciation": {
         "cta": "Send appreciation",
         "sending": "Sending…",
@@ -2718,6 +2845,12 @@
         "active": "Active",
         "save": "Save",
         "delete": "Delete"
+      },
+      "vaultPage": {
+        "title": "Vault admin",
+        "hint": "Achievement-gated content — edit items and unlock criteria",
+        "add": "New item",
+        "save": "Save"
       },
       "missionsPage": {
         "title": "Daily missions",

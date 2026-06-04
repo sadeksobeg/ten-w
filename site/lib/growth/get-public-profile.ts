@@ -52,6 +52,8 @@ export type PublicProfileData = {
   publicActivity: { headline: string; createdAt: string }[];
   cardNumber: number | null;
   dnaProfile: DnaProfile;
+  oath: string | null;
+  oathDate: string | null;
 };
 
 export async function getPublicProfileBySlug(
@@ -200,5 +202,7 @@ export async function getPublicProfileBySlug(
     })),
     cardNumber: user.partnerProfile.cardNumber,
     dnaProfile,
+    oath: user.partnerProfile.oath,
+    oathDate: user.partnerProfile.oathDate?.toISOString() ?? null,
   };
 }

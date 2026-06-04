@@ -26,6 +26,10 @@ import { buildPartnerInsightSlides, type PartnerInsightSlide } from "@/lib/growt
 import type { DnaProfile } from "@/lib/growth/dna-score";
 import type { RivalData } from "@/lib/growth/rival";
 import type { OraclePrediction } from "@/lib/growth/oracle";
+import { getTimeCapsuleForUser, daysUntilCapsuleOpen } from "@/lib/growth/time-capsule";
+import { getLatestWeeklyChronicle } from "@/lib/growth/weekly-chronicle";
+import type { WeeklyChroniclePayload } from "@/lib/growth/weekly-chronicle";
+import { getGhostData } from "@/lib/growth/ghost";
 import { calculateDnaProfile } from "@/lib/growth/dna-score";
 import { getPartnerRival } from "@/lib/growth/rival";
 import { calculateOraclePrediction } from "@/lib/growth/oracle";
@@ -183,6 +187,15 @@ export type DashboardData = {
   rivalData: RivalData | null;
   oracle: OraclePrediction;
   inHallOfLegends: boolean;
+  engagement: {
+    hasOath: boolean;
+    showOathModal: boolean;
+    timeCapsuleDaysLeft: number | null;
+    showCapsulePrompt: boolean;
+    weeklyChronicle: WeeklyChroniclePayload | null;
+    ghostXpPercent: number | null;
+    ghostLegendName: string | null;
+  };
 };
 
 export async function getPartnerDashboard(
@@ -638,5 +651,64 @@ export async function getPartnerDashboard(
     rivalData,
     oracle,
     inHallOfLegends,
+    engagement: await buildEngagementExtras(userId, locale, {
+      closedDeals,
+      hasDeals: deals.length > 0,
+      onboardingSteps:
+        profile.onboardingSteps && typeof profile.onboardingSteps === "object"
+          ? (profile.onboardingSteps as Record<string, boolean>)
+          : null,
+      totalXp: profile.totalXp,
+      currentLevelMinXp: profile.currentLevel.minXp,
+      nextLevelMinXp: nextLevel?.minXp ?? null,
+    }),
+  };
+}
+
+async function buildEngagementExtras(
+  userId: string,
+  locale: string,
+  ctx: {
+    closedDeals: number;
+    hasDeals: boolean;
+    onboardingSteps: Record<string, boolean> | null;
+    totalXp: number;
+    currentLevelMinXp: number;
+    nextLevelMinXp: number | null;
+  },
+): Promise<DashboardData["engagement"]> {
+  const [capsule, weekly, ghost, fullProfile] = await Promise.all([
+    getTimeCapsuleForUser(userId).catch(() => null),
+    getLatestWeeklyChronicle(userId).catch(() => null),
+    getGhostData(userId, locale).catch(() => null),
+    prisma.partnerProfile.findUnique({
+      where: { userId },
+      select: { oath: true, onboardingSteps: true },
+    }),
+  ]);
+
+  const daysLeft = await daysUntilCapsuleOpen(userId).catch(() => null);
+  const hasOath = Boolean(fullProfile?.oath);
+  const showOathModal =
+    !hasOath &&
+    Boolean(ctx.onboardingSteps?.profile || ctx.closedDeals > 0 || ctx.hasDeals);
+
+  let ghostXpPercent: number | null = null;
+  if (ghost && ctx.nextLevelMinXp) {
+    const span = Math.max(1, ctx.nextLevelMinXp - ctx.currentLevelMinXp);
+    ghostXpPercent = Math.min(
+      100,
+      Math.max(0, Math.round(((ghost.ghostXp - ctx.currentLevelMinXp) / span) * 100)),
+    );
+  }
+
+  return {
+    hasOath,
+    showOathModal,
+    timeCapsuleDaysLeft: capsule && !capsule.wasDelivered ? daysLeft : null,
+    showCapsulePrompt: ctx.hasDeals && !capsule,
+    weeklyChronicle: weekly,
+    ghostXpPercent,
+    ghostLegendName: ghost?.legendName ?? null,
   };
 }
