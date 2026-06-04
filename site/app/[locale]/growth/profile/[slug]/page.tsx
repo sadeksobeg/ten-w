@@ -55,7 +55,7 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
     session.user.role === UserRole.PARTNER &&
     session.user.id !== data.userId;
 
-  const registerHref = `/${locale}/growth/register?ref=${encodeURIComponent(data.referralCode)}`;
+  const signInHref = `/${locale}/growth/sign-in`;
   const profileUrl = `https://tenegta.com/${locale}/growth/profile/${data.publicSlug}`;
   if (sp.view === "card" || sp.print === "card") {
     return (
@@ -220,7 +220,7 @@ export default async function PublicPartnerProfilePage({ params, searchParams }:
       <GlassCard variant="highlight" className="mt-8 p-6 text-center sm:text-start">
         <h2 className="text-lg font-bold">{t("ctaTitle")}</h2>
         <p className="mt-2 text-sm text-[var(--growth-text-sub)]">{t("ctaBody")}</p>
-        <Link href={registerHref} className="mt-4 inline-block">
+        <Link href={signInHref} className="mt-4 inline-block">
           <GoldButton className="inline-flex items-center gap-2">
             {t("ctaButton")}
             <IconChevronRight size={18} className={locale === "ar" ? "scale-x-[-1]" : ""} aria-hidden />

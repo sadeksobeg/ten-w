@@ -16,6 +16,7 @@ function SignInForm() {
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
   const registered = searchParams.get("registered") === "1";
+  const registrationClosed = searchParams.get("closed") === "1";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -134,6 +135,14 @@ function SignInForm() {
           <h2 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold">
             {t("signInTitle")}
           </h2>
+          {registrationClosed ? (
+            <p
+              className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100"
+              role="status"
+            >
+              {t("registrationClosedBanner")}
+            </p>
+          ) : null}
           {registered ? (
             <p
               className="mt-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200"

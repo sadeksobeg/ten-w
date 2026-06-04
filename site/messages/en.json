@@ -1112,9 +1112,9 @@
       "eyebrow": "Product · Partner Growth OS",
       "tagline": "A Gamified Growth Infrastructure for Modern Organizations.",
       "subtagline": "The Operating System for Performance-Driven Partner Networks.",
-      "ctaPrimary": "Start ascending",
+      "ctaPrimary": "Sign in",
       "ctaSecondary": "Partner sign-in",
-      "note": "Free to join · Built for operators who scale with discipline"
+      "note": "Accounts are admin-created only · For invited partners"
     },
     "preview": {
       "label": "Live workspace",
@@ -1164,7 +1164,7 @@
       "title": "How partners ascend",
       "join": {
         "title": "Join the network",
-        "body": "Register with a referral code, complete your profile, and unlock your dashboard."
+        "body": "Accounts are created by admins only. Sign in if you already have credentials."
       },
       "perform": {
         "title": "Perform & compound",
@@ -1183,7 +1183,7 @@
     "cta": {
       "title": "Ready to ascend?",
       "body": "Join the partner network or talk to us about deploying ASCEND for your organization.",
-      "primary": "Create partner account",
+      "primary": "Sign in",
       "secondary": "Talk to TENEGTA"
     }
   },
@@ -1607,9 +1607,9 @@
       "badges": "Badges",
       "badgesTitle": "Badges",
       "channels": "Channels",
-      "ctaTitle": "Join the network?",
-      "ctaBody": "Register as a partner and build income with T.E.N.E.G.T.A",
-      "ctaButton": "Join now",
+      "ctaTitle": "Already a partner?",
+      "ctaBody": "Self-registration is closed. Sign in with credentials your admin created for you.",
+      "ctaButton": "Sign in",
       "qrSoon": "QR code — coming soon",
       "share": "Share profile",
       "linkCopied": "Link copied",
@@ -2559,10 +2559,24 @@
       },
       "partners": {
         "title": "Partner management",
-        "subtitle": "Create accounts, adjust level and power points, enable or disable partners.",
+        "subtitle": "Create accounts here only — public registration is off. View, edit, disable, or permanently delete any partner.",
         "createTitle": "Create partner account",
-        "createHint": "Email, password, and partner profile are created together. Do not use the admin email here.",
+        "createHint": "Email, password, and partner profile are created together. Do not use the admin email here. Public sign-up is disabled for visitors.",
         "listTitle": "Registered partners",
+        "statsTotal": "Total accounts",
+        "statsActive": "Active",
+        "statsInactive": "Disabled",
+        "searchPlaceholder": "Search name, email, or phone…",
+        "filterAll": "All",
+        "filterActive": "Active only",
+        "filterInactive": "Disabled only",
+        "deleteTitle": "Delete account permanently",
+        "deleteHint": "Removes the partner, their deals, and ledger rows. Direct referrals are detached from their tree, not deleted.",
+        "deleteConfirmLabel": "Type email to confirm",
+        "deleteConfirmPlaceholder": "Exact partner email",
+        "deleteSubmit": "Delete permanently",
+        "deleteSuccess": "Account deleted",
+        "deleteWarningReferrals": "Has {n} direct referrals — they will be detached after deletion.",
         "xpControls": "Power points & level",
         "name": "Name",
         "email": "Email",
@@ -2618,6 +2632,8 @@
           "missing_seed": "Database not initialized — run seed on the server.",
           "server_error": "Server error. Try again later or contact support.",
           "unauthorized": "Unauthorized",
+          "not_found": "Partner not found",
+          "confirm_mismatch": "Confirmation email does not match",
           "unknown": "Something went wrong"
         }
       },
@@ -2958,10 +2974,12 @@
       "signInHeroLine3": "Network-aware payouts built for operators who scale with discipline.",
       "signInError": "Invalid email or password.",
       "registeredBanner": "Account created — sign in with your email and password.",
+      "registrationClosedBanner": "Self-registration is closed. Sign in only if an admin created your account.",
       "errors": {
         "invalid_input": "Please check the fields and try again.",
         "email_taken": "This email is already registered.",
         "invalid_referral": "Referral code was not found.",
+        "registration_closed": "Self-registration is closed. Contact your admin.",
         "missing_seed": "Server data is not ready. Run database seed.",
         "unknown": "Something went wrong. Try again."
       }

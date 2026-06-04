@@ -102,7 +102,7 @@ export default async function HallOfLegendsPage({ params }: Props) {
         <h3 className="font-bold text-gold">{t("how_to_join")}</h3>
         <p className="mt-2 text-sm text-white/55">{t("how_to_join_body")}</p>
         <Link
-          href="/growth/register"
+          href="/growth/sign-in"
           className="mt-4 inline-block text-sm font-bold text-sky-300 hover:underline"
         >
           {t("join_cta")}

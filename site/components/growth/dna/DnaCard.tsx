@@ -31,7 +31,7 @@ export function DnaCard({ partnerName, referralCode, dna }: Props) {
   }, []);
 
   async function share() {
-    const text = `${t("sharePrefix")}\n${t(`archetypes.${dna.archetype as DnaArchetype}`)} | ${t("sales")} ${dna.dimensions.sales} | ${t("network")} ${dna.dimensions.network}\n${t("shareJoin")} ${typeof window !== "undefined" ? window.location.origin : ""}/growth/register?ref=${referralCode}`;
+    const text = `${t("sharePrefix")}\n${t(`archetypes.${dna.archetype as DnaArchetype}`)} | ${t("sales")} ${dna.dimensions.sales} | ${t("network")} ${dna.dimensions.network}\n${t("shareJoin")} ${typeof window !== "undefined" ? window.location.origin : ""}/growth/sign-in`;
     setSharing(true);
     try {
       if (navigator.share) {

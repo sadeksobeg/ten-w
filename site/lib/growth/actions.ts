@@ -40,6 +40,8 @@ import {
 import { setChatModerator } from "@/lib/growth/chat-moderation";
 import { GAME_CONFIG } from "@/lib/growth/game-config";
 import { touchActivityDay } from "@/lib/growth/streak";
+import { isPublicRegistrationEnabled } from "@/lib/growth/registration-policy";
+import { deletePartnerUser } from "@/lib/growth/delete-partner-user";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -80,6 +82,10 @@ export async function registerPartnerAction(
   _prev: unknown,
   formData: FormData,
 ): Promise<{ ok: true; email: string } | { ok: false; error: string }> {
+  if (!isPublicRegistrationEnabled()) {
+    return { ok: false, error: "registration_closed" };
+  }
+
   const parsed = registerSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -1538,6 +1544,62 @@ export async function togglePartnerActiveAction(
 
   revalidateGrowth();
   return { ok: true };
+}
+
+const deletePartnerSchema = z.object({
+  partnerId: z.string().min(1),
+  confirmEmail: z.string().email().max(320),
+});
+
+export async function adminDeletePartnerFormAction(formData: FormData): Promise<void> {
+  await adminDeletePartnerAction(undefined, formData);
+}
+
+export async function adminDeletePartnerAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const parsed = deletePartnerSchema.safeParse({
+    partnerId: formData.get("partnerId"),
+    confirmEmail: formData.get("confirmEmail"),
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const user = await prisma.user.findUnique({
+    where: { id: parsed.data.partnerId },
+    include: { partnerProfile: true },
+  });
+  if (!user || user.role !== UserRole.PARTNER || !user.partnerProfile) {
+    return { ok: false, error: "not_found" };
+  }
+
+  const confirm = parsed.data.confirmEmail.toLowerCase().trim();
+  if (confirm !== user.email.toLowerCase()) {
+    return { ok: false, error: "confirm_mismatch" };
+  }
+
+  const directReferrals = await prisma.partnerProfile.count({
+    where: { parentUserId: user.id },
+  });
+
+  try {
+    await deletePartnerUser(user.id);
+    await logAdminAudit(session.user.id, "delete_partner", "User", user.id, {
+      email: user.email,
+      name: user.name,
+      directReferralsDetached: directReferrals,
+    });
+    revalidateGrowth();
+    return { ok: true };
+  } catch (err) {
+    console.error("[adminDeletePartner]", err);
+    return { ok: false, error: "server_error" };
+  }
 }
 
 const setUplineSchema = z.object({

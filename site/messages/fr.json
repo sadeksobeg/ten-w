@@ -1166,9 +1166,9 @@
       "eyebrow": "Produit · OS croissance partenaires",
       "tagline": "Une infrastructure de croissance gamifiée pour les organisations modernes.",
       "subtagline": "Le système d'exploitation des réseaux de partenaires orientés performance.",
-      "ctaPrimary": "Commencer à ascendre",
+      "ctaPrimary": "Connexion",
       "ctaSecondary": "Connexion partenaire",
-      "note": "Inscription gratuite · Conçu pour les opérateurs disciplinés"
+      "note": "Comptes créés par l'admin uniquement · Partenaires invités"
     },
     "preview": {
       "label": "Espace live",
@@ -1210,7 +1210,7 @@
     "cta": {
       "title": "Prêt à ascendre ?",
       "body": "Rejoignez le réseau ou parlez-nous du déploiement ASCEND pour votre organisation.",
-      "primary": "Créer un compte partenaire",
+      "primary": "Connexion",
       "secondary": "Parler à TENEGTA"
     }
   },
@@ -1626,9 +1626,9 @@
       "badges": "Badges",
       "badgesTitle": "Badges",
       "channels": "Channels",
-      "ctaTitle": "Join the network?",
-      "ctaBody": "Register as a partner and build income with T.E.N.E.G.T.A",
-      "ctaButton": "Join now",
+      "ctaTitle": "Déjà partenaire ?",
+      "ctaBody": "L'inscription publique est fermée. Connectez-vous avec les identifiants créés par l'admin.",
+      "ctaButton": "Connexion",
       "qrSoon": "QR code — coming soon",
       "lockedBadge": "Badge caché — complétez les objectifs",
       "secret": "Badge secret",
@@ -2495,10 +2495,24 @@
       },
       "partners": {
         "title": "Partner management",
-        "subtitle": "Create accounts, adjust level and power points, enable or disable partners.",
-        "createTitle": "Create partner account",
-        "createHint": "Email, password, and partner profile are created together. Do not use the admin email here.",
-        "listTitle": "Registered partners",
+        "subtitle": "Créez les comptes ici uniquement — inscription publique désactivée. Voir, modifier, désactiver ou supprimer tout partenaire.",
+        "createTitle": "Créer un compte partenaire",
+        "createHint": "E-mail, mot de passe et profil créés ensemble. N'utilisez pas l'e-mail admin. Inscription publique désactivée.",
+        "listTitle": "Partenaires enregistrés",
+        "statsTotal": "Comptes totaux",
+        "statsActive": "Actifs",
+        "statsInactive": "Désactivés",
+        "searchPlaceholder": "Rechercher nom, e-mail ou téléphone…",
+        "filterAll": "Tous",
+        "filterActive": "Actifs seulement",
+        "filterInactive": "Désactivés seulement",
+        "deleteTitle": "Supprimer le compte définitivement",
+        "deleteHint": "Supprime le partenaire, ses affaires et écritures. Les filleuls directs sont détachés, pas supprimés.",
+        "deleteConfirmLabel": "Saisir l'e-mail pour confirmer",
+        "deleteConfirmPlaceholder": "E-mail exact du partenaire",
+        "deleteSubmit": "Supprimer définitivement",
+        "deleteSuccess": "Compte supprimé",
+        "deleteWarningReferrals": "{n} filleuls directs — seront détachés après suppression.",
         "xpControls": "Power points & level",
         "name": "Name",
         "email": "Email",
@@ -2532,6 +2546,8 @@
           "missing_seed": "Database not initialized — run seed on the server.",
           "server_error": "Erreur serveur. Réessayez plus tard.",
           "unauthorized": "Unauthorized",
+          "not_found": "Partenaire introuvable",
+          "confirm_mismatch": "L'e-mail de confirmation ne correspond pas",
           "unknown": "Something went wrong"
         }
       },
@@ -2828,11 +2844,13 @@
       "signInHeroLine3": "Network-aware payouts built for operators who scale with discipline.",
       "signInError": "Invalid email or password.",
       "registeredBanner": "Compte créé — connectez-vous avec votre e-mail et mot de passe.",
+      "registrationClosedBanner": "Inscription publique fermée. Connectez-vous uniquement si l'admin a créé votre compte.",
       "errors": {
         "invalid_input": "Please check the fields and try again.",
         "email_taken": "This email is already registered.",
         "invalid_referral": "Referral code was not found.",
         "missing_seed": "Server data is not ready. Run database seed.",
+        "registration_closed": "Inscription publique fermée. Contactez l'admin.",
         "unknown": "Something went wrong. Try again."
       }
     }

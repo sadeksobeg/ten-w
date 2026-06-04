@@ -1,10 +1,12 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import {
   adminAdjustPartnerXpFormAction,
   adminCreatePartnerAction,
+  adminDeletePartnerAction,
   adminSetPartnerLevelFormAction,
   adminSetPartnerUplineAction,
   adminSetPartnerVerifiedAction,
@@ -67,6 +69,10 @@ function createErrorText(t: (k: string) => string, code: string) {
       return t("errors.self");
     case "invalid_upline_scope":
       return t("errors.invalid_upline_scope");
+    case "not_found":
+      return t("errors.not_found");
+    case "confirm_mismatch":
+      return t("errors.confirm_mismatch");
     default:
       return t("errors.unknown");
   }
@@ -413,6 +419,78 @@ function PartnerUplineForm({
   );
 }
 
+function PartnerDeleteForm({
+  partnerId,
+  email,
+  directCount,
+}: {
+  partnerId: string;
+  email: string;
+  directCount: number;
+}) {
+  const t = useTranslations("Growth.admin.partners");
+  const router = useRouter();
+  const [state, action] = useActionState(adminDeletePartnerAction, undefined);
+  const [confirm, setConfirm] = useState("");
+  const [armed, setArmed] = useState(false);
+
+  useEffect(() => {
+    if (state && typeof state === "object" && "ok" in state && state.ok === true) {
+      router.refresh();
+    }
+  }, [state, router]);
+
+  return (
+    <form action={action} className="mt-4 space-y-2 rounded-xl border border-rose-500/30 bg-rose-950/30 p-3">
+      <p className="text-[10px] font-semibold text-rose-100">{t("deleteTitle")}</p>
+      <p className="text-[10px] text-white/45">{t("deleteHint")}</p>
+      {directCount > 0 ? (
+        <p className="text-[10px] text-amber-200/80">
+          {t("deleteWarningReferrals", { n: directCount })}
+        </p>
+      ) : null}
+      <input type="hidden" name="partnerId" value={partnerId} />
+      <label className="block">
+        <span className="text-[10px] text-white/50">{t("deleteConfirmLabel")}</span>
+        <input
+          name="confirmEmail"
+          type="email"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          placeholder={t("deleteConfirmPlaceholder")}
+          className="mt-1 w-full rounded-lg border border-white/10 bg-black/40 px-2 py-1.5 text-xs text-white"
+          autoComplete="off"
+        />
+      </label>
+      {state && typeof state === "object" && "ok" in state && state.ok === false ? (
+        <p className="text-xs text-rose-300" role="alert">
+          {createErrorText(t, String((state as { error?: string }).error ?? ""))}
+        </p>
+      ) : null}
+      {state && typeof state === "object" && "ok" in state && state.ok === true ? (
+        <p className="text-xs text-emerald-300">{t("deleteSuccess")}</p>
+      ) : null}
+      {!armed ? (
+        <button
+          type="button"
+          onClick={() => setArmed(true)}
+          className="rounded-lg border border-rose-500/40 bg-rose-500/10 px-3 py-1.5 text-xs font-bold text-rose-200"
+        >
+          {t("deleteTitle")}
+        </button>
+      ) : (
+        <button
+          type="submit"
+          disabled={confirm.trim().toLowerCase() !== email.toLowerCase()}
+          className="rounded-lg border border-rose-500/50 bg-rose-600/20 px-3 py-1.5 text-xs font-bold text-rose-100 disabled:opacity-40"
+        >
+          {t("deleteSubmit")}
+        </button>
+      )}
+    </form>
+  );
+}
+
 export function PartnerList({
   partners,
   levels,
@@ -424,13 +502,55 @@ export function PartnerList({
 }) {
   const t = useTranslations("Growth.admin.partners");
   const [expandedTree, setExpandedTree] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<"all" | "active" | "inactive">("all");
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return partners.filter((p) => {
+      if (filter === "active" && !p.isActive) return false;
+      if (filter === "inactive" && p.isActive) return false;
+      if (!q) return true;
+      return (
+        p.name.toLowerCase().includes(q) ||
+        p.email.toLowerCase().includes(q) ||
+        (p.phone ?? "").toLowerCase().includes(q)
+      );
+    });
+  }, [partners, query, filter]);
 
   return (
+    <div>
+      <div className="flex flex-col gap-3 border-b border-white/10 px-4 py-4 sm:flex-row sm:items-center sm:px-5">
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={t("searchPlaceholder")}
+          className="min-h-10 flex-1 rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white outline-none focus:border-gold/40"
+        />
+        <div className="flex gap-2">
+          {(["all", "active", "inactive"] as const).map((key) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setFilter(key)}
+              className={
+                filter === key
+                  ? "rounded-full border border-gold/40 bg-gold/15 px-3 py-1.5 text-xs font-bold text-gold"
+                  : "rounded-full border border-white/10 px-3 py-1.5 text-xs font-semibold text-white/60 hover:border-white/20"
+              }
+            >
+              {key === "all" ? t("filterAll") : key === "active" ? t("filterActive") : t("filterInactive")}
+            </button>
+          ))}
+        </div>
+      </div>
     <ul className="divide-y divide-white/10">
-      {partners.length === 0 ? (
+      {filtered.length === 0 ? (
         <li className="px-5 py-10 text-center text-sm text-white/50">{t("empty")}</li>
       ) : (
-        partners.map((p) => (
+        filtered.map((p) => (
           <li key={p.userId} className="px-4 py-5 sm:px-5">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
               <GrowthAvatar name={p.name} email={p.email} size="lg" className="shrink-0" />
@@ -538,11 +658,45 @@ export function PartnerList({
                   />
                 ) : null}
                 <PartnerXpControls partnerId={p.userId} levels={levels} />
+                <PartnerDeleteForm
+                  partnerId={p.userId}
+                  email={p.email}
+                  directCount={p.directCount}
+                />
               </div>
             </div>
           </li>
         ))
       )}
     </ul>
+    </div>
+  );
+}
+
+export function PartnerStatsBar({ partners }: { partners: PartnerRow[] }) {
+  const t = useTranslations("Growth.admin.partners");
+  const active = partners.filter((p) => p.isActive).length;
+  const inactive = partners.length - active;
+
+  return (
+    <div className="mb-6 grid gap-3 sm:grid-cols-3">
+      {[
+        { label: t("statsTotal"), value: partners.length },
+        { label: t("statsActive"), value: active },
+        { label: t("statsInactive"), value: inactive },
+      ].map((s) => (
+        <div
+          key={s.label}
+          className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3"
+        >
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-white/45">
+            {s.label}
+          </p>
+          <p className="mt-1 font-[family-name:var(--font-cairo)] text-2xl font-extrabold text-gold">
+            {s.value}
+          </p>
+        </div>
+      ))}
+    </div>
   );
 }

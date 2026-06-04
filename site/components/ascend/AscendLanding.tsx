@@ -33,7 +33,7 @@ export async function AscendLanding() {
           <p className="mt-6 max-w-2xl text-lg font-semibold text-white/90 md:text-xl">{t("hero.tagline")}</p>
           <p className="mt-3 max-w-2xl text-sm text-muted md:text-base">{t("hero.subtagline")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <TrackedLink href="/growth/register" eventName="ascend_cta_register" className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-7 py-3 text-sm font-bold text-bg transition hover:bg-gold-bright">{t("hero.ctaPrimary")}</TrackedLink>
+            <TrackedLink href="/growth/sign-in" eventName="ascend_cta_sign_in" className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-7 py-3 text-sm font-bold text-bg transition hover:bg-gold-bright">{t("hero.ctaPrimary")}</TrackedLink>
             <Link href="/growth/sign-in" className="inline-flex min-h-12 items-center justify-center rounded-full border border-gold/40 bg-gold/10 px-7 py-3 text-sm font-bold text-gold transition hover:border-gold/60 hover:bg-gold/15">{t("hero.ctaSecondary")}</Link>
           </div>
           <p className="mt-4 text-xs text-white/40">{t("hero.note")}</p>
@@ -104,7 +104,7 @@ export async function AscendLanding() {
           <h2 className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold sm:text-3xl">{t("cta.title")}</h2>
           <p className="mt-3 text-muted">{t("cta.body")}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <TrackedLink href="/growth/register" eventName="ascend_cta_bottom_register" className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-8 py-3 text-sm font-bold text-bg hover:bg-gold-bright">{t("cta.primary")}</TrackedLink>
+            <TrackedLink href="/growth/sign-in" eventName="ascend_cta_bottom_sign_in" className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-8 py-3 text-sm font-bold text-bg hover:bg-gold-bright">{t("cta.primary")}</TrackedLink>
             <TrackedLink href="/contact?topic=ascend" eventName="ascend_cta_contact" className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-8 py-3 text-sm font-semibold text-white/80 hover:border-gold/40">{t("cta.secondary")}</TrackedLink>
           </div>
         </div>

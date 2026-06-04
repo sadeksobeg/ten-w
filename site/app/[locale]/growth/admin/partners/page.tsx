@@ -2,7 +2,11 @@ import { UserRole } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { prisma } from "@/lib/prisma";
-import { CreatePartnerForm, PartnerList } from "@/components/growth/admin/PartnerAdminPanel";
+import {
+  CreatePartnerForm,
+  PartnerList,
+  PartnerStatsBar,
+} from "@/components/growth/admin/PartnerAdminPanel";
 import {
   getPartnerUpline,
   getPartnerNetworkTree,
@@ -67,6 +71,8 @@ export default async function GrowthAdminPartnersPage({ params }: Props) {
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-white/50">{t("subtitle")}</p>
       </header>
+
+      <PartnerStatsBar partners={rows} />
 
       <GlassCard className="border border-white/10 p-5 sm:p-6">
         <h2 className="text-lg font-bold text-white">{t("createTitle")}</h2>
