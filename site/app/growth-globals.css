@@ -151,6 +151,64 @@
   line-height: 0;
 }
 
+/* Premium 3D medallion badges */
+.growth-badge-3d-wrap {
+  perspective: 520px;
+  transform-style: preserve-3d;
+}
+
+.growth-badge-3d-wrap:hover .growth-badge-3d-svg {
+  transform: rotateX(6deg) rotateY(-4deg);
+}
+
+.growth-badge-3d-svg {
+  display: block;
+  transition: transform 0.35s ease;
+  transform: rotateX(4deg);
+}
+
+.growth-badge-3d-glow {
+  animation: growthBadge3dGlow 3.2s ease-in-out infinite;
+}
+
+@keyframes growthBadge3dGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
+  }
+  50% {
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 14px rgba(228, 184, 77, 0.35));
+  }
+}
+
+/* Time capsule UI */
+.growth-capsule-modal {
+  max-height: min(94vh, 900px);
+  overflow-y: auto;
+}
+
+@keyframes growthCapsuleFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.growth-capsule-float {
+  animation: growthCapsuleFloat 4s ease-in-out infinite;
+}
+
+.growth-capsule-visual--sealed .growth-capsule-visual {
+  filter: none;
+}
+
+.growth-capsule-countdown {
+  box-shadow: inset 0 1px 0 rgba(228, 184, 77, 0.12);
+}
+
 .growth-podium-1 {
   transform: scale(1.08);
   z-index: 3;
@@ -410,6 +468,8 @@
   .growth-shimmer,
   .growth-badge-earn,
   .growth-badge-pulse,
+  .growth-badge-3d-glow,
+  .growth-capsule-float,
   .growth-bell-ring,
   .growth-skeleton-pulse,
   .growth-toast-enter,

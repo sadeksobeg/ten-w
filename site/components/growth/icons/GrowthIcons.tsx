@@ -616,6 +616,37 @@ export function IconMentor({ size = 20, className = "" }: GrowthIconProps) {
   );
 }
 
+export function IconGhost(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M12 3a5 5 0 00-5 5v3.5c0 1.4-.45 2.35-1.35 3.35L4 20h16l-1.65-5.15C17.55 13.85 17 12.9 17 11.5V8a5 5 0 00-5-5z" />
+      <circle cx="9" cy="10" r="1.1" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="10" r="1.1" fill="currentColor" stroke="none" />
+      <path d="M10 14.5c.6.8 1.4 1.2 2 1.2s1.4-.4 2-1.2" opacity={0.7} />
+    </GrowthIconBase>
+  );
+}
+
+export function IconCapsule(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <rect x="7" y="5" width="10" height="15" rx="5" />
+      <path d="M7 11.5h10" strokeWidth={2} />
+      <path d="M9.5 5V3.5M14.5 5V3.5" />
+      <circle cx="12" cy="8.5" r="1" fill="currentColor" stroke="none" opacity={0.6} />
+    </GrowthIconBase>
+  );
+}
+
+export function IconLightbulb(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M9 18h6M10 21h4M12 3a5 5 0 00-3.2 8.85V14h6.4v-2.15A5 5 0 0012 3z" />
+      <path d="M12 14v1.5" opacity={0.55} />
+    </GrowthIconBase>
+  );
+}
+
 /** Mobile bottom nav mapping */
 export const GROWTH_MOBILE_NAV_ICONS = {
   dashboard: IconDashboard,

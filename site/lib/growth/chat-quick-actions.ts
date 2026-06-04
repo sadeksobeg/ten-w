@@ -52,7 +52,7 @@ export async function runChatAdminQuickAction(input: {
     const msg = await appendMessage({
       conversationId,
       senderUserId: adminUserId,
-      body: `💰 Bonus granted: $${usd.toFixed(0)}`,
+      body: `Bonus granted: $${usd.toFixed(0)}`,
       kind: "BONUS",
       metadata: { amountUsd: usd },
     });
@@ -70,7 +70,7 @@ export async function runChatAdminQuickAction(input: {
     const msg = await appendMessage({
       conversationId,
       senderUserId: adminUserId,
-      body: `🏆 Badge granted: ${badge.name}`,
+      body: `Badge granted: ${badge.name}`,
       kind: "BADGE",
       metadata: { badgeKey: key },
     });
@@ -81,13 +81,13 @@ export async function runChatAdminQuickAction(input: {
     const tpl = input.suggestTemplate ?? "push_close";
     const bodies: Record<string, string> = {
       push_close:
-        "⚡ Suggested: confirm timeline and next step to close — offer a crisp recap + single CTA.",
+        "Suggested: confirm timeline and next step to close — offer a crisp recap + single CTA.",
       offer_bonus:
-        "⚡ Suggested: if they are one step away, a small performance boost can unlock momentum.",
+        "Suggested: if they are one step away, a small performance boost can unlock momentum.",
       ask_update:
-        "⚡ Suggested: ask for a 2-line update (blockers + target date) to keep pipeline honest.",
+        "Suggested: ask for a 2-line update (blockers + target date) to keep pipeline honest.",
       commission_nudge:
-        "⚡ Strategic: review commission tier / partner override in admin — align incentive with the deal stage before pushing harder.",
+        "Strategic: review commission tier / partner override in admin — align incentive with the deal stage before pushing harder.",
     };
     const msg = await appendMessage({
       conversationId,

@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { IconSparkle } from "@/components/growth/icons/GrowthIcons";
 import { createEventPostAction } from "@/lib/growth/actions";
 import { EventPostCard } from "@/components/growth/events/EventPostCard";
 import { EventContactAssistantBubble } from "@/components/growth/events/EventContactAssistantBubble";
@@ -80,8 +81,8 @@ export function EventMemberFeed({ eventId, posts, currentUserId, contactLeads }:
         <section className="event-posts-list" aria-label={t("tabPosts")}>
           {posts.length === 0 ? (
             <div className="event-posts-empty">
-              <span className="event-posts-empty__icon" aria-hidden>
-                ✦
+              <span className="event-posts-empty__icon flex justify-center text-gold/70" aria-hidden>
+                <IconSparkle size={28} />
               </span>
               <p>{t("feedEmpty")}</p>
             </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { GhostData } from "@/lib/growth/ghost";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { IconLightbulb } from "@/components/growth/icons/GrowthIcons";
 
 type Props = {
   ghost: GhostData | null;
@@ -49,7 +50,10 @@ export function GhostModePanel({ ghost, ghostRow }: Props) {
               <dd>{t("vs", { mine: ghost.myStreak, ghost: ghost.ghostStreak })}</dd>
             </div>
           </dl>
-          <p className="mt-4 text-sm text-gold">💡 {ghost.catchUpTip}</p>
+          <p className="mt-4 flex items-start gap-2 text-sm text-gold">
+            <IconLightbulb size={18} className="mt-0.5 shrink-0 text-gold/90" />
+            <span>{ghost.catchUpTip}</span>
+          </p>
         </GlassCard>
       ) : null}
       {on && ghostRow ? <div className="mt-2">{ghostRow}</div> : null}
