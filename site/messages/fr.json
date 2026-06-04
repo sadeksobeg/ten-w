@@ -1491,7 +1491,8 @@
     "partnerCard": {
       "brand": "T.E.N.E.G.T.A",
       "cardNumber": "Carte n°{n}",
-      "flipHint": "Survolez pour incliner"
+      "flipHint": "Survolez pour incliner",
+      "certified": "Partenaire certifié"
     },
     "card": {
       "title": "Ma carte",

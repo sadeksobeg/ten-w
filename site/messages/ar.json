@@ -1434,7 +1434,8 @@
     "partnerCard": {
       "brand": "T.E.N.E.G.T.A",
       "cardNumber": "البطاقة #{n}",
-      "flipHint": "حرّك المؤشر للتدوير"
+      "flipHint": "حرّك المؤشر للتدوير",
+      "certified": "شريك معتمد"
     },
     "card": {
       "title": "بطاقتي",

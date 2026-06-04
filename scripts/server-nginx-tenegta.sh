@@ -8,6 +8,7 @@ SRC="$REPO/scripts/nginx/tenegta.com.conf"
 DEST="/etc/nginx/sites-available/tenegta.com"
 ENABLED="/etc/nginx/sites-enabled/tenegta.com"
 CERT="/etc/letsencrypt/live/tenegta.com/fullchain.pem"
+APP_PORT="$(grep -E '^PORT=' "$REPO/site/.env" 2>/dev/null | head -1 | cut -d= -f2 | tr -d '"' || echo 3100)"
 
 if [[ ! -f "$SRC" ]]; then
   echo "ERROR: missing $SRC — run git pull in $REPO"
@@ -39,8 +40,8 @@ if [[ -f "$DEST" ]]; then
   echo "==> backed up existing config to $BACKUP"
 fi
 
-echo "==> installing $SRC -> $DEST"
-run cp "$SRC" "$DEST"
+echo "==> installing nginx config (upstream 127.0.0.1:${APP_PORT} from site/.env)"
+sed "s/127.0.0.1:3100/127.0.0.1:${APP_PORT}/g; s/on 127.0.0.1:3100/on 127.0.0.1:${APP_PORT}/g" "$SRC" | run tee "$DEST" >/dev/null
 run ln -sf "$DEST" "$ENABLED"
 
 echo "==> nginx -t"
@@ -67,6 +68,6 @@ if ! run systemctl is-active --quiet nginx; then
 fi
 
 echo ""
-echo "OK: tenegta.com nginx config applied (gzip + static cache + security headers + proxy :3100)"
+echo "OK: tenegta.com nginx config applied (gzip + static cache + security headers + proxy :${APP_PORT})"
 echo "==> key lines in $DEST:"
 grep -nE "^\s*(upstream tenegta_next|Strict-Transport-Security|gzip on|location /_next/static/)" "$DEST" || true

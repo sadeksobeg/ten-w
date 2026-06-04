@@ -29,12 +29,25 @@ fi
 echo "Stopping old PM2 process (if any)..."
 bash "$PM2" delete tenegta 2>/dev/null || true
 
-echo "Freeing port ${PORT} (orphan listeners)..."
-if command -v fuser >/dev/null 2>&1; then
-  fuser -k "${PORT}/tcp" 2>/dev/null || true
-elif command -v lsof >/dev/null 2>&1; then
-  lsof -ti:"${PORT}" | xargs -r kill -9 2>/dev/null || true
-fi
+echo "Freeing port ${PORT} (tenegta/next orphans only)..."
+free_tenegta_port() {
+  local p="$1"
+  local pid cmd cwd
+  if ! ss -tlnp 2>/dev/null | grep -q ":${p} "; then
+    return 0
+  fi
+  pid="$(ss -tlnp 2>/dev/null | grep ":${p} " | sed -n 's/.*pid=\([0-9]*\).*/\1/p' | head -1)"
+  [ -n "$pid" ] || return 0
+  cmd="$(tr '\0' ' ' < "/proc/${pid}/cmdline" 2>/dev/null || true)"
+  cwd="$(readlink -f "/proc/${pid}/cwd" 2>/dev/null || true)"
+  if [[ "$cmd" == *"next-server"* ]] || [[ "$cmd" == *"/var/www/tenegta"* ]] || [[ "$cwd" == /var/www/tenegta* ]]; then
+    echo "  killing stale tenegta listener on :${p} (pid ${pid})"
+    kill -9 "$pid" 2>/dev/null || true
+  else
+    echo "  keeping :${p} (pid ${pid}, not tenegta — e.g. clinic-os on 3100)"
+  fi
+}
+free_tenegta_port "$PORT"
 sleep 1
 
 echo "Starting tenegta on port ${PORT}..."
@@ -43,4 +56,6 @@ bash "$PM2" save
 
 sleep 2
 echo ""
-curl -sI "http://127.0.0.1:${PORT}/en" | head -8 || true
+echo "Smoke (GET /en):"
+curl -fsS -o /dev/null -w "  http://127.0.0.1:${PORT}/en → HTTP %{http_code}\n" "http://127.0.0.1:${PORT}/en" || \
+  echo "  WARNING: no 200 on GET /en — check: bash scripts/server-pm2.sh logs tenegta"

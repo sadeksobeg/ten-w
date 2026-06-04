@@ -1466,7 +1466,8 @@
     "partnerCard": {
       "brand": "T.E.N.E.G.T.A",
       "cardNumber": "Card #{n}",
-      "flipHint": "Move mouse to tilt"
+      "flipHint": "Move mouse to tilt",
+      "certified": "Certified partner"
     },
     "card": {
       "title": "My card",
