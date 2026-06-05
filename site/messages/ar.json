@@ -2593,6 +2593,39 @@
           "unknown": "حدث خطأ غير متوقع"
         }
       },
+      "invites": {
+        "title": "بطاقات الدعوة",
+        "subtitle": "إنشاء روابط دعوة سينمائية وبطاقات QR للمبدعين — لا ينشئ حسابات شركاء تلقائياً.",
+        "statsTotal": "إجمالي الدعوات",
+        "statsAccepted": "مقبولة",
+        "statsPending": "قيد الانتظار",
+        "createTitle": "دعوة جديدة",
+        "createHint": "بعد الإنشاء: انسخ الرابط أو حمّل بطاقة QR وأرسلها للمبدع.",
+        "name": "الاسم",
+        "namePlaceholder": "أحمد الرشيد",
+        "handle": "المعرّف",
+        "handlePlaceholder": "ahmed.rashid",
+        "tier": "الفئة",
+        "scope": "المجال",
+        "scopePlaceholder": "Technology storytelling · Arabic",
+        "message": "رسالة الدعوة",
+        "messagePlaceholder": "رسالة شخصية للمبدع…",
+        "createSubmit": "إنشاء الدعوة",
+        "createSubmitting": "جاري الإنشاء…",
+        "listTitle": "الدعوات الصادرة",
+        "empty": "لا توجد دعوات بعد — أنشئ أول بطاقة من النموذج أعلاه.",
+        "statusAccepted": "مقبولة",
+        "statusPending": "معلّقة",
+        "downloadQr": "تحميل بطاقة QR",
+        "copyLink": "نسخ الرابط",
+        "copied": "تم النسخ",
+        "preview": "معاينة",
+        "delete": "حذف",
+        "deleteConfirm": "حذف هذه الدعوة؟",
+        "errors": {
+          "createFailed": "تعذّر إنشاء الدعوة — تحقق من الحقول."
+        }
+      },
       "events": {
         "title": "الفعاليات",
         "createTitle": "إنشاء فعالية",

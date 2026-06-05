@@ -24,13 +24,7 @@ import {
   type GrowthIconProps,
 } from "@/components/growth/icons/GrowthIcons";
 
-type NavItem = {
-  href: string;
-  labelKey: string;
-  Icon: ComponentType<GrowthIconProps>;
-  /** Outside /[locale] — use plain <a> (e.g. /admin invites panel) */
-  external?: boolean;
-};
+type NavItem = { href: string; labelKey: string; Icon: ComponentType<GrowthIconProps> };
 
 const groups: { titleKey: string; items: NavItem[] }[] = [
   {
@@ -40,7 +34,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { href: "/growth/admin/deals", labelKey: "deals", Icon: IconDeals },
       { href: "/growth/admin/payouts", labelKey: "payouts", Icon: IconPayout },
       { href: "/growth/admin/partners", labelKey: "partners", Icon: IconPartners },
-      { href: "/admin", labelKey: "invites", Icon: IconStar, external: true },
+      { href: "/growth/admin/invites", labelKey: "invites", Icon: IconStar },
       { href: "/growth/admin/chat", labelKey: "chat", Icon: IconChat },
       { href: "/growth/admin/chat/moderators", labelKey: "chatModerators", Icon: IconChat },
     ],
@@ -137,22 +131,14 @@ export function GrowthAdminNav() {
               {!isCollapsed ? (
                 <ul className="space-y-0.5">
                   {g.items.map((item) => {
-                    const active = !item.external && isActive(pathname, item.href);
+                    const active = isActive(pathname, item.href);
                     const Icon = item.Icon;
-                    const label = t(item.labelKey as "overview");
                     return (
                       <li key={item.href}>
-                        {item.external ? (
-                          <a href={item.href} className={linkClass(false)}>
-                            <Icon size={18} className="shrink-0 opacity-90" aria-hidden />
-                            {label}
-                          </a>
-                        ) : (
-                          <Link href={item.href} className={linkClass(active)}>
-                            <Icon size={18} className="shrink-0 opacity-90" aria-hidden />
-                            {label}
-                          </Link>
-                        )}
+                        <Link href={item.href} className={linkClass(active)}>
+                          <Icon size={18} className="shrink-0 opacity-90" aria-hidden />
+                          {t(item.labelKey as "overview")}
+                        </Link>
                       </li>
                     );
                   })}

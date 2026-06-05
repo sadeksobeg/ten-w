@@ -2659,6 +2659,39 @@
           "unknown": "Something went wrong"
         }
       },
+      "invites": {
+        "title": "Invite cards",
+        "subtitle": "Create cinematic invite links and QR cards for creators — does not auto-create partner accounts.",
+        "statsTotal": "Total invites",
+        "statsAccepted": "Accepted",
+        "statsPending": "Pending",
+        "createTitle": "New invitation",
+        "createHint": "After creating: copy the link or download the QR card and send it to the creator.",
+        "name": "Name",
+        "namePlaceholder": "Ahmed Al-Rashid",
+        "handle": "Handle",
+        "handlePlaceholder": "ahmed.rashid",
+        "tier": "Tier",
+        "scope": "Scope",
+        "scopePlaceholder": "Technology storytelling · Arabic",
+        "message": "Invitation message",
+        "messagePlaceholder": "Personal message for the creator…",
+        "createSubmit": "Create invitation",
+        "createSubmitting": "Creating…",
+        "listTitle": "Issued invitations",
+        "empty": "No invitations yet — create your first card using the form above.",
+        "statusAccepted": "Accepted",
+        "statusPending": "Pending",
+        "downloadQr": "Download QR card",
+        "copyLink": "Copy link",
+        "copied": "Copied",
+        "preview": "Preview",
+        "delete": "Delete",
+        "deleteConfirm": "Delete this invitation?",
+        "errors": {
+          "createFailed": "Could not create invitation — check the fields."
+        }
+      },
       "events": {
         "title": "Events",
         "createTitle": "Create event",

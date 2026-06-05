@@ -2574,6 +2574,39 @@
           "unknown": "Something went wrong"
         }
       },
+      "invites": {
+        "title": "Cartes d'invitation",
+        "subtitle": "Créez des liens d'invitation cinématiques et des cartes QR pour les créateurs — ne crée pas de comptes partenaires automatiquement.",
+        "statsTotal": "Total invitations",
+        "statsAccepted": "Acceptées",
+        "statsPending": "En attente",
+        "createTitle": "Nouvelle invitation",
+        "createHint": "Après création : copiez le lien ou téléchargez la carte QR et envoyez-la au créateur.",
+        "name": "Nom",
+        "namePlaceholder": "Ahmed Al-Rashid",
+        "handle": "Identifiant",
+        "handlePlaceholder": "ahmed.rashid",
+        "tier": "Niveau",
+        "scope": "Domaine",
+        "scopePlaceholder": "Technology storytelling · Arabic",
+        "message": "Message d'invitation",
+        "messagePlaceholder": "Message personnel pour le créateur…",
+        "createSubmit": "Créer l'invitation",
+        "createSubmitting": "Création…",
+        "listTitle": "Invitations émises",
+        "empty": "Aucune invitation — créez la première avec le formulaire ci-dessus.",
+        "statusAccepted": "Acceptée",
+        "statusPending": "En attente",
+        "downloadQr": "Télécharger carte QR",
+        "copyLink": "Copier le lien",
+        "copied": "Copié",
+        "preview": "Aperçu",
+        "delete": "Supprimer",
+        "deleteConfirm": "Supprimer cette invitation ?",
+        "errors": {
+          "createFailed": "Impossible de créer l'invitation — vérifiez les champs."
+        }
+      },
       "events": {
         "title": "Title",
         "createTitle": "Create event",
