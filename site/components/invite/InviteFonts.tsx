@@ -1,5 +1,5 @@
 const INVITE_FONTS =
-  "https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@500;600;700;800&display=swap";
+  "https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap";
 
 export function InviteFonts() {
   return (

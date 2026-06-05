@@ -8,81 +8,82 @@ type Props = {
   onComplete: () => void;
 };
 
-const BOOT_LINES = [
-  "> initializing secure channel...",
-  "> verifying access gateway...",
-  "> loading TENEGTA identity matrix...",
-  "> decrypting invitation payload...",
-  "> ACCESS TOKEN READY",
-];
-
-const SHORT_LINES = ["> session restored", "> ACCESS GRANTED"];
-
 export function BootPhase({ alreadyAccepted, onComplete }: Props) {
   const reduceMotion = useReducedMotion();
-  const lines = alreadyAccepted || reduceMotion ? SHORT_LINES : BOOT_LINES;
-  const [visible, setVisible] = useState(reduceMotion ? lines.length : 0);
-  const [showLogo, setShowLogo] = useState(Boolean(reduceMotion));
+  const [stage, setStage] = useState(reduceMotion ? 3 : 0);
 
   useEffect(() => {
     if (reduceMotion) {
-      const t = window.setTimeout(onComplete, 400);
+      const t = window.setTimeout(onComplete, 500);
       return () => window.clearTimeout(t);
     }
 
-    if (visible < lines.length) {
-      const t = window.setTimeout(() => setVisible((v) => v + 1), 420);
-      return () => window.clearTimeout(t);
-    }
+    const timers = [
+      window.setTimeout(() => setStage(1), 600),
+      window.setTimeout(() => setStage(2), 1600),
+      window.setTimeout(() => setStage(3), 2600),
+      window.setTimeout(onComplete, alreadyAccepted ? 3200 : 3800),
+    ];
 
-    const logoT = window.setTimeout(() => setShowLogo(true), 300);
-    const doneT = window.setTimeout(onComplete, 1400);
-    return () => {
-      window.clearTimeout(logoT);
-      window.clearTimeout(doneT);
-    };
-  }, [visible, lines.length, onComplete, reduceMotion]);
+    return () => timers.forEach(clearTimeout);
+  }, [alreadyAccepted, onComplete, reduceMotion]);
 
   return (
     <motion.div
-      className="invite-scanline fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#050508] px-6"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#03040a] px-6"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="invite-boot-beam" aria-hidden />
-      <div className="w-full max-w-lg space-y-2">
-        {lines.slice(0, visible).map((line, i) => (
-          <motion.p
-            key={line}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            className={`invite-font-mono text-xs sm:text-sm ${
-              i === lines.length - 1 ? "text-[var(--invite-teal)]" : "text-white/55"
-            }`}
-          >
-            {line}
-            {i === visible - 1 && i === lines.length - 1 ? (
-              <span className="invite-cursor-blink" />
-            ) : null}
-          </motion.p>
-        ))}
-      </div>
+      <div className="invite-aurora opacity-80" aria-hidden />
 
-      {showLogo ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92, filter: "blur(8px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          className="invite-glitch mt-12 text-center"
-        >
-          <p className="invite-font-mono text-[10px] tracking-[0.35em] text-[var(--invite-purple)]">
-            SYSTEM ONLINE
-          </p>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-[0.2em] text-white sm:text-4xl">
-            T.E.N.E.G.T.A
-          </h1>
-        </motion.div>
-      ) : null}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: stage >= 1 ? 1 : 0 }}
+        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+        className="invite-gold-line mb-10 w-full max-w-xs origin-center"
+        aria-hidden
+      />
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: stage >= 1 ? 1 : 0, y: stage >= 1 ? 0 : 20 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="text-center"
+      >
+        <p className="invite-eyebrow mb-4">T.E.N.E.G.T.A</p>
+        <h1 className="invite-boot-logo invite-boot-glow">TENEGTA</h1>
+      </motion.div>
+
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: stage >= 2 ? 1 : 0, y: stage >= 2 ? 0 : 12 }}
+        transition={{ duration: 0.8, delay: 0.05 }}
+        className="mt-8 max-w-md text-center text-lg font-semibold text-white/75 sm:text-xl"
+      >
+        {alreadyAccepted ? "مرحباً بعودتك" : "لديك دعوة خاصة"}
+      </motion.p>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: stage >= 3 ? 1 : 0 }}
+        transition={{ duration: 0.7 }}
+        className="mt-3 text-sm text-white/45"
+      >
+        {alreadyAccepted
+          ? "جاري فتح تجربتك…"
+          : "دعوة حصرية لصانع محتوى — مُعدّة بعناية لك وحدك"}
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: stage >= 2 ? 0.6 : 0 }}
+        className="invite-scroll-hint absolute bottom-10 flex flex-col items-center gap-2 text-white/40"
+        aria-hidden
+      >
+        <span className="text-[10px] tracking-[0.2em]">SCROLL</span>
+        <span className="text-lg">↓</span>
+      </motion.div>
     </motion.div>
   );
 }

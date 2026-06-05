@@ -16,7 +16,7 @@ export function InviteShell({ children, dir = "rtl", className = "" }: Props) {
         <link rel="icon" href="/tenegta-icon.png" type="image/png" />
       </head>
       <body
-        className={`invite-root invite-grid-bg invite-font-heading min-h-[100dvh] ${className}`}
+        className={`invite-root invite-premium-bg invite-font-body min-h-[100dvh] ${className}`}
       >
         {children}
       </body>

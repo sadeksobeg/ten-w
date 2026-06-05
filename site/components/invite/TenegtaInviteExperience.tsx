@@ -24,7 +24,7 @@ export function TenegtaInviteExperience({ card }: Props) {
 
   return (
     <div className="relative min-h-[100dvh] overflow-x-hidden">
-      {phase !== "boot" ? <InviteAmbientCanvas density={56} /> : null}
+      <InviteAmbientCanvas density={40} />
       <div className="invite-vignette pointer-events-none fixed inset-0 z-[1]" aria-hidden />
 
       <AnimatePresence mode="wait">

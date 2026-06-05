@@ -9,7 +9,8 @@ type Particle = {
   vx: number;
   vy: number;
   size: number;
-  hue: number;
+  alpha: number;
+  tone: "gold" | "violet" | "mint";
 };
 
 type Props = {
@@ -17,7 +18,13 @@ type Props = {
   className?: string;
 };
 
-export function InviteAmbientCanvas({ density = 48, className = "" }: Props) {
+const TONE: Record<Particle["tone"], string> = {
+  gold: "rgba(232, 200, 114,",
+  violet: "rgba(157, 140, 255,",
+  mint: "rgba(62, 232, 184,",
+};
+
+export function InviteAmbientCanvas({ density = 36, className = "" }: Props) {
   const reduceMotion = useReducedMotion();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -41,10 +48,11 @@ export function InviteAmbientCanvas({ density = 48, className = "" }: Props) {
       particles = Array.from({ length: density }, () => ({
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        size: Math.random() * 2 + 0.5,
-        hue: Math.random() > 0.5 ? 255 : 160,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18 - 0.05,
+        size: Math.random() * 3 + 1,
+        alpha: Math.random() * 0.35 + 0.15,
+        tone: (["gold", "violet", "mint"] as const)[Math.floor(Math.random() * 3)],
       }));
     }
 
@@ -55,16 +63,16 @@ export function InviteAmbientCanvas({ density = 48, className = "" }: Props) {
       for (const p of particles) {
         p.x += p.vx;
         p.y += p.vy;
-        if (p.x < 0) p.x = w;
-        if (p.x > w) p.x = 0;
-        if (p.y < 0) p.y = h;
-        if (p.y > h) p.y = 0;
+        if (p.x < -20) p.x = w + 20;
+        if (p.x > w + 20) p.x = -20;
+        if (p.y < -20) p.y = h + 20;
+        if (p.y > h + 20) p.y = -20;
+        const gradient = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
+        gradient.addColorStop(0, `${TONE[p.tone]}${p.alpha})`);
+        gradient.addColorStop(1, `${TONE[p.tone]}0)`);
+        ctx!.fillStyle = gradient;
         ctx!.beginPath();
-        ctx!.fillStyle =
-          p.hue > 200
-            ? `rgba(123, 111, 255, ${0.25 + p.size * 0.08})`
-            : `rgba(0, 229, 160, ${0.15 + p.size * 0.06})`;
-        ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx!.arc(p.x, p.y, p.size * 2.2, 0, Math.PI * 2);
         ctx!.fill();
       }
       raf = window.requestAnimationFrame(draw);
@@ -84,7 +92,7 @@ export function InviteAmbientCanvas({ density = 48, className = "" }: Props) {
   return (
     <canvas
       ref={canvasRef}
-      className={`pointer-events-none fixed inset-0 z-0 opacity-70 ${className}`}
+      className={`pointer-events-none fixed inset-0 z-0 opacity-80 ${className}`}
       aria-hidden
     />
   );
