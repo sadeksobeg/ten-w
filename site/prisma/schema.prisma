@@ -154,6 +154,7 @@ model User {
   mentorshipsAsMentee        MentorshipSession[] @relation("MentorshipMentee")
   weeklyChronicles           WeeklyChronicle[]
   platformMemoryDeliveries   PlatformMemoryDelivery[]
+  inviteCardsCreated         InviteCard[]       @relation("InviteCardCreator")
 }
 
 model PartnerProfile {
@@ -905,4 +906,23 @@ model PlatformMemoryDelivery {
 
   @@unique([userId, memoryKey])
   @@index([userId])
+}
+
+model InviteCard {
+  id          String    @id @default(cuid())
+  name        String
+  handle      String
+  tier        String    @default("CONTENT CREATOR")
+  scope       String
+  message     String    @db.Text
+  token       String    @unique
+  slug        String    @unique
+  accepted    Boolean   @default(false)
+  acceptedAt  DateTime?
+  createdById String?
+  createdBy   User?     @relation("InviteCardCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+
+  @@index([accepted])
+  @@index([createdAt])
 }

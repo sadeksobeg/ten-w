@@ -649,6 +649,22 @@ async function main() {
     ],
   });
 
+  await prisma.inviteCard.upsert({
+    where: { slug: "ahmed-al-rashid-ahmed-rashid" },
+    create: {
+      name: "أحمد الرشيد",
+      handle: "ahmed.rashid",
+      tier: "CONTENT CREATOR",
+      scope: "Technology storytelling · Arabic content",
+      message:
+        "أسلوبك في عرض التقنية بطريقة لم يسبقها أحد لفت انتباهنا. نحن لا نبحث عن مؤثر — نبحث عن صانع محتوى يفهم أن التقنية قصة تستحق أن تُروى.",
+      token: "TNGTA-AHMED_R-4F9A2C",
+      slug: "ahmed-al-rashid-ahmed-rashid",
+      createdById: admin.id,
+    },
+    update: {},
+  });
+
   // eslint-disable-next-line no-console -- seed script
   console.log("Seeded levels, products, badges, tier config.");
   // eslint-disable-next-line no-console -- seed script

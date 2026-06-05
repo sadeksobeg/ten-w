@@ -1,0 +1,273 @@
+/* TENEGTA Invite System — terminal / access-token aesthetic */
+.invite-root {
+  --invite-bg: #050508;
+  --invite-surface: #0a0a12;
+  --invite-surface-2: #12121c;
+  --invite-purple: #7b6fff;
+  --invite-teal: #00e5a0;
+  --invite-gold: #e4b84d;
+  --invite-muted: rgba(255, 255, 255, 0.45);
+  --invite-border: rgba(123, 111, 255, 0.22);
+  --font-syne: "Syne", system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+  color: #f0ede8;
+  background: var(--invite-bg);
+}
+
+.invite-grid-bg {
+  background-color: var(--invite-bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(123, 111, 255, 0.14), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(0, 229, 160, 0.06), transparent 50%),
+    linear-gradient(rgba(123, 111, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(123, 111, 255, 0.04) 1px, transparent 1px);
+  background-size: auto, auto, 48px 48px, 48px 48px;
+}
+
+.invite-font-heading {
+  font-family: var(--font-syne);
+}
+
+.invite-font-mono {
+  font-family: var(--font-mono);
+}
+
+.invite-cursor-blink::after {
+  content: "▋";
+  animation: invite-blink 1s step-end infinite;
+  color: var(--invite-teal);
+  margin-inline-start: 2px;
+}
+
+@keyframes invite-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.invite-scanline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.12) 2px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+  opacity: 0.35;
+}
+
+.invite-glitch {
+  animation: invite-glitch 0.35s ease-in-out;
+}
+
+@keyframes invite-glitch {
+  0%,
+  100% {
+    transform: translate(0);
+    filter: none;
+  }
+  20% {
+    transform: translate(-2px, 1px);
+    filter: hue-rotate(20deg);
+  }
+  40% {
+    transform: translate(2px, -1px);
+  }
+  60% {
+    transform: translate(-1px, 2px);
+    filter: hue-rotate(-15deg);
+  }
+}
+
+.invite-token-card {
+  background: linear-gradient(145deg, rgba(18, 18, 28, 0.98), rgba(8, 8, 14, 0.99));
+  border: 1px solid rgba(123, 111, 255, 0.28);
+  box-shadow:
+    0 24px 80px -24px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(123, 111, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.invite-token-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(123, 111, 255, 0.35), transparent 40%, rgba(0, 229, 160, 0.2));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.invite-pulse-ring {
+  animation: invite-pulse-ring 2.4s ease-out infinite;
+}
+
+@keyframes invite-pulse-ring {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+.invite-orbit {
+  animation: invite-orbit 8s linear infinite;
+}
+
+@keyframes invite-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.invite-data-column {
+  animation: invite-fall linear infinite;
+}
+
+@keyframes invite-fall {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.invite-admin-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0.65rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #fff;
+  outline: none;
+}
+
+.invite-admin-input:focus {
+  border-color: rgba(123, 111, 255, 0.55);
+  box-shadow: 0 0 0 2px rgba(123, 111, 255, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invite-cursor-blink::after,
+  .invite-glitch,
+  .invite-pulse-ring,
+  .invite-orbit,
+  .invite-data-column,
+  .invite-holo-sheen,
+  .invite-card-shimmer,
+  .invite-boot-beam {
+    animation: none !important;
+  }
+}
+
+.invite-vignette {
+  background: radial-gradient(ellipse at 50% 40%, transparent 35%, rgba(5, 5, 8, 0.65) 100%);
+}
+
+.invite-holo-card {
+  box-shadow:
+    0 28px 100px -30px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(123, 111, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 60px -20px rgba(123, 111, 255, 0.35);
+}
+
+.invite-holo-sheen {
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.07) 48%,
+    rgba(123, 111, 255, 0.12) 52%,
+    transparent 65%
+  );
+  animation: invite-holo-move 6s ease-in-out infinite;
+}
+
+@keyframes invite-holo-move {
+  0%,
+  100% {
+    transform: translateX(-30%) skewX(-8deg);
+  }
+  50% {
+    transform: translateX(30%) skewX(-8deg);
+  }
+}
+
+.invite-card-shimmer {
+  background: radial-gradient(circle at 30% 20%, rgba(228, 184, 77, 0.08), transparent 45%);
+}
+
+.invite-cta-glow {
+  box-shadow: 0 0 32px -8px rgba(123, 111, 255, 0.45);
+}
+
+.invite-cta-glow:hover {
+  box-shadow: 0 0 40px -6px rgba(0, 229, 160, 0.35);
+}
+
+.invite-world-title {
+  text-shadow: 0 0 40px rgba(123, 111, 255, 0.35);
+}
+
+.invite-world-badge {
+  box-shadow: 0 0 24px -8px rgba(0, 229, 160, 0.4);
+}
+
+.invite-pillar-card {
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+@media (hover: hover) {
+  .invite-pillar-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+}
+
+.invite-boot-beam {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--invite-teal), transparent);
+  animation: invite-beam 2.2s ease-in-out infinite;
+}
+
+@keyframes invite-beam {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.invite-safe-banner {
+  border: 1px solid rgba(0, 229, 160, 0.25);
+  background: rgba(0, 229, 160, 0.06);
+}
