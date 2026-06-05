@@ -45,7 +45,7 @@ export async function GrowthHubView({
 }: Props) {
   const t = await getTranslations("Growth");
   const powerLabel = getXpBrandLabel(locale);
-  const campaigns = await getActiveAscendCampaigns(locale, 2);
+  const campaigns = await getActiveAscendCampaigns(locale, 5);
 
   return (
     <div className="space-y-8">

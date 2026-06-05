@@ -1244,7 +1244,12 @@
       "eyebrowEvent": "Événement ASCEND",
       "eyebrowFeature": "Nouvelle fonctionnalité",
       "dismiss": "Plus tard",
-      "endsIn": "Se termine dans {days} jours"
+      "endsIn": "Se termine dans {days} jours",
+      "carouselAria": "Carrousel promo — glissez pour parcourir",
+      "prevSlide": "Promo précédente",
+      "nextSlide": "Promo suivante",
+      "slideDot": "Promo {n}",
+      "slideCounter": "{current} / {total}"
     },
     "formErrors": {
       "rate_limited": "Trop de requêtes",
@@ -1360,7 +1365,16 @@
       "ends": "Fin {date}",
       "won": "Victoire",
       "lost": "Défaite — préparez le prochain défi",
-      "empty": "Aucun défi — lancez-en un"
+      "empty": "Aucun défi — lancez-en un",
+      "pickRivalHint": "Choisissez parmi votre rival hebdo, votre région, votre réseau ou le classement proche — pas l'annuaire complet.",
+      "groupRival": "Rival hebdo",
+      "groupTerritory": "Votre région",
+      "groupNetwork": "Votre réseau",
+      "groupLeaderboard": "Classement proche",
+      "noCandidates": "Aucune cible pour l'instant. Définissez votre gouvernorat, développez votre réseau ou concluez des affaires.",
+      "selectPartner": "Appuyez sur une carte partenaire pour sélectionner.",
+      "selectedPartner": "Partenaire sélectionné — définissez l'objectif et envoyez.",
+      "territoryUnknown": "Région non définie"
     },
     "mentors": {
       "title": "Marché du mentorat",

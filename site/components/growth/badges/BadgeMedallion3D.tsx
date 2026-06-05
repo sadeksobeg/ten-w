@@ -8,7 +8,6 @@ import {
 } from "@/lib/growth/badge-visual";
 import {
   getShapePath,
-  resolvePremiumShape,
   type BadgeShape,
 } from "@/lib/growth/badge-shapes";
 
@@ -88,10 +87,9 @@ function RarityGems({ rarity, color, uid }: { rarity: string; color: string; uid
 export function BadgeMedallion3D({ badgeKey, px, showGlow, animate, earned }: MedallionProps) {
   const uid = useId().replace(/:/g, "");
   const def = getBadgeDef(badgeKey);
-  const premiumShape = resolvePremiumShape(def.rarity, def.shape as BadgeShape);
-  const shapePath = getShapePath(premiumShape);
-  const innerPath = getShapePath(premiumShape, 0.86);
-  const outerRing = getShapePath(premiumShape, 1.08);
+  const shapePath = getShapePath(def.shape as BadgeShape);
+  const innerPath = getShapePath(def.shape as BadgeShape, 0.86);
+  const outerRing = getShapePath(def.shape as BadgeShape, 1.08);
   const metal = rarityMetal(def.rarity);
   const showLaurel = def.rarity === "legendary" || def.rarity === "mythic";
   const showHolo = def.rarity === "legendary" || def.rarity === "mythic" || def.rarity === "epic";
@@ -197,7 +195,7 @@ export function BadgeMedallion3D({ badgeKey, px, showGlow, animate, earned }: Me
       <ellipse cx="60" cy="114" rx="40" ry="6.5" fill="#000" opacity="0.5" />
 
       {/* back plate depth */}
-      <path d={getShapePath(premiumShape, 1.02)} fill="#000" opacity="0.35" transform="translate(0,3)" />
+        <path d={getShapePath(def.shape as BadgeShape, 1.02)} fill="#000" opacity="0.35" transform="translate(0,3)" />
 
       <g filter={`url(#depth-${uid})`}>
         <path d={outerRing} fill="none" stroke={`url(#rim2-${uid})`} strokeWidth="2.5" opacity="0.7" />
@@ -261,7 +259,7 @@ export function BadgeMedallion3D({ badgeKey, px, showGlow, animate, earned }: Me
 
       {def.rarity === "mythic" ? (
         <path
-          d={getShapePath(premiumShape, 1.06)}
+          d={getShapePath(def.shape as BadgeShape, 1.06)}
           fill="none"
           stroke={def.primaryColor}
           strokeWidth="2"

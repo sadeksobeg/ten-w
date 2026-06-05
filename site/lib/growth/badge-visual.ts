@@ -17,6 +17,11 @@ export type BadgeDef = {
   innerStroke: string;
   innerStrokeWidth: number;
   particleColor: string;
+  /** Normalized SVG palette (derived when omitted). */
+  bgColor?: string;
+  borderColor?: string;
+  iconColor?: string;
+  iconPath?: string;
   labelAr: string;
   labelEn: string;
   labelFr: string;
@@ -736,7 +741,14 @@ const DEFAULT_DEF: BadgeDef = {
 };
 
 export function getBadgeDef(badgeKey: string): BadgeDef {
-  return BADGE_DEFS[badgeKey] ?? DEFAULT_DEF;
+  const d = BADGE_DEFS[badgeKey] ?? DEFAULT_DEF;
+  return {
+    ...d,
+    bgColor: d.bgColor ?? d.gradientTo,
+    borderColor: d.borderColor ?? d.primaryColor,
+    iconColor: d.iconColor ?? d.innerStroke,
+    iconPath: d.iconPath ?? d.innerPath,
+  };
 }
 
 export function getBadgeLabel(badgeKey: string, locale: string): string {

@@ -12,6 +12,7 @@ import {
   acceptBattleStakes,
   hasActiveBattle,
 } from "@/lib/growth/battles";
+import { isAllowedBattleTarget } from "@/lib/growth/battle-candidates";
 import { resolveChatSenderName } from "@/lib/growth/chat-display";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
@@ -146,6 +147,9 @@ export async function challengePartnerAction(
   if (!parsed.success) return { ok: false, error: "invalid_input" };
   if (parsed.data.challengedId === session.user.id) {
     return { ok: false, error: "self" };
+  }
+  if (!(await isAllowedBattleTarget(session.user.id, parsed.data.challengedId))) {
+    return { ok: false, error: "invalid_target" };
   }
   if (await hasActiveBattle(session.user.id)) {
     return { ok: false, error: "battle_active" };

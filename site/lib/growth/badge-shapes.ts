@@ -1,105 +1,63 @@
-/** SVG path helpers for badge clip shapes (viewBox 0 0 120 120). */
+/** Mathematically precise badge clip shapes (viewBox 0 0 120 120). */
 
-export type BadgeShape =
-  | "circle"
-  | "hexagon"
-  | "shield"
-  | "star"
-  | "diamond"
-  | "medallion"
-  | "crest"
-  | "seal";
+export type BadgeShape = "circle" | "hexagon" | "shield" | "star" | "diamond";
 
-function scallopedPath(cx: number, cy: number, r: number, lobes: number, depth: number): string {
-  const points: string[] = [];
-  for (let i = 0; i < lobes * 2; i += 1) {
-    const angle = ((i * 180) / lobes - 90) * (Math.PI / 180);
-    const radius = i % 2 === 0 ? r : r * (1 - depth);
-    points.push(`${cx + radius * Math.cos(angle)},${cy + radius * Math.sin(angle)}`);
-  }
-  return `M ${points.join(" L ")} Z`;
-}
-
-/** Premium 3D medallion — scalloped coin edge (Steam/Xbox-style). */
-export function getMedallionPath(scale = 1): string {
-  return scallopedPath(60, 60, 50 * scale, 14, 0.1);
-}
-
-/** Heraldic crest with wing extensions. */
-export function getCrestPath(scale = 1): string {
-  const cx = 60;
-  const cy = 58;
-  const r = 44 * scale;
-  const wing = 18 * scale;
-  return [
-    `M ${cx - r - wing},${cy + 8 * scale}`,
-    `Q ${cx - r - wing * 0.4},${cy - 20 * scale} ${cx - r * 0.55},${cy - 32 * scale}`,
-    `L ${cx},${10 * scale}`,
-    `L ${cx + r * 0.55},${cy - 32 * scale}`,
-    `Q ${cx + r + wing * 0.4},${cy - 20 * scale} ${cx + r + wing},${cy + 8 * scale}`,
-    `L ${cx + r},${cy + 10 * scale}`,
-    `Q ${cx + r},${cy + 38 * scale} ${cx},${112 * scale}`,
-    `Q ${cx - r},${cy + 38 * scale} ${cx - r},${cy + 10 * scale}`,
-    "Z",
-  ].join(" ");
-}
-
-/** Mythic seal — double-scalloped ring. */
-export function getSealPath(scale = 1): string {
-  return scallopedPath(60, 60, 52 * scale, 18, 0.14);
-}
-
-/** Map legacy + rarity to premium silhouette. */
-export function resolvePremiumShape(rarity: string, shape: BadgeShape): BadgeShape {
-  if (rarity === "mythic") return "seal";
-  if (rarity === "legendary") return "crest";
-  if (rarity === "epic" || rarity === "rare") return "medallion";
-  if (shape === "shield") return "crest";
-  if (shape === "star") return "seal";
-  if (shape === "circle" || shape === "hexagon" || shape === "diamond") return "medallion";
-  return "medallion";
-}
+const CX = 60;
+const CY = 60;
+const R = 52;
 
 export function getShapePath(shape: BadgeShape, scale = 1): string {
-  const cx = 60;
-  const cy = 60;
-  const r = 52 * scale;
+  const cx = CX;
+  const cy = CY;
+  const r = R * scale;
 
   switch (shape) {
-    case "medallion":
-      return getMedallionPath(scale);
-    case "crest":
-      return getCrestPath(scale);
-    case "seal":
-      return getSealPath(scale);
     case "circle":
-      return `M ${cx},${cy} m -${r},0 a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0`;
+      return `M ${cx - r},${cy} A ${r},${r} 0 1,0 ${cx + r},${cy} A ${r},${r} 0 1,0 ${cx - r},${cy} Z`;
+
     case "hexagon": {
-      const pts = Array.from({ length: 6 }, (_, i) => {
-        const a = ((60 * i - 30) * Math.PI) / 180;
-        return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
-      });
+      const pts: string[] = [];
+      for (let i = 0; i < 6; i += 1) {
+        const angle = ((Math.PI * 2) / 6) * i - Math.PI / 6;
+        pts.push(`${(cx + r * Math.cos(angle)).toFixed(3)},${(cy + r * Math.sin(angle)).toFixed(3)}`);
+      }
       return `M ${pts.join(" L ")} Z`;
     }
-    case "shield": {
-      const sr = r;
-      return `M ${cx},${8 * scale} L ${cx + sr},${30 * scale} L ${cx + sr},${70 * scale} Q ${cx + sr},${112 * scale} ${cx},${115 * scale} Q ${cx - sr},${112 * scale} ${cx - sr},${70 * scale} L ${cx - sr},${30 * scale} Z`;
-    }
+
+    case "shield":
+      return `M ${cx},${8 * scale + cy - CY * scale}
+        C ${cx + 48 * scale},${8 * scale + cy - CY * scale}
+          ${cx + 48 * scale},${cy - 14 * scale}
+          ${cx + 48 * scale},${cy + 8 * scale}
+        C ${cx + 48 * scale},${cy + 32 * scale}
+          ${cx + 26 * scale},${cy + 55 * scale}
+          ${cx},${cy + 55 * scale}
+        C ${cx - 26 * scale},${cy + 55 * scale}
+          ${cx - 48 * scale},${cy + 32 * scale}
+          ${cx - 48 * scale},${cy + 8 * scale}
+        C ${cx - 48 * scale},${cy - 14 * scale}
+          ${cx - 48 * scale},${8 * scale + cy - CY * scale}
+          ${cx},${8 * scale + cy - CY * scale} Z`;
+
     case "star": {
-      const starPts: string[] = [];
+      const outerR = 52 * scale;
+      const innerR = 22 * scale;
+      const pts: string[] = [];
       for (let i = 0; i < 16; i += 1) {
-        const angle = ((i * 22.5 - 90) * Math.PI) / 180;
-        const radius = i % 2 === 0 ? r : r * 0.45;
-        starPts.push(`${cx + radius * Math.cos(angle)},${cy + radius * Math.sin(angle)}`);
+        const angle = (Math.PI / 8) * i - Math.PI / 2;
+        const rr = i % 2 === 0 ? outerR : innerR;
+        pts.push(`${(cx + rr * Math.cos(angle)).toFixed(3)},${(cy + rr * Math.sin(angle)).toFixed(3)}`);
       }
-      return `M ${starPts.join(" L ")} Z`;
+      return `M ${pts.join(" L ")} Z`;
     }
+
     case "diamond": {
-      const dr = r;
+      const dr = 55 * scale;
       return `M ${cx},${cy - dr} L ${cx + dr},${cy} L ${cx},${cy + dr} L ${cx - dr},${cy} Z`;
     }
+
     default:
-      return getMedallionPath(scale);
+      return getShapePath("hexagon", scale);
   }
 }
 
@@ -118,4 +76,25 @@ export function getRarityStarCount(rarity: string): number {
     default:
       return 1;
   }
+}
+
+/** @deprecated Use badge `shape` from badge-visual directly — no premium remapping. */
+export function resolvePremiumShape(rarity: string, shape: BadgeShape): BadgeShape {
+  void rarity;
+  return shape;
+}
+
+/** @deprecated Legacy medallion paths — kept for backward compat imports. */
+export type LegacyBadgeShape = BadgeShape | "medallion" | "crest" | "seal";
+
+export function getMedallionPath(scale = 1): string {
+  return getShapePath("circle", scale * 0.96);
+}
+
+export function getCrestPath(scale = 1): string {
+  return getShapePath("shield", scale);
+}
+
+export function getSealPath(scale = 1): string {
+  return getShapePath("star", scale);
 }

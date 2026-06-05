@@ -92,7 +92,7 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
         </div>
       </div>
 
-      <ul className="grid grid-cols-2 gap-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+      <ul className="grid grid-cols-3 gap-2 gap-y-4 sm:grid-cols-4 sm:gap-3 md:grid-cols-5 lg:grid-cols-6">
         {sorted.map((b) => {
           const def = getBadgeDef(b.key);
           const isSecret = Boolean(b.hidden && !b.earned);
@@ -105,7 +105,7 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
           return (
             <li
               key={b.key}
-              className={`growth-trophy-vault-cell flex min-w-0 flex-col items-center gap-2 rounded-2xl border p-3 transition ${
+              className={`growth-trophy-vault-cell flex min-w-0 flex-col items-center gap-2 rounded-xl border p-2 transition sm:rounded-2xl sm:p-3 ${
                 b.earned
                   ? "border-gold/25 bg-gradient-to-b from-gold/[0.08] to-transparent shadow-[0_12px_40px_-16px_rgba(228,184,77,0.35)]"
                   : "border-white/8 bg-black/20 opacity-85"
@@ -129,7 +129,7 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
                   <BadgeIcon
                     badgeKey={b.key}
                     earned={b.earned}
-                    size={b.earned ? (size === "sm" ? "md" : "xl") : size}
+                    size={b.earned ? "md" : "sm"}
                     showGlow={b.earned}
                     lockedLabel={t("locked")}
                   />

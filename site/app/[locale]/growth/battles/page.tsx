@@ -5,9 +5,7 @@ import { IconBattle } from "@/components/growth/icons/GrowthIcons";
 import { getPartnerBattles, hasActiveBattle } from "@/lib/growth/battles";
 import { BattleCard } from "@/components/growth/battles/BattleCard";
 import { BattleChallengeForm } from "@/components/growth/battles/BattleChallengeForm";
-import { getPartnerRival } from "@/lib/growth/rival";
-import { prisma } from "@/lib/prisma";
-import { UserRole } from "@prisma/client";
+import { getBattleChallengeCandidates } from "@/lib/growth/battle-candidates";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -16,23 +14,11 @@ export default async function GrowthBattlesPage({ params }: Props) {
   const { userId } = await requirePartnerDashboard(locale);
   const t = await getTranslations("Growth.battles");
 
-  const [battles, canChallenge, rival] = await Promise.all([
+  const [battles, canChallenge, { groups }] = await Promise.all([
     getPartnerBattles(userId),
     hasActiveBattle(userId).then((v) => !v),
-    getPartnerRival(userId),
+    getBattleChallengeCandidates(userId),
   ]);
-
-  const rivals = rival
-    ? [{ id: rival.rival.userId, name: rival.rival.name }]
-    : await prisma.user
-        .findMany({
-          where: { role: UserRole.PARTNER, isActive: true, id: { not: userId } },
-          take: 12,
-          select: { id: true, name: true, email: true },
-        })
-        .then((rows) =>
-          rows.map((r) => ({ id: r.id, name: r.name?.trim() || r.email || r.id })),
-        );
 
   return (
     <div className="space-y-6">
@@ -42,7 +28,7 @@ export default async function GrowthBattlesPage({ params }: Props) {
         title={t("title")}
         subtitle={t("subtitle")}
       />
-      {canChallenge ? <BattleChallengeForm rivals={rivals} /> : null}
+      {canChallenge ? <BattleChallengeForm groups={groups} locale={locale} /> : null}
       <div className="space-y-4">
         {battles.length === 0 ? (
           <p className="text-sm text-white/55">{t("empty")}</p>

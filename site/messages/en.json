@@ -1217,7 +1217,12 @@
       "eyebrowEvent": "ASCEND event",
       "eyebrowFeature": "New feature",
       "dismiss": "Later",
-      "endsIn": "Ends in {days} days"
+      "endsIn": "Ends in {days} days",
+      "carouselAria": "Promo banner carousel — swipe to browse",
+      "prevSlide": "Previous promo",
+      "nextSlide": "Next promo",
+      "slideDot": "Promo {n}",
+      "slideCounter": "{current} / {total}"
     },
     "formErrors": {
       "rate_limited": "Too many requests — wait a moment and try again",
@@ -1334,7 +1339,16 @@
       "ends": "Ends {date}",
       "won": "You won",
       "lost": "You lost — prepare for the next challenge",
-      "empty": "No challenges yet — send one"
+      "empty": "No challenges yet — send one",
+      "pickRivalHint": "Choose from your weekly rival, region, network, or nearby leaderboard — not the full partner directory.",
+      "groupRival": "Weekly rival",
+      "groupTerritory": "Your region",
+      "groupNetwork": "Your network",
+      "groupLeaderboard": "Leaderboard nearby",
+      "noCandidates": "No challenge targets yet. Set your governorate in settings, grow your network, or close deals to appear on the weekly board.",
+      "selectPartner": "Tap a partner card to select them.",
+      "selectedPartner": "Partner selected — set your target and send the challenge.",
+      "territoryUnknown": "Region not set"
     },
     "mentors": {
       "title": "Mentor market",
