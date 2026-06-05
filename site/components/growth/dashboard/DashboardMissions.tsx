@@ -51,9 +51,9 @@ export function DashboardMissions({ missions }: Props) {
             );
             return (
               <GlassCard key={mission.key} className={mission.completed ? "border-emerald-500/35" : ""}>
-                <div className="flex items-start justify-between gap-2">
-                  <span className="text-sm font-bold">{mission.title}</span>
-                  <span className="shrink-0 rounded-md bg-gold/15 px-2 py-0.5 text-xs font-bold text-gold">
+                <div className="flex min-w-0 items-start justify-between gap-2">
+                  <span className="min-w-0 text-sm font-bold">{mission.title}</span>
+                  <span className="max-w-[45%] shrink-0 truncate rounded-md bg-gold/15 px-2 py-0.5 text-xs font-bold text-gold">
                     +{mission.xpReward} {powerLabel}
                   </span>
                 </div>

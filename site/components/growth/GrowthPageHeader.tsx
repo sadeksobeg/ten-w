@@ -17,7 +17,7 @@ export function GrowthPageHeader({
 }: Props) {
   if (variant === "feature") {
     return (
-      <div className="relative mb-8 overflow-hidden rounded-3xl border border-gold/20 bg-gradient-to-br from-gold/[0.12] via-[#0c101c] to-violet-950/30 p-6 sm:p-8">
+      <div className="relative mb-6 overflow-hidden rounded-3xl border border-gold/20 bg-gradient-to-br from-gold/[0.12] via-[#0c101c] to-violet-950/30 p-4 sm:mb-8 sm:p-6 lg:p-8">
         <div
           className="pointer-events-none absolute -end-16 -top-16 size-48 rounded-full bg-gold/15 blur-3xl"
           aria-hidden

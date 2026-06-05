@@ -110,8 +110,8 @@ function ThemeArt({ theme }: { theme: AscendCampaignTheme }) {
 function BadgePreview({ badgeKey }: { badgeKey: string }) {
   return (
     <>
-      <div className="flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center sm:hidden">
-        <BadgeIcon badgeKey={badgeKey} earned size="sm" showGlow animate />
+      <div className="flex h-[4.5rem] w-[4.5rem] shrink-0 items-center justify-center sm:hidden">
+        <BadgeIcon badgeKey={badgeKey} earned size="md" showGlow animate />
       </div>
       <div className="hidden h-[4.5rem] w-[4.5rem] shrink-0 items-center justify-center sm:flex">
         <BadgeIcon badgeKey={badgeKey} earned size="md" showGlow animate />
@@ -141,7 +141,7 @@ export function AscendRevealBanner({
   return (
     <article
       className={`ascend-reveal relative h-full overflow-hidden border ${themeClass} ${
-        isCarousel ? "ascend-reveal--carousel-slide rounded-2xl sm:rounded-3xl" : "rounded-3xl"
+        isCarousel ? "ascend-reveal--carousel-slide sm:rounded-3xl" : "rounded-3xl"
       }`}
       aria-label={title}
     >
@@ -150,14 +150,25 @@ export function AscendRevealBanner({
       <div className="ascend-reveal-sheen" aria-hidden />
       <div className="ascend-reveal-vignette" aria-hidden />
 
+      {onDismiss ? (
+        <button
+          type="button"
+          onClick={onDismiss}
+          className="absolute start-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/40 text-lg leading-none text-white/55 transition hover:text-white sm:end-3 sm:start-auto"
+          aria-label={t("dismiss")}
+        >
+          <span aria-hidden>×</span>
+        </button>
+      ) : null}
+
       <div
         className={`relative flex h-full min-h-0 ${
           isCarousel
-            ? "flex-row items-center gap-3 p-4 pe-10 sm:gap-5 sm:p-6 sm:pe-12"
+            ? "flex-col items-stretch gap-3 p-4 pt-12 sm:flex-row sm:items-center sm:gap-5 sm:p-6 sm:pt-6 sm:pe-12"
             : "flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8"
         }`}
       >
-        <div className="ascend-reveal-art-wrap flex shrink-0 items-center justify-center">
+        <div className="ascend-reveal-art-wrap mx-auto flex shrink-0 items-center justify-center sm:mx-0">
           {campaign.badgePreviewKey ? (
             <BadgePreview badgeKey={campaign.badgePreviewKey} />
           ) : (
@@ -165,7 +176,7 @@ export function AscendRevealBanner({
           )}
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col justify-center">
+        <div className="flex min-w-0 flex-1 flex-col justify-center text-center sm:text-start">
           <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-gold/90 sm:text-[10px] sm:tracking-[0.25em]">
             {campaign.type === "event_launch" ? t("eyebrowEvent") : t("eyebrowFeature")}
           </p>
@@ -187,13 +198,15 @@ export function AscendRevealBanner({
             </p>
           ) : null}
           <div
-            className={`mt-3 flex flex-wrap gap-2 sm:mt-4 sm:gap-3 ${
-              isCarousel ? "sm:flex-row" : ""
+            className={`mt-3 gap-2 sm:mt-4 sm:gap-3 ${
+              isCarousel
+                ? "grid grid-cols-2 sm:flex sm:flex-row sm:flex-wrap"
+                : "flex flex-wrap gap-2"
             }`}
           >
             <Link
               href={campaign.ctaHref}
-              className="inline-flex min-h-9 flex-1 items-center justify-center rounded-full bg-gradient-to-r from-gold/40 via-gold to-gold-bright px-4 py-2 text-xs font-extrabold text-bg shadow-[0_0_24px_-8px_rgba(228,184,77,0.75)] transition hover:brightness-110 sm:min-h-11 sm:flex-none sm:px-7 sm:text-sm"
+              className="inline-flex min-h-[var(--growth-touch-min)] items-center justify-center rounded-full bg-gradient-to-r from-gold/40 via-gold to-gold-bright px-4 py-2 text-xs font-extrabold text-bg shadow-[0_0_24px_-8px_rgba(228,184,77,0.75)] transition hover:brightness-110 sm:min-h-11 sm:flex-none sm:px-7 sm:text-sm"
             >
               {cta}
             </Link>
@@ -201,24 +214,13 @@ export function AscendRevealBanner({
               <button
                 type="button"
                 onClick={onDismiss}
-                className="inline-flex min-h-9 items-center justify-center rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white/65 transition hover:border-white/30 hover:text-white sm:min-h-11 sm:px-5 sm:text-sm"
+                className="inline-flex min-h-[var(--growth-touch-min)] items-center justify-center rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white/65 transition hover:border-white/30 hover:text-white sm:min-h-11 sm:px-5 sm:text-sm"
               >
                 {t("dismiss")}
               </button>
             ) : null}
           </div>
         </div>
-
-        {onDismiss ? (
-          <button
-            type="button"
-            onClick={onDismiss}
-            className="absolute end-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/40 text-lg leading-none text-white/55 transition hover:text-white sm:end-3 sm:top-3"
-            aria-label={t("dismiss")}
-          >
-            <span aria-hidden>×</span>
-          </button>
-        ) : null}
       </div>
     </article>
   );

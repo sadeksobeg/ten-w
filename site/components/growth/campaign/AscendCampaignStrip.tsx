@@ -27,6 +27,15 @@ export function AscendCampaignStrip({ campaigns, locale }: Props) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [ready, setReady] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const dismissed = new Set(readDismissedCampaignIds());
@@ -38,29 +47,7 @@ export function AscendCampaignStrip({ campaigns, locale }: Props) {
 
   const count = slides.length;
   const active = slides[index];
-
-  const goTo = useCallback(
-    (next: number, dir: number) => {
-      if (count <= 1) return;
-      setDirection(dir);
-      setIndex((next + count) % count);
-      pauseUntilRef.current = Date.now() + AUTO_MS;
-    },
-    [count],
-  );
-
-  const goNext = useCallback(() => goTo(index + 1, 1), [goTo, index]);
-  const goPrev = useCallback(() => goTo(index - 1, -1), [goTo, index]);
-
-  useEffect(() => {
-    if (!ready || count <= 1 || reduceMotion) return;
-    const id = window.setInterval(() => {
-      if (Date.now() < pauseUntilRef.current) return;
-      setDirection(1);
-      setIndex((i) => (i + 1) % count);
-    }, AUTO_MS);
-    return () => window.clearInterval(id);
-  }, [ready, count, reduceMotion]);
+  const useTrack = isMobile || Boolean(reduceMotion);
 
   const scrollToIndex = useCallback((i: number) => {
     const track = trackRef.current;
@@ -69,11 +56,44 @@ export function AscendCampaignStrip({ campaigns, locale }: Props) {
     slide?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
   }, []);
 
+  const goTo = useCallback(
+    (next: number, dir: number) => {
+      if (count <= 1) return;
+      const wrapped = (next + count) % count;
+      setDirection(dir);
+      setIndex(wrapped);
+      if (useTrack) scrollToIndex(wrapped);
+      pauseUntilRef.current = Date.now() + AUTO_MS;
+    },
+    [count, useTrack, scrollToIndex],
+  );
+
+  const goNext = useCallback(() => goTo(index + 1, 1), [goTo, index]);
+  const goPrev = useCallback(() => goTo(index - 1, -1), [goTo, index]);
+
   useEffect(() => {
-    if (reduceMotion) {
-      scrollToIndex(index);
-    }
-  }, [index, reduceMotion, scrollToIndex]);
+    if (!ready || count <= 1 || useTrack) return;
+    const id = window.setInterval(() => {
+      if (Date.now() < pauseUntilRef.current) return;
+      setDirection(1);
+      setIndex((i) => (i + 1) % count);
+    }, AUTO_MS);
+    return () => window.clearInterval(id);
+  }, [ready, count, useTrack]);
+
+  useEffect(() => {
+    if (!ready || count <= 1 || !useTrack) return;
+    const id = window.setInterval(() => {
+      if (Date.now() < pauseUntilRef.current) return;
+      setDirection(1);
+      setIndex((i) => {
+        const next = (i + 1) % count;
+        scrollToIndex(next);
+        return next;
+      });
+    }, AUTO_MS);
+    return () => window.clearInterval(id);
+  }, [ready, count, useTrack, scrollToIndex]);
 
   const handleDismiss = useCallback(
     (id: string) => {
@@ -123,12 +143,12 @@ export function AscendCampaignStrip({ campaigns, locale }: Props) {
 
   return (
     <section
-      className="ascend-campaign-carousel"
+      className="ascend-campaign-carousel growth-bleed-x"
       aria-roledescription="carousel"
       aria-label={t("carouselAria")}
     >
       <div className="ascend-campaign-viewport">
-        {reduceMotion ? (
+        {useTrack ? (
           <div
             ref={trackRef}
             className="ascend-campaign-track"
@@ -176,11 +196,11 @@ export function AscendCampaignStrip({ campaigns, locale }: Props) {
           </div>
         )}
 
-        {count > 1 ? (
+        {count > 1 && !useTrack ? (
           <>
             <button
               type="button"
-              className="ascend-campaign-nav ascend-campaign-nav--prev hidden sm:flex"
+              className="ascend-campaign-nav ascend-campaign-nav--prev"
               onClick={goPrev}
               aria-label={t("prevSlide")}
             >
@@ -188,7 +208,7 @@ export function AscendCampaignStrip({ campaigns, locale }: Props) {
             </button>
             <button
               type="button"
-              className="ascend-campaign-nav ascend-campaign-nav--next hidden sm:flex"
+              className="ascend-campaign-nav ascend-campaign-nav--next"
               onClick={goNext}
               aria-label={t("nextSlide")}
             >
@@ -213,7 +233,7 @@ export function AscendCampaignStrip({ campaigns, locale }: Props) {
               />
             ))}
           </div>
-          <p className="ascend-campaign-counter text-[10px] font-semibold tabular-nums text-white/40">
+          <p dir="ltr" className="ascend-campaign-counter text-[10px] font-semibold tabular-nums text-white/40">
             {t("slideCounter", { current: index + 1, total: count })}
           </p>
         </div>

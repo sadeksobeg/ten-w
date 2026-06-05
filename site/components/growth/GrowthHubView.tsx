@@ -48,7 +48,7 @@ export async function GrowthHubView({
   const campaigns = await getActiveAscendCampaigns(locale, 5);
 
   return (
-    <div className="space-y-8">
+    <div className="growth-section-gap">
       <AscendCampaignStrip campaigns={campaigns} locale={locale} />
 
       <DashboardHero
@@ -92,8 +92,8 @@ export async function GrowthHubView({
       </div>
 
       <GrowthHubDeferred fallback={<SkeletonStatGrid count={4} />}>
-      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="space-y-6">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="space-y-4 sm:space-y-6">
           <PartnerOnboardingChecklist locale={locale} data={data} userId={userId} />
           <DashboardMissions missions={data.missions} />
           {data.insights.length > 0 ? <PartnerInsightCarousel slides={data.insights} /> : null}
@@ -102,7 +102,7 @@ export async function GrowthHubView({
           </GrowthCollapsibleSection>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {data.rivalData ? <RivalCard rivalData={data.rivalData} /> : null}
           <LevelPerksCard current={data.currentLevelDetail} next={data.nextLevelDetail} />
           <GrowthMotivationBar

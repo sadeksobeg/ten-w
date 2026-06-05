@@ -49,7 +49,7 @@ export function DashboardHero({
     : 100;
   const powerLabel = getXpBrandLabel(locale);
   return (
-    <GlassCard variant="highlight" className="relative overflow-hidden p-6 sm:p-8">
+    <GlassCard variant="highlight" className="relative overflow-hidden p-4 sm:p-6 lg:p-8">
       <div
         className="pointer-events-none absolute inset-0 opacity-40 motion-safe:animate-[pulse_8s_ease-in-out_infinite] motion-reduce:opacity-30 motion-reduce:animate-none"
         aria-hidden
@@ -57,7 +57,7 @@ export function DashboardHero({
           background: `radial-gradient(ellipse 80% 60% at 20% 0%, ${lv.ringColor}33, transparent 55%), radial-gradient(ellipse 70% 50% at 90% 100%, ${lv.ringColor}22, transparent 50%)`,
         }}
       />
-      <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
+      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
         <div className="relative mx-auto shrink-0 sm:mx-0">
           <AuraRing percent={pct} levelCode={levelCode} levelName={levelName}>
             <GrowthAvatar name={name} email={email} avatarUrl={avatarUrl} size="lg" />

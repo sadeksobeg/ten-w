@@ -62,7 +62,7 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
     visible.filter((b) => getBadgeDef(b.key).rarity === r).length;
 
   return (
-    <div className="growth-trophy-vault rounded-2xl border border-white/10 bg-[radial-gradient(ellipse_at_50%_0%,rgba(228,184,77,0.08),transparent_55%)] p-4 sm:p-6">
+    <div className="growth-trophy-vault rounded-2xl border border-white/10 bg-[radial-gradient(ellipse_at_50%_0%,rgba(228,184,77,0.08),transparent_55%)] p-3 sm:p-6">
       <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs font-semibold text-[var(--growth-text-sub)]">
           {t("badge_count", { earned: earnedCount, total: visible.length })}
@@ -105,10 +105,10 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
           return (
             <li
               key={b.key}
-              className={`growth-trophy-vault-cell flex min-w-0 flex-col items-center gap-2 rounded-xl border p-2 transition sm:rounded-2xl sm:p-3 ${
+              className={`growth-trophy-vault-cell flex min-w-0 flex-col items-center gap-2 rounded-xl border p-2.5 transition sm:rounded-2xl sm:p-3 ${
                 b.earned
                   ? "border-gold/25 bg-gradient-to-b from-gold/[0.08] to-transparent shadow-[0_12px_40px_-16px_rgba(228,184,77,0.35)]"
-                  : "border-white/8 bg-black/20 opacity-85"
+                  : "border-white/8 bg-black/20 opacity-90"
               }`}
             >
               <BadgeTooltip
@@ -129,7 +129,7 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
                   <BadgeIcon
                     badgeKey={b.key}
                     earned={b.earned}
-                    size={b.earned ? "md" : "sm"}
+                    size="md"
                     showGlow={b.earned}
                     lockedLabel={t("locked")}
                   />

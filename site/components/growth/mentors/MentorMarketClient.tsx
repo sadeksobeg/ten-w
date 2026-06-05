@@ -40,7 +40,7 @@ export function MentorMarketClient({ offers, myOffer, canOffer, sessions, myUser
   const [pending, start] = useTransition();
 
   return (
-    <div className="space-y-8">
+    <div className="growth-section-gap">
       {canOffer && !myOffer ? (
         <GlassCard className="p-5">
           <h3 className="font-bold text-gold">{t("offer")}</h3>

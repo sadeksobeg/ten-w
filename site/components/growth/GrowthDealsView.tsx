@@ -20,7 +20,7 @@ export async function GrowthDealsView({ locale, data }: Props) {
   };
 
   return (
-    <div className="space-y-8 growth-page-enter">
+    <div className="growth-section-gap growth-page-enter">
       <GlassCard variant="highlight" className="border border-white/12 p-6">
         <AddLeadDealForm
           products={data.products.map((p) => ({

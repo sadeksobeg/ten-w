@@ -39,7 +39,7 @@ export function HubSupportCard() {
 
   return (
     <div className="growth-card-hover rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-bold uppercase tracking-wide text-gold">{t("title")}</p>
           {preview ? (
@@ -58,7 +58,7 @@ export function HubSupportCard() {
         <button
           type="button"
           onClick={openChat}
-          className="shrink-0 rounded-full bg-gradient-to-br from-gold/50 to-gold/20 px-4 py-2 text-xs font-bold text-white shadow-[0_0_16px_rgba(234,179,8,0.2)] hover:scale-[1.02]"
+          className="w-full shrink-0 rounded-full bg-gradient-to-br from-gold/50 to-gold/20 px-4 py-2.5 text-xs font-bold text-white shadow-[0_0_8px_rgba(234,179,8,0.12)] hover:scale-[1.02] sm:w-auto sm:py-2"
         >
           {t("openChat")}
         </button>

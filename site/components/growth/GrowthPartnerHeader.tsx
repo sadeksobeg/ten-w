@@ -31,10 +31,10 @@ export function GrowthPartnerHeader({
   const t = useTranslations("Growth.nav");
   const isCreator = earnedBadgeKeys.includes("content_creator");
   const linkClass =
-    "whitespace-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[11px] font-semibold text-white/80 hover:border-gold/30 hover:text-white sm:text-xs";
+    "inline-flex min-h-[var(--growth-touch-min)] items-center whitespace-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[11px] font-semibold text-white/80 hover:border-gold/30 hover:text-white sm:text-xs";
 
   return (
-    <header className="mb-6 flex flex-col gap-3 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
+    <header className="mb-4 flex flex-col gap-3 border-b border-white/10 pb-3 sm:mb-6 sm:pb-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex min-w-0 items-center gap-3">
         <GrowthAvatar name={name} email={email} avatarUrl={avatarUrl} size="md" />
         <div className="min-w-0">

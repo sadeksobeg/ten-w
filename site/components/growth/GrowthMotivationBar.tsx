@@ -42,7 +42,7 @@ export function GrowthMotivationBar({ primary, secondary }: Props) {
       initial={reduce ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.08 }}
-      className="relative overflow-hidden rounded-2xl border border-gold/25 bg-gradient-to-r from-gold/[0.08] via-purple-500/[0.06] to-gold/[0.06] px-5 py-4 shadow-[0_0_40px_-20px_rgba(201,160,97,0.35)]"
+      className="relative overflow-hidden rounded-2xl border border-gold/25 bg-gradient-to-r from-gold/[0.08] via-purple-500/[0.06] to-gold/[0.06] px-4 py-3 shadow-[0_0_40px_-20px_rgba(201,160,97,0.35)] sm:px-5 sm:py-4"
     >
       <div
         className="pointer-events-none absolute inset-y-0 start-0 w-1 bg-gradient-to-b from-gold via-gold-bright to-purple-400"
@@ -51,7 +51,7 @@ export function GrowthMotivationBar({ primary, secondary }: Props) {
       <div className="ps-3 text-sm leading-relaxed text-white/90">
         <div className="font-semibold text-gold/95">{line(primary)}</div>
         {secondary ? (
-          <div className="mt-1 text-xs text-white/65">{line(secondary)}</div>
+          <div className="mt-1 text-xs text-white/65 sm:text-sm">{line(secondary)}</div>
         ) : null}
       </div>
     </motion.div>

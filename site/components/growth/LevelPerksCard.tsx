@@ -11,7 +11,7 @@ export async function LevelPerksCard({ current, next }: Props) {
   const t = await getTranslations("Growth.levelPerks");
 
   return (
-    <GlassCard className="p-6">
+    <GlassCard className="!p-4 sm:!p-6">
       <h2 className="font-[family-name:var(--font-cairo)] text-lg font-bold">{t("title")}</h2>
       <p className="mt-1 text-sm text-white/60">{t("currentLevel", { name: current.name })}</p>
       {current.salaryUsd != null ? (
@@ -34,7 +34,7 @@ export async function LevelPerksCard({ current, next }: Props) {
         <p className="mt-3 text-xs text-white/45">{t("noPerks")}</p>
       )}
       {next ? (
-        <div className="mt-6 border-t border-white/10 pt-4">
+        <div className="mt-4 border-t border-white/10 pt-4 sm:mt-6 sm:pt-4">
           <p className="text-xs font-bold uppercase tracking-wide text-white/50">{t("nextLevel")}</p>
           <p className="mt-1 text-sm font-semibold text-white">{next.name}</p>
           {next.perks.length > 0 ? (
