@@ -215,27 +215,36 @@ export function BadgeMedallion3D({ badgeKey, px, showGlow, animate, earned }: Me
         <path d={innerPath} fill="none" stroke={def.primaryColor} strokeWidth="1" opacity="0.4" />
       </g>
 
-      {/* icon — embossed gold */}
-      <g transform="translate(60,50)">
-        <svg x="-14" y="-14" width="28" height="28" viewBox="0 0 24 24" overflow="visible">
-          <path
-            d={def.innerPath}
-            fill={def.primaryColor}
-            fillOpacity="0.15"
-            stroke={metal.highlight}
-            strokeWidth={def.innerStrokeWidth + 0.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d={def.innerPath}
-            fill="none"
-            stroke={def.innerStroke}
-            strokeWidth={def.innerStrokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+      {/* icon — embossed relic (larger, center-weighted) */}
+      <g transform="translate(60,52) scale(1.55)">
+        <path
+          d={def.innerPath}
+          fill={def.primaryColor}
+          fillOpacity="0.22"
+          stroke={metal.shadow}
+          strokeWidth={def.innerStrokeWidth + 1.2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          transform="translate(0,1)"
+          opacity="0.35"
+        />
+        <path
+          d={def.innerPath}
+          fill={def.primaryColor}
+          fillOpacity="0.12"
+          stroke={metal.highlight}
+          strokeWidth={def.innerStrokeWidth + 0.6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d={def.innerPath}
+          fill="none"
+          stroke={def.innerStroke}
+          strokeWidth={def.innerStrokeWidth + 0.25}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </g>
 
       {/* bottom ribbon */}

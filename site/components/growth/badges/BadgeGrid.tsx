@@ -62,7 +62,7 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
     visible.filter((b) => getBadgeDef(b.key).rarity === r).length;
 
   return (
-    <>
+    <div className="growth-trophy-vault rounded-2xl border border-white/10 bg-[radial-gradient(ellipse_at_50%_0%,rgba(228,184,77,0.08),transparent_55%)] p-4 sm:p-6">
       <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs font-semibold text-[var(--growth-text-sub)]">
           {t("badge_count", { earned: earnedCount, total: visible.length })}
@@ -92,7 +92,7 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
         </div>
       </div>
 
-      <ul className="grid grid-cols-3 gap-3 gap-y-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+      <ul className="grid grid-cols-2 gap-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {sorted.map((b) => {
           const def = getBadgeDef(b.key);
           const isSecret = Boolean(b.hidden && !b.earned);
@@ -103,7 +103,14 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
               : 0;
 
           return (
-            <li key={b.key} className="flex min-w-0 flex-col items-center gap-1.5">
+            <li
+              key={b.key}
+              className={`growth-trophy-vault-cell flex min-w-0 flex-col items-center gap-2 rounded-2xl border p-3 transition ${
+                b.earned
+                  ? "border-gold/25 bg-gradient-to-b from-gold/[0.08] to-transparent shadow-[0_12px_40px_-16px_rgba(228,184,77,0.35)]"
+                  : "border-white/8 bg-black/20 opacity-85"
+              }`}
+            >
               <BadgeTooltip
                 badgeKey={b.key}
                 name={displayName}
@@ -122,7 +129,8 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
                   <BadgeIcon
                     badgeKey={b.key}
                     earned={b.earned}
-                    size={size}
+                    size={b.earned ? (size === "sm" ? "md" : "xl") : size}
+                    showGlow={b.earned}
                     lockedLabel={t("locked")}
                   />
                 </button>
@@ -166,6 +174,6 @@ export function BadgeGrid({ badges, locale = "ar", size = "md", showLocked = tru
           onClose={() => setDrawer(null)}
         />
       ) : null}
-    </>
+    </div>
   );
 }

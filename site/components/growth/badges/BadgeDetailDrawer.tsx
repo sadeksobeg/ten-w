@@ -48,10 +48,11 @@ export function BadgeDetailDrawer({
       <div
         role="dialog"
         aria-modal
-        className="relative w-full max-w-md rounded-2xl border border-white/15 bg-[#12121a] p-6 shadow-2xl"
+        className="relative w-full max-w-md overflow-hidden rounded-2xl border border-gold/25 bg-[radial-gradient(ellipse_at_50%_0%,rgba(228,184,77,0.12),#12121a_70%)] p-6 shadow-2xl"
       >
+        <div className="badge-earn-reveal-rays opacity-40" aria-hidden />
         <div className="flex flex-col items-center text-center">
-          <BadgeIcon badgeKey={badgeKey} earned={earned} size="xl" animate={earned} showGlow lockedLabel={t("locked")} />
+          <BadgeIcon badgeKey={badgeKey} earned={earned} size="hero" animate={earned} showGlow lockedLabel={t("locked")} />
           <h3 className="mt-4 text-lg font-bold text-white">{name}</h3>
           {description ? <p className="mt-2 text-sm text-white/65">{description}</p> : null}
           {howTo ? (

@@ -143,7 +143,7 @@ export function PartnerCard({
           {showcasedBadges.length > 0 ? (
             <div className="mt-3 flex flex-wrap justify-center gap-1.5">
               {showcasedBadges.slice(0, 3).map((key) => (
-                <BadgeIcon key={key} badgeKey={key} earned size="xs" />
+                <BadgeIcon key={key} badgeKey={key} earned size="sm" showGlow />
               ))}
             </div>
           ) : null}

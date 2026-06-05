@@ -1,0 +1,123 @@
+[
+  {
+    "id": "feature-vault-2026",
+    "type": "feature_drop",
+    "theme": "nebula_vault",
+    "priority": 80,
+    "startsAt": "2026-01-01T00:00:00.000Z",
+    "endsAt": "2027-12-31T23:59:59.000Z",
+    "title": {
+      "ar": "القبو السري — محتوى حصري للشركاء",
+      "en": "The Secret Vault — partner-only unlocks",
+      "fr": "Le coffre secret — contenus partenaires"
+    },
+    "body": {
+      "ar": "افتح طبقات معرفة وشارات نادرة. كل مستوى يقربك من مكافأة أعمق.",
+      "en": "Unlock knowledge tiers and rare badges. Each level brings a deeper reward.",
+      "fr": "Débloquez des paliers et des badges rares."
+    },
+    "ctaLabel": {
+      "ar": "استكشف القبو",
+      "en": "Explore the Vault",
+      "fr": "Explorer le coffre"
+    },
+    "ctaHref": "/growth/vault",
+    "badgePreviewKey": "first_deal"
+  },
+  {
+    "id": "feature-battles-2026",
+    "type": "feature_drop",
+    "theme": "gold_command",
+    "priority": 70,
+    "startsAt": "2026-01-01T00:00:00.000Z",
+    "endsAt": "2027-12-31T23:59:59.000Z",
+    "title": {
+      "ar": "تحديات الشركاء — نافس بذكاء",
+      "en": "Partner Challenges — compete with focus",
+      "fr": "Défis partenaires — rivalisez avec méthode"
+    },
+    "body": {
+      "ar": "تحدِّ شريكاً على صفقات أو XP. الفائز يكتسب زخماً وشارة فخر.",
+      "en": "Challenge a peer on deals or XP. Winners gain momentum and prestige.",
+      "fr": "Défiez un pair sur les affaires ou l'XP."
+    },
+    "ctaLabel": {
+      "ar": "ابدأ التحدي",
+      "en": "Start a challenge",
+      "fr": "Lancer un défi"
+    },
+    "ctaHref": "/growth/battles"
+  },
+  {
+    "id": "feature-constellation-2026",
+    "type": "feature_drop",
+    "theme": "constellation",
+    "priority": 65,
+    "startsAt": "2026-01-01T00:00:00.000Z",
+    "endsAt": "2027-12-31T23:59:59.000Z",
+    "title": {
+      "ar": "كوكبتك — شبكة تضيء معك",
+      "en": "Your Constellation — a network that lights up",
+      "fr": "Votre constellation — un réseau qui s'illumine"
+    },
+    "body": {
+      "ar": "شاهد إحالاتك كنجوم مترابطة. كل عقدة تقوّي حضورك في ASCEND.",
+      "en": "See referrals as linked stars. Every node strengthens your ASCEND presence.",
+      "fr": "Voyez vos filleuls comme des étoiles liées."
+    },
+    "ctaLabel": {
+      "ar": "افتح الكوكبة",
+      "en": "Open constellation",
+      "fr": "Ouvrir la constellation"
+    },
+    "ctaHref": "/growth/constellation"
+  },
+  {
+    "id": "territory-atlas-2026",
+    "type": "feature_drop",
+    "theme": "territory_atlas",
+    "priority": 60,
+    "startsAt": "2026-01-01T00:00:00.000Z",
+    "endsAt": "2027-12-31T23:59:59.000Z",
+    "title": {
+      "ar": "أطلس الصعود — عرّف منطقتك",
+      "en": "Ascend Atlas — define your region",
+      "fr": "Atlas Ascend — définissez votre région"
+    },
+    "body": {
+      "ar": "اختر محافظتك، اربط شبكتك بخطوط ذهبية، وابنِ حضوراً إقليمياً مشرقاً.",
+      "en": "Pick your governorate, link your network in gold lines, and build regional presence.",
+      "fr": "Choisissez votre gouvernorat et renforcez votre présence régionale."
+    },
+    "ctaLabel": {
+      "ar": "افتح الأطلس",
+      "en": "Open Atlas",
+      "fr": "Ouvrir l'atlas"
+    },
+    "ctaHref": "/growth/map"
+  },
+  {
+    "id": "chronicle-2026",
+    "type": "feature_drop",
+    "theme": "chronicle",
+    "priority": 55,
+    "startsAt": "2026-01-01T00:00:00.000Z",
+    "endsAt": "2027-12-31T23:59:59.000Z",
+    "title": {
+      "ar": "سجلك الأسبوعي — قصة أسبوعك",
+      "en": "Weekly Chronicle — your week in story",
+      "fr": "Chronique hebdo — votre semaine en récit"
+    },
+    "body": {
+      "ar": "ملخص سينمائي لإنجازاتك: صفقات، XP، وشارات — جاهز للمشاركة.",
+      "en": "A cinematic recap: deals, XP, and badges — ready to share.",
+      "fr": "Récapitulatif cinématique de votre semaine."
+    },
+    "ctaLabel": {
+      "ar": "اقرأ سجلي",
+      "en": "Read my chronicle",
+      "fr": "Lire ma chronique"
+    },
+    "ctaHref": "/growth/chronicle"
+  }
+]

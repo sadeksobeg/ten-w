@@ -1438,3 +1438,210 @@
     animation: none !important;
   }
 }
+
+/* ── Ascend Reveal campaign banners ── */
+.ascend-reveal {
+  border-color: rgba(228, 184, 77, 0.22);
+  background: linear-gradient(145deg, rgba(18, 18, 28, 0.98), rgba(8, 8, 14, 0.99));
+  box-shadow:
+    0 24px 80px -32px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.ascend-reveal-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.9;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(228, 184, 77, 0.14), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 100%, rgba(99, 102, 241, 0.1), transparent 50%);
+}
+
+.ascend-reveal-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 75%);
+}
+
+.ascend-reveal-sheen {
+  position: absolute;
+  inset: -40% -20%;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 60%
+  );
+  animation: ascend-reveal-sheen 8s ease-in-out infinite;
+}
+
+.ascend-reveal-art-wrap {
+  position: relative;
+  min-height: 7rem;
+}
+
+.ascend-reveal-art {
+  width: 100%;
+  max-width: 10rem;
+  height: auto;
+  filter: drop-shadow(0 0 24px rgba(228, 184, 77, 0.25));
+}
+
+.ascend-reveal-pulse {
+  animation: ascend-reveal-pulse 2.4s ease-in-out infinite;
+}
+
+.ascend-reveal--gold {
+  border-color: rgba(228, 184, 77, 0.35);
+}
+.ascend-reveal--gold .ascend-reveal-bg {
+  background:
+    radial-gradient(ellipse 70% 55% at 15% 0%, rgba(228, 184, 77, 0.2), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 80%, rgba(251, 191, 36, 0.08), transparent 50%);
+}
+
+.ascend-reveal--vault {
+  border-color: rgba(167, 139, 250, 0.35);
+}
+.ascend-reveal--vault .ascend-reveal-bg {
+  background:
+    radial-gradient(ellipse 75% 60% at 10% 20%, rgba(139, 92, 246, 0.22), transparent 55%),
+    radial-gradient(ellipse 55% 45% at 95% 90%, rgba(99, 102, 241, 0.12), transparent 50%);
+}
+
+.ascend-reveal--constellation {
+  border-color: rgba(129, 140, 248, 0.3);
+}
+.ascend-reveal--constellation .ascend-reveal-bg {
+  background: radial-gradient(ellipse 80% 70% at 50% 30%, rgba(99, 102, 241, 0.18), transparent 60%);
+}
+
+.ascend-reveal--atlas {
+  border-color: rgba(228, 184, 77, 0.28);
+}
+.ascend-reveal--atlas .ascend-reveal-bg {
+  background:
+    radial-gradient(ellipse 65% 50% at 30% 20%, rgba(56, 189, 248, 0.1), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 80% 70%, rgba(228, 184, 77, 0.12), transparent 50%);
+}
+
+.ascend-reveal--chronicle {
+  border-color: rgba(125, 211, 252, 0.25);
+}
+.ascend-reveal--chronicle .ascend-reveal-bg {
+  background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(14, 165, 233, 0.12), transparent 55%);
+}
+
+.ascend-reveal--capsule,
+.ascend-reveal--event {
+  border-color: rgba(228, 184, 77, 0.3);
+}
+
+@keyframes ascend-reveal-sheen {
+  0%,
+  100% {
+    transform: translateX(-30%) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateX(30%) rotate(0deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes ascend-reveal-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+/* ── Badge earn reveal modal ── */
+.badge-earn-reveal {
+  isolation: isolate;
+}
+
+.badge-earn-reveal-rays {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg at 50% 45%,
+    transparent 0deg,
+    rgba(228, 184, 77, 0.08) 20deg,
+    transparent 40deg,
+    rgba(228, 184, 77, 0.06) 60deg,
+    transparent 80deg,
+    rgba(228, 184, 77, 0.1) 100deg,
+    transparent 120deg,
+    rgba(228, 184, 77, 0.05) 140deg,
+    transparent 160deg,
+    rgba(228, 184, 77, 0.08) 200deg,
+    transparent 220deg,
+    rgba(228, 184, 77, 0.06) 260deg,
+    transparent 280deg,
+    rgba(228, 184, 77, 0.09) 320deg,
+    transparent 360deg
+  );
+  animation: badge-earn-rays-spin 24s linear infinite;
+  mask-image: radial-gradient(circle at 50% 42%, black 15%, transparent 62%);
+}
+
+.badge-earn-reveal-pedestal {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: min(280px, 70%);
+  height: 48px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(228, 184, 77, 0.35), transparent 70%);
+  filter: blur(8px);
+  opacity: 0.75;
+}
+
+@keyframes badge-earn-rays-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Trophy vault badge grid ── */
+.growth-trophy-vault {
+  position: relative;
+  overflow: hidden;
+}
+
+.growth-trophy-vault::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 90% 50% at 50% -10%, rgba(228, 184, 77, 0.06), transparent 55%);
+}
+
+.growth-trophy-vault-cell:hover {
+  border-color: rgba(228, 184, 77, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ascend-reveal-sheen,
+  .ascend-reveal-pulse,
+  .badge-earn-reveal-rays {
+    animation: none !important;
+  }
+}

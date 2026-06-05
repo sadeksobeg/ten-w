@@ -23,6 +23,8 @@ import { RivalCard } from "@/components/growth/rivals/RivalCard";
 import { OracleCard } from "@/components/growth/oracle/OracleCard";
 import { GrowthHubExploreNav } from "@/components/growth/dashboard/GrowthHubExploreNav";
 import { EngagementHubExtras } from "@/components/growth/EngagementHubExtras";
+import { getActiveAscendCampaigns } from "@/lib/growth/ascend-campaigns";
+import { AscendCampaignStrip } from "@/components/growth/campaign/AscendCampaignStrip";
 
 type Props = {
   locale: string;
@@ -43,9 +45,12 @@ export async function GrowthHubView({
 }: Props) {
   const t = await getTranslations("Growth");
   const powerLabel = getXpBrandLabel(locale);
+  const campaigns = await getActiveAscendCampaigns(locale, 2);
 
   return (
     <div className="space-y-8">
+      <AscendCampaignStrip campaigns={campaigns} locale={locale} />
+
       <DashboardHero
         locale={locale}
         name={userName}
