@@ -2590,6 +2590,34 @@
   transform: translateY(8px) scale(0.96);
 }
 
+.invite-boot-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  max-width: min(92vw, 420px);
+  padding-inline: 16px;
+}
+
+.invite-boot-tagline {
+  font-family: var(--invite-font-arabic);
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--text-sub);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.invite-boot-tagline.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @keyframes invite-boot-logo-in {
   to {
     opacity: 1;
@@ -2636,6 +2664,7 @@
   }
 
   .invite-boot-logo--word,
+  .invite-boot-tagline,
   .invite-letter,
   .invite-card-float,
   .invite-foil-border,
@@ -2690,6 +2719,7 @@
   }
 
   .invite-boot-logo--word,
+  .invite-boot-tagline,
   .invite-letter,
   .invite-reveal-up,
   .invite-benefit-card,

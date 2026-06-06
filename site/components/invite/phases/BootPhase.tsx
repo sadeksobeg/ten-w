@@ -133,17 +133,14 @@ export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Prop
       ) : null}
 
       {showLogo ? (
-        <p
-          className={`invite-boot-logo invite-boot-logo--word ${logoShimmer ? "invite-text-shimmer" : ""}`}
-        >
-          {LOGO_TEXT}
-        </p>
-      ) : null}
-
-      {showSubtitle ? (
-        <p className="invite-font-arabic mt-8 text-center text-lg font-semibold text-[var(--text-sub)] sm:text-xl">
-          {subtitle}
-        </p>
+        <div className="invite-boot-copy">
+          <p
+            className={`invite-boot-logo invite-boot-logo--word ${logoShimmer ? "invite-text-shimmer" : ""}`}
+          >
+            {LOGO_TEXT}
+          </p>
+          <p className={`invite-boot-tagline ${showSubtitle ? "is-visible" : ""}`}>{subtitle}</p>
+        </div>
       ) : null}
 
       {showCurtain ? (
