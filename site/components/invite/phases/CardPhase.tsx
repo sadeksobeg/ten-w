@@ -32,7 +32,7 @@ function AcceptButton({
   accepting: boolean;
   onAccept: () => void;
 }) {
-  let label = "أقبل الدعوة بامتنان";
+  let label = "أقبل الدعوة";
   if (accepting) label = "·  ·  ·";
   if (granted) label = "تم القبول ✦";
 
@@ -259,7 +259,7 @@ export function CardPhase({ card, origin }: Props) {
             <p className="invite-accept-copy">
               {granted
                 ? "دعوتك مؤكدة — ادخل إلى احتفال TENEGTA"
-                : "بقبولك، تنضم رسمياً كضيف مميز — دون إنشاء حساب شريك."}
+                : "بقبولك، تنضم رسمياً كضيف مميز — وتُفعَّل بطاقة الوصول الرقمية الخاصة بك."}
             </p>
 
             {acceptError ? (
