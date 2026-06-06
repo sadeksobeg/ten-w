@@ -2,7 +2,7 @@
 
 **التاريخ:** يونيو 2026  
 **المشروع:** TENEGTA Website — `ten-w` / `tenegta.com`  
-**الحالة:** polish مكتمل — جاهز للرفع  
+**الحالة:** مُنفَّذ ومرفوع (`5253e2c`)  
 **المسار:** `/ar/demo/cinema` · `/en/demo/cinema` · `/fr/demo/cinema`
 
 ---
@@ -191,7 +191,7 @@ Namespace: **`CinemaDemo`** في `ar.json` · `en.json` · `fr.json`
 | Commit | الوصف |
 |--------|--------|
 | `446467b` | الإطلاق الأول — ديمو تفاعلي |
-| *(latest)* | polish — لوغو مقصوص، posters، animations، cursor hide |
+| *(هذا الرفع)* | polish — لوغو مقصوص، بوسترات، أنيميشن، إخفاء الماوس، توثيق |
 
 ---
 
