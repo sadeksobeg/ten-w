@@ -65,3 +65,24 @@ export function playCameraMoveSound(enabled: boolean) {
   if (!enabled) return;
   tone(320, 50, 0.04);
 }
+
+export function playBootBeep(enabled: boolean) {
+  if (!enabled) return;
+  tone(660, 40, 0.04);
+}
+
+export function playAuthSuccess(enabled: boolean) {
+  if (!enabled) return;
+  tone(523, 80, 0.05);
+  setTimeout(() => tone(784, 100, 0.05), 90);
+}
+
+export function playSeatSelectChime(enabled: boolean) {
+  if (!enabled) return;
+  tone(400, 150, 0.07);
+}
+
+export function playNotificationPing(enabled: boolean) {
+  if (!enabled) return;
+  tone(880, 60, 0.04);
+}

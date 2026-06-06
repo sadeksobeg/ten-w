@@ -477,6 +477,67 @@
       "cta": "Commencer",
       "skip": "Passer"
     },
+    "boot": {
+      "aria": "Démarrage OS Salamiya",
+      "startSession": "Commencer la session"
+    },
+    "os": {
+      "greeting": "Bonsoir, manager Salamiya Cinema",
+      "topbar": "Salamiya Cinema · Système live",
+      "branchLabel": "Choisir la succursale",
+      "branchMain": "Salamiya — Succursale principale",
+      "branchNorth": "Succursale nord",
+      "branchSouth": "Succursale sud",
+      "screensTitle": "État des salles",
+      "feedTitle": "Intelligence live",
+      "revenueTitle": "Compteur recettes",
+      "revenuePct": "{pct}% de l'objectif du jour",
+      "crowdForecast": "Affluence: au-dessus de la normale",
+      "cashierTip": "Recommandation: ouvrir caisse 3",
+      "staffTitle": "Personnel",
+      "staffBox": "employés caisse ce soir",
+      "staffShift": "Fin de service Ahmad: 23:00",
+      "analyticsTitle": "Nos clients",
+      "avgCustomer": "Valeur client moy.: 87 000 SYP/mois",
+      "marketTitle": "Analyse marché",
+      "marketShare": "Part de marché: 34%",
+      "incidentTitle": "Signalement",
+      "incidentAction": "Notifier maintenance",
+      "projectorTitle": "Contrôle projection",
+      "projectorHall": "Salle 1 — projection",
+      "brightness": "Luminosité",
+      "startShow": "Démarrer",
+      "pauseShow": "Pause",
+      "resumeShow": "Reprendre",
+      "reportsTitle": "Rapports",
+      "reportMonth": "Rapport financier — mai 2026",
+      "profitMargin": "Marge: 34%",
+      "downloadReport": "Télécharger PDF",
+      "integrationsTitle": "Intégrations actives"
+    },
+    "features": {
+      "f1Detail": "Prévision: 94% à 20:00",
+      "f2Detail": "Tarification dynamique — +340 000 SYP/mois",
+      "f3Detail": "Billet WhatsApp en 3 secondes",
+      "f4Detail": "Bienvenue Ahmad — place B4",
+      "f7Detail": "Solde: 2 400 pts · +300",
+      "f10Detail": "Ventes F&B: 340 000 SYP",
+      "f10Stock": "Stock: 12 restants",
+      "f11Detail": "Email + SMS rappel",
+      "f14Detail": "7 personnes en liste d'attente",
+      "f15Detail": "0% frais paiements digitaux",
+      "vipConcierge": "Bienvenue — lounge VIP prêt"
+    },
+    "sessionReveal": {
+      "title": "Dans votre session",
+      "booked": "Réservé",
+      "features": "Fonctions vues",
+      "revenue": "Recettes observées",
+      "duration": "Durée session",
+      "built": "Construit en 3 semaines",
+      "complete": "Système complet — prêt",
+      "continue": "Calculer ROI →"
+    },
     "modes": {
       "title": "Choisissez votre expérience",
       "subtitle": "Trois modes — client, manager, VIP",
@@ -525,6 +586,7 @@
       "view2d": "Liste",
       "cameraOverview": "Vue d'ensemble",
       "cameraImmersive": "Immersif",
+      "cameraMap": "Plan salle",
       "smartPick": "Meilleures places",
       "webglFallback": "Passage en 2D — WebGL indisponible ou mouvement réduit"
     },
@@ -547,7 +609,11 @@
       "dashboardCta": "Tableau de bord",
       "restart": "Recommencer",
       "roiCta": "Calculer le ROI",
-      "rate": "Notez votre expérience"
+      "rate": "Notez votre expérience",
+      "ready": "Votre billet est prêt",
+      "share": "Partager",
+      "download": "Télécharger",
+      "continue": "Continuer →"
     },
     "upsell": {
       "title": "Offre spéciale avant le billet",
@@ -614,7 +680,16 @@
       "ind2": "Divertissement",
       "ind3": "Hospitalité",
       "cta": "Nous contacter",
-      "restart": "Recommencer"
+      "restart": "Recommencer",
+      "week1": "Semaine 1: Design",
+      "week23": "Semaines 2-3: Build",
+      "week4": "Semaine 4: Lancement",
+      "after": "Support continu",
+      "v2Headline": "Salamiya Cinema sera la prochaine?",
+      "v2Cta": "Réserver une démo gratuite",
+      "v2Phone": "Ou appeler: {phone}",
+      "v2Email": "{email}",
+      "v2Note": "Réponse sous 24h · Sans engagement"
     },
     "dashboard": {
       "occupancy": "Occupation des salles",

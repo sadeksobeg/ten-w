@@ -6,10 +6,12 @@ import {
   computeSeatTotal,
   seatLabelsForSelection,
 } from "@/components/cinema-demo/CinemaSeatMap";
-import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
-import { CinemaProgressSteps } from "@/components/cinema-demo/CinemaProgressSteps";
+import { FeatureMoment } from "@/components/cinema-demo/features/FeatureMoment";
+import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { getMovie, getShowtime } from "@/lib/cinema-demo/data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
+
+const PAYMENTS = ["Syriatel Cash", "MTN Cash", "بطاقة", "كاش"];
 
 export function CinemaCheckoutPhase() {
   const t = useTranslations("CinemaDemo");
@@ -39,9 +41,14 @@ export function CinemaCheckoutPhase() {
 
   return (
     <section className="cinema-phase">
-      <CinemaDemoHeader />
-      <div className="cinema-container">
-        <CinemaProgressSteps step={3} />
+      <CinemaProgressBar />
+      <div className="cinema-os-center-panel">
+        <FeatureMoment featureId={4} className="cinema-feature--inline">
+          <p>{t("features.f4Detail")}</p>
+        </FeatureMoment>
+        <FeatureMoment featureId={7} durationMs={6000} className="cinema-feature--inline cinema-feature--delay">
+          <p>{t("features.f7Detail")}</p>
+        </FeatureMoment>
         <button type="button" className="cinema-btn cinema-btn-ghost mb-4" onClick={() => setPhase("seats")}>
           {t("back")}
         </button>
@@ -49,27 +56,36 @@ export function CinemaCheckoutPhase() {
         <p className="cinema-subtitle">{t("checkout.subtitle")}</p>
 
         <div className="cinema-checkout-card cinema-checkout-card--animate">
-          <div className="cinema-checkout-row cinema-checkout-row--reveal">
+          <div className="cinema-checkout-row">
             <span>{t("checkout.movie")}</span>
             <span>{isAr ? movie.titleAr : movie.titleEn}</span>
           </div>
-          <div className="cinema-checkout-row cinema-checkout-row--reveal cinema-checkout-row--delay-1">
+          <div className="cinema-checkout-row">
             <span>{t("checkout.showtime")}</span>
             <span>
               {showtime.time} · {isAr ? showtime.hallLabelAr : showtime.hallLabelEn}
             </span>
           </div>
-          <div className="cinema-checkout-row cinema-checkout-row--reveal cinema-checkout-row--delay-2">
+          <div className="cinema-checkout-row">
             <span>{t("checkout.seats")}</span>
             <span>{seats.join("، ")}</span>
           </div>
-          <div className="cinema-checkout-row cinema-checkout-row--reveal cinema-checkout-row--delay-3 cinema-checkout-total">
+          <div className="cinema-checkout-row cinema-checkout-total">
             <span>{t("checkout.total")}</span>
             <span style={{ color: "var(--cinema-yellow)" }}>
               {total.toLocaleString("ar-SY")} {t("currency")}
             </span>
           </div>
         </div>
+
+        <div className="cinema-payment-grid">
+          {PAYMENTS.map((p) => (
+            <span key={p} className="cinema-payment-chip">{p}</span>
+          ))}
+        </div>
+        <FeatureMoment featureId={15} durationMs={4000} className="cinema-feature--inline">
+          <p>{t("features.f15Detail")}</p>
+        </FeatureMoment>
 
         <label className="block mt-4 text-sm text-white/70" htmlFor="cinema-guest-name">
           {t("checkout.nameLabel")}
@@ -85,7 +101,6 @@ export function CinemaCheckoutPhase() {
         <button type="button" className="cinema-btn cinema-btn-primary mt-6 w-full" onClick={confirmCheckout}>
           {t("checkout.pay")}
         </button>
-        <p className="cinema-demo-note">{t("checkout.mockNote")}</p>
       </div>
     </section>
   );

@@ -459,6 +459,67 @@
       "cta": "Start experience",
       "skip": "Skip"
     },
+    "boot": {
+      "aria": "Salamiya Cinema OS boot",
+      "startSession": "Start your session"
+    },
+    "os": {
+      "greeting": "Good evening, Salamiya Cinema manager",
+      "topbar": "Salamiya Cinema · Live system",
+      "branchLabel": "Select branch",
+      "branchMain": "Salamiya — Main branch",
+      "branchNorth": "North branch",
+      "branchSouth": "South branch",
+      "screensTitle": "Screen status",
+      "feedTitle": "Live intelligence",
+      "revenueTitle": "Revenue meter",
+      "revenuePct": "{pct}% of daily target",
+      "crowdForecast": "Attendance: above average expected",
+      "cashierTip": "Recommendation: open cashier 3",
+      "staffTitle": "Staff",
+      "staffBox": "box office staff tonight",
+      "staffShift": "Ahmad shift ends: 23:00",
+      "analyticsTitle": "Our customers",
+      "avgCustomer": "Avg customer value: 87,000 SYP/month",
+      "marketTitle": "Market analysis",
+      "marketShare": "Your share: 34%",
+      "incidentTitle": "Incident report",
+      "incidentAction": "Notify maintenance",
+      "projectorTitle": "Projection control",
+      "projectorHall": "Hall 1 — projection",
+      "brightness": "Brightness",
+      "startShow": "Start show",
+      "pauseShow": "Pause",
+      "resumeShow": "Resume",
+      "reportsTitle": "Reports",
+      "reportMonth": "Financial report — May 2026",
+      "profitMargin": "Profit margin: 34%",
+      "downloadReport": "Download PDF",
+      "integrationsTitle": "Active integrations"
+    },
+    "features": {
+      "f1Detail": "Forecast: 94% full by 20:00",
+      "f2Detail": "Dynamic pricing — +340,000 SYP/month",
+      "f3Detail": "Ticket on WhatsApp in 3 seconds",
+      "f4Detail": "Welcome Ahmad — seat B4 · face check-in",
+      "f7Detail": "Balance: 2,400 pts · +300 from this booking",
+      "f10Detail": "F&B sales: 340,000 SYP today",
+      "f10Stock": "Stock: 12 remaining",
+      "f11Detail": "Confirmation email · SMS reminder in 1 hour",
+      "f14Detail": "7 people on waitlist",
+      "f15Detail": "0% fees on digital payments",
+      "vipConcierge": "Welcome — VIP lounge ready for your seats"
+    },
+    "sessionReveal": {
+      "title": "In your session",
+      "booked": "You booked",
+      "features": "Active features seen",
+      "revenue": "Revenue observed",
+      "duration": "Session time",
+      "built": "Built in 3 weeks — imagine your system",
+      "complete": "Full system — ready to deliver",
+      "continue": "Calculate ROI →"
+    },
     "modes": {
       "title": "Choose your experience",
       "subtitle": "Three modes — customer, manager, VIP",
@@ -507,6 +568,7 @@
       "view2d": "List view",
       "cameraOverview": "Overview",
       "cameraImmersive": "Immersive",
+      "cameraMap": "Hall map",
       "smartPick": "Best seats",
       "webglFallback": "Switched to 2D — WebGL unavailable or reduced motion enabled"
     },
@@ -529,7 +591,11 @@
       "dashboardCta": "Operations dashboard",
       "restart": "Try again",
       "roiCta": "Calculate ROI",
-      "rate": "Rate your experience"
+      "rate": "Rate your experience",
+      "ready": "Your ticket is ready",
+      "share": "Share",
+      "download": "Download",
+      "continue": "Continue →"
     },
     "upsell": {
       "title": "Special offer before your ticket",
@@ -596,7 +662,16 @@
       "ind2": "Entertainment",
       "ind3": "Hospitality",
       "cta": "Contact us",
-      "restart": "Restart demo"
+      "restart": "Restart demo",
+      "week1": "Week 1: Design & identity",
+      "week23": "Weeks 2-3: Build & test",
+      "week4": "Week 4: Training & launch",
+      "after": "After launch: ongoing support",
+      "v2Headline": "Will Salamiya Cinema be next?",
+      "v2Cta": "Book a free demo session — now",
+      "v2Phone": "Or call directly: {phone}",
+      "v2Email": "{email}",
+      "v2Note": "Reply within 24 hours · No obligation"
     },
     "dashboard": {
       "occupancy": "Today's hall occupancy",

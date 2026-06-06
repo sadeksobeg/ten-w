@@ -18,13 +18,14 @@ type Props = {
 };
 
 const COLORS = {
-  available: new THREE.Color("#9a4d6a"),
-  vip: new THREE.Color("#c9922a"),
-  wheelchair: new THREE.Color("#5a7a9e"),
-  selected: new THREE.Color("#f5c518"),
-  occupied: new THREE.Color("#4a4458"),
+  available: new THREE.Color("#5A2040"),
+  vip: new THREE.Color("#1A1020"),
+  wheelchair: new THREE.Color("#1A2A4A"),
+  selected: new THREE.Color("#C9922A"),
+  hover: new THREE.Color("#F5E6C3"),
+  occupied: new THREE.Color("#2A1520"),
   pending: new THREE.Color("#e8a830"),
-  dim: new THREE.Color("#6a6278"),
+  dim: new THREE.Color("#3a2535"),
 };
 
 function seatColor(
@@ -41,13 +42,13 @@ function seatColor(
   else if (live === "pending") c = COLORS.pending.clone();
   else if (seat.tier === "vip") {
     c = COLORS.vip.clone();
-    if (hovered) c.lerp(COLORS.selected, 0.45);
+    if (hovered) c.lerp(COLORS.hover, 0.55);
   } else if (seat.tier === "wheelchair") {
     c = COLORS.wheelchair.clone();
     if (hovered) c.lerp(COLORS.selected, 0.35);
   } else {
     c = COLORS.available.clone();
-    if (hovered) c.lerp(COLORS.selected, 0.4);
+    if (hovered) c.lerp(COLORS.hover, 0.5);
   }
 
   if (focusRow !== null && seat.rowIndex !== focusRow) {
@@ -121,10 +122,10 @@ export function InstancedSeats({
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial
         vertexColors
-        roughness={0.32}
-        metalness={0.18}
-        emissive="#2a1838"
-        emissiveIntensity={0.35}
+        roughness={0.7}
+        metalness={0.1}
+        emissive="#2a1520"
+        emissiveIntensity={0.15}
       />
     </instancedMesh>
   );

@@ -55,6 +55,20 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
         >
           {t("seats.cameraImmersive")}
         </button>
+        <button
+          type="button"
+          className={`cinema-hud-btn ${cameraPreset === "vip" ? "is-active" : ""}`}
+          onClick={() => setCameraPreset("vip")}
+        >
+          VIP
+        </button>
+        <button
+          type="button"
+          className={`cinema-hud-btn ${cameraPreset === "birdsEye" ? "is-active" : ""}`}
+          onClick={() => setCameraPreset("birdsEye")}
+        >
+          {t("seats.cameraMap")}
+        </button>
         <button type="button" className="cinema-hud-btn cinema-hud-btn--accent" onClick={() => smartPickSeats(2)}>
           <CinemaIcon name="seat" size={14} />
           {t("seats.smartPick")}
@@ -62,13 +76,14 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
       </div>
 
       {tooltipSeat ? (
-        <div className="cinema-seat-hud-tooltip">
+        <div className="cinema-seat-hud-tooltip cinema-seat-hologram">
           <strong>
             {tooltipSeat.row}
             {tooltipSeat.number}
           </strong>
-          <span className="cinema-seat-hud-tier">{tooltipSeat.tier}</span>
-          <span>{tooltipSeat.price.toLocaleString("ar-SY")}</span>
+          <span className="cinema-seat-hud-tier">{tooltipSeat.tier === "vip" ? "VIP Premium" : tooltipSeat.tier}</span>
+          <span>{tooltipSeat.price.toLocaleString("ar-SY")} ل.س</span>
+          <span>✓ متاح</span>
         </div>
       ) : null}
 

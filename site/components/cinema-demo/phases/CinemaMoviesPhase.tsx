@@ -4,9 +4,8 @@ import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { CINEMA_MOVIES } from "@/lib/cinema-demo/data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
-import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
 import { CinemaMoviePoster } from "@/components/cinema-demo/CinemaMoviePoster";
-import { CinemaProgressSteps } from "@/components/cinema-demo/CinemaProgressSteps";
+import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 
 const container = {
   hidden: { opacity: 0 },
@@ -26,9 +25,9 @@ export function CinemaMoviesPhase() {
 
   return (
     <section className="cinema-phase cinema-phase--movies">
-      <CinemaDemoHeader />
-      <div className="cinema-container">
-        <CinemaProgressSteps step={0} />
+      <CinemaProgressBar />
+      <div className="cinema-os-center-panel">
+        <p className="cinema-os-greeting">{t("os.greeting")}</p>
         <h2 className="cinema-title cinema-reveal">{t("movies.title")}</h2>
         <p className="cinema-subtitle cinema-reveal cinema-reveal--delay-1">{t("movies.subtitle")}</p>
         <motion.div className="cinema-movie-grid" variants={container} initial="hidden" animate="show">

@@ -1,0 +1,33 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
+
+export function LiveTicker() {
+  const liveRevenue = useCinemaDemoStore((s) => s.liveRevenue);
+  const [lastBookingSec, setLastBookingSec] = useState(23);
+  const [occ1, setOcc1] = useState(78);
+  const [occ2, setOcc2] = useState(89);
+  const [occ3, setOcc3] = useState(67);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setLastBookingSec((s) => (s >= 120 ? 12 + Math.floor(Math.random() * 30) : s + 3));
+      setOcc1((v) => Math.min(98, Math.max(60, v + (Math.random() > 0.5 ? 1 : -1))));
+      setOcc2((v) => Math.min(98, Math.max(50, v + (Math.random() > 0.5 ? 1 : -1))));
+      setOcc3((v) => Math.min(95, Math.max(55, v + (Math.random() > 0.5 ? 1 : -1))));
+    }, 4000);
+    return () => clearInterval(id);
+  }, []);
+
+  const text = `قاعة 1 — ${occ1}% ║ قاعة 2 — ${occ2}% ║ قاعة 3 — ${occ3}% ║ إيراد اليوم: ${liveRevenue.toLocaleString("ar-SY")} ل.س ║ آخر حجز: منذ ${lastBookingSec}ث ║ الطقس: 28° — زيادة حضور متوقعة ║`;
+
+  return (
+    <div className="cinema-os-ticker" aria-live="polite">
+      <div className="cinema-os-ticker-track">
+        <span>{text}</span>
+        <span aria-hidden>{text}</span>
+      </div>
+    </div>
+  );
+}

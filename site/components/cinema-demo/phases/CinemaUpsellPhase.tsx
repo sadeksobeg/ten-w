@@ -1,7 +1,8 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
+import { FeatureMoment } from "@/components/cinema-demo/features/FeatureMoment";
+import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { CinemaIcon } from "@/components/cinema-demo/CinemaIcon";
 import { UPSELL_BUNDLE } from "@/lib/cinema-demo/vip-data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
@@ -18,16 +19,21 @@ export function CinemaUpsellPhase() {
 
   return (
     <section className="cinema-phase">
-      <CinemaDemoHeader />
-      <div className="cinema-container cinema-upsell">
-        <h2 className="cinema-title text-center cinema-reveal">{t("upsell.title")}</h2>
-        <p className="cinema-subtitle text-center cinema-reveal cinema-reveal--delay-1">{t("upsell.subtitle")}</p>
+      <CinemaProgressBar />
+      <div className="cinema-os-center-panel">
+        <FeatureMoment featureId={10} className="cinema-feature--inline">
+          <p>{t("features.f10Detail")}</p>
+        </FeatureMoment>
+        <div className="cinema-vip-msg cinema-vip-msg--concierge cinema-reveal">
+          <p>{t("features.vipConcierge")}</p>
+        </div>
+        <h2 className="cinema-title text-center">{t("upsell.title")}</h2>
+        <p className="cinema-subtitle text-center">{t("upsell.subtitle")}</p>
 
-        <div className="cinema-upsell-compare cinema-reveal cinema-reveal--delay-2">
+        <div className="cinema-upsell-compare">
           <div className="cinema-upsell-compare-col cinema-upsell-compare-col--plain">
             <h3>{t("upsell.without")}</h3>
             <p>{t("upsell.withoutDesc")}</p>
-            <span className="cinema-upsell-compare-price">—</span>
           </div>
           <div className="cinema-upsell-compare-col cinema-upsell-compare-col--bundle">
             <span className="cinema-upsell-badge">{t("upsell.badge")}</span>
@@ -36,11 +42,9 @@ export function CinemaUpsellPhase() {
             </span>
             <h3>{bundleLabel}</h3>
             <p className="cinema-movie-meta">{bundleDesc}</p>
+            <p className="cinema-movie-meta">{t("features.f10Stock")}</p>
             <p className="cinema-sticky-price">
               {UPSELL_BUNDLE.price.toLocaleString("ar-SY")} {t("currency")}
-              <span className="cinema-upsell-save">
-                {t("upsell.save")} {UPSELL_BUNDLE.save.toLocaleString("ar-SY")}
-              </span>
             </p>
             <button type="button" className="cinema-btn cinema-btn-primary w-full" onClick={() => addUpsell(UPSELL_BUNDLE.id)}>
               {t("upsell.add")}

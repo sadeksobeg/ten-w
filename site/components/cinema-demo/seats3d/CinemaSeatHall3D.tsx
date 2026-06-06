@@ -4,16 +4,17 @@ import { Suspense, useMemo, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { useLiveSeatSimulation } from "@/components/cinema-demo/hooks/useLiveSeatSimulation";
-import {
-  AuditoriumAmbience,
-  AuditoriumFloor,
-  CinemaScreen,
-  InstancedSeats,
-} from "@/components/cinema-demo/seats3d/InstancedSeats";
+import { CinemaScreenMesh } from "@/components/cinema-demo/seats3d/CinemaScreenMesh";
+import { DustParticles } from "@/components/cinema-demo/seats3d/DustParticles";
+import { HallGeometry } from "@/components/cinema-demo/seats3d/HallGeometry";
+import { HallLighting } from "@/components/cinema-demo/seats3d/HallLighting";
+import { useHallEvents } from "@/components/cinema-demo/seats3d/HallEvents";
+import { InstancedSeats } from "@/components/cinema-demo/seats3d/InstancedSeats";
+import { ProjectorBeam } from "@/components/cinema-demo/seats3d/ProjectorBeam";
 import { CameraRig } from "@/components/cinema-demo/seats3d/CameraRig";
 import { SeatHud } from "@/components/cinema-demo/seats3d/SeatHud";
 import { buildSeatLayout3D, seatById } from "@/lib/cinema-demo/seat-layout-3d";
-import { playSeatDeselectSound, playSeatSelectSound } from "@/lib/cinema-demo/sounds";
+import { playSeatDeselectSound, playSeatSelectChime, playSeatSelectSound } from "@/lib/cinema-demo/sounds";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 type Props = {
@@ -29,12 +30,12 @@ function HallScene({ showtimeId }: Props) {
   const focusedSeatId = useCinemaDemoStore((s) => s.focusedSeatId);
   const setFocusedSeatId = useCinemaDemoStore((s) => s.setFocusedSeatId);
   const setHudHoverSeatId = useCinemaDemoStore((s) => s.setHudHoverSeatId);
+  const setCameraPreset = useCinemaDemoStore((s) => s.setCameraPreset);
   const liveStates = useLiveSeatSimulation(showtimeId, true);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  useHallEvents(true);
 
   const focusSeat = focusedSeatId ? seatById(showtimeId, focusedSeatId) ?? null : null;
-  const hoverSeat = hoveredId ? seatById(showtimeId, hoveredId) ?? null : null;
-  const highlightRow = hoverSeat?.rowIndex ?? focusSeat?.rowIndex ?? null;
 
   const handleHover = (id: string | null) => {
     setHoveredId(id);
@@ -47,9 +48,11 @@ function HallScene({ showtimeId }: Props) {
     if (wasSelected) playSeatDeselectSound(soundEnabled);
     else {
       playSeatSelectSound(soundEnabled);
+      playSeatSelectChime(soundEnabled);
       if (navigator.vibrate) navigator.vibrate(10);
     }
     setFocusedSeatId(id);
+    setCameraPreset("focus");
   };
 
   const floorW = bounds.maxX - bounds.minX + 2;
@@ -58,19 +61,19 @@ function HallScene({ showtimeId }: Props) {
   return (
     <>
       <color attach="background" args={["#050508"]} />
-      <fog attach="fog" args={["#050508", 14, 28]} />
-      <hemisphereLight args={["#2a2540", "#0a0812", 0.95]} />
-      <directionalLight position={[2, 10, 4]} intensity={0.65} color="#fff5e8" />
-      <directionalLight position={[-4, 6, -2]} intensity={0.35} color="#9a7ab8" />
-      <CinemaScreen />
-      <AuditoriumFloor width={floorW} depth={floorD} />
-      <AuditoriumAmbience width={floorW} depth={floorD} />
+      <fog attach="fog" args={["#050508", 20, 60]} />
+      <hemisphereLight args={["#2a2540", "#0a0812", 0.4]} />
+      <HallGeometry width={floorW} depth={floorD} />
+      <HallLighting width={floorW} depth={floorD} seats={seats} />
+      <CinemaScreenMesh />
+      <ProjectorBeam depth={floorD} />
+      <DustParticles depth={floorD} />
       <InstancedSeats
         seats={seats}
         selectedIds={selectedIds}
         liveStates={liveStates}
         hoveredId={hoveredId}
-        highlightRow={highlightRow}
+        highlightRow={null}
         onSeatClick={handleClick}
         onSeatHover={handleHover}
       />
@@ -87,8 +90,9 @@ export function CinemaSeatHall3D({ showtimeId }: Props) {
     <div className="cinema-hall-3d">
       <Canvas
         dpr={[1, 1.5]}
-        camera={{ fov: 48, near: 0.1, far: 50, position: [0, 5, 8] }}
+        camera={{ fov: 58, near: 0.1, far: 80, position: [0, 5, 8] }}
         gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.15 }}
+        shadows
       >
         <Suspense fallback={null}>
           <HallScene showtimeId={showtimeId} />

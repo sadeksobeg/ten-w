@@ -1,24 +1,25 @@
 "use client";
 
-import { useCinemaDemoStore, type CinemaDemoPhase } from "@/stores/cinema-demo-store";
+import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
+import type { CinemaDemoPhase } from "@/stores/cinema-demo-store";
 
 const CUSTOMER_PROGRESS: Partial<Record<CinemaDemoPhase, number>> = {
-  movies: 0.15,
-  showtime: 0.3,
-  seats: 0.5,
-  checkout: 0.65,
-  upsell: 0.8,
-  ticket: 0.95,
-  roi: 1,
+  movies: 0.12,
+  showtime: 0.28,
+  seats: 0.48,
+  checkout: 0.62,
+  upsell: 0.78,
+  ticket: 0.92,
+  sessionReveal: 0.96,
+  roi: 0.98,
   closing: 1,
 };
 
 export function CinemaProgressBar() {
   const phase = useCinemaDemoStore((s) => s.phase);
-  const demoMode = useCinemaDemoStore((s) => s.demoMode);
-  const progress = demoMode === "customer" ? (CUSTOMER_PROGRESS[phase] ?? 0) : phase === "manager" ? 0.5 : 0.3;
+  const progress = CUSTOMER_PROGRESS[phase] ?? 0;
 
-  if (phase === "splash" || phase === "modeSelect") return null;
+  if (phase === "boot") return null;
 
   return (
     <div className="cinema-top-progress" aria-hidden>

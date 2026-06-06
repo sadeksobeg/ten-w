@@ -3,9 +3,16 @@
 import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
+import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { calcRoi } from "@/lib/cinema-demo/roi";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
+
+const TIMELINE = [
+  { week: "1", labelKey: "closing.week1" },
+  { week: "2-3", labelKey: "closing.week23" },
+  { week: "4", labelKey: "closing.week4" },
+  { week: "∞", labelKey: "closing.after" },
+];
 
 export function CinemaRoiPanel() {
   const t = useTranslations("CinemaDemo");
@@ -18,8 +25,8 @@ export function CinemaRoiPanel() {
 
   return (
     <section className="cinema-phase">
-      <CinemaDemoHeader />
-      <div className="cinema-container cinema-roi">
+      <CinemaProgressBar />
+      <div className="cinema-os-center-panel cinema-roi">
         <h2 className="cinema-title text-center">{t("roi.title")}</h2>
         <p className="cinema-subtitle text-center">{t("roi.subtitle")}</p>
 
@@ -50,6 +57,15 @@ export function CinemaRoiPanel() {
             <p className="cinema-stat-value">1:{roiDisplay}</p>
             <p className="cinema-stat-label">{t("roi.ratio")}</p>
           </div>
+        </div>
+
+        <div className="cinema-roi-timeline">
+          {TIMELINE.map((item) => (
+            <div key={item.week} className="cinema-roi-timeline-item">
+              <span className="cinema-roi-timeline-dot">{item.week}</span>
+              <p>{t(item.labelKey)}</p>
+            </div>
+          ))}
         </div>
 
         <div className="cinema-roi-actions">

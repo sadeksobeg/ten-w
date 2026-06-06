@@ -7,9 +7,8 @@ import {
   computeSeatTotal,
   seatLabelsForSelection,
 } from "@/components/cinema-demo/CinemaSeatMap";
-import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
+import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { CinemaIcon } from "@/components/cinema-demo/CinemaIcon";
-import { CinemaProgressSteps } from "@/components/cinema-demo/CinemaProgressSteps";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 export function CinemaSeatsPhase() {
@@ -46,10 +45,9 @@ export function CinemaSeatsPhase() {
   const countdown = `${Math.floor(countdownSec / 60)}:${String(countdownSec % 60).padStart(2, "0")}`;
 
   return (
-    <section className="cinema-phase">
-      <CinemaDemoHeader />
-      <div className="cinema-container">
-        <CinemaProgressSteps step={2} />
+    <section className="cinema-phase cinema-phase--seats">
+      <CinemaProgressBar />
+      <div className="cinema-os-center-panel">
         <div className="cinema-seats-live">
           <CinemaIcon name="live" size={14} />
           {t("seats.liveBrowsers", { count: liveBrowsers })}
@@ -67,12 +65,10 @@ export function CinemaSeatsPhase() {
             {countdown}
           </span>
         </p>
-
         <CinemaSeatExperience showtimeId={showtimeId} selectedIds={selectedSeatIds} onToggle={toggleSeat} live />
-        <p className="cinema-pin-hint">{t("seats.dragHint")}</p>
       </div>
 
-      <div className="cinema-sticky-bar">
+      <div className="cinema-sticky-bar cinema-sticky-bar--os">
         <div>
           <p className="cinema-sticky-price">
             {total.toLocaleString("ar-SY")} {t("currency")}

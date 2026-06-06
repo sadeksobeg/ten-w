@@ -1,29 +1,28 @@
 "use client";
 
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
+import { CinemaOSDesktop } from "@/components/cinema-demo/CinemaOSDesktop";
 import { CinemaCheckoutPhase } from "@/components/cinema-demo/phases/CinemaCheckoutPhase";
 import { CinemaClosingPhase } from "@/components/cinema-demo/phases/CinemaClosingPhase";
-import { CinemaManagerPhase } from "@/components/cinema-demo/phases/CinemaManagerPhase";
-import { CinemaModeSelectorPhase } from "@/components/cinema-demo/phases/CinemaModeSelectorPhase";
 import { CinemaMoviesPhase } from "@/components/cinema-demo/phases/CinemaMoviesPhase";
 import { CinemaRoiPanel } from "@/components/cinema-demo/phases/CinemaRoiPanel";
 import { CinemaSeatsPhase } from "@/components/cinema-demo/phases/CinemaSeatsPhase";
+import { CinemaSessionRevealPhase } from "@/components/cinema-demo/phases/CinemaSessionRevealPhase";
 import { CinemaShowtimePhase } from "@/components/cinema-demo/phases/CinemaShowtimePhase";
-import { CinemaSplashPhase } from "@/components/cinema-demo/phases/CinemaSplashPhase";
+import { CinemaBootOS } from "@/components/cinema-demo/phases/CinemaBootOS";
 import { CinemaTicketPhase } from "@/components/cinema-demo/phases/CinemaTicketPhase";
 import { CinemaUpsellPhase } from "@/components/cinema-demo/phases/CinemaUpsellPhase";
-import { CinemaVipPhase } from "@/components/cinema-demo/phases/CinemaVipPhase";
 
 export function CinemaDemoExperience() {
   const phase = useCinemaDemoStore((s) => s.phase);
   const transitionClass = useCinemaDemoStore((s) => s.transitionClass);
 
-  const content = (() => {
+  if (phase === "boot") {
+    return <CinemaBootOS />;
+  }
+
+  const center = (() => {
     switch (phase) {
-      case "splash":
-        return <CinemaSplashPhase />;
-      case "modeSelect":
-        return <CinemaModeSelectorPhase />;
       case "movies":
         return <CinemaMoviesPhase />;
       case "showtime":
@@ -36,22 +35,20 @@ export function CinemaDemoExperience() {
         return <CinemaUpsellPhase />;
       case "ticket":
         return <CinemaTicketPhase />;
-      case "manager":
-        return <CinemaManagerPhase />;
-      case "vip":
-        return <CinemaVipPhase />;
+      case "sessionReveal":
+        return <CinemaSessionRevealPhase />;
       case "roi":
         return <CinemaRoiPanel />;
       case "closing":
         return <CinemaClosingPhase />;
       default:
-        return <CinemaSplashPhase />;
+        return <CinemaMoviesPhase />;
     }
   })();
 
   return (
     <div className={`cinema-experience ${transitionClass}`}>
-      {content}
+      <CinemaOSDesktop>{center}</CinemaOSDesktop>
     </div>
   );
 }

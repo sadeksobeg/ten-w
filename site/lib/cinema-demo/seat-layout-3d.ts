@@ -26,7 +26,7 @@ export type AuditoriumBounds = {
 
 const SEAT_PITCH = 0.42;
 const ROW_DEPTH = 0.52;
-const RAKE_Y = 0.11;
+const RAKE_Y = 0.18;
 const AISLE_W = 0.65;
 const SCREEN_Z = -5.2;
 
