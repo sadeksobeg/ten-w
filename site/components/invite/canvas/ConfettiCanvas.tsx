@@ -207,7 +207,7 @@ export function ConfettiCanvas({ active = true, durationMs = 5000 }: Props) {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-50"
+      className="invite-canvas-layer invite-canvas-layer--confetti"
       aria-hidden
     />
   );

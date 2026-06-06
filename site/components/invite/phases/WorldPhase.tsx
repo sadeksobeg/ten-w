@@ -101,13 +101,13 @@ export function WorldPhase({ card, origin }: Props) {
   }, [reducedMotion]);
 
   return (
-    <div className="invite-phase-fade invite-phase-visible fixed inset-0 z-40 overflow-y-auto bg-[var(--void)]">
+    <div className="invite-world-overlay invite-phase-fade invite-phase-visible">
       {!reducedMotion ? (
-        <div className="invite-world-flash pointer-events-none fixed inset-0 z-[60] bg-white" aria-hidden />
+        <div className="invite-world-flash invite-world-flash-layer" aria-hidden />
       ) : null}
       <ConfettiCanvas active={!reducedMotion} />
 
-      <div className="invite-vignette pointer-events-none fixed inset-0 z-[1]" aria-hidden />
+      <div className="invite-vignette" aria-hidden />
 
       <div className="relative z-10 flex min-h-[100dvh] flex-col items-center px-5 py-16 pb-24 text-center invite-safe-bottom">
         {step >= 0 ? <StarBurst /> : null}

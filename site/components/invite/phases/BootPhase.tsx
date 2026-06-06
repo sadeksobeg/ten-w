@@ -112,7 +112,7 @@ export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Prop
 
   return (
     <div
-      className={`invite-phase-fade fixed inset-0 z-[60] flex flex-col items-center justify-center overflow-hidden bg-[var(--void)] ${exiting ? "invite-phase-hidden" : "invite-phase-visible"}`}
+      className={`invite-boot-overlay invite-phase-fade ${exiting ? "invite-phase-hidden" : "invite-phase-visible"}`}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
@@ -162,11 +162,11 @@ export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Prop
       {showCurtain ? (
         <>
           <div
-            className="invite-boot-curtain-bar fixed inset-x-0 top-0 z-[61]"
+            className="invite-boot-curtain-bar invite-boot-curtain-bar--top"
             style={{ height: exiting ? 0 : "50vh" }}
           />
           <div
-            className="invite-boot-curtain-bar fixed inset-x-0 bottom-0 z-[61]"
+            className="invite-boot-curtain-bar invite-boot-curtain-bar--bottom"
             style={{ height: exiting ? 0 : "50vh" }}
           />
         </>

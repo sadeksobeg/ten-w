@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* TENEGTA Invite — Ceremony Edition */
 .invite-root {
   --invite-font-display: "Cormorant Garamond", Georgia, serif;
@@ -26,6 +28,32 @@
 
   color: var(--text);
   background: var(--void);
+  overflow-x: clip;
+}
+
+.invite-experience-root {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.invite-canvas-layer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.invite-canvas-layer--particles {
+  opacity: 0.6;
+}
+
+.invite-canvas-layer--confetti {
+  z-index: 50;
 }
 
 .invite-root ::selection {
@@ -320,8 +348,48 @@
 }
 
 .invite-boot-curtain-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 61;
   background: var(--void);
   transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.invite-boot-curtain-bar--top {
+  top: 0;
+}
+
+.invite-boot-curtain-bar--bottom {
+  bottom: 0;
+}
+
+.invite-boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--void);
+}
+
+.invite-world-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow-y: auto;
+  background: var(--void);
+}
+
+.invite-world-flash-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: #fff;
+  pointer-events: none;
 }
 
 .invite-phase-fade {
@@ -356,7 +424,8 @@
 
 /* ── HERO ── */
 .invite-hero-section {
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -365,6 +434,7 @@
   text-align: center;
   padding: 40px 24px;
   margin-inline: auto;
+  box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
@@ -395,6 +465,7 @@
   font-size: clamp(48px, 10vw, 96px);
   line-height: 1.1;
   font-weight: 700;
+  color: var(--gold-light);
 }
 
 @media (max-width: 767px) {
@@ -1119,15 +1190,29 @@
 }
 
 .invite-vignette {
-  background: radial-gradient(ellipse at 50% 35%, transparent 30%, rgba(3, 1, 10, 0.75) 100%);
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 30%, transparent 45%, rgba(3, 1, 10, 0.5) 100%);
 }
 
 .invite-sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
   background: linear-gradient(180deg, transparent, rgba(3, 1, 10, 0.92) 35%, rgba(3, 1, 10, 0.98));
   backdrop-filter: blur(12px);
 }
 
 .invite-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
   animation: invite-bob 2.4s ease-in-out infinite;
 }
 

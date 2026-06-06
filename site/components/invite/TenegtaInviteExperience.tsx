@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import type { InviteCardPublic } from "@/lib/invite/get-card";
 import { UpwardParticlesCanvas } from "@/components/invite/canvas/UpwardParticlesCanvas";
 import { InviteVisualBackground } from "@/components/invite/InviteVisualBackground";
@@ -23,10 +23,18 @@ export function TenegtaInviteExperience({ card, origin }: Props) {
   const [ambientVisible, setAmbientVisible] = useState(reducedMotion);
   const [mounted, setMounted] = useState(false);
   const baseTitle = `${card.name} — TENEGTA`;
+  const skipBoot = card.accepted || reducedMotion;
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useLayoutEffect(() => {
+    if (skipBoot) {
+      setAmbientVisible(true);
+      completeBoot();
+    }
+  }, [skipBoot, completeBoot]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -45,7 +53,7 @@ export function TenegtaInviteExperience({ card, origin }: Props) {
 
   if (!mounted) {
     return (
-      <div className="flex min-h-[100dvh] items-center justify-center bg-[var(--void)]">
+      <div className="invite-experience-root flex min-h-[100dvh] items-center justify-center bg-[var(--void)]">
         <p className="invite-loading-logo invite-font-display invite-text-shimmer text-2xl tracking-[0.3em]">
           TENEGTA
         </p>
@@ -56,14 +64,14 @@ export function TenegtaInviteExperience({ card, origin }: Props) {
   const showAmbient = ambientVisible || phase !== "boot";
 
   return (
-    <div className="relative min-h-[100dvh] overflow-x-hidden bg-[var(--void)]" dir="rtl">
+    <div className="invite-experience-root bg-[var(--void)]" dir="rtl">
       <InviteVisualBackground visible={showAmbient} />
       <UpwardParticlesCanvas visible={showAmbient} />
-      <div className="invite-vignette pointer-events-none fixed inset-0 z-[2]" aria-hidden />
+      <div className="invite-vignette" aria-hidden />
       <MagneticCursor />
       {phase === "card" ? <ScrollProgressBar /> : null}
 
-      {phase === "boot" ? (
+      {phase === "boot" && !skipBoot ? (
         <BootPhase
           alreadyAccepted={card.accepted}
           onComplete={completeBoot}

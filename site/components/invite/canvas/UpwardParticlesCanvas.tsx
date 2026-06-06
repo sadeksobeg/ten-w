@@ -129,7 +129,7 @@ export function UpwardParticlesCanvas({ visible = true }: Props) {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-[1] opacity-60"
+      className="invite-canvas-layer invite-canvas-layer--particles"
       aria-hidden
     />
   );

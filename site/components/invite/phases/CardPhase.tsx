@@ -185,7 +185,7 @@ export function CardPhase({ card, origin }: Props) {
           </p>
           <p className="invite-font-arabic text-xl text-[var(--gold-light)]">مرحباً</p>
           <div className="invite-hero-divider" aria-hidden />
-          <h1 className="invite-hero-name mt-2 text-[var(--gold-light)]">{card.name}</h1>
+          <h1 className="invite-hero-name mt-2">{card.name}</h1>
           <p className="invite-tier-label mt-6">
             ◆ {card.tier.toUpperCase()} ◆
           </p>
@@ -370,7 +370,7 @@ export function CardPhase({ card, origin }: Props) {
 
       {/* Sticky mobile CTA */}
       {!granted ? (
-        <div className="invite-sticky-cta invite-safe-bottom fixed inset-x-0 bottom-0 z-30 px-4 pt-8 sm:hidden">
+        <div className="invite-sticky-cta invite-safe-bottom px-4 pt-8 sm:hidden">
           {acceptError ? (
             <p className="mb-2 text-center text-xs text-rose-400">{acceptError}</p>
           ) : null}
