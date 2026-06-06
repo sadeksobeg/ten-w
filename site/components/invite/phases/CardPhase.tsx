@@ -170,7 +170,7 @@ export function CardPhase({ card, origin }: Props) {
           ) : null}
 
           <div className="invite-opening-card">
-            <AccessTokenCard card={card} />
+            <AccessTokenCard card={card} variant="luxury" revealed />
             <DownloadInviteButton card={card} origin={origin} />
           </div>
         </div>
