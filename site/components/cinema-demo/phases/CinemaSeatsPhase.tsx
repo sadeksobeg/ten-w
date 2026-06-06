@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { CinemaSeatExperience } from "@/components/cinema-demo/CinemaSeatExperience";
 import {
-  CinemaSeatMap,
   computeSeatTotal,
   seatLabelsForSelection,
 } from "@/components/cinema-demo/CinemaSeatMap";
@@ -68,8 +68,8 @@ export function CinemaSeatsPhase() {
           </span>
         </p>
 
-        <CinemaSeatMap showtimeId={showtimeId} selectedIds={selectedSeatIds} onToggle={toggleSeat} live />
-        <p className="cinema-pin-hint">{t("seats.pinchHint")}</p>
+        <CinemaSeatExperience showtimeId={showtimeId} selectedIds={selectedSeatIds} onToggle={toggleSeat} live />
+        <p className="cinema-pin-hint">{t("seats.dragHint")}</p>
       </div>
 
       <div className="cinema-sticky-bar">

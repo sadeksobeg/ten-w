@@ -48,22 +48,22 @@ export function CinemaCheckoutPhase() {
         <h2 className="cinema-title">{t("checkout.title")}</h2>
         <p className="cinema-subtitle">{t("checkout.subtitle")}</p>
 
-        <div className="cinema-checkout-card">
-          <div className="cinema-checkout-row">
+        <div className="cinema-checkout-card cinema-checkout-card--animate">
+          <div className="cinema-checkout-row cinema-checkout-row--reveal">
             <span>{t("checkout.movie")}</span>
             <span>{isAr ? movie.titleAr : movie.titleEn}</span>
           </div>
-          <div className="cinema-checkout-row">
+          <div className="cinema-checkout-row cinema-checkout-row--reveal cinema-checkout-row--delay-1">
             <span>{t("checkout.showtime")}</span>
             <span>
               {showtime.time} · {isAr ? showtime.hallLabelAr : showtime.hallLabelEn}
             </span>
           </div>
-          <div className="cinema-checkout-row">
+          <div className="cinema-checkout-row cinema-checkout-row--reveal cinema-checkout-row--delay-2">
             <span>{t("checkout.seats")}</span>
             <span>{seats.join("، ")}</span>
           </div>
-          <div className="cinema-checkout-row" style={{ borderBottom: "none", fontWeight: 800 }}>
+          <div className="cinema-checkout-row cinema-checkout-row--reveal cinema-checkout-row--delay-3 cinema-checkout-total">
             <span>{t("checkout.total")}</span>
             <span style={{ color: "var(--cinema-yellow)" }}>
               {total.toLocaleString("ar-SY")} {t("currency")}

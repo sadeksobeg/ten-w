@@ -29,7 +29,7 @@ export function CinemaClosingPhase() {
 
         <div className="cinema-closing-features">
           {features.map((f, i) => (
-            <article key={i} className={`cinema-closing-card cinema-reveal cinema-reveal--delay-${i + 1}`}>
+            <article key={i} className={`cinema-closing-card cinema-closing-card--tilt cinema-reveal cinema-reveal--delay-${i + 1}`}>
               <h3>{f.title}</h3>
               <p>{f.body}</p>
             </article>

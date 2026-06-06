@@ -1,4 +1,7 @@
 import { create } from "zustand";
+import { pickBestSeats } from "@/lib/cinema-demo/smart-pick";
+import { buildSeatLayout3D } from "@/lib/cinema-demo/seat-layout-3d";
+import type { CameraPreset } from "@/lib/cinema-demo/camera-presets";
 
 export type DemoMode = "customer" | "manager" | "vip";
 
@@ -17,6 +20,7 @@ export type CinemaDemoPhase =
   | "closing";
 
 export type ManagerView = "overview" | "screen1" | "screen2" | "screen3";
+export type SeatView = "3d" | "2d";
 
 type State = {
   phase: CinemaDemoPhase;
@@ -34,6 +38,10 @@ type State = {
   soundEnabled: boolean;
   liveBrowsers: number;
   transitionClass: string;
+  seatView: SeatView;
+  cameraPreset: CameraPreset;
+  focusedSeatId: string | null;
+  hudHoverSeatId: string | null;
 };
 
 type Actions = {
@@ -53,6 +61,11 @@ type Actions = {
   setSoundEnabled: (v: boolean) => void;
   setLiveBrowsers: (n: number) => void;
   setTransitionClass: (cls: string) => void;
+  setSeatView: (view: SeatView) => void;
+  setCameraPreset: (preset: CameraPreset) => void;
+  setFocusedSeatId: (id: string | null) => void;
+  setHudHoverSeatId: (id: string | null) => void;
+  smartPickSeats: (count?: number) => void;
   goToRoi: () => void;
   goToClosing: () => void;
   resetDemo: () => void;
@@ -74,6 +87,10 @@ const initial: State = {
   soundEnabled: true,
   liveBrowsers: 12,
   transitionClass: "",
+  seatView: "3d",
+  cameraPreset: "overview",
+  focusedSeatId: null,
+  hudHoverSeatId: null,
 };
 
 function makeBookingRef() {
@@ -92,6 +109,10 @@ export const useCinemaDemoStore = create<State & Actions>((set, get) => ({
   setSoundEnabled: (v) => set({ soundEnabled: v }),
   setLiveBrowsers: (n) => set({ liveBrowsers: n }),
   setTransitionClass: (cls) => set({ transitionClass: cls }),
+  setSeatView: (view) => set({ seatView: view }),
+  setCameraPreset: (preset) => set({ cameraPreset: preset }),
+  setFocusedSeatId: (id) => set({ focusedSeatId: id, cameraPreset: id ? "focus" : get().cameraPreset }),
+  setHudHoverSeatId: (id) => set({ hudHoverSeatId: id }),
 
   selectMovie: (id) =>
     set({
@@ -108,6 +129,8 @@ export const useCinemaDemoStore = create<State & Actions>((set, get) => ({
       selectedSeatIds: [],
       phase: "seats",
       transitionClass: "cinema-transition-zoom-hall",
+      cameraPreset: "overview",
+      focusedSeatId: null,
     }),
 
   toggleSeat: (id) => {
@@ -117,7 +140,20 @@ export const useCinemaDemoStore = create<State & Actions>((set, get) => ({
       return;
     }
     if (current.length >= 6) return;
-    set({ selectedSeatIds: [...current, id] });
+    set({ selectedSeatIds: [...current, id], focusedSeatId: id });
+  },
+
+  smartPickSeats: (count = 2) => {
+    const { showtimeId, selectedSeatIds } = get();
+    if (!showtimeId) return;
+    const { seats } = buildSeatLayout3D(showtimeId);
+    const picked = pickBestSeats(seats, count, {}, selectedSeatIds);
+    if (picked.length === 0) return;
+    set({
+      selectedSeatIds: [...selectedSeatIds, ...picked].slice(0, 6),
+      focusedSeatId: picked[0],
+      cameraPreset: "focus",
+    });
   },
 
   setGuestName: (name) => set({ guestName: name }),

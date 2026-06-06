@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import {
   BOOKING_MOVIES,
@@ -13,6 +13,8 @@ export function BookingsFeed() {
   const locale = useLocale();
   const isAr = locale === "ar";
   const [items, setItems] = useState<BookingFeedItem[]>(INITIAL_BOOKINGS);
+  const [pulseId, setPulseId] = useState<string | null>(null);
+  const pulseTimer = useRef<number | null>(null);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -31,14 +33,23 @@ export function BookingsFeed() {
         amount: tickets * 15000,
       };
       setItems((prev) => [newItem, ...prev].slice(0, 8));
+      setPulseId(newItem.id);
+      if (pulseTimer.current) window.clearTimeout(pulseTimer.current);
+      pulseTimer.current = window.setTimeout(() => setPulseId(null), 1200);
     }, 4000);
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+      if (pulseTimer.current) window.clearTimeout(pulseTimer.current);
+    };
   }, []);
 
   return (
     <div className="mgr-feed">
       {items.map((item) => (
-        <div key={item.id} className="mgr-feed-row mgr-feed-row--new">
+        <div
+          key={item.id}
+          className={`mgr-feed-row mgr-feed-row--new ${pulseId === item.id ? "mgr-feed-row--pulse" : ""}`}
+        >
           <span className="mgr-feed-name">{item.name}</span>
           <span className="mgr-feed-detail">
             {item.tickets}× {isAr ? item.movieAr : item.movieEn}

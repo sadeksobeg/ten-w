@@ -68,14 +68,35 @@ type CinemaDemoPhase =
 
 ---
 
-## 7. لوحة المدير (`components/cinema-demo/manager/`)
+---
+
+## 7. قاعة المقاعد 3D (`seats3d/`)
+
+| ملف | دور |
+|-----|-----|
+| `seat-layout-3d.ts` | إحداثيات 3D، rake ~18°، ممرات، VIP/wheelchair |
+| `camera-presets.ts` | overview · immersive · focus |
+| `smart-pick.ts` | أفضل مقاعد متاحة (center-front) |
+| `CinemaSeatHall3D.tsx` | Canvas R3F + dynamic import (`ssr: false`) |
+| `InstancedSeats.tsx` | `InstancedMesh` — أداء 60fps |
+| `CameraRig.tsx` | OrbitControls + lerp بين presets |
+| `SeatHud.tsx` | كاميرا، smart pick، mini-map، toggle 3D/2D |
+| `CinemaSeatExperience.tsx` | wrapper: WebGL أو `prefers-reduced-motion` → `CinemaSeatMap` 2D |
+
+**Store:** `seatView`, `cameraPreset`, `focusedSeatId`, `smartPickSeats()`
+
+**Fallback:** فشل WebGL أو reduced-motion → خريطة 2D تلقائياً + toggle يدوي.
+
+---
+
+## 8. لوحة المدير (`components/cinema-demo/manager/`)
 
 - `ManagerTopBar` · `KpiCards` · `ScreensStatus` · `RevenueChart`
 - `PeakHeatmap` · `BookingsFeed` (interval 4s) · `AlertsPanel` · `StaffOverview`
 
 ---
 
-## 8. ROI
+## 9. ROI
 
 ```typescript
 extraRevenueMonthly = seats × 0.12 × avgTicket × 20 shows
@@ -87,12 +108,12 @@ Slider 50–500 مقعد → CTA `/contact?intent=demo&topic=cinema`
 
 ---
 
-## 9. بنية الملفات (v2)
+## 10. بنية الملفات (v2 + 3D)
 
 ```
 site/components/cinema-demo/
 ├── CinemaBrandLogo.tsx · CinemaCustomCursor.tsx · CinemaFilmGrain.tsx
-├── CinemaProgressBar.tsx · CinemaSoundToggle.tsx · CinemaTicketCeremony.tsx
+├── CinemaSeatExperience.tsx · seats3d/ (Hall3D, InstancedSeats, CameraRig, SeatHud)
 ├── hooks/useAnimatedNumber.ts · useLiveSeatSimulation.ts
 ├── manager/ (8 modules)
 └── phases/
@@ -103,13 +124,13 @@ site/components/cinema-demo/
 
 ---
 
-## 10. i18n
+## 11. i18n
 
-Namespace **`CinemaDemo`** — مفاتيح جديدة: `modes`, `manager`, `vip`, `roi`, `closing`, `upsell`, `soundOn/Off`
+Namespace **`CinemaDemo`** — مفاتيح: `modes`, `manager`, `vip`, `roi`, `closing`, `upsell`, `seats.view3d/view2d`, `cameraOverview/Immersive`, `smartPick`, `webglFallback`
 
 ---
 
-## 11. قيود
+## 12. قيود
 
 - صفر packages جديدة
 - Canvas + AudioContext + CSS فقط
@@ -118,7 +139,7 @@ Namespace **`CinemaDemo`** — مفاتيح جديدة: `modes`, `manager`, `vip
 
 ---
 
-## 12. النشر
+## 13. النشر
 
 ```bash
 cd site && npx tsc --noEmit && npm run build
@@ -127,4 +148,4 @@ bash scripts/server-update.sh
 
 ---
 
-*T.E.N.E.G.T.A — Cinema OS Demo v2 · Salamiya Cinema*
+*T.E.N.E.G.T.A — Cinema OS Demo v2 + 3D Hall · Salamiya Cinema*

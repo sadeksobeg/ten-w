@@ -27,6 +27,7 @@ export function drawLineChart(
   lastWeek: number[],
   labels: string[],
   animProgress: number,
+  crosshair?: { x: number; index: number } | null,
 ) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -75,4 +76,22 @@ export function drawLineChart(
     const x = pad.l + (i / (labels.length - 1)) * chartW;
     ctx.fillText(label, x, h - 6);
   });
+
+  if (crosshair && crosshair.index >= 0 && crosshair.index < thisWeek.length) {
+    const cx = pad.l + (crosshair.index / (thisWeek.length - 1)) * chartW;
+    ctx.strokeStyle = "rgba(245, 197, 24, 0.5)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(cx, pad.t);
+    ctx.lineTo(cx, pad.t + chartH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    const cy = pad.t + chartH - (thisWeek[crosshair.index] / max) * chartH;
+    ctx.fillStyle = "#f5c518";
+    ctx.beginPath();
+    ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+    ctx.fill();
+  }
 }

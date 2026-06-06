@@ -519,7 +519,14 @@
       "vipScarcity": "VIP — places limitées",
       "bestValue": "Meilleur prix",
       "pending": "En cours",
-      "pinchHint": "Pincez pour zoomer sur mobile"
+      "pinchHint": "Pincez pour zoomer sur mobile",
+      "dragHint": "Glisser pour pivoter · pincer pour zoomer · toucher un siège",
+      "view3d": "Vue 3D",
+      "view2d": "Liste",
+      "cameraOverview": "Vue d'ensemble",
+      "cameraImmersive": "Immersif",
+      "smartPick": "Meilleures places",
+      "webglFallback": "Passage en 2D — WebGL indisponible ou mouvement réduit"
     },
     "checkout": {
       "title": "Confirmer",
@@ -549,7 +556,9 @@
       "save": "Économisez",
       "add": "Ajouter",
       "skip": "Non merci",
-      "added": "Menu VIP"
+      "added": "Menu VIP",
+      "without": "Sans formule",
+      "withoutDesc": "Billet seul — sans boisson ni snack"
     },
     "manager": {
       "title": "Tableau d'exploitation",
@@ -560,6 +569,10 @@
       "lastWeek": "Semaine dernière",
       "peakTitle": "Pics de réservation",
       "peakInsight": "Jeu 20h — pic d'occupation. Séance supplémentaire conseillée.",
+      "peakOccupancy": "occupation",
+      "peakRecHigh": "Pic — ajoutez une séance ou un second écran.",
+      "peakRecMid": "Forte demande — surveillez la tarification dynamique.",
+      "peakRecLow": "Faible occupation — idéal pour promos VIP.",
       "liveBookings": "Réservations live",
       "alerts": "Alertes",
       "staff": "Équipe",

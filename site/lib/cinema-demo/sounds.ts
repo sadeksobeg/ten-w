@@ -60,3 +60,8 @@ export function playSuccessChime(enabled: boolean) {
   tone(523, 100, 0.06);
   setTimeout(() => tone(659, 120, 0.05), 100);
 }
+
+export function playCameraMoveSound(enabled: boolean) {
+  if (!enabled) return;
+  tone(320, 50, 0.04);
+}

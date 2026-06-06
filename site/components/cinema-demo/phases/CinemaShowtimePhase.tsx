@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import type { CSSProperties } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { getMovie, showtimesForMovie } from "@/lib/cinema-demo/data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
@@ -50,20 +51,26 @@ export function CinemaShowtimePhase() {
         </div>
 
         <div className="cinema-showtime-list">
-          {showtimes.map((st, i) => (
-            <button
-              key={st.id}
-              type="button"
-              className={`cinema-showtime-btn cinema-reveal cinema-reveal--delay-${i + 1}`}
-              onClick={() => selectShowtime(st.id)}
-            >
-              <div>
-                <p className="cinema-showtime-time">{st.time}</p>
-                <p className="cinema-movie-meta">{isAr ? st.dateLabelAr : st.dateLabelEn}</p>
-              </div>
-              <p className="cinema-movie-meta">{isAr ? st.hallLabelAr : st.hallLabelEn}</p>
-            </button>
-          ))}
+          {showtimes.map((st, i) => {
+            const occupancy = 55 + ((st.id.length * 13 + i * 17) % 40);
+            return (
+              <button
+                key={st.id}
+                type="button"
+                className={`cinema-showtime-btn cinema-reveal cinema-reveal--delay-${i + 1}`}
+                onClick={() => selectShowtime(st.id)}
+              >
+                <div className="cinema-showtime-ring" style={{ "--occ": `${occupancy}%` } as CSSProperties}>
+                  <span>{occupancy}%</span>
+                </div>
+                <div>
+                  <p className="cinema-showtime-time">{st.time}</p>
+                  <p className="cinema-movie-meta">{isAr ? st.dateLabelAr : st.dateLabelEn}</p>
+                </div>
+                <p className="cinema-movie-meta">{isAr ? st.hallLabelAr : st.hallLabelEn}</p>
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -23,6 +23,19 @@ export function CinemaVipPhase() {
   const [subPhase, setSubPhase] = useState(0);
   const [visibleMessages, setVisibleMessages] = useState<string[]>([]);
   const [cart, setCart] = useState<string[]>([]);
+  const [flyingId, setFlyingId] = useState<string | null>(null);
+
+  const toggleLoungeItem = (itemId: string) => {
+    if (cart.includes(itemId)) {
+      setCart((c) => c.filter((x) => x !== itemId));
+      return;
+    }
+    setFlyingId(itemId);
+    window.setTimeout(() => {
+      setCart((c) => [...c, itemId]);
+      setFlyingId(null);
+    }, 450);
+  };
 
   useEffect(() => {
     if (subPhase !== 1) return;
@@ -67,7 +80,7 @@ export function CinemaVipPhase() {
             <h3>{t("vip.concierge")}</h3>
             <div className="cinema-vip-messages">
               {VIP_MESSAGES.filter((m) => visibleMessages.includes(m.id)).map((msg) => (
-                <div key={msg.id} className={`cinema-vip-msg cinema-vip-msg--${msg.from}`}>
+                <div key={msg.id} className={`cinema-vip-msg cinema-vip-msg--${msg.from} cinema-vip-msg--typewriter`}>
                   <p>{isAr ? msg.textAr : msg.textEn}</p>
                   <span>{msg.time}</span>
                 </div>
@@ -79,15 +92,16 @@ export function CinemaVipPhase() {
         {subPhase >= 2 ? (
           <div className="cinema-vip-lounge">
             <h3>{t("vip.lounge")}</h3>
+            <div className="cinema-vip-cart-badge" aria-live="polite">
+              {cart.length > 0 ? `${cart.length} · ${cartTotal.toLocaleString("ar-SY")}` : null}
+            </div>
             <div className="cinema-vip-menu">
               {LOUNGE_ITEMS.map((item) => (
                 <button
                   key={item.id}
                   type="button"
-                  className={`cinema-vip-menu-btn ${cart.includes(item.id) ? "is-active" : ""}`}
-                  onClick={() =>
-                    setCart((c) => (c.includes(item.id) ? c.filter((x) => x !== item.id) : [...c, item.id]))
-                  }
+                  className={`cinema-vip-menu-btn ${cart.includes(item.id) ? "is-active" : ""} ${flyingId === item.id ? "is-flying" : ""}`}
+                  onClick={() => toggleLoungeItem(item.id)}
                 >
                   <CinemaIcon name={LOUNGE_ICON_MAP[item.icon]} size={18} />
                   {isAr ? item.labelAr : item.labelEn}

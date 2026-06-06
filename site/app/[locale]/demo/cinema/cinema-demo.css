@@ -1672,3 +1672,251 @@ html.cinema-demo-active main {
   justify-content: center;
   gap: 0.5rem;
 }
+
+/* —— 3D seat hall —— */
+.cinema-hall-3d {
+  position: relative;
+  width: 100%;
+  height: min(68vh, 520px);
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0a0a0c 0%, #121018 45%, #1a1410 100%);
+  border: 1px solid rgba(245, 197, 24, 0.15);
+  box-shadow: inset 0 -40px 80px rgba(245, 197, 24, 0.06);
+}
+
+.cinema-hall-3d canvas { display: block; width: 100% !important; height: 100% !important; }
+.cinema-hall-3d--loading { min-height: 320px; animation: cinema-pulse 1.2s ease infinite; }
+
+.cinema-seat-experience { display: flex; flex-direction: column; gap: 0.75rem; }
+.cinema-seat-fallback-note {
+  font-size: 0.75rem;
+  color: var(--cinema-muted);
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: rgba(245, 197, 24, 0.08);
+}
+
+.cinema-seat-hud {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: rgba(10, 10, 10, 0.85);
+  border: 1px solid rgba(245, 197, 24, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.cinema-seat-hud-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cinema-seat-hud-divider {
+  width: 1px;
+  height: 1.25rem;
+  background: rgba(255, 255, 255, 0.15);
+  margin-inline: 0.25rem;
+}
+
+.cinema-hud-btn {
+  font-size: 0.7rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cinema-hud-btn.is-active,
+.cinema-hud-btn:hover {
+  border-color: var(--cinema-yellow);
+  background: rgba(245, 197, 24, 0.12);
+}
+
+.cinema-seat-hud-tooltip {
+  font-size: 0.75rem;
+  color: var(--cinema-muted);
+  text-align: center;
+}
+
+.cinema-minimap {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2px;
+  max-width: 200px;
+  margin-inline-start: auto;
+}
+
+.cinema-minimap-dot {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cinema-minimap-dot.is-selected { background: var(--cinema-yellow); }
+.cinema-minimap-dot.is-row-focus { outline: 1px solid rgba(245, 197, 24, 0.6); }
+
+@media (max-width: 640px) {
+  .cinema-hall-3d { height: 55vh; border-radius: 0; margin-inline: -1rem; width: calc(100% + 2rem); }
+  .cinema-seat-hud { border-radius: 12px 12px 0 0; margin-top: -0.5rem; }
+}
+
+[dir="rtl"] .cinema-minimap { margin-inline-start: 0; margin-inline-end: auto; }
+
+/* Upsell compare */
+.cinema-upsell-compare {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .cinema-upsell-compare { grid-template-columns: 1fr 1.2fr; align-items: stretch; }
+}
+
+.cinema-upsell-compare-col {
+  padding: 1.25rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.cinema-upsell-compare-col--plain { opacity: 0.65; }
+.cinema-upsell-compare-col--bundle {
+  border-color: rgba(245, 197, 24, 0.35);
+  background: linear-gradient(135deg, rgba(107, 33, 168, 0.12), rgba(245, 197, 24, 0.08));
+}
+
+.cinema-upsell-compare-price { display: block; margin-top: 1rem; font-size: 1.25rem; opacity: 0.4; }
+
+/* Ticket ceremony dolly */
+.cinema-ticket-shape {
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: center center;
+}
+
+.cinema-ceremony--stage-3 .cinema-ticket-shape { transform: scale(1.04) translateY(-4px); }
+.cinema-ceremony--stage-4 .cinema-ticket-shape { transform: scale(1.1) translateY(-8px); }
+.cinema-ceremony--stage-5 .cinema-ticket-shape { transform: scale(1.14) translateY(-10px); }
+
+/* Manager chart hover */
+.mgr-chart-canvas-wrap { position: relative; }
+.mgr-chart-crosshair {
+  position: absolute;
+  top: 0;
+  bottom: 28px;
+  width: 1px;
+  background: rgba(245, 197, 24, 0.45);
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.mgr-chart-tooltip {
+  position: absolute;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  background: rgba(10, 10, 10, 0.92);
+  border: 1px solid rgba(245, 197, 24, 0.35);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.mgr-feed-row--pulse { animation: mgr-feed-pulse 1s ease; }
+
+@keyframes mgr-feed-pulse {
+  0%, 100% { box-shadow: none; }
+  40% { box-shadow: inset 0 0 0 1px rgba(245, 197, 24, 0.5); background: rgba(245, 197, 24, 0.06); }
+}
+
+.mgr-heatmap-cell {
+  border: none;
+  cursor: pointer;
+  min-height: 20px;
+  transition: outline 0.15s;
+}
+
+.mgr-heatmap-cell.is-active { outline: 2px solid var(--cinema-yellow); outline-offset: -1px; }
+
+.mgr-heatmap-popover {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  border: 1px solid rgba(245, 197, 24, 0.25);
+  background: rgba(245, 197, 24, 0.06);
+  animation: cinema-reveal-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mgr-heatmap-popover strong { display: block; margin-bottom: 0.25rem; }
+.mgr-heatmap-popover p { margin: 0.35rem 0 0; color: var(--cinema-muted); }
+
+/* VIP typewriter + lounge fly */
+.cinema-vip-msg--typewriter p {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: cinema-typewriter 0.8s steps(28) both;
+  border-right: 2px solid rgba(245, 197, 24, 0.5);
+}
+
+@keyframes cinema-typewriter {
+  from { width: 0; }
+  to { width: 100%; border-right-color: transparent; }
+}
+
+.cinema-vip-lounge { position: relative; }
+.cinema-vip-cart-badge {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: var(--cinema-yellow);
+  color: var(--cinema-black);
+  font-weight: 700;
+}
+
+.cinema-vip-menu-btn.is-flying {
+  animation: cinema-fly-cart 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes cinema-fly-cart {
+  to { transform: translate(30%, -80%) scale(0.6); opacity: 0.3; }
+}
+
+[dir="rtl"] .cinema-vip-menu-btn.is-flying {
+  animation-name: cinema-fly-cart-rtl;
+}
+
+@keyframes cinema-fly-cart-rtl {
+  to { transform: translate(-30%, -80%) scale(0.6); opacity: 0.3; }
+}
+
+/* Closing 3D tilt */
+.cinema-closing-card--tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cinema-closing-card--tilt:hover {
+  transform: perspective(800px) rotateX(4deg) rotateY(-6deg) translateY(-4px);
+}
+
+[dir="rtl"] .cinema-closing-card--tilt:hover {
+  transform: perspective(800px) rotateX(4deg) rotateY(6deg) translateY(-4px);
+}

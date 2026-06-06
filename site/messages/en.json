@@ -501,7 +501,14 @@
       "vipScarcity": "VIP — limited seats",
       "bestValue": "Best value",
       "pending": "Pending",
-      "pinchHint": "Pinch to zoom on mobile"
+      "pinchHint": "Pinch to zoom on mobile",
+      "dragHint": "Drag to orbit · pinch to zoom · tap a seat",
+      "view3d": "3D view",
+      "view2d": "List view",
+      "cameraOverview": "Overview",
+      "cameraImmersive": "Immersive",
+      "smartPick": "Best seats",
+      "webglFallback": "Switched to 2D — WebGL unavailable or reduced motion enabled"
     },
     "checkout": {
       "title": "Confirm booking",
@@ -531,7 +538,9 @@
       "save": "Save",
       "add": "Add meal",
       "skip": "No thanks",
-      "added": "VIP meal"
+      "added": "VIP meal",
+      "without": "Without bundle",
+      "withoutDesc": "Ticket only — no drinks or snacks"
     },
     "manager": {
       "title": "Operations dashboard",
@@ -542,6 +551,10 @@
       "lastWeek": "Last week",
       "peakTitle": "Booking peaks",
       "peakInsight": "Thu 20:00 — peak occupancy. Consider an extra showtime.",
+      "peakOccupancy": "occupancy",
+      "peakRecHigh": "Peak — add a showtime or second screen.",
+      "peakRecMid": "Strong demand — watch dynamic pricing.",
+      "peakRecLow": "Low occupancy — good for VIP promos.",
       "liveBookings": "Live bookings",
       "alerts": "Alerts",
       "staff": "Staff",
