@@ -8,6 +8,7 @@ import { MagneticCursor } from "@/components/invite/MagneticCursor";
 import { ScrollProgressBar } from "@/components/invite/ScrollProgressBar";
 import { BootPhase } from "@/components/invite/phases/BootPhase";
 import { CardPhase } from "@/components/invite/phases/CardPhase";
+import { AcceptSystemsMontage } from "@/components/invite/AcceptSystemsMontage";
 import { WorldPhase } from "@/components/invite/phases/WorldPhase";
 import { usePrefersReducedMotion } from "@/components/invite/hooks/usePrefersReducedMotion";
 import { useInviteExperienceStore } from "@/stores/invite-experience-store";
@@ -19,7 +20,7 @@ type Props = {
 
 export function TenegtaInviteExperience({ card, origin }: Props) {
   const reducedMotion = usePrefersReducedMotion();
-  const { phase, completeBoot } = useInviteExperienceStore();
+  const { phase, completeBoot, finishAcceptMontage } = useInviteExperienceStore();
   const [ambientVisible, setAmbientVisible] = useState(reducedMotion);
   const [mounted, setMounted] = useState(false);
   const baseTitle = `${card.name} — TENEGTA`;
@@ -79,11 +80,13 @@ export function TenegtaInviteExperience({ card, origin }: Props) {
         />
       ) : null}
 
-      {phase === "card" ? (
-        <div className="invite-phase-fade invite-phase-visible relative z-10">
+      {phase === "card" || phase === "montage" ? (
+        <div className={`invite-phase-fade invite-phase-visible relative z-10 ${phase === "montage" ? "pointer-events-none" : ""}`}>
           <CardPhase card={card} origin={origin} />
         </div>
       ) : null}
+
+      {phase === "montage" ? <AcceptSystemsMontage onComplete={finishAcceptMontage} /> : null}
 
       {phase === "world" ? <WorldPhase card={card} origin={origin} /> : null}
     </div>

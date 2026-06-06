@@ -417,6 +417,8 @@
 /* ── CINEMATIC FLOW ── */
 .invite-flow {
   max-width: 100%;
+  width: 100%;
+  margin-inline: auto;
 }
 
 .invite-scene {
@@ -506,8 +508,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 16px;
   margin-top: 28px;
+  width: 100%;
 }
 
 .invite-cinema-panel {
@@ -678,6 +682,198 @@
   margin-top: 24px;
 }
 
+/* ── ACCEPT SYSTEMS MONTAGE ── */
+.invite-montage-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+  animation: invite-montage-enter 0.2s ease forwards;
+}
+
+.invite-montage-overlay--exit {
+  animation: invite-montage-exit 0.42s ease forwards;
+}
+
+@keyframes invite-montage-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes invite-montage-exit {
+  to {
+    opacity: 0;
+    filter: brightness(2);
+  }
+}
+
+.invite-montage-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  animation: invite-montage-white-flash 0.18s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes invite-montage-white-flash {
+  0% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.invite-montage-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  opacity: 0;
+  transform: scale(1.08);
+  filter: blur(8px);
+  pointer-events: none;
+  transition: none;
+}
+
+.invite-montage-scene.is-active {
+  animation: invite-montage-scene-pop 0.34s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes invite-montage-scene-pop {
+  0% {
+    opacity: 0;
+    transform: scale(1.12) translateY(12px);
+    filter: blur(10px);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(0.98) translateY(0);
+    filter: blur(0);
+  }
+}
+
+.invite-montage-scene--ai {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(168, 85, 247, 0.35), transparent 55%),
+    #05020c;
+}
+
+.invite-montage-scene--cyber {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(201, 146, 42, 0.4), transparent 55%),
+    #080601;
+}
+
+.invite-montage-scene--dev {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(245, 230, 195, 0.2), transparent 55%),
+    #06050a;
+}
+
+.invite-montage-scene--core {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(201, 146, 42, 0.45), rgba(107, 33, 168, 0.2) 45%, transparent 62%),
+    #03010a;
+}
+
+.invite-montage-code {
+  font-family: var(--invite-font-mono);
+  font-size: clamp(2.5rem, 10vw, 4.5rem);
+  letter-spacing: 0.35em;
+  color: var(--gold-light);
+  margin-bottom: 12px;
+  text-shadow: 0 0 40px rgba(201, 146, 42, 0.55);
+}
+
+.invite-montage-scene--ai .invite-montage-code {
+  color: #c084fc;
+  text-shadow: 0 0 48px rgba(168, 85, 247, 0.65);
+}
+
+.invite-montage-title {
+  font-family: var(--invite-font-arabic);
+  font-size: clamp(1.75rem, 6vw, 2.75rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.invite-montage-sub {
+  margin-top: 10px;
+  font-family: var(--invite-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgba(245, 240, 232, 0.55);
+}
+
+.invite-montage-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.03) 0,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.invite-montage-progress {
+  position: absolute;
+  bottom: clamp(28px, 6vh, 48px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.invite-montage-progress span {
+  width: 28px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.invite-montage-progress span.is-lit {
+  background: var(--gold-light);
+  box-shadow: 0 0 12px rgba(228, 184, 77, 0.65);
+}
+
+.invite-montage-caption {
+  position: absolute;
+  top: clamp(24px, 5vh, 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--invite-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  color: rgba(201, 146, 42, 0.55);
+  white-space: nowrap;
+}
+
 /* ── WORLD CELEBRATION ── */
 .invite-world-letterbox::before,
 .invite-world-letterbox::after {
@@ -706,9 +902,15 @@
 .invite-world-content {
   position: relative;
   z-index: 10;
+  width: 100%;
   max-width: 860px;
-  margin: 0 auto;
+  margin-inline: auto;
   padding: clamp(36px, 6vh, 56px) 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .invite-world-orbit-bg {
@@ -883,6 +1085,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: 100%;
   min-height: min(42vh, 360px);
   justify-content: center;
   padding-bottom: 8px;
@@ -922,17 +1125,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 16px;
   margin: 8px auto 24px;
   position: relative;
   z-index: 5;
+  width: 100%;
 }
 
 .invite-world-card-halo-wrap {
   position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
+  max-width: 560px;
+  margin-inline: auto;
 }
 
 .invite-world-card-halo {
@@ -984,6 +1192,7 @@
 
 .invite-world-pillars {
   margin: 16px 0 24px;
+  width: 100%;
 }
 
 .invite-pillars-grid--world {
@@ -1110,6 +1319,7 @@
 }
 
 .invite-world-body {
+  width: 100%;
   padding-top: 8px;
   text-align: center;
 }
@@ -1163,6 +1373,7 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  width: 100%;
 }
 
 .invite-world-cta-link {
@@ -1279,6 +1490,15 @@
   inherits: false;
 }
 
+.invite-vip-wrap {
+  margin-inline: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .invite-vip-wrap--luxury {
   position: relative;
   width: 100%;
@@ -1288,7 +1508,7 @@
 
 .invite-vip-spotlight {
   position: absolute;
-  inset: -40px -20px;
+  inset: -40px;
   background: radial-gradient(ellipse at center, rgba(201, 146, 42, 0.22) 0%, transparent 65%);
   pointer-events: none;
   z-index: 0;
@@ -1312,6 +1532,7 @@
   height: 272px;
   min-height: 272px;
   border-radius: 18px;
+  margin-inline: auto;
 }
 
 .invite-vip-card-shell--hidden {
@@ -1454,6 +1675,7 @@
   width: min(380px, calc(100vw - 48px));
   height: 240px;
   min-height: 200px;
+  margin-inline: auto;
   transition: transform 0.5s ease;
 }
 
@@ -2381,6 +2603,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .invite-montage-overlay,
+  .invite-montage-scene,
+  .invite-montage-flash {
+    animation: none !important;
+  }
+
   .invite-letter,
   .invite-card-float,
   .invite-foil-border,

@@ -106,7 +106,7 @@ function SceneDivider({ label }: { label: string }) {
 
 export function CardPhase({ card, origin }: Props) {
   const reducedMotion = usePrefersReducedMotion();
-  const { accepting, acceptError, setAccepting, setAcceptError, enterWorld } =
+  const { accepting, acceptError, setAccepting, setAcceptError, startAcceptMontage, enterWorld } =
     useInviteExperienceStore();
   const [hideScrollHint, setHideScrollHint] = useState(false);
   const granted = card.accepted;
@@ -127,9 +127,17 @@ export function CardPhase({ card, origin }: Props) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const goToWorld = () => {
+    if (reducedMotion) {
+      enterWorld();
+      return;
+    }
+    startAcceptMontage();
+  };
+
   const onAccept = async () => {
     if (granted) {
-      enterWorld();
+      goToWorld();
       return;
     }
     setAccepting(true);
@@ -145,7 +153,7 @@ export function CardPhase({ card, origin }: Props) {
         setAcceptError(data.error ?? "تعذّر تأكيد الدعوة");
         return;
       }
-      enterWorld();
+      goToWorld();
     } catch {
       setAcceptError("تحقق من الاتصال وحاول مجدداً");
     } finally {

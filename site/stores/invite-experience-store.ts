@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 
-export type InvitePhase = "boot" | "card" | "world";
+export type InvitePhase = "boot" | "card" | "montage" | "world";
 
 type State = {
   phase: InvitePhase;
@@ -17,6 +17,8 @@ type Actions = {
   setAccepting: (v: boolean) => void;
   setAcceptError: (msg: string | null) => void;
   skipToCard: () => void;
+  startAcceptMontage: () => void;
+  finishAcceptMontage: () => void;
   enterWorld: () => void;
 };
 
@@ -30,5 +32,7 @@ export const useInviteExperienceStore = create<State & Actions>((set) => ({
   setAccepting: (accepting) => set({ accepting }),
   setAcceptError: (acceptError) => set({ acceptError }),
   skipToCard: () => set({ phase: "card", bootComplete: true }),
+  startAcceptMontage: () => set({ phase: "montage", accepting: false }),
+  finishAcceptMontage: () => set({ phase: "world" }),
   enterWorld: () => set({ phase: "world", accepting: false }),
 }));
