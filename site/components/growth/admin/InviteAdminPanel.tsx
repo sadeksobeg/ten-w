@@ -7,6 +7,7 @@ import { InviteAdminFormFields } from "@/components/invite/admin/InviteAdminForm
 import {
   createInviteCardAction,
   deleteInviteCardAction,
+  normalizeInviteSlugsAction,
   updateInviteCardAction,
 } from "@/lib/invite/actions";
 import { INVITE_TIER_LABELS } from "@/lib/invite/message-templates";
@@ -67,6 +68,7 @@ export function InviteAdminPanel({ cards, stats, origin }: Props) {
   const [copied, setCopied] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [normalizeResult, setNormalizeResult] = useState<string | null>(null);
 
   function copyLink(slug: string) {
     const url = `${origin}/invite/${slug}`;
@@ -109,6 +111,27 @@ export function InviteAdminPanel({ cards, stats, origin }: Props) {
     });
   }
 
+  function onNormalizeSlugs() {
+    if (
+      !window.confirm(
+        "تطبيع روابط جميع الدعوات (إزالة تكرار الاسم)؟ لن يُمس أي حساب شريك — الروابط القديمة تبقى تعمل.",
+      )
+    ) {
+      return;
+    }
+    setNormalizeResult(null);
+    start(async () => {
+      const res = await normalizeInviteSlugsAction();
+      if (!res.ok) {
+        setError(t("errors.createFailed"));
+        return;
+      }
+      setNormalizeResult(
+        `تم فحص ${res.scanned} دعوة — تحديث ${res.updated}، بدون تغيير ${res.skipped}.`,
+      );
+    });
+  }
+
   return (
     <div className="space-y-8">
       <header>
@@ -122,6 +145,25 @@ export function InviteAdminPanel({ cards, stats, origin }: Props) {
       </header>
 
       <InviteStatsBar stats={stats} />
+
+      <GlassCard className="border border-white/10 p-5 sm:p-6">
+        <h2 className="text-lg font-bold text-white">صيانة الروابط</h2>
+        <p className="mt-1 text-xs text-white/45">
+          يصلّح روابط الدعوات التي يتكرر فيها الاسم (مثل ahmad-alkaseer-ahmad-alkaseer). يُحدَّث
+          slug فقط مع حفظ الرابط القديم — لا تأثير على PartnerProfile أو أدوار المستخدمين.
+        </p>
+        {normalizeResult ? (
+          <p className="mt-3 text-xs text-emerald-300">{normalizeResult}</p>
+        ) : null}
+        <button
+          type="button"
+          onClick={onNormalizeSlugs}
+          disabled={pending}
+          className="mt-4 rounded-xl border border-white/15 bg-white/[0.04] px-5 py-2.5 text-sm font-semibold text-white/85 hover:border-gold/35 disabled:opacity-50"
+        >
+          {pending ? "جاري التطبيع…" : "تطبيع روابط الدعوات الحالية"}
+        </button>
+      </GlassCard>
 
       <GlassCard className="border border-white/10 p-5 sm:p-6">
         <h2 className="text-lg font-bold text-white">{t("createTitle")}</h2>

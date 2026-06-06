@@ -917,6 +917,7 @@ model InviteCard {
   message     String    @db.Text
   token       String    @unique
   slug        String    @unique
+  legacySlug  String?   @unique
   accepted    Boolean   @default(false)
   acceptedAt  DateTime?
   createdById String?

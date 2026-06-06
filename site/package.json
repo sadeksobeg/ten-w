@@ -15,7 +15,8 @@
     "test:a11y": "node scripts/a11y-note.mjs",
     "test:e2e": "playwright test",
     "validate:i18n": "node scripts/validate-i18n-keys.mjs",
-    "sync:fr": "node scripts/sync-fr-from-en.mjs"
+    "sync:fr": "node scripts/sync-fr-from-en.mjs",
+    "normalize:invite-slugs": "tsx scripts/normalize-invite-slugs.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

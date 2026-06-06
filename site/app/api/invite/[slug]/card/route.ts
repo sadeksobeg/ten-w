@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { findInviteCardRow } from "@/lib/invite/get-card";
 import { renderLuxuryInviteCardPng } from "@/lib/invite/render-luxury-card-png";
 import { requireInviteAdmin } from "@/lib/invite/require-admin";
 import { getSiteUrl } from "@/lib/site";
@@ -13,7 +13,7 @@ export async function GET(_req: Request, { params }: Params) {
   }
 
   const { slug } = await params;
-  const card = await prisma.inviteCard.findUnique({ where: { slug } });
+  const card = await findInviteCardRow(slug);
   if (!card) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }

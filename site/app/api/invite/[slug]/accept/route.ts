@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { findInviteCardRow } from "@/lib/invite/get-card";
 import { rateLimitInviteAccept } from "@/lib/invite/rate-limit-invite";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -14,7 +15,7 @@ export async function POST(req: Request, { params }: Params) {
   }
 
   const { slug } = await params;
-  const card = await prisma.inviteCard.findUnique({ where: { slug } });
+  const card = await findInviteCardRow(slug);
   if (!card) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }

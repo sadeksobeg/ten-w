@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { Prisma, UserRole } from "@prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { normalizeAllInviteSlugs } from "@/lib/invite/normalize-slugs";
 import {
   createInviteSchema,
   generateSlugBase,
@@ -101,4 +102,14 @@ export async function deleteInviteCardAction(id: string) {
   await prisma.inviteCard.delete({ where: { id } });
   revalidatePath("/admin");
   return { ok: true as const };
+}
+
+export async function normalizeInviteSlugsAction() {
+  await requireAdmin();
+  const result = await normalizeAllInviteSlugs();
+  revalidatePath("/admin");
+  revalidatePath("/ar/growth/admin/invites");
+  revalidatePath("/en/growth/admin/invites");
+  revalidatePath("/fr/growth/admin/invites");
+  return { ok: true as const, ...result };
 }

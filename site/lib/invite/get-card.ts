@@ -14,7 +14,7 @@ export type InviteCardPublic = {
   createdAt: Date;
 };
 
-function mapRow(row: {
+type InviteCardRow = {
   id: string;
   name: string;
   handle: string;
@@ -26,7 +26,9 @@ function mapRow(row: {
   accepted: boolean;
   acceptedAt: Date | null;
   createdAt: Date;
-}): InviteCardPublic {
+};
+
+function mapRow(row: InviteCardRow): InviteCardPublic {
   return {
     id: row.id,
     name: row.name,
@@ -42,17 +44,26 @@ function mapRow(row: {
   };
 }
 
+export async function findInviteCardRow(slug: string) {
+  return prisma.inviteCard.findFirst({
+    where: { OR: [{ slug }, { legacySlug: slug }] },
+  });
+}
+
 export async function getInviteCardBySlug(slug: string): Promise<InviteCardPublic | null> {
-  const row = await prisma.inviteCard.findUnique({ where: { slug } });
+  const row = await findInviteCardRow(slug);
   return row ? mapRow(row) : null;
 }
 
 export async function getInviteCardForMetadata(slug: string) {
-  const row = await prisma.inviteCard.findUnique({
-    where: { slug },
-    select: { name: true, message: true, tier: true, slug: true },
-  });
-  return row;
+  const row = await findInviteCardRow(slug);
+  if (!row) return null;
+  return {
+    name: row.name,
+    message: row.message,
+    tier: row.tier,
+    slug: row.slug,
+  };
 }
 
 export async function listInviteCards() {
