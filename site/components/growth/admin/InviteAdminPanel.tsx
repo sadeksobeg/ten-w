@@ -230,6 +230,7 @@ export function InviteAdminPanel({ cards, stats, origin }: Props) {
                           message: c.message,
                         }}
                         fieldClass={fieldClass}
+                        inviteUrl={`${origin}/invite/${c.slug}`}
                       />
                     </div>
                     <button

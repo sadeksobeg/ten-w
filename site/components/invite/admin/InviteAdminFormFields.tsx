@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { INVITE_TIERS, type InviteTier } from "@/lib/invite/generate";
 import {
+  buildInviteOutreachMessage,
   INVITE_MESSAGE_AFTER_MEETING,
   INVITE_MESSAGE_TEMPLATES,
   INVITE_TIER_LABELS,
@@ -19,20 +20,32 @@ export type InviteFormCard = {
 type Props = {
   card?: InviteFormCard;
   fieldClass: string;
+  inviteUrl?: string;
 };
 
 function tierLabel(tier: string) {
   return INVITE_TIER_LABELS[tier as InviteTier] ?? tier;
 }
 
-export function InviteAdminFormFields({ card, fieldClass }: Props) {
+export function InviteAdminFormFields({ card, fieldClass, inviteUrl }: Props) {
   const initialTier = (card?.tier as InviteTier) ?? "CONTENT CREATOR";
   const [tier, setTier] = useState<InviteTier>(initialTier);
   const [message, setMessage] = useState(
     card?.message ?? INVITE_MESSAGE_TEMPLATES["CONTENT CREATOR"],
   );
+  const [copiedOutreach, setCopiedOutreach] = useState(false);
 
   const handle = card?.handle?.replace(/^@/, "") ?? "";
+
+  function copyOutreachMessage() {
+    const nameInput = document.querySelector<HTMLInputElement>('input[name="name"]');
+    const name = nameInput?.value.trim() || card?.name || "[الاسم]";
+    const url = inviteUrl ?? "[رابط الدعوة]";
+    void navigator.clipboard.writeText(buildInviteOutreachMessage(name, url)).then(() => {
+      setCopiedOutreach(true);
+      window.setTimeout(() => setCopiedOutreach(false), 2000);
+    });
+  }
 
   return (
     <>
@@ -88,6 +101,13 @@ export function InviteAdminFormFields({ card, fieldClass }: Props) {
             onClick={() => setMessage(INVITE_MESSAGE_AFTER_MEETING)}
           >
             بعد اللقاء والاتفاق
+          </button>
+          <button
+            type="button"
+            className="rounded-lg border border-gold/30 px-2 py-1 text-[10px] font-semibold text-gold/90 hover:border-gold/50"
+            onClick={copyOutreachMessage}
+          >
+            {copiedOutreach ? "تم النسخ ✓" : "نسخ رسالة الإرسال + الروابط"}
           </button>
         </div>
       </label>
