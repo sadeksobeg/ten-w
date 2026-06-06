@@ -6,6 +6,7 @@ export type CinemaMovie = {
   genreEn: string;
   durationMin: number;
   rating: string;
+  posterSrc: string;
   posterGradient: string;
 };
 
@@ -23,7 +24,10 @@ export type CinemaShowtime = {
 export const CINEMA_BRAND = {
   nameAr: "سينما سلمية",
   nameEn: "Salamiya Cinema",
+  /** Full marketing flat-lay (legacy) */
   logoSrc: "/demo/salamiya-cinema-logo.png",
+  /** Cropped wordmark — yellow + سلمية CINEMA only */
+  logoMarkSrc: "/demo/salamiya-cinema-mark.png",
   yellow: "#F5C518",
   black: "#0a0a0a",
 } as const;
@@ -37,6 +41,7 @@ export const CINEMA_MOVIES: CinemaMovie[] = [
     genreEn: "Sci-Fi · Adventure",
     durationMin: 156,
     rating: "PG-13",
+    posterSrc: "/demo/posters/dune.jpg",
     posterGradient: "linear-gradient(145deg, #1a1208 0%, #c9922a 45%, #3d2a0a 100%)",
   },
   {
@@ -47,6 +52,7 @@ export const CINEMA_MOVIES: CinemaMovie[] = [
     genreEn: "Comedy · Family",
     durationMin: 98,
     rating: "PG",
+    posterSrc: "/demo/posters/comedy.jpg",
     posterGradient: "linear-gradient(145deg, #2a1a0a 0%, #f5c518 50%, #1a1400 100%)",
   },
   {
@@ -57,6 +63,7 @@ export const CINEMA_MOVIES: CinemaMovie[] = [
     genreEn: "Drama · Local",
     durationMin: 122,
     rating: "PG-13",
+    posterSrc: "/demo/posters/drama.jpg",
     posterGradient: "linear-gradient(145deg, #0f0b1e 0%, #6b21a8 40%, #03010a 100%)",
   },
 ];

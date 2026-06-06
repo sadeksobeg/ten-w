@@ -471,12 +471,14 @@
     "back": "Retour",
     "splash": {
       "tag": "OS cinéma intelligent · T.E.N.E.G.T.A",
+      "systemLine": "Réservation · Places · Billets · Analytics",
       "cta": "Commencer"
     },
     "movies": {
       "title": "Choisir un film",
       "subtitle": "Séances du jour — réservez en quelques secondes",
-      "min": "min"
+      "min": "min",
+      "book": "Réserver →"
     },
     "showtime": {
       "subtitle": "Choisissez l'horaire et la salle"

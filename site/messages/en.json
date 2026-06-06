@@ -453,12 +453,14 @@
     "back": "Back",
     "splash": {
       "tag": "Smart cinema OS · T.E.N.E.G.T.A",
+      "systemLine": "Booking · Seats · Tickets · Analytics",
       "cta": "Start experience"
     },
     "movies": {
       "title": "Choose a film",
       "subtitle": "Today's showtimes — book in seconds",
-      "min": "min"
+      "min": "min",
+      "book": "Book now →"
     },
     "showtime": {
       "subtitle": "Pick a time and hall"

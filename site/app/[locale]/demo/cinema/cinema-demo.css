@@ -1,3 +1,16 @@
+/* ── Immersive mode: hide OS + site custom cursor ── */
+html.cinema-demo-active,
+html.cinema-demo-active body,
+html.cinema-demo-active .cinema-demo-root,
+html.cinema-demo-active .cinema-demo-root * {
+  cursor: none !important;
+}
+
+html.cinema-demo-active.custom-cursor-active body > .pointer-events-none.fixed {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
 .cinema-demo-root {
   --cinema-yellow: #f5c518;
   --cinema-yellow-dim: rgba(245, 197, 24, 0.15);
@@ -10,27 +23,103 @@
   min-height: 100dvh;
   background: var(--cinema-void);
   color: #f5f5f5;
+  position: relative;
+  isolation: isolate;
 }
 
 .cinema-demo-root * {
   box-sizing: border-box;
 }
 
+/* ── Ambient layer ── */
+.cinema-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cinema-ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  animation: cinema-glow-drift 12s ease-in-out infinite alternate;
+}
+
+.cinema-ambient-glow--gold {
+  width: 420px;
+  height: 420px;
+  top: -80px;
+  right: -60px;
+  background: rgba(245, 197, 24, 0.25);
+}
+
+.cinema-ambient-glow--purple {
+  width: 360px;
+  height: 360px;
+  bottom: 10%;
+  left: -80px;
+  background: rgba(107, 33, 168, 0.2);
+  animation-delay: -4s;
+}
+
+.cinema-ambient-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.cinema-ambient-particle {
+  position: absolute;
+  bottom: -10px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(245, 197, 24, 0.5);
+  animation: cinema-particle-rise linear infinite;
+}
+
+@keyframes cinema-glow-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(30px, 20px) scale(1.08); }
+}
+
+@keyframes cinema-particle-rise {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  100% { transform: translateY(-100vh); opacity: 0; }
+}
+
+/* ── Phase transitions ── */
 .cinema-phase {
-  animation: cinema-fade-in 0.55s ease-out both;
+  position: relative;
+  z-index: 1;
+  animation: cinema-fade-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes cinema-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
+.cinema-reveal {
+  animation: cinema-reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cinema-reveal--delay-1 { animation-delay: 0.08s; }
+.cinema-reveal--delay-2 { animation-delay: 0.16s; }
+.cinema-reveal--delay-3 { animation-delay: 0.24s; }
+.cinema-reveal--delay-4 { animation-delay: 0.32s; }
+
+@keyframes cinema-reveal-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Splash boot ── */
 .cinema-splash {
   min-height: 100dvh;
   display: flex;
@@ -40,41 +129,139 @@
   background: var(--cinema-yellow);
   padding: 2rem;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.cinema-splash-logo {
-  width: min(320px, 78vw);
+.cinema-splash-scanline {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+}
+
+.cinema-splash-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.12) 100%);
+  pointer-events: none;
+}
+
+.cinema-splash-logo-wrap {
+  position: relative;
+  transform: scale(0.88);
+  opacity: 0;
+  animation: cinema-logo-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+}
+
+.cinema-splash-mark {
+  width: min(420px, 82vw);
   height: auto;
-  border-radius: 12px;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes cinema-logo-in {
+  to { transform: scale(1); opacity: 1; }
 }
 
 .cinema-splash-tag {
   margin-top: 2rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  animation: cinema-fade-only 0.6s ease 0.9s forwards;
+}
+
+.cinema-splash-system {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  animation: cinema-fade-only 0.6s ease 1.1s forwards;
+}
+
+@keyframes cinema-fade-only {
+  to { opacity: 1; }
 }
 
 .cinema-splash-cta {
-  margin-top: 2.5rem;
-  padding: 0.9rem 2.2rem;
+  margin-top: 2.25rem;
+  padding: 0.95rem 2.4rem;
   border: none;
   border-radius: 999px;
   background: var(--cinema-black);
   color: var(--cinema-yellow);
   font-weight: 800;
   font-size: 0.95rem;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  opacity: 0;
+  animation: cinema-cta-in 0.6s ease 1.35s forwards, cinema-cta-pulse 2.5s ease-in-out 2s infinite;
+  position: relative;
+  overflow: hidden;
 }
 
-.cinema-splash-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+.cinema-splash-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.15) 50%, transparent 60%);
+  transform: translateX(-100%);
+  animation: cinema-shimmer 3s ease-in-out 2s infinite;
 }
 
+@keyframes cinema-cta-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cinema-cta-pulse {
+  0%, 100% { box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25); }
+  50% { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 8px rgba(0, 0, 0, 0.08); }
+}
+
+@keyframes cinema-shimmer {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+
+.cinema-splash-loader {
+  display: flex;
+  gap: 6px;
+  margin-top: 1.75rem;
+  opacity: 0;
+  animation: cinema-fade-only 0.4s ease 1.6s forwards;
+}
+
+.cinema-splash-loader span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  animation: cinema-loader-bounce 1.2s ease-in-out infinite;
+}
+
+.cinema-splash-loader span:nth-child(2) { animation-delay: 0.15s; }
+.cinema-splash-loader span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes cinema-loader-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+.cinema-splash-note {
+  margin-top: 1.25rem;
+  font-size: 0.72rem;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* ── Header ── */
 .cinema-header {
   position: sticky;
   top: 0;
@@ -90,9 +277,9 @@
 }
 
 .cinema-header-logo {
-  height: 40px;
+  height: 36px;
   width: auto;
-  border-radius: 6px;
+  object-fit: contain;
 }
 
 .cinema-header-badge {
@@ -103,6 +290,12 @@
   border: 1px solid rgba(245, 197, 24, 0.35);
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
+  animation: cinema-badge-glow 3s ease-in-out infinite;
+}
+
+@keyframes cinema-badge-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(245, 197, 24, 0); }
+  50% { box-shadow: 0 0 12px rgba(245, 197, 24, 0.25); }
 }
 
 .cinema-container {
@@ -111,23 +304,27 @@
   padding: 1.5rem 1.25rem 6rem;
 }
 
+/* ── Progress ── */
 .cinema-steps {
   display: flex;
   gap: 0.35rem;
   margin-bottom: 1.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.25rem;
 }
 
 .cinema-step {
   flex: 1;
-  min-width: 4.5rem;
   height: 3px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.12);
+  transition: background 0.4s, transform 0.4s;
 }
 
-.cinema-step.is-active,
+.cinema-step.is-active {
+  background: var(--cinema-yellow);
+  transform: scaleY(1.4);
+  box-shadow: 0 0 10px rgba(245, 197, 24, 0.5);
+}
+
 .cinema-step.is-done {
   background: var(--cinema-yellow);
 }
@@ -145,9 +342,10 @@
   line-height: 1.6;
 }
 
+/* ── Movie cards + posters ── */
 .cinema-movie-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 @media (min-width: 640px) {
@@ -161,20 +359,57 @@
   border-radius: 16px;
   overflow: hidden;
   background: var(--cinema-surface);
-  cursor: pointer;
   text-align: start;
-  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition: border-color 0.3s, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s;
+  padding: 0;
 }
 
 .cinema-movie-card:hover {
-  border-color: rgba(245, 197, 24, 0.45);
-  transform: translateY(-3px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  border-color: rgba(245, 197, 24, 0.55);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(245, 197, 24, 0.15);
 }
 
-.cinema-movie-poster {
+.cinema-poster-frame {
+  position: relative;
   aspect-ratio: 2 / 3;
   width: 100%;
+  overflow: hidden;
+  background: var(--cinema-surface);
+}
+
+.cinema-poster-img {
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cinema-movie-card:hover .cinema-poster-img {
+  transform: scale(1.06);
+}
+
+.cinema-poster-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, transparent 30%, rgba(255, 255, 255, 0.12) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.cinema-movie-card:hover .cinema-poster-shine {
+  transform: translateX(100%);
+}
+
+.cinema-poster-rating {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.75);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--cinema-yellow);
+  border: 1px solid rgba(245, 197, 24, 0.35);
 }
 
 .cinema-movie-body {
@@ -190,6 +425,46 @@
 .cinema-movie-meta {
   font-size: 0.75rem;
   color: var(--cinema-muted);
+}
+
+.cinema-movie-cta {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--cinema-yellow);
+  letter-spacing: 0.04em;
+}
+
+/* ── Showtime hero ── */
+.cinema-hero-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  filter: blur(28px) brightness(0.35);
+  transform: scale(1.1);
+}
+
+.cinema-showtime-hero {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .cinema-showtime-hero {
+    grid-template-columns: 140px 1fr;
+  }
+}
+
+.cinema-showtime-poster.cinema-poster-frame {
+  aspect-ratio: 2 / 3;
+  max-width: 140px;
+  border-radius: 12px;
+  border: 1px solid rgba(245, 197, 24, 0.25);
 }
 
 .cinema-showtime-list {
@@ -209,14 +484,14 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.03);
   color: inherit;
-  cursor: pointer;
   text-align: inherit;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.25s, background 0.25s, transform 0.25s;
 }
 
 .cinema-showtime-btn:hover {
-  border-color: rgba(245, 197, 24, 0.45);
+  border-color: rgba(245, 197, 24, 0.5);
   background: var(--cinema-yellow-dim);
+  transform: translateX(-4px);
 }
 
 .cinema-showtime-time {
@@ -225,6 +500,7 @@
   color: var(--cinema-yellow);
 }
 
+/* ── Seat map ── */
 .cinema-screen-wrap {
   margin: 0 auto 1.5rem;
   max-width: 520px;
@@ -232,10 +508,19 @@
 }
 
 .cinema-screen {
-  height: 8px;
+  height: 10px;
   border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  background: linear-gradient(180deg, rgba(245, 197, 24, 0.85), rgba(245, 197, 24, 0.15));
-  box-shadow: 0 0 40px rgba(245, 197, 24, 0.35);
+  background: linear-gradient(180deg, rgba(245, 197, 24, 0.9), rgba(245, 197, 24, 0.12));
+  box-shadow: 0 0 50px rgba(245, 197, 24, 0.4);
+}
+
+.cinema-screen--pulse {
+  animation: cinema-screen-glow 2.5s ease-in-out infinite;
+}
+
+@keyframes cinema-screen-glow {
+  0%, 100% { box-shadow: 0 0 40px rgba(245, 197, 24, 0.35); }
+  50% { box-shadow: 0 0 70px rgba(245, 197, 24, 0.65); }
 }
 
 .cinema-screen-label {
@@ -272,8 +557,7 @@
   border-radius: 6px 6px 2px 2px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.08);
-  cursor: pointer;
-  transition: transform 0.15s, background 0.15s, border-color 0.15s;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, border-color 0.2s, box-shadow 0.2s;
   padding: 0;
 }
 
@@ -297,15 +581,21 @@
 .cinema-seat.is-occupied {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.06);
-  cursor: not-allowed;
   opacity: 0.35;
 }
 
 .cinema-seat.is-selected {
   background: var(--cinema-yellow);
   border-color: var(--cinema-yellow);
-  transform: scale(1.08);
-  box-shadow: 0 0 12px rgba(245, 197, 24, 0.5);
+  transform: scale(1.12);
+  box-shadow: 0 0 16px rgba(245, 197, 24, 0.6);
+  animation: cinema-seat-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cinema-seat-pop {
+  0% { transform: scale(0.85); }
+  60% { transform: scale(1.18); }
+  100% { transform: scale(1.12); }
 }
 
 .cinema-seat-aisle {
@@ -334,6 +624,7 @@
   border-radius: 3px;
 }
 
+/* ── Sticky bar + buttons ── */
 .cinema-sticky-bar {
   position: fixed;
   left: 0;
@@ -346,9 +637,15 @@
   gap: 1rem;
   padding: 1rem 1.25rem;
   padding-bottom: max(1rem, env(safe-area-inset-bottom));
-  background: linear-gradient(180deg, transparent, rgba(3, 1, 10, 0.95) 30%);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(245, 197, 24, 0.12);
+  background: linear-gradient(180deg, transparent, rgba(3, 1, 10, 0.96) 35%);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(245, 197, 24, 0.15);
+  animation: cinema-bar-in 0.5s ease both;
+}
+
+@keyframes cinema-bar-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 .cinema-sticky-price {
@@ -363,13 +660,11 @@
   border: none;
   font-weight: 800;
   font-size: 0.88rem;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity 0.2s, transform 0.25s, box-shadow 0.25s;
 }
 
 .cinema-btn:disabled {
   opacity: 0.45;
-  cursor: not-allowed;
 }
 
 .cinema-btn-primary {
@@ -378,7 +673,8 @@
 }
 
 .cinema-btn-primary:not(:disabled):hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 197, 24, 0.35);
 }
 
 .cinema-btn-ghost {
@@ -414,6 +710,35 @@
   font-size: 0.95rem;
 }
 
+.cinema-input:focus {
+  outline: none;
+  border-color: rgba(245, 197, 24, 0.5);
+  box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.15);
+}
+
+/* ── Ticket + confetti ── */
+.cinema-confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cinema-confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  animation: cinema-confetti-fall 3.5s ease-in forwards;
+}
+
+@keyframes cinema-confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
 .cinema-ticket {
   max-width: 380px;
   margin: 0 auto;
@@ -422,6 +747,15 @@
   border: 1px solid rgba(245, 197, 24, 0.35);
   background: linear-gradient(160deg, #121212, #0a0a0a);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.cinema-ticket--animate {
+  animation: cinema-ticket-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cinema-ticket-in {
+  from { opacity: 0; transform: translateY(30px) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .cinema-ticket-head {
@@ -442,12 +776,30 @@
   padding: 0.75rem;
   background: #fff;
   border-radius: 12px;
+  animation: cinema-qr-flash 0.6s ease 0.5s both;
+}
+
+@keyframes cinema-qr-flash {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .cinema-dashboard {
   display: grid;
   gap: 1rem;
   margin-top: 2rem;
+}
+
+.cinema-dashboard--animate .cinema-stat {
+  animation: cinema-stat-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cinema-dashboard--animate .cinema-stat:nth-child(2) { animation-delay: 0.1s; }
+.cinema-dashboard--animate .cinema-stat:nth-child(3) { animation-delay: 0.2s; }
+
+@keyframes cinema-stat-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (min-width: 640px) {
@@ -499,7 +851,21 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cinema-phase {
-    animation: none;
+  .cinema-phase,
+  .cinema-reveal,
+  .cinema-splash-logo-wrap,
+  .cinema-splash-tag,
+  .cinema-splash-system,
+  .cinema-splash-cta,
+  .cinema-screen--pulse,
+  .cinema-confetti-piece,
+  .cinema-ambient-particle {
+    animation: none !important;
+  }
+
+  .cinema-movie-card:hover,
+  .cinema-showtime-btn:hover,
+  .cinema-seat.is-selected {
+    transform: none;
   }
 }

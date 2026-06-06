@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { getMovie, showtimesForMovie } from "@/lib/cinema-demo/data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
+import { CinemaMoviePoster } from "@/components/cinema-demo/CinemaMoviePoster";
 import { CinemaProgressSteps } from "@/components/cinema-demo/CinemaProgressSteps";
 
 export function CinemaShowtimePhase() {
@@ -24,22 +25,36 @@ export function CinemaShowtimePhase() {
 
   if (!movie) return null;
 
+  const title = isAr ? movie.titleAr : movie.titleEn;
+
   return (
-    <section className="cinema-phase">
+    <section className="cinema-phase cinema-phase--showtime">
+      <div
+        className="cinema-hero-backdrop"
+        style={{ backgroundImage: `url(${movie.posterSrc})` }}
+        aria-hidden
+      />
       <CinemaDemoHeader />
       <div className="cinema-container">
         <CinemaProgressSteps step={1} />
         <button type="button" className="cinema-btn cinema-btn-ghost mb-4" onClick={() => setPhase("movies")}>
           {t("back")}
         </button>
-        <h2 className="cinema-title">{isAr ? movie.titleAr : movie.titleEn}</h2>
-        <p className="cinema-subtitle">{t("showtime.subtitle")}</p>
+
+        <div className="cinema-showtime-hero">
+          <CinemaMoviePoster movie={movie} title={title} className="cinema-showtime-poster" />
+          <div>
+            <h2 className="cinema-title">{title}</h2>
+            <p className="cinema-subtitle">{t("showtime.subtitle")}</p>
+          </div>
+        </div>
+
         <div className="cinema-showtime-list">
-          {showtimes.map((st) => (
+          {showtimes.map((st, i) => (
             <button
               key={st.id}
               type="button"
-              className="cinema-showtime-btn"
+              className={`cinema-showtime-btn cinema-reveal cinema-reveal--delay-${i + 1}`}
               onClick={() => selectShowtime(st.id)}
             >
               <div>

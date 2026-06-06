@@ -8,6 +8,7 @@ import {
   computeSeatTotal,
   seatLabelsForSelection,
 } from "@/components/cinema-demo/CinemaSeatMap";
+import { CinemaConfetti } from "@/components/cinema-demo/CinemaConfetti";
 import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
 import { CinemaProgressSteps } from "@/components/cinema-demo/CinemaProgressSteps";
 import { getMovie, getShowtime } from "@/lib/cinema-demo/data";
@@ -49,14 +50,17 @@ export function CinemaTicketPhase() {
   const seats = seatLabelsForSelection(showtimeId, selectedSeatIds);
 
   return (
-    <section className="cinema-phase">
+    <section className="cinema-phase cinema-phase--ticket">
+      <CinemaConfetti />
       <CinemaDemoHeader />
       <div className="cinema-container">
         <CinemaProgressSteps step={4} />
-        <h2 className="cinema-title text-center">{t("ticket.title")}</h2>
-        <p className="cinema-subtitle text-center">{t("ticket.subtitle")}</p>
+        <h2 className="cinema-title text-center cinema-reveal">{t("ticket.title")}</h2>
+        <p className="cinema-subtitle text-center cinema-reveal cinema-reveal--delay-1">
+          {t("ticket.subtitle")}
+        </p>
 
-        <div className="cinema-ticket">
+        <div className="cinema-ticket cinema-ticket--animate">
           <div className="cinema-ticket-head">
             <p style={{ margin: 0, fontWeight: 800, fontSize: "0.85rem" }}>{t("brandName")}</p>
             <p style={{ margin: "0.25rem 0 0", fontSize: "0.7rem", opacity: 0.7 }}>{bookingRef}</p>
@@ -97,7 +101,7 @@ export function CinemaTicketPhase() {
         </div>
 
         {showDashboard ? (
-          <div className="cinema-dashboard">
+          <div className="cinema-dashboard cinema-dashboard--animate">
             <div className="cinema-stat">
               <p className="cinema-stat-value">87%</p>
               <p className="cinema-stat-label">{t("dashboard.occupancy")}</p>

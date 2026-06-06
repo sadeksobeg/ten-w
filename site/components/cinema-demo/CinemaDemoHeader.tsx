@@ -10,10 +10,10 @@ export function CinemaDemoHeader() {
   return (
     <header className="cinema-header">
       <Image
-        src={CINEMA_BRAND.logoSrc}
+        src={CINEMA_BRAND.logoMarkSrc}
         alt={t("brandName")}
-        width={120}
-        height={40}
+        width={140}
+        height={48}
         className="cinema-header-logo"
       />
       <span className="cinema-header-badge">{t("demoBadge")}</span>

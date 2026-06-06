@@ -57,7 +57,7 @@ export function CinemaSeatMap({ showtimeId, selectedIds, onToggle }: Props) {
   return (
     <div>
       <div className="cinema-screen-wrap">
-        <div className="cinema-screen" aria-hidden />
+        <div className="cinema-screen cinema-screen--pulse" aria-hidden />
         <p className="cinema-screen-label">{t("seats.screen")}</p>
       </div>
 
