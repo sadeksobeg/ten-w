@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import type { InviteCardPublic } from "@/lib/invite/get-card";
-import { AmbientCanvas } from "@/components/invite/canvas/AmbientCanvas";
-import { StarfieldCanvas } from "@/components/invite/canvas/StarfieldCanvas";
+import { UpwardParticlesCanvas } from "@/components/invite/canvas/UpwardParticlesCanvas";
+import { InviteVisualBackground } from "@/components/invite/InviteVisualBackground";
 import { MagneticCursor } from "@/components/invite/MagneticCursor";
 import { ScrollProgressBar } from "@/components/invite/ScrollProgressBar";
 import { BootPhase } from "@/components/invite/phases/BootPhase";
@@ -53,10 +53,12 @@ export function TenegtaInviteExperience({ card, origin }: Props) {
     );
   }
 
+  const showAmbient = ambientVisible || phase !== "boot";
+
   return (
-    <div className="relative min-h-[100dvh] overflow-x-hidden bg-[var(--void)]">
-      <StarfieldCanvas />
-      <AmbientCanvas visible={ambientVisible || phase !== "boot"} />
+    <div className="relative min-h-[100dvh] overflow-x-hidden bg-[var(--void)]" dir="rtl">
+      <InviteVisualBackground visible={showAmbient} />
+      <UpwardParticlesCanvas visible={showAmbient} />
       <div className="invite-vignette pointer-events-none fixed inset-0 z-[2]" aria-hidden />
       <MagneticCursor />
       {phase === "card" ? <ScrollProgressBar /> : null}

@@ -22,35 +22,48 @@ const COLORS = {
   gold: ["#C9922A", "#E4B84D", "#F5E6C3", "#B07D2B"],
   purple: ["#6B21A8", "#A855F7", "#7C3AED"],
   white: ["#FFFFFF", "#F5F0E8"],
-  burgundy: ["#4A1025", "#6B1535", "#3D0E1F"],
 };
 
 function pick<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[Math.floor(Math.random() * arr.length)]!;
 }
 
 function createPiece(w: number, h: number, type: ConfettiPiece["type"]): ConfettiPiece {
-  const maxLife = 180;
+  const maxLife = 160 + Math.random() * 80;
   const palette =
-    type === "rect" || type === "star"
+    type === "rect" || type === "square" || type === "star"
       ? COLORS.gold
       : type === "circle"
         ? COLORS.purple
-        : type === "ribbon"
-          ? COLORS.white
-          : COLORS.burgundy;
+        : COLORS.white;
 
   return {
-    x: w * 0.5 + (Math.random() - 0.5) * w * 0.4,
-    y: h * 0.65 + (Math.random() - 0.5) * 40,
-    vx: (Math.random() - 0.5) * 16,
-    vy: -20 - Math.random() * 15,
+    x: Math.random() * w,
+    y: h + Math.random() * 20,
+    vx: (Math.random() - 0.5) * 12,
+    vy: -(8 + Math.random() * 10),
     rotation: Math.random() * Math.PI * 2,
-    rotationSpeed: (Math.random() - 0.5) * 0.2,
+    rotationSpeed: (Math.random() - 0.5) * 0.25,
     life: 0,
     maxLife,
-    width: type === "ribbon" ? 2 : type === "star" ? 10 : 4 + Math.random() * 4,
-    height: type === "ribbon" ? 20 + Math.random() * 20 : type === "star" ? 10 : 8 + Math.random() * 6,
+    width:
+      type === "ribbon"
+        ? 1 + Math.random()
+        : type === "star"
+          ? 6 + Math.random() * 4
+          : type === "square"
+            ? 5 + Math.random() * 3
+            : 4 + Math.random() * 4,
+    height:
+      type === "ribbon"
+        ? 15 + Math.random() * 20
+        : type === "rect"
+          ? 8 + Math.random() * 8
+          : type === "square"
+            ? 5 + Math.random() * 3
+            : type === "star"
+              ? 6 + Math.random() * 4
+              : 3 + Math.random() * 2,
     color: pick(palette),
     type,
   };
@@ -67,6 +80,17 @@ function drawStar(ctx: CanvasRenderingContext2D, x: number, y: number, r: number
   }
   ctx.closePath();
   ctx.fill();
+}
+
+function spawnWave(w: number, h: number): ConfettiPiece[] {
+  const types: ConfettiPiece["type"][] = [
+    ...Array<ConfettiPiece["type"]>(27).fill("rect"),
+    ...Array<ConfettiPiece["type"]>(17).fill("circle"),
+    ...Array<ConfettiPiece["type"]>(23).fill("ribbon"),
+    ...Array<ConfettiPiece["type"]>(20).fill("square"),
+    ...Array<ConfettiPiece["type"]>(13).fill("star"),
+  ];
+  return types.map((t) => createPiece(w, h, t));
 }
 
 type Props = {
@@ -99,22 +123,9 @@ export function ConfettiCanvas({ active = true, durationMs = 5000 }: Props) {
       ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function spawnWave() {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const batch: ConfettiPiece["type"][] = [
-        ...Array<ConfettiPiece["type"]>(60).fill("rect"),
-        ...Array<ConfettiPiece["type"]>(50).fill("circle"),
-        ...Array<ConfettiPiece["type"]>(80).fill("ribbon"),
-        ...Array<ConfettiPiece["type"]>(40).fill("star"),
-        ...Array<ConfettiPiece["type"]>(70).fill("square"),
-        ...Array<ConfettiPiece["type"]>(100).fill("circle"),
-      ];
-      pieces.push(...batch.map((t) => createPiece(w, h, t)));
-    }
-
     function frame() {
-      if (!running || document.hidden) {
+      if (!running) return;
+      if (document.hidden) {
         raf = requestAnimationFrame(frame);
         return;
       }
@@ -122,6 +133,7 @@ export function ConfettiCanvas({ active = true, durationMs = 5000 }: Props) {
       const elapsed = performance.now() - started;
       if (elapsed > durationMs) {
         running = false;
+        ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
         return;
       }
 
@@ -131,16 +143,17 @@ export function ConfettiCanvas({ active = true, durationMs = 5000 }: Props) {
 
       for (const p of pieces) {
         p.life += 1;
-        p.vy += 0.3;
-        p.vx *= 0.99;
-        p.vy *= 0.99;
+        p.vy += 0.25;
+        p.vx *= 0.998;
         p.x += p.vx;
         p.y += p.vy;
         p.rotation += p.rotationSpeed;
 
-        const fadeStart = p.maxLife * 0.8;
+        const lifeRatio = p.life / p.maxLife;
         const alpha =
-          p.life > fadeStart ? Math.max(0, 1 - (p.life - fadeStart) / (p.maxLife - fadeStart)) : 1;
+          lifeRatio < 0.7
+            ? 1
+            : Math.max(0, 1 - (lifeRatio - 0.7) / 0.3);
 
         ctx!.save();
         ctx!.translate(p.x, p.y);
@@ -155,7 +168,10 @@ export function ConfettiCanvas({ active = true, durationMs = 5000 }: Props) {
         } else if (p.type === "star") {
           drawStar(ctx!, 0, 0, p.width);
         } else if (p.type === "square") {
+          ctx!.save();
+          ctx!.rotate(Math.PI / 4);
           ctx!.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
+          ctx!.restore();
         } else if (p.type === "ribbon") {
           ctx!.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
         } else {
@@ -164,14 +180,18 @@ export function ConfettiCanvas({ active = true, durationMs = 5000 }: Props) {
         ctx!.restore();
       }
 
-      pieces = pieces.filter((p) => p.life < p.maxLife && p.y < h + 40);
+      pieces = pieces.filter((p) => p.life < p.maxLife && p.y < h + 60);
       raf = requestAnimationFrame(frame);
     }
 
     resize();
-    spawnWave();
-    setTimeout(spawnWave, 300);
-    setTimeout(spawnWave, 600);
+    pieces = spawnWave(window.innerWidth, window.innerHeight);
+    setTimeout(() => {
+      pieces.push(...spawnWave(window.innerWidth, window.innerHeight));
+    }, 250);
+    setTimeout(() => {
+      pieces.push(...spawnWave(window.innerWidth, window.innerHeight));
+    }, 500);
     window.addEventListener("resize", resize);
     raf = requestAnimationFrame(frame);
 

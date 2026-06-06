@@ -26,6 +26,7 @@ export async function GET(_req: Request, { params }: Params) {
     scope: card.scope,
     token: card.token,
     inviteUrl,
+    message: card.message,
   });
 
   const safeName = card.name.replace(/[^\w\u0600-\u06FF.-]+/g, "-").slice(0, 40);

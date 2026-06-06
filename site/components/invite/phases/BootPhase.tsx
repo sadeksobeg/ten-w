@@ -4,11 +4,12 @@ import { useEffect, useRef, useState, type TouchEvent } from "react";
 import { usePrefersReducedMotion } from "@/components/invite/hooks/usePrefersReducedMotion";
 
 export type BootStage =
-  | "dark"
+  | "black"
   | "point"
-  | "line"
+  | "lines"
   | "logo"
-  | "text"
+  | "subtitle"
+  | "particles"
   | "curtain"
   | "done";
 
@@ -18,34 +19,46 @@ type Props = {
   onCanvasVisible?: () => void;
 };
 
-const LOGO = "TENEGTA";
+const LOGO_LETTERS = ["T", "E", "N", "E", "G", "T", "A"];
 
 const TIMING_NORMAL: Record<BootStage, number> = {
-  dark: 300,
-  point: 500,
-  line: 700,
-  logo: 700,
-  text: 800,
-  curtain: 500,
-  done: 500,
+  black: 400,
+  point: 400,
+  lines: 600,
+  logo: 800,
+  subtitle: 600,
+  particles: 400,
+  curtain: 600,
+  done: 400,
 };
 
 const TIMING_COMPRESSED: Record<BootStage, number> = {
-  dark: 100,
-  point: 150,
-  line: 150,
+  black: 120,
+  point: 120,
+  lines: 150,
   logo: 200,
-  text: 250,
-  curtain: 200,
+  subtitle: 180,
+  particles: 150,
+  curtain: 180,
   done: 150,
 };
 
-const STAGES: BootStage[] = ["dark", "point", "line", "logo", "text", "curtain", "done"];
+const STAGES: BootStage[] = [
+  "black",
+  "point",
+  "lines",
+  "logo",
+  "subtitle",
+  "particles",
+  "curtain",
+  "done",
+];
 
 export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Props) {
   const reducedMotion = usePrefersReducedMotion();
-  const [stage, setStage] = useState<BootStage>("dark");
+  const [stage, setStage] = useState<BootStage>("black");
   const [exiting, setExiting] = useState(false);
+  const [logoShimmer, setLogoShimmer] = useState(false);
   const touchStartY = useRef<number | null>(null);
   const accelerated = useRef(false);
   const timing = reducedMotion ? TIMING_COMPRESSED : TIMING_NORMAL;
@@ -58,7 +71,11 @@ export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Prop
       if (idx >= STAGES.length) return;
       const next = STAGES[idx];
       setStage(next);
-      if (next === "text") onCanvasVisible?.();
+      if (next === "particles") onCanvasVisible?.();
+      if (next === "logo") {
+        const shimmerDelay = accelerated.current ? 400 : 1030;
+        setTimeout(() => setLogoShimmer(true), shimmerDelay);
+      }
       if (next === "done") {
         setExiting(true);
         timer = setTimeout(onComplete, timing.done);
@@ -69,7 +86,7 @@ export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Prop
       timer = setTimeout(advance, delay);
     };
 
-    timer = setTimeout(advance, timing.dark);
+    timer = setTimeout(advance, timing.black);
     return () => clearTimeout(timer);
   }, [onComplete, onCanvasVisible, timing]);
 
@@ -85,16 +102,13 @@ export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Prop
     }
   };
 
-  const showPoint = stage !== "dark";
-  const showLine = ["line", "logo", "text", "curtain", "done"].includes(stage);
-  const showLogo = ["logo", "text", "curtain", "done"].includes(stage);
-  const showText = ["text", "curtain", "done"].includes(stage);
+  const showPoint = stage !== "black";
+  const showLines = ["lines", "logo", "subtitle", "particles", "curtain", "done"].includes(stage);
+  const showLogo = ["logo", "subtitle", "particles", "curtain", "done"].includes(stage);
+  const showSubtitle = ["subtitle", "particles", "curtain", "done"].includes(stage);
   const showCurtain = ["curtain", "done"].includes(stage);
 
   const subtitle = alreadyAccepted ? "مرحباً بعودتك" : "لديك دعوة خاصة";
-  const hint = alreadyAccepted
-    ? "جاري فتح تجربتك…"
-    : "دعوة حصرية لصانع محتوى — مُعدّة بعناية لك وحدك";
 
   return (
     <div
@@ -104,64 +118,45 @@ export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Prop
     >
       {showPoint ? (
         <div
-          className="invite-boot-point mb-8 transition-transform duration-700"
-          style={{ transform: showLine ? "scale(1)" : "scale(0)" }}
+          className="invite-boot-point"
+          style={{
+            transform: stage === "point" || showLines ? "scale(1)" : "scale(0)",
+          }}
         />
       ) : null}
 
-      {showLine ? (
-        <div className="mb-6 flex flex-col items-center gap-3">
-          <div
-            className="invite-boot-gate-line h-px transition-all duration-700"
-            style={{ width: showLogo ? 120 : 0 }}
-          />
-          <div
-            className="invite-boot-gate-line h-px transition-all duration-700 delay-100"
-            style={{ width: showLogo ? 120 : 0 }}
-          />
-        </div>
+      {showLines ? (
+        <div
+          className="invite-boot-line-center my-6"
+          style={{ width: showLogo ? 160 : 0 }}
+        />
       ) : null}
 
       {showLogo ? (
-        <div className="text-center">
-          <p
-            className="invite-font-display invite-text-shimmer text-[28px] tracking-[0.35em] text-white"
-            aria-hidden
-          >
-            {LOGO.split("").map((letter, i) => (
+        <p
+          className={`invite-boot-logo ${logoShimmer ? "invite-text-shimmer" : ""}`}
+          aria-hidden
+        >
+          {LOGO_LETTERS.map((letter, i) => (
+            <span key={`${letter}-${i}`}>
               <span
-                key={letter + i}
                 className="invite-letter"
-                style={{ animationDelay: `${i * 80}ms` }}
+                style={{ animationDelay: `${i * 90}ms` }}
               >
                 {letter}
               </span>
-            ))}
-          </p>
-          <div
-            className="invite-boot-wings mx-auto mt-4 transition-all duration-700"
-            style={{ width: showText ? 160 : 0 }}
-          />
-        </div>
+              {i < LOGO_LETTERS.length - 1 ? (
+                <span className="text-[var(--gold-light)]/40">·</span>
+              ) : null}
+            </span>
+          ))}
+        </p>
       ) : null}
 
-      {showText ? (
-        <div className="mt-10 text-center">
-          <p className="invite-font-arabic text-lg font-semibold text-[var(--text-sub)] sm:text-xl">
-            {subtitle.split("").map((char, i) => (
-              <span
-                key={`${char}-${i}`}
-                className="invite-letter"
-                style={{ animationDelay: `${i * 120}ms` }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </span>
-            ))}
-          </p>
-          <p className="invite-reveal-up mt-3 text-sm text-white/45" style={{ animationDelay: "400ms" }}>
-            {hint}
-          </p>
-        </div>
+      {showSubtitle ? (
+        <p className="invite-font-arabic mt-8 text-center text-lg font-semibold text-[var(--text-sub)] sm:text-xl">
+          {subtitle}
+        </p>
       ) : null}
 
       {showCurtain ? (

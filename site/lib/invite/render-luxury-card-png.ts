@@ -4,9 +4,9 @@ import { buildLuxuryCardSvg, type LuxuryCardInput } from "@/lib/invite/render-lu
 
 export async function renderLuxuryInviteCardPng(input: LuxuryCardInput): Promise<Buffer> {
   const qrDataUrl = await QRCode.toDataURL(input.inviteUrl, {
-    width: 460,
-    margin: 1,
-    color: { dark: "#050508ff", light: "#ffffffff" },
+    width: 280,
+    margin: 2,
+    color: { dark: "#C9922A", light: "#03010A" },
     errorCorrectionLevel: "H",
   });
 

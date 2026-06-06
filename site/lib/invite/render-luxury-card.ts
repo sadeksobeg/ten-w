@@ -14,81 +14,80 @@ export type LuxuryCardInput = {
   scope: string;
   token: string;
   inviteUrl: string;
+  message?: string;
 };
 
-/** Premium portrait invitation card (1080×1920) for download / share. */
+/** Premium portrait invitation card (1080×1920) for server PNG export. */
 export function buildLuxuryCardSvg(input: LuxuryCardInput, qrDataUrl: string): string {
   const name = escapeXml(input.name);
-  const handle = escapeXml(input.handle.replace(/^@/, ""));
-  const tier = escapeXml(input.tier);
-  const scope = escapeXml(input.scope.slice(0, 80));
+  const tier = escapeXml(input.tier.toUpperCase());
   const token = escapeXml(input.token);
-  const url = escapeXml(input.inviteUrl);
+  const url = escapeXml(input.inviteUrl.replace(/^https?:\/\//, ""));
+  const message = escapeXml((input.message ?? input.scope).slice(0, 200));
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#050508"/>
-      <stop offset="50%" stop-color="#0a0a14"/>
-      <stop offset="100%" stop-color="#050508"/>
-    </linearGradient>
-    <radialGradient id="glowP" cx="30%" cy="15%" r="55%">
-      <stop offset="0%" stop-color="#7b6fff" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#7b6fff" stop-opacity="0"/>
+    <radialGradient id="goldGlow" cx="50%" cy="10%" r="50%">
+      <stop offset="0%" stop-color="#C9922A" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#C9922A" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="glowT" cx="85%" cy="75%" r="45%">
-      <stop offset="0%" stop-color="#00e5a0" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#00e5a0" stop-opacity="0"/>
+    <radialGradient id="purpleGlow" cx="10%" cy="90%" r="55%">
+      <stop offset="0%" stop-color="#6B21A8" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#6B21A8" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#b07d2b"/>
-      <stop offset="50%" stop-color="#e4b84d"/>
-      <stop offset="100%" stop-color="#b07d2b"/>
+    <linearGradient id="frameGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B6514"/>
+      <stop offset="50%" stop-color="#E4B84D"/>
+      <stop offset="100%" stop-color="#8B6514"/>
     </linearGradient>
-    <linearGradient id="frame" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7b6fff" stop-opacity="0.55"/>
-      <stop offset="50%" stop-color="#00e5a0" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#7b6fff" stop-opacity="0.55"/>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F0B1E"/>
+      <stop offset="50%" stop-color="#1A1530"/>
+      <stop offset="100%" stop-color="#0F0B1E"/>
     </linearGradient>
-    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
-      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#7b6fff" stroke-opacity="0.06"/>
-    </pattern>
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="12" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
   </defs>
 
-  <rect width="1080" height="1920" fill="url(#bg)"/>
-  <rect width="1080" height="1920" fill="url(#glowP)"/>
-  <rect width="1080" height="1920" fill="url(#glowT)"/>
-  <rect width="1080" height="1920" fill="url(#grid)"/>
+  <rect width="1080" height="1920" fill="#03010A"/>
+  <rect width="1080" height="1920" fill="url(#goldGlow)"/>
+  <rect width="1080" height="1920" fill="url(#purpleGlow)"/>
 
-  <rect x="48" y="48" width="984" height="1824" rx="32" fill="none" stroke="url(#frame)" stroke-width="2"/>
-  <rect x="64" y="64" width="952" height="1792" rx="24" fill="rgba(10,10,18,0.72)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <rect x="30" y="30" width="1020" height="1860" rx="32" fill="none" stroke="url(#frameGold)" stroke-width="2"/>
+  <rect x="50" y="50" width="980" height="1820" rx="24" fill="none" stroke="rgba(201,146,42,0.3)" stroke-width="1"/>
 
-  <text x="540" y="160" text-anchor="middle" fill="#7b6fff" font-family="monospace" font-size="22" letter-spacing="8">T.E.N.E.G.T.A</text>
-  <text x="540" y="210" text-anchor="middle" fill="#00e5a0" font-family="monospace" font-size="16" letter-spacing="4">ACCESS TOKEN · CONTENT CREATOR</text>
+  <polygon points="70,62 78,70 70,78 62,70" fill="#C9922A"/>
+  <polygon points="1010,62 1018,70 1010,78 1002,70" fill="#C9922A"/>
+  <polygon points="70,1858 78,1866 70,1874 62,1866" fill="#C9922A"/>
+  <polygon points="1010,1858 1018,1866 1010,1874 1002,1866" fill="#C9922A"/>
 
-  <rect x="340" y="250" width="400" height="4" rx="2" fill="url(#gold)" opacity="0.85"/>
+  <text x="540" y="155" text-anchor="middle" fill="#E4B84D" font-family="Cairo, Arial, sans-serif" font-size="44" font-weight="700">TENEGTA</text>
+  <line x1="380" y1="175" x2="700" y2="175" stroke="rgba(201,146,42,0.5)" stroke-width="1"/>
+  <text x="540" y="210" text-anchor="middle" fill="rgba(201,146,42,0.7)" font-family="monospace" font-size="16" letter-spacing="4">ASCEND PARTNER</text>
 
-  <text x="540" y="320" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="36" font-weight="700">دعوة تعاون</text>
-  <text x="540" y="365" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-family="sans-serif" font-size="22">Collaboration Invitation</text>
+  <rect x="80" y="280" width="920" height="380" rx="20" fill="url(#cardBg)" stroke="url(#frameGold)" stroke-width="1.5"/>
+  <rect x="820" y="310" width="60" height="44" rx="6" fill="#1A1430" stroke="rgba(201,146,42,0.6)" stroke-width="1.5"/>
+  <line x1="850" y1="310" x2="850" y2="354" stroke="rgba(201,146,42,0.5)" stroke-width="1"/>
+  <line x1="832" y1="322" x2="868" y2="322" stroke="rgba(201,146,42,0.5)" stroke-width="1"/>
+  <line x1="832" y1="332" x2="868" y2="332" stroke="rgba(201,146,42,0.5)" stroke-width="1"/>
+  <line x1="832" y1="342" x2="868" y2="342" stroke="rgba(201,146,42,0.5)" stroke-width="1"/>
 
-  <rect x="120" y="420" width="840" height="520" rx="20" fill="rgba(0,0,0,0.35)" stroke="rgba(123,111,255,0.35)" stroke-width="1.5" filter="url(#softGlow)"/>
-  <text x="540" y="520" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-size="52" font-weight="800">${name}</text>
-  <text x="540" y="580" text-anchor="middle" fill="#7b6fff" font-family="monospace" font-size="28">@${handle}</text>
-  <text x="540" y="650" text-anchor="middle" fill="url(#gold)" font-family="monospace" font-size="20" letter-spacing="3">${tier}</text>
-  <text x="540" y="720" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-family="monospace" font-size="18">${scope}</text>
-  <text x="540" y="880" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="16">${token}</text>
+  <text x="540" y="430" text-anchor="middle" fill="#F5F0E8" font-family="Cairo, Arial, sans-serif" font-size="64" font-weight="700">${name}</text>
+  <text x="540" y="480" text-anchor="middle" fill="#C9922A" font-family="monospace" font-size="18" letter-spacing="3">${tier}</text>
+  <text x="540" y="620" text-anchor="middle" fill="rgba(201,146,42,0.8)" font-family="monospace" font-size="20">◆  ${token}  ◆</text>
 
-  <rect x="290" y="1020" width="500" height="500" rx="24" fill="#ffffff" stroke="rgba(123,111,255,0.4)" stroke-width="2"/>
-  <image href="${qrDataUrl}" x="310" y="1040" width="460" height="460" preserveAspectRatio="xMidYMid meet"/>
+  <text x="80" y="780" fill="rgba(201,146,42,0.15)" font-family="Georgia, serif" font-size="100" font-weight="700">«</text>
+  <text x="1000" y="900" text-anchor="end" fill="rgba(201,146,42,0.15)" font-family="Georgia, serif" font-size="100" font-weight="700">»</text>
+  <text x="540" y="780" text-anchor="middle" fill="rgba(245,240,232,0.85)" font-family="Cairo, Arial, sans-serif" font-size="26">${message}</text>
 
-  <text x="540" y="1580" text-anchor="middle" fill="#00e5a0" font-family="monospace" font-size="20">امسح الرمز · Scan to enter your world</text>
-  <text x="540" y="1630" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="14">${url}</text>
+  <line x1="200" y1="960" x2="880" y2="960" stroke="rgba(201,146,42,0.5)" stroke-width="1"/>
+  <text x="540" y="1040" text-anchor="middle" fill="#C9922A" font-family="Cairo, Arial, sans-serif" font-size="22">امسح للانضمام</text>
 
-  <text x="540" y="1780" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="monospace" font-size="13">TENEGTA · Technology · Engineering · Narrative · Enterprise · Growth · Trust · Ascend</text>
+  <rect x="396" y="1066" width="288" height="288" rx="6" fill="none" stroke="rgba(201,146,42,0.6)" stroke-width="1.5"/>
+  <image href="${qrDataUrl}" x="400" y="1070" width="280" height="280"/>
+
+  <text x="540" y="1385" text-anchor="middle" fill="rgba(201,146,42,0.6)" font-family="monospace" font-size="18">${url}</text>
+  <line x1="300" y1="1480" x2="780" y2="1480" stroke="rgba(201,146,42,0.3)" stroke-width="1"/>
+  <text x="540" y="1540" text-anchor="middle" fill="rgba(201,146,42,0.8)" font-family="Cairo, Arial, sans-serif" font-size="24">tenegta.com</text>
+  <text x="540" y="1580" text-anchor="middle" fill="rgba(201,146,42,0.4)" font-family="Cairo, Arial, sans-serif" font-size="16">ASCEND · PARTNER NETWORK · 2026</text>
 </svg>`;
 }
