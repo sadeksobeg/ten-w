@@ -1,4 +1,5 @@
 import QRCode from "qrcode";
+import { drawWrappedRtlText } from "@/lib/invite/card-text-layout";
 
 export type InviteCanvasInput = {
   name: string;
@@ -99,31 +100,6 @@ function drawStar(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: numb
   ctx.fill();
 }
 
-function wrapText(
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  x: number,
-  startY: number,
-  maxWidth: number,
-  lineHeight: number,
-): number {
-  const words = text.split(/\s+/);
-  let line = "";
-  let y = startY;
-  for (const word of words) {
-    const test = line ? `${line} ${word}` : word;
-    if (ctx.measureText(test).width > maxWidth && line) {
-      ctx.fillText(line, x, y);
-      line = word;
-      y += lineHeight;
-    } else {
-      line = test;
-    }
-  }
-  if (line) ctx.fillText(line, x, y);
-  return y;
-}
-
 export async function generateInviteCardCanvas(input: InviteCanvasInput): Promise<Blob> {
   const canvas = document.createElement("canvas");
   canvas.width = W;
@@ -222,7 +198,7 @@ export async function generateInviteCardCanvas(input: InviteCanvasInput): Promis
 
   ctx.fillStyle = "rgba(245,240,232,0.85)";
   ctx.font = "26px Cairo, Arial, sans-serif";
-  wrapText(ctx, input.message.slice(0, 200), 540, 740, 800, 44);
+  drawWrappedRtlText(ctx, input.message.slice(0, 200), 540, 740, 800, 44);
 
   const divider = ctx.createLinearGradient(200, 960, 880, 960);
   divider.addColorStop(0, "transparent");

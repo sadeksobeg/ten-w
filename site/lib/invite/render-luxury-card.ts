@@ -1,3 +1,5 @@
+import { wrapTextLinesEstimated } from "@/lib/invite/card-text-layout";
+
 function escapeXml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -23,7 +25,11 @@ export function buildLuxuryCardSvg(input: LuxuryCardInput, qrDataUrl: string): s
   const tier = escapeXml(input.tier.toUpperCase());
   const token = escapeXml(input.token);
   const url = escapeXml(input.inviteUrl.replace(/^https?:\/\//, ""));
-  const message = escapeXml((input.message ?? input.scope).slice(0, 200));
+  const rawMessage = (input.message ?? input.scope).slice(0, 200);
+  const messageLines = wrapTextLinesEstimated(rawMessage, 800, 26);
+  const messageSvg = messageLines
+    .map((line, i) => `<tspan x="540" y="${740 + i * 44}">${escapeXml(line)}</tspan>`)
+    .join("\n    ");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +83,9 @@ export function buildLuxuryCardSvg(input: LuxuryCardInput, qrDataUrl: string): s
 
   <text x="80" y="780" fill="rgba(201,146,42,0.15)" font-family="Georgia, serif" font-size="100" font-weight="700">«</text>
   <text x="1000" y="900" text-anchor="end" fill="rgba(201,146,42,0.15)" font-family="Georgia, serif" font-size="100" font-weight="700">»</text>
-  <text x="540" y="780" text-anchor="middle" fill="rgba(245,240,232,0.85)" font-family="Cairo, Arial, sans-serif" font-size="26">${message}</text>
+  <text x="540" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" fill="rgba(245,240,232,0.85)" font-family="Cairo, Arial, sans-serif" font-size="26">
+    ${messageSvg}
+  </text>
 
   <line x1="200" y1="960" x2="880" y2="960" stroke="rgba(201,146,42,0.5)" stroke-width="1"/>
   <text x="540" y="1040" text-anchor="middle" fill="#C9922A" font-family="Cairo, Arial, sans-serif" font-size="22">امسح للانضمام</text>
