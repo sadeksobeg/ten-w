@@ -56,6 +56,7 @@ export function generateToken(name: string): string {
 export function generateSlugBase(name: string, handle: string): string {
   const n = slugPart(name) || "creator";
   const h = slugPart(handle.replace(/^@/, "")) || "user";
+  if (n === h) return n.slice(0, 80);
   return `${n}-${h}`.slice(0, 80);
 }
 
