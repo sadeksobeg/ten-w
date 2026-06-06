@@ -1,89 +1,181 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState, type TouchEvent } from "react";
+import { usePrefersReducedMotion } from "@/components/invite/hooks/usePrefersReducedMotion";
+
+export type BootStage =
+  | "dark"
+  | "point"
+  | "line"
+  | "logo"
+  | "text"
+  | "curtain"
+  | "done";
 
 type Props = {
   alreadyAccepted: boolean;
   onComplete: () => void;
+  onCanvasVisible?: () => void;
 };
 
-export function BootPhase({ alreadyAccepted, onComplete }: Props) {
-  const reduceMotion = useReducedMotion();
-  const [stage, setStage] = useState(reduceMotion ? 3 : 0);
+const LOGO = "TENEGTA";
+
+const TIMING_NORMAL: Record<BootStage, number> = {
+  dark: 300,
+  point: 500,
+  line: 700,
+  logo: 700,
+  text: 800,
+  curtain: 500,
+  done: 500,
+};
+
+const TIMING_COMPRESSED: Record<BootStage, number> = {
+  dark: 100,
+  point: 150,
+  line: 150,
+  logo: 200,
+  text: 250,
+  curtain: 200,
+  done: 150,
+};
+
+const STAGES: BootStage[] = ["dark", "point", "line", "logo", "text", "curtain", "done"];
+
+export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Props) {
+  const reducedMotion = usePrefersReducedMotion();
+  const [stage, setStage] = useState<BootStage>("dark");
+  const [exiting, setExiting] = useState(false);
+  const touchStartY = useRef<number | null>(null);
+  const accelerated = useRef(false);
+  const timing = reducedMotion ? TIMING_COMPRESSED : TIMING_NORMAL;
 
   useEffect(() => {
-    if (reduceMotion) {
-      const t = window.setTimeout(onComplete, 500);
-      return () => window.clearTimeout(t);
+    let idx = 1;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const advance = () => {
+      if (idx >= STAGES.length) return;
+      const next = STAGES[idx];
+      setStage(next);
+      if (next === "text") onCanvasVisible?.();
+      if (next === "done") {
+        setExiting(true);
+        timer = setTimeout(onComplete, timing.done);
+        return;
+      }
+      idx += 1;
+      const delay = accelerated.current ? timing[next] * 0.45 : timing[next];
+      timer = setTimeout(advance, delay);
+    };
+
+    timer = setTimeout(advance, timing.dark);
+    return () => clearTimeout(timer);
+  }, [onComplete, onCanvasVisible, timing]);
+
+  const onTouchStart = (e: TouchEvent) => {
+    touchStartY.current = e.touches[0]?.clientY ?? null;
+  };
+
+  const onTouchEnd = (e: TouchEvent) => {
+    const start = touchStartY.current;
+    const end = e.changedTouches[0]?.clientY;
+    if (start != null && end != null && start - end > 40) {
+      accelerated.current = true;
     }
+  };
 
-    const timers = [
-      window.setTimeout(() => setStage(1), 600),
-      window.setTimeout(() => setStage(2), 1600),
-      window.setTimeout(() => setStage(3), 2600),
-      window.setTimeout(onComplete, alreadyAccepted ? 3200 : 3800),
-    ];
+  const showPoint = stage !== "dark";
+  const showLine = ["line", "logo", "text", "curtain", "done"].includes(stage);
+  const showLogo = ["logo", "text", "curtain", "done"].includes(stage);
+  const showText = ["text", "curtain", "done"].includes(stage);
+  const showCurtain = ["curtain", "done"].includes(stage);
 
-    return () => timers.forEach(clearTimeout);
-  }, [alreadyAccepted, onComplete, reduceMotion]);
+  const subtitle = alreadyAccepted ? "مرحباً بعودتك" : "لديك دعوة خاصة";
+  const hint = alreadyAccepted
+    ? "جاري فتح تجربتك…"
+    : "دعوة حصرية لصانع محتوى — مُعدّة بعناية لك وحدك";
 
   return (
-    <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#03040a] px-6"
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      className={`invite-phase-fade fixed inset-0 z-[60] flex flex-col items-center justify-center overflow-hidden bg-[var(--void)] ${exiting ? "invite-phase-hidden" : "invite-phase-visible"}`}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
-      <div className="invite-aurora opacity-80" aria-hidden />
+      {showPoint ? (
+        <div
+          className="invite-boot-point mb-8 transition-transform duration-700"
+          style={{ transform: showLine ? "scale(1)" : "scale(0)" }}
+        />
+      ) : null}
 
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: stage >= 1 ? 1 : 0 }}
-        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-        className="invite-gold-line mb-10 w-full max-w-xs origin-center"
-        aria-hidden
-      />
+      {showLine ? (
+        <div className="mb-6 flex flex-col items-center gap-3">
+          <div
+            className="invite-boot-gate-line h-px transition-all duration-700"
+            style={{ width: showLogo ? 120 : 0 }}
+          />
+          <div
+            className="invite-boot-gate-line h-px transition-all duration-700 delay-100"
+            style={{ width: showLogo ? 120 : 0 }}
+          />
+        </div>
+      ) : null}
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: stage >= 1 ? 1 : 0, y: stage >= 1 ? 0 : 20 }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="text-center"
-      >
-        <p className="invite-eyebrow mb-4">T.E.N.E.G.T.A</p>
-        <h1 className="invite-boot-logo invite-boot-glow">TENEGTA</h1>
-      </motion.div>
+      {showLogo ? (
+        <div className="text-center">
+          <p
+            className="invite-font-display invite-text-shimmer text-[28px] tracking-[0.35em] text-white"
+            aria-hidden
+          >
+            {LOGO.split("").map((letter, i) => (
+              <span
+                key={letter + i}
+                className="invite-letter"
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                {letter}
+              </span>
+            ))}
+          </p>
+          <div
+            className="invite-boot-wings mx-auto mt-4 transition-all duration-700"
+            style={{ width: showText ? 160 : 0 }}
+          />
+        </div>
+      ) : null}
 
-      <motion.p
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: stage >= 2 ? 1 : 0, y: stage >= 2 ? 0 : 12 }}
-        transition={{ duration: 0.8, delay: 0.05 }}
-        className="mt-8 max-w-md text-center text-lg font-semibold text-white/75 sm:text-xl"
-      >
-        {alreadyAccepted ? "مرحباً بعودتك" : "لديك دعوة خاصة"}
-      </motion.p>
+      {showText ? (
+        <div className="mt-10 text-center">
+          <p className="invite-font-arabic text-lg font-semibold text-[var(--text-sub)] sm:text-xl">
+            {subtitle.split("").map((char, i) => (
+              <span
+                key={`${char}-${i}`}
+                className="invite-letter"
+                style={{ animationDelay: `${i * 120}ms` }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
+          </p>
+          <p className="invite-reveal-up mt-3 text-sm text-white/45" style={{ animationDelay: "400ms" }}>
+            {hint}
+          </p>
+        </div>
+      ) : null}
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: stage >= 3 ? 1 : 0 }}
-        transition={{ duration: 0.7 }}
-        className="mt-3 text-sm text-white/45"
-      >
-        {alreadyAccepted
-          ? "جاري فتح تجربتك…"
-          : "دعوة حصرية لصانع محتوى — مُعدّة بعناية لك وحدك"}
-      </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: stage >= 2 ? 0.6 : 0 }}
-        className="invite-scroll-hint absolute bottom-10 flex flex-col items-center gap-2 text-white/40"
-        aria-hidden
-      >
-        <span className="text-[10px] tracking-[0.2em]">SCROLL</span>
-        <span className="text-lg">↓</span>
-      </motion.div>
-    </motion.div>
+      {showCurtain ? (
+        <>
+          <div
+            className="invite-boot-curtain-bar fixed inset-x-0 top-0 z-[61]"
+            style={{ height: exiting ? 0 : "50vh" }}
+          />
+          <div
+            className="invite-boot-curtain-bar fixed inset-x-0 bottom-0 z-[61]"
+            style={{ height: exiting ? 0 : "50vh" }}
+          />
+        </>
+      ) : null}
+    </div>
   );
 }

@@ -40,5 +40,5 @@ export default async function InviteSlugPage({ params }: Props) {
   const card = await getInviteCardBySlug(slug);
   if (!card) notFound();
 
-  return <TenegtaInviteExperience card={card} />;
+  return <TenegtaInviteExperience card={card} origin={getSiteUrl().origin} />;
 }

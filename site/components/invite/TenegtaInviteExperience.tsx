@@ -1,44 +1,81 @@
 "use client";
 
-import { useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
-import { useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 import type { InviteCardPublic } from "@/lib/invite/get-card";
+import { AmbientCanvas } from "@/components/invite/canvas/AmbientCanvas";
+import { StarfieldCanvas } from "@/components/invite/canvas/StarfieldCanvas";
+import { MagneticCursor } from "@/components/invite/MagneticCursor";
+import { ScrollProgressBar } from "@/components/invite/ScrollProgressBar";
 import { BootPhase } from "@/components/invite/phases/BootPhase";
 import { CardPhase } from "@/components/invite/phases/CardPhase";
 import { WorldPhase } from "@/components/invite/phases/WorldPhase";
-import { InviteAmbientCanvas } from "@/components/invite/InviteAmbientCanvas";
+import { usePrefersReducedMotion } from "@/components/invite/hooks/usePrefersReducedMotion";
 import { useInviteExperienceStore } from "@/stores/invite-experience-store";
 
 type Props = {
   card: InviteCardPublic;
+  origin: string;
 };
 
-export function TenegtaInviteExperience({ card }: Props) {
-  const reduceMotion = useReducedMotion();
-  const { phase, completeBoot, skipToCard } = useInviteExperienceStore();
+export function TenegtaInviteExperience({ card, origin }: Props) {
+  const reducedMotion = usePrefersReducedMotion();
+  const { phase, completeBoot } = useInviteExperienceStore();
+  const [ambientVisible, setAmbientVisible] = useState(reducedMotion);
+  const [mounted, setMounted] = useState(false);
+  const baseTitle = `${card.name} — TENEGTA`;
 
   useEffect(() => {
-    if (reduceMotion) skipToCard();
-  }, [reduceMotion, skipToCard]);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    document.title = baseTitle;
+    const titles = [baseTitle, "✦ دعوتك الخاصة ✦", baseTitle];
+    let i = 0;
+    const id = window.setInterval(() => {
+      i = (i + 1) % titles.length;
+      document.title = titles[i] ?? baseTitle;
+    }, 2000);
+    return () => {
+      clearInterval(id);
+      document.title = baseTitle;
+    };
+  }, [mounted, baseTitle]);
+
+  if (!mounted) {
+    return (
+      <div className="flex min-h-[100dvh] items-center justify-center bg-[var(--void)]">
+        <p className="invite-loading-logo invite-font-display invite-text-shimmer text-2xl tracking-[0.3em]">
+          TENEGTA
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="relative min-h-[100dvh] overflow-x-hidden">
-      <InviteAmbientCanvas density={40} />
-      <div className="invite-vignette pointer-events-none fixed inset-0 z-[1]" aria-hidden />
+    <div className="relative min-h-[100dvh] overflow-x-hidden bg-[var(--void)]">
+      <StarfieldCanvas />
+      <AmbientCanvas visible={ambientVisible || phase !== "boot"} />
+      <div className="invite-vignette pointer-events-none fixed inset-0 z-[2]" aria-hidden />
+      <MagneticCursor />
+      {phase === "card" ? <ScrollProgressBar /> : null}
 
-      <AnimatePresence mode="wait">
-        {phase === "boot" ? (
-          <BootPhase
-            key="boot"
-            alreadyAccepted={card.accepted}
-            onComplete={completeBoot}
-          />
-        ) : null}
-      </AnimatePresence>
+      {phase === "boot" ? (
+        <BootPhase
+          alreadyAccepted={card.accepted}
+          onComplete={completeBoot}
+          onCanvasVisible={() => setAmbientVisible(true)}
+        />
+      ) : null}
 
-      {phase === "card" ? <CardPhase card={card} /> : null}
-      {phase === "world" ? <WorldPhase card={card} /> : null}
+      {phase === "card" ? (
+        <div className="invite-phase-fade invite-phase-visible relative z-10">
+          <CardPhase card={card} origin={origin} />
+        </div>
+      ) : null}
+
+      {phase === "world" ? <WorldPhase card={card} origin={origin} /> : null}
     </div>
   );
 }

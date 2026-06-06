@@ -13,10 +13,11 @@ export function InviteShell({ children, dir = "rtl", className = "" }: Props) {
     <html lang="ar" dir={dir} className="h-full antialiased" suppressHydrationWarning>
       <head>
         <InviteFonts />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="icon" href="/tenegta-icon.png" type="image/png" />
       </head>
       <body
-        className={`invite-root invite-premium-bg invite-font-body min-h-[100dvh] ${className}`}
+        className={`invite-root invite-premium-bg invite-font-arabic min-h-[100dvh] ${className}`}
       >
         {children}
       </body>
