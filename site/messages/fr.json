@@ -459,6 +459,69 @@
     "reportError": "Could not send. Try again or use the contact page.",
     "reportRateLimited": "Too many requests. Please wait and try again."
   },
+  "CinemaDemo": {
+    "meta": {
+      "title": "Démo système cinéma — Salamiya Cinema",
+      "description": "Démo interactive : billetterie, plan de salle et tableau de bord — données fictives par T.E.N.E.G.T.A."
+    },
+    "brandName": "Salamiya Cinema",
+    "demoBadge": "Démo",
+    "demoNote": "Données fictives — réservation non réelle.",
+    "currency": "SYP",
+    "back": "Retour",
+    "splash": {
+      "tag": "OS cinéma intelligent · T.E.N.E.G.T.A",
+      "cta": "Commencer"
+    },
+    "movies": {
+      "title": "Choisir un film",
+      "subtitle": "Séances du jour — réservez en quelques secondes",
+      "min": "min"
+    },
+    "showtime": {
+      "subtitle": "Choisissez l'horaire et la salle"
+    },
+    "seats": {
+      "title": "Choisir les places",
+      "subtitle": "Places disponibles — jusqu'à 6",
+      "screen": "ÉCRAN",
+      "available": "Disponible",
+      "selected": "Sélectionné",
+      "vip": "VIP",
+      "wheelchair": "Accessible",
+      "mapLabel": "Plan de salle",
+      "countLabel": "places",
+      "continue": "Continuer"
+    },
+    "checkout": {
+      "title": "Confirmer",
+      "subtitle": "Vérifiez avant d'émettre le billet",
+      "movie": "Film",
+      "showtime": "Séance",
+      "seats": "Places",
+      "total": "Total",
+      "nameLabel": "Nom (optionnel)",
+      "namePlaceholder": "Nom du titulaire",
+      "pay": "Émettre le billet",
+      "mockNote": "Aucun paiement réel — démonstration."
+    },
+    "ticket": {
+      "title": "Votre billet est prêt",
+      "subtitle": "Scannez à l'entrée — ou enregistrez l'écran",
+      "qrLabel": "QR d'entrée",
+      "dashboardCta": "Tableau de bord",
+      "restart": "Recommencer"
+    },
+    "dashboard": {
+      "occupancy": "Occupation des salles",
+      "revenue": "Recettes du jour (SYP)",
+      "tickets": "Billets vendus"
+    },
+    "powered": {
+      "body": "Exploitation cinéma intelligente — billetterie, places, analytics et expérience visiteur.",
+      "cta": "Demander une démo sur mesure"
+    }
+  },
   "PilotsShowcasePage": {
     "meta": {
       "title": "Showcase – labs & pilots",

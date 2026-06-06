@@ -441,6 +441,69 @@
     "reportError": "Could not send. Try again or use the contact page.",
     "reportRateLimited": "Too many requests. Please wait and try again."
   },
+  "CinemaDemo": {
+    "meta": {
+      "title": "Cinema system demo — Salamiya Cinema",
+      "description": "Interactive demo for ticketing, seat maps, and operations dashboard — mock data powered by T.E.N.E.G.T.A."
+    },
+    "brandName": "Salamiya Cinema",
+    "demoBadge": "Live demo",
+    "demoNote": "Mock data only — not a real booking.",
+    "currency": "SYP",
+    "back": "Back",
+    "splash": {
+      "tag": "Smart cinema OS · T.E.N.E.G.T.A",
+      "cta": "Start experience"
+    },
+    "movies": {
+      "title": "Choose a film",
+      "subtitle": "Today's showtimes — book in seconds",
+      "min": "min"
+    },
+    "showtime": {
+      "subtitle": "Pick a time and hall"
+    },
+    "seats": {
+      "title": "Select seats",
+      "subtitle": "Tap available seats — up to 6",
+      "screen": "SCREEN",
+      "available": "Available",
+      "selected": "Selected",
+      "vip": "VIP",
+      "wheelchair": "Accessible",
+      "mapLabel": "Seat map",
+      "countLabel": "seats",
+      "continue": "Continue"
+    },
+    "checkout": {
+      "title": "Confirm booking",
+      "subtitle": "Review before issuing your ticket",
+      "movie": "Film",
+      "showtime": "Showtime",
+      "seats": "Seats",
+      "total": "Total",
+      "nameLabel": "Name (optional)",
+      "namePlaceholder": "Ticket holder name",
+      "pay": "Issue ticket",
+      "mockNote": "No real payment — demonstration only."
+    },
+    "ticket": {
+      "title": "Your ticket is ready",
+      "subtitle": "Scan at the entrance — or save this screen",
+      "qrLabel": "Entry QR code",
+      "dashboardCta": "Operations dashboard",
+      "restart": "Try again"
+    },
+    "dashboard": {
+      "occupancy": "Today's hall occupancy",
+      "revenue": "Today's revenue (SYP)",
+      "tickets": "Tickets sold"
+    },
+    "powered": {
+      "body": "Smart cinema operations — booking, seating, analytics, and guest experience in one stack.",
+      "cta": "Request a custom demo"
+    }
+  },
   "PilotsShowcasePage": {
     "meta": {
       "title": "Showcase – labs & pilots",
