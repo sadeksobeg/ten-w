@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
 import { calcRoi } from "@/lib/cinema-demo/roi";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
@@ -17,6 +18,7 @@ export function CinemaRoiPanel() {
 
   return (
     <section className="cinema-phase">
+      <CinemaDemoHeader />
       <div className="cinema-container cinema-roi">
         <h2 className="cinema-title text-center">{t("roi.title")}</h2>
         <p className="cinema-subtitle text-center">{t("roi.subtitle")}</p>

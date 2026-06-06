@@ -12,6 +12,7 @@ export type LoungeItem = {
   labelAr: string;
   labelEn: string;
   price: number;
+  icon: "popcorn" | "drinks" | "choco" | "family" | "vip-pack";
 };
 
 export const VIP_MESSAGES: VipMessage[] = [
@@ -26,8 +27,8 @@ export const VIP_MESSAGES: VipMessage[] = [
   {
     id: "m2",
     from: "concierge",
-    textAr: "رصيد نقاطك الحالي: 2,400 نقطة 🌟",
-    textEn: "Your points balance: 2,400 🌟",
+    textAr: "رصيد نقاطك الحالي: 2,400 نقطة",
+    textEn: "Your points balance: 2,400 points",
     time: "9:45 م",
     delayMs: 1600,
   },
@@ -50,27 +51,27 @@ export const VIP_MESSAGES: VipMessage[] = [
   {
     id: "m5",
     from: "concierge",
-    textAr: "تم الحجز: A1, A2 — صف ملكي 👑",
-    textEn: "Booked: A1, A2 — royal row 👑",
+    textAr: "تم الحجز: A1, A2 — صف ملكي VIP",
+    textEn: "Booked: A1, A2 — royal VIP row",
     time: "9:46 م",
     delayMs: 5200,
   },
   {
     id: "m6",
     from: "concierge",
-    textAr: "وجبة VIP مضافة مجاناً 🍿 — التذكرة في الواتساب 📱",
-    textEn: "Complimentary VIP meal 🍿 — ticket sent via WhatsApp 📱",
+    textAr: "وجبة VIP مضافة مجاناً — التذكرة في الواتساب",
+    textEn: "Complimentary VIP meal — ticket sent via WhatsApp",
     time: "9:46 م",
     delayMs: 6600,
   },
 ];
 
 export const LOUNGE_ITEMS: LoungeItem[] = [
-  { id: "popcorn", labelAr: "بوشار بالكراميل", labelEn: "Caramel popcorn", price: 3500 },
-  { id: "drinks", labelAr: "مشروبات", labelEn: "Drinks", price: 2500 },
-  { id: "choco", labelAr: "شوكولاتة", labelEn: "Chocolate", price: 1500 },
-  { id: "family", labelAr: "وجبة عائلية", labelEn: "Family combo", price: 12000 },
-  { id: "vip-pack", labelAr: "باقة VIP", labelEn: "VIP bundle", price: 15000 },
+  { id: "popcorn", labelAr: "بوشار بالكراميل", labelEn: "Caramel popcorn", price: 3500, icon: "popcorn" },
+  { id: "drinks", labelAr: "مشروبات", labelEn: "Drinks", price: 2500, icon: "drinks" },
+  { id: "choco", labelAr: "شوكولاتة", labelEn: "Chocolate", price: 1500, icon: "choco" },
+  { id: "family", labelAr: "وجبة عائلية", labelEn: "Family combo", price: 12000, icon: "family" },
+  { id: "vip-pack", labelAr: "باقة VIP", labelEn: "VIP bundle", price: 15000, icon: "vip-pack" },
 ];
 
 export const UPSELL_BUNDLE = {

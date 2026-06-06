@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   CinemaSeatMap,
@@ -8,6 +8,7 @@ import {
   seatLabelsForSelection,
 } from "@/components/cinema-demo/CinemaSeatMap";
 import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
+import { CinemaIcon } from "@/components/cinema-demo/CinemaIcon";
 import { CinemaProgressSteps } from "@/components/cinema-demo/CinemaProgressSteps";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
@@ -19,27 +20,30 @@ export function CinemaSeatsPhase() {
   const setLiveBrowsers = useCinemaDemoStore((s) => s.setLiveBrowsers);
   const toggleSeat = useCinemaDemoStore((s) => s.toggleSeat);
   const setPhase = useCinemaDemoStore((s) => s.setPhase);
+  const [countdownSec, setCountdownSec] = useState(154);
 
   useEffect(() => {
     if (!showtimeId) setPhase("movies");
   }, [showtimeId, setPhase]);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
+    const browsersId = window.setInterval(() => {
       setLiveBrowsers(10 + Math.floor(Math.random() * 6));
     }, 5000);
-    return () => clearInterval(id);
+    const timerId = window.setInterval(() => {
+      setCountdownSec((s) => (s <= 1 ? 154 : s - 1));
+    }, 1000);
+    return () => {
+      clearInterval(browsersId);
+      clearInterval(timerId);
+    };
   }, [setLiveBrowsers]);
-
-  const countdown = useMemo(() => {
-    const base = 154;
-    return `${Math.floor(base / 60)}:${String(base % 60).padStart(2, "0")}`;
-  }, []);
 
   if (!showtimeId) return null;
 
   const total = computeSeatTotal(showtimeId, selectedSeatIds);
   const count = selectedSeatIds.length;
+  const countdown = `${Math.floor(countdownSec / 60)}:${String(countdownSec % 60).padStart(2, "0")}`;
 
   return (
     <section className="cinema-phase">
@@ -47,7 +51,7 @@ export function CinemaSeatsPhase() {
       <div className="cinema-container">
         <CinemaProgressSteps step={2} />
         <div className="cinema-seats-live">
-          <span className="cinema-live-dot" />
+          <CinemaIcon name="live" size={14} />
           {t("seats.liveBrowsers", { count: liveBrowsers })}
         </div>
         <button type="button" className="cinema-btn cinema-btn-ghost mb-4" onClick={() => setPhase("showtime")}>
@@ -58,7 +62,10 @@ export function CinemaSeatsPhase() {
         <p className="cinema-pricing-hint">
           <span className="cinema-badge cinema-badge--vip">{t("seats.vipScarcity")}</span>
           <span className="cinema-badge cinema-badge--value">{t("seats.bestValue")}</span>
-          <span className="cinema-badge cinema-badge--timer">{countdown}</span>
+          <span className="cinema-badge cinema-badge--timer">
+            <CinemaIcon name="clock" size={12} className="inline-icon" />
+            {countdown}
+          </span>
         </p>
 
         <CinemaSeatMap showtimeId={showtimeId} selectedIds={selectedSeatIds} onToggle={toggleSeat} live />

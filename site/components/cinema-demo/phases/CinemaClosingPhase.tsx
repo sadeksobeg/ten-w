@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
+import { CinemaBrandLogo } from "@/components/cinema-demo/CinemaBrandLogo";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 export function CinemaClosingPhase() {
@@ -18,7 +20,9 @@ export function CinemaClosingPhase() {
 
   return (
     <section className="cinema-phase cinema-closing">
+      <CinemaDemoHeader />
       <div className="cinema-container text-center">
+        <CinemaBrandLogo variant="dark" className="mx-auto mb-6" />
         <p className="cinema-closing-eyebrow">{t("closing.eyebrow")}</p>
         <h2 className="cinema-title">{t("closing.title")}</h2>
         <p className="cinema-subtitle mb-8">{t("closing.subtitle")}</p>

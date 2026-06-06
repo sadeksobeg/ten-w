@@ -485,6 +485,8 @@
     "modes": {
       "title": "اختر تجربتك",
       "subtitle": "ثلاثة أوضاع — عميل، مدير، VIP",
+      "start": "ابدأ",
+      "tagline": "تجربة سينمائية فاخرة",
       "customer": {
         "title": "تجربة العميل",
         "desc": "حجز فيلم، مقاعد، تذكرة رقمية"
@@ -566,7 +568,11 @@
       "liveBookings": "حجوزات حية",
       "alerts": "تنبيهات",
       "staff": "الطاقم",
-      "continueRoi": "احسب العائد ←"
+      "continueRoi": "احسب العائد ←",
+      "statusActive": "يعرض الآن",
+      "statusUpcoming": "قريباً",
+      "statusIssue": "تنبيه",
+      "staffActive": "متصل"
     },
     "vip": {
       "entryTitle": "مرحباً بك في VIP",

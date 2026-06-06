@@ -480,6 +480,8 @@
     "modes": {
       "title": "Choisissez votre expérience",
       "subtitle": "Trois modes — client, manager, VIP",
+      "start": "Commencer",
+      "tagline": "Expérience cinéma premium",
       "customer": {
         "title": "Parcours client",
         "desc": "Film, places, billet numérique"
@@ -561,7 +563,11 @@
       "liveBookings": "Réservations live",
       "alerts": "Alertes",
       "staff": "Équipe",
-      "continueRoi": "Calculer le ROI →"
+      "continueRoi": "Calculer le ROI →",
+      "statusActive": "En cours",
+      "statusUpcoming": "À venir",
+      "statusIssue": "Alerte",
+      "staffActive": "en service"
     },
     "vip": {
       "entryTitle": "Bienvenue VIP",

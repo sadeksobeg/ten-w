@@ -1,9 +1,10 @@
 "use client";
 
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { STAFF_SECTIONS } from "@/lib/cinema-demo/manager-data";
 
 export function StaffOverview() {
+  const t = useTranslations("CinemaDemo");
   const locale = useLocale();
   const isAr = locale === "ar";
 
@@ -21,7 +22,7 @@ export function StaffOverview() {
           <div>
             <p className="mgr-staff-label">{isAr ? section.labelAr : section.labelEn}</p>
             <p className="cinema-movie-meta">
-              {section.active}/{section.count} active
+              {section.active}/{section.count} {t("manager.staffActive")}
             </p>
           </div>
         </div>

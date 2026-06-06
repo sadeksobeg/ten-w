@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
+import { CinemaIcon } from "@/components/cinema-demo/CinemaIcon";
 import { UPSELL_BUNDLE } from "@/lib/cinema-demo/vip-data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
@@ -21,6 +22,9 @@ export function CinemaUpsellPhase() {
 
         <div className="cinema-upsell-card">
           <span className="cinema-upsell-badge">{t("upsell.badge")}</span>
+          <span className="cinema-upsell-icon">
+            <CinemaIcon name="popcorn" size={36} />
+          </span>
           <h3>{isAr ? UPSELL_BUNDLE.labelAr : UPSELL_BUNDLE.labelEn}</h3>
           <p className="cinema-movie-meta">{isAr ? UPSELL_BUNDLE.descAr : UPSELL_BUNDLE.descEn}</p>
           <p className="cinema-sticky-price">

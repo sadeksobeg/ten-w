@@ -7,6 +7,8 @@ import {
   computeSeatTotal,
   seatLabelsForSelection,
 } from "@/components/cinema-demo/CinemaSeatMap";
+import { CinemaBrandLogo } from "@/components/cinema-demo/CinemaBrandLogo";
+import { CinemaIcon } from "@/components/cinema-demo/CinemaIcon";
 import { getMovie, getShowtime } from "@/lib/cinema-demo/data";
 import { playSuccessChime } from "@/lib/cinema-demo/sounds";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
@@ -79,15 +81,17 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
       <div className="cinema-ticket-shape">
         <div className="cinema-ticket-main">
           <div className="cinema-ticket-head">
-            <p>{t("brandName")}</p>
+            <CinemaBrandLogo variant="light" className="mx-auto" />
             <p className="cinema-ticket-ref">{bookingRef}</p>
           </div>
           <div className="cinema-ticket-body">
             <p className="cinema-movie-title">{isAr ? movie.titleAr : movie.titleEn}</p>
             <p className="cinema-movie-meta">
+              <CinemaIcon name="clock" size={14} className="inline-icon" />
               {showtime.time} · {isAr ? showtime.hallLabelAr : showtime.hallLabelEn}
             </p>
             <p className="cinema-movie-meta">
+              <CinemaIcon name="seat" size={14} className="inline-icon" />
               {seats.join("، ")}
               {upsellAdded ? ` · ${t("upsell.added")}` : ""}
             </p>
@@ -98,25 +102,38 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
             {stage >= 4 ? (
               <div className={`cinema-ticket-qr ${scanDone ? "is-scanned" : ""}`}>
                 <canvas ref={canvasRef} aria-label={t("ticket.qrLabel")} />
-                {scanDone ? <span className="cinema-scan-ok">✓</span> : null}
+                {scanDone ? (
+                  <span className="cinema-scan-ok">
+                    <CinemaIcon name="check" size={40} />
+                  </span>
+                ) : null}
               </div>
             ) : null}
             {stage >= 5 ? (
               <div className="cinema-ticket-stars" aria-label={t("ticket.rate")}>
                 {Array.from({ length: 5 }, (_, i) => (
-                  <span key={i} className={i < stars ? "is-filled" : ""}>
-                    ★
-                  </span>
+                  <CinemaIcon
+                    key={i}
+                    name="star-filled"
+                    size={20}
+                    className={i < stars ? "is-filled" : ""}
+                    filled={i < stars}
+                  />
                 ))}
               </div>
             ) : null}
             <div className="cinema-wallet-btns">
-              <span className="cinema-wallet-btn"> Apple Wallet</span>
-              <span className="cinema-wallet-btn"> Google Wallet</span>
+              <span className="cinema-wallet-btn">
+                <CinemaIcon name="wallet" size={14} /> Apple Wallet
+              </span>
+              <span className="cinema-wallet-btn">
+                <CinemaIcon name="wallet" size={14} /> Google Wallet
+              </span>
             </div>
           </div>
         </div>
         <div className="cinema-ticket-stub">
+          <CinemaIcon name="ticket" size={18} />
           <p>{bookingRef}</p>
           <p>{showtime.time}</p>
         </div>

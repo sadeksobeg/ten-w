@@ -462,6 +462,8 @@
     "modes": {
       "title": "Choose your experience",
       "subtitle": "Three modes — customer, manager, VIP",
+      "start": "Start",
+      "tagline": "Premium cinema experience",
       "customer": {
         "title": "Customer journey",
         "desc": "Film, seats, digital ticket"
@@ -543,7 +545,11 @@
       "liveBookings": "Live bookings",
       "alerts": "Alerts",
       "staff": "Staff",
-      "continueRoi": "Calculate ROI →"
+      "continueRoi": "Calculate ROI →",
+      "statusActive": "Now showing",
+      "statusUpcoming": "Upcoming",
+      "statusIssue": "Alert",
+      "staffActive": "on duty"
     },
     "vip": {
       "entryTitle": "Welcome to VIP",

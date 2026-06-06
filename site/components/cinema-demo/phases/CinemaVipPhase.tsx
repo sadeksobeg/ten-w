@@ -3,8 +3,17 @@
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { CinemaDemoHeader } from "@/components/cinema-demo/CinemaDemoHeader";
+import { CinemaIcon } from "@/components/cinema-demo/CinemaIcon";
 import { LOUNGE_ITEMS, VIP_MESSAGES } from "@/lib/cinema-demo/vip-data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
+
+const LOUNGE_ICON_MAP = {
+  popcorn: "popcorn",
+  drinks: "popcorn",
+  choco: "popcorn",
+  family: "users",
+  "vip-pack": "crown",
+} as const;
 
 export function CinemaVipPhase() {
   const t = useTranslations("CinemaDemo");
@@ -42,6 +51,9 @@ export function CinemaVipPhase() {
           <div className="cinema-vip-entry">
             <div className="cinema-vip-rope" aria-hidden />
             <div className="cinema-vip-spotlight" aria-hidden />
+            <span className="cinema-vip-entry-icon">
+              <CinemaIcon name="crown" size={48} />
+            </span>
             <h2 className="cinema-title text-center">{t("vip.entryTitle")}</h2>
             <p className="cinema-subtitle text-center">{t("vip.entrySubtitle")}</p>
             <button type="button" className="cinema-btn cinema-btn-primary mx-auto block mt-8" onClick={() => setSubPhase(1)}>
@@ -77,6 +89,7 @@ export function CinemaVipPhase() {
                     setCart((c) => (c.includes(item.id) ? c.filter((x) => x !== item.id) : [...c, item.id]))
                   }
                 >
+                  <CinemaIcon name={LOUNGE_ICON_MAP[item.icon]} size={18} />
                   {isAr ? item.labelAr : item.labelEn}
                   <span>{item.price.toLocaleString("ar-SY")}</span>
                 </button>

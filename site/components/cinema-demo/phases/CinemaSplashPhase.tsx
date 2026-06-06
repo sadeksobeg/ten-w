@@ -52,7 +52,7 @@ export function CinemaSplashPhase() {
       ) : null}
 
       <div className="cinema-splash-logo-wrap cinema-splash-spotlight">
-        <CinemaBrandLogo variant="splash" />
+        <CinemaBrandLogo variant="splash" tagline={t("modes.tagline")} />
       </div>
 
       <p className="cinema-splash-tag">{t("splash.tag")}</p>
