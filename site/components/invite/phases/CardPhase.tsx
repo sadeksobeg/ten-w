@@ -9,51 +9,13 @@ import { usePrefersReducedMotion } from "@/components/invite/hooks/usePrefersRed
 import { playAcceptChime } from "@/lib/invite/invite-sound";
 import { useInviteExperienceStore } from "@/stores/invite-experience-store";
 
+import { InviteBenefitIcon } from "@/components/invite/InviteBenefitIcon";
+import { benefitsForTier } from "@/lib/invite/message-templates";
+
 type Props = {
   card: InviteCardPublic;
   origin: string;
 };
-
-const BENEFITS = [
-  {
-    label: "وصول حصري للشبكة",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <circle cx="12" cy="5" r="2" />
-        <circle cx="5" cy="19" r="2" />
-        <circle cx="19" cy="19" r="2" />
-        <path d="M12 7v4M8.5 17.5L10.5 13M15.5 17.5L13.5 13" />
-      </svg>
-    ),
-  },
-  {
-    label: "تعاون مع الفريق",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-      </svg>
-    ),
-  },
-  {
-    label: "محتوى مميز ومدفوع",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" />
-      </svg>
-    ),
-  },
-  {
-    label: "شراكة طويلة المدى",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M5 12c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7" />
-        <path d="M5 12H2M5 12c0 3.87-3.13 7-7 7" transform="translate(7 0)" />
-      </svg>
-    ),
-  },
-];
 
 const STEPS = [
   { num: "١", title: "اقبل", desc: "تأكيد حضورك" },
@@ -111,6 +73,7 @@ export function CardPhase({ card, origin }: Props) {
   const [hideScrollHint, setHideScrollHint] = useState(false);
   const granted = card.accepted;
   const year = new Date().getFullYear();
+  const benefits = benefitsForTier(card.tier);
 
   const storyRef = useRef<HTMLElement>(null);
   const journeyRef = useRef<HTMLElement>(null);
@@ -211,13 +174,15 @@ export function CardPhase({ card, origin }: Props) {
             <div className="invite-panel-rule" aria-hidden />
             <h2 className="invite-benefits-title">ما يمنحك إياه البرنامج</h2>
             <div className="invite-benefits-grid invite-benefits-grid--compact">
-              {BENEFITS.map((item, i) => (
+              {benefits.map((item, i) => (
                 <div
                   key={item.label}
                   className={`invite-benefit-card invite-benefit-card--compact ${storyVisible ? "is-visible" : ""}`}
                   style={{ transitionDelay: `${i * 80}ms` }}
                 >
-                  <span className="invite-benefit-icon">{item.icon}</span>
+                  <span className="invite-benefit-icon">
+                    <InviteBenefitIcon icon={item.icon} />
+                  </span>
                   <p className="invite-benefit-label">{item.label}</p>
                 </div>
               ))}

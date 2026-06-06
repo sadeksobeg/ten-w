@@ -3,11 +3,14 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
+import { InviteAdminFormFields } from "@/components/invite/admin/InviteAdminFormFields";
 import {
   createInviteCardAction,
   deleteInviteCardAction,
+  updateInviteCardAction,
 } from "@/lib/invite/actions";
-import { INVITE_TIERS } from "@/lib/invite/generate";
+import { INVITE_TIER_LABELS } from "@/lib/invite/message-templates";
+import type { InviteTier } from "@/lib/invite/generate";
 
 export type InviteCardRow = {
   id: string;
@@ -15,6 +18,7 @@ export type InviteCardRow = {
   handle: string;
   tier: string;
   scope: string;
+  message: string;
   slug: string;
   token: string;
   accepted: boolean;
@@ -62,6 +66,7 @@ export function InviteAdminPanel({ cards, stats, origin }: Props) {
   const [pending, start] = useTransition();
   const [copied, setCopied] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   function copyLink(slug: string) {
     const url = `${origin}/invite/${slug}`;
@@ -84,10 +89,23 @@ export function InviteAdminPanel({ cards, stats, origin }: Props) {
     });
   }
 
+  function handleUpdate(formData: FormData) {
+    setError(null);
+    start(async () => {
+      const res = await updateInviteCardAction(formData);
+      if (!res.ok) {
+        setError(t("errors.createFailed"));
+        return;
+      }
+      setEditingId(null);
+    });
+  }
+
   function onDelete(id: string) {
     if (!window.confirm(t("deleteConfirm"))) return;
     start(async () => {
       await deleteInviteCardAction(id);
+      if (editingId === id) setEditingId(null);
     });
   }
 
@@ -98,6 +116,9 @@ export function InviteAdminPanel({ cards, stats, origin }: Props) {
           {t("title")}
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-white/50">{t("subtitle")}</p>
+        <p className="mt-2 max-w-2xl text-xs text-white/40">
+          اختر نوع الدعوة (صانع محتوى أو شريك خدمات)، عدّل النص، ثم أرسل الرابط. يمكنك تعديل أي دعوة لاحقاً.
+        </p>
       </header>
 
       <InviteStatsBar stats={stats} />
@@ -108,48 +129,7 @@ export function InviteAdminPanel({ cards, stats, origin }: Props) {
         {error ? <p className="mt-3 text-xs text-rose-400">{error}</p> : null}
         <form id="invite-create-form" action={handleCreate} className="mt-6 space-y-5">
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block">
-              <span className="text-xs font-semibold text-white/55">{t("name")}</span>
-              <input name="name" required className={fieldClass} placeholder={t("namePlaceholder")} />
-            </label>
-            <label className="block">
-              <span className="text-xs font-semibold text-white/55">{t("handle")}</span>
-              <input
-                name="handle"
-                required
-                className={fieldClass}
-                placeholder={t("handlePlaceholder")}
-              />
-            </label>
-            <label className="block">
-              <span className="text-xs font-semibold text-white/55">{t("tier")}</span>
-              <select name="tier" defaultValue="CONTENT CREATOR" className={fieldClass}>
-                {INVITE_TIERS.map((tier) => (
-                  <option key={tier} value={tier}>
-                    {tier}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="block">
-              <span className="text-xs font-semibold text-white/55">{t("scope")}</span>
-              <input
-                name="scope"
-                required
-                className={fieldClass}
-                placeholder={t("scopePlaceholder")}
-              />
-            </label>
-            <label className="block sm:col-span-2">
-              <span className="text-xs font-semibold text-white/55">{t("message")}</span>
-              <textarea
-                name="message"
-                required
-                rows={4}
-                className={`${fieldClass} resize-y`}
-                placeholder={t("messagePlaceholder")}
-              />
-            </label>
+            <InviteAdminFormFields fieldClass={fieldClass} />
           </div>
           <button
             type="submit"
@@ -174,61 +154,93 @@ export function InviteAdminPanel({ cards, stats, origin }: Props) {
         ) : (
           <div className="space-y-3">
             {cards.map((c) => (
-              <div
-                key={c.id}
-                className="rounded-xl border border-white/10 bg-black/25 p-4 lg:flex lg:items-center lg:justify-between lg:gap-4"
-              >
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-semibold text-white">{c.name}</p>
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-                        c.accepted
-                          ? "bg-emerald-500/15 text-emerald-300"
-                          : "bg-amber-500/15 text-amber-200"
-                      }`}
-                    >
-                      {c.accepted ? t("statusAccepted") : t("statusPending")}
-                    </span>
+              <div key={c.id} className="rounded-xl border border-white/10 bg-black/25 p-4">
+                <div className="lg:flex lg:items-start lg:justify-between lg:gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-semibold text-white">{c.name}</p>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                          c.accepted
+                            ? "bg-emerald-500/15 text-emerald-300"
+                            : "bg-amber-500/15 text-amber-200"
+                        }`}
+                      >
+                        {c.accepted ? t("statusAccepted") : t("statusPending")}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-white/50">@{c.handle}</p>
+                    <p className="mt-1 text-xs text-white/40">
+                      {INVITE_TIER_LABELS[c.tier as InviteTier] ?? c.tier} · {c.scope}
+                    </p>
+                    <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-white/55">{c.message}</p>
+                    <p className="mt-2 truncate font-mono text-[10px] text-white/30">{c.token}</p>
                   </div>
-                  <p className="mt-1 text-xs text-white/50">@{c.handle}</p>
-                  <p className="mt-1 text-xs text-white/40">
-                    {c.tier} · {c.scope}
-                  </p>
-                  <p className="mt-2 truncate font-mono text-[10px] text-white/30">{c.token}</p>
+
+                  <div className="mt-4 flex flex-wrap gap-2 lg:mt-0 lg:shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setEditingId(editingId === c.id ? null : c.id)}
+                      className="rounded-lg border border-gold/35 bg-gold/10 px-3 py-2 text-xs font-bold text-gold hover:bg-gold/15"
+                    >
+                      {editingId === c.id ? "إلغاء" : "تعديل"}
+                    </button>
+                    <a
+                      href={`/api/invite/${c.slug}/card`}
+                      className="rounded-lg border border-gold/35 bg-gold/10 px-3 py-2 text-xs font-bold text-gold hover:bg-gold/15"
+                    >
+                      {t("downloadQr")}
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => copyLink(c.slug)}
+                      className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/80 hover:border-gold/30"
+                    >
+                      {copied === c.slug ? t("copied") : t("copyLink")}
+                    </button>
+                    <a
+                      href={`/invite/${c.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/80 hover:border-gold/30"
+                    >
+                      {t("preview")}
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(c.id)}
+                      disabled={pending}
+                      className="rounded-lg border border-rose-500/30 px-3 py-2 text-xs font-semibold text-rose-300 hover:bg-rose-500/10 disabled:opacity-50"
+                    >
+                      {t("delete")}
+                    </button>
+                  </div>
                 </div>
 
-                <div className="mt-4 flex flex-wrap gap-2 lg:mt-0 lg:shrink-0">
-                  <a
-                    href={`/api/invite/${c.slug}/card`}
-                    className="rounded-lg border border-gold/35 bg-gold/10 px-3 py-2 text-xs font-bold text-gold hover:bg-gold/15"
-                  >
-                    {t("downloadQr")}
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => copyLink(c.slug)}
-                    className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/80 hover:border-gold/30"
-                  >
-                    {copied === c.slug ? t("copied") : t("copyLink")}
-                  </button>
-                  <a
-                    href={`/invite/${c.slug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white/80 hover:border-gold/30"
-                  >
-                    {t("preview")}
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => onDelete(c.id)}
-                    disabled={pending}
-                    className="rounded-lg border border-rose-500/30 px-3 py-2 text-xs font-semibold text-rose-300 hover:bg-rose-500/10 disabled:opacity-50"
-                  >
-                    {t("delete")}
-                  </button>
-                </div>
+                {editingId === c.id ? (
+                  <form action={handleUpdate} className="mt-4 space-y-4 border-t border-white/10 pt-4">
+                    <input type="hidden" name="id" value={c.id} />
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <InviteAdminFormFields
+                        card={{
+                          name: c.name,
+                          handle: c.handle,
+                          tier: c.tier,
+                          scope: c.scope,
+                          message: c.message,
+                        }}
+                        fieldClass={fieldClass}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={pending}
+                      className="rounded-xl border border-gold/40 bg-gold/15 px-6 py-2.5 text-sm font-bold text-gold hover:bg-gold/25 disabled:opacity-50"
+                    >
+                      {pending ? "جاري الحفظ…" : "حفظ التعديلات"}
+                    </button>
+                  </form>
+                ) : null}
               </div>
             ))}
           </div>

@@ -64,6 +64,7 @@ export async function listInviteCards() {
       handle: true,
       tier: true,
       scope: true,
+      message: true,
       slug: true,
       token: true,
       accepted: true,

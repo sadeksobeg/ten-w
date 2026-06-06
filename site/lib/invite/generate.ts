@@ -3,6 +3,7 @@ import { z } from "zod";
 
 export const INVITE_TIERS = [
   "CONTENT CREATOR",
+  "SERVICE PARTNER",
   "CREATIVE PARTNER",
   "BRAND AMBASSADOR",
 ] as const;
@@ -23,6 +24,12 @@ export const createInviteSchema = z.object({
 });
 
 export type CreateInviteInput = z.infer<typeof createInviteSchema>;
+
+export const updateInviteSchema = createInviteSchema.extend({
+  id: z.string().cuid(),
+});
+
+export type UpdateInviteInput = z.infer<typeof updateInviteSchema>;
 
 function slugPart(value: string): string {
   return value
