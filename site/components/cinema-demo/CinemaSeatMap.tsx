@@ -1,61 +1,93 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useLiveSeatSimulation } from "@/components/cinema-demo/hooks/useLiveSeatSimulation";
 import {
   buildSeatMap,
   formatSeatLabel,
   type SeatCell,
   type SeatRow,
 } from "@/lib/cinema-demo/seat-map";
+import { playSeatDeselectSound, playSeatSelectSound } from "@/lib/cinema-demo/sounds";
+import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 type Props = {
   showtimeId: string;
   selectedIds: string[];
   onToggle: (id: string) => void;
+  live?: boolean;
 };
 
 function SeatButton({
   seat,
   selected,
+  liveState,
   onToggle,
+  soundEnabled,
 }: {
   seat: SeatCell;
   selected: boolean;
+  liveState?: "available" | "occupied" | "pending";
   onToggle: (id: string) => void;
+  soundEnabled: boolean;
 }) {
+  const [tooltip, setTooltip] = useState(false);
+
   if (seat.isAisle) {
     return <span className="cinema-seat-aisle" aria-hidden />;
   }
+
+  const occupied = seat.occupied || liveState === "occupied";
+  const pending = liveState === "pending";
 
   const classes = [
     "cinema-seat",
     seat.tier === "vip" ? "is-vip" : "",
     seat.tier === "wheelchair" ? "is-wheelchair" : "",
-    seat.occupied ? "is-occupied" : "",
+    occupied ? "is-occupied" : "",
+    pending ? "is-pending" : "",
     selected ? "is-selected" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
+  const handleClick = () => {
+    if (occupied) return;
+    if (selected) playSeatDeselectSound(soundEnabled);
+    else playSeatSelectSound(soundEnabled);
+    if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(10);
+    onToggle(seat.id);
+  };
+
   return (
-    <button
-      type="button"
-      className={classes}
-      disabled={seat.occupied}
-      aria-label={formatSeatLabel(seat)}
-      aria-pressed={selected}
-      onClick={() => onToggle(seat.id)}
-    />
+    <span className="cinema-seat-wrap" onMouseEnter={() => setTooltip(true)} onMouseLeave={() => setTooltip(false)}>
+      <button
+        type="button"
+        className={classes}
+        disabled={occupied || pending}
+        aria-label={formatSeatLabel(seat)}
+        aria-pressed={selected}
+        onClick={handleClick}
+      />
+      {tooltip && !occupied ? (
+        <span className="cinema-seat-tooltip">
+          {seat.row}
+          {seat.number} · {seat.tier} · {seat.price.toLocaleString("ar-SY")}
+        </span>
+      ) : null}
+    </span>
   );
 }
 
-export function CinemaSeatMap({ showtimeId, selectedIds, onToggle }: Props) {
+export function CinemaSeatMap({ showtimeId, selectedIds, onToggle, live = false }: Props) {
   const t = useTranslations("CinemaDemo");
+  const soundEnabled = useCinemaDemoStore((s) => s.soundEnabled);
   const rows = useMemo(() => buildSeatMap(showtimeId), [showtimeId]);
+  const liveStates = useLiveSeatSimulation(showtimeId, live);
 
   return (
-    <div>
+    <div className="cinema-seat-map-wrap">
       <div className="cinema-screen-wrap">
         <div className="cinema-screen cinema-screen--pulse" aria-hidden />
         <p className="cinema-screen-label">{t("seats.screen")}</p>
@@ -78,6 +110,12 @@ export function CinemaSeatMap({ showtimeId, selectedIds, onToggle }: Props) {
           <span className="cinema-legend-dot" style={{ background: "rgba(107,33,168,0.5)" }} />
           {t("seats.wheelchair")}
         </span>
+        {live ? (
+          <span className="cinema-legend-item">
+            <span className="cinema-legend-dot cinema-legend-dot--pending" />
+            {t("seats.pending")}
+          </span>
+        ) : null}
       </div>
 
       <div className="cinema-seat-map" role="group" aria-label={t("seats.mapLabel")}>
@@ -89,7 +127,9 @@ export function CinemaSeatMap({ showtimeId, selectedIds, onToggle }: Props) {
                 key={seat.id}
                 seat={seat}
                 selected={selectedIds.includes(seat.id)}
+                liveState={liveStates[seat.id]}
                 onToggle={onToggle}
+                soundEnabled={soundEnabled}
               />
             ))}
             <span className="cinema-row-label">{row.label}</span>

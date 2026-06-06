@@ -451,10 +451,29 @@
     "demoNote": "Mock data only — not a real booking.",
     "currency": "SYP",
     "back": "Back",
+    "soundOn": "Enable sound",
+    "soundOff": "Mute sound",
     "splash": {
       "tag": "Smart cinema OS · T.E.N.E.G.T.A",
-      "systemLine": "Booking · Seats · Tickets · Analytics",
-      "cta": "Start experience"
+      "systemLine": "Salamiya Cinema management system",
+      "cta": "Start experience",
+      "skip": "Skip"
+    },
+    "modes": {
+      "title": "Choose your experience",
+      "subtitle": "Three modes — customer, manager, VIP",
+      "customer": {
+        "title": "Customer journey",
+        "desc": "Film, seats, digital ticket"
+      },
+      "manager": {
+        "title": "Manager dashboard",
+        "desc": "Revenue, halls, live alerts"
+      },
+      "vip": {
+        "title": "VIP experience",
+        "desc": "Concierge, lounge, premium service"
+      }
     },
     "movies": {
       "title": "Choose a film",
@@ -475,7 +494,12 @@
       "wheelchair": "Accessible",
       "mapLabel": "Seat map",
       "countLabel": "seats",
-      "continue": "Continue"
+      "continue": "Continue",
+      "liveBrowsers": "{count} people browsing now",
+      "vipScarcity": "VIP — limited seats",
+      "bestValue": "Best value",
+      "pending": "Pending",
+      "pinchHint": "Pinch to zoom on mobile"
     },
     "checkout": {
       "title": "Confirm booking",
@@ -494,7 +518,66 @@
       "subtitle": "Scan at the entrance — or save this screen",
       "qrLabel": "Entry QR code",
       "dashboardCta": "Operations dashboard",
-      "restart": "Try again"
+      "restart": "Try again",
+      "roiCta": "Calculate ROI",
+      "rate": "Rate your experience"
+    },
+    "upsell": {
+      "title": "Special offer before your ticket",
+      "subtitle": "Add a VIP meal bundle at a discount",
+      "badge": "Recommended",
+      "save": "Save",
+      "add": "Add meal",
+      "skip": "No thanks",
+      "added": "VIP meal"
+    },
+    "manager": {
+      "title": "Operations dashboard",
+      "filterToday": "Today",
+      "filterWeek": "Week",
+      "revenueChart": "Weekly revenue",
+      "thisWeek": "This week",
+      "lastWeek": "Last week",
+      "peakTitle": "Booking peaks",
+      "peakInsight": "Thu 20:00 — peak occupancy. Consider an extra showtime.",
+      "liveBookings": "Live bookings",
+      "alerts": "Alerts",
+      "staff": "Staff",
+      "continueRoi": "Calculate ROI →"
+    },
+    "vip": {
+      "entryTitle": "Welcome to VIP",
+      "entrySubtitle": "Private lounge · royal seats · concierge",
+      "enter": "Enter lounge",
+      "concierge": "Concierge",
+      "lounge": "Lounge menu",
+      "continue": "Continue to ROI"
+    },
+    "roi": {
+      "title": "ROI calculator",
+      "subtitle": "How much does Salamiya Cinema save with TENEGTA?",
+      "seatsLabel": "Seat count",
+      "extraRevenue": "Extra revenue / month",
+      "timeSaved": "Hours saved / month",
+      "ratio": "ROI ratio",
+      "contactCta": "Request a custom demo",
+      "continue": "Continue"
+    },
+    "closing": {
+      "eyebrow": "What we built in one week",
+      "title": "Full cinema operations stack",
+      "subtitle": "Booking · seats · analytics · VIP — production-ready",
+      "f1Title": "Booking & tickets",
+      "f1Body": "Live seats, upsell, digital ticket with QR",
+      "f2Title": "Manager dashboard",
+      "f2Body": "KPIs, heatmap, live bookings and alerts",
+      "f3Title": "VIP experience",
+      "f3Body": "Concierge, lounge, loyalty points",
+      "ind1": "Cinema",
+      "ind2": "Entertainment",
+      "ind3": "Hospitality",
+      "cta": "Contact us",
+      "restart": "Restart demo"
     },
     "dashboard": {
       "occupancy": "Today's hall occupancy",

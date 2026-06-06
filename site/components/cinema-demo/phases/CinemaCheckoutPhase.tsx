@@ -20,7 +20,7 @@ export function CinemaCheckoutPhase() {
   const selectedSeatIds = useCinemaDemoStore((s) => s.selectedSeatIds);
   const guestName = useCinemaDemoStore((s) => s.guestName);
   const setGuestName = useCinemaDemoStore((s) => s.setGuestName);
-  const confirmBooking = useCinemaDemoStore((s) => s.confirmBooking);
+  const confirmCheckout = useCinemaDemoStore((s) => s.confirmCheckout);
   const setPhase = useCinemaDemoStore((s) => s.setPhase);
 
   const movie = movieId ? getMovie(movieId) : null;
@@ -82,11 +82,7 @@ export function CinemaCheckoutPhase() {
           placeholder={t("checkout.namePlaceholder")}
         />
 
-        <button
-          type="button"
-          className="cinema-btn cinema-btn-primary mt-6 w-full"
-          onClick={confirmBooking}
-        >
+        <button type="button" className="cinema-btn cinema-btn-primary mt-6 w-full" onClick={confirmCheckout}>
           {t("checkout.pay")}
         </button>
         <p className="cinema-demo-note">{t("checkout.mockNote")}</p>

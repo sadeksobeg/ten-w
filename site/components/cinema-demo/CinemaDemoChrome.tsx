@@ -2,10 +2,10 @@
 
 import { useEffect, type ReactNode } from "react";
 import { CinemaAmbientLayer } from "@/components/cinema-demo/CinemaAmbientLayer";
+import { CinemaCustomCursor } from "@/components/cinema-demo/CinemaCustomCursor";
 
 type Props = { children: ReactNode };
 
-/** Hides OS cursor + site custom cursor for immersive kiosk-style demo. */
 export function CinemaDemoChrome({ children }: Props) {
   useEffect(() => {
     const html = document.documentElement;
@@ -22,6 +22,7 @@ export function CinemaDemoChrome({ children }: Props) {
   return (
     <>
       <CinemaAmbientLayer />
+      <CinemaCustomCursor />
       {children}
     </>
   );

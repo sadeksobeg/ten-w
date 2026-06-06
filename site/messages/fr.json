@@ -469,10 +469,29 @@
     "demoNote": "Données fictives — réservation non réelle.",
     "currency": "SYP",
     "back": "Retour",
+    "soundOn": "Activer le son",
+    "soundOff": "Couper le son",
     "splash": {
       "tag": "OS cinéma intelligent · T.E.N.E.G.T.A",
-      "systemLine": "Réservation · Places · Billets · Analytics",
-      "cta": "Commencer"
+      "systemLine": "Système de gestion Salamiya Cinema",
+      "cta": "Commencer",
+      "skip": "Passer"
+    },
+    "modes": {
+      "title": "Choisissez votre expérience",
+      "subtitle": "Trois modes — client, manager, VIP",
+      "customer": {
+        "title": "Parcours client",
+        "desc": "Film, places, billet numérique"
+      },
+      "manager": {
+        "title": "Tableau manager",
+        "desc": "Recettes, salles, alertes live"
+      },
+      "vip": {
+        "title": "Expérience VIP",
+        "desc": "Concierge, lounge, service premium"
+      }
     },
     "movies": {
       "title": "Choisir un film",
@@ -493,7 +512,12 @@
       "wheelchair": "Accessible",
       "mapLabel": "Plan de salle",
       "countLabel": "places",
-      "continue": "Continuer"
+      "continue": "Continuer",
+      "liveBrowsers": "{count} personnes consultent",
+      "vipScarcity": "VIP — places limitées",
+      "bestValue": "Meilleur prix",
+      "pending": "En cours",
+      "pinchHint": "Pincez pour zoomer sur mobile"
     },
     "checkout": {
       "title": "Confirmer",
@@ -512,6 +536,65 @@
       "subtitle": "Scannez à l'entrée — ou enregistrez l'écran",
       "qrLabel": "QR d'entrée",
       "dashboardCta": "Tableau de bord",
+      "restart": "Recommencer",
+      "roiCta": "Calculer le ROI",
+      "rate": "Notez votre expérience"
+    },
+    "upsell": {
+      "title": "Offre spéciale avant le billet",
+      "subtitle": "Ajoutez un menu VIP à prix réduit",
+      "badge": "Recommandé",
+      "save": "Économisez",
+      "add": "Ajouter",
+      "skip": "Non merci",
+      "added": "Menu VIP"
+    },
+    "manager": {
+      "title": "Tableau d'exploitation",
+      "filterToday": "Aujourd'hui",
+      "filterWeek": "Semaine",
+      "revenueChart": "Recettes hebdo",
+      "thisWeek": "Cette semaine",
+      "lastWeek": "Semaine dernière",
+      "peakTitle": "Pics de réservation",
+      "peakInsight": "Jeu 20h — pic d'occupation. Séance supplémentaire conseillée.",
+      "liveBookings": "Réservations live",
+      "alerts": "Alertes",
+      "staff": "Équipe",
+      "continueRoi": "Calculer le ROI →"
+    },
+    "vip": {
+      "entryTitle": "Bienvenue VIP",
+      "entrySubtitle": "Lounge privé · places royales · concierge",
+      "enter": "Entrer",
+      "concierge": "Concierge",
+      "lounge": "Menu lounge",
+      "continue": "Continuer vers ROI"
+    },
+    "roi": {
+      "title": "Calculateur ROI",
+      "subtitle": "Combien Salamiya Cinema économise avec TENEGTA ?",
+      "seatsLabel": "Nombre de places",
+      "extraRevenue": "Recettes extra / mois",
+      "timeSaved": "Heures gagnées / mois",
+      "ratio": "Ratio ROI",
+      "contactCta": "Demander une démo",
+      "continue": "Continuer"
+    },
+    "closing": {
+      "eyebrow": "Ce qu'on a construit en une semaine",
+      "title": "Stack d'exploitation cinéma complet",
+      "subtitle": "Réservation · places · analytics · VIP — prêt prod",
+      "f1Title": "Réservation & billets",
+      "f1Body": "Places live, upsell, billet QR",
+      "f2Title": "Tableau manager",
+      "f2Body": "KPIs, heatmap, réservations et alertes",
+      "f3Title": "Expérience VIP",
+      "f3Body": "Concierge, lounge, fidélité",
+      "ind1": "Cinéma",
+      "ind2": "Divertissement",
+      "ind3": "Hospitalité",
+      "cta": "Nous contacter",
       "restart": "Recommencer"
     },
     "dashboard": {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   CinemaSeatMap,
@@ -15,12 +15,26 @@ export function CinemaSeatsPhase() {
   const t = useTranslations("CinemaDemo");
   const showtimeId = useCinemaDemoStore((s) => s.showtimeId);
   const selectedSeatIds = useCinemaDemoStore((s) => s.selectedSeatIds);
+  const liveBrowsers = useCinemaDemoStore((s) => s.liveBrowsers);
+  const setLiveBrowsers = useCinemaDemoStore((s) => s.setLiveBrowsers);
   const toggleSeat = useCinemaDemoStore((s) => s.toggleSeat);
   const setPhase = useCinemaDemoStore((s) => s.setPhase);
 
   useEffect(() => {
     if (!showtimeId) setPhase("movies");
   }, [showtimeId, setPhase]);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setLiveBrowsers(10 + Math.floor(Math.random() * 6));
+    }, 5000);
+    return () => clearInterval(id);
+  }, [setLiveBrowsers]);
+
+  const countdown = useMemo(() => {
+    const base = 154;
+    return `${Math.floor(base / 60)}:${String(base % 60).padStart(2, "0")}`;
+  }, []);
 
   if (!showtimeId) return null;
 
@@ -32,17 +46,23 @@ export function CinemaSeatsPhase() {
       <CinemaDemoHeader />
       <div className="cinema-container">
         <CinemaProgressSteps step={2} />
+        <div className="cinema-seats-live">
+          <span className="cinema-live-dot" />
+          {t("seats.liveBrowsers", { count: liveBrowsers })}
+        </div>
         <button type="button" className="cinema-btn cinema-btn-ghost mb-4" onClick={() => setPhase("showtime")}>
           {t("back")}
         </button>
         <h2 className="cinema-title">{t("seats.title")}</h2>
         <p className="cinema-subtitle">{t("seats.subtitle")}</p>
+        <p className="cinema-pricing-hint">
+          <span className="cinema-badge cinema-badge--vip">{t("seats.vipScarcity")}</span>
+          <span className="cinema-badge cinema-badge--value">{t("seats.bestValue")}</span>
+          <span className="cinema-badge cinema-badge--timer">{countdown}</span>
+        </p>
 
-        <CinemaSeatMap
-          showtimeId={showtimeId}
-          selectedIds={selectedSeatIds}
-          onToggle={toggleSeat}
-        />
+        <CinemaSeatMap showtimeId={showtimeId} selectedIds={selectedSeatIds} onToggle={toggleSeat} live />
+        <p className="cinema-pin-hint">{t("seats.pinchHint")}</p>
       </div>
 
       <div className="cinema-sticky-bar">
