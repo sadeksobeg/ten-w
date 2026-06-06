@@ -2,8 +2,14 @@
 
 import { Suspense, useMemo, useState } from "react";
 import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
 import { useLiveSeatSimulation } from "@/components/cinema-demo/hooks/useLiveSeatSimulation";
-import { AuditoriumFloor, CinemaScreen, InstancedSeats } from "@/components/cinema-demo/seats3d/InstancedSeats";
+import {
+  AuditoriumAmbience,
+  AuditoriumFloor,
+  CinemaScreen,
+  InstancedSeats,
+} from "@/components/cinema-demo/seats3d/InstancedSeats";
 import { CameraRig } from "@/components/cinema-demo/seats3d/CameraRig";
 import { SeatHud } from "@/components/cinema-demo/seats3d/SeatHud";
 import { buildSeatLayout3D, seatById } from "@/lib/cinema-demo/seat-layout-3d";
@@ -46,14 +52,19 @@ function HallScene({ showtimeId }: Props) {
     setFocusedSeatId(id);
   };
 
+  const floorW = bounds.maxX - bounds.minX + 2;
+  const floorD = bounds.maxZ + 2;
+
   return (
     <>
-      <color attach="background" args={["#03010a"]} />
-      <fog attach="fog" args={["#03010a", 8, 18]} />
-      <ambientLight intensity={0.35} />
-      <directionalLight position={[4, 8, 2]} intensity={0.5} color="#fff8e7" />
+      <color attach="background" args={["#050508"]} />
+      <fog attach="fog" args={["#050508", 14, 28]} />
+      <hemisphereLight args={["#2a2540", "#0a0812", 0.95]} />
+      <directionalLight position={[2, 10, 4]} intensity={0.65} color="#fff5e8" />
+      <directionalLight position={[-4, 6, -2]} intensity={0.35} color="#9a7ab8" />
       <CinemaScreen />
-      <AuditoriumFloor width={bounds.maxX - bounds.minX + 2} depth={bounds.maxZ + 2} />
+      <AuditoriumFloor width={floorW} depth={floorD} />
+      <AuditoriumAmbience width={floorW} depth={floorD} />
       <InstancedSeats
         seats={seats}
         selectedIds={selectedIds}
@@ -77,7 +88,7 @@ export function CinemaSeatHall3D({ showtimeId }: Props) {
       <Canvas
         dpr={[1, 1.5]}
         camera={{ fov: 48, near: 0.1, far: 50, position: [0, 5, 8] }}
-        gl={{ antialias: true, alpha: false }}
+        gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.15 }}
       >
         <Suspense fallback={null}>
           <HallScene showtimeId={showtimeId} />

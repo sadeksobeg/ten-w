@@ -148,4 +148,126 @@ bash scripts/server-update.sh
 
 ---
 
+## 14. تقرير شامل — ما تم تنفيذه
+
+### 14.1 الدفعة الأولى — Cinema OS v2 (`146ab5b`)
+
+| المكوّن | التفاصيل |
+|---------|----------|
+| **ثلاثة أوضاع** | عميل · مدير · VIP مع `demoMode` في Zustand |
+| **مسار العميل** | أفلام → مواعيد → مقاعد → checkout → upsell → تذكرة → ROI → closing |
+| **لوحة المدير** | KPIs، إيرادات أسبوعية، heatmap، feed حي، تنبيهات، طاقم |
+| **VIP** | دخول VIP، chat كونسierge، صالة lounge |
+| **ROI** | حاسبة مقاعد 50–500 مع CTA تواصل |
+| **صوت** | AudioContext — نقر مقعد، projector، chime |
+| **i18n** | ar / en / fr — namespace `CinemaDemo` |
+
+### 14.2 الدفعة الثانية — Polish احترافي (`acf693b`)
+
+- **`CinemaBrandLogo`**: wordmark SVG/CSS بدل PNG على الـ header
+- **`CinemaIcon`**: أيقونات SVG موحّدة (بدون emoji)
+- **Immersive mode**: إخفاء chrome الموقع داخل الديمو
+- **Cursor مخصص** ذهبي حسب الوضع
+- **Film grain** + ambient particles
+
+### 14.3 الدفعة الثالثة — قاعة 3D + Full Pass (`8f1e57c`)
+
+#### أ) هندسة 3D
+
+| ملف | الوظيفة |
+|-----|---------|
+| `seat-layout-3d.ts` | تحويل `buildSeatMap()` → `{ x, y, z, tier, rowIndex }` مع rake ~18° وممرات |
+| `camera-presets.ts` | overview · immersive · focus |
+| `smart-pick.ts` | خوارزمية center-front لأفضل مقاعد متاحة |
+| `useWebGLSupport.ts` | كشف WebGL + `prefers-reduced-motion` |
+
+#### ب) مكوّنات R3F (`seats3d/`)
+
+- **`CinemaSeatHall3D`**: Canvas + dynamic import (`ssr: false`)
+- **`InstancedSeats`**: `InstancedMesh` واحد — أداء 60fps، ألوان live sim
+- **`CameraRig`**: OrbitControls من `three/examples` + lerp بين presets
+- **`SeatHud`**: toggle 3D/2D، أزرار كاميرا، smart pick، mini-map
+- **`CinemaSeatExperience`**: wrapper يختار 3D أو fallback 2D
+
+#### ج) Store — حقول جديدة
+
+```typescript
+seatView: '3d' | '2d'
+cameraPreset: 'overview' | 'immersive' | 'focus'
+focusedSeatId: string | null
+hudHoverSeatId: string | null
+smartPickSeats(count?: number)
+```
+
+#### د) Polish لكل الأوضاع
+
+| المنطقة | التحسين |
+|---------|---------|
+| **Movies** | framer-motion stagger، rating badges، poster shine |
+| **Showtime** | occupancy ring «Almost full» |
+| **Checkout** | reveal animation للصفوف |
+| **Upsell** | compare card (مع/بدون bundle) |
+| **Ticket** | ceremony dolly-in على مراحل |
+| **Manager** | RevenueChart crosshair + tooltip، BookingsFeed pulse، PeakHeatmap popover |
+| **VIP** | typewriter chat، lounge fly-to-cart |
+| **Closing** | بطاقات 3D tilt على hover |
+
+#### هـ) CSS + i18n
+
+- Block `.cinema-hall-3d` · `.cinema-seat-hud` · `.cinema-minimap`
+- مفاتيح: `seats.view3d`, `view2d`, `cameraOverview`, `cameraImmersive`, `smartPick`, `webglFallback`, `dragHint`
+- RTL: HUD + minimap mirrored
+
+### 14.4 الدفعة الرابعة — Premium Visual Pass (هذه الجلسة)
+
+**المشكلة:** المقاعد 3D مظلمة جداً، splash أصفر كامل، الواجهات تحتاج رفع بصري.
+
+**الحل:**
+
+| التغيير | التفاصيل |
+|---------|----------|
+| **إضاءة القاعة** | `hemisphereLight` + directional warm/cool + `AuditoriumAmbience` (جدران + fill lights) |
+| **ألوان المقاعد** | velvet burgundy `#9a4d6a` · VIP gold `#c9922a` · emissive lift على المادة |
+| **الشاشة** | ramp-up تدريجي (0→100% خلال ~2.8s) — **لا flash أصفر** عند البداية |
+| **pointLight الشاشة** | خفّض من 2.0 → 0.08–0.5 مع decay |
+| **Tone mapping** | ACESFilmic + exposure 1.15 |
+| **Splash** | خلفية سينمائية داكنة (بنفسجي/أسود) بدل `#f5c518` |
+| **UI premium** | glass tokens، gradient titles، gradient buttons، elevated cards |
+| **HUD 3D** | overlay زجاجي فوق القاعة، أزرار `cinema-hud-btn` |
+
+### 14.5 Fallback و a11y
+
+1. فشل WebGL → `CinemaSeatMap` 2D تلقائياً
+2. `prefers-reduced-motion` → 2D + إيقاف animations صوت/grain
+3. Toggle يدوي 3D / List في HUD
+4. Keyboard a11y على خريطة 2D (Tab/Arrow/Enter)
+
+### 14.6 الأداء
+
+- `InstancedMesh` — draw call واحد للمقاعد
+- `dpr={[1, 1.5]}` على mobile
+- Lazy load 3D chunk عبر `next/dynamic`
+- Pause sim عند مغادرة phase seats (via hook)
+
+### 14.7 Commits على `ten-w/main`
+
+| Hash | الوصف |
+|------|--------|
+| `146ab5b` | Cinema OS v2 — 3 modes |
+| `acf693b` | Wordmark SVG + icons + immersive polish |
+| `8f1e57c` | 3D hall + camera + full pass |
+| *(pending)* | Premium visual pass — إضاءة + splash + UI |
+
+### 14.8 QA checklist
+
+- [ ] Splash داكن — لا خلفية صفراء
+- [ ] مقاعد 3D مرئية وواضحة (burgundy/gold)
+- [ ] الشاشة تضيء تدريجياً بدون wash أصفر
+- [ ] orbit · pinch · select · smart pick · max 6 seats
+- [ ] fallback 2D عند reduced-motion
+- [ ] Manager/VIP/Closing animations
+- [ ] RTL ar — HUD mirrored
+
+---
+
 *T.E.N.E.G.T.A — Cinema OS Demo v2 + 3D Hall · Salamiya Cinema*

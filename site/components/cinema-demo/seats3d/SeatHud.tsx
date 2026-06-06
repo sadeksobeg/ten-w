@@ -28,14 +28,14 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
       <div className="cinema-seat-hud-toolbar">
         <button
           type="button"
-          className={seatView === "3d" ? "is-active" : ""}
+          className={`cinema-hud-btn ${seatView === "3d" ? "is-active" : ""}`}
           onClick={() => setSeatView("3d")}
         >
           {t("seats.view3d")}
         </button>
         <button
           type="button"
-          className={seatView === "2d" ? "is-active" : ""}
+          className={`cinema-hud-btn ${seatView === "2d" ? "is-active" : ""}`}
           onClick={() => setSeatView("2d")}
         >
           {t("seats.view2d")}
@@ -43,19 +43,19 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
         <span className="cinema-seat-hud-divider" />
         <button
           type="button"
-          className={cameraPreset === "overview" ? "is-active" : ""}
+          className={`cinema-hud-btn ${cameraPreset === "overview" ? "is-active" : ""}`}
           onClick={() => setCameraPreset("overview")}
         >
           {t("seats.cameraOverview")}
         </button>
         <button
           type="button"
-          className={cameraPreset === "immersive" ? "is-active" : ""}
+          className={`cinema-hud-btn ${cameraPreset === "immersive" ? "is-active" : ""}`}
           onClick={() => setCameraPreset("immersive")}
         >
           {t("seats.cameraImmersive")}
         </button>
-        <button type="button" onClick={() => smartPickSeats(2)}>
+        <button type="button" className="cinema-hud-btn cinema-hud-btn--accent" onClick={() => smartPickSeats(2)}>
           <CinemaIcon name="seat" size={14} />
           {t("seats.smartPick")}
         </button>
@@ -67,7 +67,7 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
             {tooltipSeat.row}
             {tooltipSeat.number}
           </strong>
-          <span>{tooltipSeat.tier}</span>
+          <span className="cinema-seat-hud-tier">{tooltipSeat.tier}</span>
           <span>{tooltipSeat.price.toLocaleString("ar-SY")}</span>
         </div>
       ) : null}
