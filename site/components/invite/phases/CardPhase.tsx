@@ -262,9 +262,11 @@ export function CardPhase({ card, origin }: Props) {
                 : "بقبولك، تنضم رسمياً كضيف مميز — دون إنشاء حساب شريك."}
             </p>
 
-            {acceptError ? <p className="invite-accept-error">{acceptError}</p> : null}
+            {acceptError ? (
+              <p className="invite-accept-error hidden sm:block">{acceptError}</p>
+            ) : null}
 
-            <div className="invite-accept-cta">
+            <div className="invite-accept-cta hidden sm:block">
               <AcceptButton granted={granted} accepting={accepting} onAccept={() => void onAccept()} />
             </div>
           </div>
