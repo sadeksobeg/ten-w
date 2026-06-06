@@ -19,7 +19,7 @@ type Props = {
   onCanvasVisible?: () => void;
 };
 
-const LOGO_LETTERS = ["T", "E", "N", "E", "G", "T", "A"];
+const LOGO_TEXT = "TENEGTA";
 
 const TIMING_NORMAL: Record<BootStage, number> = {
   black: 400,
@@ -134,22 +134,9 @@ export function BootPhase({ alreadyAccepted, onComplete, onCanvasVisible }: Prop
 
       {showLogo ? (
         <p
-          className={`invite-boot-logo ${logoShimmer ? "invite-text-shimmer" : ""}`}
-          aria-hidden
+          className={`invite-boot-logo invite-boot-logo--word ${logoShimmer ? "invite-text-shimmer" : ""}`}
         >
-          {LOGO_LETTERS.map((letter, i) => (
-            <span key={`${letter}-${i}`}>
-              <span
-                className="invite-letter"
-                style={{ animationDelay: `${i * 90}ms` }}
-              >
-                {letter}
-              </span>
-              {i < LOGO_LETTERS.length - 1 ? (
-                <span className="text-[var(--gold-light)]/40">·</span>
-              ) : null}
-            </span>
-          ))}
+          {LOGO_TEXT}
         </p>
       ) : null}
 

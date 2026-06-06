@@ -170,7 +170,7 @@ export function CardPhase({ card, origin }: Props) {
           <p className="invite-scene-act">ACT I · الوصول</p>
           <div className="invite-hero-line" aria-hidden />
           <p className="invite-eyebrow invite-reveal-up">TENEGTA ASCEND · {year}</p>
-          <p className="invite-hero-greeting">مرحباً</p>
+          <p className="invite-hero-greeting invite-text-shimmer">TENEGTA</p>
           <h1 className="invite-hero-name">{card.name}</h1>
           <p className="invite-tier-label">◆ {card.tier.toUpperCase()} ◆</p>
           {granted ? (
@@ -299,19 +299,17 @@ export function CardPhase({ card, origin }: Props) {
 
             {acceptError ? <p className="invite-accept-error">{acceptError}</p> : null}
 
-            <div className="invite-accept-cta hidden sm:block">
+            <div className="invite-accept-cta">
               <AcceptButton granted={granted} accepting={accepting} onAccept={() => void onAccept()} />
             </div>
           </div>
         </div>
       </section>
 
-      {!granted ? (
-        <div className="invite-sticky-cta invite-safe-bottom px-4 pt-6 sm:hidden">
-          {acceptError ? <p className="invite-accept-error mb-2 text-center">{acceptError}</p> : null}
-          <AcceptButton granted={granted} accepting={accepting} onAccept={() => void onAccept()} />
-        </div>
-      ) : null}
+      <div className="invite-sticky-cta invite-safe-bottom px-4 pt-6 sm:hidden">
+        {acceptError ? <p className="invite-accept-error mb-2 text-center">{acceptError}</p> : null}
+        <AcceptButton granted={granted} accepting={accepting} onAccept={() => void onAccept()} />
+      </div>
     </div>
   );
 }

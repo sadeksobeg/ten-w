@@ -1154,7 +1154,8 @@
 
 .invite-world-card-halo--1 {
   width: min(500px, calc(100vw - 24px));
-  height: 290px;
+  aspect-ratio: 500 / 290;
+  height: auto;
   border: 1px solid rgba(201, 146, 42, 0.25);
   box-shadow:
     0 0 40px rgba(201, 146, 42, 0.15),
@@ -1164,7 +1165,8 @@
 
 .invite-world-card-halo--2 {
   width: min(540px, calc(100vw - 8px));
-  height: 320px;
+  aspect-ratio: 540 / 320;
+  height: auto;
   border: 1px solid rgba(168, 85, 247, 0.12);
   animation: invite-card-halo 3s ease-in-out infinite reverse;
   animation-delay: 0.5s;
@@ -1529,8 +1531,9 @@
 
 .invite-vip-card-shell--luxury {
   width: min(500px, calc(100vw - 40px));
-  height: 272px;
-  min-height: 272px;
+  aspect-ratio: 500 / 272;
+  height: auto;
+  min-height: 0;
   border-radius: 18px;
   margin-inline: auto;
 }
@@ -1661,8 +1664,7 @@
 
 @media (max-width: 767px) {
   .invite-vip-card-shell--luxury {
-    height: auto;
-    min-height: 220px;
+    width: min(calc(100vw - 32px), 420px);
   }
 
   .invite-vip-content--luxury .invite-vip-name {
@@ -1673,16 +1675,16 @@
 .invite-vip-card-shell {
   position: relative;
   width: min(380px, calc(100vw - 48px));
-  height: 240px;
-  min-height: 200px;
+  aspect-ratio: 380 / 240;
+  height: auto;
+  min-height: 0;
   margin-inline: auto;
   transition: transform 0.5s ease;
 }
 
 @media (max-width: 767px) {
   .invite-vip-card-shell {
-    height: auto;
-    min-height: 200px;
+    width: min(calc(100vw - 32px), 380px);
   }
 }
 
@@ -1695,7 +1697,8 @@
 }
 
 .invite-vip-foil-wrap {
-  position: relative;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   border-radius: 16px;
@@ -2345,8 +2348,18 @@
   right: 0;
   bottom: 0;
   z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1.5rem;
   background: linear-gradient(180deg, transparent, rgba(3, 1, 10, 0.92) 35%, rgba(3, 1, 10, 0.98));
   backdrop-filter: blur(12px);
+}
+
+@media (min-width: 640px) {
+  .invite-sticky-cta {
+    display: none;
+  }
 }
 
 .invite-scroll-hint {
@@ -2571,6 +2584,19 @@
   text-align: center;
 }
 
+.invite-boot-logo--word {
+  animation: invite-boot-logo-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+}
+
+@keyframes invite-boot-logo-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .invite-world-welcome {
   font-family: var(--invite-font-arabic);
   font-size: 18px;
@@ -2609,6 +2635,7 @@
     animation: none !important;
   }
 
+  .invite-boot-logo--word,
   .invite-letter,
   .invite-card-float,
   .invite-foil-border,
