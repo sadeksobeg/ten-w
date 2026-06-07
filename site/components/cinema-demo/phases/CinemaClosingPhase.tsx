@@ -3,19 +3,17 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { CinemaBrandLogo } from "@/components/cinema-demo/CinemaBrandLogo";
-import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 export function CinemaClosingPhase() {
   const t = useTranslations("CinemaDemo");
-  const tContact = useTranslations("Contact");
+  const tContact = useTranslations("ContactPage");
   const resetDemo = useCinemaDemoStore((s) => s.resetDemo);
 
   const industries = [t("closing.ind1"), t("closing.ind2"), t("closing.ind3")];
 
   return (
     <section className="cinema-phase cinema-closing cinema-closing-v2">
-      <CinemaProgressBar />
       <div className="cinema-closing-aurora" aria-hidden />
       <div className="cinema-os-center-panel text-center">
         <CinemaBrandLogo variant="dark" className="mx-auto mb-6" />

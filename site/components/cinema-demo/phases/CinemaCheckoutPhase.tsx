@@ -7,7 +7,6 @@ import {
   seatLabelsForSelection,
 } from "@/components/cinema-demo/CinemaSeatMap";
 import { FeatureMoment } from "@/components/cinema-demo/features/FeatureMoment";
-import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { getMovie, getShowtime } from "@/lib/cinema-demo/data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
@@ -41,7 +40,6 @@ export function CinemaCheckoutPhase() {
 
   return (
     <section className="cinema-phase">
-      <CinemaProgressBar />
       <div className="cinema-os-center-panel">
         <FeatureMoment featureId={4} className="cinema-feature--inline">
           <p>{t("features.f4Detail")}</p>

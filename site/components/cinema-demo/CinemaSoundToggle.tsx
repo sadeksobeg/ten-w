@@ -12,7 +12,7 @@ export function CinemaSoundToggle() {
   return (
     <button
       type="button"
-      className="cinema-sound-toggle"
+      className="cinema-os-sound-btn"
       onClick={() => setSoundEnabled(!soundEnabled)}
       aria-label={soundEnabled ? t("soundOff") : t("soundOn")}
       aria-pressed={soundEnabled}

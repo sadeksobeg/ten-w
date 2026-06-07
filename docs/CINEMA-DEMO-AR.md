@@ -1,6 +1,6 @@
-# تقرير — منظومة تشغيل سينما سلمية (Cinema OS Demo v2)
+# تقرير — منظومة تشغيل سينما سلمية (Cinema OS Unified Experience)
 
-**التاريخ:** مايو 2026  
+**التاريخ:** يونيو 2026  
 **المشروع:** TENEGTA Website — `ten-w` / `tenegta.com`  
 **المسار:** `/ar/demo/cinema` · `/en/demo/cinema` · `/fr/demo/cinema`
 
@@ -8,51 +8,69 @@
 
 ## 1. ملخص تنفيذي
 
-ديمو **full-screen** يحاكي **منظومة تشغيل سينما كاملة** لـ **سينما سلمية** — ثلاثة أوضاع (عميل / مدير / VIP)، حجز حي، upsell، لوحة مدير، حاسبة ROI، وclosing pitch — **بدون npm packages جديدة** و**بدون قاعدة بيانات**.
+ديمو **full-screen** يحاكي **منظومة تشغيل سينما كاملة** لـ **سينما سلمية** — سردية موحّدة من منظور **مدير العمليات**: إقلاع OS → سطح مكتب حي → حجز تجريبي → كشف الجلسة → ROI → closing pitch.
+
+**بدون npm packages جديدة** · **بدون قاعدة بيانات** · **ar / en / fr** · **RTL كامل**
+
+> **تحديث يونيو 2026:** استُبدلت تجربة «ثلاثة أوضاع» (عميل / مدير / VIP) بتجربة **Cinema OS Unified** — ثم أُجريت **جولة تلميع UI شاملة** (طبقات، hydration، RTL، a11y، فحص كل مرحلة في المتصفح).
 
 ---
 
-## 2. مسار التجربة
+## 2. مسار التجربة (الحالي)
 
 ```
-Splash (8s) → Mode Selector
-  ├─ customer: movies → showtime → seats → checkout → upsell → ticket ceremony → ROI → closing
-  ├─ manager: dashboard → ROI → closing
-  └─ vip: entry → concierge chat → lounge → ROI → closing
+boot (25s POST → bars → auth → briefing)
+  → movies → showtime → seats (3D/2D) → checkout → upsell
+  → ticket ceremony → sessionReveal → roi → closing
 ```
 
----
-
-## 3. الأوضاع الثلاثة
-
-| الوضع | `demoMode` | نقطة البيع |
-|-------|------------|------------|
-| عميل | `customer` | حجز، مقاعد حية، upsell، تذكرة ceremony |
-| مدير | `manager` | KPIs، charts، heatmap، حجوزات حية، تنبيهات |
-| VIP | `vip` | كونسierge، صالة، نقاط ولاء |
+| المرحلة | الغرض |
+|---------|--------|
+| **boot** | POST BIOS، شريط تحميل، بصمة، معاينة سطح المكتب، CTA «ابدأ جلستك» + تخطي |
+| **movies … ticket** | حجز تجريبي كامل مع Feature Moments (20 ميزة) |
+| **sessionReveal** | إحصائيات الجلسة + شبكة 20 ميزة مُضاءة |
+| **roi** | حاسبة عائد + timeline تسليم |
+| **closing** | pitch TENEGTA + CTA تواصل + إعادة التجربة |
 
 ---
 
-## 4. Phase 0 — إصلاحات UX
+## 3. سطح مكتب Cinema OS (`CinemaOSDesktop`)
 
-| المشكلة | الحل |
-|---------|------|
-| الماوس مخفي | إزالة `cursor: none` — **`CinemaCustomCursor`** ذهبي حسب الوضع |
-| لوغو أصفر على header | **`CinemaBrandLogo`**: splash=PNG، header=CSS wordmark |
+| المنطقة | المكوّنات |
+|---------|-----------|
+| **Chrome ثابت** | شريط تقدّم · LiveTicker · OsTopBar (فرع + تاريخ/ساعة) · زر صوت |
+| **يسار** | ScreenMonitors — حالة القاعات الثلاث |
+| **وسط** | مرحلة الحجز / الكشف / ROI / Closing |
+| **يمين** | BookingFeedLive · RevenueGauge · WeatherIntel · Staff · Analytics · Competitor · Incident · Reports · ApiIntegrations (+ ProjectorControl في seats) |
+| **عائم** | FloatingWidgets (حالة النظام) · NotificationSystem |
+
+**إخفاء الألواح الجانبية** في `sessionReveal` و `closing` — المحتوى بعرض كامل.
 
 ---
 
-## 5. Store (Zustand)
+## 4. Store (Zustand)
 
 ```typescript
-type DemoMode = 'customer' | 'manager' | 'vip'
 type CinemaDemoPhase =
-  | 'splash' | 'modeSelect'
-  | 'movies' | 'showtime' | 'seats' | 'checkout' | 'upsell' | 'ticket'
-  | 'manager' | 'vip' | 'roi' | 'closing'
+  | 'boot' | 'movies' | 'showtime' | 'seats' | 'checkout' | 'upsell'
+  | 'ticket' | 'sessionReveal' | 'roi' | 'closing'
+
+// حقول رئيسية
+bootStage · osReady · sessionStartedAt
+liveRevenue · revenueTarget · featuresSeen[] · bookingFeed[]
+activeBranch · grainIntensity · screenMode
+seatView · cameraPreset · focusedSeatId · smartPickAnimating
 ```
 
-حقول: `upsellAdded`, `upsellItems[]`, `roiSeats`, `soundEnabled`, `liveBrowsers`, `transitionClass`
+**إزالة:** `demoMode` · phases `splash` · `modeSelect` · `manager` · `vip`
+
+---
+
+## 5. Feature Moments (20 ميزة)
+
+- **`lib/cinema-demo/features.ts`** — تعريف 20 ميزة (تنبؤ، تسعير ديناميكي، واتساب، وجه، …)
+- **`FeatureMoment.tsx`** — overlay ثابت أو inline حسب المرحلة؛ يُسجّل `featuresSeen`
+- تظهر في: showtime · checkout · upsell · ticket ceremony · وغيرها
 
 ---
 
@@ -60,13 +78,14 @@ type CinemaDemoPhase =
 
 | ملف | محتوى |
 |-----|--------|
-| `manager-data.ts` | KPIs، قاعات، heatmap 7×6، feed، alerts، staff |
-| `vip-data.ts` | رسائل concierge، lounge، upsell bundle |
-| `roi.ts` | `calcRoi(seats)` — إيراد إضافي، ساعات موفّرة، نسبة 1:8.3 |
-| `sounds.ts` | AudioContext — seat click، projector tick، chime |
-| `charts.ts` | sparklines + line chart على canvas |
-
----
+| `data.ts` | أفلام · مواعيد · مقاعد |
+| `manager-data.ts` | KPIs، قاعات، feed، alerts |
+| `vip-data.ts` | upsell bundle |
+| `roi.ts` | `calcRoi(seats)` |
+| `sounds.ts` | AudioContext — boot · auth · chime |
+| `features.ts` | 20 ميزة Cinema OS |
+| `seat-layout-3d.ts` | إحداثيات 3D + rake |
+| `camera-presets.ts` | overview · immersive · focus · vip · birdsEye |
 
 ---
 
@@ -74,25 +93,28 @@ type CinemaDemoPhase =
 
 | ملف | دور |
 |-----|-----|
-| `seat-layout-3d.ts` | إحداثيات 3D، rake ~18°، ممرات، VIP/wheelchair |
-| `camera-presets.ts` | overview · immersive · focus |
-| `smart-pick.ts` | أفضل مقاعد متاحة (center-front) |
-| `CinemaSeatHall3D.tsx` | Canvas R3F + dynamic import (`ssr: false`) |
-| `InstancedSeats.tsx` | `InstancedMesh` — أداء 60fps |
-| `CameraRig.tsx` | OrbitControls + lerp بين presets |
-| `SeatHud.tsx` | كاميرا، smart pick، mini-map، toggle 3D/2D |
-| `CinemaSeatExperience.tsx` | wrapper: WebGL أو `prefers-reduced-motion` → `CinemaSeatMap` 2D |
+| `HallGeometry.tsx` · `HallLighting.tsx` | جدران · إضاءة · tone mapping |
+| `CinemaScreenMesh.tsx` · `ProjectorBeam.tsx` | شاشة + beam |
+| `DustParticles.tsx` · `HallEvents.tsx` | جزicles · أحداث حية |
+| `InstancedSeats.tsx` | `InstancedMesh` 60fps |
+| `CameraRig.tsx` | OrbitControls + lerp |
+| `SeatHud.tsx` | 3D/2D · كاميرا · smart pick · minimap صفوف |
+| `CinemaSeatExperience.tsx` | WebGL أو fallback 2D |
 
-**Store:** `seatView`, `cameraPreset`, `focusedSeatId`, `smartPickSeats()`
-
-**Fallback:** فشل WebGL أو reduced-motion → خريطة 2D تلقائياً + toggle يدوي.
+**Fallback:** `prefers-reduced-motion` أو فشل WebGL → `CinemaSeatMap` 2D.
 
 ---
 
-## 8. لوحة المدير (`components/cinema-demo/manager/`)
+## 8. مراحل جديدة (Unified)
 
-- `ManagerTopBar` · `KpiCards` · `ScreensStatus` · `RevenueChart`
-- `PeakHeatmap` · `BookingsFeed` (interval 4s) · `AlertsPanel` · `StaffOverview`
+| ملف | دور |
+|-----|-----|
+| `CinemaBootOS.tsx` | إقلاع 25s — POST · bars · auth · briefing |
+| `CinemaSessionRevealPhase.tsx` | إحصائيات + شبكة 20 ميزة + CTA ROI |
+| `CinemaOSDesktop.tsx` | shell موحّد لكل المراحل بعد boot |
+| `os/*` | LiveTicker · ScreenMonitors · BookingFeedLive · … |
+
+**محذوف:** `CinemaModeSelectorPhase` · `CinemaSplashPhase` · `CinemaManagerPhase` · `CinemaVipPhase`
 
 ---
 
@@ -104,38 +126,52 @@ timeSavedHours = 3 × 30
 roiRatio = extraRevenueMonthly / 4_500_000 SYP
 ```
 
-Slider 50–500 مقعد → CTA `/contact?intent=demo&topic=cinema`
+Slider 50–500 مقعد · timeline 4 أسابيع · CTA `/contact?intent=demo&topic=cinema`
 
 ---
 
-## 10. بنية الملفات (v2 + 3D)
+## 10. بنية الملفات (Unified)
 
 ```
 site/components/cinema-demo/
-├── CinemaBrandLogo.tsx · CinemaCustomCursor.tsx · CinemaFilmGrain.tsx
-├── CinemaSeatExperience.tsx · seats3d/ (Hall3D, InstancedSeats, CameraRig, SeatHud)
-├── hooks/useAnimatedNumber.ts · useLiveSeatSimulation.ts
-├── manager/ (8 modules)
+├── CinemaOSDesktop.tsx · CinemaDemoExperience.tsx · CinemaDemoChrome.tsx
+├── CinemaProgressBar.tsx · CinemaTicketCeremony.tsx · CinemaFilmGrain.tsx
+├── features/FeatureMoment.tsx
+├── os/ (LiveTicker, OsTopBar, ScreenMonitors, BookingFeedLive, …)
+├── seats3d/ (Hall*, InstancedSeats, SeatHud, …)
+├── hooks/ (useTypewriter, useAnimatedNumber, …)
 └── phases/
-    ├── CinemaModeSelectorPhase.tsx · CinemaManagerPhase.tsx · CinemaVipPhase.tsx
-    ├── CinemaUpsellPhase.tsx · CinemaRoiPanel.tsx · CinemaClosingPhase.tsx
-    └── … (customer flow phases)
+    ├── CinemaBootOS.tsx
+    ├── CinemaMoviesPhase · CinemaShowtimePhase · CinemaSeatsPhase
+    ├── CinemaCheckoutPhase · CinemaUpsellPhase · CinemaTicketPhase
+    ├── CinemaSessionRevealPhase · CinemaRoiPanel · CinemaClosingPhase
+
+site/app/[locale]/demo/cinema/
+├── cinema-demo.css · cinema-os.css · layout.tsx · page.tsx
+
+site/stores/cinema-demo-store.ts
+site/messages/{ar,en,fr}.json → CinemaDemo.*
 ```
 
 ---
 
 ## 11. i18n
 
-Namespace **`CinemaDemo`** — مفاتيح: `modes`, `manager`, `vip`, `roi`, `closing`, `upsell`, `seats.view3d/view2d`, `cameraOverview/Immersive`, `smartPick`, `webglFallback`
+Namespace **`CinemaDemo`** — مفاتيح جديدة:
+
+- `boot.*` · `os.*` (greeting, topbar, panels, **`progressLabel`**, **`systemStatus`**)
+- `features.*` · `sessionReveal.*`
+- `closing.v2*` · `seats.*` · `ticket.*` · `roi.*`
 
 ---
 
 ## 12. قيود
 
 - صفر packages جديدة
-- Canvas + AudioContext + CSS فقط
-- `prefers-reduced-motion`: grain/countdown audio off
+- TypeScript strict · RTL عربي
+- `prefers-reduced-motion`: grain off · 3D→2D · ticket ceremony مختصر
 - لا Growth / invite / PartnerProfile
+- لا تعديل ملف الخطة الأصلي
 
 ---
 
@@ -146,128 +182,123 @@ cd site && npx tsc --noEmit && npm run build
 bash scripts/server-update.sh
 ```
 
+**ملاحظة dev:** إذا كان المنفذ 3000 يعرض bundle قديم، أعد تشغيل `npm run dev` أو استخدم المنفذ الجديد (مثلاً 3001).
+
 ---
 
-## 14. تقرير شامل — ما تم تنفيذه
+## 14. سجل التنفيذ الكامل
 
 ### 14.1 الدفعة الأولى — Cinema OS v2 (`146ab5b`)
 
-| المكوّن | التفاصيل |
-|---------|----------|
-| **ثلاثة أوضاع** | عميل · مدير · VIP مع `demoMode` في Zustand |
-| **مسار العميل** | أفلام → مواعيد → مقاعد → checkout → upsell → تذكرة → ROI → closing |
-| **لوحة المدير** | KPIs، إيرادات أسبوعية، heatmap، feed حي، تنبيهات، طاقم |
-| **VIP** | دخول VIP، chat كونسierge، صالة lounge |
-| **ROI** | حاسبة مقاعد 50–500 مع CTA تواصل |
-| **صوت** | AudioContext — نقر مقعد، projector، chime |
-| **i18n** | ar / en / fr — namespace `CinemaDemo` |
+ثلاثة أوضاع (عميل / مدير / VIP) · لوحة مدير · VIP · ROI · صوت · i18n.
 
-### 14.2 الدفعة الثانية — Polish احترافي (`acf693b`)
+### 14.2 الدفعة الثانية — Polish (`acf693b`)
 
-- **`CinemaBrandLogo`**: wordmark SVG/CSS بدل PNG على الـ header
-- **`CinemaIcon`**: أيقونات SVG موحّدة (بدون emoji)
-- **Immersive mode**: إخفاء chrome الموقع داخل الديمو
-- **Cursor مخصص** ذهبي حسب الوضع
-- **Film grain** + ambient particles
+Wordmark SVG · أيقونات · cursor · grain · immersive chrome.
 
-### 14.3 الدفعة الثالثة — قاعة 3D + Full Pass (`8f1e57c`)
+### 14.3 الدفعة الثالثة — 3D Hall (`8f1e57c`)
 
-#### أ) هندسة 3D
+seat-layout-3d · InstancedSeats · CameraRig · SeatHud · smart pick · polish لكل الأوضاع.
 
-| ملف | الوظيفة |
-|-----|---------|
-| `seat-layout-3d.ts` | تحويل `buildSeatMap()` → `{ x, y, z, tier, rowIndex }` مع rake ~18° وممرات |
-| `camera-presets.ts` | overview · immersive · focus |
-| `smart-pick.ts` | خوارزمية center-front لأفضل مقاعد متاحة |
-| `useWebGLSupport.ts` | كشف WebGL + `prefers-reduced-motion` |
+### 14.4 الدفعة الرابعة — Premium Visual (`afbc387`)
 
-#### ب) مكوّنات R3F (`seats3d/`)
+إضاءة قاعة · splash داكن · UI glass · HUD زجاجي · tone mapping.
 
-- **`CinemaSeatHall3D`**: Canvas + dynamic import (`ssr: false`)
-- **`InstancedSeats`**: `InstancedMesh` واحد — أداء 60fps، ألوان live sim
-- **`CameraRig`**: OrbitControls من `three/examples` + lerp بين presets
-- **`SeatHud`**: toggle 3D/2D، أزرار كاميرا، smart pick، mini-map
-- **`CinemaSeatExperience`**: wrapper يختار 3D أو fallback 2D
-
-#### ج) Store — حقول جديدة
-
-```typescript
-seatView: '3d' | '2d'
-cameraPreset: 'overview' | 'immersive' | 'focus'
-focusedSeatId: string | null
-hudHoverSeatId: string | null
-smartPickSeats(count?: number)
-```
-
-#### د) Polish لكل الأوضاع
-
-| المنطقة | التحسين |
-|---------|---------|
-| **Movies** | framer-motion stagger، rating badges، poster shine |
-| **Showtime** | occupancy ring «Almost full» |
-| **Checkout** | reveal animation للصفوف |
-| **Upsell** | compare card (مع/بدون bundle) |
-| **Ticket** | ceremony dolly-in على مراحل |
-| **Manager** | RevenueChart crosshair + tooltip، BookingsFeed pulse، PeakHeatmap popover |
-| **VIP** | typewriter chat، lounge fly-to-cart |
-| **Closing** | بطاقات 3D tilt على hover |
-
-#### هـ) CSS + i18n
-
-- Block `.cinema-hall-3d` · `.cinema-seat-hud` · `.cinema-minimap`
-- مفاتيح: `seats.view3d`, `view2d`, `cameraOverview`, `cameraImmersive`, `smartPick`, `webglFallback`, `dragHint`
-- RTL: HUD + minimap mirrored
-
-### 14.4 الدفعة الرابعة — Premium Visual Pass (هذه الجلسة)
-
-**المشكلة:** المقاعد 3D مظلمة جداً، splash أصفر كامل، الواجهات تحتاج رفع بصري.
-
-**الحل:**
+### 14.5 الدفعة الخامسة — Unified Cinema OS (`97a3e9e`)
 
 | التغيير | التفاصيل |
 |---------|----------|
-| **إضاءة القاعة** | `hemisphereLight` + directional warm/cool + `AuditoriumAmbience` (جدران + fill lights) |
-| **ألوان المقاعد** | velvet burgundy `#9a4d6a` · VIP gold `#c9922a` · emissive lift على المادة |
-| **الشاشة** | ramp-up تدريجي (0→100% خلال ~2.8s) — **لا flash أصفر** عند البداية |
-| **pointLight الشاشة** | خفّض من 2.0 → 0.08–0.5 مع decay |
-| **Tone mapping** | ACESFilmic + exposure 1.15 |
-| **Splash** | خلفية سينمائية داكنة (بنفسجي/أسود) بدل `#f5c518` |
-| **UI premium** | glass tokens، gradient titles، gradient buttons، elevated cards |
-| **HUD 3D** | overlay زجاجي فوق القاعة، أزرار `cinema-hud-btn` |
+| **سردية موحّدة** | boot → OS desktop → booking → sessionReveal → roi → closing |
+| **إزالة 3 modes** | حذف selector · manager phase · vip phase |
+| **CinemaBootOS** | POST 25s · bars · auth · briefing · flash |
+| **CinemaOSDesktop** | ticker · side panels · notifications · revenue live |
+| **Session Reveal** | 20 feature cards · إحصائيات الجلسة |
+| **3D محسّن** | HallGeometry · Lighting · Screen · Projector · Dust · Events |
+| **Store** | `bootStage` · `liveRevenue` · `featuresSeen` · `bookingFeed` · … |
+| **CSS** | `cinema-os.css` جديد |
+| **i18n** | `boot.*` · `os.*` · `features.*` · `sessionReveal.*` · closing v2 |
 
-### 14.5 Fallback و a11y
+### 14.6 الدفعة السادسة — UI Polish & QA (يونيو 2026)
 
-1. فشل WebGL → `CinemaSeatMap` 2D تلقائياً
-2. `prefers-reduced-motion` → 2D + إيقاف animations صوت/grain
-3. Toggle يدوي 3D / List في HUD
-4. Keyboard a11y على خريطة 2D (Tab/Arrow/Enter)
+**الهدف:** فحص كل واجهة وفق أعلى معيار — إصلاح التراكبات · hydration · RTL · responsive.
 
-### 14.6 الأداء
+#### أ) طبقات وتخطيط
 
-- `InstancedMesh` — draw call واحد للمقاعد
-- `dpr={[1, 1.5]}` على mobile
-- Lazy load 3D chunk عبر `next/dynamic`
-- Pause sim عند مغادرة phase seats (via hook)
+| المشكلة | الحل |
+|---------|------|
+| شريط تقدّم مكرّر/ثابت يغطي ticker | **`CinemaProgressBar`** فقط داخل `cinema-os-chrome` — أُزيل من كل phases |
+| grain z-index 999 | grain `fixed` z-index 2 · إزالة duplicate من `cinema-os.css` |
+| ambient مكرّر | grain/ambient في `CinemaDemoChrome` فقط |
+| sticky bar + status + sound تتداخل | `cinema-os--action-bar` · padding-bottom · status يُرفع في مراحل غير action-bar |
+| chrome header | `cinema-os-chrome` sticky: progress + ticker + topbar row + sound inline |
 
-### 14.7 Commits على `ten-w/main`
+#### ب) مكوّنات
+
+| المكوّن | الإصلاح |
+|---------|---------|
+| **CinemaFilmGrain** | render بعد `mounted` — إصلاح hydration |
+| **CinemaBootOS** | `reduced` عبر useEffect · تخطي دائماً · briefing scroll · scrollbar مخصّص |
+| **CinemaCustomCursor** | `left`/`top` + CSS `translate(-50%,-50%)` |
+| **CinemaTicketCeremony** | reduced-motion يصل stage 12 · seal في زاوية QR (لا يغطيه) · FeatureMoment overlay |
+| **CinemaSessionRevealPhase** | مؤقّت جلسة حي (interval) · عناوين ميزات حسب locale · عملة من i18n |
+| **CinemaClosingPhase** | `ContactPage` بدل `Contact` — عرض هاتف/بريد صحيح |
+| **SeatHud minimap** | CSS `.cinema-minimap-grid` / `.cinema-minimap-row` |
+| **LiveTicker · OsTopBar** | `suppressHydrationWarning` · ticker ثابت SSR-safe |
+| **CinemaMoviesPhase** | إزالة badge تقييم مكرّر (الملصق على الـ poster كافٍ) |
+
+#### ج) CSS
+
+- **`cinema-showtime-ring`** — occupancy donut
+- **`cinema-feature-moment`** — fixed overlay + inline variants
+- **`cinema-feature-grid`** — auto-fill · خط أكبر · `is-complete`
+- **RTL:** ticker · notifications · showtime hover (`translateX(4px)`)
+- **sidebar scroll** · **ticket line animation** · **ROI timeline item**
+
+#### د) i18n
+
+- `os.progressLabel` · `os.systemStatus` — ar / en / fr
+
+#### هـ) فحص المتصفح (QA يدوي)
+
+| المرحلة | النتيجة |
+|---------|---------|
+| boot → skip / CTA | ✅ |
+| movies · showtime · rings | ✅ |
+| seats 3D HUD · 2D · smart pick | ✅ |
+| checkout · upsell · features | ✅ |
+| ticket QR + VALID seal | ✅ |
+| sessionReveal · roi · closing | ✅ |
+| `npm run build` | ✅ exit 0 |
+
+---
+
+## 15. Commits على `ten-w/main`
 
 | Hash | الوصف |
 |------|--------|
 | `146ab5b` | Cinema OS v2 — 3 modes |
 | `acf693b` | Wordmark SVG + icons + immersive polish |
 | `8f1e57c` | 3D hall + camera + full pass |
-| *(pending)* | Premium visual pass — إضاءة + splash + UI |
-
-### 14.8 QA checklist
-
-- [ ] Splash داكن — لا خلفية صفراء
-- [ ] مقاعد 3D مرئية وواضحة (burgundy/gold)
-- [ ] الشاشة تضيء تدريجياً بدون wash أصفر
-- [ ] orbit · pinch · select · smart pick · max 6 seats
-- [ ] fallback 2D عند reduced-motion
-- [ ] Manager/VIP/Closing animations
-- [ ] RTL ar — HUD mirrored
+| `afbc387` | Premium visual — إضاءة + splash + UI |
+| `97a3e9e` | Unified Cinema OS — boot → desktop → session reveal |
+| *(هذا الرفع)* | UI polish — layering · hydration · RTL · QA |
 
 ---
 
-*T.E.N.E.G.T.A — Cinema OS Demo v2 + 3D Hall · Salamiya Cinema*
+## 16. QA checklist (Unified + Polish)
+
+- [x] Boot POST → bars → auth → briefing → «ابدأ جلستك» / تخطي
+- [x] OS chrome: progress · ticker · topbar · sound — بدون تراكب
+- [x] Feature moments تُسجّل في `featuresSeen`
+- [x] مقاعد 3D · fallback 2D · smart pick · minimap صفوف
+- [x] Sticky bar لا يغطي status float
+- [x] Ticket: QR مرئي · seal في الزاوية · reduced-motion يكمل
+- [x] Session reveal: مؤقّت حي · 20 بطاقة ميزة
+- [x] Closing: هاتف +963… · info@tenegta.com (ليس placeholder)
+- [x] RTL ar — ticker · HUD · showtime hover
+- [x] ar / en / fr builds
+- [ ] hydration تحذير من layout الموقع (`SmoothScroll`) — خارج نطاق الديمو
+
+---
+
+*T.E.N.E.G.T.A — Cinema OS Unified Experience · Salamiya Cinema · يونيو 2026*

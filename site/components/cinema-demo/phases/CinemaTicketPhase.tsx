@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CinemaTicketCeremony } from "@/components/cinema-demo/CinemaTicketCeremony";
-import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 export function CinemaTicketPhase() {
@@ -22,7 +21,6 @@ export function CinemaTicketPhase() {
 
   return (
     <section className="cinema-phase cinema-phase--ticket">
-      <CinemaProgressBar />
       <div className="cinema-os-center-panel">
         <h2 className="cinema-title text-center">{t("ticket.title")}</h2>
         <CinemaTicketCeremony bookingRef={bookingRef} onComplete={() => setCeremonyDone(true)} />

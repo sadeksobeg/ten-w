@@ -2,7 +2,6 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { FeatureMoment } from "@/components/cinema-demo/features/FeatureMoment";
-import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { CinemaIcon } from "@/components/cinema-demo/CinemaIcon";
 import { UPSELL_BUNDLE } from "@/lib/cinema-demo/vip-data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
@@ -19,7 +18,6 @@ export function CinemaUpsellPhase() {
 
   return (
     <section className="cinema-phase">
-      <CinemaProgressBar />
       <div className="cinema-os-center-panel">
         <FeatureMoment featureId={10} className="cinema-feature--inline">
           <p>{t("features.f10Detail")}</p>

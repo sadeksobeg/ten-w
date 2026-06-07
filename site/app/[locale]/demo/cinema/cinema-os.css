@@ -1,6 +1,7 @@
 /* Cinema OS unified experience styles */
 .cinema-boot {
   min-height: 100dvh;
+  overflow-y: auto;
   background: #000;
   color: #00ff41;
   font-family: "JetBrains Mono", ui-monospace, monospace;
@@ -91,7 +92,24 @@
   border-radius: 0 0 8px 8px;
 }
 .cinema-boot-widget { height: 48px; background: rgba(201,146,42,0.08); border-radius: 6px; }
-.cinema-boot-briefing { text-align: center; color: #f5f5f5; max-width: 520px; }
+.cinema-boot-briefing {
+  text-align: center;
+  color: #f5f5f5;
+  max-width: 520px;
+  max-height: min(52vh, 420px);
+  overflow-y: auto;
+  padding-bottom: 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 146, 42, 0.45) rgba(255, 255, 255, 0.06);
+}
+.cinema-boot-briefing::-webkit-scrollbar { width: 6px; }
+.cinema-boot-briefing::-webkit-scrollbar-thumb {
+  background: rgba(201, 146, 42, 0.45);
+  border-radius: 999px;
+}
+.cinema-boot-briefing-title { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-bottom: 0.5rem; }
+.cinema-boot-ready { margin: 0.75rem 0; color: #c9922a; font-weight: 700; }
+.cinema-boot--stage-4 { justify-content: flex-start; padding-top: 1.25rem; }
 .cinema-boot-brief-cards { display: grid; gap: 0.75rem; margin: 1rem 0; }
 .cinema-boot-brief-cards article {
   padding: 0.85rem 1rem;
@@ -114,7 +132,84 @@
   cursor: pointer;
 }
 
-.cinema-os { min-height: 100dvh; display: flex; flex-direction: column; position: relative; }
+.cinema-os { min-height: 100dvh; display: flex; flex-direction: column; position: relative; isolation: isolate; }
+
+.cinema-os-chrome {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(10, 10, 16, 0.94);
+  border-bottom: 1px solid rgba(201, 146, 42, 0.15);
+  backdrop-filter: blur(12px);
+}
+
+.cinema-os-progress {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cinema-os-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c9922a, #f5c518);
+  transition: width 0.5s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+.cinema-os-topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.cinema-os-topbar-row .cinema-os-topbar { flex: 1; border-bottom: none; }
+
+.cinema-os-sound-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin-inline-end: 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 146, 42, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  color: #c9922a;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cinema-os-sound-btn:hover {
+  border-color: rgba(201, 146, 42, 0.65);
+  background: rgba(201, 146, 42, 0.12);
+}
+
+.cinema-os-sidebar-scroll {
+  max-height: calc(100dvh - 8.5rem);
+  overflow-y: auto;
+  padding-inline-end: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.cinema-os--action-bar .cinema-os-col--center { padding-bottom: 5.75rem; }
+.cinema-os--action-bar .cinema-os-float--status { bottom: 5.25rem; }
+
+.cinema-os:not(.cinema-os--action-bar) .cinema-os-float--status {
+  top: 5.25rem;
+  bottom: auto;
+  inset-inline-start: auto;
+  inset-inline-end: 0.75rem;
+}
+
+.cinema-sticky-bar--os {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 45;
+  margin: 0;
+}
 .cinema-os-live-dot {
   width: 8px;
   height: 8px;
@@ -142,6 +237,13 @@
 @keyframes cinema-ticker {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
+}
+[dir="rtl"] .cinema-os-ticker-track {
+  animation-name: cinema-ticker-rtl;
+}
+@keyframes cinema-ticker-rtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
 }
 
 .cinema-os-topbar {
@@ -197,8 +299,6 @@
 .cinema-os-mini-grid span { aspect-ratio: 1; border-radius: 1px; background: rgba(255,255,255,0.08); }
 .cinema-os-mini-grid span.is-occupied { background: #4ade80; }
 .cinema-os-mini-grid span.is-vip { background: #c9922a; }
-.cinema-os-progress { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 0.35rem; }
-.cinema-os-progress div { height: 100%; background: #c9922a; border-radius: 2px; }
 
 .cinema-os-feed { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; max-height: 180px; overflow-y: auto; }
 .cinema-os-feed-row { padding: 0.45rem; border-radius: 6px; background: rgba(255,255,255,0.04); font-size: 0.65rem; }
@@ -259,17 +359,46 @@
   10%, 80% { opacity: 1; transform: translateX(0); }
   100% { opacity: 0; transform: translateX(20px); }
 }
-
-.cinema-os-sound { position: fixed; bottom: 0.75rem; left: 50%; transform: translateX(-50%); z-index: 46; }
-.cinema-sticky-bar--os { position: sticky; }
+[dir="rtl"] .cinema-os-notification {
+  animation-name: cinema-os-notify-rtl;
+}
+@keyframes cinema-os-notify-rtl {
+  0% { opacity: 0; transform: translateX(-20px); }
+  10%, 80% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(-20px); }
+}
 
 .cinema-feature-moment {
+  position: fixed;
+  z-index: 55;
+  max-width: min(320px, calc(100vw - 2rem));
   padding: 0.65rem 0.85rem;
   border-radius: 10px;
   border: 1px solid rgba(201,146,42,0.35);
-  background: rgba(201,146,42,0.08);
+  background: rgba(10, 10, 16, 0.92);
   font-size: 0.75rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.cinema-feature--inline {
+  position: relative;
+  z-index: 1;
   margin-bottom: 0.75rem;
+  pointer-events: auto;
+}
+
+.cinema-feature--delay { margin-top: 0.35rem; }
+
+.cinema-feature--whatsapp { bottom: 5.5rem; inset-inline-start: 1rem; }
+.cinema-feature--marketing { bottom: 5.5rem; inset-inline-end: 1rem; }
+
+.cinema-feature--inline.cinema-feature-moment {
+  position: relative;
+  inset: auto;
+  max-width: none;
+  pointer-events: auto;
+  box-shadow: none;
 }
 .cinema-feature-badge {
   display: inline-block;
@@ -289,7 +418,18 @@
   background: rgba(10,10,16,0.9);
 }
 
-.cinema-ceremony-v3 { min-height: 360px; position: relative; }
+.cinema-ceremony-v3 { min-height: 360px; position: relative; padding-bottom: 1rem; }
+.cinema-ticket-v3-line {
+  height: 2px;
+  width: min(380px, 92vw);
+  margin: 0 auto 1rem;
+  background: linear-gradient(90deg, transparent, #c9922a, transparent);
+  animation: cinema-ticket-line-in 0.6s ease both;
+}
+@keyframes cinema-ticket-line-in {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
+}
 .cinema-ticket-v3 {
   max-width: 380px;
   margin: 0 auto;
@@ -311,36 +451,57 @@
 .cinema-ticket-v3-body { padding: 1rem; font-size: 0.8rem; }
 .cinema-ticket-v3-perforation { border-top: 2px dotted rgba(255,255,255,0.25); margin: 0 1rem; }
 .cinema-ticket-v3-stub { height: 12px; background: rgba(201,146,42,0.1); }
+.cinema-ticket-v3-qr-wrap { position: relative; }
 .cinema-ticket-v3-qr { display: flex; justify-content: center; padding: 1rem; background: #fff; }
 .cinema-ticket-v3-seal {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-12deg);
+  bottom: 0.75rem;
+  inset-inline-end: 0.75rem;
   padding: 0.35rem 0.75rem;
   border: 2px solid #c9922a;
   border-radius: 999px;
   color: #c9922a;
   font-weight: 800;
   font-size: 0.7rem;
+  transform: rotate(-12deg);
+  background: rgba(10, 10, 16, 0.85);
 }
 .cinema-ticket-v3-ready { text-align: center; color: #c9922a; font-weight: 800; margin-top: 1rem; }
 .cinema-ticket-v3-actions { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; }
 
-.cinema-session-reveal .cinema-session-stats { display: grid; gap: 0.5rem; margin: 1.5rem 0; }
-.cinema-feature-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin: 1.5rem 0; }
+.cinema-session-reveal .cinema-session-stats {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+.cinema-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 0.65rem;
+  margin: 1.5rem 0;
+}
 .cinema-feature-card {
-  padding: 0.5rem;
+  padding: 0.65rem 0.45rem;
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.08);
-  font-size: 0.55rem;
+  font-size: 0.68rem;
+  line-height: 1.35;
   text-align: center;
   opacity: 0.4;
 }
+.cinema-feature-card span {
+  display: block;
+  font-size: 0.6rem;
+  color: var(--cinema-muted);
+  margin-bottom: 0.2rem;
+}
+.cinema-feature-grid.is-complete .cinema-feature-card { opacity: 1; }
 .cinema-feature-card.is-seen { opacity: 1; border-color: rgba(201,146,42,0.5); box-shadow: 0 0 12px rgba(201,146,42,0.2); }
 .cinema-session-complete { color: #c9922a; font-weight: 800; text-align: center; }
 
 .cinema-roi-timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin: 1.5rem 0; font-size: 0.65rem; }
+.cinema-roi-timeline-item { text-align: center; }
 .cinema-roi-timeline-dot {
   display: flex;
   align-items: center;
@@ -368,20 +529,15 @@
 .cinema-closing-cta { max-width: 400px; width: 100%; font-size: 1rem; padding: 1rem 2rem; }
 .cinema-closing-contact { font-size: 0.85rem; color: var(--cinema-muted); margin-top: 0.5rem; }
 
-.cinema-film-grain {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  pointer-events: none;
-}
-
 @media (max-width: 900px) {
   .cinema-os-grid { grid-template-columns: 1fr; }
   .cinema-os-col--left, .cinema-os-col--right { display: none; }
-  .cinema-feature-grid { grid-template-columns: repeat(4, 1fr); }
+  .cinema-feature--whatsapp,
+  .cinema-feature--marketing { bottom: 6rem; max-width: calc(100vw - 1.5rem); }
 }
 
 @media (max-width: 640px) {
   .cinema-feature-grid { grid-template-columns: repeat(2, 1fr); }
   .cinema-os-float--clock, .cinema-os-float--weather { display: none; }
+  .cinema-os-center-panel { padding-bottom: 6rem; }
 }

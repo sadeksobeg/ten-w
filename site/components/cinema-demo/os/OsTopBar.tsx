@@ -26,8 +26,8 @@ export function OsTopBar() {
     <header className="cinema-os-topbar">
       <div className="cinema-os-topbar-main">
         <span className="cinema-os-live-dot" aria-hidden />
-        <span>
-          {t("os.topbar")} · {date} · {clock}
+        <span suppressHydrationWarning>
+          {t("os.topbar")} · {date || "—"} · {clock || "—"}
         </span>
       </div>
       <select

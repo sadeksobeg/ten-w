@@ -5,8 +5,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { CINEMA_MOVIES } from "@/lib/cinema-demo/data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 import { CinemaMoviePoster } from "@/components/cinema-demo/CinemaMoviePoster";
-import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
-
 const container = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.1 } },
@@ -25,7 +23,6 @@ export function CinemaMoviesPhase() {
 
   return (
     <section className="cinema-phase cinema-phase--movies">
-      <CinemaProgressBar />
       <div className="cinema-os-center-panel">
         <p className="cinema-os-greeting">{t("os.greeting")}</p>
         <h2 className="cinema-title cinema-reveal">{t("movies.title")}</h2>
@@ -45,7 +42,6 @@ export function CinemaMoviesPhase() {
               >
                 <CinemaMoviePoster movie={movie} title={title} priority={i === 0} />
                 <div className="cinema-movie-body">
-                  <span className="cinema-rating-badge">{movie.rating}</span>
                   <h3 className="cinema-movie-title">{title}</h3>
                   <p className="cinema-movie-meta">
                     {isAr ? movie.genreAr : movie.genreEn} · {movie.durationMin} {t("movies.min")}

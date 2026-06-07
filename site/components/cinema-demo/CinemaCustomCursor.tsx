@@ -29,7 +29,7 @@ export function CinemaCustomCursor() {
   return (
     <div
       className="cinema-custom-cursor cinema-custom-cursor--manager"
-      style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
+      style={{ left: pos.x, top: pos.y }}
       aria-hidden
     >
       <span className="cinema-custom-cursor-dot" />

@@ -495,6 +495,8 @@
       "branchSouth": "فرع الجنوب",
       "screensTitle": "حالة القاعات",
       "feedTitle": "الذكاء التشغيلي",
+      "progressLabel": "تقدم الجلسة {pct}%",
+      "systemStatus": "النظام يعمل · متصل",
       "revenueTitle": "عداد الإيراد",
       "revenuePct": "{pct}% من الهدف اليومي",
       "crowdForecast": "توقع حضور: أعلى من المعتاد",

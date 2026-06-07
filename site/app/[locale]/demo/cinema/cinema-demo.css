@@ -518,10 +518,36 @@ html.cinema-demo-active main {
   transform: translateX(-4px);
 }
 
+.cinema-showtime-ring {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(#c9922a var(--occ, 50%), rgba(255, 255, 255, 0.08) 0);
+}
+
+.cinema-showtime-ring span {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--cinema-surface-elevated);
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: var(--cinema-yellow);
+}
+
 .cinema-showtime-time {
   font-size: 1.35rem;
   font-weight: 800;
   color: var(--cinema-yellow);
+}
+
+[dir="rtl"] .cinema-showtime-btn:hover {
+  transform: translateX(4px);
 }
 
 /* ── Seat map ── */
@@ -1117,8 +1143,9 @@ html.cinema-demo-active main {
 }
 
 .cinema-film-grain {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: 2;
   opacity: 0.35;
   pointer-events: none;
 }
@@ -1769,6 +1796,10 @@ html.cinema-demo-active main {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
+.cinema-seat-hud .cinema-minimap {
+  align-self: flex-end;
+}
+
 .cinema-seat-hud-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -1822,11 +1853,41 @@ html.cinema-demo-active main {
 .cinema-seat-hud-tier { text-transform: uppercase; font-size: 0.6rem; letter-spacing: 0.08em; }
 
 .cinema-minimap {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 2px;
-  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 140px;
   margin-inline-start: auto;
+}
+
+.cinema-minimap-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--cinema-muted);
+  margin: 0;
+}
+
+.cinema-minimap-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cinema-minimap-row {
+  height: 6px;
+  width: 100%;
+  border: none;
+  border-radius: 2px;
+  padding: 0;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.12);
+  transition: background 0.2s;
+}
+
+.cinema-minimap-row:hover {
+  background: rgba(245, 197, 24, 0.45);
 }
 
 .cinema-minimap-dot {

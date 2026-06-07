@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { CinemaAmbientLayer } from "@/components/cinema-demo/CinemaAmbientLayer";
+import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { CinemaSoundToggle } from "@/components/cinema-demo/CinemaSoundToggle";
 import { AnalyticsPanel } from "@/components/cinema-demo/os/AnalyticsPanel";
 import { ApiIntegrationsPanel } from "@/components/cinema-demo/os/ApiIntegrationsPanel";
@@ -20,21 +20,31 @@ import { ScreenMonitors } from "@/components/cinema-demo/os/ScreenMonitors";
 import { StaffPanel } from "@/components/cinema-demo/os/StaffPanel";
 import { WeatherIntel } from "@/components/cinema-demo/os/WeatherIntel";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
+import type { CinemaDemoPhase } from "@/stores/cinema-demo-store";
 
 type Props = { children: ReactNode };
+
+const ACTION_BAR_PHASES: CinemaDemoPhase[] = ["seats", "checkout", "upsell", "ticket"];
 
 export function CinemaOSDesktop({ children }: Props) {
   const t = useTranslations("CinemaDemo");
   const phase = useCinemaDemoStore((s) => s.phase);
   const showSidePanels = phase !== "sessionReveal" && phase !== "closing";
+  const hasActionBar = ACTION_BAR_PHASES.includes(phase);
 
   return (
-    <div className="cinema-os">
-      <CinemaAmbientLayer />
+    <div className={`cinema-os ${hasActionBar ? "cinema-os--action-bar" : ""}`}>
+      <header className="cinema-os-chrome">
+        <CinemaProgressBar />
+        <LiveTicker />
+        <div className="cinema-os-topbar-row">
+          <OsTopBar />
+          <CinemaSoundToggle />
+        </div>
+      </header>
+
       <FloatingWidgets />
       <NotificationSystem />
-      <LiveTicker />
-      <OsTopBar />
 
       <div className={`cinema-os-grid ${showSidePanels ? "" : "cinema-os-grid--full"}`}>
         {showSidePanels ? (
@@ -48,23 +58,21 @@ export function CinemaOSDesktop({ children }: Props) {
 
         {showSidePanels ? (
           <aside className="cinema-os-col cinema-os-col--right">
-            <h3 className="cinema-os-col-title">{t("os.feedTitle")}</h3>
-            <BookingFeedLive />
-            <RevenueGauge />
-            <WeatherIntel />
-            {phase === "seats" ? <ProjectorControlPanel /> : null}
-            <StaffPanel />
-            <AnalyticsPanel />
-            <CompetitorPanel />
-            <IncidentPanel />
-            <ReportsPanel />
-            <ApiIntegrationsPanel />
+            <div className="cinema-os-sidebar-scroll">
+              <h3 className="cinema-os-col-title">{t("os.feedTitle")}</h3>
+              <BookingFeedLive />
+              <RevenueGauge />
+              <WeatherIntel />
+              {phase === "seats" ? <ProjectorControlPanel /> : null}
+              <StaffPanel />
+              <AnalyticsPanel />
+              <CompetitorPanel />
+              <IncidentPanel />
+              <ReportsPanel />
+              <ApiIntegrationsPanel />
+            </div>
           </aside>
         ) : null}
-      </div>
-
-      <div className="cinema-os-sound">
-        <CinemaSoundToggle />
       </div>
     </div>
   );

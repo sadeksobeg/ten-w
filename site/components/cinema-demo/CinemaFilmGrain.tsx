@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 import type { GrainIntensity } from "@/stores/cinema-demo-store";
 
@@ -14,8 +14,14 @@ const OPACITY: Record<GrainIntensity, number> = {
 export function CinemaFilmGrain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const grainIntensity = useCinemaDemoStore((s) => s.grainIntensity);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -53,7 +59,9 @@ export function CinemaFilmGrain() {
       window.removeEventListener("resize", resize);
       clearTimeout(id);
     };
-  }, [grainIntensity]);
+  }, [grainIntensity, mounted]);
+
+  if (!mounted) return null;
 
   return <canvas ref={canvasRef} className="cinema-film-grain" aria-hidden />;
 }

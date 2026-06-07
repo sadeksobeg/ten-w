@@ -7,7 +7,6 @@ import {
   computeSeatTotal,
   seatLabelsForSelection,
 } from "@/components/cinema-demo/CinemaSeatMap";
-import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { CinemaIcon } from "@/components/cinema-demo/CinemaIcon";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
@@ -46,7 +45,6 @@ export function CinemaSeatsPhase() {
 
   return (
     <section className="cinema-phase cinema-phase--seats">
-      <CinemaProgressBar />
       <div className="cinema-os-center-panel">
         <div className="cinema-seats-live">
           <CinemaIcon name="live" size={14} />

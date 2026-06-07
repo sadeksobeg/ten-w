@@ -9,6 +9,11 @@ export function LiveTicker() {
   const [occ1, setOcc1] = useState(78);
   const [occ2, setOcc2] = useState(89);
   const [occ3, setOcc3] = useState(67);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -20,10 +25,12 @@ export function LiveTicker() {
     return () => clearInterval(id);
   }, []);
 
-  const text = `قاعة 1 — ${occ1}% ║ قاعة 2 — ${occ2}% ║ قاعة 3 — ${occ3}% ║ إيراد اليوم: ${liveRevenue.toLocaleString("ar-SY")} ل.س ║ آخر حجز: منذ ${lastBookingSec}ث ║ الطقس: 28° — زيادة حضور متوقعة ║`;
+  const text = mounted
+    ? `قاعة 1 — ${occ1}% ║ قاعة 2 — ${occ2}% ║ قاعة 3 — ${occ3}% ║ إيراد اليوم: ${liveRevenue.toLocaleString("ar-SY")} ل.س ║ آخر حجز: منذ ${lastBookingSec}ث ║ الطقس: 28° — زيادة حضور متوقعة ║`
+    : "قاعة 1 — 78% ║ قاعة 2 — 89% ║ قاعة 3 — 67% ║ إيراد اليوم: 2,847,500 ل.س ║ آخر حجز: منذ 23ث ║ الطقس: 28° — زيادة حضور متوقعة ║";
 
   return (
-    <div className="cinema-os-ticker" aria-live="polite">
+    <div className="cinema-os-ticker" aria-live="polite" suppressHydrationWarning>
       <div className="cinema-os-ticker-track">
         <span>{text}</span>
         <span aria-hidden>{text}</span>

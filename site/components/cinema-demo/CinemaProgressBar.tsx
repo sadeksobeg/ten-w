@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 import type { CinemaDemoPhase } from "@/stores/cinema-demo-store";
 
@@ -16,14 +17,23 @@ const CUSTOMER_PROGRESS: Partial<Record<CinemaDemoPhase, number>> = {
 };
 
 export function CinemaProgressBar() {
+  const t = useTranslations("CinemaDemo");
   const phase = useCinemaDemoStore((s) => s.phase);
   const progress = CUSTOMER_PROGRESS[phase] ?? 0;
+  const pct = Math.round(progress * 100);
 
   if (phase === "boot") return null;
 
   return (
-    <div className="cinema-top-progress" aria-hidden>
-      <div className="cinema-top-progress-fill" style={{ width: `${progress * 100}%` }} />
+    <div
+      className="cinema-os-progress"
+      role="progressbar"
+      aria-valuenow={pct}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={t("os.progressLabel", { pct })}
+    >
+      <div className="cinema-os-progress-fill" style={{ width: `${pct}%` }} />
     </div>
   );
 }

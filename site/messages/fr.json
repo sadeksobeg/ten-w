@@ -490,6 +490,8 @@
       "branchSouth": "Succursale sud",
       "screensTitle": "État des salles",
       "feedTitle": "Intelligence live",
+      "progressLabel": "Progression session {pct}%",
+      "systemStatus": "Système actif · connecté",
       "revenueTitle": "Compteur recettes",
       "revenuePct": "{pct}% de l'objectif du jour",
       "crowdForecast": "Affluence: au-dessus de la normale",

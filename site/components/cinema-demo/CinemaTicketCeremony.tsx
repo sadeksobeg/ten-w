@@ -9,7 +9,6 @@ import {
 } from "@/components/cinema-demo/CinemaSeatMap";
 import { CinemaConfetti } from "@/components/cinema-demo/CinemaConfetti";
 import { FeatureMoment } from "@/components/cinema-demo/features/FeatureMoment";
-import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { getMovie, getShowtime } from "@/lib/cinema-demo/data";
 import { playSuccessChime } from "@/lib/cinema-demo/sounds";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
@@ -18,6 +17,9 @@ type Props = {
   bookingRef: string;
   onComplete: () => void;
 };
+
+const FULL_STAGES = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000];
+const REDUCED_STAGES = [0, 120, 240, 360, 480, 600, 720, 840, 960, 1080, 1200, 1320, 1440];
 
 export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
   const t = useTranslations("CinemaDemo");
@@ -40,9 +42,9 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const steps = reduced ? [0, 200, 400, 600, 800, 1000, 1200] : [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000];
+    const steps = reduced ? REDUCED_STAGES : FULL_STAGES;
     const timers = steps.map((ms, i) => window.setTimeout(() => setStage(i), ms));
-    const finish = window.setTimeout(onComplete, reduced ? 1500 : 13000);
+    const finish = window.setTimeout(onComplete, reduced ? 1800 : 13000);
     return () => {
       timers.forEach(clearTimeout);
       clearTimeout(finish);
@@ -75,7 +77,6 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
   useEffect(() => {
     if (stage >= 10 && !synced.current && showtime) {
       synced.current = true;
-      const seats = seatLabelsForSelection(showtimeId ?? "", selectedSeatIds);
       pushBookingFeed({
         id: `ticket-${Date.now()}`,
         name: "حجز جديد",
@@ -90,7 +91,7 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
       incrementRevenue(selectedSeatIds.length * 20000);
       addTicketsBooked(selectedSeatIds.length);
     }
-  }, [stage, showtime, showtimeId, selectedSeatIds, movie, pushBookingFeed, incrementRevenue, addTicketsBooked]);
+  }, [stage, showtime, selectedSeatIds, movie, pushBookingFeed, incrementRevenue, addTicketsBooked]);
 
   if (!movie || !showtime || !showtimeId) return null;
 
@@ -100,7 +101,7 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
   return (
     <div className={`cinema-ceremony-v3 cinema-ceremony-v3--stage-${stage}`}>
       {stage >= 10 ? <CinemaConfetti /> : null}
-      {stage >= 1 ? <div className="cinema-ticket-v3-line" /> : null}
+      {stage >= 1 ? <div className="cinema-ticket-v3-line" aria-hidden /> : null}
       <div className="cinema-ticket-v3">
         {stage >= 3 ? (
           <header className="cinema-ticket-v3-head">
@@ -112,26 +113,36 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
           <div className="cinema-ticket-v3-body">
             <h3>{isAr ? movie.titleAr : movie.titleEn}</h3>
             <p>{movie.titleEn}</p>
-            <p>{showtime.time} · {isAr ? showtime.hallLabelAr : showtime.hallLabelEn}</p>
+            <p>
+              {showtime.time} · {isAr ? showtime.hallLabelAr : showtime.hallLabelEn}
+            </p>
             <p>{seats.join(" · ")}</p>
-            <p>{total.toLocaleString("ar-SY")} {t("currency")}</p>
+            <p>
+              {total.toLocaleString("ar-SY")} {t("currency")}
+            </p>
             <p>{bookingRef}</p>
           </div>
         ) : null}
         {stage >= 6 ? <div className="cinema-ticket-v3-perforation" /> : null}
         {stage >= 7 ? <div className="cinema-ticket-v3-stub" /> : null}
         {stage >= 8 ? (
-          <div className="cinema-ticket-v3-qr" style={{ opacity: qrProgress / 150 }}>
-            <canvas ref={canvasRef} aria-label={t("ticket.qrLabel")} />
+          <div className="cinema-ticket-v3-qr-wrap">
+            <div className="cinema-ticket-v3-qr" style={{ opacity: qrProgress / 150 }}>
+              <canvas ref={canvasRef} aria-label={t("ticket.qrLabel")} />
+            </div>
+            {stage >= 9 ? <div className="cinema-ticket-v3-seal">VALID</div> : null}
           </div>
         ) : null}
-        {stage >= 9 ? <div className="cinema-ticket-v3-seal">VALID</div> : null}
       </div>
       {stage >= 11 ? <p className="cinema-ticket-v3-ready">{t("ticket.ready")}</p> : null}
       {stage >= 12 ? (
         <div className="cinema-ticket-v3-actions">
-          <button type="button" className="cinema-btn cinema-btn-primary">{t("ticket.share")}</button>
-          <button type="button" className="cinema-btn cinema-btn-ghost">{t("ticket.download")}</button>
+          <button type="button" className="cinema-btn cinema-btn-primary">
+            {t("ticket.share")}
+          </button>
+          <button type="button" className="cinema-btn cinema-btn-ghost">
+            {t("ticket.download")}
+          </button>
         </div>
       ) : null}
       <FeatureMoment featureId={3} durationMs={5000} className="cinema-feature--whatsapp">

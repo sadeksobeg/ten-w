@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import type { CSSProperties } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { FeatureMoment } from "@/components/cinema-demo/features/FeatureMoment";
-import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { CinemaMoviePoster } from "@/components/cinema-demo/CinemaMoviePoster";
 import { getMovie, showtimesForMovie } from "@/lib/cinema-demo/data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
@@ -30,7 +29,6 @@ export function CinemaShowtimePhase() {
 
   return (
     <section className="cinema-phase cinema-phase--showtime">
-      <CinemaProgressBar />
       <div className="cinema-os-center-panel">
         <FeatureMoment featureId={1} className="cinema-feature--inline">
           <p>{t("features.f1Detail")}</p>

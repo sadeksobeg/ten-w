@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { CINEMA_FEATURES } from "@/lib/cinema-demo/features";
 import { useAnimatedNumber } from "@/components/cinema-demo/hooks/useAnimatedNumber";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 export function CinemaSessionRevealPhase() {
   const t = useTranslations("CinemaDemo");
+  const locale = useLocale();
+  const isAr = locale === "ar";
   const goToRoi = useCinemaDemoStore((s) => s.goToRoi);
   const ticketsBookedSession = useCinemaDemoStore((s) => s.ticketsBookedSession);
   const featuresSeen = useCinemaDemoStore((s) => s.featuresSeen);
@@ -15,10 +17,14 @@ export function CinemaSessionRevealPhase() {
   const sessionStartedAt = useCinemaDemoStore((s) => s.sessionStartedAt);
   const selectedSeatIds = useCinemaDemoStore((s) => s.selectedSeatIds);
   const [allLit, setAllLit] = useState(false);
+  const [sessionSec, setSessionSec] = useState(0);
 
-  const sessionSec = useMemo(() => {
-    if (!sessionStartedAt) return 0;
-    return Math.floor((Date.now() - sessionStartedAt) / 1000);
+  useEffect(() => {
+    if (!sessionStartedAt) return;
+    const tick = () => setSessionSec(Math.floor((Date.now() - sessionStartedAt) / 1000));
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => clearInterval(id);
   }, [sessionStartedAt]);
 
   const tickets = Math.max(ticketsBookedSession, selectedSeatIds.length);
@@ -41,10 +47,18 @@ export function CinemaSessionRevealPhase() {
       <div className="cinema-os-center-panel">
         <h2 className="cinema-title">{t("sessionReveal.title")}</h2>
         <div className="cinema-session-stats">
-          <p>{t("sessionReveal.booked")}: {animatedTickets}</p>
-          <p>{t("sessionReveal.features")}: {animatedFeatures}</p>
-          <p>{t("sessionReveal.revenue")}: {animatedRevenue.toLocaleString("ar-SY")} ل.س</p>
-          <p>{t("sessionReveal.duration")}: {mins}:{String(secs).padStart(2, "0")}</p>
+          <p>
+            {t("sessionReveal.booked")}: {animatedTickets}
+          </p>
+          <p>
+            {t("sessionReveal.features")}: {animatedFeatures}
+          </p>
+          <p>
+            {t("sessionReveal.revenue")}: {animatedRevenue.toLocaleString("ar-SY")} {t("currency")}
+          </p>
+          <p>
+            {t("sessionReveal.duration")}: {mins}:{String(secs).padStart(2, "0")}
+          </p>
         </div>
         <p className="cinema-subtitle">{t("sessionReveal.built")}</p>
 
@@ -56,7 +70,7 @@ export function CinemaSessionRevealPhase() {
               style={{ animationDelay: `${i * 0.08}s` }}
             >
               <span>{f.id}</span>
-              <p>{f.titleAr}</p>
+              <p>{isAr ? f.titleAr : f.titleEn}</p>
             </article>
           ))}
         </div>

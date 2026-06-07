@@ -472,6 +472,8 @@
       "branchSouth": "South branch",
       "screensTitle": "Screen status",
       "feedTitle": "Live intelligence",
+      "progressLabel": "Session progress {pct}%",
+      "systemStatus": "System online · connected",
       "revenueTitle": "Revenue meter",
       "revenuePct": "{pct}% of daily target",
       "crowdForecast": "Attendance: above average expected",

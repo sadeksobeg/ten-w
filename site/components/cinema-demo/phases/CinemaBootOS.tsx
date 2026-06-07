@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CinemaBrandLogo } from "@/components/cinema-demo/CinemaBrandLogo";
 import { useTypewriter } from "@/components/cinema-demo/hooks/useTypewriter";
@@ -39,15 +39,19 @@ export function CinemaBootOS() {
   const [scanPct, setScanPct] = useState(0);
   const [flash, setFlash] = useState(false);
   const [clock, setClock] = useState("");
-
-  const reduced = useMemo(
-    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    [],
-  );
-
-  const { visibleLines, done, cursorVisible } = useTypewriter(POST_LINES, reduced ? 0 : 120, stage === 0);
+  const [mounted, setMounted] = useState(false);
+  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }, []);
+
+  const typewriterDelay = mounted && reduced ? 0 : 120;
+  const { visibleLines, done, cursorVisible } = useTypewriter(POST_LINES, typewriterDelay, stage === 0);
+
+  useEffect(() => {
+    if (!mounted) return;
     const timings = reduced ? [0, 400, 800, 1200, 1600] : [0, 2000, 5000, 8000, 12000];
     const timers = timings.map((ms, i) =>
       window.setTimeout(() => {
@@ -59,7 +63,7 @@ export function CinemaBootOS() {
       }, ms),
     );
     return () => timers.forEach(clearTimeout);
-  }, [reduced, setBootStage, soundEnabled]);
+  }, [mounted, reduced, setBootStage, soundEnabled]);
 
   useEffect(() => {
     if (stage !== 1) return;
@@ -162,7 +166,9 @@ export function CinemaBootOS() {
       {stage >= 3 ? (
         <div className="cinema-boot-desktop-preview">
           <div className="cinema-boot-topbar">
-            <span>سينما سلمية · النظام الحي · {clock}</span>
+            <span suppressHydrationWarning>
+              سينما سلمية · النظام الحي · {clock || "—"}
+            </span>
           </div>
           <div className="cinema-boot-widgets">
             <div className="cinema-boot-widget" />
@@ -187,7 +193,7 @@ export function CinemaBootOS() {
         </div>
       ) : null}
 
-      {!reduced && stage < 4 ? (
+      {stage < 4 ? (
         <button type="button" className="cinema-splash-skip" onClick={startSession}>
           {t("splash.skip")}
         </button>
