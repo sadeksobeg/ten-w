@@ -4,19 +4,24 @@ import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as THREE from "three";
-import {
-  getCameraPreset,
-  type CameraPreset,
-} from "@/lib/cinema-demo/camera-presets";
+import { getCameraPreset, type CameraPreset } from "@/lib/cinema-demo/camera-presets";
 import type { AuditoriumBounds, Seat3D } from "@/lib/cinema-demo/seat-layout-3d";
 
 type Props = {
   preset: CameraPreset;
   bounds: AuditoriumBounds;
   focusSeat: Seat3D | null;
+  smartPickAnimating?: boolean;
+  reducedMotion?: boolean;
 };
 
-export function CameraRig({ preset, bounds, focusSeat }: Props) {
+export function CameraRig({
+  preset,
+  bounds,
+  focusSeat,
+  smartPickAnimating = false,
+  reducedMotion = false,
+}: Props) {
   const { camera, gl } = useThree();
   const controlsRef = useRef<OrbitControls | null>(null);
   const animating = useRef(false);
@@ -27,6 +32,7 @@ export function CameraRig({ preset, bounds, focusSeat }: Props) {
   const endTarget = useRef(new THREE.Vector3());
   const curvePos = useRef<THREE.CatmullRomCurve3 | null>(null);
   const birdsEyeAngle = useRef(0);
+  const entryFov = useRef<number | null>(null);
 
   useEffect(() => {
     const controls = new OrbitControls(camera, gl.domElement);
@@ -63,32 +69,43 @@ export function CameraRig({ preset, bounds, focusSeat }: Props) {
       new THREE.Vector3(...mid),
       endPos.current.clone(),
     ]);
-    progress.current = 0;
-    animating.current = true;
-    if (from.fov && "fov" in camera) (camera as THREE.PerspectiveCamera).fov = from.fov;
-  }, [preset, bounds, focusSeat, camera]);
+    progress.current = reducedMotion ? 1 : 0;
+    animating.current = !reducedMotion;
+    if (from.fov && "fov" in camera) {
+      entryFov.current = from.fov;
+      (camera as THREE.PerspectiveCamera).fov = from.fov;
+    }
+    if (reducedMotion) {
+      camera.position.copy(endPos.current);
+      controlsRef.current?.target.copy(endTarget.current);
+    }
+  }, [preset, bounds, focusSeat, camera, reducedMotion]);
 
   useFrame(({ clock }) => {
     const controls = controlsRef.current;
     if (!controls) return;
 
-    if (animating.current && curvePos.current) {
-      progress.current = Math.min(1, progress.current + 0.018);
+    if (animating.current && curvePos.current && !reducedMotion) {
+      const step = preset === "dramaticEntry" ? 0.035 : 0.018;
+      progress.current = Math.min(1, progress.current + step);
       const t = progress.current;
       const eased = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
       const p = curvePos.current.getPoint(eased);
       camera.position.copy(p);
       controls.target.lerpVectors(startTarget.current, endTarget.current, eased);
+      if (preset === "dramaticEntry" && entryFov.current && "fov" in camera) {
+        const cam = camera as THREE.PerspectiveCamera;
+        cam.fov = entryFov.current - eased * 4;
+      }
       if (progress.current >= 1) animating.current = false;
     }
 
-    if (preset === "immersive") {
+    if (!reducedMotion && preset === "immersive") {
       camera.position.y += Math.sin(clock.elapsedTime * 0.8) * 0.002;
     }
 
-    if (preset === "birdsEye") {
+    if (!reducedMotion && preset === "birdsEye" && smartPickAnimating) {
       birdsEyeAngle.current += 0.0009;
-      const r = bounds.maxZ + 8;
       camera.position.x = bounds.centerX + Math.sin(birdsEyeAngle.current) * 0.8;
       camera.position.z = bounds.centerZ + 2 + Math.cos(birdsEyeAngle.current) * 0.5;
     }

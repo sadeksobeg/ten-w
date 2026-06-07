@@ -25,17 +25,30 @@ export function pickBestSeats(
 
   const sortedRows = [...byRow.entries()].sort((a, b) => a[0] - b[0]);
 
-  for (const [, rowSeats] of sortedRows) {
+  type Candidate = { ids: string[]; score: number };
+  const candidates: Candidate[] = [];
+
+  for (const [rowIndex, rowSeats] of sortedRows) {
     rowSeats.sort((a, b) => a.colIndex - b.colIndex);
     for (let i = 0; i <= rowSeats.length - count; i++) {
       const slice = rowSeats.slice(i, i + count);
       const contiguous = slice.every((s, idx) => idx === 0 || s.colIndex === slice[idx - 1].colIndex + 1);
-      if (contiguous) {
-        const centerBias = Math.abs(slice[0].colIndex - 5.5);
-        if (centerBias <= 3) return slice.map((s) => s.id);
-      }
+      if (!contiguous) continue;
+      const centerBias = Math.abs((slice[0].colIndex + slice[slice.length - 1].colIndex) / 2 - 5.5);
+      const vipBonus = slice.some((s) => s.tier === "vip") ? -1.5 : 0;
+      const frontBonus = rowIndex * -0.4;
+      candidates.push({ ids: slice.map((s) => s.id), score: centerBias + vipBonus + frontBonus });
     }
   }
 
-  return available.slice(0, count).map((s) => s.id);
+  if (candidates.length > 0) {
+    candidates.sort((a, b) => a.score - b.score);
+    return candidates[0].ids;
+  }
+
+  const vipFirst = [...available].sort((a, b) => {
+    const tierScore = (s: Seat3D) => (s.tier === "vip" ? 0 : s.tier === "standard" ? 1 : 2);
+    return tierScore(a) - tierScore(b) || a.rowIndex - b.rowIndex;
+  });
+  return vipFirst.slice(0, count).map((s) => s.id);
 }

@@ -5,15 +5,15 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { getScreenZ } from "@/lib/cinema-demo/seat-layout-3d";
 
-type Props = { count?: number; depth: number };
+type Props = { count?: number; depth: number; enabled?: boolean };
 
-export function DustParticles({ count = 500, depth }: Props) {
+export function DustParticles({ count = 80, depth, enabled = true }: Props) {
   const ref = useRef<THREE.Points>(null);
   const screenZ = getScreenZ();
-  const mobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const n = mobile ? 200 : count;
+  const n = enabled ? count : 0;
 
   const positions = useMemo(() => {
+    if (n === 0) return new Float32Array(0);
     const arr = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) {
       arr[i * 3] = (Math.random() - 0.5) * 2;
@@ -24,6 +24,7 @@ export function DustParticles({ count = 500, depth }: Props) {
   }, [n, depth, screenZ]);
 
   useFrame(({ clock }) => {
+    if (!enabled || n === 0) return;
     const pts = ref.current;
     if (!pts) return;
     const pos = pts.geometry.attributes.position as THREE.BufferAttribute;
@@ -35,6 +36,8 @@ export function DustParticles({ count = 500, depth }: Props) {
     }
     pos.needsUpdate = true;
   });
+
+  if (n === 0) return null;
 
   return (
     <points ref={ref}>

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { LiveSeatState } from "@/components/cinema-demo/hooks/useLiveSeatSimulation";
 import { pickBestSeats } from "@/lib/cinema-demo/smart-pick";
 import { buildSeatLayout3D } from "@/lib/cinema-demo/seat-layout-3d";
 import type { BookingFeedItem } from "@/lib/cinema-demo/manager-data";
@@ -53,6 +54,7 @@ type State = {
   bookingFeed: BookingFeedItem[];
   ticketsBookedSession: number;
   smartPickAnimating: boolean;
+  liveSeatStates: LiveSeatState;
 };
 
 type Actions = {
@@ -86,6 +88,7 @@ type Actions = {
   incrementRevenue: (amount: number) => void;
   addTicketsBooked: (count: number) => void;
   smartPickSeats: (count?: number) => void;
+  setLiveSeatStates: (states: LiveSeatState) => void;
   goToSessionReveal: () => void;
   goToRoi: () => void;
   goToClosing: () => void;
@@ -129,6 +132,7 @@ const initial: State = {
   bookingFeed: [],
   ticketsBookedSession: 0,
   smartPickAnimating: false,
+  liveSeatStates: {},
 };
 
 function makeBookingRef() {
@@ -200,10 +204,10 @@ export const useCinemaDemoStore = create<State & Actions>((set, get) => ({
   },
 
   smartPickSeats: (count = 2) => {
-    const { showtimeId, selectedSeatIds } = get();
-    if (!showtimeId) return;
+    const { showtimeId, selectedSeatIds, liveSeatStates, smartPickAnimating } = get();
+    if (!showtimeId || smartPickAnimating) return;
     const { seats } = buildSeatLayout3D(showtimeId);
-    const picked = pickBestSeats(seats, count, {}, selectedSeatIds);
+    const picked = pickBestSeats(seats, count, liveSeatStates, selectedSeatIds);
     if (picked.length === 0) return;
     set({ smartPickAnimating: true, cameraPreset: "birdsEye" });
     let i = 0;
@@ -221,6 +225,8 @@ export const useCinemaDemoStore = create<State & Actions>((set, get) => ({
       }
     }, 400);
   },
+
+  setLiveSeatStates: (states) => set({ liveSeatStates: states }),
 
   setGuestName: (name) => set({ guestName: name }),
 

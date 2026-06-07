@@ -96,12 +96,13 @@ seatView · cameraPreset · focusedSeatId · smartPickAnimating
 | `HallGeometry.tsx` · `HallLighting.tsx` | جدران · إضاءة · tone mapping |
 | `CinemaScreenMesh.tsx` · `ProjectorBeam.tsx` | شاشة + beam |
 | `DustParticles.tsx` · `HallEvents.tsx` | جزicles · أحداث حية |
-| `InstancedSeats.tsx` | `InstancedMesh` 60fps |
-| `CameraRig.tsx` | OrbitControls + lerp |
-| `SeatHud.tsx` | 3D/2D · كاميرا · smart pick · minimap صفوف |
-| `CinemaSeatExperience.tsx` | WebGL أو fallback 2D |
+| `InstancedSeats.tsx` | مقاعد procedural (standard/vip/wheelchair) · dirty updates · click guards |
+| `RowLabels.tsx` | تسميات الصفوف A–H |
+| `CameraRig.tsx` | OrbitControls · dramaticEntry · viewFromSeat · birdsEye أثناء smart pick |
+| `SeatHud.tsx` | 3D/2D · كاميرا · smart pick · minimap 12×8 · legend · tooltips حقيقية |
+| `CinemaSeatExperience.tsx` | WebGL fallback · keyboard grid · aria-live |
 
-**Fallback:** `prefers-reduced-motion` أو فشل WebGL → `CinemaSeatMap` 2D.
+**Fallback:** فشل WebGL فقط → `CinemaSeatMap` 2D. `prefers-reduced-motion` يبقي 3D ثابت (بدون particles/bob/orbit).
 
 ---
 
@@ -161,7 +162,7 @@ Namespace **`CinemaDemo`** — مفاتيح جديدة:
 
 - `boot.*` · `os.*` (greeting, topbar, panels, **`progressLabel`**, **`systemStatus`**)
 - `features.*` · `sessionReveal.*`
-- `closing.v2*` · `seats.*` · `ticket.*` · `roi.*`
+- `closing.v2*` · `seats.*` (stateOccupied · viewFromSeat · legend* · smartPickBusy · keyboard*) · `ticket.*` · `roi.*`
 
 ---
 
@@ -169,7 +170,7 @@ Namespace **`CinemaDemo`** — مفاتيح جديدة:
 
 - صفر packages جديدة
 - TypeScript strict · RTL عربي
-- `prefers-reduced-motion`: grain off · 3D→2D · ticket ceremony مختصر
+- `prefers-reduced-motion`: grain off · 3D ثابت (لا particles/orbit) · ticket ceremony مختصر · fallback 2D فقط عند فشل WebGL
 - لا Growth / invite / PartnerProfile
 - لا تعديل ملف الخطة الأصلي
 

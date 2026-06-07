@@ -7,7 +7,8 @@ export type CameraPreset =
   | "vip"
   | "birdsEye"
   | "dramaticEntry"
-  | "focus";
+  | "focus"
+  | "viewFromSeat";
 
 export type CameraTarget = {
   position: [number, number, number];
@@ -24,10 +25,18 @@ export function getCameraPreset(
   const cx = bounds.centerX;
   const cz = bounds.centerZ;
 
+  if (preset === "viewFromSeat" && focusSeat) {
+    return {
+      position: [focusSeat.x, focusSeat.y + 0.48, focusSeat.z + 0.08],
+      target: [cx, 1.45, screenZ + 0.2],
+      fov: 68,
+    };
+  }
+
   if (preset === "focus" && focusSeat) {
     return {
       position: [focusSeat.x, focusSeat.y + 2.8, focusSeat.z + 2.2],
-      target: [focusSeat.x, focusSeat.y + 0.2, focusSeat.z - 0.3],
+      target: [cx, 1.25, screenZ + 0.35],
       fov: 48,
     };
   }

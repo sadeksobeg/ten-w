@@ -6,12 +6,15 @@ import * as THREE from "three";
 import { getScreenZ } from "@/lib/cinema-demo/seat-layout-3d";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
-export function CinemaScreenMesh() {
+type Props = { reducedMotion?: boolean };
+
+export function CinemaScreenMesh({ reducedMotion = false }: Props) {
   const screenZ = getScreenZ();
   const screenMode = useCinemaDemoStore((s) => s.screenMode);
   const matRef = useRef<THREE.MeshStandardMaterial>(null);
   const textureRef = useRef<THREE.CanvasTexture | null>(null);
   const boot = useRef(0);
+  const frameRef = useRef(0);
 
   const canvas = useMemo(() => {
     if (typeof document === "undefined") return null;
@@ -35,6 +38,12 @@ export function CinemaScreenMesh() {
     const ctx = canvas?.getContext("2d");
     if (!ctx || !canvas) return;
 
+    const throttlePlaying = screenMode === "playing" && !reducedMotion;
+    if (throttlePlaying) {
+      frameRef.current += 1;
+      if (frameRef.current % 4 !== 0) return;
+    }
+
     if (screenMode === "preMovie") {
       const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
       g.addColorStop(0, "#1a2848");
@@ -50,7 +59,7 @@ export function CinemaScreenMesh() {
       ctx.fillStyle = "rgba(255,248,220,0.85)";
       ctx.fillText("Salamiya Cinema", canvas.width / 2, canvas.height / 2 + 22);
     } else if (screenMode === "playing") {
-      const hue = (clock.elapsedTime * 8) % 360;
+      const hue = reducedMotion ? 220 : (clock.elapsedTime * 8) % 360;
       ctx.fillStyle = `hsl(${hue}, 70%, 45%)`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     } else {

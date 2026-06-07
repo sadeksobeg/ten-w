@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import type { ThreeEvent } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import type { LiveSeatState } from "@/components/cinema-demo/hooks/useLiveSeatSimulation";
+import { createSeatGeometry } from "@/lib/cinema-demo/seat-geometry";
 import type { Seat3D } from "@/lib/cinema-demo/seat-layout-3d";
-import { getScreenZ } from "@/lib/cinema-demo/seat-layout-3d";
+import type { SeatTier } from "@/lib/cinema-demo/seat-map";
+import { isSeatSelectable } from "@/lib/cinema-demo/seat-select";
 
 type Props = {
   seats: Seat3D[];
@@ -13,6 +16,8 @@ type Props = {
   liveStates: LiveSeatState;
   hoveredId: string | null;
   highlightRow: number | null;
+  reducedMotion?: boolean;
+  smartPickAnimating?: boolean;
   onSeatClick: (id: string) => void;
   onSeatHover: (id: string | null) => void;
 };
@@ -26,36 +31,171 @@ const COLORS = {
   occupied: new THREE.Color("#2A1520"),
   pending: new THREE.Color("#e8a830"),
   dim: new THREE.Color("#3a2535"),
+  emissiveGold: new THREE.Color("#f5c518"),
+  emissiveDim: new THREE.Color("#2a1520"),
 };
 
-function seatColor(
+const TIERS: SeatTier[] = ["standard", "vip", "wheelchair"];
+
+function applySeatColor(
+  out: THREE.Color,
   seat: Seat3D,
   selected: boolean,
   live: LiveSeatState[string] | undefined,
   hovered: boolean,
   focusRow: number | null,
-): THREE.Color {
-  let c: THREE.Color;
-
-  if (selected) c = COLORS.selected.clone();
-  else if (seat.occupied || live === "occupied") c = COLORS.occupied.clone();
-  else if (live === "pending") c = COLORS.pending.clone();
+): void {
+  if (selected) out.copy(COLORS.selected);
+  else if (seat.occupied || live === "occupied") out.copy(COLORS.occupied);
+  else if (live === "pending") out.copy(COLORS.pending);
   else if (seat.tier === "vip") {
-    c = COLORS.vip.clone();
-    if (hovered) c.lerp(COLORS.hover, 0.55);
+    out.copy(COLORS.vip);
+    if (hovered) out.lerp(COLORS.hover, 0.55);
   } else if (seat.tier === "wheelchair") {
-    c = COLORS.wheelchair.clone();
-    if (hovered) c.lerp(COLORS.selected, 0.35);
+    out.copy(COLORS.wheelchair);
+    if (hovered) out.lerp(COLORS.selected, 0.35);
   } else {
-    c = COLORS.available.clone();
-    if (hovered) c.lerp(COLORS.hover, 0.5);
+    out.copy(COLORS.available);
+    if (hovered) out.lerp(COLORS.hover, 0.5);
   }
 
   if (focusRow !== null && seat.rowIndex !== focusRow) {
-    c.lerp(COLORS.dim, 0.5);
+    out.lerp(COLORS.dim, 0.5);
   }
+}
 
-  return c;
+type TierMeshProps = {
+  tier: SeatTier;
+  tierSeats: Seat3D[];
+  selectedIds: string[];
+  liveStates: LiveSeatState;
+  hoveredId: string | null;
+  highlightRow: number | null;
+  reducedMotion: boolean;
+  smartPickAnimating: boolean;
+  onSeatClick: (id: string) => void;
+  onSeatHover: (id: string | null) => void;
+};
+
+function TierInstancedMesh({
+  tier,
+  tierSeats,
+  selectedIds,
+  liveStates,
+  hoveredId,
+  highlightRow,
+  reducedMotion,
+  smartPickAnimating,
+  onSeatClick,
+  onSeatHover,
+}: TierMeshProps) {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const geometry = useMemo(() => createSeatGeometry(tier), [tier]);
+  const colorScratch = useMemo(() => new THREE.Color(), []);
+  const dirtyRef = useRef(true);
+  const prevRef = useRef("");
+  const { gl } = useThree();
+
+  const signature = useMemo(
+    () => JSON.stringify({ selectedIds, hoveredId, highlightRow, liveStates, tierCount: tierSeats.length }),
+    [selectedIds, hoveredId, highlightRow, liveStates, tierSeats.length],
+  );
+
+  useEffect(() => {
+    dirtyRef.current = true;
+  }, [signature]);
+
+  useEffect(() => {
+    const mesh = meshRef.current;
+    if (!mesh || tierSeats.length === 0) return;
+    mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(tierSeats.length * 3), 3);
+    tierSeats.forEach((seat, i) => {
+      dummy.position.set(seat.x, seat.y + 0.14, seat.z);
+      dummy.scale.setScalar(seat.scale);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+    dirtyRef.current = true;
+  }, [tierSeats, dummy]);
+
+  useFrame(({ clock }) => {
+    const mesh = meshRef.current;
+    if (!mesh || tierSeats.length === 0) return;
+
+    if (prevRef.current !== signature) {
+      prevRef.current = signature;
+      dirtyRef.current = true;
+    }
+
+    const animateBob = !reducedMotion && !smartPickAnimating;
+    let matrixDirty = false;
+
+    tierSeats.forEach((seat, i) => {
+      const selected = selectedIds.includes(seat.id);
+      const live = liveStates[seat.id];
+      const hovered = hoveredId === seat.id;
+      const pending = live === "pending";
+      const selectable = isSeatSelectable(seat, liveStates, selectedIds);
+      const bounce = animateBob && pending ? Math.sin(clock.elapsedTime * 8) * 0.02 : 0;
+      const scaleMul =
+        selectable && !seat.occupied && live !== "occupied" ? (selected ? 1.08 : hovered ? 1.04 : 1) : 1;
+
+      dummy.position.set(seat.x, seat.y + 0.14 + bounce, seat.z);
+      dummy.scale.setScalar(seat.scale * scaleMul);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+      matrixDirty = matrixDirty || animateBob;
+
+      if (dirtyRef.current) {
+        applySeatColor(colorScratch, seat, selected, live, hovered, highlightRow);
+        mesh.setColorAt(i, colorScratch);
+      }
+    });
+
+    if (matrixDirty || dirtyRef.current) {
+      mesh.instanceMatrix.needsUpdate = true;
+      if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    }
+    dirtyRef.current = false;
+  });
+
+  const resolveSeat = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation();
+    if (e.instanceId == null) return null;
+    return tierSeats[e.instanceId] ?? null;
+  };
+
+  return (
+    <instancedMesh
+      ref={meshRef}
+      args={[geometry, undefined, tierSeats.length]}
+      onPointerMissed={() => {
+        onSeatHover(null);
+        gl.domElement.style.cursor = "default";
+      }}
+      onPointerMove={(e) => {
+        const seat = resolveSeat(e);
+        if (!seat) return;
+        onSeatHover(seat.id);
+        gl.domElement.style.cursor = isSeatSelectable(seat, liveStates, selectedIds) ? "pointer" : "not-allowed";
+      }}
+      onClick={(e) => {
+        const seat = resolveSeat(e);
+        if (!seat || !isSeatSelectable(seat, liveStates, selectedIds)) return;
+        onSeatClick(seat.id);
+      }}
+    >
+      <meshStandardMaterial
+        vertexColors
+        roughness={0.62}
+        metalness={0.14}
+        emissive="#2a1520"
+        emissiveIntensity={0.18}
+      />
+    </instancedMesh>
+  );
 }
 
 export function InstancedSeats({
@@ -64,142 +204,35 @@ export function InstancedSeats({
   liveStates,
   hoveredId,
   highlightRow,
+  reducedMotion = false,
+  smartPickAnimating = false,
   onSeatClick,
   onSeatHover,
 }: Props) {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
-
-  useEffect(() => {
-    const mesh = meshRef.current;
-    if (!mesh) return;
-    mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(seats.length * 3), 3);
-    seats.forEach((seat, i) => {
-      dummy.position.set(seat.x, seat.y + 0.14, seat.z);
-      dummy.scale.set(0.34 * seat.scale, 0.28 * seat.scale, 0.32 * seat.scale);
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
-    });
-    mesh.instanceMatrix.needsUpdate = true;
-  }, [seats, dummy]);
-
-  useFrame(({ clock }) => {
-    const mesh = meshRef.current;
-    if (!mesh) return;
-    seats.forEach((seat, i) => {
-      const selected = selectedIds.includes(seat.id);
-      const live = liveStates[seat.id];
-      const hovered = hoveredId === seat.id;
-      const pending = live === "pending";
-      const s = seat.scale * (selected ? 1.1 : hovered ? 1.04 : 1);
-      dummy.position.set(seat.x, seat.y + 0.14, seat.z);
-      dummy.scale.set(0.34 * s, 0.28 * s, 0.32 * s);
-      if (pending) dummy.position.y += Math.sin(clock.elapsedTime * 8) * 0.02;
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
-      mesh.setColorAt(i, seatColor(seat, selected, live, hovered, highlightRow));
-    });
-    mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-  });
-
-  return (
-    <instancedMesh
-      ref={meshRef}
-      args={[undefined, undefined, seats.length]}
-      onPointerMissed={() => onSeatHover(null)}
-      onPointerMove={(e) => {
-        e.stopPropagation();
-        if (e.instanceId != null) onSeatHover(seats[e.instanceId]?.id ?? null);
-      }}
-      onClick={(e) => {
-        e.stopPropagation();
-        if (e.instanceId == null) return;
-        const seat = seats[e.instanceId];
-        if (seat) onSeatClick(seat.id);
-      }}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial
-        vertexColors
-        roughness={0.7}
-        metalness={0.1}
-        emissive="#2a1520"
-        emissiveIntensity={0.15}
-      />
-    </instancedMesh>
+  const byTier = useMemo(
+    () => TIERS.map((tier) => ({ tier, tierSeats: seats.filter((s) => s.tier === tier) })),
+    [seats],
   );
-}
 
-export function CinemaScreen() {
-  const screenZ = getScreenZ();
-  const matRef = useRef<THREE.MeshStandardMaterial>(null);
-  const lightRef = useRef<THREE.PointLight>(null);
-  const boot = useRef(0);
-
-  useFrame(({ clock }) => {
-    boot.current = Math.min(1, boot.current + clock.getDelta() / 2.8);
-    const eased = boot.current * boot.current * (3 - 2 * boot.current);
-    const pulse = 0.92 + Math.sin(clock.elapsedTime * 0.9) * 0.08;
-    if (matRef.current) {
-      matRef.current.emissiveIntensity = (0.12 + eased * 0.48) * pulse;
-    }
-    if (lightRef.current) {
-      lightRef.current.intensity = 0.08 + eased * 0.42;
-    }
-  });
-
-  return (
-    <group position={[0, 1.85, screenZ]}>
-      <mesh rotation={[-0.08, 0, 0]}>
-        <planeGeometry args={[7.5, 2.2]} />
-        <meshStandardMaterial
-          ref={matRef}
-          color="#fff9ef"
-          emissive="#d4a012"
-          emissiveIntensity={0.12}
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh rotation={[-0.08, 0, 0]} position={[0, 0, -0.02]}>
-        <planeGeometry args={[7.8, 2.5]} />
-        <meshStandardMaterial color="#0a0a12" roughness={1} />
-      </mesh>
-      <pointLight ref={lightRef} position={[0, 0.5, 1.2]} intensity={0.08} color="#ffe8b0" distance={6} decay={2} />
-    </group>
-  );
-}
-
-export function AuditoriumFloor({ width, depth }: { width: number; depth: number }) {
-  return (
-    <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, depth / 2]} receiveShadow>
-        <planeGeometry args={[width, depth + 6]} />
-        <meshStandardMaterial color="#16141f" roughness={0.75} metalness={0.12} />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.015, depth / 2 - 0.5]}>
-        <planeGeometry args={[width * 0.85, 0.08]} />
-        <meshStandardMaterial color="#f5c518" emissive="#f5c518" emissiveIntensity={0.15} toneMapped={false} />
-      </mesh>
-    </>
-  );
-}
-
-export function AuditoriumAmbience({ width, depth }: { width: number; depth: number }) {
-  const screenZ = getScreenZ();
   return (
     <group>
-      <mesh position={[-width / 2 - 0.3, 1.2, depth / 2]} rotation={[0, Math.PI / 2, 0]}>
-        <planeGeometry args={[depth, 2.4]} />
-        <meshStandardMaterial color="#0e0c16" roughness={0.95} />
-      </mesh>
-      <mesh position={[width / 2 + 0.3, 1.2, depth / 2]} rotation={[0, -Math.PI / 2, 0]}>
-        <planeGeometry args={[depth, 2.4]} />
-        <meshStandardMaterial color="#0e0c16" roughness={0.95} />
-      </mesh>
-      <pointLight position={[0, 3.5, depth * 0.35]} intensity={0.55} color="#e8dff5" distance={14} decay={2} />
-      <pointLight position={[-3, 2, screenZ + 3]} intensity={0.25} color="#6b21a8" distance={10} decay={2} />
-      <pointLight position={[3, 2, screenZ + 3]} intensity={0.25} color="#6b21a8" distance={10} decay={2} />
+      {byTier.map(({ tier, tierSeats }) =>
+        tierSeats.length > 0 ? (
+          <TierInstancedMesh
+            key={tier}
+            tier={tier}
+            tierSeats={tierSeats}
+            selectedIds={selectedIds}
+            liveStates={liveStates}
+            hoveredId={hoveredId}
+            highlightRow={highlightRow}
+            reducedMotion={reducedMotion}
+            smartPickAnimating={smartPickAnimating}
+            onSeatClick={onSeatClick}
+            onSeatHover={onSeatHover}
+          />
+        ) : null,
+      )}
     </group>
   );
 }

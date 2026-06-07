@@ -23,5 +23,10 @@ export function useWebGLSupport() {
     return () => mq.removeEventListener("change", onMq);
   }, []);
 
-  return { supported, reducedMotion, prefer2D: !supported || reducedMotion };
+  return {
+    supported,
+    reducedMotion,
+    reducedMotion3D: reducedMotion && supported,
+    prefer2D: !supported,
+  };
 }

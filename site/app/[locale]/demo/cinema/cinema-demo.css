@@ -987,10 +987,14 @@ html.cinema-demo-active main {
   .cinema-screen--pulse,
   .cinema-confetti-piece,
   .cinema-ambient-particle,
-  .cinema-film-grain {
+  .cinema-film-grain,
+  .cinema-hall-3d--loading,
+  .cinema-seats-live svg,
+  .cinema-minimap-dot.is-pending {
     animation: none !important;
-    display: none;
   }
+
+  .cinema-film-grain { display: none; }
 
   .cinema-movie-card:hover,
   .cinema-showtime-btn:hover,
@@ -1895,6 +1899,44 @@ html.cinema-demo-active main {
   justify-content: space-between;
   gap: 0.65rem;
   pointer-events: none;
+  max-height: 72px;
+}
+
+.cinema-seat-hud-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  font-size: 0.62rem;
+  color: var(--cinema-muted);
+  margin-bottom: 0.15rem;
+}
+
+.cinema-seat-hud-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cinema-legend-dot--available { background: rgba(90, 32, 64, 0.85); }
+.cinema-legend-dot--vip { background: rgba(245, 197, 24, 0.55); }
+.cinema-legend-dot--occupied { background: rgba(42, 21, 32, 0.95); }
+.cinema-legend-dot--selected { background: var(--cinema-yellow); }
+.cinema-legend-dot--pending { background: #e8a830; }
+
+.cinema-seat-hud-state--occupied { color: #f87171; }
+.cinema-seat-hud-state--pending { color: #e8a830; }
+.cinema-seat-hud-state--selected { color: var(--cinema-yellow); }
+
+.cinema-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .cinema-seat-hud-overlay > * {
@@ -1969,6 +2011,18 @@ html.cinema-demo-active main {
   transition: border-color 0.2s, background 0.2s;
 }
 
+.cinema-hud-btn:focus-visible,
+.cinema-minimap-dot:focus-visible,
+.cinema-seat-keyboard-btn:focus-visible {
+  outline: 2px solid rgba(245, 197, 24, 0.85);
+  outline-offset: 2px;
+}
+
+.cinema-hud-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .cinema-hud-btn.is-active,
 .cinema-hud-btn:hover {
   border-color: rgba(245, 197, 24, 0.55);
@@ -2022,6 +2076,13 @@ html.cinema-demo-active main {
   gap: 3px;
 }
 
+.cinema-minimap-grid--dots {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2px;
+  max-width: 120px;
+}
+
 .cinema-minimap-row {
   height: 6px;
   width: 100%;
@@ -2045,6 +2106,66 @@ html.cinema-demo-active main {
   padding: 0;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.12);
+}
+
+.cinema-minimap-dot--empty {
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
+.cinema-minimap-dot.is-available { background: rgba(90, 32, 64, 0.75); }
+.cinema-minimap-dot.is-vip { background: rgba(245, 197, 24, 0.45); }
+.cinema-minimap-dot.is-occupied { background: rgba(42, 21, 32, 0.9); }
+.cinema-minimap-dot.is-pending { background: #e8a830; animation: cinema-pending-bounce 1.2s ease infinite; }
+.cinema-minimap-dot.is-selected { background: var(--cinema-yellow); }
+.cinema-minimap-dot.is-row-focus { outline: 1px solid rgba(245, 197, 24, 0.6); }
+.cinema-minimap-dot.is-focused { box-shadow: 0 0 0 1px #fff; }
+
+@keyframes cinema-pending-bounce {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+.cinema-seat-keyboard-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cinema-seat-keyboard-toggle { align-self: flex-start; }
+
+.cinema-seat-keyboard-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.cinema-seat-keyboard-btn {
+  font-size: 0.62rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(90, 32, 64, 0.5);
+  color: inherit;
+  cursor: pointer;
+}
+
+.cinema-seat-keyboard-btn--selected {
+  background: rgba(245, 197, 24, 0.35);
+  border-color: rgba(245, 197, 24, 0.55);
+}
+
+.cinema-seat-keyboard-btn--occupied,
+.cinema-seat-keyboard-btn--pending {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .cinema-minimap-dot.is-selected { background: var(--cinema-yellow); }

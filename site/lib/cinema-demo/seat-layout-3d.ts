@@ -38,7 +38,12 @@ function colToX(colIndex: number, tier: SeatTier): number {
   return x * vipScale;
 }
 
+const layoutCache = new Map<string, { seats: Seat3D[]; bounds: AuditoriumBounds }>();
+
 export function buildSeatLayout3D(showtimeId: string): { seats: Seat3D[]; bounds: AuditoriumBounds } {
+  const cached = layoutCache.get(showtimeId);
+  if (cached) return cached;
+
   const rows = buildSeatMap(showtimeId);
   const seats: Seat3D[] = [];
 
@@ -81,7 +86,9 @@ export function buildSeatLayout3D(showtimeId: string): { seats: Seat3D[]; bounds
     centerZ: Math.max(...zs) / 2,
   };
 
-  return { seats, bounds };
+  const result = { seats, bounds };
+  layoutCache.set(showtimeId, result);
+  return result;
 }
 
 export function getScreenZ() {
