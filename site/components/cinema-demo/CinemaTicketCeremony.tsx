@@ -102,31 +102,36 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
     <div className={`cinema-ceremony-v3 cinema-ceremony-v3--stage-${stage}`}>
       {stage >= 10 ? <CinemaConfetti /> : null}
       {stage >= 1 ? <div className="cinema-ticket-v3-line" aria-hidden /> : null}
-      <div className="cinema-ticket-v3">
+      <div className="cinema-ticket-v3 cinema-ticket-classic">
         {stage >= 3 ? (
-          <header className="cinema-ticket-v3-head">
-            <span>{t("ticket.brandLeft")}</span>
-            <span>{t("ticket.brandRight")}</span>
+          <header className="cinema-ticket-classic-brand">
+            <p className="cinema-ticket-classic-name">{t("ticket.brandName")}</p>
+            <p className="cinema-ticket-classic-sub">{t("ticket.brandSub")}</p>
+            <div className="cinema-ticket-classic-meta">
+              <span>{t("ticket.admit")}</span>
+              <span>{bookingRef}</span>
+            </div>
           </header>
         ) : null}
         {stage >= 4 ? (
-          <div className="cinema-ticket-v3-body">
+          <div className="cinema-ticket-v3-body cinema-ticket-classic-body">
+            <p className="cinema-ticket-classic-label">{t("ticket.movieLabel")}</p>
             <h3>{isAr ? movie.titleAr : movie.titleEn}</h3>
-            {!isAr ? <p>{movie.titleEn}</p> : null}
+            <p className="cinema-ticket-classic-label">{t("ticket.showLabel")}</p>
             <p>
               {showtime.time} · {isAr ? showtime.hallLabelAr : showtime.hallLabelEn}
             </p>
-            <p>{seats.join(" · ")}</p>
-            <p>
+            <p className="cinema-ticket-classic-label">{t("ticket.seatsLabel")}</p>
+            <p className="cinema-ticket-classic-seats">{seats.join(" · ")}</p>
+            <p className="cinema-ticket-classic-total">
               {total.toLocaleString("ar-SY")} {t("currency")}
             </p>
-            <p>{bookingRef}</p>
           </div>
         ) : null}
-        {stage >= 6 ? <div className="cinema-ticket-v3-perforation" /> : null}
-        {stage >= 7 ? <div className="cinema-ticket-v3-stub" /> : null}
+        {stage >= 6 ? <div className="cinema-ticket-v3-perforation cinema-ticket-classic-perforation" aria-hidden /> : null}
         {stage >= 8 ? (
-          <div className="cinema-ticket-v3-qr-wrap">
+          <div className="cinema-ticket-v3-qr-wrap cinema-ticket-classic-stub">
+            <p className="cinema-ticket-classic-stub-label">{t("ticket.entryLabel")}</p>
             <div className="cinema-ticket-v3-qr" style={{ opacity: qrProgress / 150 }}>
               <canvas ref={canvasRef} aria-label={t("ticket.qrLabel")} />
             </div>

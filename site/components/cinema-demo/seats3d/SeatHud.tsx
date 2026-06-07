@@ -6,12 +6,12 @@ import type { Seat3D } from "@/lib/cinema-demo/seat-layout-3d";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 type Props = {
-  showtimeId: string;
   seats: Seat3D[];
   tooltipSeatId: string | null;
+  variant: "controls" | "overlay";
 };
 
-export function SeatHud({ seats, tooltipSeatId }: Props) {
+export function SeatHud({ seats, tooltipSeatId, variant }: Props) {
   const t = useTranslations("CinemaDemo");
   const cameraPreset = useCinemaDemoStore((s) => s.cameraPreset);
   const setCameraPreset = useCinemaDemoStore((s) => s.setCameraPreset);
@@ -23,60 +23,64 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
   const tooltipSeat = tooltipSeatId ? seats.find((s) => s.id === tooltipSeatId) : null;
   const rowCount = new Set(seats.map((s) => s.rowIndex)).size;
 
-  return (
-    <div className="cinema-seat-hud">
-      <div className="cinema-seat-hud-toolbar cinema-seat-hud-toolbar--primary">
-        <button
-          type="button"
-          className={`cinema-hud-btn ${seatView === "3d" ? "is-active" : ""}`}
-          onClick={() => setSeatView("3d")}
-        >
-          {t("seats.view3d")}
-        </button>
-        <button
-          type="button"
-          className={`cinema-hud-btn ${seatView === "2d" ? "is-active" : ""}`}
-          onClick={() => setSeatView("2d")}
-        >
-          {t("seats.view2d")}
-        </button>
-        <span className="cinema-seat-hud-divider" />
-        <button
-          type="button"
-          className={`cinema-hud-btn ${cameraPreset === "overview" ? "is-active" : ""}`}
-          onClick={() => setCameraPreset("overview")}
-        >
-          {t("seats.cameraOverview")}
-        </button>
-        <button
-          type="button"
-          className={`cinema-hud-btn ${cameraPreset === "immersive" ? "is-active" : ""}`}
-          onClick={() => setCameraPreset("immersive")}
-        >
-          {t("seats.cameraImmersive")}
-        </button>
-        <button
-          type="button"
-          className={`cinema-hud-btn ${cameraPreset === "vip" ? "is-active" : ""}`}
-          onClick={() => setCameraPreset("vip")}
-        >
-          {t("seats.vipCamera")}
-        </button>
-        <button
-          type="button"
-          className={`cinema-hud-btn ${cameraPreset === "birdsEye" ? "is-active" : ""}`}
-          onClick={() => setCameraPreset("birdsEye")}
-        >
-          {t("seats.cameraMap")}
-        </button>
+  if (variant === "controls") {
+    return (
+      <div className="cinema-seat-hud-controls" aria-label={t("seats.mapLabel")}>
+        <div className="cinema-seat-hud-toolbar cinema-seat-hud-toolbar--primary">
+          <button
+            type="button"
+            className={`cinema-hud-btn ${seatView === "3d" ? "is-active" : ""}`}
+            onClick={() => setSeatView("3d")}
+          >
+            {t("seats.view3d")}
+          </button>
+          <button
+            type="button"
+            className={`cinema-hud-btn ${seatView === "2d" ? "is-active" : ""}`}
+            onClick={() => setSeatView("2d")}
+          >
+            {t("seats.view2d")}
+          </button>
+          <span className="cinema-seat-hud-divider" />
+          <button
+            type="button"
+            className={`cinema-hud-btn ${cameraPreset === "overview" ? "is-active" : ""}`}
+            onClick={() => setCameraPreset("overview")}
+          >
+            {t("seats.cameraOverview")}
+          </button>
+          <button
+            type="button"
+            className={`cinema-hud-btn ${cameraPreset === "immersive" ? "is-active" : ""}`}
+            onClick={() => setCameraPreset("immersive")}
+          >
+            {t("seats.cameraImmersive")}
+          </button>
+          <button
+            type="button"
+            className={`cinema-hud-btn ${cameraPreset === "vip" ? "is-active" : ""}`}
+            onClick={() => setCameraPreset("vip")}
+          >
+            {t("seats.vipCamera")}
+          </button>
+          <button
+            type="button"
+            className={`cinema-hud-btn ${cameraPreset === "birdsEye" ? "is-active" : ""}`}
+            onClick={() => setCameraPreset("birdsEye")}
+          >
+            {t("seats.cameraMap")}
+          </button>
+          <button type="button" className="cinema-hud-btn cinema-hud-btn--accent" onClick={() => smartPickSeats(2)}>
+            <CinemaIcon name="seat" size={14} />
+            {t("seats.smartPick")}
+          </button>
+        </div>
       </div>
-      <div className="cinema-seat-hud-toolbar cinema-seat-hud-toolbar--actions">
-        <button type="button" className="cinema-hud-btn cinema-hud-btn--accent" onClick={() => smartPickSeats(2)}>
-          <CinemaIcon name="seat" size={14} />
-          {t("seats.smartPick")}
-        </button>
-      </div>
+    );
+  }
 
+  return (
+    <div className="cinema-seat-hud-overlay">
       {tooltipSeat ? (
         <div className="cinema-seat-hud-tooltip cinema-seat-hologram">
           <strong>
@@ -91,7 +95,9 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
           </span>
           <span>✓ {t("seats.available")}</span>
         </div>
-      ) : null}
+      ) : (
+        <span className="cinema-seat-hud-hint">{t("seats.dragHint")}</span>
+      )}
 
       <div className="cinema-minimap" aria-hidden>
         <p className="cinema-minimap-label">{t("seats.screen")}</p>

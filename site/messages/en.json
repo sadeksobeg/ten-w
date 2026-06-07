@@ -660,6 +660,13 @@
       "continue": "Continue →",
       "brandLeft": "SALAMIYA CINEMA",
       "brandRight": "TENEGTA SYSTEMS",
+      "brandName": "Salamiya Cinema",
+      "brandSub": "سينما سلمية",
+      "admit": "Admit One",
+      "movieLabel": "Movie",
+      "showLabel": "Showtime",
+      "seatsLabel": "Seats",
+      "entryLabel": "Scan at entry",
       "validSeal": "VALID",
       "newBookingName": "New booking"
     },

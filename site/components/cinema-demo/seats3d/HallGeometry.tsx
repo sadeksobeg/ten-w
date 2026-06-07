@@ -12,7 +12,7 @@ export function HallGeometry({ width, depth }: Props) {
     <group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, depth / 2]} receiveShadow>
         <planeGeometry args={[width, depth + 6]} />
-        <meshStandardMaterial color="#16141f" roughness={0.75} metalness={0.12} />
+        <meshStandardMaterial color="#221e2e" roughness={0.65} metalness={0.15} />
       </mesh>
 
       {[-1, 1].map((side) => (

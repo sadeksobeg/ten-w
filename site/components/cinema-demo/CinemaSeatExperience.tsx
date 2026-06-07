@@ -1,10 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { CinemaSeatMap } from "@/components/cinema-demo/CinemaSeatMap";
 import { useWebGLSupport } from "@/components/cinema-demo/hooks/useWebGLSupport";
+import { SeatHud } from "@/components/cinema-demo/seats3d/SeatHud";
+import { buildSeatLayout3D } from "@/lib/cinema-demo/seat-layout-3d";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 const CinemaSeatHall3D = dynamic(
@@ -24,7 +26,9 @@ export function CinemaSeatExperience({ showtimeId, selectedIds, onToggle, live =
   const t = useTranslations("CinemaDemo");
   const seatView = useCinemaDemoStore((s) => s.seatView);
   const setSeatView = useCinemaDemoStore((s) => s.setSeatView);
+  const hudHoverSeatId = useCinemaDemoStore((s) => s.hudHoverSeatId);
   const { prefer2D } = useWebGLSupport();
+  const seats = useMemo(() => buildSeatLayout3D(showtimeId).seats, [showtimeId]);
 
   useEffect(() => {
     if (prefer2D && seatView === "3d") setSeatView("2d");
@@ -36,9 +40,11 @@ export function CinemaSeatExperience({ showtimeId, selectedIds, onToggle, live =
     <div className="cinema-seat-experience">
       {prefer2D ? (
         <p className="cinema-webgl-fallback">{t("seats.webglFallback")}</p>
-      ) : null}
+      ) : (
+        <SeatHud seats={seats} tooltipSeatId={hudHoverSeatId} variant="controls" />
+      )}
       {use3D ? (
-        <CinemaSeatHall3D showtimeId={showtimeId} />
+        <CinemaSeatHall3D showtimeId={showtimeId} seats={seats} tooltipSeatId={hudHoverSeatId} />
       ) : (
         <CinemaSeatMap showtimeId={showtimeId} selectedIds={selectedIds} onToggle={onToggle} live={live} />
       )}

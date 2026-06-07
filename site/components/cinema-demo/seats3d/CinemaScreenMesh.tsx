@@ -36,19 +36,19 @@ export function CinemaScreenMesh() {
     if (!ctx || !canvas) return;
 
     if (screenMode === "preMovie") {
-      const img = ctx.createImageData(canvas.width, canvas.height);
-      for (let i = 0; i < img.data.length; i += 4) {
-        const n = Math.random() * 40 + 20;
-        img.data[i] = 20;
-        img.data[i + 1] = 40 + n;
-        img.data[i + 2] = 80 + n;
-        img.data[i + 3] = 255;
-      }
-      ctx.putImageData(img, 0, 0);
-      ctx.fillStyle = "rgba(255,255,255,0.85)";
-      ctx.font = "bold 28px sans-serif";
+      const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      g.addColorStop(0, "#1a2848");
+      g.addColorStop(0.45, "#3d5a8a");
+      g.addColorStop(1, "#c9922a");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      ctx.font = "bold 32px sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText("قريباً", canvas.width / 2, canvas.height / 2);
+      ctx.fillText("سينما سلمية", canvas.width / 2, canvas.height / 2 - 8);
+      ctx.font = "600 16px sans-serif";
+      ctx.fillStyle = "rgba(255,248,220,0.85)";
+      ctx.fillText("Salamiya Cinema", canvas.width / 2, canvas.height / 2 + 22);
     } else if (screenMode === "playing") {
       const hue = (clock.elapsedTime * 8) % 360;
       ctx.fillStyle = `hsl(${hue}, 70%, 45%)`;
@@ -63,7 +63,7 @@ export function CinemaScreenMesh() {
     }
     if (textureRef.current) textureRef.current.needsUpdate = true;
     if (matRef.current) {
-      matRef.current.emissiveIntensity = 0.2 + boot.current * 0.6;
+      matRef.current.emissiveIntensity = 0.45 + boot.current * 1.1;
     }
   });
 
@@ -85,7 +85,7 @@ export function CinemaScreenMesh() {
           ref={matRef}
           color="#fff9ef"
           emissive="#d4e8ff"
-          emissiveIntensity={0.12}
+          emissiveIntensity={0.35}
           toneMapped={false}
         />
       </mesh>

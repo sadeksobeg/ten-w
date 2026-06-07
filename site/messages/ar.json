@@ -683,6 +683,13 @@
       "continue": "متابعة ←",
       "brandLeft": "SALAMIYA CINEMA",
       "brandRight": "TENEGTA SYSTEMS",
+      "brandName": "سينما سلمية",
+      "brandSub": "Salamiya Cinema",
+      "admit": "تذكرة دخول",
+      "movieLabel": "الفيلم",
+      "showLabel": "الموعد",
+      "seatsLabel": "المقاعد",
+      "entryLabel": "امسح للدخول",
       "validSeal": "VALID",
       "newBookingName": "حجز جديد"
     },

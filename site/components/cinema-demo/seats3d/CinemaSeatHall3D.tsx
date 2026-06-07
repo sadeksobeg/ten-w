@@ -13,7 +13,7 @@ import { InstancedSeats } from "@/components/cinema-demo/seats3d/InstancedSeats"
 import { ProjectorBeam } from "@/components/cinema-demo/seats3d/ProjectorBeam";
 import { CameraRig } from "@/components/cinema-demo/seats3d/CameraRig";
 import { SeatHud } from "@/components/cinema-demo/seats3d/SeatHud";
-import { buildSeatLayout3D, seatById } from "@/lib/cinema-demo/seat-layout-3d";
+import { buildSeatLayout3D, seatById, type Seat3D } from "@/lib/cinema-demo/seat-layout-3d";
 import { playSeatDeselectSound, playSeatSelectChime, playSeatSelectSound } from "@/lib/cinema-demo/sounds";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
@@ -60,9 +60,10 @@ function HallScene({ showtimeId }: Props) {
 
   return (
     <>
-      <color attach="background" args={["#050508"]} />
-      <fog attach="fog" args={["#050508", 20, 60]} />
-      <hemisphereLight args={["#2a2540", "#0a0812", 0.4]} />
+      <color attach="background" args={["#0c0a14"]} />
+      <fog attach="fog" args={["#14101f", 28, 75]} />
+      <hemisphereLight args={["#4a4568", "#120f1a", 0.72]} />
+      <ambientLight intensity={0.22} color="#ffe8c8" />
       <HallGeometry width={floorW} depth={floorD} />
       <HallLighting width={floorW} depth={floorD} seats={seats} />
       <CinemaScreenMesh />
@@ -82,23 +83,32 @@ function HallScene({ showtimeId }: Props) {
   );
 }
 
-export function CinemaSeatHall3D({ showtimeId }: Props) {
-  const seats = useMemo(() => buildSeatLayout3D(showtimeId).seats, [showtimeId]);
-  const hudHoverSeatId = useCinemaDemoStore((s) => s.hudHoverSeatId);
+type HallProps = {
+  showtimeId: string;
+  seats: Seat3D[];
+  tooltipSeatId: string | null;
+};
 
+export function CinemaSeatHall3D({ showtimeId, seats, tooltipSeatId }: HallProps) {
   return (
     <div className="cinema-hall-3d">
+      <div className="cinema-hall-3d-glow" aria-hidden />
       <Canvas
-        dpr={[1, 1.5]}
-        camera={{ fov: 58, near: 0.1, far: 80, position: [0, 5, 8] }}
-        gl={{ antialias: true, alpha: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.15 }}
+        dpr={[1, 1.75]}
+        camera={{ fov: 54, near: 0.1, far: 80, position: [0, 5, 8] }}
+        gl={{
+          antialias: true,
+          alpha: false,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.55,
+        }}
         shadows
       >
         <Suspense fallback={null}>
           <HallScene showtimeId={showtimeId} />
         </Suspense>
       </Canvas>
-      <SeatHud showtimeId={showtimeId} seats={seats} tooltipSeatId={hudHoverSeatId} />
+      <SeatHud seats={seats} tooltipSeatId={tooltipSeatId} variant="overlay" />
     </div>
   );
 }

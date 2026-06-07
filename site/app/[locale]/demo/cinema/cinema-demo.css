@@ -1802,18 +1802,35 @@ html.cinema-demo-active main {
 .cinema-hall-3d {
   position: relative;
   width: 100%;
-  height: min(68vh, 520px);
+  height: min(64vh, 580px);
   border-radius: 18px;
   overflow: hidden;
-  background: #050508;
-  border: 1px solid var(--cinema-glass-border);
+  background: radial-gradient(ellipse 90% 70% at 50% 20%, #1a1428 0%, #0a0812 55%, #050508 100%);
+  border: 1px solid rgba(245, 197, 24, 0.22);
   box-shadow:
-    0 16px 48px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    inset 0 -1px 0 rgba(245, 197, 24, 0.06);
+    0 20px 60px rgba(0, 0, 0, 0.55),
+    0 0 48px rgba(201, 146, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 100px rgba(245, 197, 24, 0.05);
 }
 
-.cinema-hall-3d canvas { display: block; width: 100% !important; height: 100% !important; }
+.cinema-hall-3d-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 35% at 50% 8%, rgba(255, 232, 180, 0.18), transparent 70%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(107, 33, 168, 0.12), transparent 60%);
+  z-index: 1;
+}
+
+.cinema-hall-3d canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  position: relative;
+  z-index: 0;
+}
 .cinema-hall-3d--loading {
   min-height: 320px;
   background: #050508;
@@ -1851,8 +1868,48 @@ html.cinema-demo-active main {
   background: rgba(245, 197, 24, 0.08);
 }
 
-.cinema-os--action-bar .cinema-seat-hud {
-  bottom: 5.75rem;
+.cinema-os--action-bar .cinema-seat-hud-overlay {
+  bottom: 0.5rem;
+}
+
+.cinema-seat-hud-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 14px;
+  background: var(--cinema-glass);
+  border: 1px solid rgba(245, 197, 24, 0.2);
+  backdrop-filter: blur(16px) saturate(1.15);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.cinema-seat-hud-overlay {
+  position: absolute;
+  left: 0.65rem;
+  right: 0.65rem;
+  bottom: 0.65rem;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.65rem;
+  pointer-events: none;
+}
+
+.cinema-seat-hud-overlay > * {
+  pointer-events: auto;
+}
+
+.cinema-seat-hud-hint {
+  flex: 1;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 0.45rem 0.65rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
 }
 
 .cinema-seat-hud {
@@ -1872,8 +1929,10 @@ html.cinema-demo-active main {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.cinema-seat-hud .cinema-minimap {
-  align-self: flex-end;
+.cinema-seat-hud .cinema-minimap,
+.cinema-seat-hud-overlay .cinema-minimap {
+  flex-shrink: 0;
+  max-width: 120px;
 }
 
 .cinema-seat-hud-toolbar {
@@ -1888,9 +1947,8 @@ html.cinema-demo-active main {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.cinema-seat-hud-toolbar--actions .cinema-hud-btn--accent {
-  width: 100%;
-  justify-content: center;
+.cinema-seat-hud-controls .cinema-hud-btn--accent {
+  margin-inline-start: auto;
 }
 
 .cinema-seat-hud-divider {
@@ -1926,13 +1984,16 @@ html.cinema-demo-active main {
 .cinema-seat-hud-tooltip {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.65rem;
   font-size: 0.75rem;
   color: var(--cinema-muted);
-  padding: 0.35rem 0.5rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
+  padding: 0.45rem 0.65rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(245, 197, 24, 0.25);
+  backdrop-filter: blur(10px);
+  max-width: min(100%, 320px);
 }
 
 .cinema-seat-hud-tooltip strong { color: var(--cinema-yellow); font-size: 0.85rem; }
@@ -1991,7 +2052,9 @@ html.cinema-demo-active main {
 
 @media (max-width: 640px) {
   .cinema-hall-3d { height: 55vh; border-radius: 0; margin-inline: -1rem; width: calc(100% + 2rem); }
-  .cinema-seat-hud { left: 0.5rem; right: 0.5rem; bottom: 0.5rem; border-radius: 12px 12px 0 0; }
+  .cinema-seat-hud-controls { border-radius: 12px; padding: 0.55rem; }
+  .cinema-seat-hud-overlay { left: 0.5rem; right: 0.5rem; bottom: 0.5rem; flex-direction: column; align-items: stretch; }
+  .cinema-seat-hud-overlay .cinema-minimap { align-self: flex-end; max-width: 100px; }
 }
 
 [dir="rtl"] .cinema-minimap { margin-inline-start: 0; margin-inline-end: auto; }
