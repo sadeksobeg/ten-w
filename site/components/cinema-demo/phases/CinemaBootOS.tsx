@@ -146,8 +146,8 @@ export function CinemaBootOS() {
             <dl className="cinema-boot-login-rows">
               <div className="cinema-boot-login-row">
                 <dt>{t("boot.loginUserLabel")}</dt>
-                <dd>
-                  <bdi dir="rtl">{t("boot.loginUserEmail")}</bdi>
+                <dd dir="ltr" className="cinema-boot-login-email">
+                  manager@tenegta.com
                 </dd>
               </div>
               <div className="cinema-boot-login-row">

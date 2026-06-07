@@ -147,6 +147,16 @@
   font-family: "JetBrains Mono", ui-monospace, monospace;
   word-break: break-word;
 }
+.cinema-boot-login-email {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: embed;
+  color: #f5c518;
+  letter-spacing: 0.02em;
+}
+[dir="rtl"] .cinema-boot-login-email {
+  text-align: left;
+}
 .cinema-boot-verified {
   display: flex;
   align-items: center;

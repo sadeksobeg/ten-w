@@ -50,15 +50,17 @@ function HallScene({ showtimeId, seats, bounds, reducedMotion3D, highlightRow }:
   }, [liveStates, setLiveSeatStates]);
 
   useEffect(() => {
+    setScreenMode("preMovie");
     startHallAmbience(soundEnabled);
-    const preTimer = window.setTimeout(() => setScreenMode("playing"), 1800);
-    const rollTimer = window.setTimeout(() => playProjectorRoll(soundEnabled), 1900);
+    const playTimer = window.setTimeout(() => {
+      setScreenMode("playing");
+      playProjectorRoll(soundEnabled);
+    }, 700);
     return () => {
-      clearTimeout(preTimer);
-      clearTimeout(rollTimer);
+      clearTimeout(playTimer);
       stopHallAmbience();
     };
-  }, [soundEnabled, setScreenMode]);
+  }, [soundEnabled, setScreenMode, showtimeId]);
 
   const focusSeat = focusedSeatId ? (seatById(showtimeId, focusedSeatId) ?? null) : null;
   const floorW = bounds.maxX - bounds.minX + 2;

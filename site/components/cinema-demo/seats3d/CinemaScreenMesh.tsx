@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useLocale } from "next-intl";
 import * as THREE from "three";
@@ -16,17 +16,17 @@ export function CinemaScreenMesh({ reducedMotion = false }: Props) {
   const locale = useLocale();
   const screenMode = useCinemaDemoStore((s) => s.screenMode);
   const movieId = useCinemaDemoStore((s) => s.movieId);
-  const matRef = useRef<THREE.MeshStandardMaterial>(null);
-  const textureRef = useRef<THREE.CanvasTexture | null>(null);
   const boot = useRef(0);
   const frameRef = useRef(0);
+  const posterRef = useRef<HTMLImageElement | null>(null);
+  const [screenTexture, setScreenTexture] = useState<THREE.CanvasTexture | null>(null);
   const movie = useMemo(() => (movieId ? getMovie(movieId) ?? null : null), [movieId]);
 
   const canvas = useMemo(() => {
     if (typeof document === "undefined") return null;
     const c = document.createElement("canvas");
-    c.width = 768;
-    c.height = 384;
+    c.width = 1024;
+    c.height = 512;
     return c;
   }, []);
 
@@ -35,24 +35,37 @@ export function CinemaScreenMesh({ reducedMotion = false }: Props) {
     const tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
     tex.magFilter = THREE.LinearFilter;
+    tex.colorSpace = THREE.SRGBColorSpace;
     tex.needsUpdate = true;
-    textureRef.current = tex;
-    if (matRef.current) {
-      matRef.current.map = tex;
-      matRef.current.emissiveMap = tex;
-    }
-    return () => tex.dispose();
+    setScreenTexture(tex);
+    return () => {
+      tex.dispose();
+      setScreenTexture(null);
+    };
   }, [canvas]);
 
+  useEffect(() => {
+    posterRef.current = null;
+    if (!movie?.posterSrc) return;
+    const img = new Image();
+    img.onload = () => {
+      posterRef.current = img;
+    };
+    img.onerror = () => {
+      posterRef.current = null;
+    };
+    img.src = movie.posterSrc;
+  }, [movie?.posterSrc]);
+
   useFrame(({ clock }) => {
-    boot.current = Math.min(1, boot.current + clock.getDelta() / 3);
+    boot.current = Math.min(1, boot.current + clock.getDelta() / 2.5);
     const ctx = canvas?.getContext("2d");
     if (!ctx || !canvas) return;
 
     const throttlePlaying = screenMode === "playing" && !reducedMotion;
     if (throttlePlaying) {
       frameRef.current += 1;
-      if (frameRef.current % 3 !== 0) return;
+      if (frameRef.current % 2 !== 0) return;
     }
 
     drawCinemaScreenCanvas(ctx, canvas, {
@@ -61,12 +74,10 @@ export function CinemaScreenMesh({ reducedMotion = false }: Props) {
       locale,
       time: clock.elapsedTime,
       reducedMotion,
+      poster: posterRef.current,
     });
 
-    if (textureRef.current) textureRef.current.needsUpdate = true;
-    if (matRef.current) {
-      matRef.current.emissiveIntensity = 0.55 + boot.current * 0.95;
-    }
+    if (screenTexture) screenTexture.needsUpdate = true;
   });
 
   const curve = useMemo(() => {
@@ -81,16 +92,19 @@ export function CinemaScreenMesh({ reducedMotion = false }: Props) {
   }, []);
 
   return (
-    <group position={[0, 1.85, screenZ]}>
-      <mesh rotation={[-0.08, 0, 0]} geometry={curve}>
+    <group position={[0, 1.85, screenZ + 0.08]}>
+      <mesh rotation={[-0.08, 0, 0]} geometry={curve} renderOrder={3}>
         <meshStandardMaterial
-          ref={matRef}
-          color="#fff9ef"
+          map={screenTexture ?? undefined}
+          emissiveMap={screenTexture ?? undefined}
+          color="#ffffff"
           emissive="#ffffff"
-          emissiveIntensity={0.55}
+          emissiveIntensity={0.85 + boot.current * 0.65}
           toneMapped={false}
         />
       </mesh>
+      <pointLight position={[0, 0, 1.8]} intensity={2.2} color="#eef6ff" distance={14} decay={1.4} />
+      <pointLight position={[0, -0.8, 2.5]} intensity={0.45} color="#fff4dc" distance={10} decay={2} />
     </group>
   );
 }

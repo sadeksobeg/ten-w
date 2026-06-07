@@ -9,24 +9,24 @@ export function useHallEvents(active: boolean) {
 
   useEffect(() => {
     if (!active) return;
-    const events = [
-      () => pushBookingFeed({
-        id: `evt-${Date.now()}`,
-        name: "مشتري",
-        tickets: 1,
-        movieAr: "كثيب",
-        movieEn: "Dune",
-        hallAr: "قاعة 1",
-        hallEn: "Hall 1",
-        time: "19:30",
-        amount: 15000,
-      }),
-      () => setScreenMode("playing"),
-      () => setScreenMode("preMovie"),
-    ];
     const id = window.setInterval(() => {
-      events[Math.floor(Math.random() * events.length)]();
-    }, 30000);
+      if (Math.random() > 0.35) {
+        pushBookingFeed({
+          id: `evt-${Date.now()}`,
+          name: "مشتري",
+          tickets: 1,
+          movieAr: "كثيب",
+          movieEn: "Dune",
+          hallAr: "قاعة 1",
+          hallEn: "Hall 1",
+          time: "19:30",
+          amount: 15000,
+        });
+      } else {
+        setScreenMode(Math.random() > 0.5 ? "playing" : "intermission");
+        window.setTimeout(() => setScreenMode("playing"), 4000);
+      }
+    }, 45000);
     return () => clearInterval(id);
   }, [active, pushBookingFeed, setScreenMode]);
 }

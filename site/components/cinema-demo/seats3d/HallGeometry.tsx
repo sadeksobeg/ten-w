@@ -36,10 +36,14 @@ export function HallGeometry({ width, depth }: Props) {
         <meshStandardMaterial color="#f5c518" emissive="#f5c518" emissiveIntensity={0.12} toneMapped={false} />
       </mesh>
 
-      <group position={[0, 1.85, screenZ - 0.15]}>
+      <group position={[0, 1.85, screenZ - 0.18]}>
         <mesh rotation={[-0.08, 0, 0]}>
-          <boxGeometry args={[8.2, 2.6, 0.12]} />
-          <meshStandardMaterial color="#0a0a0a" roughness={1} />
+          <boxGeometry args={[8.2, 2.6, 0.1]} />
+          <meshStandardMaterial color="#050508" roughness={1} />
+        </mesh>
+        <mesh rotation={[-0.08, 0, 0]} position={[0, 0, 0.02]}>
+          <boxGeometry args={[7.95, 2.42, 0.02]} />
+          <meshStandardMaterial color="#c9922a" roughness={0.35} metalness={0.55} emissive="#c9922a" emissiveIntensity={0.08} />
         </mesh>
       </group>
 
