@@ -18,7 +18,7 @@ export function IncidentPanel() {
   return (
     <div className="cinema-os-panel cinema-os-panel--alert">
       <h4>{t("os.incidentTitle")}</h4>
-      <p>بلاغ: مقعد C7 — مكسور</p>
+      <p>{t("os.incidentDetail")}</p>
       <button type="button" className="cinema-hud-btn" onClick={() => setDismissed(true)}>
         {t("os.incidentAction")}
       </button>

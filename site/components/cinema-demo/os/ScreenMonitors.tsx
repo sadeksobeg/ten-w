@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { SCREEN_STATUSES } from "@/lib/cinema-demo/manager-data";
 
 function MiniSeatGrid({ occupancy, capacity }: { occupancy: number; capacity: number }) {
@@ -15,6 +15,7 @@ function MiniSeatGrid({ occupancy, capacity }: { occupancy: number; capacity: nu
 }
 
 export function ScreenMonitors() {
+  const t = useTranslations("CinemaDemo");
   const locale = useLocale();
   const isAr = locale === "ar";
 
@@ -26,42 +27,39 @@ export function ScreenMonitors() {
 
   return (
     <div className="cinema-os-screens">
-      {SCREEN_STATUSES.map((screen) => (
-        <article
-          key={screen.id}
-          className={`cinema-os-screen-monitor ${borderClass(screen.status, screen.id)}`}
-        >
-          <header>
-            <span className="cinema-os-screen-pulse" aria-hidden />
-            <strong>{isAr ? screen.nameAr : screen.nameEn}</strong>
-          </header>
-          <p className="cinema-os-screen-movie">{isAr ? screen.movieAr : screen.movieEn}</p>
-          <p className="cinema-os-screen-meta">{screen.timeRange}</p>
-          {screen.id === 1 ? (
-            <>
-              <p>
-                {Math.round((screen.occupancy / 100) * screen.capacity)} / {screen.capacity}
-              </p>
-              <MiniSeatGrid occupancy={screen.occupancy} capacity={screen.capacity} />
-              <p className="cinema-os-screen-remaining">يتبقى 26 دقيقة</p>
-            </>
-          ) : screen.id === 2 ? (
-            <>
-              <p>يبدأ في {screen.startsInMin ?? 47} دقيقة</p>
-              <p>
-                {Math.round((screen.occupancy / 100) * screen.capacity)} / {screen.capacity}
-              </p>
-              <div className="cinema-os-progress">
-                <div style={{ width: `${screen.occupancy}%` }} />
-              </div>
-            </>
-          ) : (
-            <p>
-              {Math.round((screen.occupancy / 100) * screen.capacity)} من أصل {screen.capacity} حجزاً
-            </p>
-          )}
-        </article>
-      ))}
+      {SCREEN_STATUSES.map((screen) => {
+        const filled = Math.round((screen.occupancy / 100) * screen.capacity);
+        return (
+          <article
+            key={screen.id}
+            className={`cinema-os-screen-monitor ${borderClass(screen.status, screen.id)}`}
+          >
+            <header>
+              <span className="cinema-os-screen-pulse" aria-hidden />
+              <strong>{isAr ? screen.nameAr : screen.nameEn}</strong>
+            </header>
+            <p className="cinema-os-screen-movie">{isAr ? screen.movieAr : screen.movieEn}</p>
+            <p className="cinema-os-screen-meta">{screen.timeRange}</p>
+            {screen.id === 1 ? (
+              <>
+                <p>{t("os.screenOccupancy", { filled, capacity: screen.capacity })}</p>
+                <MiniSeatGrid occupancy={screen.occupancy} capacity={screen.capacity} />
+                <p className="cinema-os-screen-remaining">{t("os.screenRemaining", { min: 26 })}</p>
+              </>
+            ) : screen.id === 2 ? (
+              <>
+                <p>{t("os.screenStartsIn", { min: screen.startsInMin ?? 47 })}</p>
+                <p>{t("os.screenOccupancy", { filled, capacity: screen.capacity })}</p>
+                <div className="cinema-os-progress">
+                  <div className="cinema-os-progress-fill" style={{ width: `${screen.occupancy}%` }} />
+                </div>
+              </>
+            ) : (
+              <p>{t("os.screenBookedCount", { filled, capacity: screen.capacity })}</p>
+            )}
+          </article>
+        );
+      })}
     </div>
   );
 }

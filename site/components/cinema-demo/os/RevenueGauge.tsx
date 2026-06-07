@@ -49,8 +49,7 @@ export function RevenueGauge() {
     <div className="cinema-os-revenue">
       <h4>{t("os.revenueTitle")}</h4>
       <canvas ref={canvasRef} aria-label={t("os.revenueTitle")} />
-      <p>{liveRevenue.toLocaleString("ar-SY")} / {target.toLocaleString("ar-SY")}</p>
-      <p className="cinema-os-revenue-pct">{t("os.revenuePct", { pct: Math.round((liveRevenue / target) * 100) })}</p>
+      <p>{t("os.revenueOfTarget", { current: liveRevenue.toLocaleString("ar-SY"), target: target.toLocaleString("ar-SY") })}</p>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CinemaProgressBar } from "@/components/cinema-demo/CinemaProgressBar";
 import { CinemaSoundToggle } from "@/components/cinema-demo/CinemaSoundToggle";
@@ -24,13 +24,23 @@ import type { CinemaDemoPhase } from "@/stores/cinema-demo-store";
 
 type Props = { children: ReactNode };
 
-const ACTION_BAR_PHASES: CinemaDemoPhase[] = ["seats", "checkout", "upsell", "ticket"];
+const ACTION_BAR_PHASES: CinemaDemoPhase[] = ["seats"];
+
+type SidebarTab = "live" | "ops" | "commercial";
 
 export function CinemaOSDesktop({ children }: Props) {
   const t = useTranslations("CinemaDemo");
   const phase = useCinemaDemoStore((s) => s.phase);
   const showSidePanels = phase !== "sessionReveal" && phase !== "closing";
   const hasActionBar = ACTION_BAR_PHASES.includes(phase);
+  const [sidebarTab, setSidebarTab] = useState<SidebarTab>("live");
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+
+  const tabs: { id: SidebarTab; label: string }[] = [
+    { id: "live", label: t("os.sidebarLive") },
+    { id: "ops", label: t("os.sidebarOps") },
+    { id: "commercial", label: t("os.sidebarCommercial") },
+  ];
 
   return (
     <div className={`cinema-os ${hasActionBar ? "cinema-os--action-bar" : ""}`}>
@@ -57,19 +67,54 @@ export function CinemaOSDesktop({ children }: Props) {
         <main className="cinema-os-col cinema-os-col--center">{children}</main>
 
         {showSidePanels ? (
-          <aside className="cinema-os-col cinema-os-col--right">
+          <aside className={`cinema-os-col cinema-os-col--right ${sidebarExpanded ? "is-expanded" : ""}`}>
+            <button
+              type="button"
+              className="cinema-os-sidebar-mobile-toggle"
+              onClick={() => setSidebarExpanded((open) => !open)}
+              aria-expanded={sidebarExpanded}
+            >
+              <span>{t("os.sidebarToggle")}</span>
+              <span aria-hidden>{sidebarExpanded ? "▾" : "▴"}</span>
+            </button>
+            <h3 className="cinema-os-col-title">{t("os.feedTitle")}</h3>
+            <div className="cinema-os-sidebar-tabs" role="tablist">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={sidebarTab === tab.id}
+                  className={`cinema-os-sidebar-tab ${sidebarTab === tab.id ? "is-active" : ""}`}
+                  onClick={() => setSidebarTab(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
             <div className="cinema-os-sidebar-scroll">
-              <h3 className="cinema-os-col-title">{t("os.feedTitle")}</h3>
-              <BookingFeedLive />
-              <RevenueGauge />
-              <WeatherIntel />
-              {phase === "seats" ? <ProjectorControlPanel /> : null}
-              <StaffPanel />
-              <AnalyticsPanel />
-              <CompetitorPanel />
-              <IncidentPanel />
-              <ReportsPanel />
-              <ApiIntegrationsPanel />
+              {sidebarTab === "live" ? (
+                <div className="cinema-os-sidebar-section">
+                  <BookingFeedLive />
+                  <RevenueGauge />
+                  <WeatherIntel />
+                </div>
+              ) : null}
+              {sidebarTab === "ops" ? (
+                <div className="cinema-os-sidebar-section">
+                  {phase === "seats" ? <ProjectorControlPanel /> : null}
+                  <StaffPanel />
+                  <IncidentPanel />
+                  <ReportsPanel />
+                </div>
+              ) : null}
+              {sidebarTab === "commercial" ? (
+                <div className="cinema-os-sidebar-section">
+                  <AnalyticsPanel />
+                  <CompetitorPanel />
+                  <ApiIntegrationsPanel />
+                </div>
+              ) : null}
             </div>
           </aside>
         ) : null}

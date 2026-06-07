@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 export function LiveTicker() {
+  const t = useTranslations("CinemaDemo");
   const liveRevenue = useCinemaDemoStore((s) => s.liveRevenue);
   const [lastBookingSec, setLastBookingSec] = useState(23);
   const [occ1, setOcc1] = useState(78);
@@ -25,9 +27,16 @@ export function LiveTicker() {
     return () => clearInterval(id);
   }, []);
 
-  const text = mounted
-    ? `قاعة 1 — ${occ1}% ║ قاعة 2 — ${occ2}% ║ قاعة 3 — ${occ3}% ║ إيراد اليوم: ${liveRevenue.toLocaleString("ar-SY")} ل.س ║ آخر حجز: منذ ${lastBookingSec}ث ║ الطقس: 28° — زيادة حضور متوقعة ║`
-    : "قاعة 1 — 78% ║ قاعة 2 — 89% ║ قاعة 3 — 67% ║ إيراد اليوم: 2,847,500 ل.س ║ آخر حجز: منذ 23ث ║ الطقس: 28° — زيادة حضور متوقعة ║";
+  const revenue = mounted ? liveRevenue.toLocaleString("ar-SY") : "2,847,500";
+  const text = t("os.tickerLine", {
+    occ1: mounted ? occ1 : 78,
+    occ2: mounted ? occ2 : 89,
+    occ3: mounted ? occ3 : 67,
+    revenue,
+    currency: t("currency"),
+    sec: mounted ? lastBookingSec : 23,
+    weather: t("os.tickerWeatherDetail"),
+  });
 
   return (
     <div className="cinema-os-ticker" aria-live="polite" suppressHydrationWarning>

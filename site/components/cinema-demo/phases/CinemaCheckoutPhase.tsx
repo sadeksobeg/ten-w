@@ -10,7 +10,7 @@ import { FeatureMoment } from "@/components/cinema-demo/features/FeatureMoment";
 import { getMovie, getShowtime } from "@/lib/cinema-demo/data";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
-const PAYMENTS = ["Syriatel Cash", "MTN Cash", "بطاقة", "كاش"];
+const PAYMENT_KEYS = ["paymentSyriatel", "paymentMtn", "paymentCard", "paymentCash"] as const;
 
 export function CinemaCheckoutPhase() {
   const t = useTranslations("CinemaDemo");
@@ -39,7 +39,7 @@ export function CinemaCheckoutPhase() {
   const seats = seatLabelsForSelection(showtimeId, selectedSeatIds);
 
   return (
-    <section className="cinema-phase">
+    <section className="cinema-phase cinema-phase--checkout">
       <div className="cinema-os-center-panel">
         <FeatureMoment featureId={4} className="cinema-feature--inline">
           <p>{t("features.f4Detail")}</p>
@@ -77,8 +77,8 @@ export function CinemaCheckoutPhase() {
         </div>
 
         <div className="cinema-payment-grid">
-          {PAYMENTS.map((p) => (
-            <span key={p} className="cinema-payment-chip">{p}</span>
+          {PAYMENT_KEYS.map((key) => (
+            <span key={key} className="cinema-payment-chip">{t(`checkout.${key}`)}</span>
           ))}
         </div>
         <FeatureMoment featureId={15} durationMs={4000} className="cinema-feature--inline">

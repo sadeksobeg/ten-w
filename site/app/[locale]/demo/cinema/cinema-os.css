@@ -1,6 +1,12 @@
 /* Cinema OS unified experience styles */
+.cinema-demo-root {
+  --cinema-chrome-height: 7.25rem;
+}
+
 .cinema-boot {
+  height: 100dvh;
   min-height: 100dvh;
+  overflow-x: hidden;
   overflow-y: auto;
   background: #000;
   color: #00ff41;
@@ -65,7 +71,7 @@
   background: #fff;
   animation: cinema-boot-flash 0.4s ease forwards;
   pointer-events: none;
-  z-index: 100;
+  z-index: var(--z-notify, 50);
 }
 @keyframes cinema-boot-flash {
   from { opacity: 1; }
@@ -73,6 +79,8 @@
 }
 
 .cinema-boot-desktop-preview { width: min(640px, 90vw); margin-bottom: 1rem; }
+.cinema-boot-logo { width: min(180px, 60vw); margin: 0 auto 1rem; display: block; }
+.cinema-boot-scan-fill { transition: height 0.08s linear; }
 .cinema-boot-topbar {
   padding: 0.5rem 1rem;
   background: rgba(18,18,18,0.9);
@@ -91,7 +99,29 @@
   border-top: none;
   border-radius: 0 0 8px 8px;
 }
-.cinema-boot-widget { height: 48px; background: rgba(201,146,42,0.08); border-radius: 6px; }
+.cinema-boot-widget {
+  height: 56px;
+  padding: 0.5rem 0.65rem;
+  background: rgba(201,146,42,0.08);
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.15rem;
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.75);
+}
+.cinema-boot-widget strong {
+  color: #c9922a;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.cinema-boot-widget--wide { grid-column: span 1; }
+.cinema-boot--stage-0 { justify-content: center; }
+.cinema-boot--stage-1 { justify-content: center; }
+.cinema-boot--stage-2 { justify-content: center; }
+.cinema-boot--stage-3 { justify-content: flex-start; padding-top: 1rem; }
 .cinema-boot-briefing {
   text-align: center;
   color: #f5f5f5;
@@ -132,12 +162,22 @@
   cursor: pointer;
 }
 
-.cinema-os { min-height: 100dvh; display: flex; flex-direction: column; position: relative; isolation: isolate; }
+.cinema-os {
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
+}
 
 .cinema-os-chrome {
   position: sticky;
   top: 0;
-  z-index: 40;
+  z-index: var(--z-chrome, 40);
+  flex-shrink: 0;
   background: rgba(10, 10, 16, 0.94);
   border-bottom: 1px solid rgba(201, 146, 42, 0.15);
   backdrop-filter: blur(12px);
@@ -186,20 +226,16 @@
 }
 
 .cinema-os-sidebar-scroll {
-  max-height: calc(100dvh - 8.5rem);
-  overflow-y: auto;
-  padding-inline-end: 0.25rem;
-  scrollbar-width: thin;
+  display: contents;
 }
 
 .cinema-os--action-bar .cinema-os-col--center { padding-bottom: 5.75rem; }
-.cinema-os--action-bar .cinema-os-float--status { bottom: 5.25rem; }
 
-.cinema-os:not(.cinema-os--action-bar) .cinema-os-float--status {
-  top: 5.25rem;
+.cinema-os-float--status {
+  top: calc(var(--cinema-chrome-height) + 0.35rem);
   bottom: auto;
-  inset-inline-start: auto;
-  inset-inline-end: 0.75rem;
+  inset-inline-start: 0.75rem;
+  inset-inline-end: auto;
 }
 
 .cinema-sticky-bar--os {
@@ -207,7 +243,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 45;
+  z-index: var(--z-sticky, 45);
   margin: 0;
 }
 .cinema-os-live-dot {
@@ -269,13 +305,28 @@
 
 .cinema-os-grid {
   display: grid;
-  grid-template-columns: 260px 1fr 260px;
+  grid-template-columns: 260px 1fr 280px;
   gap: 0.75rem;
   padding: 0.75rem;
   flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 .cinema-os-grid--full { grid-template-columns: 1fr; }
-.cinema-os-col { overflow-y: auto; }
+.cinema-os-col {
+  min-height: 0;
+  overflow: hidden;
+}
+.cinema-os-col--center,
+.cinema-os-col--right {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-inline-end: 0.15rem;
+}
+.cinema-os-col--left {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
 .cinema-os-col-title { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cinema-muted); margin: 0 0 0.75rem; }
 .cinema-os-center-panel { padding: 1rem 1.25rem 5rem; max-width: 720px; margin: 0 auto; }
 .cinema-os-greeting { color: #c9922a; font-size: 0.85rem; margin-bottom: 0.5rem; }
@@ -291,6 +342,21 @@
 .cinema-os-screen-monitor.is-active { border-color: #4ade80; }
 .cinema-os-screen-monitor.is-upcoming { border-color: #f59e0b; }
 .cinema-os-screen-monitor.is-standby { border-color: #3b82f6; }
+.cinema-os-screen-movie {
+  margin: 0.35rem 0 0.15rem;
+  font-weight: 600;
+  color: #f5f5f5;
+}
+.cinema-os-screen-meta {
+  margin: 0;
+  color: var(--cinema-muted);
+  font-size: 0.68rem;
+}
+.cinema-os-screen-remaining {
+  margin: 0.35rem 0 0;
+  color: #4ade80;
+  font-size: 0.68rem;
+}
 .cinema-os-screen-pulse {
   width: 6px; height: 6px; border-radius: 50%; background: #4ade80;
   display: inline-block; margin-inline-end: 0.35rem;
@@ -300,25 +366,33 @@
 .cinema-os-mini-grid span.is-occupied { background: #4ade80; }
 .cinema-os-mini-grid span.is-vip { background: #c9922a; }
 
-.cinema-os-feed { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; max-height: 180px; overflow-y: auto; }
-.cinema-os-feed-row { padding: 0.45rem; border-radius: 6px; background: rgba(255,255,255,0.04); font-size: 0.65rem; }
+.cinema-os-feed { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1rem; }
+.cinema-os-feed-row { padding: 0.55rem 0.6rem; border-radius: 8px; background: rgba(255,255,255,0.04); font-size: 0.72rem; line-height: 1.45; }
 .cinema-os-feed-row.is-new { background: rgba(201,146,42,0.12); }
 .cinema-os-feed-amount { color: #c9922a; font-weight: 700; }
 
-.cinema-os-revenue { text-align: center; margin-bottom: 1rem; padding: 0.75rem; border-radius: 10px; background: rgba(18,18,18,0.5); font-size: 0.7rem; }
-.cinema-os-revenue-pct { color: #c9922a; }
-.cinema-os-weather { padding: 0.75rem; border-radius: 10px; background: rgba(18,18,18,0.5); font-size: 0.72rem; margin-bottom: 0.75rem; }
+.cinema-os-revenue { text-align: center; margin-bottom: 1rem; padding: 0.85rem; border-radius: 10px; background: rgba(18,18,18,0.5); font-size: 0.78rem; }
+.cinema-os-revenue-pct { color: #c9922a; margin-top: 0.25rem; }
+.cinema-os-weather { padding: 0.85rem; border-radius: 10px; background: rgba(18,18,18,0.5); font-size: 0.78rem; margin-bottom: 0.75rem; }
+.cinema-os-weather-icon { display: inline-block; margin-inline-end: 0.35rem; font-size: 1rem; vertical-align: middle; }
 .cinema-os-weather-tip { color: #c9922a; margin-top: 0.35rem; }
 
 .cinema-os-panel {
-  padding: 0.65rem;
-  border-radius: 8px;
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
   background: rgba(18,18,18,0.45);
   border: 1px solid rgba(255,255,255,0.06);
-  font-size: 0.65rem;
-  margin-bottom: 0.5rem;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  margin-bottom: 0.65rem;
 }
-.cinema-os-panel h4 { margin: 0 0 0.35rem; font-size: 0.68rem; color: var(--cinema-gold); }
+.cinema-os-panel h4 { margin: 0 0 0.45rem; font-size: 0.76rem; color: var(--cinema-gold); }
+.cinema-os-slider-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--cinema-muted);
+}
 .cinema-os-panel--alert { border-color: rgba(245,158,11,0.4); }
 .cinema-os-mini-chart { display: flex; gap: 2px; height: 8px; margin: 0.35rem 0; }
 .cinema-os-mini-chart span { background: #c9922a; border-radius: 2px; }
@@ -328,7 +402,7 @@
 
 .cinema-os-float {
   position: fixed;
-  z-index: 45;
+  z-index: var(--z-float, 46);
   padding: 0.4rem 0.65rem;
   border-radius: 8px;
   background: rgba(10,10,16,0.85);
@@ -338,14 +412,14 @@
 }
 .cinema-os-float--clock { top: 2.5rem; inset-inline-end: 0.75rem; text-align: end; }
 .cinema-os-float--clock strong { display: block; font-family: "JetBrains Mono", monospace; color: #c9922a; }
-.cinema-os-float--status { bottom: 0.75rem; inset-inline-start: 0.75rem; display: flex; align-items: center; gap: 0.35rem; color: #4ade80; }
+.cinema-os-float--status { display: flex; align-items: center; gap: 0.35rem; color: #4ade80; max-width: min(220px, calc(100vw - 300px)); }
 .cinema-os-float--weather { bottom: 0.75rem; inset-inline-end: 0.75rem; }
 
 .cinema-os-notification {
   position: fixed;
-  top: 2.75rem;
+  top: calc(var(--cinema-chrome-height) + 0.35rem);
   inset-inline-end: 0.75rem;
-  z-index: 50;
+  z-index: var(--z-notify, 50);
   padding: 0.65rem 1rem;
   border-radius: 10px;
   background: rgba(10,10,16,0.95);
@@ -370,7 +444,7 @@
 
 .cinema-feature-moment {
   position: fixed;
-  z-index: 55;
+  z-index: var(--z-feature, 55);
   max-width: min(320px, calc(100vw - 2rem));
   padding: 0.65rem 0.85rem;
   border-radius: 10px;
@@ -390,8 +464,20 @@
 
 .cinema-feature--delay { margin-top: 0.35rem; }
 
-.cinema-feature--whatsapp { bottom: 5.5rem; inset-inline-start: 1rem; }
-.cinema-feature--marketing { bottom: 5.5rem; inset-inline-end: 1rem; }
+.cinema-feature--whatsapp { top: calc(var(--cinema-chrome-height) + 3.5rem); bottom: auto; inset-inline-start: 0.75rem; }
+.cinema-feature--marketing { top: calc(var(--cinema-chrome-height) + 3.5rem); bottom: auto; inset-inline-end: 0.75rem; }
+
+.cinema-ceremony-v3 .cinema-feature--whatsapp,
+.cinema-ceremony-v3 .cinema-feature--marketing {
+  top: auto;
+  bottom: 1rem;
+}
+
+.cinema-os--action-bar .cinema-feature--whatsapp,
+.cinema-os--action-bar .cinema-feature--marketing {
+  top: auto;
+  bottom: 5.75rem;
+}
 
 .cinema-feature--inline.cinema-feature-moment {
   position: relative;
@@ -418,7 +504,107 @@
   background: rgba(10,10,16,0.9);
 }
 
-.cinema-ceremony-v3 { min-height: 360px; position: relative; padding-bottom: 1rem; }
+.cinema-ceremony-v3 { min-height: 360px; position: relative; padding-bottom: 5rem; }
+.cinema-ceremony-v3--stage-0 .cinema-ticket-v3 { opacity: 0; }
+.cinema-ceremony-v3--stage-12 .cinema-ticket-v3-actions { animation: cinema-checkout-in 0.4s ease both; }
+
+.cinema-phase--showtime .cinema-feature--inline,
+.cinema-phase--checkout .cinema-feature--inline,
+.cinema-phase--upsell .cinema-feature--inline {
+  min-height: 2.35rem;
+}
+
+.cinema-phase--upsell .cinema-upsell-compare-col--bundle .cinema-sticky-price {
+  display: block;
+  margin: 0.75rem 0;
+  font-size: 1.15rem;
+}
+
+.cinema-phase--roi .cinema-os-center-panel {
+  padding-bottom: 2rem;
+}
+
+.cinema-phase--closing .cinema-os-center-panel {
+  padding-bottom: 3rem;
+}
+
+.cinema-showtime-btn .cinema-badge--waitlist {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+.cinema-phase--showtime .cinema-os-center-panel { padding-top: 0.25rem; }
+.cinema-phase--seats .cinema-os-center-panel { padding-bottom: 6.5rem; max-width: none; }
+.cinema-phase--ticket .cinema-os-center-panel { padding-bottom: 2rem; }
+.cinema-phase--ticket,
+.cinema-phase--checkout,
+.cinema-phase--upsell { min-height: 0; }
+
+.cinema-os-sidebar-tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+  padding: 0.25rem;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.cinema-os-sidebar-tab {
+  flex: 1;
+  padding: 0.45rem 0.35rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cinema-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.cinema-os-sidebar-tab.is-active {
+  background: rgba(201,146,42,0.18);
+  color: #f5c518;
+}
+
+.cinema-os-sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cinema-os-sidebar-mobile-toggle {
+  display: none;
+}
+
+.cinema-closing-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.cinema-closing-pill {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201,146,42,0.35);
+  background: rgba(201,146,42,0.08);
+  color: rgba(255,255,255,0.82);
+  font-size: 0.72rem;
+}
+
+.cinema-session-reveal .cinema-session-stats p {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(18,18,18,0.55);
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.cinema-roi-timeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; margin: 1.5rem 0; font-size: 0.72rem; overflow-x: auto; padding-bottom: 0.25rem; }
 .cinema-ticket-v3-line {
   height: 2px;
   width: min(380px, 92vw);
@@ -530,14 +716,54 @@
 .cinema-closing-contact { font-size: 0.85rem; color: var(--cinema-muted); margin-top: 0.5rem; }
 
 @media (max-width: 900px) {
-  .cinema-os-grid { grid-template-columns: 1fr; }
-  .cinema-os-col--left, .cinema-os-col--right { display: none; }
+  .cinema-os-grid { grid-template-columns: 1fr; padding-bottom: 0; }
+  .cinema-os-col--left { display: none; }
+  .cinema-os-col--right {
+    position: fixed;
+    inset-inline: 0.5rem;
+    bottom: 0.5rem;
+    max-height: min(42vh, 360px);
+    z-index: var(--z-chrome, 40);
+    border-radius: 14px 14px 0 0;
+    border: 1px solid rgba(201,146,42,0.25);
+    background: rgba(10,10,16,0.96);
+    backdrop-filter: blur(14px);
+    padding: 0.65rem 0.75rem 0.85rem;
+    box-shadow: 0 -12px 40px rgba(0,0,0,0.45);
+    transform: translateY(calc(100% - 2.75rem));
+    transition: transform 0.35s ease;
+  }
+  .cinema-os-col--right.is-expanded {
+    transform: translateY(0);
+  }
+  .cinema-os-sidebar-mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.35rem 0.15rem 0.65rem;
+    border: none;
+    background: transparent;
+    color: #c9922a;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .cinema-os-col--center { padding-bottom: 3.5rem; }
+  .cinema-os--action-bar .cinema-os-col--center { padding-bottom: 6rem; }
   .cinema-feature--whatsapp,
-  .cinema-feature--marketing { bottom: 6rem; max-width: calc(100vw - 1.5rem); }
+  .cinema-feature--marketing { max-width: calc(100vw - 1.5rem); }
+  .cinema-boot-widgets { grid-template-columns: 1fr 1fr 1fr; }
+  .cinema-boot-briefing { max-height: min(40vh, 320px); }
 }
 
 @media (max-width: 640px) {
   .cinema-feature-grid { grid-template-columns: repeat(2, 1fr); }
   .cinema-os-float--clock, .cinema-os-float--weather { display: none; }
-  .cinema-os-center-panel { padding-bottom: 6rem; }
+  .cinema-os-center-panel { padding-bottom: 5rem; }
+  .cinema-os-float--status { max-width: calc(100vw - 180px); font-size: 0.6rem; }
+  .cinema-os-notification { max-width: calc(100vw - 1.5rem); top: calc(var(--cinema-chrome-height) + 2.5rem); }
+  .cinema-roi-timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cinema-boot { padding: 1rem; }
+  .cinema-boot-cta { width: 100%; max-width: 320px; }
 }

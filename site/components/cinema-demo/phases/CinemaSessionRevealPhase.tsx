@@ -43,7 +43,7 @@ export function CinemaSessionRevealPhase() {
   const secs = sessionSec % 60;
 
   return (
-    <section className="cinema-phase cinema-session-reveal">
+    <section className="cinema-phase cinema-phase--session-reveal cinema-session-reveal">
       <div className="cinema-os-center-panel">
         <h2 className="cinema-title">{t("sessionReveal.title")}</h2>
         <div className="cinema-session-stats">

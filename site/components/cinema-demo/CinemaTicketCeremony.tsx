@@ -79,7 +79,7 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
       synced.current = true;
       pushBookingFeed({
         id: `ticket-${Date.now()}`,
-        name: "حجز جديد",
+        name: t("ticket.newBookingName"),
         tickets: selectedSeatIds.length,
         movieAr: movie?.titleAr ?? "",
         movieEn: movie?.titleEn ?? "",
@@ -91,7 +91,7 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
       incrementRevenue(selectedSeatIds.length * 20000);
       addTicketsBooked(selectedSeatIds.length);
     }
-  }, [stage, showtime, selectedSeatIds, movie, pushBookingFeed, incrementRevenue, addTicketsBooked]);
+  }, [stage, showtime, selectedSeatIds, movie, pushBookingFeed, incrementRevenue, addTicketsBooked, t]);
 
   if (!movie || !showtime || !showtimeId) return null;
 
@@ -105,14 +105,14 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
       <div className="cinema-ticket-v3">
         {stage >= 3 ? (
           <header className="cinema-ticket-v3-head">
-            <span>SALAMIYA CINEMA</span>
-            <span>TENEGTA SYSTEMS</span>
+            <span>{t("ticket.brandLeft")}</span>
+            <span>{t("ticket.brandRight")}</span>
           </header>
         ) : null}
         {stage >= 4 ? (
           <div className="cinema-ticket-v3-body">
             <h3>{isAr ? movie.titleAr : movie.titleEn}</h3>
-            <p>{movie.titleEn}</p>
+            {!isAr ? <p>{movie.titleEn}</p> : null}
             <p>
               {showtime.time} · {isAr ? showtime.hallLabelAr : showtime.hallLabelEn}
             </p>
@@ -130,7 +130,7 @@ export function CinemaTicketCeremony({ bookingRef, onComplete }: Props) {
             <div className="cinema-ticket-v3-qr" style={{ opacity: qrProgress / 150 }}>
               <canvas ref={canvasRef} aria-label={t("ticket.qrLabel")} />
             </div>
-            {stage >= 9 ? <div className="cinema-ticket-v3-seal">VALID</div> : null}
+            {stage >= 9 ? <div className="cinema-ticket-v3-seal">{t("ticket.validSeal")}</div> : null}
           </div>
         ) : null}
       </div>

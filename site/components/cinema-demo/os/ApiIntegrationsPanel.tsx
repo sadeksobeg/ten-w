@@ -4,13 +4,13 @@ import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
-const INTEGRATIONS = [
-  "WhatsApp Business",
-  "بوابة الدفع",
-  "حساب البريد",
-  "Google Analytics",
-  "نظام المحاسبة",
-];
+const INTEGRATION_KEYS = [
+  "integrationWhatsapp",
+  "integrationPayment",
+  "integrationEmail",
+  "integrationAnalytics",
+  "integrationAccounting",
+] as const;
 
 export function ApiIntegrationsPanel() {
   const t = useTranslations("CinemaDemo");
@@ -27,8 +27,8 @@ export function ApiIntegrationsPanel() {
     <div className="cinema-os-panel">
       <h4>{t("os.integrationsTitle")}</h4>
       <ul className="cinema-os-integrations">
-        {INTEGRATIONS.map((name) => (
-          <li key={name}>✓ {name}</li>
+        {INTEGRATION_KEYS.map((key) => (
+          <li key={key}>✓ {t(`os.${key}`)}</li>
         ))}
       </ul>
     </div>

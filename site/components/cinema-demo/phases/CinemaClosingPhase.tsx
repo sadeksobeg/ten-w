@@ -13,7 +13,7 @@ export function CinemaClosingPhase() {
   const industries = [t("closing.ind1"), t("closing.ind2"), t("closing.ind3")];
 
   return (
-    <section className="cinema-phase cinema-closing cinema-closing-v2">
+    <section className="cinema-phase cinema-phase--closing cinema-closing cinema-closing-v2">
       <div className="cinema-closing-aurora" aria-hidden />
       <div className="cinema-os-center-panel text-center">
         <CinemaBrandLogo variant="dark" className="mx-auto mb-6" />
@@ -29,7 +29,7 @@ export function CinemaClosingPhase() {
 
         <div className="cinema-closing-pills">
           {industries.map((pill) => (
-            <span key={pill} className="mgr-pill">{pill}</span>
+            <span key={pill} className="cinema-closing-pill">{pill}</span>
           ))}
         </div>
 

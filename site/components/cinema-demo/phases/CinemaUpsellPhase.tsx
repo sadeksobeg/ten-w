@@ -17,7 +17,7 @@ export function CinemaUpsellPhase() {
   const bundleDesc = isAr ? UPSELL_BUNDLE.descAr : UPSELL_BUNDLE.descEn;
 
   return (
-    <section className="cinema-phase">
+    <section className="cinema-phase cinema-phase--upsell">
       <div className="cinema-os-center-panel">
         <FeatureMoment featureId={10} className="cinema-feature--inline">
           <p>{t("features.f10Detail")}</p>

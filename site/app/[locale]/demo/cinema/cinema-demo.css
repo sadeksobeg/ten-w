@@ -21,6 +21,16 @@ html.cinema-demo-active main {
 }
 
 .cinema-demo-root {
+  --z-ambient: 0;
+  --z-content: 1;
+  --z-grain: 2;
+  --z-chrome: 40;
+  --z-sticky: 45;
+  --z-float: 46;
+  --z-notify: 50;
+  --z-feature: 55;
+  --z-confetti: 60;
+  --z-cursor: 9999;
   --cinema-yellow: #f5c518;
   --cinema-yellow-dim: rgba(245, 197, 24, 0.12);
   --cinema-black: #0a0a0a;
@@ -44,11 +54,41 @@ html.cinema-demo-active main {
   box-sizing: border-box;
 }
 
+.cinema-demo-root .cinema-os-col--center,
+.cinema-demo-root .cinema-os-col--right,
+.cinema-demo-root .cinema-boot,
+.cinema-demo-root .cinema-boot-briefing {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 146, 42, 0.45) rgba(255, 255, 255, 0.06);
+}
+
+.cinema-demo-root .cinema-os-col--center::-webkit-scrollbar,
+.cinema-demo-root .cinema-os-col--right::-webkit-scrollbar,
+.cinema-demo-root .cinema-boot::-webkit-scrollbar,
+.cinema-demo-root .cinema-boot-briefing::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cinema-demo-root .cinema-os-col--center::-webkit-scrollbar-thumb,
+.cinema-demo-root .cinema-os-col--right::-webkit-scrollbar-thumb,
+.cinema-demo-root .cinema-boot::-webkit-scrollbar-thumb,
+.cinema-demo-root .cinema-boot-briefing::-webkit-scrollbar-thumb {
+  background: rgba(201, 146, 42, 0.45);
+  border-radius: 999px;
+}
+
+.cinema-demo-root .cinema-os-col--center::-webkit-scrollbar-track,
+.cinema-demo-root .cinema-os-col--right::-webkit-scrollbar-track,
+.cinema-demo-root .cinema-boot::-webkit-scrollbar-track,
+.cinema-demo-root .cinema-boot-briefing::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+}
+
 /* ── Ambient layer ── */
 .cinema-ambient {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: var(--z-ambient, 0);
   pointer-events: none;
   overflow: hidden;
 }
@@ -393,6 +433,11 @@ html.cinema-demo-active main {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(245, 197, 24, 0.15);
 }
 
+.cinema-movie-card--motion:hover {
+  transform: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
 .cinema-poster-frame {
   position: relative;
   aspect-ratio: 2 / 3;
@@ -425,7 +470,7 @@ html.cinema-demo-active main {
 .cinema-poster-rating {
   position: absolute;
   top: 10px;
-  right: 10px;
+  inset-inline-end: 10px;
   padding: 0.2rem 0.45rem;
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.75);
@@ -753,6 +798,34 @@ html.cinema-demo-active main {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.cinema-checkout-card--animate {
+  animation: cinema-checkout-in 0.55s var(--cinema-ease) both;
+}
+
+@keyframes cinema-checkout-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cinema-checkout-total {
+  margin-top: 0.35rem;
+  padding-top: 0.75rem;
+  border-bottom: none;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.cinema-badge--waitlist {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fbbf24;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
 .cinema-input {
   width: 100%;
   margin-top: 1rem;
@@ -774,7 +847,7 @@ html.cinema-demo-active main {
 .cinema-confetti {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  z-index: var(--z-confetti, 60);
   pointer-events: none;
   overflow: hidden;
 }
@@ -1114,10 +1187,9 @@ html.cinema-demo-active main {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9999;
+  z-index: var(--z-cursor, 9999);
   pointer-events: none;
   transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
 }
 
 .cinema-custom-cursor-dot {
@@ -1126,7 +1198,7 @@ html.cinema-demo-active main {
   height: 8px;
   border-radius: 50%;
   background: #f5c518;
-  box-shadow: 0 0 12px rgba(245, 197, 24, 0.6);
+  box-shadow: 0 0 10px rgba(245, 197, 24, 0.85), 0 0 20px rgba(201, 146, 42, 0.35);
 }
 
 .cinema-custom-cursor--manager .cinema-custom-cursor-dot {
@@ -1145,7 +1217,7 @@ html.cinema-demo-active main {
 .cinema-film-grain {
   position: fixed;
   inset: 0;
-  z-index: 2;
+  z-index: var(--z-grain, 2);
   opacity: 0.35;
   pointer-events: none;
 }
@@ -1779,12 +1851,16 @@ html.cinema-demo-active main {
   background: rgba(245, 197, 24, 0.08);
 }
 
+.cinema-os--action-bar .cinema-seat-hud {
+  bottom: 5.75rem;
+}
+
 .cinema-seat-hud {
   position: absolute;
   left: 0.75rem;
   right: 0.75rem;
   bottom: 0.75rem;
-  z-index: 2;
+  z-index: var(--z-content, 1);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

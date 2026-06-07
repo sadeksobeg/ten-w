@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   BOOKING_MOVIES,
   BOOKING_NAMES,
@@ -11,6 +11,7 @@ import {
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 export function BookingFeedLive() {
+  const t = useTranslations("CinemaDemo");
   const locale = useLocale();
   const isAr = locale === "ar";
   const storeFeed = useCinemaDemoStore((s) => s.bookingFeed);
@@ -69,11 +70,17 @@ export function BookingFeedLive() {
           key={item.id}
           className={`cinema-os-feed-row ${pulseId === item.id ? "is-new" : ""}`}
         >
-          <span>{i === 0 ? "منذ الآن" : `قبل ${i * 23} ث`}</span>
+          <span>{i === 0 ? t("os.feedJustNow") : t("os.feedAgo", { sec: i * 23 })}</span>
           <span>
-            {item.name} — {item.tickets} تذاكر {isAr ? item.hallAr : item.hallEn}
+            {t("os.feedRow", {
+              name: item.name,
+              tickets: item.tickets,
+              hall: isAr ? item.hallAr : item.hallEn,
+            })}
           </span>
-          <span className="cinema-os-feed-amount">{item.amount.toLocaleString("ar-SY")} ل.س</span>
+          <span className="cinema-os-feed-amount">
+            {item.amount.toLocaleString("ar-SY")} {t("currency")}
+          </span>
         </div>
       ))}
     </div>

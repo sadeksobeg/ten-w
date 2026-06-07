@@ -484,7 +484,33 @@
     },
     "boot": {
       "aria": "تشغيل نظام سينما سلمية",
-      "startSession": "ابدأ جلستك"
+      "startSession": "ابدأ جلستك",
+      "barBooking": "نظام الحجز",
+      "barDatabase": "قاعدة البيانات",
+      "barHall1": "قاعة 1 IMAX",
+      "barHall2": "قاعة 2 VIP",
+      "barHall3": "قاعة 3",
+      "opsCenterEn": "CINEMA OPERATIONS CENTER",
+      "opsCenterAr": "مركز عمليات سينما سلمية",
+      "loginUser": "المستخدم: مدير@سلمية.com",
+      "loginRole": "الصلاحية: مدير عمليات",
+      "loginLevel": "المستوى: مدير أول",
+      "loginVerified": "✓ تم التحقق",
+      "fingerprintDone": "تم التعرف على البصمة",
+      "previewTopbar": "سينما سلمية · النظام الحي · {clock}",
+      "widgetRevenue": "إيراد",
+      "widgetRevenueValue": "2.8M ل.س",
+      "widgetScreens": "قاعات",
+      "widgetScreensValue": "3 نشطة",
+      "widgetAlerts": "تنبيهات",
+      "widgetAlertsValue": "12 حجز",
+      "briefingTitle": "الوضع الحالي في السينما:",
+      "briefHall1": "قاعة 1: تعرض الآن — كثيب الجزء الثالث",
+      "briefHall1Detail": "78% ممتلئة — تنتهي في 74 دقيقة",
+      "briefHall2": "قاعة 2 VIP: العرض القادم في 47 دقيقة",
+      "briefHall2Detail": "تم بيع 89% من التذاكر",
+      "briefAlert": "تنبيه: وصلت 12 حجز في آخر 5 دقائق",
+      "readyPrompt": "مستعد للتحكم؟"
     },
     "os": {
       "greeting": "مساء الخير، مدير سينما سلمية",
@@ -520,7 +546,33 @@
       "reportMonth": "تقرير مالي — مايو 2026",
       "profitMargin": "هامش الربح: 34%",
       "downloadReport": "تحميل PDF",
-      "integrationsTitle": "التكاملات النشطة"
+      "integrationsTitle": "التكاملات النشطة",
+      "sidebarLive": "مباشر",
+      "sidebarOps": "تشغيلي",
+      "sidebarCommercial": "تجاري",
+      "sidebarToggle": "لوحة الذكاء التشغيلي",
+      "tickerLine": "قاعة 1 — {occ1}% ║ قاعة 2 — {occ2}% ║ قاعة 3 — {occ3}% ║ إيراد اليوم: {revenue} {currency} ║ آخر حجز: منذ {sec}ث ║ الطقس: {weather} ║",
+      "tickerWeatherDetail": "28° — زيادة حضور متوقعة",
+      "feedJustNow": "منذ الآن",
+      "feedAgo": "قبل {sec} ث",
+      "feedRow": "{name} — {tickets} تذاكر {hall}",
+      "weatherSummary": "28° مساءً — يوم الجمعة",
+      "screenRemaining": "يتبقى {min} دقيقة",
+      "screenStartsIn": "يبدأ في {min} دقيقة",
+      "screenOccupancy": "{filled} / {capacity}",
+      "screenBookedCount": "{filled} من أصل {capacity} حجزاً",
+      "incidentDetail": "بلاغ: مقعد C7 — مكسور",
+      "notifyNewBooking": "[✓] حجز جديد — مقعد C8 — 15,000 ل.س",
+      "notifyLowSeats": "[!] قاعة 2 — 5 مقاعد متبقية فقط",
+      "notifyRecommendation": "[💡] توصية: أضف عرض منتصف الليل",
+      "notifyVipPaid": "[✓] مدفوعة — 3 تذاكر VIP — 60,000 ل.س",
+      "notifyPaymentSuccess": "[✓] دفع ناجح — 45,000 ل.س",
+      "integrationWhatsapp": "WhatsApp Business",
+      "integrationPayment": "بوابة الدفع",
+      "integrationEmail": "حساب البريد",
+      "integrationAnalytics": "Google Analytics",
+      "integrationAccounting": "نظام المحاسبة",
+      "revenueOfTarget": "{current} / {target}"
     },
     "features": {
       "f1Detail": "توقع: 94% امتلاء بحلول 20:00",
@@ -595,7 +647,9 @@
       "cameraImmersive": "غامر",
       "cameraMap": "خريطة القاعة",
       "smartPick": "أفضل مقاعد",
-      "webglFallback": "تم التبديل للعرض ثنائي الأبعاد — جهازك لا يدعم 3D أو تفضيل الحركة مُفعّل"
+      "webglFallback": "تم التبديل للعرض ثنائي الأبعاد — جهازك لا يدعم 3D أو تفضيل الحركة مُفعّل",
+      "vipPremium": "VIP Premium",
+      "vipCamera": "VIP"
     },
     "checkout": {
       "title": "تأكيد الحجز",
@@ -607,7 +661,11 @@
       "nameLabel": "الاسم (اختياري)",
       "namePlaceholder": "اسم حامل التذكرة",
       "pay": "إصدار التذكرة",
-      "mockNote": "لا يتم خصم مبلغ حقيقي — هذا عرض توضيحي."
+      "mockNote": "لا يتم خصم مبلغ حقيقي — هذا عرض توضيحي.",
+      "paymentSyriatel": "Syriatel Cash",
+      "paymentMtn": "MTN Cash",
+      "paymentCard": "بطاقة",
+      "paymentCash": "كاش"
     },
     "ticket": {
       "title": "تذكرتك جاهزة",
@@ -620,7 +678,11 @@
       "ready": "تذكرتك جاهزة",
       "share": "مشاركة",
       "download": "تحميل",
-      "continue": "متابعة ←"
+      "continue": "متابعة ←",
+      "brandLeft": "SALAMIYA CINEMA",
+      "brandRight": "TENEGTA SYSTEMS",
+      "validSeal": "VALID",
+      "newBookingName": "حجز جديد"
     },
     "upsell": {
       "title": "عرض خاص قبل التذكرة",

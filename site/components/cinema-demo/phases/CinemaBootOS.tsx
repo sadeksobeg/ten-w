@@ -19,13 +19,7 @@ const POST_LINES = [
   "Loading cinema management kernel...",
 ];
 
-const BAR_ITEMS = [
-  { label: "نظام الحجز", pct: 100 },
-  { label: "قاعدة البيانات", pct: 100 },
-  { label: "قاعة 1 IMAX", pct: 100 },
-  { label: "قاعة 2 VIP", pct: 100 },
-  { label: "قاعة 3", pct: 100 },
-];
+const BAR_KEYS = ["barBooking", "barDatabase", "barHall1", "barHall2", "barHall3"] as const;
 
 export function CinemaBootOS() {
   const t = useTranslations("CinemaDemo");
@@ -71,7 +65,7 @@ export function CinemaBootOS() {
     const id = window.setInterval(() => {
       i += 1;
       setBarFill(i);
-      if (i >= BAR_ITEMS.length) clearInterval(id);
+      if (i >= BAR_KEYS.length) clearInterval(id);
     }, reduced ? 80 : 200);
     return () => clearInterval(id);
   }, [stage, reduced]);
@@ -118,13 +112,13 @@ export function CinemaBootOS() {
 
       {stage === 1 ? (
         <div className="cinema-boot-bars">
-          {BAR_ITEMS.map((bar, i) => (
-            <div key={bar.label} className={`cinema-boot-bar-row ${i < barFill ? "is-filled" : ""}`}>
-              <span>{bar.label}</span>
+          {BAR_KEYS.map((key, i) => (
+            <div key={key} className={`cinema-boot-bar-row ${i < barFill ? "is-filled" : ""}`}>
+              <span>{t(`boot.${key}`)}</span>
               <div className="cinema-boot-bar-track">
-                <div className="cinema-boot-bar-fill" style={{ width: i < barFill ? `${bar.pct}%` : "0%" }} />
+                <div className="cinema-boot-bar-fill" style={{ width: i < barFill ? "100%" : "0%" }} />
               </div>
-              <span>{i < barFill ? `${bar.pct}%` : ""}</span>
+              <span>{i < barFill ? "100%" : ""}</span>
             </div>
           ))}
         </div>
@@ -133,13 +127,13 @@ export function CinemaBootOS() {
       {stage === 2 ? (
         <div className="cinema-boot-auth">
           <CinemaBrandLogo variant="dark" className="cinema-boot-logo" />
-          <h1>CINEMA OPERATIONS CENTER</h1>
-          <p>مركز عمليات سينما سلمية</p>
+          <h1>{t("boot.opsCenterEn")}</h1>
+          <p>{t("boot.opsCenterAr")}</p>
           <div className="cinema-boot-login-card">
-            <p>المستخدم: مدير@سلمية.com</p>
-            <p>الصلاحية: مدير عمليات</p>
-            <p>المستوى: مدير أول</p>
-            <p className="cinema-boot-verified">✓ تم التحقق</p>
+            <p>{t("boot.loginUser")}</p>
+            <p>{t("boot.loginRole")}</p>
+            <p>{t("boot.loginLevel")}</p>
+            <p className="cinema-boot-verified">{t("boot.loginVerified")}</p>
           </div>
           <div className="cinema-boot-fingerprint">
             <svg viewBox="0 0 64 80" aria-hidden>
@@ -158,7 +152,7 @@ export function CinemaBootOS() {
                 fill="rgba(201,146,42,0.35)"
               />
             </svg>
-            {scanPct >= 100 ? <p>تم التعرف على البصمة</p> : null}
+            {scanPct >= 100 ? <p>{t("boot.fingerprintDone")}</p> : null}
           </div>
         </div>
       ) : null}
@@ -167,26 +161,43 @@ export function CinemaBootOS() {
         <div className="cinema-boot-desktop-preview">
           <div className="cinema-boot-topbar">
             <span suppressHydrationWarning>
-              سينما سلمية · النظام الحي · {clock || "—"}
+              {t("boot.previewTopbar", { clock: clock || "—" })}
             </span>
           </div>
           <div className="cinema-boot-widgets">
-            <div className="cinema-boot-widget" />
-            <div className="cinema-boot-widget cinema-boot-widget--wide" />
-            <div className="cinema-boot-widget" />
+            <div className="cinema-boot-widget">
+              <span>{t("boot.widgetRevenue")}</span>
+              <strong>{t("boot.widgetRevenueValue")}</strong>
+            </div>
+            <div className="cinema-boot-widget cinema-boot-widget--wide">
+              <span>{t("boot.widgetScreens")}</span>
+              <strong>{t("boot.widgetScreensValue")}</strong>
+            </div>
+            <div className="cinema-boot-widget">
+              <span>{t("boot.widgetAlerts")}</span>
+              <strong>{t("boot.widgetAlertsValue")}</strong>
+            </div>
           </div>
         </div>
       ) : null}
 
       {stage >= 4 ? (
         <div className="cinema-boot-briefing">
-          <p className="cinema-boot-briefing-title">الوضع الحالي في السينما:</p>
+          <p className="cinema-boot-briefing-title">{t("boot.briefingTitle")}</p>
           <div className="cinema-boot-brief-cards">
-            <article>قاعة 1: تعرض الآن — كثيب الجزء الثالث<br />78% ممتلئة — تنتهي في 74 دقيقة</article>
-            <article>قاعة 2 VIP: العرض القادم في 47 دقيقة<br />تم بيع 89% من التذاكر</article>
-            <article className="cinema-boot-alert">تنبيه: وصلت 12 حجز في آخر 5 دقائق</article>
+            <article>
+              {t("boot.briefHall1")}
+              <br />
+              {t("boot.briefHall1Detail")}
+            </article>
+            <article>
+              {t("boot.briefHall2")}
+              <br />
+              {t("boot.briefHall2Detail")}
+            </article>
+            <article className="cinema-boot-alert">{t("boot.briefAlert")}</article>
           </div>
-          <p className="cinema-boot-ready">مستعد للتحكم؟</p>
+          <p className="cinema-boot-ready">{t("boot.readyPrompt")}</p>
           <button type="button" className="cinema-boot-cta" onClick={startSession}>
             {t("boot.startSession")}
           </button>

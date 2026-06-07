@@ -23,7 +23,7 @@ export function CinemaRoiPanel() {
   const roiDisplay = result.roiRatio.toFixed(1);
 
   return (
-    <section className="cinema-phase">
+    <section className="cinema-phase cinema-phase--roi">
       <div className="cinema-os-center-panel cinema-roi">
         <h2 className="cinema-title text-center">{t("roi.title")}</h2>
         <p className="cinema-subtitle text-center">{t("roi.subtitle")}</p>

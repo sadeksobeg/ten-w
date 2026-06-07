@@ -479,7 +479,33 @@
     },
     "boot": {
       "aria": "Démarrage OS Salamiya",
-      "startSession": "Commencer la session"
+      "startSession": "Commencer la session",
+      "barBooking": "Système de réservation",
+      "barDatabase": "Base de données",
+      "barHall1": "Salle 1 IMAX",
+      "barHall2": "Salle 2 VIP",
+      "barHall3": "Salle 3",
+      "opsCenterEn": "CINEMA OPERATIONS CENTER",
+      "opsCenterAr": "Centre opérations Salamiya Cinema",
+      "loginUser": "Utilisateur: manager@salamiya.com",
+      "loginRole": "Rôle: Manager opérations",
+      "loginLevel": "Niveau: Manager senior",
+      "loginVerified": "✓ Vérifié",
+      "fingerprintDone": "Empreinte reconnue",
+      "previewTopbar": "Salamiya Cinema · Système live · {clock}",
+      "widgetRevenue": "Recettes",
+      "widgetRevenueValue": "2,8M SYP",
+      "widgetScreens": "Salles",
+      "widgetScreensValue": "3 actives",
+      "widgetAlerts": "Alertes",
+      "widgetAlertsValue": "12 réservations",
+      "briefingTitle": "État actuel du cinéma:",
+      "briefHall1": "Salle 1: en projection — Dune Part Three",
+      "briefHall1Detail": "78% pleine — fin dans 74 minutes",
+      "briefHall2": "Salle 2 VIP: prochaine séance dans 47 minutes",
+      "briefHall2Detail": "89% des billets vendus",
+      "briefAlert": "Alerte: 12 réservations dans les 5 dernières minutes",
+      "readyPrompt": "Prêt à prendre le contrôle?"
     },
     "os": {
       "greeting": "Bonsoir, manager Salamiya Cinema",
@@ -515,7 +541,33 @@
       "reportMonth": "Rapport financier — mai 2026",
       "profitMargin": "Marge: 34%",
       "downloadReport": "Télécharger PDF",
-      "integrationsTitle": "Intégrations actives"
+      "integrationsTitle": "Intégrations actives",
+      "sidebarLive": "Live",
+      "sidebarOps": "Opérations",
+      "sidebarCommercial": "Commercial",
+      "sidebarToggle": "Intelligence opérationnelle",
+      "tickerLine": "Salle 1 — {occ1}% ║ Salle 2 — {occ2}% ║ Salle 3 — {occ3}% ║ Recettes du jour: {revenue} {currency} ║ Dernière résa: il y a {sec}s ║ Météo: {weather} ║",
+      "tickerWeatherDetail": "28° — affluence plus élevée attendue",
+      "feedJustNow": "À l'instant",
+      "feedAgo": "Il y a {sec}s",
+      "feedRow": "{name} — {tickets} billets {hall}",
+      "weatherSummary": "28° soir — vendredi",
+      "screenRemaining": "Il reste {min} min",
+      "screenStartsIn": "Début dans {min} min",
+      "screenOccupancy": "{filled} / {capacity}",
+      "screenBookedCount": "{filled} sur {capacity} réservés",
+      "incidentDetail": "Signalement: siège C7 — cassé",
+      "notifyNewBooking": "[✓] Nouvelle résa — siège C8 — 15 000 SYP",
+      "notifyLowSeats": "[!] Salle 2 — 5 places restantes",
+      "notifyRecommendation": "[💡] Conseil: ajouter une séance de minuit",
+      "notifyVipPaid": "[✓] Payé — 3 billets VIP — 60 000 SYP",
+      "notifyPaymentSuccess": "[✓] Paiement réussi — 45 000 SYP",
+      "integrationWhatsapp": "WhatsApp Business",
+      "integrationPayment": "Passerelle de paiement",
+      "integrationEmail": "Compte e-mail",
+      "integrationAnalytics": "Google Analytics",
+      "integrationAccounting": "Système comptable",
+      "revenueOfTarget": "{current} / {target}"
     },
     "features": {
       "f1Detail": "Prévision: 94% à 20:00",
@@ -590,7 +642,9 @@
       "cameraImmersive": "Immersif",
       "cameraMap": "Plan salle",
       "smartPick": "Meilleures places",
-      "webglFallback": "Passage en 2D — WebGL indisponible ou mouvement réduit"
+      "webglFallback": "Passage en 2D — WebGL indisponible ou mouvement réduit",
+      "vipPremium": "VIP Premium",
+      "vipCamera": "VIP"
     },
     "checkout": {
       "title": "Confirmer",
@@ -602,7 +656,11 @@
       "nameLabel": "Nom (optionnel)",
       "namePlaceholder": "Nom du titulaire",
       "pay": "Émettre le billet",
-      "mockNote": "Aucun paiement réel — démonstration."
+      "mockNote": "Aucun paiement réel — démonstration.",
+      "paymentSyriatel": "Syriatel Cash",
+      "paymentMtn": "MTN Cash",
+      "paymentCard": "Carte",
+      "paymentCash": "Espèces"
     },
     "ticket": {
       "title": "Votre billet est prêt",
@@ -615,7 +673,11 @@
       "ready": "Votre billet est prêt",
       "share": "Partager",
       "download": "Télécharger",
-      "continue": "Continuer →"
+      "continue": "Continuer →",
+      "brandLeft": "SALAMIYA CINEMA",
+      "brandRight": "TENEGTA SYSTEMS",
+      "validSeal": "VALID",
+      "newBookingName": "Nouvelle réservation"
     },
     "upsell": {
       "title": "Offre spéciale avant le billet",

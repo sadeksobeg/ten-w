@@ -1,35 +1,40 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { playNotificationPing } from "@/lib/cinema-demo/sounds";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
-
-const MESSAGES = [
-  "[✓] حجز جديد — مقعد C8 — 15,000 ل.س",
-  "[!] قاعة 2 — 5 مقاعد متبقية فقط",
-  "[💡] توصية: أضف عرض منتصف الليل",
-  "[✓] مدفوعة — 3 تذاكر VIP — 60,000 ل.س",
-  "[✓] دفع ناجح — 45,000 ل.س",
-];
 
 type Toast = { id: number; text: string };
 
 export function NotificationSystem() {
+  const t = useTranslations("CinemaDemo");
   const soundEnabled = useCinemaDemoStore((s) => s.soundEnabled);
   const [toast, setToast] = useState<Toast | null>(null);
+
+  const messages = useMemo(
+    () => [
+      t("os.notifyNewBooking"),
+      t("os.notifyLowSeats"),
+      t("os.notifyRecommendation"),
+      t("os.notifyVipPaid"),
+      t("os.notifyPaymentSuccess"),
+    ],
+    [t],
+  );
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
     const id = window.setInterval(() => {
-      const text = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
+      const text = messages[Math.floor(Math.random() * messages.length)];
       const tid = Date.now();
       setToast({ id: tid, text });
       playNotificationPing(soundEnabled);
-      window.setTimeout(() => setToast((t) => (t?.id === tid ? null : t)), 3200);
+      window.setTimeout(() => setToast((current) => (current?.id === tid ? null : current)), 3200);
     }, 20000);
     return () => clearInterval(id);
-  }, [soundEnabled]);
+  }, [messages, soundEnabled]);
 
   if (!toast) return null;
 

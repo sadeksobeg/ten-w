@@ -60,7 +60,7 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
           className={`cinema-hud-btn ${cameraPreset === "vip" ? "is-active" : ""}`}
           onClick={() => setCameraPreset("vip")}
         >
-          VIP
+          {t("seats.vipCamera")}
         </button>
         <button
           type="button"
@@ -81,9 +81,13 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
             {tooltipSeat.row}
             {tooltipSeat.number}
           </strong>
-          <span className="cinema-seat-hud-tier">{tooltipSeat.tier === "vip" ? "VIP Premium" : tooltipSeat.tier}</span>
-          <span>{tooltipSeat.price.toLocaleString("ar-SY")} ل.س</span>
-          <span>✓ متاح</span>
+          <span className="cinema-seat-hud-tier">
+            {tooltipSeat.tier === "vip" ? t("seats.vipPremium") : tooltipSeat.tier}
+          </span>
+          <span>
+            {tooltipSeat.price.toLocaleString("ar-SY")} {t("currency")}
+          </span>
+          <span>✓ {t("seats.available")}</span>
         </div>
       ) : null}
 
