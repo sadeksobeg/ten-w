@@ -357,6 +357,23 @@
   color: #4ade80;
   font-size: 0.68rem;
 }
+.cinema-os-screen-occupancy {
+  margin: 0.25rem 0 0.35rem;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.82);
+}
+.cinema-os-screen-monitor .cinema-os-progress {
+  height: 4px;
+  margin: 0.35rem 0 0.25rem;
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.cinema-os-screen-monitor .cinema-os-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c9922a, #f5c518);
+  border-radius: 999px;
+}
 .cinema-os-screen-pulse {
   width: 6px; height: 6px; border-radius: 50%; background: #4ade80;
   display: inline-block; margin-inline-end: 0.35rem;
@@ -367,12 +384,38 @@
 .cinema-os-mini-grid span.is-vip { background: #c9922a; }
 
 .cinema-os-feed { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1rem; }
-.cinema-os-feed-row { padding: 0.55rem 0.6rem; border-radius: 8px; background: rgba(255,255,255,0.04); font-size: 0.72rem; line-height: 1.45; }
+.cinema-os-feed-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.2rem 0.65rem;
+  padding: 0.6rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
 .cinema-os-feed-row.is-new { background: rgba(201,146,42,0.12); }
-.cinema-os-feed-amount { color: #c9922a; font-weight: 700; }
+.cinema-os-feed-time {
+  grid-column: 1 / -1;
+  font-size: 0.64rem;
+  color: var(--cinema-muted);
+}
+.cinema-os-feed-detail {
+  margin: 0;
+  color: rgba(255,255,255,0.88);
+  word-break: break-word;
+}
+.cinema-os-feed-amount {
+  color: #c9922a;
+  font-weight: 700;
+  white-space: nowrap;
+  align-self: center;
+}
 
 .cinema-os-revenue { text-align: center; margin-bottom: 1rem; padding: 0.85rem; border-radius: 10px; background: rgba(18,18,18,0.5); font-size: 0.78rem; }
-.cinema-os-revenue-pct { color: #c9922a; margin-top: 0.25rem; }
+.cinema-os-revenue-current { margin: 0.35rem 0 0.15rem; color: #f5f5f5; font-weight: 700; }
+.cinema-os-revenue-target { margin: 0; color: var(--cinema-muted); font-size: 0.72rem; }
+.cinema-os-revenue-pct { color: #c9922a; margin-top: 0.35rem; }
 .cinema-os-weather { padding: 0.85rem; border-radius: 10px; background: rgba(18,18,18,0.5); font-size: 0.78rem; margin-bottom: 0.75rem; }
 .cinema-os-weather-icon { display: inline-block; margin-inline-end: 0.35rem; font-size: 1rem; vertical-align: middle; }
 .cinema-os-weather-tip { color: #c9922a; margin-top: 0.35rem; }
@@ -532,6 +575,63 @@
   margin-inline-start: auto;
   flex-shrink: 0;
 }
+.cinema-os--customer {
+  --cinema-chrome-height: 4.5rem;
+}
+
+.cinema-os--customer .cinema-os-chrome {
+  border-bottom-color: rgba(201, 146, 42, 0.22);
+}
+
+.cinema-os--customer .cinema-os-center-panel {
+  max-width: min(980px, 100%);
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.cinema-os--customer .cinema-movie-grid {
+  gap: 1.25rem;
+}
+
+.cinema-os--admin {
+  --cinema-chrome-height: 7.25rem;
+}
+
+.cinema-customer-topbar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  min-width: 0;
+}
+
+.cinema-customer-topbar-brand {
+  flex-shrink: 0;
+}
+
+.cinema-customer-topbar-badge {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 146, 42, 0.35);
+  background: rgba(201, 146, 42, 0.1);
+  color: #c9922a;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cinema-session-admin-banner {
+  margin-bottom: 1rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(201, 146, 42, 0.3);
+  background: rgba(201, 146, 42, 0.08);
+  color: #c9922a;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
 .cinema-phase--showtime .cinema-os-center-panel { padding-top: 0.25rem; }
 .cinema-phase--seats .cinema-os-center-panel { padding-bottom: 6.5rem; max-width: none; }
 .cinema-phase--ticket .cinema-os-center-panel { padding-bottom: 2rem; }

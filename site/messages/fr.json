@@ -550,11 +550,11 @@
       "tickerWeatherDetail": "28° — affluence plus élevée attendue",
       "feedJustNow": "À l'instant",
       "feedAgo": "Il y a {sec}s",
-      "feedRow": "{name} — {tickets} billets {hall}",
+      "feedDetail": "{name} · {hall} · {movie} · {tickets} billets",
       "weatherSummary": "28° soir — vendredi",
       "screenRemaining": "Il reste {min} min",
       "screenStartsIn": "Début dans {min} min",
-      "screenOccupancy": "{filled} / {capacity}",
+      "screenOccupancy": "{filled} sur {capacity} réservés",
       "screenBookedCount": "{filled} sur {capacity} réservés",
       "incidentDetail": "Signalement: siège C7 — cassé",
       "notifyNewBooking": "[✓] Nouvelle résa — siège C8 — 15 000 SYP",
@@ -567,7 +567,8 @@
       "integrationEmail": "Compte e-mail",
       "integrationAnalytics": "Google Analytics",
       "integrationAccounting": "Système comptable",
-      "revenueOfTarget": "{current} / {target}"
+      "revenueCurrent": "Actuel: {value} {currency}",
+      "revenueTargetLabel": "Objectif: {value} {currency}"
     },
     "features": {
       "f1Detail": "Prévision: 94% à 20:00",
@@ -584,6 +585,7 @@
     },
     "sessionReveal": {
       "title": "Dans votre session",
+      "adminBanner": "Console opérations — ce qui s'est passé en coulisses",
       "booked": "Réservé",
       "features": "Fonctions vues",
       "revenue": "Recettes observées",

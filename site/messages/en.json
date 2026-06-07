@@ -532,11 +532,11 @@
       "tickerWeatherDetail": "28° — higher attendance expected",
       "feedJustNow": "Just now",
       "feedAgo": "{sec}s ago",
-      "feedRow": "{name} — {tickets} tickets {hall}",
+      "feedDetail": "{name} · {hall} · {movie} · {tickets} tickets",
       "weatherSummary": "28° evening — Friday",
       "screenRemaining": "{min} minutes left",
       "screenStartsIn": "Starts in {min} min",
-      "screenOccupancy": "{filled} / {capacity}",
+      "screenOccupancy": "{filled} of {capacity} booked",
       "screenBookedCount": "{filled} of {capacity} booked",
       "incidentDetail": "Report: seat C7 — broken",
       "notifyNewBooking": "[✓] New booking — seat C8 — 15,000 SYP",
@@ -549,7 +549,8 @@
       "integrationEmail": "Email account",
       "integrationAnalytics": "Google Analytics",
       "integrationAccounting": "Accounting system",
-      "revenueOfTarget": "{current} / {target}"
+      "revenueCurrent": "Current: {value} {currency}",
+      "revenueTargetLabel": "Target: {value} {currency}"
     },
     "features": {
       "f1Detail": "Forecast: 94% full by 20:00",
@@ -566,6 +567,7 @@
     },
     "sessionReveal": {
       "title": "In your session",
+      "adminBanner": "Operations console — what ran behind your session",
       "booked": "You booked",
       "features": "Active features seen",
       "revenue": "Revenue observed",

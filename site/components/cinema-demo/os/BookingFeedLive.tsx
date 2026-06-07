@@ -65,24 +65,31 @@ export function BookingFeedLive() {
 
   return (
     <div className="cinema-os-feed">
-      {items.map((item, i) => (
-        <div
-          key={item.id}
-          className={`cinema-os-feed-row ${pulseId === item.id ? "is-new" : ""}`}
-        >
-          <span>{i === 0 ? t("os.feedJustNow") : t("os.feedAgo", { sec: i * 23 })}</span>
-          <span>
-            {t("os.feedRow", {
-              name: item.name,
-              tickets: item.tickets,
-              hall: isAr ? item.hallAr : item.hallEn,
-            })}
-          </span>
-          <span className="cinema-os-feed-amount">
-            {item.amount.toLocaleString("ar-SY")} {t("currency")}
-          </span>
-        </div>
-      ))}
+      {items.map((item, i) => {
+        const hall = isAr ? item.hallAr : item.hallEn;
+        const movie = isAr ? item.movieAr : item.movieEn;
+        return (
+          <div
+            key={item.id}
+            className={`cinema-os-feed-row ${pulseId === item.id ? "is-new" : ""}`}
+          >
+            <span className="cinema-os-feed-time">
+              {i === 0 ? t("os.feedJustNow") : t("os.feedAgo", { sec: i * 23 })}
+            </span>
+            <p className="cinema-os-feed-detail">
+              {t("os.feedDetail", {
+                name: item.name,
+                hall,
+                movie,
+                tickets: item.tickets,
+              })}
+            </p>
+            <span className="cinema-os-feed-amount">
+              {item.amount.toLocaleString("ar-SY")} {t("currency")}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }

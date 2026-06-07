@@ -9,6 +9,7 @@ export function RevenueGauge() {
   const liveRevenue = useCinemaDemoStore((s) => s.liveRevenue);
   const target = useCinemaDemoStore((s) => s.revenueTarget);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pct = Math.min(100, Math.round((liveRevenue / target) * 100));
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -23,7 +24,7 @@ export function RevenueGauge() {
     canvas.style.height = `${size}px`;
     ctx.scale(dpr, dpr);
 
-    const pct = Math.min(1, liveRevenue / target);
+    const ratio = Math.min(1, liveRevenue / target);
     const cx = size / 2;
     const cy = size / 2 + 8;
     const r = 52;
@@ -34,7 +35,7 @@ export function RevenueGauge() {
     ctx.lineWidth = 10;
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(cx, cy, r, Math.PI, Math.PI + Math.PI * pct);
+    ctx.arc(cx, cy, r, Math.PI, Math.PI + Math.PI * ratio);
     ctx.strokeStyle = "#c9922a";
     ctx.lineWidth = 10;
     ctx.lineCap = "round";
@@ -42,14 +43,20 @@ export function RevenueGauge() {
     ctx.fillStyle = "#c9922a";
     ctx.font = "bold 18px JetBrains Mono, monospace";
     ctx.textAlign = "center";
-    ctx.fillText(`${Math.round(pct * 100)}%`, cx, cy - 4);
+    ctx.fillText(`${Math.round(ratio * 100)}%`, cx, cy - 4);
   }, [liveRevenue, target]);
 
   return (
     <div className="cinema-os-revenue">
       <h4>{t("os.revenueTitle")}</h4>
       <canvas ref={canvasRef} aria-label={t("os.revenueTitle")} />
-      <p>{t("os.revenueOfTarget", { current: liveRevenue.toLocaleString("ar-SY"), target: target.toLocaleString("ar-SY") })}</p>
+      <p className="cinema-os-revenue-current">
+        {t("os.revenueCurrent", { value: liveRevenue.toLocaleString("ar-SY"), currency: t("currency") })}
+      </p>
+      <p className="cinema-os-revenue-target">
+        {t("os.revenueTargetLabel", { value: target.toLocaleString("ar-SY"), currency: t("currency") })}
+      </p>
+      <p className="cinema-os-revenue-pct">{t("os.revenuePct", { pct })}</p>
     </div>
   );
 }

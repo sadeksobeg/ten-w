@@ -24,7 +24,6 @@ export function CinemaMoviesPhase() {
   return (
     <section className="cinema-phase cinema-phase--movies">
       <div className="cinema-os-center-panel">
-        <p className="cinema-os-greeting">{t("os.greeting")}</p>
         <h2 className="cinema-title cinema-reveal">{t("movies.title")}</h2>
         <p className="cinema-subtitle cinema-reveal cinema-reveal--delay-1">{t("movies.subtitle")}</p>
         <motion.div className="cinema-movie-grid" variants={container} initial="hidden" animate="show">

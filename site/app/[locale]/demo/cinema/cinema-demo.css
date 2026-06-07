@@ -1883,6 +1883,16 @@ html.cinema-demo-active main {
   gap: 0.35rem;
 }
 
+.cinema-seat-hud-toolbar--actions {
+  padding-top: 0.15rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cinema-seat-hud-toolbar--actions .cinema-hud-btn--accent {
+  width: 100%;
+  justify-content: center;
+}
+
 .cinema-seat-hud-divider {
   width: 1px;
   height: 1.25rem;

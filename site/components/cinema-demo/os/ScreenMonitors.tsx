@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { SCREEN_STATUSES } from "@/lib/cinema-demo/manager-data";
 
-function MiniSeatGrid({ occupancy, capacity }: { occupancy: number; capacity: number }) {
+function MiniSeatGrid({ occupancy }: { occupancy: number }) {
   const filled = Math.round((occupancy / 100) * 40);
   return (
     <div className="cinema-os-mini-grid" aria-hidden>
@@ -40,22 +40,19 @@ export function ScreenMonitors() {
             </header>
             <p className="cinema-os-screen-movie">{isAr ? screen.movieAr : screen.movieEn}</p>
             <p className="cinema-os-screen-meta">{screen.timeRange}</p>
+            <p className="cinema-os-screen-occupancy">
+              {t("os.screenOccupancy", { filled, capacity: screen.capacity })}
+            </p>
+            <MiniSeatGrid occupancy={screen.occupancy} />
+            <div className="cinema-os-progress" aria-hidden>
+              <div className="cinema-os-progress-fill" style={{ width: `${screen.occupancy}%` }} />
+            </div>
             {screen.id === 1 ? (
-              <>
-                <p>{t("os.screenOccupancy", { filled, capacity: screen.capacity })}</p>
-                <MiniSeatGrid occupancy={screen.occupancy} capacity={screen.capacity} />
-                <p className="cinema-os-screen-remaining">{t("os.screenRemaining", { min: 26 })}</p>
-              </>
-            ) : screen.id === 2 ? (
-              <>
-                <p>{t("os.screenStartsIn", { min: screen.startsInMin ?? 47 })}</p>
-                <p>{t("os.screenOccupancy", { filled, capacity: screen.capacity })}</p>
-                <div className="cinema-os-progress">
-                  <div className="cinema-os-progress-fill" style={{ width: `${screen.occupancy}%` }} />
-                </div>
-              </>
+              <p className="cinema-os-screen-remaining">{t("os.screenRemaining", { min: 26 })}</p>
+            ) : screen.startsInMin ? (
+              <p className="cinema-os-screen-remaining">{t("os.screenStartsIn", { min: screen.startsInMin })}</p>
             ) : (
-              <p>{t("os.screenBookedCount", { filled, capacity: screen.capacity })}</p>
+              <p className="cinema-os-screen-remaining">{t("os.screenBookedCount", { filled, capacity: screen.capacity })}</p>
             )}
           </article>
         );

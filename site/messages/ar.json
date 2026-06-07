@@ -555,12 +555,12 @@
       "tickerWeatherDetail": "28° — زيادة حضور متوقعة",
       "feedJustNow": "منذ الآن",
       "feedAgo": "قبل {sec} ث",
-      "feedRow": "{name} — {tickets} تذاكر {hall}",
+      "feedDetail": "{name} · {hall} · {movie} · {tickets} تذاكر",
       "weatherSummary": "28° مساءً — يوم الجمعة",
       "screenRemaining": "يتبقى {min} دقيقة",
       "screenStartsIn": "يبدأ في {min} دقيقة",
-      "screenOccupancy": "{filled} / {capacity}",
-      "screenBookedCount": "{filled} من أصل {capacity} حجزاً",
+      "screenOccupancy": "محجوز {filled} من {capacity}",
+      "screenBookedCount": "محجوز {filled} من {capacity}",
       "incidentDetail": "بلاغ: مقعد C7 — مكسور",
       "notifyNewBooking": "[✓] حجز جديد — مقعد C8 — 15,000 ل.س",
       "notifyLowSeats": "[!] قاعة 2 — 5 مقاعد متبقية فقط",
@@ -572,7 +572,8 @@
       "integrationEmail": "حساب البريد",
       "integrationAnalytics": "Google Analytics",
       "integrationAccounting": "نظام المحاسبة",
-      "revenueOfTarget": "{current} / {target}"
+      "revenueCurrent": "الحالي: {value} {currency}",
+      "revenueTargetLabel": "الهدف: {value} {currency}"
     },
     "features": {
       "f1Detail": "توقع: 94% امتلاء بحلول 20:00",
@@ -589,6 +590,7 @@
     },
     "sessionReveal": {
       "title": "في جلستك هذه",
+      "adminBanner": "لوحة التشغيل — ما يحدث خلف الكواليس أثناء جلستك",
       "booked": "حجزت",
       "features": "رأيت ميزات نشطة",
       "revenue": "إجمالي الإيرادات المرصودة",

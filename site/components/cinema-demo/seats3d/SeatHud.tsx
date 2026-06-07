@@ -25,7 +25,7 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
 
   return (
     <div className="cinema-seat-hud">
-      <div className="cinema-seat-hud-toolbar">
+      <div className="cinema-seat-hud-toolbar cinema-seat-hud-toolbar--primary">
         <button
           type="button"
           className={`cinema-hud-btn ${seatView === "3d" ? "is-active" : ""}`}
@@ -69,6 +69,8 @@ export function SeatHud({ seats, tooltipSeatId }: Props) {
         >
           {t("seats.cameraMap")}
         </button>
+      </div>
+      <div className="cinema-seat-hud-toolbar cinema-seat-hud-toolbar--actions">
         <button type="button" className="cinema-hud-btn cinema-hud-btn--accent" onClick={() => smartPickSeats(2)}>
           <CinemaIcon name="seat" size={14} />
           {t("seats.smartPick")}

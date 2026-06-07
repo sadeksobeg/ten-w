@@ -45,6 +45,7 @@ export function CinemaSessionRevealPhase() {
   return (
     <section className="cinema-phase cinema-phase--session-reveal cinema-session-reveal">
       <div className="cinema-os-center-panel">
+        <p className="cinema-session-admin-banner">{t("sessionReveal.adminBanner")}</p>
         <h2 className="cinema-title">{t("sessionReveal.title")}</h2>
         <div className="cinema-session-stats">
           <p>
