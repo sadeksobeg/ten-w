@@ -2,7 +2,10 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useLocale } from "next-intl";
 import * as THREE from "three";
+import { getMovie } from "@/lib/cinema-demo/data";
+import { drawCinemaScreenCanvas } from "@/lib/cinema-demo/screen-canvas";
 import { getScreenZ } from "@/lib/cinema-demo/seat-layout-3d";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
@@ -10,26 +13,34 @@ type Props = { reducedMotion?: boolean };
 
 export function CinemaScreenMesh({ reducedMotion = false }: Props) {
   const screenZ = getScreenZ();
+  const locale = useLocale();
   const screenMode = useCinemaDemoStore((s) => s.screenMode);
+  const movieId = useCinemaDemoStore((s) => s.movieId);
   const matRef = useRef<THREE.MeshStandardMaterial>(null);
   const textureRef = useRef<THREE.CanvasTexture | null>(null);
   const boot = useRef(0);
   const frameRef = useRef(0);
+  const movie = useMemo(() => (movieId ? getMovie(movieId) ?? null : null), [movieId]);
 
   const canvas = useMemo(() => {
     if (typeof document === "undefined") return null;
     const c = document.createElement("canvas");
-    c.width = 512;
-    c.height = 256;
+    c.width = 768;
+    c.height = 384;
     return c;
   }, []);
 
   useEffect(() => {
     if (!canvas) return;
     const tex = new THREE.CanvasTexture(canvas);
+    tex.minFilter = THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
     tex.needsUpdate = true;
     textureRef.current = tex;
-    if (matRef.current) matRef.current.map = tex;
+    if (matRef.current) {
+      matRef.current.map = tex;
+      matRef.current.emissiveMap = tex;
+    }
     return () => tex.dispose();
   }, [canvas]);
 
@@ -41,38 +52,20 @@ export function CinemaScreenMesh({ reducedMotion = false }: Props) {
     const throttlePlaying = screenMode === "playing" && !reducedMotion;
     if (throttlePlaying) {
       frameRef.current += 1;
-      if (frameRef.current % 4 !== 0) return;
+      if (frameRef.current % 3 !== 0) return;
     }
 
-    if (screenMode === "preMovie") {
-      const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      g.addColorStop(0, "#1a2848");
-      g.addColorStop(0.45, "#3d5a8a");
-      g.addColorStop(1, "#c9922a");
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(255,255,255,0.92)";
-      ctx.font = "bold 32px sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("سينما سلمية", canvas.width / 2, canvas.height / 2 - 8);
-      ctx.font = "600 16px sans-serif";
-      ctx.fillStyle = "rgba(255,248,220,0.85)";
-      ctx.fillText("Salamiya Cinema", canvas.width / 2, canvas.height / 2 + 22);
-    } else if (screenMode === "playing") {
-      const hue = reducedMotion ? 220 : (clock.elapsedTime * 8) % 360;
-      ctx.fillStyle = `hsl(${hue}, 70%, 45%)`;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    } else {
-      ctx.fillStyle = "#c9922a";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#fff";
-      ctx.font = "bold 24px sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("سينما سلمية", canvas.width / 2, canvas.height / 2);
-    }
+    drawCinemaScreenCanvas(ctx, canvas, {
+      mode: screenMode,
+      movie,
+      locale,
+      time: clock.elapsedTime,
+      reducedMotion,
+    });
+
     if (textureRef.current) textureRef.current.needsUpdate = true;
     if (matRef.current) {
-      matRef.current.emissiveIntensity = 0.45 + boot.current * 1.1;
+      matRef.current.emissiveIntensity = 0.55 + boot.current * 0.95;
     }
   });
 
@@ -93,8 +86,8 @@ export function CinemaScreenMesh({ reducedMotion = false }: Props) {
         <meshStandardMaterial
           ref={matRef}
           color="#fff9ef"
-          emissive="#d4e8ff"
-          emissiveIntensity={0.35}
+          emissive="#ffffff"
+          emissiveIntensity={0.55}
           toneMapped={false}
         />
       </mesh>

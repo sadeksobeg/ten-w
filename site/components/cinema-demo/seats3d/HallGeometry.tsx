@@ -15,6 +15,11 @@ export function HallGeometry({ width, depth }: Props) {
         <meshStandardMaterial color="#221e2e" roughness={0.35} metalness={0.18} />
       </mesh>
 
+      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 4.6, depth / 2]}>
+        <planeGeometry args={[width * 1.05, depth + 4]} />
+        <meshStandardMaterial color="#08070c" roughness={1} side={THREE.BackSide} />
+      </mesh>
+
       {[-1, 1].map((side) => (
         <mesh key={side} position={[side * (width / 2 + 0.25), 1.4, depth / 2]} rotation={[0, side * -Math.PI / 2, 0]}>
           <planeGeometry args={[depth + 4, 2.8]} />
@@ -22,21 +27,19 @@ export function HallGeometry({ width, depth }: Props) {
         </mesh>
       ))}
 
-      {Array.from({ length: 5 }, (_, i) => (
-        <mesh key={i} position={[0, 3.2, depth * 0.2 + i * 1.2]}>
-          <boxGeometry args={[width * 0.9, 0.08, 0.6]} />
-          <meshStandardMaterial color="#121018" roughness={0.9} />
-        </mesh>
-      ))}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-width * 0.38, 0.01, depth * 0.35]}>
+        <planeGeometry args={[0.12, depth * 0.7]} />
+        <meshStandardMaterial color="#f5c518" emissive="#f5c518" emissiveIntensity={0.12} toneMapped={false} />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[width * 0.38, 0.01, depth * 0.35]}>
+        <planeGeometry args={[0.12, depth * 0.7]} />
+        <meshStandardMaterial color="#f5c518" emissive="#f5c518" emissiveIntensity={0.12} toneMapped={false} />
+      </mesh>
 
       <group position={[0, 1.85, screenZ - 0.15]}>
         <mesh rotation={[-0.08, 0, 0]}>
           <boxGeometry args={[8.2, 2.6, 0.12]} />
           <meshStandardMaterial color="#0a0a0a" roughness={1} />
-        </mesh>
-        <mesh rotation={[-0.08, 0, 0]} position={[0, 0, 0.02]}>
-          <boxGeometry args={[7.9, 2.35, 0.02]} />
-          <meshStandardMaterial color="#c9922a" roughness={0.4} metalness={0.6} />
         </mesh>
       </group>
 

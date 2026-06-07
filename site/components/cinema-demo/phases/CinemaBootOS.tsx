@@ -126,15 +126,46 @@ export function CinemaBootOS() {
 
       {stage === 2 ? (
         <div className="cinema-boot-auth">
+          <div className="cinema-boot-auth-glow" aria-hidden />
           <CinemaBrandLogo variant="dark" className="cinema-boot-logo" />
+          <p className="cinema-boot-auth-kicker">{t("boot.opsCenterAr")}</p>
           <h1>{t("boot.opsCenterEn")}</h1>
-          <p>{t("boot.opsCenterAr")}</p>
+          <p className="cinema-boot-auth-sub">{t("boot.authSubtitle")}</p>
+
           <div className="cinema-boot-login-card">
-            <p>{t("boot.loginUser")}</p>
-            <p>{t("boot.loginRole")}</p>
-            <p>{t("boot.loginLevel")}</p>
-            <p className="cinema-boot-verified">{t("boot.loginVerified")}</p>
+            <div className="cinema-boot-login-head">
+              <span className="cinema-boot-login-avatar" aria-hidden>
+                {t("boot.loginAvatar")}
+              </span>
+              <div>
+                <strong>{t("boot.loginName")}</strong>
+                <span className="cinema-boot-login-branch">{t("boot.loginBranch")}</span>
+              </div>
+            </div>
+
+            <dl className="cinema-boot-login-rows">
+              <div className="cinema-boot-login-row">
+                <dt>{t("boot.loginUserLabel")}</dt>
+                <dd>
+                  <bdi dir="rtl">{t("boot.loginUserEmail")}</bdi>
+                </dd>
+              </div>
+              <div className="cinema-boot-login-row">
+                <dt>{t("boot.loginRoleLabel")}</dt>
+                <dd>{t("boot.loginRoleValue")}</dd>
+              </div>
+              <div className="cinema-boot-login-row">
+                <dt>{t("boot.loginLevelLabel")}</dt>
+                <dd>{t("boot.loginLevelValue")}</dd>
+              </div>
+            </dl>
+
+            <p className="cinema-boot-verified">
+              <span className="cinema-boot-verified-dot" aria-hidden />
+              {t("boot.loginVerified")}
+            </p>
           </div>
+
           <div className="cinema-boot-fingerprint">
             <svg viewBox="0 0 64 80" aria-hidden>
               <path
@@ -152,7 +183,9 @@ export function CinemaBootOS() {
                 fill="rgba(201,146,42,0.35)"
               />
             </svg>
-            {scanPct >= 100 ? <p>{t("boot.fingerprintDone")}</p> : null}
+            <p className="cinema-boot-scan-label">
+              {scanPct >= 100 ? t("boot.fingerprintDone") : t("boot.fingerprintScanning", { pct: scanPct })}
+            </p>
           </div>
         </div>
       ) : null}

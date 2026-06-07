@@ -17,7 +17,7 @@ import { RowLabels } from "@/components/cinema-demo/seats3d/RowLabels";
 import { SeatHud } from "@/components/cinema-demo/seats3d/SeatHud";
 import { seatById, type AuditoriumBounds, type Seat3D } from "@/lib/cinema-demo/seat-layout-3d";
 import { isSeatSelectable } from "@/lib/cinema-demo/seat-select";
-import { playSeatDeselectSound, playSeatSelectChime, playSeatSelectSound } from "@/lib/cinema-demo/sounds";
+import { playProjectorRoll, playSeatDeselectSound, playSeatSelectChime, playSeatSelectSound, startHallAmbience, stopHallAmbience } from "@/lib/cinema-demo/sounds";
 import { useCinemaDemoStore } from "@/stores/cinema-demo-store";
 
 type SceneProps = {
@@ -38,6 +38,7 @@ function HallScene({ showtimeId, seats, bounds, reducedMotion3D, highlightRow }:
   const setHudHoverSeatId = useCinemaDemoStore((s) => s.setHudHoverSeatId);
   const setCameraPreset = useCinemaDemoStore((s) => s.setCameraPreset);
   const setLiveSeatStates = useCinemaDemoStore((s) => s.setLiveSeatStates);
+  const setScreenMode = useCinemaDemoStore((s) => s.setScreenMode);
   const smartPickAnimating = useCinemaDemoStore((s) => s.smartPickAnimating);
   const liveStates = useLiveSeatSimulation(showtimeId, true);
   const quality = useHallQuality(reducedMotion3D);
@@ -47,6 +48,17 @@ function HallScene({ showtimeId, seats, bounds, reducedMotion3D, highlightRow }:
   useEffect(() => {
     setLiveSeatStates(liveStates);
   }, [liveStates, setLiveSeatStates]);
+
+  useEffect(() => {
+    startHallAmbience(soundEnabled);
+    const preTimer = window.setTimeout(() => setScreenMode("playing"), 1800);
+    const rollTimer = window.setTimeout(() => playProjectorRoll(soundEnabled), 1900);
+    return () => {
+      clearTimeout(preTimer);
+      clearTimeout(rollTimer);
+      stopHallAmbience();
+    };
+  }, [soundEnabled, setScreenMode]);
 
   const focusSeat = focusedSeatId ? (seatById(showtimeId, focusedSeatId) ?? null) : null;
   const floorW = bounds.maxX - bounds.minX + 2;
@@ -81,7 +93,7 @@ function HallScene({ showtimeId, seats, bounds, reducedMotion3D, highlightRow }:
       <HallGeometry width={floorW} depth={floorD} />
       <HallLighting width={floorW} depth={floorD} />
       <CinemaScreenMesh reducedMotion={reducedMotion3D} />
-      <ProjectorBeam depth={floorD} />
+      <ProjectorBeam depth={floorD} visible={!reducedMotion3D} />
       <DustParticles depth={floorD} count={quality.particleCount} enabled={quality.particleCount > 0} />
       <RowLabels seats={seats} />
       <InstancedSeats

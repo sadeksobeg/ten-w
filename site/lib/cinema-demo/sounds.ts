@@ -66,6 +66,55 @@ export function playCameraMoveSound(enabled: boolean) {
   tone(320, 50, 0.04);
 }
 
+let ambienceOsc: OscillatorNode | null = null;
+let ambienceGain: GainNode | null = null;
+
+export function startHallAmbience(enabled: boolean) {
+  stopHallAmbience();
+  if (!enabled) return;
+  const ctx = getCtx();
+  if (!ctx) return;
+  void ctx.resume();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = "sine";
+  osc.frequency.value = 52;
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.012, ctx.currentTime + 1.8);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  ambienceOsc = osc;
+  ambienceGain = gain;
+}
+
+export function stopHallAmbience() {
+  const ctx = getCtx();
+  if (!ctx || !ambienceOsc || !ambienceGain) return;
+  ambienceGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.6);
+  const osc = ambienceOsc;
+  window.setTimeout(() => {
+    try {
+      osc.stop();
+    } catch {
+      /* already stopped */
+    }
+  }, 700);
+  ambienceOsc = null;
+  ambienceGain = null;
+}
+
+export function playProjectorRoll(enabled: boolean) {
+  if (!enabled) return;
+  const ctx = getCtx();
+  if (!ctx) return;
+  void ctx.resume();
+  for (let i = 0; i < 8; i++) {
+    window.setTimeout(() => tone(120 + i * 18, 35, 0.025), i * 90);
+  }
+  window.setTimeout(() => playProjectorTick(enabled), 720);
+}
+
 export function playBootBeep(enabled: boolean) {
   if (!enabled) return;
   tone(660, 40, 0.04);

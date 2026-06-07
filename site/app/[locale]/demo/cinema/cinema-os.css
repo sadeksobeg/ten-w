@@ -50,20 +50,128 @@
   transition: width 0.4s ease;
 }
 
-.cinema-boot-auth { text-align: center; color: #f5f5f5; }
-.cinema-boot-auth h1 { font-size: 0.75rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.7); }
-.cinema-boot-login-card {
-  margin: 1.5rem auto;
-  padding: 1rem 1.5rem;
-  border: 1px solid rgba(201,146,42,0.35);
-  border-radius: 12px;
-  background: rgba(18,18,18,0.8);
-  text-align: start;
-  max-width: 320px;
+.cinema-boot-auth {
+  position: relative;
+  text-align: center;
+  color: #f5f5f5;
+  width: min(420px, 92vw);
+  font-family: var(--font-sans, system-ui, sans-serif);
 }
-.cinema-boot-verified { color: #4ade80; }
-.cinema-boot-fingerprint { color: #c9922a; margin-top: 1rem; }
+.cinema-boot-auth-glow {
+  position: absolute;
+  inset: -40% -20%;
+  background: radial-gradient(ellipse at center, rgba(201, 146, 42, 0.18) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+.cinema-boot-auth > *:not(.cinema-boot-auth-glow) { position: relative; z-index: 1; }
+.cinema-boot-auth-kicker {
+  margin: 0.75rem 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f5c518;
+  letter-spacing: 0.02em;
+}
+.cinema-boot-auth h1 {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 600;
+}
+.cinema-boot-auth-sub {
+  margin: 0.65rem 0 0;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+.cinema-boot-login-card {
+  margin: 1.35rem auto 0;
+  padding: 1.1rem 1.15rem;
+  border: 1px solid rgba(245, 197, 24, 0.28);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(22, 18, 28, 0.92), rgba(10, 10, 16, 0.88));
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  text-align: start;
+}
+.cinema-boot-login-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.cinema-boot-login-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: #0a0a0a;
+  background: linear-gradient(135deg, #ffe066, #c9922a);
+  flex-shrink: 0;
+}
+.cinema-boot-login-head strong {
+  display: block;
+  font-size: 0.92rem;
+  color: #fff;
+}
+.cinema-boot-login-branch {
+  display: block;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.15rem;
+}
+.cinema-boot-login-rows {
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+.cinema-boot-login-row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+.cinema-boot-login-row dt {
+  margin: 0;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+.cinema-boot-login-row dd {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  word-break: break-word;
+}
+.cinema-boot-verified {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.85rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #4ade80;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.cinema-boot-verified-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #4ade80;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.65);
+}
+.cinema-boot-fingerprint { color: #c9922a; margin-top: 1.15rem; }
 .cinema-boot-fingerprint svg { width: 64px; height: 80px; }
+.cinema-boot-scan-label {
+  margin: 0.45rem 0 0;
+  font-size: 0.72rem;
+  color: rgba(245, 197, 24, 0.85);
+}
 
 .cinema-boot-flash {
   position: fixed;
