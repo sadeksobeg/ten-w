@@ -1,5 +1,6 @@
 import { PrismaClient, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { uniqueClientDiscountCode } from "@/lib/growth/client-discount-code";
 
 function randomReferralCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -43,9 +44,27 @@ export async function ensurePartnerProfile(userId: string) {
     data: {
       userId,
       referralCode: await uniqueReferralCode(prisma),
+      clientDiscountCode: await uniqueClientDiscountCode(prisma),
       parentUserId: null,
       currentLevelId: starter.id,
     },
     include: { currentLevel: true },
   });
+}
+
+/** Ensures every partner profile has a client discount code (backfill for legacy rows). */
+export async function ensureClientDiscountCode(userId: string): Promise<string | null> {
+  const profile = await prisma.partnerProfile.findUnique({
+    where: { userId },
+    select: { clientDiscountCode: true },
+  });
+  if (!profile) return null;
+  if (profile.clientDiscountCode) return profile.clientDiscountCode;
+
+  const code = await uniqueClientDiscountCode(prisma);
+  await prisma.partnerProfile.update({
+    where: { userId },
+    data: { clientDiscountCode: code },
+  });
+  return code;
 }

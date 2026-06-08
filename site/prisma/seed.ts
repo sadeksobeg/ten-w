@@ -8,6 +8,8 @@ import {
   BadgeType,
 } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { productFeaturesForSlug } from "../lib/growth/product-features";
+import { uniqueClientDiscountCode } from "../lib/growth/client-discount-code";
 
 const prisma = new PrismaClient();
 
@@ -537,6 +539,8 @@ async function main() {
         priceCents: 120_00,
         commissionBaseCents: 40_00,
         marketingKit: kit("clinic-system"),
+        publicVisible: false,
+        sortOrder: 10,
         active: true,
       },
       {
@@ -545,22 +549,59 @@ async function main() {
         priceCents: 300_00,
         commissionBaseCents: 100_00,
         marketingKit: kit("visual-identity"),
+        publicVisible: false,
+        sortOrder: 20,
         active: true,
       },
       {
         slug: "website",
-        name: "عقد الموقع",
+        name: "موقع إلكتروني",
         priceCents: 4500_00,
-        commissionBaseCents: 500_00,
+        commissionBaseCents: 450_00,
         marketingKit: kit("website"),
+        featuresJson: productFeaturesForSlug("website"),
+        descriptionAr:
+          "موقع احترافي سريع ومتجاوب مع لوحة إدارة — يعكس هوية شركتك ويحوّل الزوار لعملاء.",
+        descriptionEn:
+          "A fast, responsive professional website with admin panel — reflects your brand and converts visitors.",
+        descriptionFr:
+          "Site web professionnel rapide et responsive avec panneau admin — reflète votre marque et convertit.",
+        publicVisible: true,
+        sortOrder: 1,
+        active: true,
+      },
+      {
+        slug: "automation-ai",
+        name: "أتمتة وذكاء اصطناعي",
+        priceCents: 5900_00,
+        commissionBaseCents: 590_00,
+        marketingKit: kit("automation-ai"),
+        featuresJson: productFeaturesForSlug("automation-ai"),
+        descriptionAr:
+          "نظام أتمتة ذكي يربط قنوات التواصل، يرد تلقائياً، ويحوّل العملاء المحتملين لمسار واضح.",
+        descriptionEn:
+          "Smart automation connecting channels, auto-replies, and routes leads through a clear pipeline.",
+        descriptionFr:
+          "Automatisation intelligente reliant les canaux, réponses auto et pipeline de leads clair.",
+        publicVisible: true,
+        sortOrder: 2,
         active: true,
       },
       {
         slug: "mobile-app",
-        name: "تطبيق الموبايل",
+        name: "تطبيق موبايل",
         priceCents: 9500_00,
-        commissionBaseCents: 1000_00,
+        commissionBaseCents: 950_00,
         marketingKit: kit("mobile-app"),
+        featuresJson: productFeaturesForSlug("mobile-app"),
+        descriptionAr:
+          "تطبيق iOS و Android مخصص لعلامتك — تجربة سلسة، إشعارات، ولوحة تحكم.",
+        descriptionEn:
+          "Custom iOS & Android app for your brand — smooth UX, notifications, and admin dashboard.",
+        descriptionFr:
+          "Application iOS et Android sur mesure — UX fluide, notifications et tableau de bord.",
+        publicVisible: true,
+        sortOrder: 3,
         active: true,
       },
     ],
@@ -601,6 +642,7 @@ async function main() {
     data: {
       userId: demo.id,
       referralCode: await uniqueReferralCode(),
+      clientDiscountCode: await uniqueClientDiscountCode(prisma),
       parentUserId: null,
       currentLevelId: starter.id,
       displayTitle: "Elite Partner",
@@ -661,6 +703,55 @@ async function main() {
       token: "TNGTA-AHMED_R-4F9A2C",
       slug: "ahmed-al-rashid-ahmed-rashid",
       createdById: admin.id,
+    },
+    update: {},
+  });
+
+  const creatorBadge = await prisma.badgeDefinition.findUnique({
+    where: { key: "content_creator" },
+  });
+  if (creatorBadge) {
+    await prisma.userBadge.upsert({
+      where: { userId_badgeId: { userId: demo.id, badgeId: creatorBadge.id } },
+      create: { userId: demo.id, badgeId: creatorBadge.id, grantedById: admin.id },
+      update: {},
+    });
+  }
+
+  const now = new Date();
+  const weekEnd = new Date(now);
+  weekEnd.setUTCDate(weekEnd.getUTCDate() + 7);
+  const weekKey = `${now.getUTCFullYear()}-W${String(
+    Math.ceil(
+      ((now.getTime() - Date.UTC(now.getUTCFullYear(), 0, 1)) / 86400000 + 1) / 7,
+    ),
+  ).padStart(2, "0")}`;
+
+  await prisma.creatorChallenge.upsert({
+    where: { weekKey },
+    create: {
+      weekKey,
+      titleAr: "انشر محتوى عن ASCEND هذا الأسبوع",
+      titleEn: "Post ASCEND content this week",
+      titleFr: "Publiez du contenu ASCEND cette semaine",
+      bodyAr: "صوّر أو اكتب عن تجربة ASCEND وارفع رابط المنشور.",
+      bodyEn: "Film or write about ASCEND and submit your post link.",
+      bodyFr: "Filmez ou écrivez sur ASCEND et soumettez votre lien.",
+      xpReward: 500,
+      active: true,
+      startsAt: now,
+      endsAt: weekEnd,
+    },
+    update: { active: true },
+  });
+
+  await prisma.creatorArenaProfile.upsert({
+    where: { userId: demo.id },
+    create: {
+      userId: demo.id,
+      status: "JOINED",
+      milestones: ["first_post"],
+      totalSubmissions: 0,
     },
     update: {},
   });

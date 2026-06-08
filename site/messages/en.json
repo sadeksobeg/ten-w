@@ -441,30 +441,177 @@
     "reportError": "Could not send. Try again or use the contact page.",
     "reportRateLimited": "Too many requests. Please wait and try again."
   },
+  "OrderPage": {
+    "meta": {
+      "title": "Order your service — TENEGTA",
+      "description": "Pick website, automation, or mobile app packages, customize features, and apply a discount code."
+    },
+    "eyebrow": "TENEGTA · Service order",
+    "title": "Choose your package",
+    "subtitle": "Three clear packages — price changes with the features you select. Final price is confirmed after our team reviews your request.",
+    "startsFrom": "Starting at",
+    "selectedPackage": "Selected package",
+    "changePackage": "Change package",
+    "continue": "Continue",
+    "back": "Back",
+    "features": {
+      "title": "Customize features",
+      "subtitle": "Each add-on updates the price instantly."
+    },
+    "summary": {
+      "title": "Price summary",
+      "base": "Base price",
+      "discount": "{pct}% off",
+      "total": "Estimated total",
+      "disclaimer": "Final price confirmed after review — this is an estimate only."
+    },
+    "discount": {
+      "label": "Discount code (optional)",
+      "placeholder": "ABC123",
+      "apply": "Apply",
+      "applied": "3% discount applied",
+      "invalid": "Invalid code",
+      "error": "Could not validate code"
+    },
+    "form": {
+      "title": "Your contact details",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "company": "Company (optional)",
+      "notes": "Notes (optional)",
+      "submit": "Submit order",
+      "submitting": "Sending…"
+    },
+    "success": {
+      "title": "Request received",
+      "body": "The TENEGTA team will contact you soon to confirm details and final pricing.",
+      "ref": "Order ref: {id}"
+    },
+    "errors": {
+      "generic": "Could not submit — please try again.",
+      "rate_limited": "Too many requests — wait a moment.",
+      "validation": "Check required fields.",
+      "turnstile_failed": "Security check failed.",
+      "service_unconfigured": "Order service is unavailable.",
+      "invalid_product": "Selected package is unavailable."
+    }
+  },
   "Creators": {
     "studio": {
-      "metaTitle": "Creator Studio — film TENEGTA experiences",
-      "metaDescription": "Public filming hub for creators — Cinema OS, invite cards, Ascend, and share-ready links.",
+      "metaTitle": "Creator Studio — grow with TENEGTA",
+      "metaDescription": "Public hub for creators — marketing kits, tracked links, commissions, and ASCEND partner tools.",
       "eyebrow": "ASCEND Creator Arena",
       "title": "Creator Studio",
-      "subtitle": "Shoot Reels, TikTok, and Shorts from premium TENEGTA experiences — copy your filming link and go.",
-      "copyFilmingLink": "Copy filming link",
+      "subtitle": "Create content, share tracked links, and earn commissions on the TENEGTA partner platform.",
+      "copyFilmingLink": "Copy studio link",
       "downloadStoryFrame": "Download story frame (9:16)",
-      "linkCopied": "Filming link copied",
+      "linkCopied": "Studio link copied",
       "storyDownloaded": "Story frame downloaded",
       "copyError": "Could not copy",
       "storyError": "Could not generate frame",
-      "experiencesTitle": "Film-ready experiences",
-      "experiencesSubtitle": "Each card opens a cinematic surface designed for vertical video.",
-      "openExperience": "Open for filming →",
-      "experiences": {
-        "cinema": {
-          "title": "Cinema OS — presenter mode",
-          "body": "Skip boot, tap Start Show, walk from movies to the digital ticket."
+      "hero": {
+        "tagline": "Your public launchpad for partner content — copy your link, use the kit, and grow with ASCEND.",
+        "joinCta": "Join the program",
+        "watchHow": "See how it works",
+        "stats": {
+          "creators": { "value": "120+", "label": "Active creators" },
+          "content": { "value": "2.4k", "label": "Posts this month" },
+          "commissions": { "value": "18%", "label": "Top tier rate" }
+        }
+      },
+      "howItWorks": {
+        "title": "How it works",
+        "subtitle": "Three steps from signup to your first commission.",
+        "steps": {
+          "join": {
+            "title": "Join ASCEND",
+            "body": "Activate your partner account and unlock the creator badge inside the growth hub."
+          },
+          "promote": {
+            "title": "Share your order link",
+            "body": "Copy your /order link with the 3% discount code — clients pick a package and the request goes to you and admin."
+          },
+          "earn": {
+            "title": "Earn commissions",
+            "body": "Commissions start at 10% and grow with your activity and closed deals — track everything in ASCEND."
+          }
+        }
+      },
+      "tools": {
+        "title": "Your creator toolkit",
+        "subtitle": "Everything you need to promote TENEGTA professionally.",
+        "marketingKit": {
+          "title": "Marketing kit",
+          "body": "Ready-made captions, visuals, and talking points — no guesswork before you hit publish."
         },
+        "utm": {
+          "title": "UTM tracking links",
+          "body": "Every studio link carries source and campaign tags so you know what content converts."
+        },
+        "commissions": {
+          "title": "Commission dashboard",
+          "body": "See pending and paid earnings in ASCEND — transparent rates at every partner tier."
+        }
+      },
+      "testimonials": {
+        "title": "Creators on TENEGTA",
+        "subtitle": "Placeholder voices — real stories coming as the arena grows.",
+        "archetypes": {
+          "growth": {
+            "initials": "GP",
+            "role": "Growth partner",
+            "quote": "The UTM link made it obvious which Reel drove signups. I doubled down on what worked."
+          },
+          "lifestyle": {
+            "initials": "LC",
+            "role": "Lifestyle creator",
+            "quote": "The marketing kit saved hours — I posted the same day I got my badge."
+          },
+          "business": {
+            "initials": "BE",
+            "role": "Business educator",
+            "quote": "Commissions show up in ASCEND with no chasing invoices. Clean and professional."
+          }
+        }
+      },
+      "faq": {
+        "title": "Common questions",
+        "items": {
+          "who": {
+            "q": "Who can join Creator Studio?",
+            "a": "Any ASCEND partner can use the public studio page. The full creator lounge and challenges require the content_creator badge."
+          },
+          "badge": {
+            "q": "How do I get the creator badge?",
+            "a": "Apply through ASCEND or get invited by the TENEGTA team. Badge holders unlock the private creator circle and weekly challenges."
+          },
+          "utm": {
+            "q": "How do UTM links work?",
+            "a": "Your studio link includes utm_source and utm_campaign parameters. Visits are logged so your content gets credit."
+          },
+          "payout": {
+            "q": "When are commissions paid?",
+            "a": "Payouts follow ASCEND partner rules — pending deals move to paid once closed and approved by admin."
+          },
+          "support": {
+            "q": "Where do I get help?",
+            "a": "Use ASCEND support chat or contact TENEGTA directly. Badge holders also have the private creators group."
+          }
+        }
+      },
+      "finalCta": {
+        "title": "Ready to create with TENEGTA?",
+        "body": "Join ASCEND, grab your studio link, and start building your partner audience today.",
+        "cta": "Join ASCEND"
+      },
+      "experiencesTitle": "Explore partner experiences",
+      "experiencesSubtitle": "Each card opens a demo surface you can feature in your content.",
+      "openExperience": "Open experience →",
+      "experiences": {
         "invite": {
-          "title": "Cinematic invite card",
-          "body": "Luxury invite flow — perfect opening shot for your video."
+          "title": "Luxury invite card",
+          "body": "Premium invite flow — a polished opening for your vertical content."
         },
         "ascend": {
           "title": "Ascend in 60 seconds",
@@ -475,8 +622,6 @@
           "body": "System visualizer from the homepage — ?demo=ai"
         }
       },
-      "scriptTitle": "75-second script",
-      "scriptBody": "0–5s: Invite card\n5–25s: Cinema OS boot → ticket\n25–40s: Ascend Growth\n40–55s: Creator Lounge\n55–75s: tenegta.com/creators/studio + #TENEGTA",
       "privateRoomHint": "Badge holders get the private Creator Lounge inside ASCEND.",
       "ascendCta": "Activate ASCEND account"
     }
@@ -2597,12 +2742,35 @@
         "scriptCopied": "Script copied",
         "copyError": "Could not copy",
         "filmLinks": "Film these",
+        "orderPage": "Client order page",
         "studio": "Creator Studio hub",
         "cinema": "Cinema OS (presenter mode)",
         "invite": "Cinematic invite card",
         "visualizer": "AI system visualizer",
+        "profile": "Partner profile settings",
+        "toolLinks": "Quick tools",
+        "hashtags": "#TENEGTA #ASCEND #CreatorArena",
         "copyStudioLink": "Copy studio link with UTM",
         "linkCopied": "Studio link copied"
+      },
+      "salesGuide": {
+        "eyebrow": "Sales guide",
+        "title": "What to promote",
+        "intro": "In simple terms — these are the services you market, with commissions starting at 10% and growing with your effort.",
+        "colProduct": "Product",
+        "colPrice": "Base price",
+        "colCommission": "Your rate now",
+        "priceNote": "Price goes up or down based on features the client selects.",
+        "commissionNote": "Your current rate is {rate} — it grows with deals, referrals, and platform activity.",
+        "discountTitle": "Client discount code",
+        "discountBody": "Gives clients 3% off on orders — applied automatically from your link.",
+        "copyCode": "Copy code",
+        "codeCopied": "Code copied",
+        "orderLinkTitle": "Ready order link",
+        "copyOrderLink": "Copy order link",
+        "linkCopied": "Link copied",
+        "copyError": "Could not copy",
+        "noCodeYet": "Your discount code will be generated when your account is active."
       },
       "cupTitle": "Creator Cup",
       "cupSubtitle": "Weekly rank — creators with the content_creator badge only.",
@@ -2635,6 +2803,205 @@
         "FILMING": "Filming",
         "SUBMITTED": "Submitted",
         "FEATURED": "Featured"
+      },
+      "lounge": {
+        "welcomeCelebration": "Welcome to the Creator Lounge! Explore challenges and tools.",
+        "navAria": "Creator Lounge navigation",
+        "mobileNavAria": "Creator Lounge sections",
+        "nav": {
+          "home": "Home",
+          "challenge": "Challenge",
+          "cup": "Creator Cup",
+          "battles": "Battles",
+          "studio": "Studio",
+          "achievements": "Achievements",
+          "settings": "Settings"
+        },
+        "weekLabel": "Week {week}",
+        "activeCreators": "{count} creators active",
+        "activityTitle": "Live activity",
+        "activityOnline": "{count} online",
+        "weekStats": "This week",
+        "postsStat": "Posts",
+        "submissionsStat": "Missions",
+        "activityFeed": {
+          "joined": "{name} joined the lounge",
+          "submitted": "{name} submitted a challenge",
+          "filming": "{name} is filming",
+          "featured": "{name} was featured",
+          "battle": "{name} sent a battle challenge"
+        },
+        "homeChatTitle": "Creators chat",
+        "recentSubmissions": "Recent submissions",
+        "recentSubmissionsEmpty": "No submissions yet this week.",
+        "challengeHero": "Weekly mission",
+        "challengeEmpty": "No active challenge this week.",
+        "challengeCountdown": "Ends in {time}",
+        "challengeEnded": "Challenge ended",
+        "leaderboardPreview": "Leaderboard preview",
+        "platforms": {
+          "reels": "Reels",
+          "tiktok": "TikTok",
+          "shorts": "Shorts",
+          "other": "Other"
+        },
+        "cupRankHighlight": "Your rank",
+        "cupYourScore": "{score} pts · {posts} posts",
+        "cupPointsExplainer": "Points = weekly XP + 75 per approved post + 10 per UTM visit.",
+        "battlesHistory": "Past battles",
+        "battlesHistoryEmpty": "No completed battles yet.",
+        "battleOutcome": {
+          "won": "Won",
+          "lost": "Lost",
+          "pending": "Active"
+        },
+        "studioTitle": "Creator tools",
+        "studioSubtitle": "Film, share, and track — all from the lounge.",
+        "utmTitle": "UTM tracking link",
+        "resourcesTitle": "Resource library",
+        "resources": {
+          "brand": "Brand guidelines",
+          "utm": "UTM guide",
+          "hashtags": "Hashtag kit"
+        },
+        "achievementsTitle": "Achievements & milestones",
+        "achievementsSubtitle": "Badges and milestones earned in the creator program.",
+        "milestonesTitle": "Milestones",
+        "milestonesEmpty": "No milestones yet — keep shipping content.",
+        "settingsTitle": "Creator settings",
+        "settingsSubtitle": "Update your status and profile.",
+        "errorTitle": "Something went wrong",
+        "errorBody": "The lounge hit a snag. Try again.",
+        "errorRetry": "Retry"
+      },
+      "spotlight": {
+        "eyebrow": "Creator of the week",
+        "featuredCount": "{count} featured posts",
+        "viewProfile": "View profile",
+        "challenge": "Challenge them"
+      },
+      "onboarding": {
+        "title": "Getting started",
+        "subtitle": "Complete these steps to unlock the full lounge.",
+        "steps": {
+          "profile": "Complete your profile",
+          "introduce": "Introduce yourself in chat",
+          "challenge": "Check this week's challenge",
+          "studio": "Try studio tools (UTM / story frame)",
+          "orderLink": "Copy your order link and discount code",
+          "firstShare": "Share your first link"
+        },
+        "complete": "Done"
+      },
+      "calendar": {
+        "title": "Content calendar",
+        "subtitle": "Plan posts for {week}",
+        "planned": "Planned",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      },
+      "drawer": {
+        "close": "Close",
+        "status": "Status",
+        "submissions": "Submissions",
+        "featured": "Featured",
+        "viewProfile": "Public profile",
+        "challenge": "Send battle challenge"
+      },
+      "admin": {
+        "tabsAria": "Creator admin sections",
+        "tabCreators": "Creators",
+        "tabChallenges": "Challenges",
+        "tabCup": "Creator Cup",
+        "stats": {
+          "aria": "Creator program statistics",
+          "totalCreators": "Lounge creators",
+          "activeThisWeek": "Active this week",
+          "featured": "Featured",
+          "pendingSubmissions": "Pending review"
+        },
+        "list": {
+          "filterStatus": "Filter by status",
+          "filterAll": "All statuses",
+          "filterNoStatus": "No status",
+          "sortBy": "Sort by",
+          "sortName": "Name",
+          "sortSubmissions": "Submissions",
+          "sortCupScore": "Cup score",
+          "sortStatus": "Status",
+          "empty": "No creators match your filters.",
+          "viewDetail": "Details",
+          "metaSubmissions": "{n} submissions",
+          "metaCup": "{score} cup pts"
+        },
+        "detail": {
+          "close": "Close panel",
+          "statsTitle": "Creator stats",
+          "totalSubmissions": "Total submissions",
+          "featuredCount": "Featured posts",
+          "cupScore": "Cup score",
+          "submissionsTitle": "Recent submissions",
+          "submissionsEmpty": "No submissions yet.",
+          "notesTitle": "Admin notes",
+          "notesPlaceholder": "Internal notes about this creator…",
+          "saveNotes": "Save notes",
+          "milestonesTitle": "Milestones",
+          "actionsTitle": "Actions",
+          "grantBadge": "Grant content creator badge",
+          "grantMilestone": "Grant milestone",
+          "toastSaved": "Saved"
+        },
+        "challenges": {
+          "title": "Weekly challenges",
+          "subtitle": "Create missions and rate creator submissions.",
+          "createChallenge": "New challenge",
+          "cancelCreate": "Cancel",
+          "formTitle": "Create weekly challenge",
+          "weekKey": "Week key",
+          "xpReward": "XP reward",
+          "titleAr": "Title (Arabic)",
+          "titleEn": "Title (English)",
+          "titleFr": "Title (French)",
+          "bodyAr": "Body (Arabic)",
+          "bodyEn": "Body (English)",
+          "bodyFr": "Body (French)",
+          "submitCreate": "Publish challenge",
+          "empty": "No challenges yet.",
+          "metaXp": "+{xp} XP",
+          "metaPosts": "posts",
+          "active": "Active",
+          "submissionsTitle": "Submissions",
+          "submissionsEmpty": "No submissions for this week.",
+          "pickChallenge": "Select a challenge to review submissions.",
+          "featured": "Featured",
+          "rate": "Rate {n} stars",
+          "toastCreated": "Challenge saved",
+          "toastRated": "Rating saved",
+          "toastError": "Action failed"
+        },
+        "cup": {
+          "title": "Creator Cup leaderboard",
+          "subtitle": "Weekly ranked creators — top 3 receive season badges when you close the season.",
+          "closeSeason": "Close season & award top 3",
+          "closeConfirm": "Award cup badges to the top 3 creators and notify them?",
+          "closeHint": "Closing the season grants creator_cup_gold, creator_cup_silver, and creator_cup_bronze badges.",
+          "empty": "No ranked creators this week.",
+          "colRank": "Rank",
+          "colCreator": "Creator",
+          "colScore": "Score",
+          "colPosts": "Posts",
+          "anonymous": "Creator",
+          "toastClosed": "Season closed — badges granted",
+          "toastError": "Could not close season"
+        }
+      },
+      "chat": {
+        "charLimit": "Max {max} characters per message"
       }
     },
     "chat": {
@@ -2897,6 +3264,8 @@
     "admin": {
       "toastSaved": "Saved",
       "toastDealClosed": "Deal closed",
+      "toastOrderReviewed": "Order reviewed",
+      "toastOrderRejected": "Order rejected",
       "toastDealLost": "Deal marked lost",
       "toastPayoutUpdated": "Payout updated",
       "statsBar": {
@@ -2931,6 +3300,7 @@
         "groupPrograms": "Programs",
         "overview": "Overview",
         "deals": "Deals",
+        "orders": "Client orders",
         "payouts": "Payouts",
         "products": "Products",
         "badges": "Badges",
@@ -3282,6 +3652,31 @@
         "clientLabel": "Client label",
         "closeRequest": "Close requested"
       },
+      "orders": {
+        "title": "Client orders",
+        "subtitle": "Requests from /order — packages, features, and discount codes.",
+        "empty": "No orders yet.",
+        "review": "Mark reviewed",
+        "reject": "Reject",
+        "organic": "Direct order",
+        "discountApplied": "{pct}% off · {code}",
+        "colProduct": "Package",
+        "colCreator": "Creator",
+        "colDate": "Date",
+        "colRef": "Ref",
+        "stats": {
+          "today": "Today's orders",
+          "total": "All orders",
+          "topCreator": "Top creator",
+          "topProduct": "Top package"
+        },
+        "status": {
+          "NEW": "New",
+          "REVIEWED": "Reviewed",
+          "CONVERTED": "Closed",
+          "REJECTED": "Rejected"
+        }
+      },
       "payoutsPage": {
         "title": "Payout requests",
         "hint": "Approve partner withdrawal requests, then mark as paid after transfer.",
@@ -3492,6 +3887,8 @@
       "switchToSignIn": "Already have an account? Sign in",
       "registerIntro": "Create your partner profile to start earning when deals close.",
       "inviteRegisterHint": "Your invite is accepted — register with the same email to unlock the Creator Lounge badge automatically.",
+      "inviteRegisterBanner": "You are registering with a special T.E.N.E.G.T.A invite",
+      "inviteCreatorBadge": "Invited content creator",
       "signInHeroEyebrow": "TENEGTA ASCEND",
       "signInHeroTitle": "Your command center for partner performance",
       "signInHeroLine1": "Commissions, levels, and XP — unified in one live workspace.",

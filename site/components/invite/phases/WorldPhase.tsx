@@ -8,6 +8,7 @@ import { DownloadInviteButton } from "@/components/invite/DownloadInviteButton";
 import { WorldSystemsOrbit } from "@/components/invite/WorldSystemsOrbit";
 import { useIntersectionReveal } from "@/components/invite/hooks/useIntersectionReveal";
 import { usePrefersReducedMotion } from "@/components/invite/hooks/usePrefersReducedMotion";
+import { isCreatorProgramInvite } from "@/lib/growth/creator-program";
 
 type Props = {
   card: InviteCardPublic;
@@ -186,9 +187,18 @@ export function WorldPhase({ card, origin }: Props) {
         {step >= 7 ? (
           <section className="invite-world-actions invite-world-step-in">
             <DownloadInviteButton card={card} origin={origin} label="احفظ بطاقتك الرقمية" large />
-            <a href="https://tenegta.com" className="invite-cta-ceremony invite-world-cta-link">
-              استكشف TENEGTA ←
-            </a>
+            {isCreatorProgramInvite(card.tier) ? (
+              <a
+                href={`/ar/growth/register?invite=${encodeURIComponent(card.slug)}`}
+                className="invite-cta-ceremony invite-world-cta-link"
+              >
+                فعّل ASCEND — غرفة الصنّاع ←
+              </a>
+            ) : (
+              <a href="https://tenegta.com" className="invite-cta-ceremony invite-world-cta-link">
+                استكشف TENEGTA ←
+              </a>
+            )}
             <p className="invite-world-token">مرجع دعوتك · {card.token}</p>
           </section>
         ) : null}

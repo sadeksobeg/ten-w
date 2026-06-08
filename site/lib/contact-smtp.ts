@@ -134,3 +134,105 @@ export async function sendContactViaSmtp(
     return false;
   }
 }
+
+export type OrderNotificationPayload = {
+  orderId: string;
+  locale: string;
+  productName: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone?: string;
+  company?: string;
+  basePriceCents: number;
+  discountBps: number;
+  discountCents: number;
+  finalPriceCents: number;
+  discountCode?: string;
+  creatorName?: string;
+  creatorEmail?: string;
+  selectedFeatures: Array<{ label: string; priceDeltaCents: number }>;
+  notes?: string;
+  adminUrl: string;
+  sentAt: string;
+};
+
+function formatUsd(cents: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(cents / 100);
+}
+
+function formatOrderBody(payload: OrderNotificationPayload): string {
+  const featureLines =
+    payload.selectedFeatures.length > 0
+      ? payload.selectedFeatures.map(
+          (f) => `  - ${f.label}: +${formatUsd(f.priceDeltaCents)}`,
+        )
+      : ["  (none)"];
+
+  const lines = [
+    `Order ID: ${payload.orderId}`,
+    `Locale: ${payload.locale}`,
+    `Product: ${payload.productName}`,
+    "",
+    `Client: ${payload.clientName}`,
+    `Email: ${payload.clientEmail}`,
+    payload.clientPhone ? `Phone: ${payload.clientPhone}` : null,
+    payload.company ? `Company: ${payload.company}` : null,
+    "",
+    `Base price: ${formatUsd(payload.basePriceCents)}`,
+    ...featureLines,
+    payload.discountBps > 0
+      ? `Discount: ${payload.discountBps / 100}% (${formatUsd(payload.discountCents)}) via ${payload.discountCode ?? "—"}`
+      : "Discount: none",
+    `Estimated total: ${formatUsd(payload.finalPriceCents)}`,
+    "",
+    payload.creatorName
+      ? `Creator: ${payload.creatorName} (${payload.creatorEmail ?? "—"})`
+      : "Creator: none (organic)",
+    "",
+    payload.notes ? `Notes:\n${payload.notes}` : null,
+    "",
+    `Admin: ${payload.adminUrl}`,
+    `Sent at: ${payload.sentAt}`,
+  ];
+  return lines.filter((line): line is string => Boolean(line)).join("\n");
+}
+
+export async function sendOrderNotificationEmail(
+  payload: OrderNotificationPayload,
+): Promise<boolean> {
+  if (!isSmtpConfigured()) return false;
+
+  const to = getContactEmailTo();
+  if (!to) {
+    console.error("[order] SMTP: CONTACT_EMAIL_TO or SMTP_USER required");
+    return false;
+  }
+
+  const from =
+    process.env.SMTP_FROM?.trim() ||
+    `TENEGTA Website <${process.env.SMTP_USER!.trim()}>`;
+
+  try {
+    const transport = buildTransport();
+    await transport.sendMail({
+      from,
+      to,
+      replyTo: `${payload.clientName} <${payload.clientEmail}>`,
+      subject: `[TENEGTA] طلب جديد — ${payload.productName} — ${payload.clientName}`,
+      text: formatOrderBody(payload),
+    });
+    return true;
+  } catch (err) {
+    const e = err as Error & { code?: string; response?: string; responseCode?: number };
+    console.error("[order] SMTP failed", {
+      host: process.env.SMTP_HOST,
+      code: e.code,
+      error: e.message ?? String(err),
+    });
+    return false;
+  }
+}

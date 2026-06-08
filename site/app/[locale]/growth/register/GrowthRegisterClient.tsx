@@ -3,6 +3,7 @@
 import { Suspense, useActionState, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
+import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { registerPartnerAction } from "@/lib/growth/actions";
 import { RegisterReferralField } from "@/components/growth/RegisterReferralField";
@@ -28,9 +29,14 @@ function registerErrorText(t: (key: string) => string, code: string) {
 type Props = {
   inviteSlug?: string | null;
   defaultName?: string;
+  isCreatorInvite?: boolean;
 };
 
-export function GrowthRegisterClient({ inviteSlug, defaultName = "" }: Props) {
+export function GrowthRegisterClient({
+  inviteSlug,
+  defaultName = "",
+  isCreatorInvite = false,
+}: Props) {
   const t = useTranslations("Growth.auth");
   const router = useRouter();
   const [state, formAction] = useActionState(registerPartnerAction, undefined);
@@ -38,6 +44,11 @@ export function GrowthRegisterClient({ inviteSlug, defaultName = "" }: Props) {
 
   useEffect(() => {
     if (state && typeof state === "object" && "ok" in state && state.ok === true) {
+      if ("isCreator" in state && state.isCreator) {
+        router.push("/growth/creators?welcome=1");
+        router.refresh();
+        return;
+      }
       const q = new URLSearchParams({ registered: "1" });
       if ("email" in state && typeof state.email === "string") {
         q.set("email", state.email);
@@ -56,9 +67,16 @@ export function GrowthRegisterClient({ inviteSlug, defaultName = "" }: Props) {
         <p className="mt-2 text-sm text-white/60">{t("registerIntro")}</p>
 
         {inviteSlug ? (
-          <p className="mt-4 rounded-xl border border-gold/25 bg-gold/10 px-4 py-3 text-xs text-gold/95">
-            {t("inviteRegisterHint")}
-          </p>
+          <div className="mt-4 rounded-xl border border-gold/25 bg-gold/10 px-4 py-4">
+            <p className="text-xs font-semibold text-gold/95">{t("inviteRegisterBanner")}</p>
+            {isCreatorInvite ? (
+              <div className="mt-3 flex items-center gap-2">
+                <BadgeIcon badgeKey="content_creator" earned size="sm" showGlow />
+                <p className="text-[11px] text-gold/80">{t("inviteCreatorBadge")}</p>
+              </div>
+            ) : null}
+            <p className="mt-2 text-[11px] text-white/50">{t("inviteRegisterHint")}</p>
+          </div>
         ) : null}
 
         <form action={formAction} className="mt-8 space-y-4">
@@ -90,7 +108,10 @@ export function GrowthRegisterClient({ inviteSlug, defaultName = "" }: Props) {
             onChange={setPassword}
           />
           <Suspense fallback={null}>
-            <RegisterReferralField label={t("referral")} />
+            <RegisterReferralField
+              label={t("referral")}
+              readOnly={Boolean(inviteSlug)}
+            />
           </Suspense>
 
           {state && typeof state === "object" && "ok" in state && state.ok === false ? (

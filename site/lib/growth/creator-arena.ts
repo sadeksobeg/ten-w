@@ -82,29 +82,85 @@ function challengeCopy(locale: string, row: {
   return { title: row.titleEn, body: row.bodyEn };
 }
 
+export type CreatorSubmissionPreview = {
+  id: string;
+  userId: string;
+  name: string;
+  postUrl: string;
+  platform: string | null;
+  createdAt: string;
+  status: string;
+};
+
+export type CreatorPublicProfile = {
+  userId: string;
+  name: string;
+  avatarUrl: string | null;
+  publicSlug: string | null;
+  levelCode: string;
+  status: CreatorWorkflowStatus;
+  totalSubmissions: number;
+  battlesWon: number;
+  battlesLost: number;
+  cupScore: number;
+  recentSubmissions: { postUrl: string; createdAt: string }[];
+};
+
+function detectPlatform(url: string): string | null {
+  const u = url.toLowerCase();
+  if (u.includes("youtube.com") || u.includes("youtu.be")) return "youtube";
+  if (u.includes("instagram.com")) return "instagram";
+  if (u.includes("tiktok.com")) return "tiktok";
+  if (u.includes("twitter.com") || u.includes("x.com")) return "x";
+  return null;
+}
+
+async function notifyCreatorsNewChallenge(weekKey: string) {
+  const { getCreatorLoungeParticipantIds } = await import("@/lib/growth/creator-program");
+  const ids = await getCreatorLoungeParticipantIds();
+  const challenge = await prisma.creatorChallenge.findUnique({ where: { weekKey } });
+  if (!challenge) return;
+
+  await Promise.all(
+    ids.map((userId) =>
+      createNotification(prisma, {
+        userId,
+        type: NotificationType.SYSTEM,
+        title: "تحدي أسبوع جديد",
+        body: challenge.titleAr,
+        link: "/growth/creators",
+        metadata: { kind: "creator_weekly_challenge", weekKey },
+      }),
+    ),
+  );
+}
+
 export async function ensureWeeklyChallenge(weekKey = currentWeekKey()) {
   const existing = await prisma.creatorChallenge.findUnique({ where: { weekKey } });
   if (existing) return existing;
 
   const { startsAt, endsAt } = weekBounds(weekKey);
-  return prisma.creatorChallenge.create({
+  const created = await prisma.creatorChallenge.create({
     data: {
       weekKey,
-      titleAr: "صوّر دخول Cinema OS من البوت حتى التذكرة",
-      titleEn: "Film Cinema OS from boot to ticket",
-      titleFr: "Filmez Cinema OS du démarrage au billet",
+      titleAr: "انشر محتوى عن ASCEND هذا الأسبوع",
+      titleEn: "Post ASCEND content this week",
+      titleFr: "Publiez du contenu ASCEND cette semaine",
       bodyAr:
-        "سجّل رحلة كاملة في تجربة السينما — من شاشة الإقلاع حتى التذكرة الرقمية. ارفع رابط المنشور خلال 48 ساعة = +500 XP.",
+        "صوّر أو اكتب عن تجربة ASCEND — الترتيب، المعارك، أو غرفة الصنّاع. ارفع رابط المنشور خلال 48 ساعة = +500 XP.",
       bodyEn:
-        "Record the full cinema journey — boot screen through the digital ticket. Post your link within 48h for +500 XP.",
+        "Film or write about ASCEND — leaderboard, battles, or the creator lounge. Post your link within 48h for +500 XP.",
       bodyFr:
-        "Enregistrez le parcours cinéma complet — du boot au billet. Publiez le lien sous 48h pour +500 XP.",
+        "Filmez ou écrivez sur ASCEND — classement, batailles ou lounge créateurs. Publiez le lien sous 48h pour +500 XP.",
       xpReward: 500,
       active: true,
       startsAt,
       endsAt,
     },
   });
+
+  void notifyCreatorsNewChallenge(weekKey);
+  return created;
 }
 
 export async function ensureCreatorArenaProfile(userId: string, status?: CreatorWorkflowStatus) {
@@ -207,18 +263,59 @@ export async function getCreatorChallengeForUser(
   };
 }
 
-export async function submitCreatorPost(userId: string, postUrl: string) {
+export async function submitCreatorPost(
+  userId: string,
+  postUrl: string,
+  platform?: string | null,
+) {
   const weekKey = currentWeekKey();
   await ensureWeeklyChallenge(weekKey);
+  const resolvedPlatform = platform ?? detectPlatform(postUrl);
 
   const beforeBoard = await creatorCupLeaderboard(20);
   const beforeRank = beforeBoard.findIndex((r) => r.userId === userId);
 
+  const existing = await prisma.creatorSubmission.findUnique({
+    where: { userId_weekKey: { userId, weekKey } },
+  });
+
   const row = await prisma.creatorSubmission.upsert({
     where: { userId_weekKey: { userId, weekKey } },
-    create: { userId, weekKey, postUrl, status: "pending" },
-    update: { postUrl, status: "pending" },
+    create: {
+      userId,
+      weekKey,
+      postUrl,
+      platform: resolvedPlatform,
+      status: "pending",
+    },
+    update: { postUrl, platform: resolvedPlatform, status: "pending" },
   });
+
+  if (!existing) {
+    await prisma.creatorChallenge.update({
+      where: { weekKey },
+      data: { totalSubmissions: { increment: 1 } },
+    });
+    await prisma.creatorArenaProfile.upsert({
+      where: { userId },
+      create: {
+        userId,
+        status: CreatorWorkflowStatus.SUBMITTED,
+        totalSubmissions: 1,
+        lastActiveAt: new Date(),
+      },
+      update: {
+        totalSubmissions: { increment: 1 },
+        lastActiveAt: new Date(),
+      },
+    });
+  } else {
+    await prisma.creatorArenaProfile.upsert({
+      where: { userId },
+      create: { userId, lastActiveAt: new Date() },
+      update: { lastActiveAt: new Date() },
+    });
+  }
 
   await updateCreatorWorkflowStatus(userId, CreatorWorkflowStatus.SUBMITTED);
 
@@ -304,12 +401,238 @@ export async function trackCreatorArenaVisit(opts: {
   utmCampaign?: string | null;
   userId?: string | null;
 }) {
+  if (opts.userId) {
+    await prisma.creatorArenaProfile.upsert({
+      where: { userId: opts.userId },
+      create: { userId: opts.userId, lastActiveAt: new Date() },
+      update: { lastActiveAt: new Date() },
+    });
+  }
   return prisma.creatorArenaVisit.create({
     data: {
       path: opts.path,
       utmSource: opts.utmSource ?? null,
       utmCampaign: opts.utmCampaign ?? null,
       userId: opts.userId ?? null,
+    },
+  });
+}
+
+export async function listRecentCreatorSubmissions(limit = 3): Promise<CreatorSubmissionPreview[]> {
+  const weekKey = currentWeekKey();
+  const challenge = await prisma.creatorChallenge.findUnique({ where: { weekKey } });
+  const rows = await prisma.creatorSubmission.findMany({
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          isVerifiedOfficial: true,
+          officialDisplayName: true,
+        },
+      },
+    },
+  });
+  return rows.map((r) => ({
+    id: r.id,
+    userId: r.userId,
+    name: resolveChatSenderName(r.user),
+    postUrl: r.postUrl,
+    platform: r.platform,
+    createdAt: r.createdAt.toISOString(),
+    status: r.status,
+  }));
+}
+
+export async function getFeaturedCreator(): Promise<{
+  userId: string;
+  name: string;
+  avatarUrl: string | null;
+  publicSlug: string | null;
+  featuredCount: number;
+  status: CreatorWorkflowStatus;
+} | null> {
+  const featured = await prisma.creatorArenaProfile.findFirst({
+    where: { status: CreatorWorkflowStatus.FEATURED },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          avatarUrl: true,
+          publicSlug: true,
+          isVerifiedOfficial: true,
+          officialDisplayName: true,
+        },
+      },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+  if (!featured) return null;
+
+  return {
+    userId: featured.userId,
+    name: resolveChatSenderName(featured.user),
+    avatarUrl: featured.user.avatarUrl,
+    publicSlug: featured.user.publicSlug,
+    featuredCount: featured.featuredCount,
+    status: featured.status,
+  };
+}
+
+export async function getViewerCreatorProfile(userId: string) {
+  const profile = await prisma.creatorArenaProfile.findUnique({ where: { userId } });
+  return {
+    status: profile?.status ?? CreatorWorkflowStatus.JOINED,
+    milestones: profile?.milestones ?? [],
+    totalSubmissions: profile?.totalSubmissions ?? 0,
+    featuredCount: profile?.featuredCount ?? 0,
+  };
+}
+
+export async function getCreatorPublicProfile(userId: string): Promise<CreatorPublicProfile | null> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      avatarUrl: true,
+      publicSlug: true,
+      isVerifiedOfficial: true,
+      officialDisplayName: true,
+      creatorArenaProfile: true,
+      partnerProfile: { select: { currentLevel: { select: { code: true } } } },
+    },
+  });
+  if (!user) return null;
+
+  const [wins, losses, board, recent] = await Promise.all([
+    prisma.partnerBattle.count({
+      where: { winnerId: userId, metric: "creator_posts", status: "COMPLETED" },
+    }),
+    prisma.partnerBattle.count({
+      where: {
+        metric: "creator_posts",
+        status: "COMPLETED",
+        winnerId: { not: userId },
+        OR: [{ challengerId: userId }, { challengedId: userId }],
+      },
+    }),
+    creatorCupLeaderboard(50),
+    prisma.creatorSubmission.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: 3,
+      select: { postUrl: true, createdAt: true },
+    }),
+  ]);
+
+  const cupRow = board.find((r) => r.userId === userId);
+
+  return {
+    userId: user.id,
+    name: resolveChatSenderName(user),
+    avatarUrl: user.avatarUrl,
+    publicSlug: user.publicSlug,
+    levelCode: user.partnerProfile?.currentLevel.code ?? "STARTER",
+    status: user.creatorArenaProfile?.status ?? CreatorWorkflowStatus.JOINED,
+    totalSubmissions: user.creatorArenaProfile?.totalSubmissions ?? 0,
+    battlesWon: wins,
+    battlesLost: losses,
+    cupScore: cupRow?.score ?? 0,
+    recentSubmissions: recent.map((r) => ({
+      postUrl: r.postUrl,
+      createdAt: r.createdAt.toISOString(),
+    })),
+  };
+}
+
+export async function countActiveCreatorBattles(userId: string) {
+  return prisma.partnerBattle.count({
+    where: {
+      OR: [{ challengerId: userId }, { challengedId: userId }],
+      status: { in: ["PENDING", "ACTIVE"] },
+      metric: "creator_posts",
+    },
+  });
+}
+
+export async function listCreatorBattleHistory(userId: string, limit = 5) {
+  const rows = await prisma.partnerBattle.findMany({
+    where: {
+      OR: [{ challengerId: userId }, { challengedId: userId }],
+      metric: "creator_posts",
+    },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    include: {
+      challenger: {
+        select: { name: true, email: true, isVerifiedOfficial: true, officialDisplayName: true },
+      },
+      challenged: {
+        select: { name: true, email: true, isVerifiedOfficial: true, officialDisplayName: true },
+      },
+    },
+  });
+
+  return rows.map((b) => {
+    const won = b.status === "COMPLETED" && b.winnerId === userId;
+    const rival =
+      b.challengerId === userId
+        ? resolveChatSenderName(b.challenged)
+        : resolveChatSenderName(b.challenger);
+    return {
+      id: b.id,
+      opponentName: rival,
+      outcome: won ? ("won" as const) : b.status === "COMPLETED" ? ("lost" as const) : ("pending" as const),
+      endedAt: b.status === "COMPLETED" ? b.createdAt.toISOString() : null,
+    };
+  });
+}
+
+export async function getAdminCreatorStats() {
+  const weekStart = weekBounds(currentWeekKey()).startsAt;
+  const { getCreatorLoungeParticipantIds } = await import("@/lib/growth/creator-program");
+  const ids = await getCreatorLoungeParticipantIds();
+
+  const [total, activeWeek, featured, pending] = await Promise.all([
+    prisma.creatorArenaProfile.count(),
+    prisma.creatorSubmission.groupBy({
+      by: ["userId"],
+      where: { createdAt: { gte: weekStart }, userId: { in: ids } },
+    }),
+    prisma.creatorArenaProfile.count({ where: { status: CreatorWorkflowStatus.FEATURED } }),
+    prisma.creatorSubmission.count({ where: { status: "pending" } }),
+  ]);
+
+  return {
+    totalCreators: ids.length,
+    activeThisWeek: activeWeek.length,
+    featured,
+    pendingSubmissions: pending,
+  };
+}
+
+export async function listAllChallenges() {
+  return prisma.creatorChallenge.findMany({ orderBy: { startsAt: "desc" }, take: 20 });
+}
+
+export async function listChallengeSubmissions(weekKey: string) {
+  return prisma.creatorSubmission.findMany({
+    where: { weekKey },
+    orderBy: { createdAt: "desc" },
+    include: {
+      user: {
+        select: {
+          name: true,
+          email: true,
+          isVerifiedOfficial: true,
+          officialDisplayName: true,
+        },
+      },
     },
   });
 }

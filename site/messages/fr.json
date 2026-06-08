@@ -459,30 +459,178 @@
     "reportError": "Could not send. Try again or use the contact page.",
     "reportRateLimited": "Too many requests. Please wait and try again."
   },
+  "OrderPage": {
+    "meta": {
+      "title": "Commander votre service — TENEGTA",
+      "description": "Choisissez site web, automatisation ou application mobile, personnalisez les options et appliquez un code de réduction."
+    },
+    "eyebrow": "TENEGTA · Commande",
+    "title": "Choisissez votre offre",
+    "subtitle": "Trois offres claires — le prix varie selon les options choisies. Le prix final est confirmé après examen par l'équipe.",
+    "startsFrom": "À partir de",
+    "selectedPackage": "Offre sélectionnée",
+    "changePackage": "Changer d'offre",
+    "continue": "Continuer",
+    "back": "Retour",
+    "features": {
+      "title": "Personnaliser les options",
+      "subtitle": "Chaque option met à jour le prix instantanément."
+    },
+    "summary": {
+      "title": "Récapitulatif",
+      "base": "Prix de base",
+      "discount": "Réduction {pct}%",
+      "total": "Total estimé",
+      "disclaimer": "Prix final confirmé après examen — estimation uniquement."
+    },
+    "discount": {
+      "label": "Code de réduction (optionnel)",
+      "placeholder": "ABC123",
+      "apply": "Appliquer",
+      "applied": "Réduction de 3% appliquée",
+      "invalid": "Code invalide",
+      "error": "Impossible de valider le code"
+    },
+    "form": {
+      "title": "Vos coordonnées",
+      "name": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone (optionnel)",
+      "company": "Entreprise (optionnel)",
+      "notes": "Notes (optionnel)",
+      "submit": "Envoyer la demande",
+      "submitting": "Envoi…"
+    },
+    "success": {
+      "title": "Demande reçue",
+      "body": "L'équipe TENEGTA vous contactera bientôt pour confirmer les détails et le prix final.",
+      "ref": "Réf. commande : {id}"
+    },
+    "errors": {
+      "generic": "Échec de l'envoi — réessayez.",
+      "rate_limited": "Trop de demandes — patientez.",
+      "validation": "Vérifiez les champs requis.",
+      "turnstile_failed": "Échec de la vérification de sécurité.",
+      "service_unconfigured": "Service de commande indisponible.",
+      "invalid_product": "Offre sélectionnée indisponible."
+    }
+  },
   "Creators": {
     "studio": {
-      "metaTitle": "Creator Studio — filmez TENEGTA",
-      "metaDescription": "Hub public de tournage — Cinema OS, invitations, Ascend et liens partageables.",
+      "metaTitle": "Creator Studio — grandissez avec TENEGTA",
+      "metaDescription": "Hub public créateurs — kits marketing, liens trackés, commissions et outils ASCEND.",
       "eyebrow": "ASCEND Creator Arena",
       "title": "Creator Studio",
-      "subtitle": "Tournez Reels, TikTok et Shorts depuis les expériences TENEGTA.",
-      "copyFilmingLink": "Copier le lien de tournage",
+      "subtitle": "Créez du contenu, partagez des liens trackés et gagnez des commissions sur la plateforme partenaire.",
+      "copyFilmingLink": "Copier le lien studio",
       "downloadStoryFrame": "Télécharger le cadre story (9:16)",
-      "linkCopied": "Lien copié",
+      "linkCopied": "Lien studio copié",
       "storyDownloaded": "Cadre téléchargé",
       "copyError": "Échec de copie",
       "storyError": "Échec de génération",
-      "experiencesTitle": "Expériences prêtes à filmer",
-      "experiencesSubtitle": "Chaque carte ouvre une surface cinématique pour la vidéo verticale.",
-      "openExperience": "Ouvrir pour filmer →",
+      "hero": {
+        "tagline": "Votre rampe de lancement pour le contenu partenaire — copiez votre lien, utilisez le kit et grandissez avec ASCEND.",
+        "joinCta": "Rejoindre le programme",
+        "watchHow": "Voir comment ça marche",
+        "stats": {
+          "creators": { "value": "120+", "label": "Créateurs actifs" },
+          "content": { "value": "2.4k", "label": "Posts ce mois" },
+          "commissions": { "value": "18%", "label": "Taux max" }
+        }
+      },
+      "howItWorks": {
+        "title": "Comment ça marche",
+        "subtitle": "Trois étapes de l'inscription à votre première commission.",
+        "steps": {
+          "join": {
+            "title": "Rejoindre ASCEND",
+            "body": "Activez votre compte partenaire et débloquez le badge créateur dans le hub growth."
+          },
+          "promote": {
+            "title": "Partager votre lien de commande",
+            "body": "Copiez votre lien /order avec le code -3% — le client choisit l'offre et la demande vous parvient directement."
+          },
+          "earn": {
+            "title": "Gagner des commissions",
+            "body": "Commissions à partir de 10%, qui augmentent avec votre activité — suivez tout dans ASCEND."
+          }
+        }
+      },
+      "tools": {
+        "title": "Votre boîte à outils",
+        "subtitle": "Tout pour promouvoir TENEGTA professionnellement.",
+        "marketingKit": {
+          "title": "Kit marketing",
+          "body": "Légendes, visuels et arguments prêts — plus de doute avant de publier."
+        },
+        "utm": {
+          "title": "Liens UTM",
+          "body": "Chaque lien studio porte source et campagne pour savoir quel contenu convertit."
+        },
+        "commissions": {
+          "title": "Tableau des commissions",
+          "body": "Voir gains en attente et payés dans ASCEND — taux transparents à chaque niveau."
+        }
+      },
+      "testimonials": {
+        "title": "Créateurs sur TENEGTA",
+        "subtitle": "Voix types — de vraies histoires bientôt avec la croissance de l'arène.",
+        "archetypes": {
+          "growth": {
+            "initials": "GP",
+            "role": "Partenaire growth",
+            "quote": "Le lien UTM a montré quel Reel a généré des inscriptions. J'ai misé sur ce qui marche."
+          },
+          "lifestyle": {
+            "initials": "LC",
+            "role": "Créateur lifestyle",
+            "quote": "Le kit m'a fait gagner des heures — j'ai posté le jour même où j'ai eu mon badge."
+          },
+          "business": {
+            "initials": "BE",
+            "role": "Formateur business",
+            "quote": "Les commissions apparaissent dans ASCEND sans relancer des factures. Propre et pro."
+          }
+        }
+      },
+      "faq": {
+        "title": "Questions fréquentes",
+        "items": {
+          "who": {
+            "q": "Qui peut rejoindre Creator Studio ?",
+            "a": "Tout partenaire ASCEND peut utiliser la page publique. Le salon complet et les défis exigent le badge content_creator."
+          },
+          "badge": {
+            "q": "Comment obtenir le badge créateur ?",
+            "a": "Postulez via ASCEND ou sur invitation TENEGTA. Les badge holders accèdent au cercle privé et aux défis hebdo."
+          },
+          "utm": {
+            "q": "Comment fonctionnent les liens UTM ?",
+            "a": "Votre lien studio inclut utm_source et utm_campaign. Les visites sont enregistrées pour créditer votre contenu."
+          },
+          "payout": {
+            "q": "Quand les commissions sont-elles payées ?",
+            "a": "Les paiements suivent les règles ASCEND — les deals en attente passent en payé une fois clos et approuvés."
+          },
+          "support": {
+            "q": "Où obtenir de l'aide ?",
+            "a": "Chat support ASCEND ou contact TENEGTA. Les badge holders ont aussi le groupe créateurs privé."
+          }
+        }
+      },
+      "finalCta": {
+        "title": "Prêt à créer avec TENEGTA ?",
+        "body": "Rejoignez ASCEND, prenez votre lien studio et construisez votre audience partenaire.",
+        "cta": "Rejoindre ASCEND"
+      },
+      "experiencesTitle": "Explorer les expériences partenaires",
+      "experiencesSubtitle": "Chaque carte ouvre une démo à mettre en avant dans votre contenu.",
+      "openExperience": "Ouvrir l'expérience →",
       "experiences": {
-        "cinema": { "title": "Cinema OS — mode présentateur", "body": "Sans boot — du film au billet." },
-        "invite": { "title": "Carte d'invitation", "body": "Ouverture luxe pour votre vidéo." },
+        "invite": { "title": "Carte d'invitation luxe", "body": "Flux premium — ouverture soignée pour votre contenu vertical." },
         "ascend": { "title": "Ascend en 60 secondes", "body": "Plateforme partenaire — rangs et réseau." },
         "visualizer": { "title": "Visualiseur IA", "body": "Page d'accueil — ?demo=ai" }
       },
-      "scriptTitle": "Script 75 secondes",
-      "scriptBody": "0–5s: Invitation\n5–25s: Cinema OS\n25–40s: Ascend\n40–55s: Creator Lounge\n55–75s: creators/studio + #TENEGTA",
       "privateRoomHint": "Les créateurs badge accèdent au salon privé ASCEND.",
       "ascendCta": "Activer ASCEND"
     }
@@ -2552,12 +2700,35 @@
         "scriptCopied": "Copié",
         "copyError": "Échec de copie",
         "filmLinks": "Filmez ceci",
+        "orderPage": "Page de commande client",
         "studio": "Studio créateur",
         "cinema": "Cinema OS (mode présentateur)",
         "invite": "Carte d'invitation",
         "visualizer": "Visualiseur IA",
+        "profile": "Paramètres du profil",
+        "toolLinks": "Outils rapides",
+        "hashtags": "#TENEGTA #ASCEND #CreatorArena",
         "copyStudioLink": "Copier le lien studio (UTM)",
         "linkCopied": "Lien studio copié"
+      },
+      "salesGuide": {
+        "eyebrow": "Guide commercial",
+        "title": "Que promouvoir",
+        "intro": "En termes simples — ces services que vous commercialisez, avec des commissions à partir de 10%.",
+        "colProduct": "Produit",
+        "colPrice": "Prix de base",
+        "colCommission": "Votre taux",
+        "priceNote": "Le prix varie selon les options choisies par le client.",
+        "commissionNote": "Votre taux actuel : {rate} — il augmente avec les deals, parrainages et activité.",
+        "discountTitle": "Code de réduction client",
+        "discountBody": "Offre 3% de réduction — appliqué automatiquement via votre lien.",
+        "copyCode": "Copier le code",
+        "codeCopied": "Code copié",
+        "orderLinkTitle": "Lien de commande prêt",
+        "copyOrderLink": "Copier le lien",
+        "linkCopied": "Lien copié",
+        "copyError": "Échec de copie",
+        "noCodeYet": "Votre code sera généré à l'activation du compte."
       },
       "cupTitle": "Creator Cup",
       "cupSubtitle": "Classement hebdo — badge content_creator uniquement.",
@@ -2590,6 +2761,205 @@
         "FILMING": "Tournage",
         "SUBMITTED": "Soumis",
         "FEATURED": "À la une"
+      },
+      "lounge": {
+        "welcomeCelebration": "Bienvenue dans le Creator Lounge ! Explorez défis et outils.",
+        "navAria": "Navigation Creator Lounge",
+        "mobileNavAria": "Sections du salon",
+        "nav": {
+          "home": "Accueil",
+          "challenge": "Défi",
+          "cup": "Creator Cup",
+          "battles": "Batailles",
+          "studio": "Studio",
+          "achievements": "Succès",
+          "settings": "Réglages"
+        },
+        "weekLabel": "Semaine {week}",
+        "activeCreators": "{count} créateurs actifs",
+        "activityTitle": "Activité live",
+        "activityOnline": "{count} en ligne",
+        "weekStats": "Cette semaine",
+        "postsStat": "Posts",
+        "submissionsStat": "Missions",
+        "activityFeed": {
+          "joined": "{name} a rejoint le salon",
+          "submitted": "{name} a soumis un défi",
+          "filming": "{name} tourne",
+          "featured": "{name} est à la une",
+          "battle": "{name} a lancé un duel"
+        },
+        "homeChatTitle": "Chat créateurs",
+        "recentSubmissions": "Soumissions récentes",
+        "recentSubmissionsEmpty": "Aucune soumission cette semaine.",
+        "challengeHero": "Mission hebdo",
+        "challengeEmpty": "Pas de défi actif cette semaine.",
+        "challengeCountdown": "Fin dans {time}",
+        "challengeEnded": "Défi terminé",
+        "leaderboardPreview": "Aperçu du classement",
+        "platforms": {
+          "reels": "Reels",
+          "tiktok": "TikTok",
+          "shorts": "Shorts",
+          "other": "Autre"
+        },
+        "cupRankHighlight": "Votre rang",
+        "cupYourScore": "{score} pts · {posts} posts",
+        "cupPointsExplainer": "Points = XP hebdo + 75 par post approuvé + 10 par visite UTM.",
+        "battlesHistory": "Batailles passées",
+        "battlesHistoryEmpty": "Aucune bataille terminée.",
+        "battleOutcome": {
+          "won": "Gagné",
+          "lost": "Perdu",
+          "pending": "En cours"
+        },
+        "studioTitle": "Outils créateur",
+        "studioSubtitle": "Filmez, partagez et suivez — depuis le salon.",
+        "utmTitle": "Lien UTM de suivi",
+        "resourcesTitle": "Bibliothèque de ressources",
+        "resources": {
+          "brand": "Guide de marque",
+          "utm": "Guide UTM",
+          "hashtags": "Kit hashtags"
+        },
+        "achievementsTitle": "Succès et jalons",
+        "achievementsSubtitle": "Badges et jalons du programme créateurs.",
+        "milestonesTitle": "Jalons",
+        "milestonesEmpty": "Pas encore de jalons — continuez à publier.",
+        "settingsTitle": "Réglages créateur",
+        "settingsSubtitle": "Mettez à jour votre statut et profil.",
+        "errorTitle": "Une erreur est survenue",
+        "errorBody": "Le salon a rencontré un problème. Réessayez.",
+        "errorRetry": "Réessayer"
+      },
+      "spotlight": {
+        "eyebrow": "Créateur de la semaine",
+        "featuredCount": "{count} posts à la une",
+        "viewProfile": "Voir le profil",
+        "challenge": "Le défier"
+      },
+      "onboarding": {
+        "title": "Premiers pas",
+        "subtitle": "Complétez ces étapes pour débloquer le salon.",
+        "steps": {
+          "profile": "Complétez votre profil",
+          "introduce": "Présentez-vous dans le chat",
+          "challenge": "Consultez le défi de la semaine",
+          "studio": "Essayez les outils studio (UTM / story frame)",
+          "orderLink": "Copiez votre lien de commande et code de réduction",
+          "firstShare": "Partagez votre premier lien"
+        },
+        "complete": "Fait"
+      },
+      "calendar": {
+        "title": "Calendrier de contenu",
+        "subtitle": "Planifiez les posts pour {week}",
+        "planned": "Planifié",
+        "mon": "Lun",
+        "tue": "Mar",
+        "wed": "Mer",
+        "thu": "Jeu",
+        "fri": "Ven",
+        "sat": "Sam",
+        "sun": "Dim"
+      },
+      "drawer": {
+        "close": "Fermer",
+        "status": "Statut",
+        "submissions": "Soumissions",
+        "featured": "À la une",
+        "viewProfile": "Profil public",
+        "challenge": "Envoyer un duel"
+      },
+      "admin": {
+        "tabsAria": "Sections admin créateurs",
+        "tabCreators": "Créateurs",
+        "tabChallenges": "Défis",
+        "tabCup": "Creator Cup",
+        "stats": {
+          "aria": "Statistiques du programme créateurs",
+          "totalCreators": "Créateurs lounge",
+          "activeThisWeek": "Actifs cette semaine",
+          "featured": "À la une",
+          "pendingSubmissions": "En attente de revue"
+        },
+        "list": {
+          "filterStatus": "Filtrer par statut",
+          "filterAll": "Tous les statuts",
+          "filterNoStatus": "Sans statut",
+          "sortBy": "Trier par",
+          "sortName": "Nom",
+          "sortSubmissions": "Soumissions",
+          "sortCupScore": "Score cup",
+          "sortStatus": "Statut",
+          "empty": "Aucun créateur ne correspond aux filtres.",
+          "viewDetail": "Détails",
+          "metaSubmissions": "{n} soumissions",
+          "metaCup": "{score} pts cup"
+        },
+        "detail": {
+          "close": "Fermer le panneau",
+          "statsTitle": "Stats créateur",
+          "totalSubmissions": "Soumissions totales",
+          "featuredCount": "Posts à la une",
+          "cupScore": "Score cup",
+          "submissionsTitle": "Soumissions récentes",
+          "submissionsEmpty": "Aucune soumission.",
+          "notesTitle": "Notes admin",
+          "notesPlaceholder": "Notes internes sur ce créateur…",
+          "saveNotes": "Enregistrer les notes",
+          "milestonesTitle": "Jalons",
+          "actionsTitle": "Actions",
+          "grantBadge": "Accorder le badge content creator",
+          "grantMilestone": "Accorder un jalon",
+          "toastSaved": "Enregistré"
+        },
+        "challenges": {
+          "title": "Défis hebdomadaires",
+          "subtitle": "Créez des missions et notez les soumissions.",
+          "createChallenge": "Nouveau défi",
+          "cancelCreate": "Annuler",
+          "formTitle": "Créer un défi hebdomadaire",
+          "weekKey": "Clé semaine",
+          "xpReward": "Récompense XP",
+          "titleAr": "Titre (arabe)",
+          "titleEn": "Titre (anglais)",
+          "titleFr": "Titre (français)",
+          "bodyAr": "Corps (arabe)",
+          "bodyEn": "Corps (anglais)",
+          "bodyFr": "Corps (français)",
+          "submitCreate": "Publier le défi",
+          "empty": "Aucun défi.",
+          "metaXp": "+{xp} XP",
+          "metaPosts": "posts",
+          "active": "Actif",
+          "submissionsTitle": "Soumissions",
+          "submissionsEmpty": "Aucune soumission cette semaine.",
+          "pickChallenge": "Sélectionnez un défi pour revoir les soumissions.",
+          "featured": "À la une",
+          "rate": "Noter {n} étoiles",
+          "toastCreated": "Défi enregistré",
+          "toastRated": "Note enregistrée",
+          "toastError": "Action échouée"
+        },
+        "cup": {
+          "title": "Classement Creator Cup",
+          "subtitle": "Classement hebdomadaire — le top 3 reçoit des badges de saison à la clôture.",
+          "closeSeason": "Clôturer la saison & récompenser le top 3",
+          "closeConfirm": "Accorder les badges cup au top 3 et les notifier ?",
+          "closeHint": "La clôture accorde les badges creator_cup_gold, creator_cup_silver et creator_cup_bronze.",
+          "empty": "Aucun créateur classé cette semaine.",
+          "colRank": "Rang",
+          "colCreator": "Créateur",
+          "colScore": "Score",
+          "colPosts": "Posts",
+          "anonymous": "Créateur",
+          "toastClosed": "Saison clôturée — badges accordés",
+          "toastError": "Impossible de clôturer la saison"
+        }
+      },
+      "chat": {
+        "charLimit": "Max {max} caractères par message"
       }
     },
     "chat": {
@@ -2829,6 +3199,8 @@
     "admin": {
       "toastSaved": "Enregistré",
       "toastDealClosed": "Deal clôturé",
+      "toastOrderReviewed": "Commande examinée",
+      "toastOrderRejected": "Commande refusée",
       "toastDealLost": "Deal marqué perdu",
       "toastPayoutUpdated": "Paiement mis à jour",
       "statsBar": {
@@ -2852,6 +3224,7 @@
         "groupPrograms": "Programs",
         "overview": "Overview",
         "deals": "Deals",
+        "orders": "Commandes clients",
         "payouts": "Payouts",
         "products": "Products",
         "badges": "Badges",
@@ -3162,6 +3535,31 @@
         "createSubmit": "Create",
         "clientLabel": "Client label"
       },
+      "orders": {
+        "title": "Commandes clients",
+        "subtitle": "Demandes depuis /order — offres, options et codes de réduction.",
+        "empty": "Aucune commande pour l'instant.",
+        "review": "Marquer examinée",
+        "reject": "Refuser",
+        "organic": "Commande directe",
+        "discountApplied": "-{pct}% · {code}",
+        "colProduct": "Offre",
+        "colCreator": "Créateur",
+        "colDate": "Date",
+        "colRef": "Réf.",
+        "stats": {
+          "today": "Aujourd'hui",
+          "total": "Total",
+          "topCreator": "Meilleur créateur",
+          "topProduct": "Offre phare"
+        },
+        "status": {
+          "NEW": "Nouveau",
+          "REVIEWED": "Examiné",
+          "CONVERTED": "Clôturé",
+          "REJECTED": "Refusé"
+        }
+      },
       "payoutsPage": {
         "title": "Payout requests",
         "hint": "Approve partner withdrawal requests, then mark as paid after transfer.",
@@ -3347,6 +3745,8 @@
       "switchToSignIn": "Already have an account? Sign in",
       "registerIntro": "Create your partner profile to start earning when deals close.",
       "inviteRegisterHint": "Invitation acceptée — inscrivez-vous avec le même e-mail pour débloquer le badge créateur.",
+      "inviteRegisterBanner": "Vous vous inscrivez avec une invitation spéciale T.E.N.E.G.T.A",
+      "inviteCreatorBadge": "Créateur de contenu invité",
       "signInHeroEyebrow": "TENEGTA ASCEND",
       "signInHeroTitle": "Votre centre de commande performance partenaire",
       "signInHeroLine1": "Commissions, levels, and XP — unified in one live workspace.",

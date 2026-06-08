@@ -8,13 +8,24 @@ import {
   userIsCreatorRoomMember,
 } from "@/lib/growth/creator-program";
 import {
+  countActiveCreatorBattles,
   creatorCupLeaderboard,
   getCreatorChallengeForUser,
   getCreatorBattleCandidates,
   getCreatorPulse,
+  getFeaturedCreator,
+  getViewerCreatorProfile,
+  listCreatorBattleHistory,
+  listRecentCreatorSubmissions,
   listCreatorStatusCards,
 } from "@/lib/growth/creator-arena";
 import { resolveChatSenderName, VIEWER_CHAT_PROFILE_SELECT } from "@/lib/growth/chat-display";
+import {
+  computeCreatorCommissionBoost,
+  formatCommissionPercent,
+} from "@/lib/growth/creator-commission-boost";
+import { ensureClientDiscountCode } from "@/lib/growth/ensure-partner-profile";
+import { getPublicProducts } from "@/lib/growth/public-products";
 import { prisma } from "@/lib/prisma";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -29,9 +40,10 @@ export default async function ContentCreatorsPage({ params }: Props) {
     redirect(`/${locale}/growth/admin/creators`);
   }
 
+  const userId = session.user.id;
   const [hasAccess, hasBadge] = await Promise.all([
-    canAccessCreatorLounge(session.user.id),
-    userHasContentCreatorBadge(session.user.id),
+    canAccessCreatorLounge(userId),
+    userHasContentCreatorBadge(userId),
   ]);
   if (!hasAccess) {
     redirect(`/${locale}/growth`);
@@ -46,8 +58,17 @@ export default async function ContentCreatorsPage({ params }: Props) {
     challenge,
     battleCandidates,
     user,
+    recentSubmissions,
+    featuredCreator,
+    viewerProfile,
+    activeBattles,
+    battleHistory,
+    badges,
+    salesProducts,
+    commissionBoost,
+    clientDiscountCode,
   ] = await Promise.all([
-    userIsCreatorRoomMember(session.user.id),
+    userIsCreatorRoomMember(userId),
     prisma.growthEvent.findMany({
       where: {
         status: { in: [EventStatus.PUBLISHED, EventStatus.ACTIVE] },
@@ -65,13 +86,34 @@ export default async function ContentCreatorsPage({ params }: Props) {
     getCreatorPulse(),
     listCreatorStatusCards(),
     creatorCupLeaderboard(10),
-    getCreatorChallengeForUser(session.user.id, locale),
-    getCreatorBattleCandidates(session.user.id),
+    getCreatorChallengeForUser(userId, locale),
+    getCreatorBattleCandidates(userId),
     prisma.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: userId },
       select: { ...VIEWER_CHAT_PROFILE_SELECT, publicSlug: true },
     }),
+    listRecentCreatorSubmissions(3),
+    getFeaturedCreator(),
+    getViewerCreatorProfile(userId),
+    countActiveCreatorBattles(userId),
+    listCreatorBattleHistory(userId, 5),
+    prisma.userBadge.findMany({
+      where: { userId },
+      include: { badge: { select: { key: true, name: true, description: true } } },
+    }),
+    getPublicProducts(locale),
+    computeCreatorCommissionBoost(userId),
+    ensureClientDiscountCode(userId),
   ]);
+
+  const viewerRank = cupRows.find((r) => r.userId === userId)?.rank ?? null;
+
+  const badgeItems = badges.map((b) => ({
+    key: b.badge.key,
+    name: b.badge.name,
+    description: b.badge.description ?? undefined,
+    earned: true,
+  }));
 
   return (
     <div className="space-y-6 growth-page-enter">
@@ -92,14 +134,28 @@ export default async function ContentCreatorsPage({ params }: Props) {
         challenge={challenge}
         battleCandidates={battleCandidates}
         publicSlug={user?.publicSlug ?? null}
+        recentSubmissions={recentSubmissions}
+        featuredCreator={featuredCreator}
+        viewerProfile={viewerProfile}
+        viewerRank={viewerRank}
+        activeBattles={activeBattles}
+        battleHistory={battleHistory}
+        badges={badgeItems}
         viewer={{
-          userId: session.user.id,
+          userId,
           email: user?.email ?? session.user.email ?? "",
           name: user?.name ?? session.user.name ?? null,
           displayName: user ? resolveChatSenderName(user) : undefined,
           avatarUrl: user?.avatarUrl,
           avatarPreset: user?.avatarPreset,
         }}
+        clientDiscountCode={clientDiscountCode}
+        commissionPercent={formatCommissionPercent(commissionBoost.effectiveBps)}
+        salesProducts={salesProducts.map((p) => ({
+          slug: p.slug,
+          name: p.name,
+          priceCents: p.priceCents,
+        }))}
       />
     </div>
   );

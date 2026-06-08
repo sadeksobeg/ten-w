@@ -25,6 +25,7 @@ type Props = {
   roomSlug?: string;
   hintKey?: "communityHint" | "eventChatHint" | "creatorChatHint";
   placeholderKey?: "communityPlaceholder" | "eventChatPlaceholder" | "creatorChatPlaceholder";
+  inputMaxLength?: number;
 };
 
 function mergeMessages(prev: ChatRoomMessageDTO[], incoming: ChatRoomMessageDTO[]): ChatRoomMessageDTO[] {
@@ -42,6 +43,7 @@ export function GrowthCommunityChat({
   roomSlug = COMMUNITY_ROOM_SLUG,
   hintKey = "communityHint",
   placeholderKey = "communityPlaceholder",
+  inputMaxLength,
 }: Props) {
   const t = useTranslations("Growth.chat");
   const tKw = useTranslations("Growth.chat.keywords");
@@ -412,7 +414,7 @@ export function GrowthCommunityChat({
             onChange={(e) => setBody(e.target.value)}
             placeholder={t(placeholderKey)}
             className="min-h-[var(--growth-touch-min)] min-w-0 flex-1 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-gold/40"
-            maxLength={8000}
+            maxLength={inputMaxLength ?? 8000}
           />
           <button
             type="submit"

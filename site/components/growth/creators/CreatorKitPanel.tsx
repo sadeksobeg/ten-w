@@ -1,41 +1,33 @@
 "use client";
 
-import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
-import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { useToast } from "@/hooks/useToast";
 
 type Props = {
   publicSlug: string | null;
+  clientDiscountCode?: string | null;
 };
 
-export function CreatorKitPanel({ publicSlug }: Props) {
+export function CreatorKitPanel({ publicSlug, clientDiscountCode = null }: Props) {
   const t = useTranslations("Growth.creators");
   const locale = useLocale();
   const { showToast } = useToast();
-  const [copied, setCopied] = useState(false);
 
   const studioUrl = `https://tenegta.com/${locale}/creators/studio?utm_source=creator&utm_campaign=arena`;
   const inviteSlug = publicSlug ?? "demo";
-  const filmLinks = [
+  const orderHref = clientDiscountCode
+    ? `/order?code=${encodeURIComponent(clientDiscountCode)}`
+    : "/order";
+
+  const toolLinks = [
+    { href: orderHref, label: t("kit.orderPage") },
     { href: `/creators/studio`, label: t("kit.studio") },
-    { href: `/demo/cinema?presenter=1`, label: t("kit.cinema") },
     { href: `/invite/${inviteSlug}`, label: t("kit.invite"), external: true },
     { href: `/${locale}?demo=ai`, label: t("kit.visualizer") },
+    { href: `/growth/settings`, label: t("kit.profile") },
   ] as const;
-
-  async function copyScript() {
-    try {
-      await navigator.clipboard.writeText(t("kit.scriptBody"));
-      setCopied(true);
-      showToast({ type: "success", title: t("kit.scriptCopied") });
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      showToast({ type: "error", title: t("kit.copyError") });
-    }
-  }
 
   async function copyStudioLink() {
     try {
@@ -53,22 +45,10 @@ export function CreatorKitPanel({ publicSlug }: Props) {
       </h2>
       <p className="mt-1 text-xs text-white/55">{t("kitSubtitle")}</p>
 
-      <div className="mt-4 rounded-xl border border-gold/20 bg-black/30 p-4">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-gold/80">
-          {t("kit.scriptLabel")}
-        </p>
-        <p className="mt-2 whitespace-pre-wrap text-xs leading-relaxed text-white/70">
-          {t("kit.scriptBody")}
-        </p>
-        <GoldButton type="button" className="mt-3" onClick={() => void copyScript()}>
-          {copied ? t("kit.scriptCopied") : t("kit.copyScript")}
-        </GoldButton>
-      </div>
-
       <div className="mt-4">
-        <p className="text-xs font-semibold text-white/70">{t("kit.filmLinks")}</p>
+        <p className="text-xs font-semibold text-white/70">{t("kit.toolLinks")}</p>
         <ul className="mt-2 grid gap-2 sm:grid-cols-2">
-          {filmLinks.map((link) => (
+          {toolLinks.map((link) => (
             <li key={link.href}>
               {"external" in link && link.external ? (
                 <a
@@ -92,11 +72,7 @@ export function CreatorKitPanel({ publicSlug }: Props) {
         </ul>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-white/50">
-        <span>#TENEGTA</span>
-        <span>#Ascend</span>
-        <span>#صعود</span>
-      </div>
+      <p className="mt-4 text-[11px] text-white/50">{t("kit.hashtags")}</p>
 
       <button
         type="button"

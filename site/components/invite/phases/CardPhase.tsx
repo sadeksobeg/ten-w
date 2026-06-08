@@ -11,6 +11,7 @@ import { useInviteExperienceStore } from "@/stores/invite-experience-store";
 
 import { InviteBenefitIcon } from "@/components/invite/InviteBenefitIcon";
 import { benefitsForTier } from "@/lib/invite/message-templates";
+import { isCreatorProgramInvite } from "@/lib/growth/creator-program";
 
 type Props = {
   card: InviteCardPublic;
@@ -77,6 +78,7 @@ export function CardPhase({ card, origin }: Props) {
   const granted = card.accepted;
   const year = new Date().getFullYear();
   const benefits = benefitsForTier(card.tier);
+  const isCreatorInvite = isCreatorProgramInvite(card.tier);
 
   const storyRef = useRef<HTMLElement>(null);
   const journeyRef = useRef<HTMLElement>(null);
@@ -277,12 +279,20 @@ export function CardPhase({ card, origin }: Props) {
             <div className="invite-accept-cta hidden sm:block">
               <AcceptButton granted={granted} accepting={accepting} onAccept={() => void onAccept()} />
               {granted && ascendRegisterPath ? (
-                <a
-                  href={ascendRegisterPath}
-                  className="invite-ascend-bridge mt-4 inline-flex rounded-full border border-[var(--invite-teal)]/50 bg-[var(--invite-teal)]/10 px-6 py-2.5 text-sm font-semibold text-[var(--invite-teal)]"
-                >
-                  فعّل حسابك في ASCEND ←
-                </a>
+                <div className="mt-4 space-y-2 text-center">
+                  {isCreatorInvite ? (
+                    <p className="text-sm text-white/70">أنت مدعو لبرنامج صنّاع المحتوى</p>
+                  ) : null}
+                  <a
+                    href={ascendRegisterPath}
+                    className="invite-ascend-bridge inline-flex rounded-full border border-[var(--invite-teal)]/50 bg-[var(--invite-teal)]/10 px-6 py-2.5 text-sm font-semibold text-[var(--invite-teal)]"
+                  >
+                    {isCreatorInvite ? "فعّل ASCEND الآن ←" : "فعّل حسابك في ASCEND ←"}
+                  </a>
+                  {isCreatorInvite ? (
+                    <p className="text-[11px] text-white/45">سيتم ربط دعوتك بحسابك في ASCEND</p>
+                  ) : null}
+                </div>
               ) : null}
             </div>
           </div>

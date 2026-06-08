@@ -464,30 +464,177 @@
     "reportError": "تعذر الإرسال. حاول مجدداً أو استخدم صفحة التواصل.",
     "reportRateLimited": "طلبات كثيرة. انتظر ثم أعد المحاولة."
   },
+  "OrderPage": {
+    "meta": {
+      "title": "اطلب خدمتك — TENEGTA",
+      "description": "اختر باقة موقع أو أتمتة أو تطبيق موبايل، خصّص الميزات، وطبّق كود الحسم."
+    },
+    "eyebrow": "TENEGTA · طلب خدمة",
+    "title": "اختر باقتك وابدأ",
+    "subtitle": "ثلاث باقات واضحة — السعر يتغير حسب الميزات التي تختارها. السعر النهائي يُؤكد بعد مراجعة الفريق.",
+    "startsFrom": "يبدأ من",
+    "selectedPackage": "الباقة المختارة",
+    "changePackage": "تغيير الباقة",
+    "continue": "متابعة",
+    "back": "رجوع",
+    "features": {
+      "title": "خصّص ميزاتك",
+      "subtitle": "كل ميزة تضيف قيمة — السعر يتحدّث مباشرة."
+    },
+    "summary": {
+      "title": "ملخص السعر",
+      "base": "السعر الأساسي",
+      "discount": "حسم {pct}%",
+      "total": "الإجمالي التقديري",
+      "disclaimer": "السعر النهائي يُؤكد بعد مراجعة الفريق — هذا تقدير فقط."
+    },
+    "discount": {
+      "label": "كود الحسم (اختياري)",
+      "placeholder": "ABC123",
+      "apply": "تطبيق",
+      "applied": "تم تطبيق الحسم 3%",
+      "invalid": "كود غير صالح",
+      "error": "تعذّر التحقق من الكود"
+    },
+    "form": {
+      "title": "بياناتك للتواصل",
+      "name": "الاسم",
+      "email": "البريد",
+      "phone": "الهاتف (اختياري)",
+      "company": "الشركة (اختياري)",
+      "notes": "ملاحظات (اختياري)",
+      "submit": "إرسال الطلب",
+      "submitting": "جاري الإرسال…"
+    },
+    "success": {
+      "title": "تم استلام طلبك",
+      "body": "سيتواصل معك فريق TENEGTA قريباً لتأكيد التفاصيل والسعر النهائي.",
+      "ref": "رقم الطلب: {id}"
+    },
+    "errors": {
+      "generic": "تعذّر الإرسال — حاول مجدداً.",
+      "rate_limited": "طلبات كثيرة — انتظر قليلاً.",
+      "validation": "تحقق من الحقول المطلوبة.",
+      "turnstile_failed": "فشل التحقق الأمني.",
+      "service_unconfigured": "خدمة الطلب غير متاحة حالياً.",
+      "invalid_product": "الباقة المختارة غير متاحة."
+    }
+  },
   "Creators": {
     "studio": {
-      "metaTitle": "استوديو الصنّاع — صوّر تجارب TENEGTA",
-      "metaDescription": "مركز تصوير عام للصنّاع — Cinema OS، بطاقات الدعوة، Ascend، وروابط جاهزة للمشاركة.",
+      "metaTitle": "استوديو الصنّاع — انمُ مع TENEGTA",
+      "metaDescription": "مركز عام للصنّاع — حزم تسويق، روابط متتبعة، عمولات، وأدوات شركاء ASCEND.",
       "eyebrow": "ASCEND Creator Arena",
       "title": "استوديو الصنّاع",
-      "subtitle": "صوّر Reels وTikTok وShorts من تجارب TENEGTA المبهرة — انسخ رابط التصوير وانطلق.",
-      "copyFilmingLink": "انسخ رابط التصوير",
+      "subtitle": "أنشئ محتوى، شارك روابط متتبعة، واكسب عمولات على منصة شركاء TENEGTA.",
+      "copyFilmingLink": "انسخ رابط الاستوديو",
       "downloadStoryFrame": "تحميل إطار الستوري (9:16)",
-      "linkCopied": "تم نسخ الرابط",
+      "linkCopied": "تم نسخ رابط الاستوديو",
       "storyDownloaded": "تم تحميل الإطار",
       "copyError": "تعذّر النسخ",
       "storyError": "تعذّر إنشاء الإطار",
-      "experiencesTitle": "تجارب جاهزة للتصوير",
-      "experiencesSubtitle": "كل بطاقة تفتح سطحاً بصرياً مصمماً للفيديو العمودي.",
-      "openExperience": "افتح للتصوير ←",
-      "experiences": {
-        "cinema": {
-          "title": "Cinema OS — وضع العرض",
-          "body": "تخطّي الإقلاع، اضغط ابدأ العرض، من الأفلام حتى التذكرة."
+      "hero": {
+        "tagline": "منصة الإطلاق العامة لمحتوى الشركاء — انسخ رابطك، استخدم الحزمة، وانمُ مع ASCEND.",
+        "joinCta": "انضم للبرنامج",
+        "watchHow": "كيف يعمل",
+        "stats": {
+          "creators": { "value": "+120", "label": "صنّاع نشطون" },
+          "content": { "value": "2.4k", "label": "منشور هذا الشهر" },
+          "commissions": { "value": "18%", "label": "أعلى نسبة عمولة" }
+        }
+      },
+      "howItWorks": {
+        "title": "كيف يعمل",
+        "subtitle": "ثلاث خطوات من التسجيل إلى أول عمولة.",
+        "steps": {
+          "join": {
+            "title": "انضم لـ ASCEND",
+            "body": "فعّل حساب الشريك وافتح شارة الصنّاع داخل مركز النمو."
+          },
+          "promote": {
+            "title": "شارك رابط الطلب",
+            "body": "انسخ رابط /order مع كود الحسم 3% — العميل يختار الباقة ويصل الطلب مباشرة لك وللإدارة."
+          },
+          "earn": {
+            "title": "اكسب عمولات",
+            "body": "عمولة تبدأ من 10% وتزداد مع نشاطك وعقودك — تتابع كل شيء من محفظة ASCEND."
+          }
+        }
+      },
+      "tools": {
+        "title": "أدوات الصنّاع",
+        "subtitle": "كل ما تحتاجه للترويج لـ TENEGTA باحتراف.",
+        "marketingKit": {
+          "title": "حزمة تسويق",
+          "body": "نصوص وصور وجمل جاهزة — بلا تخمين قبل النشر."
         },
+        "utm": {
+          "title": "روابط UTM",
+          "body": "كل رابط استوديو يحمل وسوم المصدر والحملة لتعرف أي محتوى يحوّل."
+        },
+        "commissions": {
+          "title": "لوحة العمولات",
+          "body": "شاهد الأرباح المعلّقة والمدفوعة في ASCEND — نسب شفافة لكل مستوى."
+        }
+      },
+      "testimonials": {
+        "title": "صنّاع على TENEGTA",
+        "subtitle": "أصوات نموذجية — قصص حقيقية قريباً مع نمو الساحة.",
+        "archetypes": {
+          "growth": {
+            "initials": "ش",
+            "role": "شريك نمو",
+            "quote": "رابط UTM أوضح أي Reel جلب تسجيلات. ركّزت على ما نجح."
+          },
+          "lifestyle": {
+            "initials": "م",
+            "role": "صانع محتوى lifestyle",
+            "quote": "الحزمة وفّرت ساعات — نشرت في نفس يوم حصولي على الشارة."
+          },
+          "business": {
+            "initials": "أ",
+            "role": "مُعلّم أعمال",
+            "quote": "العمولات تظهر في ASCEND بلا مطاردة فواتير. نظيف واحترافي."
+          }
+        }
+      },
+      "faq": {
+        "title": "أسئلة شائعة",
+        "items": {
+          "who": {
+            "q": "من يمكنه الانضمام لاستوديو الصنّاع؟",
+            "a": "أي شريك ASCEND يستخدم الصفحة العامة. الصالة الكاملة والتحديات تتطلب شارة content_creator."
+          },
+          "badge": {
+            "q": "كيف أحصل على شارة الصنّاع؟",
+            "a": "قدّم عبر ASCEND أو بدعوة من فريق TENEGTA. حاملو الشارة يدخلون دائرة الصنّاع الخاصة والتحديات الأسبوعية."
+          },
+          "utm": {
+            "q": "كيف تعمل روابط UTM؟",
+            "a": "رابط الاستوديو يتضمن utm_source و utm_campaign. الزيارات تُسجّل ليُنسب الفضل لمحتواك."
+          },
+          "payout": {
+            "q": "متى تُدفع العمولات؟",
+            "a": "المدفوعات تتبع قواعد شركاء ASCEND — الصفقات المعلّقة تنتقل للمدفوع بعد الإغلاق وموافقة الإدارة."
+          },
+          "support": {
+            "q": "أين أحصل على المساعدة؟",
+            "a": "استخدم دردشة دعم ASCEND أو تواصل مع TENEGTA. حاملو الشارة لديهم مجموعة الصنّاع الخاصة."
+          }
+        }
+      },
+      "finalCta": {
+        "title": "مستعد للإبداع مع TENEGTA؟",
+        "body": "انضم لـ ASCEND، خذ رابط الاستوديو، وابنِ جمهور شركائك اليوم.",
+        "cta": "انضم لـ ASCEND"
+      },
+      "experiencesTitle": "استكشف تجارب الشركاء",
+      "experiencesSubtitle": "كل بطاقة تفتح تجربة يمكنك عرضها في محتواك.",
+      "openExperience": "افتح التجربة ←",
+      "experiences": {
         "invite": {
-          "title": "بطاقة دعوة سينمائية",
-          "body": "تجربة دعوة فاخرة — مثالية للقطة الافتتاحية."
+          "title": "بطاقة دعوة فاخرة",
+          "body": "تجربة دعوة مميزة — افتتاحية أنيقة لمحتواك العمودي."
         },
         "ascend": {
           "title": "صعود في 60 ثانية",
@@ -498,8 +645,6 @@
           "body": "System Visualizer من الصفحة الرئيسية — ?demo=ai"
         }
       },
-      "scriptTitle": "سكربت 75 ثانية",
-      "scriptBody": "0–5ث: بطاقة الدعوة\n5–25ث: Cinema OS حتى التذكرة\n25–40ث: Ascend Growth\n40–55ث: غرفة الصنّاع\n55–75ث: tenegta.com/ar/creators/studio + #TENEGTA",
       "privateRoomHint": "حاملي الشارة يدخلون غرفة الصنّاع الخاصة داخل ASCEND.",
       "ascendCta": "فعّل حساب ASCEND"
     }
@@ -2540,20 +2685,37 @@
         "posts": "منشورات هذا الأسبوع"
       },
       "kitTitle": "حقيبة الصانع",
-      "kitSubtitle": "سكربت وروابط تصوير وهاشتاغات جاهزة.",
+      "kitSubtitle": "روابط وأدوات مشاركة جاهزة.",
       "kit": {
-        "scriptLabel": "سكربت 75 ثانية",
-        "scriptBody": "0–5ث: بطاقة الدعوة — «هذا ليس مجرد دعوة، هذا دخول لعالم».\n5–25ث: Cinema OS — أفلام → مقاعد 3D → تذكرة.\n25–40ث: Ascend — ترتيب، معركة، شبكة.\n40–55ث: غرفة الصنّاع — تحديات وترتيب وموارد.\n55–75ث: tenegta.com/ar/creators/studio + #TENEGTA",
-        "copyScript": "انسخ السكربت",
-        "scriptCopied": "تم النسخ",
         "copyError": "تعذّر النسخ",
-        "filmLinks": "صوّر هذا",
+        "orderPage": "صفحة طلب العملاء",
         "studio": "استوديو الصنّاع",
-        "cinema": "Cinema OS (وضع العرض)",
-        "invite": "بطاقة دعوة سينمائية",
+        "invite": "بطاقة دعوتك",
         "visualizer": "مولّد الهوية",
+        "profile": "بروفايلك العام",
+        "toolLinks": "أدواتك",
+        "hashtags": "#TENEGTA · #Ascend · #صعود",
         "copyStudioLink": "انسخ رابط الاستوديو مع UTM",
         "linkCopied": "تم نسخ رابط الاستوديو"
+      },
+      "salesGuide": {
+        "eyebrow": "دليل التسويق",
+        "title": "ماذا تسوق؟",
+        "intro": "بكلمات بسيطة — هذه الخدمات التي تروّج لها، وعمولتك تبدأ من 10% وتزداد مع جهودك.",
+        "colProduct": "المنتج",
+        "colPrice": "السعر الأساسي",
+        "colCommission": "عمولتك الآن",
+        "priceNote": "السعر يزيد أو ينقص حسب الميزات التي يختارها العميل.",
+        "commissionNote": "عمولتك الحالية {rate} — تزداد مع العقود والإحالات والنشاط على المنصة.",
+        "discountTitle": "كود الحسم للعميل",
+        "discountBody": "يعطي العميل خصم 3% عند الطلب — يُطبّق تلقائياً من رابطك.",
+        "copyCode": "نسخ الكود",
+        "codeCopied": "تم نسخ الكود",
+        "orderLinkTitle": "رابط الطلب الجاهز",
+        "copyOrderLink": "نسخ رابط الطلب",
+        "linkCopied": "تم نسخ الرابط",
+        "copyError": "تعذّر النسخ",
+        "noCodeYet": "سيُولَّد كود الحسم تلقائياً عند تفعيل حسابك."
       },
       "cupTitle": "كأس الصنّاع",
       "cupSubtitle": "ترتيب أسبوعي — صنّاع المحتوى المعتمدون فقط.",
@@ -2586,6 +2748,205 @@
         "FILMING": "يصوّر",
         "SUBMITTED": "أرسل",
         "FEATURED": "مميز"
+      },
+      "lounge": {
+        "welcomeCelebration": "مرحباً في غرفة الصنّاع! استكشف التحديات والأدوات.",
+        "navAria": "تنقل غرفة الصنّاع",
+        "mobileNavAria": "أقسام الغرفة",
+        "nav": {
+          "home": "الرئيسية",
+          "challenge": "التحدي",
+          "cup": "كأس الصنّاع",
+          "battles": "المعارك",
+          "studio": "الاستوديو",
+          "achievements": "الإنجازات",
+          "settings": "الإعدادات"
+        },
+        "weekLabel": "الأسبوع {week}",
+        "activeCreators": "{count} صانع نشط",
+        "activityTitle": "نشاط مباشر",
+        "activityOnline": "{count} متصل",
+        "weekStats": "هذا الأسبوع",
+        "postsStat": "منشورات",
+        "submissionsStat": "مهام",
+        "activityFeed": {
+          "joined": "{name} انضم للغرفة",
+          "submitted": "{name} أرسل تحدياً",
+          "filming": "{name} يصوّر الآن",
+          "featured": "{name} أصبح مميزاً",
+          "battle": "{name} أرسل تحدي معركة"
+        },
+        "homeChatTitle": "دردشة الصنّاع",
+        "recentSubmissions": "آخر التسليمات",
+        "recentSubmissionsEmpty": "لا تسليمات هذا الأسبوع بعد.",
+        "challengeHero": "مهمة الأسبوع",
+        "challengeEmpty": "لا يوجد تحدي نشط هذا الأسبوع.",
+        "challengeCountdown": "ينتهي خلال {time}",
+        "challengeEnded": "انتهى التحدي",
+        "leaderboardPreview": "معاينة الترتيب",
+        "platforms": {
+          "reels": "Reels",
+          "tiktok": "TikTok",
+          "shorts": "Shorts",
+          "other": "أخرى"
+        },
+        "cupRankHighlight": "ترتيبك",
+        "cupYourScore": "{score} نقطة · {posts} منشور",
+        "cupPointsExplainer": "النقاط = XP أسبوعي + 75 لكل منشور معتمد + 10 لكل زيارة UTM.",
+        "battlesHistory": "معارك سابقة",
+        "battlesHistoryEmpty": "لا معارك مكتملة بعد.",
+        "battleOutcome": {
+          "won": "فوز",
+          "lost": "خسارة",
+          "pending": "جارية"
+        },
+        "studioTitle": "أدوات الصانع",
+        "studioSubtitle": "صوّر، شارك، وتتبّع — من الغرفة مباشرة.",
+        "utmTitle": "رابط UTM للتتبع",
+        "resourcesTitle": "مكتبة الموارد",
+        "resources": {
+          "brand": "دليل الهوية",
+          "utm": "دليل UTM",
+          "hashtags": "حزمة الهاشتاغ"
+        },
+        "achievementsTitle": "الإنجازات والمعالم",
+        "achievementsSubtitle": "الشارات والمعالم في برنامج الصنّاع.",
+        "milestonesTitle": "معالم",
+        "milestonesEmpty": "لا معالم بعد — استمر في النشر.",
+        "settingsTitle": "إعدادات الصانع",
+        "settingsSubtitle": "حدّث حالتك وملفك.",
+        "errorTitle": "حدث خطأ",
+        "errorBody": "واجهت الغرفة مشكلة. حاول مرة أخرى.",
+        "errorRetry": "إعادة المحاولة"
+      },
+      "spotlight": {
+        "eyebrow": "صانع الأسبوع",
+        "featuredCount": "{count} منشور مميز",
+        "viewProfile": "عرض الملف",
+        "challenge": "تحدَّه"
+      },
+      "onboarding": {
+        "title": "البداية",
+        "subtitle": "أكمل هذه الخطوات لفتح الغرفة بالكامل.",
+        "steps": {
+          "profile": "أكمل ملفك الشخصي",
+          "introduce": "قدّم نفسك في الدردشة",
+          "challenge": "اطّلع على تحدي الأسبوع",
+          "studio": "جرّب أدوات الاستوديو (UTM / إطار ستوري)",
+          "orderLink": "انسخ رابط الطلب وكود الحسم",
+          "firstShare": "شارك رابطك الأول"
+        },
+        "complete": "تم"
+      },
+      "calendar": {
+        "title": "تقويم المحتوى",
+        "subtitle": "خطّط منشورات {week}",
+        "planned": "مخطط",
+        "mon": "إث",
+        "tue": "ثل",
+        "wed": "أر",
+        "thu": "خم",
+        "fri": "جم",
+        "sat": "سب",
+        "sun": "أح"
+      },
+      "drawer": {
+        "close": "إغلاق",
+        "status": "الحالة",
+        "submissions": "التسليمات",
+        "featured": "مميز",
+        "viewProfile": "الملف العام",
+        "challenge": "إرسال تحدي معركة"
+      },
+      "admin": {
+        "tabsAria": "أقسام إدارة الصنّاع",
+        "tabCreators": "الصنّاع",
+        "tabChallenges": "التحديات",
+        "tabCup": "كأس الصنّاع",
+        "stats": {
+          "aria": "إحصائيات برنامج الصنّاع",
+          "totalCreators": "صنّاع الغرفة",
+          "activeThisWeek": "نشط هذا الأسبوع",
+          "featured": "مميزون",
+          "pendingSubmissions": "بانتظار المراجعة"
+        },
+        "list": {
+          "filterStatus": "تصفية حسب الحالة",
+          "filterAll": "كل الحالات",
+          "filterNoStatus": "بدون حالة",
+          "sortBy": "ترتيب حسب",
+          "sortName": "الاسم",
+          "sortSubmissions": "التسليمات",
+          "sortCupScore": "نقاط الكأس",
+          "sortStatus": "الحالة",
+          "empty": "لا يوجد صنّاع يطابقون الفلاتر.",
+          "viewDetail": "التفاصيل",
+          "metaSubmissions": "{n} تسليم",
+          "metaCup": "{score} نقطة كأس"
+        },
+        "detail": {
+          "close": "إغلاق اللوحة",
+          "statsTitle": "إحصائيات الصانع",
+          "totalSubmissions": "إجمالي التسليمات",
+          "featuredCount": "منشورات مميزة",
+          "cupScore": "نقاط الكأس",
+          "submissionsTitle": "آخر التسليمات",
+          "submissionsEmpty": "لا تسليمات بعد.",
+          "notesTitle": "ملاحظات الإدارة",
+          "notesPlaceholder": "ملاحظات داخلية عن هذا الصانع…",
+          "saveNotes": "حفظ الملاحظات",
+          "milestonesTitle": "المعالم",
+          "actionsTitle": "إجراءات",
+          "grantBadge": "منح شارة صانع المحتوى",
+          "grantMilestone": "منح معلم",
+          "toastSaved": "تم الحفظ"
+        },
+        "challenges": {
+          "title": "التحديات الأسبوعية",
+          "subtitle": "أنشئ المهمات وقيّم تسليمات الصنّاع.",
+          "createChallenge": "تحدي جديد",
+          "cancelCreate": "إلغاء",
+          "formTitle": "إنشاء تحدي أسبوعي",
+          "weekKey": "مفتاح الأسبوع",
+          "xpReward": "مكافأة XP",
+          "titleAr": "العنوان (عربي)",
+          "titleEn": "العنوان (إنجليزي)",
+          "titleFr": "العنوان (فرنسي)",
+          "bodyAr": "النص (عربي)",
+          "bodyEn": "النص (إنجليزي)",
+          "bodyFr": "النص (فرنسي)",
+          "submitCreate": "نشر التحدي",
+          "empty": "لا تحديات بعد.",
+          "metaXp": "+{xp} XP",
+          "metaPosts": "منشور",
+          "active": "نشط",
+          "submissionsTitle": "التسليمات",
+          "submissionsEmpty": "لا تسليمات لهذا الأسبوع.",
+          "pickChallenge": "اختر تحدياً لمراجعة التسليمات.",
+          "featured": "مميز",
+          "rate": "تقييم {n} نجوم",
+          "toastCreated": "تم حفظ التحدي",
+          "toastRated": "تم حفظ التقييم",
+          "toastError": "تعذّر تنفيذ العملية"
+        },
+        "cup": {
+          "title": "ترتيب كأس الصنّاع",
+          "subtitle": "ترتيب أسبوعي — أفضل 3 يحصلون على شارات الموسم عند الإغلاق.",
+          "closeSeason": "إغلاق الموسم وتكريم أفضل 3",
+          "closeConfirm": "منح شارات الكأس لأفضل 3 صنّاع وإرسال إشعار لهم؟",
+          "closeHint": "إغلاق الموسم يمنح شارات creator_cup_gold و creator_cup_silver و creator_cup_bronze.",
+          "empty": "لا يوجد ترتيب هذا الأسبوع.",
+          "colRank": "الترتيب",
+          "colCreator": "الصانع",
+          "colScore": "النقاط",
+          "colPosts": "المنشورات",
+          "anonymous": "صانع",
+          "toastClosed": "تم إغلاق الموسم — منحت الشارات",
+          "toastError": "تعذّر إغلاق الموسم"
+        }
+      },
+      "chat": {
+        "charLimit": "حد أقصى {max} حرفاً للرسالة"
       }
     },
     "chat": {
@@ -2843,6 +3204,8 @@
       "toastSaved": "تم الحفظ",
       "toastDealClosed": "تم إغلاق الصفقة",
       "toastDealLost": "تم تعليم الصفقة كخاسرة",
+      "toastOrderReviewed": "تمت مراجعة الطلب",
+      "toastOrderRejected": "تم رفض الطلب",
       "toastPayoutUpdated": "تم تحديث السحب",
       "statsBar": {
         "aria": "إحصائيات سريعة للإدارة",
@@ -2865,6 +3228,7 @@
         "groupPrograms": "البرامج",
         "overview": "نظرة عامة",
         "deals": "الصفقات",
+        "orders": "طلبات العملاء",
         "payouts": "السحوبات",
         "products": "المنتجات",
         "badges": "الشارات",
@@ -3221,6 +3585,31 @@
         "createSubmit": "إنشاء",
         "clientLabel": "وصف العميل"
       },
+      "orders": {
+        "title": "طلبات العملاء",
+        "subtitle": "طلبات من صفحة /order — باقات، ميزات، وأكواد الحسم.",
+        "empty": "لا توجد طلبات بعد.",
+        "review": "تمت المراجعة",
+        "reject": "رفض",
+        "organic": "طلب مباشر",
+        "discountApplied": "حسم {pct}% · {code}",
+        "colProduct": "الباقة",
+        "colCreator": "الصانع",
+        "colDate": "التاريخ",
+        "colRef": "المرجع",
+        "stats": {
+          "today": "طلبات اليوم",
+          "total": "إجمالي الطلبات",
+          "topCreator": "أفضل صانع",
+          "topProduct": "أكثر باقة"
+        },
+        "status": {
+          "NEW": "جديد",
+          "REVIEWED": "تمت المراجعة",
+          "CONVERTED": "مغلق",
+          "REJECTED": "مرفوض"
+        }
+      },
       "payoutsPage": {
         "title": "طلبات السحب",
         "hint": "وافق على طلبات الشركاء ثم سجّل الدفع بعد التحويل.",
@@ -3427,6 +3816,8 @@
       "switchToSignIn": "لديك حساب؟ سجّل الدخول",
       "registerIntro": "أنشئ ملفك كشريك وابدأ تتبّع الأرباح والعمولات عند إغلاق الصفقات.",
       "inviteRegisterHint": "تم قبول دعوتك — سجّل بنفس البريد لتفعيل شارة غرفة الصنّاع تلقائياً.",
+      "inviteRegisterBanner": "أنت تسجّل بدعوة خاصة من T.E.N.E.G.T.A",
+      "inviteCreatorBadge": "صانع محتوى مدعو",
       "signInHeroEyebrow": "TENEGTA ASCEND",
       "signInHeroTitle": "مركز قيادتك لأداء الشركاء",
       "signInHeroLine1": "عمولات، مستويات، ونقاط خبرة — في مساحة عمل واحدة مباشرة.",

@@ -5,6 +5,7 @@ import {
   Prisma,
   UserRole,
   DealStatus,
+  ClientOrderStatus,
   PayoutStatus,
   BadgeType,
   EventStatus,
@@ -42,6 +43,7 @@ import { GAME_CONFIG } from "@/lib/growth/game-config";
 import { touchActivityDay } from "@/lib/growth/streak";
 import { isPublicRegistrationEnabled } from "@/lib/growth/registration-policy";
 import { deletePartnerUser } from "@/lib/growth/delete-partner-user";
+import { uniqueClientDiscountCode } from "@/lib/growth/client-discount-code";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -81,7 +83,7 @@ export async function growthSignOutAction(formData: FormData): Promise<void> {
 export async function registerPartnerAction(
   _prev: unknown,
   formData: FormData,
-): Promise<{ ok: true; email: string } | { ok: false; error: string }> {
+): Promise<{ ok: true; email: string; isCreator?: boolean } | { ok: false; error: string }> {
   if (!isPublicRegistrationEnabled()) {
     return { ok: false, error: "registration_closed" };
   }
@@ -139,6 +141,7 @@ export async function registerPartnerAction(
       data: {
         userId: user.id,
         referralCode,
+        clientDiscountCode: await uniqueClientDiscountCode(tx),
         parentUserId,
         currentLevelId: starter.id,
         cardNumber,
@@ -158,13 +161,14 @@ export async function registerPartnerAction(
   }
 
   const inviteSlug = String(formData.get("inviteSlug") ?? "").trim();
+  let isCreator = false;
   if (inviteSlug && newUserId) {
     const { linkInviteToPartner } = await import("@/lib/growth/creator-arena");
-    await linkInviteToPartner(newUserId, email, inviteSlug);
+    isCreator = (await linkInviteToPartner(newUserId, email, inviteSlug)) === true;
   }
 
   revalidatePath("/", "layout");
-  return { ok: true, email };
+  return { ok: true, email, isCreator };
 }
 
 const addLeadSchema = z.object({
@@ -1374,6 +1378,7 @@ export async function adminCreatePartnerAction(
         data: {
           userId: u.id,
           referralCode,
+          clientDiscountCode: await uniqueClientDiscountCode(tx),
           parentUserId,
           currentLevelId: starter.id,
           cardNumber,
@@ -3105,4 +3110,82 @@ export async function addToHallOfLegendAction(
   revalidatePath(`/${parsed.data.locale}/growth/legends`);
   revalidatePath(`/${parsed.data.locale}/growth/admin/legends`);
   return { ok: true };
+}
+
+export async function reviewClientOrderAdminAction(
+  orderId: string,
+): Promise<ActionResult> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const order = await prisma.clientOrder.findUnique({ where: { id: orderId } });
+  if (!order) return { ok: false, error: "not_found" };
+  if (order.status !== ClientOrderStatus.NEW) {
+    return { ok: false, error: "bad_state" };
+  }
+
+  await prisma.clientOrder.update({
+    where: { id: orderId },
+    data: { status: ClientOrderStatus.REVIEWED, reviewedAt: new Date() },
+  });
+
+  revalidatePath("/");
+  return { ok: true };
+}
+
+export async function reviewClientOrderAdminFormAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const orderId = String(formData.get("orderId") ?? "").trim();
+  if (!orderId) return { ok: false, error: "invalid_input" };
+  return reviewClientOrderAdminAction(orderId);
+}
+
+export async function rejectClientOrderAdminAction(
+  orderId: string,
+): Promise<ActionResult> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.ADMIN) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const order = await prisma.clientOrder.findUnique({
+    where: { id: orderId },
+    include: { deal: true },
+  });
+  if (!order) return { ok: false, error: "not_found" };
+  if (
+    order.status === ClientOrderStatus.REJECTED ||
+    order.status === ClientOrderStatus.CONVERTED
+  ) {
+    return { ok: false, error: "bad_state" };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.clientOrder.update({
+      where: { id: orderId },
+      data: { status: ClientOrderStatus.REJECTED, reviewedAt: new Date() },
+    });
+    if (order.dealId && order.deal?.status === DealStatus.PENDING) {
+      await tx.deal.update({
+        where: { id: order.dealId },
+        data: { status: DealStatus.LOST, lostAt: new Date() },
+      });
+    }
+  });
+
+  revalidatePath("/");
+  return { ok: true };
+}
+
+export async function rejectClientOrderAdminFormAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const orderId = String(formData.get("orderId") ?? "").trim();
+  if (!orderId) return { ok: false, error: "invalid_input" };
+  return rejectClientOrderAdminAction(orderId);
 }

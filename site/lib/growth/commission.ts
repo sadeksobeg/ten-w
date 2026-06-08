@@ -1,6 +1,6 @@
-import { DealStatus, UserRole } from "@prisma/client";
+import { ClientOrderStatus, DealStatus, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { effectiveCommissionBaseCents } from "@/lib/growth/commission-base";
+import { effectiveCommissionBaseCentsForDeal } from "@/lib/growth/creator-commission-boost";
 import { evaluateAutoBadgesForUser, grantFastCloserIfEligible } from "@/lib/growth/badges";
 import { logActivityEvent } from "@/lib/growth/activity";
 import { syncPartnerLevel } from "@/lib/growth/levels";
@@ -68,7 +68,12 @@ export async function closeDealAsAdmin(params: {
     throw new Error("Missing CommissionTierConfig seed");
   }
 
-  const base = await effectiveCommissionBaseCents(deal.partnerId, deal.productId);
+  const { baseCents: base, boost } = await effectiveCommissionBaseCentsForDeal({
+    partnerUserId: deal.partnerId,
+    productId: deal.productId,
+    productSlug: deal.product.slug,
+    saleAmountCents: deal.saleAmountCents,
+  });
   const t1 = splitAmount(base, tierCfg.tier1Bps);
   const t2 = splitAmount(base, tierCfg.tier2Bps);
   const t3 = splitAmount(base, tierCfg.tier3Bps);
@@ -91,12 +96,20 @@ export async function closeDealAsAdmin(params: {
     tier2Bps: tierCfg.tier2Bps,
     tier3Bps: tierCfg.tier3Bps,
     baseCents: base,
+    boostBps: boost.effectiveBps,
+    boostFactor: boost.boostFactor,
+    saleAmountCents: deal.saleAmountCents,
   };
 
   await prisma.$transaction(async (tx) => {
     await tx.deal.update({
       where: { id: deal.id },
       data: { status: DealStatus.CLOSED, closedAt: now },
+    });
+
+    await tx.clientOrder.updateMany({
+      where: { dealId: deal.id },
+      data: { status: ClientOrderStatus.CONVERTED, reviewedAt: now },
     });
 
     await tx.commissionLedger.create({

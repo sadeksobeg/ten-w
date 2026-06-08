@@ -20,6 +20,13 @@ enum DealStatus {
   LOST
 }
 
+enum ClientOrderStatus {
+  NEW
+  REVIEWED
+  CONVERTED
+  REJECTED
+}
+
 enum PayoutStatus {
   PENDING
   APPROVED
@@ -87,6 +94,7 @@ enum NotificationType {
   XP_BOOST
   PAYOUT_UPDATE
   DEAL_CLOSED
+  CLIENT_ORDER
   SYSTEM
   ADMIN_MESSAGE
 }
@@ -158,13 +166,16 @@ model User {
   inviteLinkedAsPartner      InviteCard[]       @relation("InviteLinkedPartner")
   creatorArenaProfile        CreatorArenaProfile?
   creatorSubmissions         CreatorSubmission[]
+  clientOrdersAsPartner      ClientOrder[]      @relation("ClientOrderPartner")
 }
 
 model PartnerProfile {
-  id             String   @id @default(cuid())
-  userId         String   @unique
-  referralCode   String   @unique
-  parentUserId   String?
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  referralCode       String   @unique
+  clientDiscountCode String?  @unique
+  discountBps        Int      @default(300)
+  parentUserId       String?
   currentLevelId String
   totalXp        Int      @default(0)
   displayTitle   String?
@@ -188,6 +199,7 @@ model PartnerProfile {
 
   @@index([parentUserId])
   @@index([referralCode])
+  @@index([clientDiscountCode])
 }
 
 model LevelDefinition {
@@ -210,9 +222,16 @@ model Product {
   priceCents            Int
   commissionBaseCents   Int
   marketingKit          Json?
+  featuresJson          Json?
+  descriptionAr         String? @db.Text
+  descriptionEn         String? @db.Text
+  descriptionFr         String? @db.Text
+  publicVisible         Boolean @default(false)
+  sortOrder             Int     @default(0)
   active                Boolean @default(true)
 
   deals               Deal[]
+  clientOrders        ClientOrder[]
   commissionOverrides PartnerCommissionOverride[]
 }
 
@@ -243,8 +262,40 @@ model Deal {
   xpEvents XpEvent[]            @relation("XpDeal")
   linkedConversations ChatConversation[] @relation("ChatLinkedDeal")
 
+  clientOrders ClientOrder[]
+
   @@index([partnerId, status])
   @@index([closedAt])
+}
+
+model ClientOrder {
+  id                 String            @id @default(cuid())
+  locale             String            @default("ar")
+  status             ClientOrderStatus @default(NEW)
+  productId          String
+  partnerId          String?
+  clientName         String
+  clientEmail        String
+  clientPhone        String?
+  company            String?
+  selectedFeatures   Json              @default("[]")
+  basePriceCents     Int
+  discountBps        Int               @default(0)
+  discountCents      Int               @default(0)
+  finalPriceCents    Int
+  discountCode       String?
+  notes              String?           @db.Text
+  dealId             String?           @unique
+  createdAt          DateTime          @default(now())
+  reviewedAt         DateTime?
+
+  product Product @relation(fields: [productId], references: [id])
+  partner User?   @relation("ClientOrderPartner", fields: [partnerId], references: [id], onDelete: SetNull)
+  deal    Deal?   @relation(fields: [dealId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([partnerId])
+  @@index([productId])
 }
 
 model CommissionLedger {
@@ -920,11 +971,16 @@ enum CreatorWorkflowStatus {
 }
 
 model CreatorArenaProfile {
-  id          String                @id @default(cuid())
-  userId      String                @unique
-  status      CreatorWorkflowStatus @default(JOINED)
-  updatedAt   DateTime              @updatedAt
-  updatedById String?
+  id               String                @id @default(cuid())
+  userId           String                @unique
+  status           CreatorWorkflowStatus @default(JOINED)
+  notes            String?               @db.Text
+  lastActiveAt     DateTime?
+  totalSubmissions Int                   @default(0)
+  featuredCount    Int                   @default(0)
+  milestones       String[]              @default([])
+  updatedAt        DateTime              @updatedAt
+  updatedById      String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -932,28 +988,34 @@ model CreatorArenaProfile {
 }
 
 model CreatorChallenge {
-  id        String   @id @default(cuid())
-  weekKey   String   @unique
-  titleAr   String
-  titleEn   String
-  titleFr   String   @default("")
-  bodyAr    String   @db.Text
-  bodyEn    String   @db.Text
-  bodyFr    String   @default("") @db.Text
-  xpReward  Int      @default(500)
-  active    Boolean  @default(true)
-  startsAt  DateTime
-  endsAt    DateTime
-  createdAt DateTime @default(now())
+  id                   String   @id @default(cuid())
+  weekKey              String   @unique
+  titleAr              String
+  titleEn              String
+  titleFr              String   @default("")
+  bodyAr               String   @db.Text
+  bodyEn               String   @db.Text
+  bodyFr               String   @default("") @db.Text
+  xpReward             Int      @default(500)
+  active               Boolean  @default(true)
+  featuredSubmissionId String?
+  totalSubmissions     Int      @default(0)
+  startsAt             DateTime
+  endsAt               DateTime
+  createdAt            DateTime @default(now())
 }
 
 model CreatorSubmission {
-  id        String   @id @default(cuid())
-  userId    String
-  weekKey   String
-  postUrl   String
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  userId      String
+  weekKey     String
+  postUrl     String
+  platform    String?
+  adminRating Int?
+  isFeatured  Boolean  @default(false)
+  viewCount   Int      @default(0)
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { isPublicRegistrationEnabled } from "@/lib/growth/registration-policy";
+import { isCreatorProgramInvite } from "@/lib/growth/creator-program";
 import { prisma } from "@/lib/prisma";
 import { GrowthRegisterClient } from "./GrowthRegisterClient";
 
@@ -18,14 +19,17 @@ export default async function GrowthRegisterPage({ params, searchParams }: Props
   const inviteCard = inviteSlug
     ? await prisma.inviteCard.findUnique({
         where: { slug: inviteSlug },
-        select: { name: true, slug: true, accepted: true },
+        select: { name: true, slug: true, accepted: true, tier: true },
       })
     : null;
+
+  const isCreatorInvite = inviteCard ? isCreatorProgramInvite(inviteCard.tier) : false;
 
   return (
     <GrowthRegisterClient
       inviteSlug={inviteCard?.accepted ? inviteCard.slug : inviteSlug ?? null}
       defaultName={inviteCard?.name ?? ""}
+      isCreatorInvite={isCreatorInvite}
     />
   );
 }
