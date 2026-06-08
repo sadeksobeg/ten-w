@@ -1,24 +1,32 @@
 import { redirect } from "next/navigation";
-import { EventStatus } from "@prisma/client";
 import { auth } from "@/auth";
 import { ContentCreatorHub } from "@/components/growth/creators/ContentCreatorHub";
 import {
   canAccessCreatorLounge,
+  ensureCreatorChannels,
   userHasContentCreatorBadge,
   userIsCreatorRoomMember,
 } from "@/lib/growth/creator-program";
 import {
   countActiveCreatorBattles,
   creatorCupLeaderboard,
+  currentWeekKey,
+  getActiveCreatorBattle,
   getCreatorChallengeForUser,
   getCreatorBattleCandidates,
+  getCreatorDashboardMetrics,
   getCreatorPulse,
+  getCreatorAnalyticsSeries,
   getFeaturedCreator,
   getViewerCreatorProfile,
   listCreatorBattleHistory,
-  listRecentCreatorSubmissions,
+  listCreatorDirectory,
   listCreatorStatusCards,
+  listPendingBattleInvites,
+  listRecentCreatorSubmissions,
+  listWeekSubmissions,
 } from "@/lib/growth/creator-arena";
+import { listCreatorChatRooms } from "@/lib/growth/creator-chat";
 import { resolveChatSenderName, VIEWER_CHAT_PROFILE_SELECT } from "@/lib/growth/chat-display";
 import {
   computeCreatorCommissionBoost,
@@ -53,9 +61,12 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
     redirect(`/${locale}/growth`);
   }
 
+  await ensureCreatorChannels();
+
+  const weekKey = currentWeekKey();
+
   const [
     isRoomMember,
-    events,
     pulse,
     statusCards,
     cupRows,
@@ -71,36 +82,34 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
     salesProducts,
     commissionBoost,
     clientDiscountCode,
+    metrics,
+    chatRooms,
+    directory,
+    analyticsSeries,
+    weekSubmissions,
+    activeBattle,
+    pendingInvites,
+    arenaProfile,
   ] = await Promise.all([
     userIsCreatorRoomMember(userId),
-    prisma.growthEvent.findMany({
-      where: {
-        status: { in: [EventStatus.PUBLISHED, EventStatus.ACTIVE] },
-      },
-      orderBy: { startAt: "asc" },
-      take: 6,
-      select: {
-        slug: true,
-        title: true,
-        status: true,
-        startAt: true,
-        _count: { select: { participants: true } },
-      },
-    }),
     getCreatorPulse(),
     listCreatorStatusCards(),
-    creatorCupLeaderboard(10),
+    creatorCupLeaderboard(20),
     getCreatorChallengeForUser(userId, locale),
     getCreatorBattleCandidates(userId),
     prisma.user.findUnique({
       where: { id: userId },
-      select: { ...VIEWER_CHAT_PROFILE_SELECT, publicSlug: true },
+      select: {
+        ...VIEWER_CHAT_PROFILE_SELECT,
+        publicSlug: true,
+        partnerProfile: { select: { currentLevel: { select: { code: true } } } },
+      },
     }),
-    listRecentCreatorSubmissions(3),
+    listRecentCreatorSubmissions(5),
     getFeaturedCreator(),
     getViewerCreatorProfile(userId),
     countActiveCreatorBattles(userId),
-    listCreatorBattleHistory(userId, 5),
+    listCreatorBattleHistory(userId, 8),
     prisma.userBadge.findMany({
       where: { userId },
       include: { badge: { select: { key: true, name: true, description: true } } },
@@ -108,9 +117,26 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
     getPublicProducts(locale),
     computeCreatorCommissionBoost(userId),
     ensureClientDiscountCode(userId),
+    getCreatorDashboardMetrics(userId),
+    listCreatorChatRooms(userId),
+    listCreatorDirectory(),
+    getCreatorAnalyticsSeries(userId),
+    listWeekSubmissions(weekKey),
+    getActiveCreatorBattle(userId),
+    listPendingBattleInvites(userId),
+    prisma.creatorArenaProfile.findUnique({ where: { userId } }),
   ]);
 
   const viewerRank = cupRows.find((r) => r.userId === userId)?.rank ?? null;
+  const approvedCount = await prisma.creatorSubmission.count({
+    where: { userId, status: { in: ["approved", "featured"] } },
+  });
+  const totalCount = await prisma.creatorSubmission.count({ where: { userId } });
+  const approvalRate = totalCount > 0 ? Math.round((approvedCount / totalCount) * 100) : 0;
+
+  const contentIdeas = Array.isArray(arenaProfile?.contentIdeas)
+    ? (arenaProfile!.contentIdeas as Array<{ id: string; title: string; column: string; platform: string; priority: string }>)
+    : [];
 
   const badgeItems = badges.map((b) => ({
     key: b.badge.key,
@@ -119,32 +145,43 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
     earned: true,
   }));
 
+  const battleMapped = activeBattle
+    ? {
+        id: activeBattle.id,
+        challengerId: activeBattle.challengerId,
+        challengedId: activeBattle.challengedId,
+        status: activeBattle.status,
+        challengerProgress: activeBattle.challengerProgress,
+        challengedProgress: activeBattle.challengedProgress,
+        target: activeBattle.target,
+        stakesXp: activeBattle.stakesXp,
+        endsAt: activeBattle.endsAt?.toISOString() ?? null,
+        challengerName: resolveChatSenderName(activeBattle.challenger),
+        challengedName: resolveChatSenderName(activeBattle.challenged),
+      }
+    : null;
+
   return (
     <div className="space-y-6 growth-page-enter">
       <ContentCreatorHub
         locale={locale}
         hasBadge={hasBadge}
         isRoomMember={isRoomMember}
-        events={events.map((ev) => ({
-          slug: ev.slug,
-          title: ev.title,
-          status: ev.status,
-          startAt: ev.startAt.toISOString(),
-          participantCount: ev._count.participants,
-        }))}
         pulse={pulse}
+        metrics={metrics}
         statusCards={statusCards}
         cupRows={cupRows}
         challenge={challenge}
         battleCandidates={battleCandidates}
         publicSlug={user?.publicSlug ?? null}
         recentSubmissions={recentSubmissions}
+        weekSubmissions={weekSubmissions}
         featuredCreator={featuredCreator}
-        viewerProfile={viewerProfile}
         viewerRank={viewerRank}
         activeBattles={activeBattles}
         battleHistory={battleHistory}
         badges={badgeItems}
+        milestones={arenaProfile?.milestones ?? []}
         viewer={{
           userId,
           email: user?.email ?? session.user.email ?? "",
@@ -152,6 +189,8 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
           displayName: user ? resolveChatSenderName(user) : undefined,
           avatarUrl: user?.avatarUrl,
           avatarPreset: user?.avatarPreset,
+          levelCode: user?.partnerProfile?.currentLevel.code ?? "STARTER",
+          status: viewerProfile?.status ?? arenaProfile?.status ?? "JOINED",
         }}
         clientDiscountCode={clientDiscountCode}
         commissionPercent={formatCommissionPercent(commissionBoost.effectiveBps)}
@@ -160,6 +199,22 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
           name: p.name,
           priceCents: p.priceCents,
         }))}
+        chatRooms={chatRooms}
+        directory={directory}
+        analyticsSeries={analyticsSeries}
+        utmStats={[]}
+        contentIdeas={contentIdeas}
+        onboarding={{
+          profile: Boolean(user?.publicSlug),
+          introduce: isRoomMember,
+          challenge: Boolean(challenge?.hasSubmitted),
+          firstShare: Boolean(challenge?.submissionUrl),
+        }}
+        bio={arenaProfile?.bio ?? null}
+        specialty={arenaProfile?.specialty ?? []}
+        activeBattle={battleMapped}
+        pendingInvites={pendingInvites}
+        approvalRate={approvalRate}
       />
     </div>
   );

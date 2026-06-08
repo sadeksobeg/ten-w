@@ -167,6 +167,9 @@ model User {
   creatorArenaProfile        CreatorArenaProfile?
   creatorSubmissions         CreatorSubmission[]
   clientOrdersAsPartner      ClientOrder[]      @relation("ClientOrderPartner")
+  chatRoomMessageReactions   ChatRoomMessageReaction[]
+  creatorDirectRoomsA        CreatorDirectRoom[] @relation("CreatorDirectUserA")
+  creatorDirectRoomsB        CreatorDirectRoom[] @relation("CreatorDirectUserB")
 }
 
 model PartnerProfile {
@@ -618,12 +621,14 @@ model ChatRoom {
   mentorshipSession  MentorshipSession?
   members            ChatRoomMember[]
   messages           ChatRoomMessage[]
+  creatorDirectRoom  CreatorDirectRoom?
 }
 
 model ChatRoomMember {
-  roomId   String
-  userId   String
-  joinedAt DateTime @default(now())
+  roomId     String
+  userId     String
+  joinedAt   DateTime  @default(now())
+  lastReadAt DateTime?
 
   room ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
   user User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -646,10 +651,41 @@ model ChatRoomMessage {
   editedById   String?
   createdAt    DateTime  @default(now())
 
-  room   ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  sender User     @relation("ChatRoomMessageSender", fields: [senderUserId], references: [id])
+  room      ChatRoom                  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender    User                      @relation("ChatRoomMessageSender", fields: [senderUserId], references: [id])
+  reactions ChatRoomMessageReaction[]
 
   @@index([roomId, createdAt])
+}
+
+model ChatRoomMessageReaction {
+  id        String   @id @default(cuid())
+  messageId String
+  userId    String
+  emoji     String
+  createdAt DateTime @default(now())
+
+  message ChatRoomMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId, emoji])
+  @@index([messageId])
+}
+
+model CreatorDirectRoom {
+  id        String   @id @default(cuid())
+  userAId   String
+  userBId   String
+  roomId    String   @unique
+  createdAt DateTime @default(now())
+
+  userA User     @relation("CreatorDirectUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB User     @relation("CreatorDirectUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  room  ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([userAId, userBId])
+  @@index([userAId])
+  @@index([userBId])
 }
 
 model DemoEvent {
@@ -971,16 +1007,20 @@ enum CreatorWorkflowStatus {
 }
 
 model CreatorArenaProfile {
-  id               String                @id @default(cuid())
-  userId           String                @unique
-  status           CreatorWorkflowStatus @default(JOINED)
-  notes            String?               @db.Text
-  lastActiveAt     DateTime?
-  totalSubmissions Int                   @default(0)
-  featuredCount    Int                   @default(0)
-  milestones       String[]              @default([])
-  updatedAt        DateTime              @updatedAt
-  updatedById      String?
+  id                      String                @id @default(cuid())
+  userId                  String                @unique
+  status                  CreatorWorkflowStatus @default(JOINED)
+  bio                     String?               @db.VarChar(280)
+  specialty               String[]              @default([])
+  contentIdeas            Json?
+  notificationPreferences Json?
+  notes                   String?               @db.Text
+  lastActiveAt            DateTime?
+  totalSubmissions        Int                   @default(0)
+  featuredCount           Int                   @default(0)
+  milestones              String[]              @default([])
+  updatedAt               DateTime              @updatedAt
+  updatedById             String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -1011,7 +1051,9 @@ model CreatorSubmission {
   weekKey     String
   postUrl     String
   platform    String?
+  description String?  @db.VarChar(100)
   adminRating Int?
+  adminNote   String?  @db.Text
   isFeatured  Boolean  @default(false)
   viewCount   Int      @default(0)
   status      String   @default("pending")
@@ -1022,6 +1064,21 @@ model CreatorSubmission {
   @@unique([userId, weekKey])
   @@index([weekKey])
   @@index([userId])
+}
+
+model CreatorApplication {
+  id              String   @id @default(cuid())
+  name            String
+  email           String
+  mainPlatformUrl String
+  platform        String?
+  contentTypes    Json
+  followersRange  String
+  status          String   @default("PENDING")
+  adminNotes      String?  @db.Text
+  createdAt       DateTime @default(now())
+
+  @@index([status, createdAt])
 }
 
 model CreatorArenaVisit {

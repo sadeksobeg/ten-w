@@ -12,6 +12,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { AdminChallengeManager } from "./AdminChallengeManager";
 import { AdminCreatorCupManager } from "./AdminCreatorCupManager";
+import { AdminCreatorApplications, type CreatorApplicationRow } from "./AdminCreatorApplications";
 import { AdminCreatorDetailPanel } from "./AdminCreatorDetailPanel";
 import { AdminCreatorList } from "./AdminCreatorList";
 import { AdminCreatorStatsRow } from "./AdminCreatorStatsRow";
@@ -37,6 +38,8 @@ type Props = {
   pendingSubmissions: CreatorAdminChallengeSubmission[];
   missingThisWeek: CreatorAdminMissingSubmission[];
   cupLeaderboard: CreatorCupRow[];
+  applications?: CreatorApplicationRow[];
+  pendingApplications?: number;
 };
 
 export function AdminCreatorGroupClient({
@@ -47,6 +50,8 @@ export function AdminCreatorGroupClient({
   pendingSubmissions: initialPending,
   missingThisWeek,
   cupLeaderboard,
+  applications = [],
+  pendingApplications = 0,
 }: Props) {
   const t = useTranslations("Growth.admin.creatorsPage");
   const tAdmin = useTranslations("Growth.creators.admin");
@@ -233,6 +238,18 @@ export function AdminCreatorGroupClient({
         >
           {tAdmin("tabCup")}
         </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "applications"}
+          className={tabClass(tab === "applications")}
+          onClick={() => setTab("applications")}
+        >
+          {tAdmin("tabApplications")}
+          {pendingApplications > 0 ? (
+            <span className="rounded-full bg-rose-500/20 px-1.5 py-0.5 text-[9px] text-rose-200">{pendingApplications}</span>
+          ) : null}
+        </button>
       </div>
 
       {tab === "creators" ? (
@@ -287,6 +304,8 @@ export function AdminCreatorGroupClient({
       ) : null}
 
       {tab === "cup" ? <AdminCreatorCupManager leaderboard={cupLeaderboard} /> : null}
+
+      {tab === "applications" ? <AdminCreatorApplications applications={applications} /> : null}
 
       <AdminCreatorDetailPanel
         partner={selectedPartner}

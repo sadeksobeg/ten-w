@@ -164,6 +164,14 @@ export default async function AdminCreatorsPage({ params }: Props) {
     endsAt: c.endsAt.toISOString(),
   }));
 
+  const [applications, pendingAppCount] = await Promise.all([
+    prisma.creatorApplication.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    }),
+    prisma.creatorApplication.count({ where: { status: "PENDING" } }),
+  ]);
+
   return (
     <div className="space-y-6 growth-page-enter">
       <AdminCreatorGroupClient
@@ -174,6 +182,17 @@ export default async function AdminCreatorsPage({ params }: Props) {
         pendingSubmissions={pendingRows}
         missingThisWeek={missingThisWeek}
         cupLeaderboard={cupLeaderboard}
+        applications={applications.map((a) => ({
+          id: a.id,
+          name: a.name,
+          email: a.email,
+          mainPlatformUrl: a.mainPlatformUrl,
+          platform: a.platform,
+          followersRange: a.followersRange,
+          status: a.status,
+          createdAt: a.createdAt.toISOString(),
+        }))}
+        pendingApplications={pendingAppCount}
       />
     </div>
   );

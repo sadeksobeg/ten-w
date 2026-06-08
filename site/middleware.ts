@@ -31,7 +31,14 @@ export default function middleware(request: NextRequest) {
   const studioRedirect = pathname.match(/^\/(ar|en|fr)\/creators\/studio\/?$/);
   if (studioRedirect) {
     const url = request.nextUrl.clone();
-    url.pathname = `/${studioRedirect[1]}/ascend`;
+    url.pathname = `/${studioRedirect[1]}/for-creators`;
+    return NextResponse.redirect(url, 301);
+  }
+
+  const creatorsRedirect = pathname.match(/^\/(ar|en|fr)\/creators\/?$/);
+  if (creatorsRedirect) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${creatorsRedirect[1]}/for-creators`;
     return NextResponse.redirect(url, 301);
   }
 

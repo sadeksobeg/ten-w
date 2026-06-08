@@ -4,6 +4,15 @@ import { prisma } from "@/lib/prisma";
 export const CREATOR_ROOM_SLUG = "content-creators";
 export const CONTENT_CREATOR_BADGE = "content_creator";
 
+export const CREATOR_CHANNEL_SLUGS = [
+  { slug: "content-creators", title: "عام" },
+  { slug: "creator-challenges", title: "تحديات-ونصائح" },
+  { slug: "creator-battles", title: "معارك-وتحديات" },
+  { slug: "creator-announcements", title: "إعلانات" },
+] as const;
+
+export const CREATOR_ANNOUNCEMENTS_SLUG = "creator-announcements";
+
 export async function userHasBadge(userId: string, badgeKey: string): Promise<boolean> {
   const row = await prisma.userBadge.findFirst({
     where: { userId, badge: { key: badgeKey } },
@@ -38,6 +47,37 @@ export function isCreatorProgramInvite(tier: string): boolean {
   return t.includes("CREATOR") || t.includes("CONTENT") || tier.includes("صانع");
 }
 
+export async function ensureCreatorChannels() {
+  for (const ch of CREATOR_CHANNEL_SLUGS) {
+    const existing = await prisma.chatRoom.findUnique({ where: { slug: ch.slug } });
+    if (!existing) {
+      await prisma.chatRoom.create({
+        data: {
+          slug: ch.slug,
+          type: ChatRoomType.CREATOR,
+          title: ch.title,
+          isPublic: false,
+        },
+      });
+    }
+  }
+}
+
+export async function addUserToAllCreatorChannels(userId: string) {
+  await ensureCreatorChannels();
+  const rooms = await prisma.chatRoom.findMany({
+    where: { slug: { in: CREATOR_CHANNEL_SLUGS.map((c) => c.slug) } },
+    select: { id: true },
+  });
+  for (const room of rooms) {
+    await prisma.chatRoomMember.upsert({
+      where: { roomId_userId: { roomId: room.id, userId } },
+      create: { roomId: room.id, userId },
+      update: {},
+    });
+  }
+}
+
 export async function grantCreatorLoungeAccess(
   userId: string,
   opts?: { notify?: boolean },
@@ -47,15 +87,15 @@ export async function grantCreatorLoungeAccess(
   const { createNotification } = await import("@/lib/growth/notify");
   const { prisma } = await import("@/lib/prisma");
 
-  await addUserToCreatorRoom(userId);
+  await addUserToAllCreatorChannels(userId);
   await ensureCreatorArenaProfile(userId, CreatorWorkflowStatus.JOINED);
 
   if (opts?.notify !== false) {
     await createNotification(prisma, {
       userId,
       type: NotificationType.SYSTEM,
-      title: "Creator Arena",
-      body: "تم منحك وصول غرفة صنّاع المحتوى — استكشف التحديات والموارد.",
+      title: "Creator Hub",
+      body: "مرحباً بك في شبكة الصنّاع — جاهز للإبداع.",
       link: "/growth/creators",
       metadata: { kind: "creator_lounge_granted" },
     });
@@ -131,13 +171,8 @@ export async function userIsCreatorRoomMember(userId: string): Promise<boolean> 
 }
 
 export async function addUserToCreatorRoom(userId: string) {
-  const room = await ensureCreatorRoom();
-  await prisma.chatRoomMember.upsert({
-    where: { roomId_userId: { roomId: room.id, userId } },
-    create: { roomId: room.id, userId },
-    update: {},
-  });
-  return room;
+  await addUserToAllCreatorChannels(userId);
+  return ensureCreatorRoom();
 }
 
 export async function removeUserFromCreatorRoom(userId: string) {

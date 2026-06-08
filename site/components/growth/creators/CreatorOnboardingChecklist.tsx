@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { IconCheck } from "@/components/growth/icons/GrowthIcons";
-import type { CreatorLoungeSection } from "./CreatorLoungeLayout";
+import type { CreatorHubSection } from "./CreatorHubTypes";
 
 export type CreatorOnboardingProgress = {
   profile: boolean;
@@ -15,14 +15,14 @@ export type CreatorOnboardingProgress = {
 
 type Props = {
   progress: CreatorOnboardingProgress;
-  onNavigate?: (section: CreatorLoungeSection) => void;
+  onNavigate?: (section: CreatorHubSection) => void;
 };
 
-const STEPS: { key: keyof CreatorOnboardingProgress; section?: CreatorLoungeSection }[] = [
+const STEPS: { key: keyof CreatorOnboardingProgress; section?: CreatorHubSection }[] = [
   { key: "profile" },
   { key: "introduce", section: "chat" },
   { key: "challenge", section: "challenge" },
-  { key: "firstShare", section: "toolkit" },
+  { key: "firstShare", section: "kit" },
 ];
 
 export function CreatorOnboardingChecklist({ progress, onNavigate }: Props) {

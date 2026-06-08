@@ -1972,10 +1972,127 @@
   }
 }
 
+/* Creator Hub design tokens */
+:root {
+  --creator-primary: #e11d48;
+  --creator-secondary: #c9922a;
+  --creator-accent: #7c3aed;
+  --creator-surface: #0f0a1a;
+  --creator-surface-2: #1a1228;
+  --creator-surface-3: #231830;
+  --creator-border: rgba(225, 29, 72, 0.15);
+  --creator-border-gold: rgba(201, 146, 42, 0.2);
+  --creator-text: #f8f4ff;
+  --creator-text-sub: #9b8ec4;
+  --status-invited: #6366f1;
+  --status-joined: #0ea5e9;
+  --status-filming: #f59e0b;
+  --status-submitted: #10b981;
+  --status-featured: #e11d48;
+}
+
+.creator-card {
+  background: linear-gradient(135deg, rgba(26, 18, 40, 0.9), rgba(15, 10, 26, 0.95));
+  border: 1px solid var(--creator-border);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.creator-card:hover {
+  border-color: var(--creator-border-gold);
+  transform: translateY(-2px);
+}
+
+.creator-glow-rose {
+  box-shadow: 0 0 30px rgba(225, 29, 72, 0.15), 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.creator-glow-gold {
+  box-shadow: 0 0 30px rgba(201, 146, 42, 0.2), 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.creator-featured-badge {
+  background: linear-gradient(135deg, var(--creator-primary), #ff6b8a);
+  color: white;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 20px rgba(225, 29, 72, 0.4);
+}
+
+.creator-status-pill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+@property --creator-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes creator-border-spin {
+  to {
+    --creator-angle: 360deg;
+  }
+}
+
+.creator-active-border {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--creator-surface), var(--creator-surface)) padding-box,
+    conic-gradient(from var(--creator-angle), #e11d48, #c9922a, #7c3aed, #e11d48) border-box;
+  animation: creator-border-spin 4s linear infinite;
+}
+
+.creator-bubble-mine {
+  background: linear-gradient(135deg, #b07d2b, #c9922a);
+  color: #000;
+  border-radius: 18px 18px 4px 18px;
+}
+
+.creator-bubble-them {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--creator-text);
+  border-radius: 18px 18px 18px 4px;
+}
+
+.creator-metric {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  background: linear-gradient(135deg, #e4b84d, #f5f0e8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.creator-hub-shell {
+  background: var(--creator-surface);
+  color: var(--creator-text);
+}
+
+.creator-hub-sidebar {
+  background: var(--creator-surface-2);
+  border-color: var(--creator-border);
+}
+
+.creator-nav-active {
+  border-inline-start: 3px solid var(--creator-primary);
+  background: rgba(225, 29, 72, 0.08);
+  color: var(--creator-text);
+}
+
 /* Creator Arena V3 shell */
 .creator-arena-shell {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #080a10;
+  border: 1px solid var(--creator-border);
+  background: var(--creator-surface);
 }
 
 .creator-arena-chat-tab {
@@ -1995,4 +2112,13 @@
 
 .creator-arena-mobile-nav {
   box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creator-active-border {
+    animation: none;
+  }
+  .creator-card:hover {
+    transform: none;
+  }
 }

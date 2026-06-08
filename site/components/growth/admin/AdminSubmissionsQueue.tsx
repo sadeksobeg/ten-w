@@ -37,6 +37,7 @@ export function AdminSubmissionsQueue({
   const { showToast } = useToast();
   const [pending, setPending] = useState(initialPending);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [rejectNotes, setRejectNotes] = useState<Record<string, string>>({});
 
   const dateFmt = useMemo(
     () => new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }),
@@ -48,6 +49,8 @@ export function AdminSubmissionsQueue({
     const fd = new FormData();
     fd.set("submissionId", submissionId);
     fd.set("status", status);
+    const note = rejectNotes[submissionId]?.trim();
+    if (status === "rejected" && note) fd.set("adminNote", note);
     const res = await adminSetSubmissionStatusAction(null, fd);
     setBusyId(null);
     if (res.ok) {
@@ -155,6 +158,19 @@ export function AdminSubmissionsQueue({
                     </button>
                   </div>
                 </div>
+
+                <label className="mt-3 block text-[10px] text-white/45">
+                  {t("rejectNoteLabel")}
+                  <textarea
+                    value={rejectNotes[s.id] ?? ""}
+                    onChange={(e) =>
+                      setRejectNotes((prev) => ({ ...prev, [s.id]: e.target.value }))
+                    }
+                    rows={2}
+                    placeholder={t("rejectNotePlaceholder")}
+                    className="mt-1 w-full resize-none rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-xs text-white/80"
+                  />
+                </label>
 
                 <div className="mt-3 flex flex-wrap items-center gap-1 border-t border-white/8 pt-3">
                   <span className="me-1 text-[10px] text-white/45">{t("rateLabel")}</span>

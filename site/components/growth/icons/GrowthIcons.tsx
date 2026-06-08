@@ -647,6 +647,112 @@ export function IconLightbulb(props: GrowthIconProps) {
   );
 }
 
+export function IconFire(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M12 3c1 4-3 5-3 9a3 3 0 006 0c0-2-2-3-1-5 1 2 4 2 4 6a4 4 0 01-8 0c0-3 2-5 2-10z" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconThumbUp(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M7 11v10M7 11l4-8 2 4h5a2 2 0 012 2l-1 8H7" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconLightning(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconMedalGold(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <circle cx="12" cy="8" r="5" />
+      <path d="M8.5 12L7 21l5-3 5 3-1.5-9" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconMedalSilver(props: GrowthIconProps) {
+  return <IconMedalGold {...props} />;
+}
+
+export function IconMedalBronze(props: GrowthIconProps) {
+  return <IconMedalGold {...props} />;
+}
+
+export function IconYoutube(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <rect x="3" y="6" width="18" height="12" rx="3" />
+      <path d="M11 10l5 2-5 2V10z" fill="currentColor" stroke="none" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconInstagram(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <rect x="4" y="4" width="16" height="16" rx="4" />
+      <circle cx="12" cy="12" r="3.5" />
+      <circle cx="17" cy="7" r="1" fill="currentColor" stroke="none" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconTiktok(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M9 6v10a3 3 0 103-3h1V9h4V6h-5z" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconXPlatform(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M6 6l12 12M18 6L6 18" strokeWidth={2} />
+    </GrowthIconBase>
+  );
+}
+
+export function IconWhatsapp(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3z" />
+      <path d="M9.5 10.5c.5 2 2.5 3.5 4 3" opacity={0.7} />
+    </GrowthIconBase>
+  );
+}
+
+export function IconPodium(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M4 20h16M7 20V12h4v8M13 20V8h4v12" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconPerson(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M5 20c0-4 3-6 7-6s7 2 7 6" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconBag(props: GrowthIconProps) {
+  return <IconKit {...props} />;
+}
+
 /** Mobile bottom nav mapping */
 export const GROWTH_MOBILE_NAV_ICONS = {
   dashboard: IconDashboard,

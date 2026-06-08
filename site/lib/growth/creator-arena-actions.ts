@@ -30,6 +30,7 @@ const statusSchema = z.object({
 const submitSchema = z.object({
   postUrl: z.string().url().max(500),
   platform: z.string().max(32).optional(),
+  description: z.string().max(100).optional(),
 });
 
 const trackSchema = z.object({
@@ -128,10 +129,16 @@ export async function submitCreatorChallengeAction(
   const parsed = submitSchema.safeParse({
     postUrl: formData.get("postUrl"),
     platform: formData.get("platform") ?? undefined,
+    description: formData.get("description") ?? undefined,
   });
   if (!parsed.success) return { ok: false, error: "invalid_input" };
 
-  await submitCreatorPost(session.user.id, parsed.data.postUrl, parsed.data.platform);
+  await submitCreatorPost(
+    session.user.id,
+    parsed.data.postUrl,
+    parsed.data.platform,
+    parsed.data.description,
+  );
   revalidatePath("/growth/creators");
   return { ok: true };
 }
@@ -264,12 +271,16 @@ export async function adminSetSubmissionStatusAction(
   if (!parsed.success) return { ok: false, error: "invalid_input" };
 
   const isFeatured = parsed.data.status === "approved";
+  const adminNote = formData.get("adminNote");
   await prisma.creatorSubmission.update({
     where: { id: parsed.data.submissionId },
     data: {
       status: parsed.data.status,
       isFeatured,
       adminRating: parsed.data.status === "approved" ? 5 : parsed.data.status === "rejected" ? 1 : null,
+      ...(parsed.data.status === "rejected" && typeof adminNote === "string" && adminNote.trim()
+        ? { adminNote: adminNote.trim() }
+        : {}),
     },
   });
 
@@ -432,6 +443,105 @@ export async function adminCloseCreatorCupSeasonAction(): Promise<ActionResult> 
     });
   }
 
+  revalidatePath("/growth/admin/creators");
+  return { ok: true };
+}
+
+export async function saveContentIdeasAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const session = await auth();
+  if (!session?.user?.id || !(await canAccessCreatorLounge(session.user.id))) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const raw = String(formData.get("ideas") ?? "[]");
+  let ideas: unknown;
+  try {
+    ideas = JSON.parse(raw);
+  } catch {
+    return { ok: false, error: "invalid_input" };
+  }
+  await prisma.creatorArenaProfile.upsert({
+    where: { userId: session.user.id },
+    create: { userId: session.user.id, contentIdeas: ideas as object },
+    update: { contentIdeas: ideas as object },
+  });
+  revalidatePath("/growth/creators");
+  return { ok: true };
+}
+
+export async function saveCreatorProfileAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const session = await auth();
+  if (!session?.user?.id || !(await canAccessCreatorLounge(session.user.id))) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const bio = String(formData.get("bio") ?? "").slice(0, 280);
+  const specialty = formData.getAll("specialty").map((s) => String(s).slice(0, 32));
+  await prisma.creatorArenaProfile.upsert({
+    where: { userId: session.user.id },
+    create: { userId: session.user.id, bio: bio || null, specialty },
+    update: { bio: bio || null, specialty },
+  });
+  revalidatePath("/growth/creators");
+  return { ok: true };
+}
+
+export async function ensureCreatorDirectRoomAction(
+  peerUserId: string,
+): Promise<ActionResult<{ slug: string }>> {
+  const session = await auth();
+  if (!session?.user?.id || !(await canAccessCreatorLounge(session.user.id))) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const { ensureCreatorDirectRoom } = await import("@/lib/growth/creator-chat");
+  const room = await ensureCreatorDirectRoom(session.user.id, peerUserId);
+  revalidatePath("/growth/creators");
+  return { ok: true, data: { slug: room.slug } };
+}
+
+export async function adminReviewApplicationAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin;
+  const id = String(formData.get("id") ?? "");
+  const decision = String(formData.get("decision") ?? "");
+  if (!id || (decision !== "accept" && decision !== "reject")) {
+    return { ok: false, error: "invalid_input" };
+  }
+  const app = await prisma.creatorApplication.findUnique({ where: { id } });
+  if (!app) return { ok: false, error: "not_found" };
+
+  if (decision === "accept") {
+    const token = crypto.randomUUID().replace(/-/g, "").slice(0, 24);
+    const slug = `creator-${app.email.split("@")[0]}-${Date.now().toString(36)}`.slice(0, 48);
+    await prisma.inviteCard.create({
+      data: {
+        name: app.name,
+        handle: app.platform ?? "creator",
+        tier: "CONTENT CREATOR",
+        scope: "Creator Network",
+        message: "دعوة للانضمام لشبكة صنّاع T.E.N.E.G.T.A",
+        token,
+        slug,
+        inviteeEmail: app.email,
+      },
+    });
+    await prisma.creatorApplication.update({
+      where: { id },
+      data: { status: "ACCEPTED" },
+    });
+  } else {
+    await prisma.creatorApplication.update({
+      where: { id },
+      data: { status: "REJECTED", adminNotes: String(formData.get("notes") ?? "") },
+    });
+  }
   revalidatePath("/growth/admin/creators");
   return { ok: true };
 }
