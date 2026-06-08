@@ -684,7 +684,11 @@
       "analytics": "Analytics",
       "network": "Creators",
       "profile": "Profile",
-      "settings": "Settings"
+      "settings": "Settings",
+      "back": "Back",
+      "more": "More",
+      "close": "Close",
+      "mobileNav": "Creator Hub navigation"
     },
     "status": {
       "invited": "Invited",
@@ -705,10 +709,10 @@
       "accessPending": "Access pending — you will join the chat once approved."
     },
     "planning": { "ideasTitle": "Ideas board", "column": { "ideas": "Ideas", "progress": "In progress", "published": "Published" }, "ideaPlaceholder": "New idea...", "addIdea": "Add", "goalsTitle": "Weekly goals", "goalPlaceholder": "New goal...", "addGoal": "Add", "goalsProgress": "{done}/{total} done" },
-    "challenge": { "empty": "No active challenge.", "active": "Active challenge", "ended": "Ended", "deadline": "Ends in {time}", "submit": "Submit your content", "submitted": "Submitted ✓", "urlLabel": "Post URL", "descLabel": "What did you cover?", "submitBtn": "Submit", "error": "Submit failed", "weekList": "This week's submissions", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "x": "X" } },
+    "challenge": { "empty": "No active challenge.", "active": "Active challenge", "ended": "Ended", "deadline": "Ends in {time}", "submit": "Submit your content", "submitted": "Submitted ✓", "urlLabel": "Post URL", "descLabel": "What did you cover?", "submitBtn": "Submit", "sending": "Sending...", "error": "Submit failed", "pickPlatform": "Pick your platform", "backPlatform": "Change platform", "weekList": "This week's submissions", "weekEmpty": "No submissions yet this week.", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X" } },
     "leaderboard": { "season": "Season {label} — Creator Cup", "competing": "{n} creators competing", "yourRank": "Your rank", "yourPoints": "{score} pts · {posts} posts", "gapToNext": "{n} pts to next rank", "howPoints": "How points work?", "rule": { "approved": { "label": "Approved post", "pts": "+50" }, "battle": { "label": "Battle win", "pts": "+100" }, "featured": { "label": "Featured", "pts": "+200" }, "first": { "label": "First submit", "pts": "+30" }, "referral": { "label": "Referral", "pts": "+75" } } },
     "battles": { "active": "Active battle", "you": "You", "stakes": "{xp} XP", "invite": "{name} challenged you", "accept": "Accept", "decline": "Decline", "history": "Battle history", "historyEmpty": "No battles yet.", "outcome": { "won": "Won", "lost": "Lost", "pending": "Pending" } },
-    "kit": { "utmTitle": "Your tracked links", "utmSubtitle": "Every link tracks performance", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "x": "X", "whatsapp": "WhatsApp" }, "copyLink": "Copy link", "copied": "Copied", "copyError": "Copy failed", "qr": "QR", "scriptsTitle": "Ready scripts", "scriptInstagram": "Discover TENEGTA tech solutions — use code {code} for 3% off.", "copyScript": "Copy", "ideasTitle": "Content ideas this week", "idea1": "Cinema OS tour", "idea2": "3 reasons for TENEGTA websites", "idea3": "AI automation challenge", "idea4": "Cybersecurity for SMBs", "idea5": "How ASCEND partners work", "assetsTitle": "Brand assets", "assetLogo": "T.E.N.E.G.T.A logo SVG" },
+    "kit": { "utmTitle": "Your tracked links", "utmSubtitle": "Every link tracks performance", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X", "whatsapp": "WhatsApp" }, "copyLink": "Copy link", "copied": "Copied", "copyError": "Copy failed", "qr": "QR", "scriptsTitle": "Ready scripts", "scriptInstagram": "Discover TENEGTA tech solutions — use code {code} for 3% off.", "copyScript": "Copy", "ideasTitle": "Content ideas this week", "idea1": "Cinema OS tour", "idea2": "3 reasons for TENEGTA websites", "idea3": "AI automation challenge", "idea4": "Cybersecurity for SMBs", "idea5": "How ASCEND partners work", "assetsTitle": "Brand assets", "assetLogo": "T.E.N.E.G.T.A logo SVG" },
     "analytics": { "metric": { "submissions": "Posts (30d)", "referrals": "Referrals", "cup": "Cup points", "approval": "Approval rate" }, "chartTitle": "Your activity vs top", "you": "You", "top": "#1" },
     "network": { "heroes": "Heroes this week", "filter": { "all": "All", "featured": "Featured", "new": "New" }, "challenge": "Challenge", "message": "Message", "profile": "Profile" },
     "profile": { "title": "Creator profile", "bio": "Creator bio", "specialtyLabel": "Specialty", "specialty": { "tech": "Tech", "business": "Business", "education": "Education", "entertainment": "Entertainment", "lifestyle": "Lifestyle" }, "save": "Save", "error": "Save failed", "settings": "Account settings", "journey": "Creator journey" },

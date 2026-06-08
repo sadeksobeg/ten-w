@@ -681,7 +681,11 @@
       "analytics": "Analytique",
       "network": "Créateurs",
       "profile": "Profil",
-      "settings": "Paramètres"
+      "settings": "Paramètres",
+      "back": "Retour",
+      "more": "Plus",
+      "close": "Fermer",
+      "mobileNav": "Navigation Creator Hub"
     },
     "status": {
       "invited": "Invité",
@@ -702,10 +706,10 @@
       "accessPending": "Accès en attente — vous rejoindrez le chat après approbation."
     },
     "planning": { "ideasTitle": "Tableau d'idées", "column": { "ideas": "Idées", "progress": "En cours", "published": "Publié" }, "ideaPlaceholder": "Nouvelle idée...", "addIdea": "Ajouter", "goalsTitle": "Objectifs hebdo", "goalPlaceholder": "Nouvel objectif...", "addGoal": "Ajouter", "goalsProgress": "{done}/{total} faits" },
-    "challenge": { "empty": "Aucun défi actif.", "active": "Défi actif", "ended": "Terminé", "deadline": "Fin dans {time}", "submit": "Soumettre votre contenu", "submitted": "Soumis ✓", "urlLabel": "URL du post", "descLabel": "Sujet couvert ?", "submitBtn": "Soumettre", "error": "Échec", "weekList": "Soumissions de la semaine", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "x": "X" } },
+    "challenge": { "empty": "Aucun défi actif.", "active": "Défi actif", "ended": "Terminé", "deadline": "Fin dans {time}", "submit": "Soumettre votre contenu", "submitted": "Soumis ✓", "urlLabel": "URL du post", "descLabel": "Sujet couvert ?", "submitBtn": "Soumettre", "sending": "Envoi...", "error": "Échec", "pickPlatform": "Choisir la plateforme", "backPlatform": "Changer de plateforme", "weekList": "Soumissions de la semaine", "weekEmpty": "Aucune soumission cette semaine.", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X" } },
     "leaderboard": { "season": "Saison {label} — Creator Cup", "competing": "{n} créateurs", "yourRank": "Votre rang", "yourPoints": "{score} pts · {posts} posts", "gapToNext": "{n} pts pour le rang suivant", "howPoints": "Comment gagner des points ?", "rule": { "approved": { "label": "Post approuvé", "pts": "+50" }, "battle": { "label": "Duel gagné", "pts": "+100" }, "featured": { "label": "À la une", "pts": "+200" }, "first": { "label": "Première soumission", "pts": "+30" }, "referral": { "label": "Parrainage", "pts": "+75" } } },
     "battles": { "active": "Duel actif", "you": "Vous", "stakes": "{xp} XP", "invite": "{name} vous défie", "accept": "Accepter", "decline": "Refuser", "history": "Historique", "historyEmpty": "Aucun duel.", "outcome": { "won": "Gagné", "lost": "Perdu", "pending": "En attente" } },
-    "kit": { "utmTitle": "Liens trackés", "utmSubtitle": "Chaque lien suit les performances", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "x": "X", "whatsapp": "WhatsApp" }, "copyLink": "Copier", "copied": "Copié", "copyError": "Échec", "qr": "QR", "scriptsTitle": "Scripts prêts", "scriptInstagram": "Découvrez TENEGTA — code {code} pour -3%.", "copyScript": "Copier", "ideasTitle": "Idées de contenu", "idea1": "Visite Cinema OS", "idea2": "3 raisons pour TENEGTA", "idea3": "Défi automatisation IA", "idea4": "Cybersécurité PME", "idea5": "Partenaires ASCEND", "assetsTitle": "Assets marque", "assetLogo": "Logo T.E.N.E.G.T.A SVG" },
+    "kit": { "utmTitle": "Liens trackés", "utmSubtitle": "Chaque lien suit les performances", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X", "whatsapp": "WhatsApp" }, "copyLink": "Copier", "copied": "Copié", "copyError": "Échec", "qr": "QR", "scriptsTitle": "Scripts prêts", "scriptInstagram": "Découvrez TENEGTA — code {code} pour -3%.", "copyScript": "Copier", "ideasTitle": "Idées de contenu", "idea1": "Visite Cinema OS", "idea2": "3 raisons pour TENEGTA", "idea3": "Défi automatisation IA", "idea4": "Cybersécurité PME", "idea5": "Partenaires ASCEND", "assetsTitle": "Assets marque", "assetLogo": "Logo T.E.N.E.G.T.A SVG" },
     "analytics": { "metric": { "submissions": "Posts (30j)", "referrals": "Parrainages", "cup": "Points coupe", "approval": "Taux d'approbation" }, "chartTitle": "Votre activité vs top", "you": "Vous", "top": "#1" },
     "network": { "heroes": "Héros de la semaine", "filter": { "all": "Tous", "featured": "Vedettes", "new": "Nouveaux" }, "challenge": "Défier", "message": "Message", "profile": "Profil" },
     "profile": { "title": "Profil créateur", "bio": "Bio", "specialtyLabel": "Spécialité", "specialty": { "tech": "Tech", "business": "Business", "education": "Éducation", "entertainment": "Divertissement", "lifestyle": "Lifestyle" }, "save": "Enregistrer", "error": "Échec", "settings": "Paramètres compte", "journey": "Parcours créateur" },

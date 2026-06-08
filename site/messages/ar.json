@@ -707,7 +707,11 @@
       "analytics": "تحليلاتي",
       "network": "الصنّاع",
       "profile": "ملفي",
-      "settings": "الإعدادات"
+      "settings": "الإعدادات",
+      "back": "رجوع",
+      "more": "المزيد",
+      "close": "إغلاق",
+      "mobileNav": "تنقل Creator Hub"
     },
     "status": {
       "invited": "مدعو للانضمام",
@@ -747,9 +751,13 @@
       "urlLabel": "رابط منشورك",
       "descLabel": "ماذا غطّيت؟ (اختياري)",
       "submitBtn": "تسليم المحتوى",
+      "sending": "جاري الإرسال...",
       "error": "تعذّر الإرسال",
+      "pickPlatform": "اختر المنصة",
+      "backPlatform": "تغيير المنصة",
       "weekList": "تسليمات هذا الأسبوع",
-      "platform": { "youtube": "يوتيوب", "instagram": "انستاقرام", "tiktok": "تيك توك", "x": "X" }
+      "weekEmpty": "لا تسليمات بعد هذا الأسبوع.",
+      "platform": { "youtube": "يوتيوب", "instagram": "انستاقرام", "tiktok": "تيك توك", "facebook": "فيسبوك", "x": "X" }
     },
     "leaderboard": {
       "season": "الموسم {label} — Creator Cup",
@@ -780,7 +788,7 @@
     "kit": {
       "utmTitle": "روابطك المخصصة",
       "utmSubtitle": "كل رابط يتتبع أداءك وإحالاتك",
-      "platform": { "youtube": "يوتيوب", "instagram": "انستاقرام", "tiktok": "تيك توك", "x": "X", "whatsapp": "واتساب" },
+      "platform": { "youtube": "يوتيوب", "instagram": "انستاقرام", "tiktok": "تيك توك", "facebook": "فيسبوك", "x": "X", "whatsapp": "واتساب" },
       "copyLink": "نسخ الرابط",
       "copied": "تم النسخ",
       "copyError": "تعذّر النسخ",

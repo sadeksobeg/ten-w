@@ -226,6 +226,22 @@ export function IconChevronRight(props: GrowthIconProps) {
   );
 }
 
+export function IconBack(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M15 18l-6-6 6-6" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconMenu(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M5 7h14M5 12h14M5 17h14" />
+    </GrowthIconBase>
+  );
+}
+
 export function IconExternalLink(props: GrowthIconProps) {
   return (
     <GrowthIconBase {...props}>
@@ -703,6 +719,14 @@ export function IconInstagram(props: GrowthIconProps) {
       <rect x="4" y="4" width="16" height="16" rx="4" />
       <circle cx="12" cy="12" r="3.5" />
       <circle cx="17" cy="7" r="1" fill="currentColor" stroke="none" />
+    </GrowthIconBase>
+  );
+}
+
+export function IconFacebook(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
     </GrowthIconBase>
   );
 }

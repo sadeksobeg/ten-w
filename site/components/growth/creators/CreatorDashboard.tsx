@@ -90,25 +90,25 @@ export function CreatorDashboard({
         </div>
       </GlassCard>
 
-      <div className="flex gap-2 overflow-x-auto pb-1">
-        <GoldButton type="button" className="shrink-0 text-xs" onClick={() => onNavigate("challenge")}>
+      <div className="creator-quick-actions lg:flex lg:gap-2 lg:overflow-x-auto lg:pb-1">
+        <GoldButton type="button" className="text-xs" onClick={() => onNavigate("challenge")}>
           {t("actionSubmit")}
         </GoldButton>
-        <Link href={contactHref} className="shrink-0 rounded-full border border-white/15 px-4 py-2 text-xs font-bold text-white/80 hover:border-[var(--creator-primary)]">
+        <Link href={contactHref} className="flex items-center justify-center rounded-full border border-white/15 px-4 py-2.5 text-xs font-bold text-white/80 hover:border-[var(--creator-primary)]">
           <IconShare size={14} className="me-1 inline" />
           {t("actionCopyLink")}
         </Link>
-        <button type="button" className="shrink-0 rounded-full border border-white/15 px-4 py-2 text-xs font-bold text-white/80" onClick={() => onNavigate("battles")}>
+        <button type="button" className="flex items-center justify-center rounded-full border border-white/15 px-4 py-2.5 text-xs font-bold text-white/80" onClick={() => onNavigate("battles")}>
           <IconBattle size={14} className="me-1 inline" />
           {t("actionBattle")}
         </button>
-        <button type="button" className="shrink-0 rounded-full border border-white/15 px-4 py-2 text-xs font-bold text-white/80" onClick={() => onNavigate("kit")}>
+        <button type="button" className="flex items-center justify-center rounded-full border border-white/15 px-4 py-2.5 text-xs font-bold text-white/80" onClick={() => onNavigate("kit")}>
           <IconKit size={14} className="me-1 inline" />
           {t("actionKit")}
         </button>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="creator-metrics-grid grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { key: "submissions", value: metrics.weekSubmissions, sub: t("metricSubHint") },
           { key: "cup", value: metrics.cupScore, sub: viewerRank ? `#${viewerRank}` : "—" },

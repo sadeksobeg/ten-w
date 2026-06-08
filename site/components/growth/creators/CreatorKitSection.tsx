@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
-import { IconYoutube, IconInstagram, IconTiktok, IconXPlatform, IconWhatsapp, IconQr, IconExternalLink } from "@/components/growth/icons/GrowthIcons";
+import { IconYoutube, IconInstagram, IconTiktok, IconXPlatform, IconFacebook, IconWhatsapp, IconQr, IconExternalLink } from "@/components/growth/icons/GrowthIcons";
 import { CreatorSalesGuidePanel } from "./CreatorSalesGuidePanel";
 import { useToast } from "@/hooks/useToast";
 
@@ -20,6 +20,7 @@ const PLATFORMS = [
   { key: "youtube", Icon: IconYoutube },
   { key: "instagram", Icon: IconInstagram },
   { key: "tiktok", Icon: IconTiktok },
+  { key: "facebook", Icon: IconFacebook },
   { key: "x", Icon: IconXPlatform },
   { key: "whatsapp", Icon: IconWhatsapp },
 ] as const;
@@ -59,9 +60,9 @@ export function CreatorKitSection({ clientDiscountCode, commissionPercent, sales
       <GlassCard className="creator-card p-5">
         <h2 className="font-[family-name:var(--font-cairo)] text-lg font-extrabold text-white">{t("utmTitle")}</h2>
         <p className="mt-1 text-xs text-white/55">{t("utmSubtitle")}</p>
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="creator-platform-scroll mt-4">
           {PLATFORMS.map(({ key, Icon }) => (
-            <button key={key} type="button" onClick={() => setPlatform(key)} className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-bold ${platform === key ? "bg-[var(--creator-primary)] text-white" : "border border-white/15 text-white/60"}`}>
+            <button key={key} type="button" onClick={() => setPlatform(key)} className={`creator-platform-chip flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[11px] font-bold ${platform === key ? "bg-[var(--creator-primary)] text-white" : "border border-white/15 text-white/60"}`}>
               <Icon size={12} />
               {t(`platform.${key}`)}
             </button>
