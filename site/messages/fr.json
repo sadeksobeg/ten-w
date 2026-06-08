@@ -529,15 +529,29 @@
       "copyError": "Échec de copie",
       "storyError": "Échec de génération",
       "hero": {
-        "tagline": "Votre rampe de lancement pour le contenu partenaire — copiez votre lien, utilisez le kit et grandissez avec ASCEND.",
-        "joinCta": "Rejoindre le programme",
+        "tagline": "Promouvez trois services clairs — site web, automatisation IA, app mobile — commission à partir de 10%.",
+        "joinCta": "S'inscrire partenaire",
+        "orderCta": "Page de commande",
         "watchHow": "Voir comment ça marche",
-        "stats": {
-          "creators": { "value": "120+", "label": "Créateurs actifs" },
-          "content": { "value": "2.4k", "label": "Posts ce mois" },
-          "commissions": { "value": "18%", "label": "Taux max" }
+        "facts": {
+          "commission": { "value": "10%", "label": "Commission de base" },
+          "discount": { "value": "3%", "label": "Réduction client avec votre code" },
+          "products": { "value": "3", "label": "Services prêts à vendre" }
         }
       },
+      "packages": {
+        "title": "Que promouvoir ?",
+        "subtitle": "Prix de base clairs — le montant final dépend des options choisies.",
+        "note": "Prix final confirmé après examen — chiffres ci-dessus = point de départ.",
+        "orderCta": "Essayer la page commande",
+        "registerCta": "Devenir partenaire",
+        "items": {
+          "website": { "price": "$4,500", "name": "Site web", "body": "Site pro responsive avec panneau admin." },
+          "automation": { "price": "$5,900", "name": "Automatisation & IA", "body": "Connecte les canaux et organise le parcours client." },
+          "mobile": { "price": "$9,500", "name": "Application mobile", "body": "App iOS & Android sur mesure avec notifications." }
+        }
+      },
+      "openLink": "Ouvrir",
       "howItWorks": {
         "title": "Comment ça marche",
         "subtitle": "Trois étapes de l'inscription à votre première commission.",
@@ -557,40 +571,19 @@
         }
       },
       "tools": {
-        "title": "Votre boîte à outils",
-        "subtitle": "Tout pour promouvoir TENEGTA professionnellement.",
-        "marketingKit": {
-          "title": "Kit marketing",
-          "body": "Légendes, visuels et arguments prêts — plus de doute avant de publier."
+        "title": "Liens qui fonctionnent",
+        "subtitle": "Cliquez et ouvrez — sans deviner.",
+        "orderPage": {
+          "title": "Page de commande client",
+          "body": "Le client choisit l'offre, les options et votre code -3% — la demande vous parvient."
         },
-        "utm": {
-          "title": "Liens UTM",
-          "body": "Chaque lien studio porte source et campagne pour savoir quel contenu convertit."
+        "register": {
+          "title": "Inscription partenaire ASCEND",
+          "body": "Créez votre compte, obtenez votre code et commencez à promouvoir."
         },
-        "commissions": {
-          "title": "Tableau des commissions",
-          "body": "Voir gains en attente et payés dans ASCEND — taux transparents à chaque niveau."
-        }
-      },
-      "testimonials": {
-        "title": "Créateurs sur TENEGTA",
-        "subtitle": "Voix types — de vraies histoires bientôt avec la croissance de l'arène.",
-        "archetypes": {
-          "growth": {
-            "initials": "GP",
-            "role": "Partenaire growth",
-            "quote": "Le lien UTM a montré quel Reel a généré des inscriptions. J'ai misé sur ce qui marche."
-          },
-          "lifestyle": {
-            "initials": "LC",
-            "role": "Créateur lifestyle",
-            "quote": "Le kit m'a fait gagner des heures — j'ai posté le jour même où j'ai eu mon badge."
-          },
-          "business": {
-            "initials": "BE",
-            "role": "Formateur business",
-            "quote": "Les commissions apparaissent dans ASCEND sans relancer des factures. Propre et pro."
-          }
+        "lounge": {
+          "title": "Salon créateurs",
+          "body": "Après connexion avec badge content_creator — défis, coupe et guide commercial."
         }
       },
       "faq": {
@@ -605,12 +598,12 @@
             "a": "Postulez via ASCEND ou sur invitation TENEGTA. Les badge holders accèdent au cercle privé et aux défis hebdo."
           },
           "utm": {
-            "q": "Comment fonctionnent les liens UTM ?",
-            "a": "Votre lien studio inclut utm_source et utm_campaign. Les visites sont enregistrées pour créditer votre contenu."
+            "q": "Comment partager le lien de commande avec mon code ?",
+            "a": "Après inscription, copiez votre lien /order?code=XXXX depuis le salon créateur. Le client a -3% et vous êtes crédité."
           },
           "payout": {
-            "q": "Quand les commissions sont-elles payées ?",
-            "a": "Les paiements suivent les règles ASCEND — les deals en attente passent en payé une fois clos et approuvés."
+            "q": "Quel est le taux de commission ?",
+            "a": "À partir de 10% de la valeur du deal, augmente avec votre activité. Suivez sur /growth/earnings."
           },
           "support": {
             "q": "Où obtenir de l'aide ?",
@@ -619,17 +612,18 @@
         }
       },
       "finalCta": {
-        "title": "Prêt à créer avec TENEGTA ?",
-        "body": "Rejoignez ASCEND, prenez votre lien studio et construisez votre audience partenaire.",
-        "cta": "Rejoindre ASCEND"
+        "title": "Commencez à promouvoir",
+        "body": "Inscrivez-vous, obtenez votre code et partagez la page de commande.",
+        "cta": "S'inscrire",
+        "orderCta": "Page commande"
       },
-      "experiencesTitle": "Explorer les expériences partenaires",
-      "experiencesSubtitle": "Chaque carte ouvre une démo à mettre en avant dans votre contenu.",
-      "openExperience": "Ouvrir l'expérience →",
+      "experiencesTitle": "Pages à filmer et partager",
+      "experiencesSubtitle": "Liens réels qui fonctionnent — pour Reels, stories et votre contenu.",
+      "openExperience": "Ouvrir la page →",
       "experiences": {
-        "invite": { "title": "Carte d'invitation luxe", "body": "Flux premium — ouverture soignée pour votre contenu vertical." },
-        "ascend": { "title": "Ascend en 60 secondes", "body": "Plateforme partenaire — rangs et réseau." },
-        "visualizer": { "title": "Visualiseur IA", "body": "Page d'accueil — ?demo=ai" }
+        "order": { "title": "Page de commande client", "body": "Montrez comment le client choisit l'offre — votre lien inclut le code." },
+        "cinema": { "title": "Cinema OS — mode présentateur", "body": "Démo cinéma prête à filmer sans contrôles distrayants." },
+        "ascend": { "title": "Plateforme ASCEND", "body": "Découvrez le système partenaire — rangs, duels et commissions." }
       },
       "privateRoomHint": "Les créateurs badge accèdent au salon privé ASCEND.",
       "ascendCta": "Activer ASCEND"

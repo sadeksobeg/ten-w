@@ -1,7 +1,12 @@
 import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 
-const TOOLS = ["marketingKit", "utm", "commissions"] as const;
+const TOOLS = [
+  { key: "orderPage", href: "/order" },
+  { key: "register", href: "/growth/register" },
+  { key: "lounge", href: "/growth/creators" },
+] as const;
 
 export async function StudioToolsShowcase() {
   const t = await getTranslations("Creators.studio");
@@ -17,14 +22,16 @@ export async function StudioToolsShowcase() {
         </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {TOOLS.map((key) => (
-            <GlassCard
-              key={key}
-              className="border border-white/10 bg-white/[0.04] transition hover:border-gold/35 hover:bg-gold/5"
-            >
-              <h3 className="text-lg font-bold text-white">{t(`tools.${key}.title`)}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/60">{t(`tools.${key}.body`)}</p>
-            </GlassCard>
+          {TOOLS.map(({ key, href }) => (
+            <Link key={key} href={href} className="group block h-full">
+              <GlassCard className="h-full border border-white/10 bg-white/[0.04] p-5 transition group-hover:border-gold/35 group-hover:bg-gold/5">
+                <h3 className="text-lg font-bold text-white">{t(`tools.${key}.title`)}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/60">{t(`tools.${key}.body`)}</p>
+                <span className="mt-4 inline-flex text-xs font-semibold text-gold group-hover:underline">
+                  {t("openLink")} →
+                </span>
+              </GlassCard>
+            </Link>
           ))}
         </div>
       </div>

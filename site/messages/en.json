@@ -511,15 +511,41 @@
       "copyError": "Could not copy",
       "storyError": "Could not generate frame",
       "hero": {
-        "tagline": "Your public launchpad for partner content — copy your link, use the kit, and grow with ASCEND.",
-        "joinCta": "Join the program",
+        "tagline": "Promote three clear services — website, smart automation, mobile app — and earn from 10% commission.",
+        "joinCta": "Register as partner",
+        "orderCta": "Client order page",
         "watchHow": "See how it works",
-        "stats": {
-          "creators": { "value": "120+", "label": "Active creators" },
-          "content": { "value": "2.4k", "label": "Posts this month" },
-          "commissions": { "value": "18%", "label": "Top tier rate" }
+        "facts": {
+          "commission": { "value": "10%", "label": "Your base commission" },
+          "discount": { "value": "3%", "label": "Client discount with your code" },
+          "products": { "value": "3", "label": "Ready-to-sell services" }
         }
       },
+      "packages": {
+        "title": "What you promote",
+        "subtitle": "Clear base prices — final amount depends on features the client selects.",
+        "note": "Final price is confirmed after review — figures above are starting points.",
+        "orderCta": "Try the order page",
+        "registerCta": "Join as partner",
+        "items": {
+          "website": {
+            "price": "$4,500",
+            "name": "Website",
+            "body": "Professional responsive site with admin panel — converts visitors into clients."
+          },
+          "automation": {
+            "price": "$5,900",
+            "name": "Automation & AI",
+            "body": "Connects channels, auto-replies, and routes leads through a clear pipeline."
+          },
+          "mobile": {
+            "price": "$9,500",
+            "name": "Mobile app",
+            "body": "Custom iOS & Android app with dashboard and push notifications."
+          }
+        }
+      },
+      "openLink": "Open",
       "howItWorks": {
         "title": "How it works",
         "subtitle": "Three steps from signup to your first commission.",
@@ -539,40 +565,19 @@
         }
       },
       "tools": {
-        "title": "Your creator toolkit",
-        "subtitle": "Everything you need to promote TENEGTA professionally.",
-        "marketingKit": {
-          "title": "Marketing kit",
-          "body": "Ready-made captions, visuals, and talking points — no guesswork before you hit publish."
+        "title": "Working links",
+        "subtitle": "Click and open — no guesswork.",
+        "orderPage": {
+          "title": "Client order page",
+          "body": "Clients pick a package, add features, and apply your 3% code — the request reaches you and admin."
         },
-        "utm": {
-          "title": "UTM tracking links",
-          "body": "Every studio link carries source and campaign tags so you know what content converts."
+        "register": {
+          "title": "ASCEND partner signup",
+          "body": "Create your account, get your discount code, and start promoting."
         },
-        "commissions": {
-          "title": "Commission dashboard",
-          "body": "See pending and paid earnings in ASCEND — transparent rates at every partner tier."
-        }
-      },
-      "testimonials": {
-        "title": "Creators on TENEGTA",
-        "subtitle": "Placeholder voices — real stories coming as the arena grows.",
-        "archetypes": {
-          "growth": {
-            "initials": "GP",
-            "role": "Growth partner",
-            "quote": "The UTM link made it obvious which Reel drove signups. I doubled down on what worked."
-          },
-          "lifestyle": {
-            "initials": "LC",
-            "role": "Lifestyle creator",
-            "quote": "The marketing kit saved hours — I posted the same day I got my badge."
-          },
-          "business": {
-            "initials": "BE",
-            "role": "Business educator",
-            "quote": "Commissions show up in ASCEND with no chasing invoices. Clean and professional."
-          }
+        "lounge": {
+          "title": "Creator lounge",
+          "body": "After sign-in with content_creator badge — challenges, cup, and sales guide."
         }
       },
       "faq": {
@@ -587,12 +592,12 @@
             "a": "Apply through ASCEND or get invited by the TENEGTA team. Badge holders unlock the private creator circle and weekly challenges."
           },
           "utm": {
-            "q": "How do UTM links work?",
-            "a": "Your studio link includes utm_source and utm_campaign parameters. Visits are logged so your content gets credit."
+            "q": "How do I share the order link with my discount code?",
+            "a": "After signup, copy your /order?code=XXXX link from the creator lounge. Clients get 3% off and you get credit for the deal."
           },
           "payout": {
-            "q": "When are commissions paid?",
-            "a": "Payouts follow ASCEND partner rules — pending deals move to paid once closed and approved by admin."
+            "q": "What is the commission rate?",
+            "a": "Starts at 10% of deal value and grows with your activity and closed deals. Track it at /growth/earnings."
           },
           "support": {
             "q": "Where do I get help?",
@@ -601,25 +606,26 @@
         }
       },
       "finalCta": {
-        "title": "Ready to create with TENEGTA?",
-        "body": "Join ASCEND, grab your studio link, and start building your partner audience today.",
-        "cta": "Join ASCEND"
+        "title": "Start promoting today",
+        "body": "Register as a partner, get your discount code, and share the order page with your audience.",
+        "cta": "Register now",
+        "orderCta": "Order page"
       },
-      "experiencesTitle": "Explore partner experiences",
-      "experiencesSubtitle": "Each card opens a demo surface you can feature in your content.",
-      "openExperience": "Open experience →",
+      "experiencesTitle": "Pages to film and share",
+      "experiencesSubtitle": "Real working links — use them in Reels, stories, and your content.",
+      "openExperience": "Open page →",
       "experiences": {
-        "invite": {
-          "title": "Luxury invite card",
-          "body": "Premium invite flow — a polished opening for your vertical content."
+        "order": {
+          "title": "Client order page",
+          "body": "Show how clients pick packages and features — your link carries the discount code."
+        },
+        "cinema": {
+          "title": "Cinema OS — presenter mode",
+          "body": "Cinematic demo ready to film without distracting controls."
         },
         "ascend": {
-          "title": "Ascend in 60 seconds",
-          "body": "Partner platform — ranks, battles, constellation."
-        },
-        "visualizer": {
-          "title": "AI identity visualizer",
-          "body": "System visualizer from the homepage — ?demo=ai"
+          "title": "ASCEND platform",
+          "body": "Learn the partner system — ranks, battles, and commissions."
         }
       },
       "privateRoomHint": "Badge holders get the private Creator Lounge inside ASCEND.",

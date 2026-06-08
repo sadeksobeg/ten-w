@@ -14,12 +14,20 @@ export async function StudioFinalCta() {
           {t("finalCta.title")}
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-sm text-white/60">{t("finalCta.body")}</p>
-        <Link
-          href="/ascend"
-          className="mt-8 inline-flex min-h-12 items-center justify-center rounded-[10px] bg-[linear-gradient(135deg,#B07D2B,#E4B84D)] px-8 py-3 text-sm font-semibold text-black transition hover:brightness-110 motion-safe:hover:scale-[1.02]"
-        >
-          {t("finalCta.cta")}
-        </Link>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/growth/register"
+            className="inline-flex min-h-12 items-center justify-center rounded-[10px] bg-[linear-gradient(135deg,#B07D2B,#E4B84D)] px-8 py-3 text-sm font-semibold text-black transition hover:brightness-110 motion-safe:hover:scale-[1.02]"
+          >
+            {t("finalCta.cta")}
+          </Link>
+          <Link
+            href="/order"
+            className="inline-flex min-h-12 items-center justify-center rounded-[10px] border border-gold/40 bg-gold/10 px-8 py-3 text-sm font-semibold text-gold transition hover:border-gold/60"
+          >
+            {t("finalCta.orderCta")}
+          </Link>
+        </div>
       </div>
     </section>
   );
