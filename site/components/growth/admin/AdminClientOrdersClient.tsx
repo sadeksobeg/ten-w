@@ -25,6 +25,10 @@ function formatUsd(cents: number): string {
   }).format(cents / 100);
 }
 
+function formatValue(cents: number, pendingLabel: string): string {
+  return cents > 0 ? formatUsd(cents) : pendingLabel;
+}
+
 const STATUS_COLORS: Record<ClientOrderStatus, string> = {
   NEW: "border-sky-500/40 bg-sky-500/10 text-sky-200",
   REVIEWED: "border-amber-500/40 bg-amber-500/10 text-amber-200",
@@ -57,12 +61,16 @@ export function AdminClientOrdersClient({ orders, stats }: Props) {
             <div className="rounded-xl border border-white/10 bg-black/25 p-4">
               <dt className="text-[10px] uppercase tracking-wide text-white/45">{t("stats.today")}</dt>
               <dd className="mt-1 text-2xl font-black text-gold">{stats.todayCount}</dd>
-              <dd className="text-xs text-white/50">{formatUsd(stats.todayValueCents)}</dd>
+              <dd className="text-xs text-white/50">
+                {formatValue(stats.todayValueCents, t("pricePending"))}
+              </dd>
             </div>
             <div className="rounded-xl border border-white/10 bg-black/25 p-4">
               <dt className="text-[10px] uppercase tracking-wide text-white/45">{t("stats.total")}</dt>
               <dd className="mt-1 text-2xl font-black text-white">{stats.totalCount}</dd>
-              <dd className="text-xs text-white/50">{formatUsd(stats.totalValueCents)}</dd>
+              <dd className="text-xs text-white/50">
+                {formatValue(stats.totalValueCents, t("pricePending"))}
+              </dd>
             </div>
             <div className="rounded-xl border border-white/10 bg-black/25 p-4">
               <dt className="text-[10px] uppercase tracking-wide text-white/45">{t("stats.topCreator")}</dt>
@@ -108,10 +116,17 @@ export function AdminClientOrdersClient({ orders, stats }: Props) {
                   </p>
                 </div>
                 <div className="text-end">
-                  <p className="text-xl font-black text-gold">{formatUsd(order.finalPriceCents)}</p>
-                  {order.discountBps > 0 ? (
+                  <p className="text-xl font-black text-gold">
+                    {formatValue(order.finalPriceCents, t("pricePending"))}
+                  </p>
+                  {order.discountCode ? (
                     <p className="text-[10px] text-emerald-300">
-                      {t("discountApplied", { pct: order.discountBps / 100, code: order.discountCode ?? "" })}
+                      {order.discountBps > 0
+                        ? t("discountApplied", {
+                            pct: order.discountBps / 100,
+                            code: order.discountCode,
+                          })
+                        : t("discountCodeOnly", { code: order.discountCode })}
                     </p>
                   ) : null}
                 </div>
@@ -149,7 +164,8 @@ export function AdminClientOrdersClient({ orders, stats }: Props) {
                       key={f.label}
                       className="rounded-lg border border-white/10 bg-black/20 px-2 py-1 text-[10px] text-white/65"
                     >
-                      {f.label} (+{formatUsd(f.priceDeltaCents)})
+                      {f.label}
+                      {f.priceDeltaCents > 0 ? ` (+${formatUsd(f.priceDeltaCents)})` : ""}
                     </li>
                   ))}
                 </ul>

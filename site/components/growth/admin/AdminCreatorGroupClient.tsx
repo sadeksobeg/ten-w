@@ -166,12 +166,20 @@ export function AdminCreatorGroupClient({
             <p className="max-w-xl text-sm leading-relaxed text-white/65">{t("subtitle")}</p>
             <p className="mt-2 max-w-xl text-xs text-white/45">{t("accessNote")}</p>
           </div>
-          <Link
-            href="/growth/creators?preview=lounge"
-            className="shrink-0 rounded-xl border border-gold/35 bg-gold/10 px-4 py-2.5 text-xs font-bold text-gold hover:border-gold/50"
-          >
-            {tAdmin("previewLounge")}
-          </Link>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            <Link
+              href="/growth/admin/orders"
+              className="rounded-xl border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-bold text-white/80 hover:border-gold/35 hover:text-gold"
+            >
+              {t("contactOrdersLink")}
+            </Link>
+            <Link
+              href="/growth/creators?preview=lounge"
+              className="rounded-xl border border-gold/35 bg-gold/10 px-4 py-2.5 text-xs font-bold text-gold hover:border-gold/50"
+            >
+              {tAdmin("previewLounge")}
+            </Link>
+          </div>
         </div>
       </GlassCard>
 

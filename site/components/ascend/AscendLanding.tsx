@@ -34,7 +34,7 @@ export async function AscendLanding() {
           <p className="mt-3 max-w-2xl text-sm text-muted md:text-base">{t("hero.subtagline")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <TrackedLink href="/growth/sign-in" eventName="ascend_cta_sign_in" className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-7 py-3 text-sm font-bold text-bg transition hover:bg-gold-bright">{t("hero.ctaPrimary")}</TrackedLink>
-            <Link href="/creators/studio" className="inline-flex min-h-12 items-center justify-center rounded-full border border-gold/40 bg-gold/10 px-7 py-3 text-sm font-bold text-gold transition hover:border-gold/60 hover:bg-gold/15">{t("hero.ctaStudio")}</Link>
+            <Link href="/growth/register" className="inline-flex min-h-12 items-center justify-center rounded-full border border-gold/40 bg-gold/10 px-7 py-3 text-sm font-bold text-gold transition hover:border-gold/60 hover:bg-gold/15">{t("hero.ctaRegister")}</Link>
             <Link href="/growth/sign-in" className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-white/80 transition hover:border-gold/40">{t("hero.ctaSecondary")}</Link>
           </div>
           <p className="mt-4 text-xs text-white/40">{t("hero.note")}</p>

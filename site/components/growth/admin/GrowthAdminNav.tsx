@@ -32,19 +32,24 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
     items: [
       { href: "/growth/admin", labelKey: "overview", Icon: IconDashboard },
       { href: "/growth/admin/deals", labelKey: "deals", Icon: IconDeals },
-      { href: "/growth/admin/orders", labelKey: "orders", Icon: IconEarnings },
       { href: "/growth/admin/payouts", labelKey: "payouts", Icon: IconPayout },
       { href: "/growth/admin/partners", labelKey: "partners", Icon: IconPartners },
-      { href: "/growth/admin/creators", labelKey: "creators", Icon: IconStar },
       { href: "/growth/admin/invites", labelKey: "invites", Icon: IconStar },
       { href: "/growth/admin/chat", labelKey: "chat", Icon: IconChat },
       { href: "/growth/admin/chat/moderators", labelKey: "chatModerators", Icon: IconChat },
     ],
   },
   {
+    titleKey: "groupCreatorArena",
+    items: [
+      { href: "/growth/admin/creators", labelKey: "creators", Icon: IconStar },
+      { href: "/growth/admin/orders", labelKey: "contactOrders", Icon: IconEarnings },
+      { href: "/growth/admin/products", labelKey: "products", Icon: IconSettings },
+    ],
+  },
+  {
     titleKey: "groupCatalog",
     items: [
-      { href: "/growth/admin/products", labelKey: "products", Icon: IconSettings },
       { href: "/growth/admin/badges", labelKey: "badges", Icon: IconBadge },
       { href: "/growth/admin/levels", labelKey: "levels", Icon: IconLevel },
       { href: "/growth/admin/tiers", labelKey: "tiers", Icon: IconEarnings },

@@ -5,11 +5,11 @@ import { useTranslations } from "next-intl";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { CreatorPulsePanel } from "@/components/growth/creators/CreatorPulsePanel";
 import { CreatorFeaturedSpotlight, type CreatorFeaturedCreator } from "./CreatorFeaturedSpotlight";
-import { CreatorLoungeChat } from "./CreatorLoungeChat";
 import { CreatorOnboardingChecklist, type CreatorOnboardingProgress } from "./CreatorOnboardingChecklist";
 import { CreatorProfileDrawer } from "./CreatorProfileDrawer";
 import { CreatorWeeklyTracker } from "./CreatorWeeklyTracker";
 import type { CreatorChallengeView, CreatorPulseStats } from "@/lib/growth/creator-arena";
+import type { CreatorLoungeSection } from "./CreatorLoungeLayout";
 
 export type CreatorSubmissionPreview = {
   id: string;
@@ -21,33 +21,20 @@ export type CreatorSubmissionPreview = {
   status: string;
 };
 
-type ChatViewer = {
-  userId: string;
-  email: string;
-  name: string | null;
-  displayName?: string;
-  avatarUrl?: string | null;
-  avatarPreset?: string | null;
-};
-
 type Props = {
   locale: string;
-  isRoomMember: boolean;
-  viewer: ChatViewer;
   pulse: CreatorPulseStats;
   challenge: CreatorChallengeView | null;
   viewerRank?: number | null;
   featuredCreator: CreatorFeaturedCreator | null;
   recentSubmissions: CreatorSubmissionPreview[];
   onboarding: CreatorOnboardingProgress;
-  onNavigate?: (section: "challenge" | "studio" | "home") => void;
+  onNavigate?: (section: CreatorLoungeSection) => void;
   onChallengeCreator?: (creator: CreatorFeaturedCreator) => void;
 };
 
 export function CreatorLoungeHome({
-  locale,
-  isRoomMember,
-  viewer,
+  locale: _locale,
   pulse,
   challenge,
   viewerRank,
@@ -78,8 +65,6 @@ export function CreatorLoungeHome({
           onChallenge={onChallengeCreator}
         />
       </div>
-
-      <CreatorLoungeChat locale={locale} isRoomMember={isRoomMember} viewer={viewer} />
 
       <GlassCard className="border border-white/10 bg-white/[0.03] p-5">
         <h3 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">

@@ -5,9 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { CreatorWorkflowStatus } from "@prisma/client";
-import { ParticleEffect } from "@/components/growth/ui/ParticleEffect";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
-import { CreatorStatusBoard } from "@/components/growth/creators/CreatorStatusBoard";
 import { CreatorLoungeHeader } from "./CreatorLoungeHeader";
 import { CreatorLoungeSidebar, CreatorLoungeMobileTabs } from "./CreatorLoungeSidebar";
 import { CreatorLoungeActivityPanel } from "./CreatorLoungeActivityPanel";
@@ -15,8 +13,9 @@ import { CreatorLoungeHome, type CreatorSubmissionPreview } from "./CreatorLoung
 import { CreatorLoungeChallenge } from "./CreatorLoungeChallenge";
 import { CreatorLoungeCup } from "./CreatorLoungeCup";
 import { CreatorLoungeBattles, type CreatorBattleHistoryItem } from "./CreatorLoungeBattles";
-import { CreatorLoungeStudio } from "./CreatorLoungeStudio";
-import { CreatorLoungeAchievements } from "./CreatorLoungeAchievements";
+import { CreatorPartnershipKit } from "./CreatorPartnershipKit";
+import { CreatorLoungeChatTab } from "./CreatorLoungeChatTab";
+import { CreatorLoungeProfile } from "./CreatorLoungeProfile";
 import { CreatorLoungeErrorBoundary } from "./CreatorLoungeErrorBoundary";
 import { CreatorProfileDrawer } from "./CreatorProfileDrawer";
 import type { CreatorFeaturedCreator } from "./CreatorFeaturedSpotlight";
@@ -31,12 +30,12 @@ import type {
 
 export type CreatorLoungeSection =
   | "home"
+  | "chat"
   | "challenge"
   | "cup"
   | "battles"
-  | "studio"
-  | "achievements"
-  | "settings";
+  | "toolkit"
+  | "profile";
 
 export type CreatorEventPreview = {
   slug: string;
@@ -115,7 +114,6 @@ export function CreatorLoungeLayout({
   activeBattles = 0,
   battleHistory = [],
   badges = [],
-  plannedDays,
   clientDiscountCode = null,
   commissionPercent = "10%",
   salesProducts = [],
@@ -126,6 +124,7 @@ export function CreatorLoungeLayout({
   const [section, setSection] = useState<CreatorLoungeSection>("home");
   const [challengeDrawer, setChallengeDrawer] = useState<CreatorFeaturedCreator | null>(null);
   const [activityOpen, setActivityOpen] = useState(false);
+  const [unreadChat, setUnreadChat] = useState(0);
 
   const myCard = statusCards.find((c) => c.userId === viewer.userId);
   const viewerProfile: CreatorViewerProfile = viewerProfileProp ?? {
@@ -162,22 +161,35 @@ export function CreatorLoungeLayout({
 
   const viewerName = viewer.displayName ?? viewer.name ?? viewer.email;
 
+  function navigate(next: CreatorLoungeSection) {
+    if (next === "chat") setUnreadChat(0);
+    setSection(next);
+  }
+
   const mainContent = useMemo(() => {
     switch (section) {
       case "home":
         return (
           <CreatorLoungeHome
             locale={locale}
-            isRoomMember={isRoomMember}
-            viewer={viewer}
             pulse={pulse}
             challenge={challenge}
             viewerRank={viewerRank}
             featuredCreator={featuredCreator}
             recentSubmissions={recentSubmissions}
             onboarding={onboarding}
-            onNavigate={(s) => setSection(s)}
+            onNavigate={(s) => navigate(s)}
             onChallengeCreator={setChallengeDrawer}
+          />
+        );
+      case "chat":
+        return (
+          <CreatorLoungeChatTab
+            locale={locale}
+            isRoomMember={isRoomMember}
+            viewer={viewer}
+            isActive={section === "chat"}
+            onUnread={(n) => setUnreadChat((c) => c + n)}
           />
         );
       case "challenge":
@@ -194,39 +206,23 @@ export function CreatorLoungeLayout({
         return (
           <CreatorLoungeBattles candidates={battleCandidates} history={battleHistory} />
         );
-      case "studio":
+      case "toolkit":
         return (
-          <CreatorLoungeStudio
+          <CreatorPartnershipKit
             clientDiscountCode={clientDiscountCode}
             commissionPercent={commissionPercent}
             salesProducts={salesProducts}
           />
         );
-      case "achievements":
+      case "profile":
         return (
-          <CreatorLoungeAchievements
+          <CreatorLoungeProfile
             locale={locale}
             badges={badges}
             milestones={viewerProfile.milestones}
+            statusCards={statusCards}
+            myUserId={viewer.userId}
           />
-        );
-      case "settings":
-        return (
-          <div className="space-y-4">
-            <GlassCard className="border border-white/10 bg-white/[0.03] p-5">
-              <h2 className="font-[family-name:var(--font-cairo)] text-lg font-extrabold text-white">
-                {t("lounge.settingsTitle")}
-              </h2>
-              <p className="mt-1 text-xs text-white/55">{t("lounge.settingsSubtitle")}</p>
-              <Link
-                href="/growth/settings"
-                className="mt-3 inline-flex text-xs font-semibold text-gold underline-offset-4 hover:underline"
-              >
-                {t("kit.profile")}
-              </Link>
-            </GlassCard>
-            <CreatorStatusBoard cards={statusCards} myUserId={viewer.userId} />
-          </div>
         );
       default:
         return null;
@@ -244,43 +240,45 @@ export function CreatorLoungeLayout({
     cupRows,
     battleCandidates,
     battleHistory,
-    publicSlug,
-    plannedDays,
+    clientDiscountCode,
+    commissionPercent,
+    salesProducts,
     badges,
     viewerProfile.milestones,
     statusCards,
-    t,
+    viewerRank,
   ]);
 
   return (
     <CreatorLoungeErrorBoundary>
-      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl">
+      <div className="creator-arena-shell relative overflow-hidden rounded-2xl sm:rounded-3xl">
         <div
-          className="pointer-events-none absolute inset-0 opacity-90"
+          className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(228,184,77,0.35), transparent 55%), radial-gradient(ellipse 60% 50% at 90% 80%, rgba(220,38,38,0.2), transparent 50%), linear-gradient(165deg, #0a0612 0%, #12081f 40%, #1a0a0a 100%)",
+              "radial-gradient(ellipse 70% 50% at 50% -5%, rgba(228,184,77,0.12), transparent 55%), linear-gradient(165deg, #080a10 0%, #0e1018 50%, #0a0c12 100%)",
           }}
           aria-hidden
         />
-        <ParticleEffect className="pointer-events-none absolute inset-0 opacity-30 sm:opacity-40" />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
-          <div className="mb-4 text-center sm:mb-6">
+        <div className="relative z-10 mx-auto max-w-7xl px-3 py-5 pb-24 sm:px-6 sm:py-8 lg:px-8 lg:pb-8">
+          <div className="mb-5 text-center sm:mb-6 sm:text-start">
             <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.28em] text-gold/80 sm:text-xs">
               {t("eyebrow")}
             </p>
             <h1 className="font-[family-name:var(--font-cairo)] text-xl font-black text-white sm:text-3xl">
               {t("title")}
             </h1>
-            <p className="mx-auto mt-2 max-w-xl text-xs text-white/60 sm:text-sm">{t("subtitle")}</p>
+            <p className="mx-auto mt-2 max-w-xl text-xs text-white/60 sm:mx-0 sm:text-sm">
+              {t("subtitle")}
+            </p>
             {showWelcome ? (
-              <p className="mx-auto mt-3 max-w-md rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-100">
+              <p className="mx-auto mt-3 max-w-md rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-100 sm:mx-0">
                 {t("lounge.welcomeCelebration")}
               </p>
             ) : null}
             {!hasBadge && isRoomMember ? (
-              <p className="mx-auto mt-2 max-w-md rounded-xl border border-gold/25 bg-gold/10 px-3 py-2 text-[11px] text-gold/95">
+              <p className="mx-auto mt-2 max-w-lg rounded-xl border border-sky-500/25 bg-sky-500/8 px-4 py-2.5 text-[11px] leading-relaxed text-sky-100/90 sm:mx-0">
                 {t("adminGrantedAccess")}
               </p>
             ) : null}
@@ -297,25 +295,19 @@ export function CreatorLoungeLayout({
             activeCreators={statusCards.length}
           />
 
-          <CreatorLoungeMobileTabs
-            active={section}
-            onNavigate={setSection}
-            viewerRank={viewerRank}
-            activeBattles={activeBattles}
-          />
-
-          <div className="mt-4 grid gap-4 lg:mt-6 lg:grid-cols-[220px_minmax(0,1fr)_280px] lg:gap-6">
+          <div className="mt-4 grid gap-4 lg:mt-6 lg:grid-cols-[220px_minmax(0,1fr)_260px] lg:gap-6">
             <div className="hidden lg:block">
               <CreatorLoungeSidebar
                 active={section}
-                onNavigate={setSection}
+                onNavigate={navigate}
                 viewerRank={viewerRank}
                 activeBattles={activeBattles}
+                unreadChat={unreadChat}
                 className="sticky top-4"
               />
             </div>
 
-            <main className="min-w-0 space-y-4">{mainContent}</main>
+            <main className="min-w-0">{mainContent}</main>
 
             <div className="hidden lg:block">
               <CreatorLoungeActivityPanel
@@ -344,7 +336,7 @@ export function CreatorLoungeLayout({
 
           {section === "home" && events.length > 0 ? (
             <section className="mt-6">
-              <h2 className="mb-3 text-center font-[family-name:var(--font-cairo)] text-base font-extrabold text-gold">
+              <h2 className="mb-3 text-center font-[family-name:var(--font-cairo)] text-base font-extrabold text-gold sm:text-start">
                 {t("eventsTitle")}
               </h2>
               <ul className="grid gap-3 sm:grid-cols-2">
@@ -365,16 +357,26 @@ export function CreatorLoungeLayout({
             </section>
           ) : null}
 
-          <p className="mt-6 text-center text-[10px] text-white/35">{t("footer")}</p>
+          <p className="mt-6 text-center text-[10px] text-white/35 lg:text-start">
+            {t("footer")}
+          </p>
         </div>
       </div>
+
+      <CreatorLoungeMobileTabs
+        active={section}
+        onNavigate={navigate}
+        viewerRank={viewerRank}
+        activeBattles={activeBattles}
+        unreadChat={unreadChat}
+      />
 
       <CreatorProfileDrawer
         creator={challengeDrawer}
         onClose={() => setChallengeDrawer(null)}
         onChallenge={() => {
           setChallengeDrawer(null);
-          setSection("battles");
+          navigate("battles");
         }}
       />
     </CreatorLoungeErrorBoundary>

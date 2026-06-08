@@ -531,7 +531,7 @@
       "hero": {
         "tagline": "Promouvez trois services clairs — site web, automatisation IA, app mobile — commission à partir de 10%.",
         "joinCta": "S'inscrire partenaire",
-        "orderCta": "Page de commande",
+        "contactCta": "Nous contacter",
         "watchHow": "Voir comment ça marche",
         "facts": {
           "commission": { "value": "10%", "label": "Commission de base" },
@@ -541,14 +541,14 @@
       },
       "packages": {
         "title": "Que promouvoir ?",
-        "subtitle": "Prix de base clairs — le montant final dépend des options choisies.",
-        "note": "Prix final confirmé après examen — chiffres ci-dessus = point de départ.",
-        "orderCta": "Essayer la page commande",
+        "subtitle": "Trois services clairs — le client nous contacte et nous convenons du périmètre et du prix.",
+        "note": "Les tarifs se discutent après contact — non affichés sur le site public.",
+        "contactCta": "Nous contacter",
         "registerCta": "Devenir partenaire",
         "items": {
-          "website": { "price": "$4,500", "name": "Site web", "body": "Site pro responsive avec panneau admin." },
-          "automation": { "price": "$5,900", "name": "Automatisation & IA", "body": "Connecte les canaux et organise le parcours client." },
-          "mobile": { "price": "$9,500", "name": "Application mobile", "body": "App iOS & Android sur mesure avec notifications." }
+          "website": { "tag": "Service", "name": "Site web", "body": "Site pro responsive avec panneau admin." },
+          "automation": { "tag": "Service", "name": "Automatisation & IA", "body": "Connecte les canaux et organise le parcours client." },
+          "mobile": { "tag": "Service", "name": "Application mobile", "body": "App iOS & Android sur mesure avec notifications." }
         }
       },
       "openLink": "Ouvrir",
@@ -561,8 +561,8 @@
             "body": "Activez votre compte partenaire et débloquez le badge créateur dans le hub growth."
           },
           "promote": {
-            "title": "Partager votre lien de commande",
-            "body": "Copiez votre lien /order avec le code -3% — le client choisit l'offre et la demande vous parvient directement."
+            "title": "Partager votre lien de contact",
+            "body": "Copiez votre lien de contact avec le code -3% — le client envoie un message et la demande vous parvient."
           },
           "earn": {
             "title": "Gagner des commissions",
@@ -573,9 +573,9 @@
       "tools": {
         "title": "Liens qui fonctionnent",
         "subtitle": "Cliquez et ouvrez — sans deviner.",
-        "orderPage": {
-          "title": "Page de commande client",
-          "body": "Le client choisit l'offre, les options et votre code -3% — la demande vous parvient."
+        "contactPage": {
+          "title": "Page de contact",
+          "body": "Le client nous contacte et saisit votre code -3% — la demande vous parvient."
         },
         "register": {
           "title": "Inscription partenaire ASCEND",
@@ -598,8 +598,8 @@
             "a": "Postulez via ASCEND ou sur invitation TENEGTA. Les badge holders accèdent au cercle privé et aux défis hebdo."
           },
           "utm": {
-            "q": "Comment partager le lien de commande avec mon code ?",
-            "a": "Après inscription, copiez votre lien /order?code=XXXX depuis le salon créateur. Le client a -3% et vous êtes crédité."
+            "q": "Comment partager le lien de contact avec mon code ?",
+            "a": "Après inscription, copiez votre lien /contact?code=XXXX depuis le salon créateur. Le client a -3% et vous êtes crédité."
           },
           "payout": {
             "q": "Quel est le taux de commission ?",
@@ -613,15 +613,15 @@
       },
       "finalCta": {
         "title": "Commencez à promouvoir",
-        "body": "Inscrivez-vous, obtenez votre code et partagez la page de commande.",
+        "body": "Inscrivez-vous, obtenez votre code et partagez la page de contact.",
         "cta": "S'inscrire",
-        "orderCta": "Page commande"
+        "contactCta": "Page contact"
       },
       "experiencesTitle": "Pages à filmer et partager",
       "experiencesSubtitle": "Liens réels qui fonctionnent — pour Reels, stories et votre contenu.",
       "openExperience": "Ouvrir la page →",
       "experiences": {
-        "order": { "title": "Page de commande client", "body": "Montrez comment le client choisit l'offre — votre lien inclut le code." },
+        "contact": { "title": "Page de contact", "body": "Montrez comment le client nous contacte — votre lien inclut le code -3%." },
         "lounge": { "title": "Creator Lounge", "body": "Défis hebdo, classement et duels — contenu live à filmer et partager." },
         "ascend": { "title": "Plateforme ASCEND", "body": "Découvrez le système partenaire — rangs, duels et commissions." }
       },
@@ -1091,6 +1091,21 @@
         "checkFields": "Check the fields (email, message length, etc.)."
       },
       "honeypot": "Leave this field empty"
+    },
+    "discount": {
+      "applied": "Réduction {pct}% — via {creator}",
+      "creatorFallback": "créateur",
+      "invalidHint": "Code invalide — vous pouvez envoyer quand même, l'équipe vérifiera.",
+      "serviceLabel": "Type de service",
+      "codeLabel": "Code de réduction (optionnel)",
+      "codePlaceholder": "ex. VQPGQU",
+      "codeHint": "Si vous arrivez via un lien créateur, la réduction s'applique automatiquement.",
+      "services": {
+        "general": "Demande générale",
+        "website": "Site web",
+        "automation-ai": "Automatisation & IA",
+        "mobile-app": "Application mobile"
+      }
     },
     "whatsapp": "WhatsApp",
     "address": "Address",
@@ -1683,7 +1698,7 @@
       "tagline": "Une infrastructure de croissance gamifiée pour les organisations modernes.",
       "subtagline": "Le système d'exploitation des réseaux de partenaires orientés performance.",
       "ctaPrimary": "Connexion",
-      "ctaStudio": "Creator Studio (tournage)",
+      "ctaRegister": "Devenir partenaire",
       "ctaSecondary": "Connexion partenaire",
       "note": "Comptes créés par l'admin uniquement · Partenaires invités"
     },
@@ -2657,9 +2672,9 @@
       "lost": "Deal stopped — capture the lesson and re-aim."
     },
     "creators": {
-      "eyebrow": "Programme partenaire",
-      "title": "Cercle des créateurs",
-      "subtitle": "Vous faites partie de l'élite qui raconte TENEGTA — contenu, événements et récompenses exclusives.",
+      "eyebrow": "Creator Arena",
+      "title": "Hub créateurs partenaires",
+      "subtitle": "Espace professionnel pour créateurs approuvés — défis hebdo, communauté live et outils de partenariat.",
       "pillar1Title": "Partenariat réel",
       "pillar1Body": "Commissions premium, kit marketing prêt, support direct de l'équipe growth.",
       "pillar2Title": "Événements exclusifs",
@@ -2672,11 +2687,10 @@
       "circleTitle": "Groupe créateurs",
       "circleBody": "Rejoignez la conversation privée avec les créateurs approuvés.",
       "ctaChat": "Ouvrir le groupe privé",
-      "ctaPending": "Un admin vous ajoutera bientôt au groupe.",
+      "ctaPending": "Demande d'accès en cours — l'équipe partenariats vous contactera bientôt.",
       "ctaEvents": "Explorer les événements",
       "footer": "T.E.N.E.G.T.A — les créateurs construisent l'avenir.",
-      "studioLink": "Ouvrir le studio public (tournage)",
-      "adminGrantedAccess": "Accès salon accordé par l'admin — votre compte partenaire reste inchangé.",
+      "adminGrantedAccess": "Accès Creator Arena activé — votre compte partenaire ASCEND fonctionne normalement.",
       "tabNavAria": "Sections Creator Arena",
       "tabLounge": "Salon",
       "tabKit": "Kit créateur",
@@ -2689,9 +2703,8 @@
       "kitSubtitle": "Liens marketing prêts — copiez et partagez.",
       "kit": {
         "copyError": "Échec de copie",
-        "orderPage": "Page de commande client",
-        "studio": "Studio créateur public",
-        "lounge": "Creator Lounge",
+        "contactPage": "Page de contact",
+        "lounge": "Hub partenaire",
         "profile": "Paramètres du compte",
         "toolLinks": "Liens rapides",
         "hashtags": "#TENEGTA #ASCEND #CreatorArena"
@@ -2706,11 +2719,11 @@
         "priceNote": "Le prix varie selon les options choisies par le client.",
         "commissionNote": "Votre taux actuel : {rate} — il augmente avec les deals, parrainages et activité.",
         "discountTitle": "Code de réduction client",
-        "discountBody": "Offre 3% de réduction — appliqué automatiquement via votre lien.",
+        "discountBody": "Offre 3% de réduction au contact — appliqué automatiquement via votre lien.",
         "copyCode": "Copier le code",
         "codeCopied": "Code copié",
-        "orderLinkTitle": "Lien de commande prêt",
-        "copyOrderLink": "Copier le lien",
+        "contactLinkTitle": "Lien de contact prêt",
+        "copyContactLink": "Copier le lien de contact",
         "linkCopied": "Lien copié",
         "copyError": "Échec de copie",
         "noCodeYet": "Votre code sera généré à l'activation du compte."
@@ -2754,14 +2767,25 @@
         "navAria": "Navigation Creator Lounge",
         "mobileNavAria": "Sections du salon",
         "nav": {
-          "home": "Accueil",
+          "home": "Vue d'ensemble",
+          "chat": "Chat",
           "challenge": "Défi",
-          "cup": "Creator Cup",
+          "cup": "Classement",
           "battles": "Batailles",
-          "studio": "Studio",
-          "achievements": "Succès",
-          "settings": "Réglages"
+          "toolkit": "Kit partenariat",
+          "profile": "Profil",
+          "more": "Plus"
         },
+        "toolkitTitle": "Kit partenariat",
+        "toolkitSubtitle": "Liens marketing, code promo et guide services — prêts à copier.",
+        "toolkitHint": "Partagez votre lien contact avec le code -3% — le client vous parvient et vous êtes crédité.",
+        "chatTabTitle": "Communauté créateurs",
+        "chatTabSubtitle": "Chat live avec l'équipe et les créateurs — {max} caractères par message.",
+        "chatAccessPending": "Accès en cours de revue. Une fois approuvé, vous rejoindrez la conversation.",
+        "profileTitle": "Votre profil partenaire",
+        "profileSubtitle": "Succès, statut et paramètres ASCEND.",
+        "profileSettingsCta": "Ouvrir les paramètres",
+        "profileStatusBoard": "Tableau de statut",
         "weekLabel": "Semaine {week}",
         "activeCreators": "{count} créateurs actifs",
         "activityTitle": "Activité live",
@@ -2839,7 +2863,7 @@
           "profile": "Complétez votre profil",
           "introduce": "Présentez-vous dans le chat",
           "challenge": "Soumettez le lien de votre post sur l'entreprise",
-          "firstShare": "Partagez votre lien de commande avec votre audience"
+          "firstShare": "Partagez votre lien de contact avec votre audience"
         },
         "complete": "Fait"
       },
@@ -3230,11 +3254,13 @@
         "navAria": "Growth admin navigation",
         "jumpTo": "Jump to",
         "groupOperations": "Operations",
+        "groupCreatorArena": "Créateurs de contenu",
         "groupCatalog": "Configuration",
         "groupPrograms": "Programs",
         "overview": "Overview",
         "deals": "Deals",
         "orders": "Commandes clients",
+        "contactOrders": "Demandes de contact",
         "payouts": "Payouts",
         "products": "Products",
         "badges": "Badges",
@@ -3315,6 +3341,7 @@
       },
       "creatorsPage": {
         "title": "Programme créateurs",
+        "contactOrdersLink": "Demandes de contact",
         "subtitle": "Accordez l'accès Creator Arena à tout partenaire — le badge donne l'accès automatiquement.",
         "accessNote": "L'accès salon ne modifie pas commissions, XP ni deals. Impossible de révoquer un détenteur du badge content_creator.",
         "statBadge": "Badge holders",
@@ -3546,13 +3573,15 @@
         "clientLabel": "Client label"
       },
       "orders": {
-        "title": "Commandes clients",
-        "subtitle": "Demandes depuis /order — offres, options et codes de réduction.",
+        "title": "Demandes de contact",
+        "subtitle": "Demandes depuis la page contact — client, créateur, code et type de service.",
         "empty": "Aucune commande pour l'instant.",
         "review": "Marquer examinée",
         "reject": "Refuser",
         "organic": "Commande directe",
+        "pricePending": "À définir",
         "discountApplied": "-{pct}% · {code}",
+        "discountCodeOnly": "Code : {code}",
         "colProduct": "Offre",
         "colCreator": "Créateur",
         "colDate": "Date",

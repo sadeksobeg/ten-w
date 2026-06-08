@@ -1,7 +1,14 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import type { ComponentType } from "react";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
+import {
+  IconDashboard,
+  IconKit,
+  IconSettings,
+  type GrowthIconProps,
+} from "@/components/growth/icons/GrowthIcons";
 import { useToast } from "@/hooks/useToast";
 
 type ProductRow = {
@@ -16,10 +23,10 @@ type Props = {
   products: ProductRow[];
 };
 
-const SLUG_EMOJI: Record<string, string> = {
-  website: "🌐",
-  "automation-ai": "🤖",
-  "mobile-app": "📱",
+const SLUG_ICON: Record<string, ComponentType<GrowthIconProps>> = {
+  website: IconDashboard,
+  "automation-ai": IconSettings,
+  "mobile-app": IconKit,
 };
 
 function formatUsd(cents: number, locale: string): string {
@@ -39,8 +46,8 @@ export function CreatorSalesGuidePanel({
   const locale = useLocale();
   const { showToast } = useToast();
 
-  const orderUrl = clientDiscountCode
-    ? `https://tenegta.com/${locale}/order?code=${encodeURIComponent(clientDiscountCode)}`
+  const contactUrl = clientDiscountCode
+    ? `https://tenegta.com/${locale}/contact?code=${encodeURIComponent(clientDiscountCode)}`
     : null;
 
   async function copy(text: string, successKey: "codeCopied" | "linkCopied") {
@@ -77,20 +84,23 @@ export function CreatorSalesGuidePanel({
               </tr>
             </thead>
             <tbody>
-              {products.map((p) => (
-                <tr key={p.slug} className="border-b border-white/5 last:border-0">
-                  <td className="px-3 py-2.5 font-semibold text-white">
-                    <span className="me-1.5">{SLUG_EMOJI[p.slug] ?? "✦"}</span>
-                    {p.name}
-                  </td>
-                  <td className="px-3 py-2.5 text-end font-bold text-gold">
-                    {formatUsd(p.priceCents, locale)}
-                  </td>
-                  <td className="px-3 py-2.5 text-end text-emerald-200/90">
-                    {commissionPercent}
-                  </td>
-                </tr>
-              ))}
+              {products.map((p) => {
+                const Icon = SLUG_ICON[p.slug] ?? IconDashboard;
+                return (
+                  <tr key={p.slug} className="border-b border-white/5 last:border-0">
+                    <td className="px-3 py-2.5 font-semibold text-white">
+                      <Icon size={14} className="me-1.5 inline-block align-[-2px] text-gold/80" aria-hidden />
+                      {p.name}
+                    </td>
+                    <td className="px-3 py-2.5 text-end font-bold text-gold">
+                      {formatUsd(p.priceCents, locale)}
+                    </td>
+                    <td className="px-3 py-2.5 text-end text-emerald-200/90">
+                      {commissionPercent}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -121,18 +131,18 @@ export function CreatorSalesGuidePanel({
               <p className="mt-1 text-[10px] text-white/45">{t("discountBody")}</p>
             </div>
 
-            {orderUrl ? (
+            {contactUrl ? (
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wide text-white/50">
-                  {t("orderLinkTitle")}
+                  {t("contactLinkTitle")}
                 </p>
-                <p className="mt-1 break-all font-mono text-[10px] text-white/40">{orderUrl}</p>
+                <p className="mt-1 break-all font-mono text-[10px] text-white/40">{contactUrl}</p>
                 <button
                   type="button"
-                  onClick={() => void copy(orderUrl, "linkCopied")}
+                  onClick={() => void copy(contactUrl, "linkCopied")}
                   className="mt-2 text-[11px] font-semibold text-gold underline-offset-4 hover:underline"
                 >
-                  {t("copyOrderLink")}
+                  {t("copyContactLink")}
                 </button>
               </div>
             ) : null}

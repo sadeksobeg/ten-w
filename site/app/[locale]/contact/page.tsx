@@ -8,7 +8,7 @@ import { buildAlternates } from "@/lib/metadata-helpers";
 
 type Props = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ intent?: string; topic?: string }>;
+  searchParams: Promise<{ intent?: string; topic?: string; code?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -53,8 +53,8 @@ export default async function ContactPage({ params, searchParams }: Props) {
       </Section>
 
       <Section>
-        <div className="grid gap-12 lg:grid-cols-2">
-          <div>
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="order-2 lg:order-1">
             <h2 className="text-lg font-semibold text-foreground">
               {t("formHeading")}
             </h2>
@@ -63,7 +63,7 @@ export default async function ContactPage({ params, searchParams }: Props) {
               defaultTopic={sp.topic}
             />
           </div>
-          <div className="space-y-6 text-sm text-muted">
+          <div className="order-1 space-y-5 text-sm text-muted lg:order-2 lg:space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-gold">{t("emailLabel")}</h3>
               <p className="mt-2">

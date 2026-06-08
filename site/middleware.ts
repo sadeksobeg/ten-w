@@ -21,6 +21,20 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301);
   }
 
+  const orderRedirect = pathname.match(/^\/(ar|en|fr)\/order\/?$/);
+  if (orderRedirect) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${orderRedirect[1]}/contact`;
+    return NextResponse.redirect(url, 301);
+  }
+
+  const studioRedirect = pathname.match(/^\/(ar|en|fr)\/creators\/studio\/?$/);
+  if (studioRedirect) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${studioRedirect[1]}/ascend`;
+    return NextResponse.redirect(url, 301);
+  }
+
   if (isInviteSystemPath(pathname)) {
     const res = NextResponse.next();
     if (pathname.startsWith("/admin")) {

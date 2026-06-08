@@ -11,13 +11,13 @@ type Props = {
 export function CreatorKitPanel({ clientDiscountCode = null }: Props) {
   const t = useTranslations("Growth.creators");
 
-  const orderHref = clientDiscountCode
-    ? `/order?code=${encodeURIComponent(clientDiscountCode)}`
-    : "/order";
+  const contactHref = clientDiscountCode
+    ? `/contact?code=${encodeURIComponent(clientDiscountCode)}`
+    : "/contact";
 
   const toolLinks = [
-    { href: orderHref, label: t("kit.orderPage") },
-    { href: "/creators/studio", label: t("kit.studio") },
+    { href: contactHref, label: t("kit.contactPage") },
+    { href: "/growth/creators", label: t("kit.lounge") },
     { href: "/growth/settings", label: t("kit.profile") },
   ] as const;
 

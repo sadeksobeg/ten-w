@@ -7,6 +7,12 @@ export type ContactMessagePayload = {
   message: string;
   intent?: string;
   topic?: string;
+  serviceInterest?: string;
+  discountCode?: string;
+  creatorName?: string;
+  discountBps?: number;
+  orderId?: string;
+  adminUrl?: string;
   source: string;
   sentAt: string;
 };
@@ -79,6 +85,13 @@ function formatBody(payload: ContactMessagePayload): string {
     payload.company ? `Company: ${payload.company}` : null,
     payload.intent ? `Intent: ${payload.intent}` : null,
     payload.topic ? `Topic: ${payload.topic}` : null,
+    payload.serviceInterest ? `Service: ${payload.serviceInterest}` : null,
+    payload.discountCode
+      ? `Discount code: ${payload.discountCode}${payload.discountBps ? ` (${payload.discountBps / 100}%)` : ""}`
+      : null,
+    payload.creatorName ? `Creator: ${payload.creatorName}` : null,
+    payload.orderId ? `Lead ID: ${payload.orderId}` : null,
+    payload.adminUrl ? `Admin: ${payload.adminUrl}` : null,
     `Source: ${payload.source}`,
     `Sent at: ${payload.sentAt}`,
     "",

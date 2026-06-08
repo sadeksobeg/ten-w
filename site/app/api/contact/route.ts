@@ -6,6 +6,7 @@ import {
   sendContactViaSmtp,
   type ContactMessagePayload,
 } from "@/lib/contact-smtp";
+import { createContactLead } from "@/lib/growth/contact-lead";
 import { getClientIp, rateLimitContact } from "@/lib/rate-limit";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 
@@ -16,6 +17,11 @@ const bodySchema = z.object({
   message: z.string().min(5).max(8000),
   intent: z.string().max(80).optional(),
   topic: z.string().max(80).optional(),
+  locale: z.enum(["ar", "en", "fr"]).default("ar"),
+  serviceInterest: z
+    .enum(["website", "automation-ai", "mobile-app", "general"])
+    .optional(),
+  discountCode: z.string().max(20).optional(),
   /** Honeypot — must stay empty */
   companyWebsite: z.string().optional(),
   /** Cloudflare Turnstile — required when TURNSTILE_SECRET_KEY is set */
@@ -161,7 +167,39 @@ export async function POST(req: Request) {
     }
   }
 
-  const { name, email, company, message, intent, topic } = parsed.data;
+  const {
+    name,
+    email,
+    company,
+    message,
+    intent,
+    topic,
+    locale,
+    serviceInterest,
+    discountCode,
+  } = parsed.data;
+
+  let leadResult: Awaited<ReturnType<typeof createContactLead>> | null = null;
+  try {
+    leadResult = await createContactLead({
+      locale,
+      name,
+      email,
+      company,
+      message,
+      serviceInterest,
+      discountCode,
+    });
+  } catch (err) {
+    console.error("[contact] lead creation failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
+  }
+
+  const host = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://tenegta.com";
+  const adminUrl = leadResult?.orderId
+    ? `${host}/${locale}/growth/admin/orders`
+    : undefined;
 
   const messagePayload: ContactMessagePayload = {
     name,
@@ -170,6 +208,12 @@ export async function POST(req: Request) {
     message,
     intent,
     topic,
+    serviceInterest,
+    discountCode: discountCode?.trim().toUpperCase() || undefined,
+    creatorName: leadResult?.partnerName ?? undefined,
+    discountBps: leadResult?.discountValid ? leadResult.discountBps : undefined,
+    orderId: leadResult?.orderId ?? undefined,
+    adminUrl,
     source: "tenegta.com",
     sentAt: new Date().toISOString(),
   };

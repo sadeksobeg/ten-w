@@ -513,7 +513,7 @@
       "hero": {
         "tagline": "Promote three clear services — website, smart automation, mobile app — and earn from 10% commission.",
         "joinCta": "Register as partner",
-        "orderCta": "Client order page",
+        "contactCta": "Contact us",
         "watchHow": "See how it works",
         "facts": {
           "commission": { "value": "10%", "label": "Your base commission" },
@@ -523,23 +523,23 @@
       },
       "packages": {
         "title": "What you promote",
-        "subtitle": "Clear base prices — final amount depends on features the client selects.",
-        "note": "Final price is confirmed after review — figures above are starting points.",
-        "orderCta": "Try the order page",
+        "subtitle": "Three clear services — clients contact us and we agree scope and price together.",
+        "note": "Pricing is discussed after contact — not shown on the public site.",
+        "contactCta": "Contact us",
         "registerCta": "Join as partner",
         "items": {
           "website": {
-            "price": "$4,500",
+            "tag": "Service",
             "name": "Website",
             "body": "Professional responsive site with admin panel — converts visitors into clients."
           },
           "automation": {
-            "price": "$5,900",
+            "tag": "Service",
             "name": "Automation & AI",
             "body": "Connects channels, auto-replies, and routes leads through a clear pipeline."
           },
           "mobile": {
-            "price": "$9,500",
+            "tag": "Service",
             "name": "Mobile app",
             "body": "Custom iOS & Android app with dashboard and push notifications."
           }
@@ -555,8 +555,8 @@
             "body": "Activate your partner account and unlock the creator badge inside the growth hub."
           },
           "promote": {
-            "title": "Share your order link",
-            "body": "Copy your /order link with the 3% discount code — clients pick a package and the request goes to you and admin."
+            "title": "Share your contact link",
+            "body": "Copy your contact link with the 3% discount code — clients send a message and the request goes to you and admin."
           },
           "earn": {
             "title": "Earn commissions",
@@ -567,9 +567,9 @@
       "tools": {
         "title": "Working links",
         "subtitle": "Click and open — no guesswork.",
-        "orderPage": {
-          "title": "Client order page",
-          "body": "Clients pick a package, add features, and apply your 3% code — the request reaches you and admin."
+        "contactPage": {
+          "title": "Contact page",
+          "body": "Clients reach out and enter your 3% code — the request reaches you and admin."
         },
         "register": {
           "title": "ASCEND partner signup",
@@ -592,8 +592,8 @@
             "a": "Apply through ASCEND or get invited by the TENEGTA team. Badge holders unlock the private creator circle and weekly challenges."
           },
           "utm": {
-            "q": "How do I share the order link with my discount code?",
-            "a": "After signup, copy your /order?code=XXXX link from the creator lounge. Clients get 3% off and you get credit for the deal."
+            "q": "How do I share the contact link with my discount code?",
+            "a": "After signup, copy your /contact?code=XXXX link from the creator lounge. Clients get 3% off and you get credit for the deal."
           },
           "payout": {
             "q": "What is the commission rate?",
@@ -607,17 +607,17 @@
       },
       "finalCta": {
         "title": "Start promoting today",
-        "body": "Register as a partner, get your discount code, and share the order page with your audience.",
+        "body": "Register as a partner, get your discount code, and share the contact page with your audience.",
         "cta": "Register now",
-        "orderCta": "Order page"
+        "contactCta": "Contact page"
       },
       "experiencesTitle": "Pages to film and share",
       "experiencesSubtitle": "Real working links — use them in Reels, stories, and your content.",
       "openExperience": "Open page →",
       "experiences": {
-        "order": {
-          "title": "Client order page",
-          "body": "Show how clients pick packages and features — your link carries the discount code."
+        "contact": {
+          "title": "Contact page",
+          "body": "Show how clients reach out — your link carries the 3% discount code."
         },
         "lounge": {
           "title": "Creator Lounge",
@@ -1067,6 +1067,21 @@
         "checkFields": "Check the fields (email, message length, etc.)."
       },
       "honeypot": "Leave this field empty"
+    },
+    "discount": {
+      "applied": "{pct}% discount — via {creator}",
+      "creatorFallback": "content creator",
+      "invalidHint": "Code is not valid — you can still submit and the team will review it.",
+      "serviceLabel": "Service type",
+      "codeLabel": "Discount code (optional)",
+      "codePlaceholder": "e.g. VQPGQU",
+      "codeHint": "If you arrived via a creator link, the discount applies automatically.",
+      "services": {
+        "general": "General inquiry",
+        "website": "Website",
+        "automation-ai": "Automation & AI",
+        "mobile-app": "Mobile app"
+      }
     },
     "whatsapp": "WhatsApp",
     "address": "Address",
@@ -1650,7 +1665,7 @@
       "tagline": "A Gamified Growth Infrastructure for Modern Organizations.",
       "subtagline": "The Operating System for Performance-Driven Partner Networks.",
       "ctaPrimary": "Sign in",
-      "ctaStudio": "Creator Studio (film)",
+      "ctaRegister": "Join as partner",
       "ctaSecondary": "Partner sign-in",
       "note": "Accounts are admin-created only · For invited partners"
     },
@@ -2707,9 +2722,9 @@
       "lost": "Deal stopped — capture the lesson and re-aim."
     },
     "creators": {
-      "eyebrow": "Partnership program",
-      "title": "Content Creators Circle",
-      "subtitle": "You are part of the elite creators shaping TENEGTA — content, events, and exclusive rewards.",
+      "eyebrow": "Creator Arena",
+      "title": "Partner Creator Hub",
+      "subtitle": "A professional workspace for approved creators — weekly challenges, live community, and ready partnership tools.",
       "pillar1Title": "Real partnership",
       "pillar1Body": "Premium commissions, ready-made marketing kit, and direct growth team support.",
       "pillar2Title": "Exclusive events",
@@ -2722,11 +2737,10 @@
       "circleTitle": "Creators group chat",
       "circleBody": "Join the private conversation with admin-approved creators.",
       "ctaChat": "Open private group",
-      "ctaPending": "An admin will add you to the group soon.",
+      "ctaPending": "Access request under review — the partnerships team will reach out soon.",
       "ctaEvents": "Explore events",
       "footer": "T.E.N.E.G.T.A — creators build the future.",
-      "studioLink": "Open public Creator Studio (for filming)",
-      "adminGrantedAccess": "You have lounge access granted by the admin — your partner account is unchanged.",
+      "adminGrantedAccess": "Creator Arena access is active — your ASCEND partner account works as usual.",
       "tabNavAria": "Creator Arena sections",
       "tabLounge": "Lounge",
       "tabKit": "Creator Kit",
@@ -2743,9 +2757,8 @@
       "kitSubtitle": "Ready marketing links — copy and share.",
       "kit": {
         "copyError": "Could not copy",
-        "orderPage": "Client order page",
-        "studio": "Public creator studio",
-        "lounge": "Creator Lounge",
+        "contactPage": "Contact page",
+        "lounge": "Partner hub",
         "profile": "Account settings",
         "toolLinks": "Quick links",
         "hashtags": "#TENEGTA #ASCEND #CreatorArena"
@@ -2760,11 +2773,11 @@
         "priceNote": "Price goes up or down based on features the client selects.",
         "commissionNote": "Your current rate is {rate} — it grows with deals, referrals, and platform activity.",
         "discountTitle": "Client discount code",
-        "discountBody": "Gives clients 3% off on orders — applied automatically from your link.",
+        "discountBody": "Gives clients 3% off on contact — applied automatically from your link.",
         "copyCode": "Copy code",
         "codeCopied": "Code copied",
-        "orderLinkTitle": "Ready order link",
-        "copyOrderLink": "Copy order link",
+        "contactLinkTitle": "Ready contact link",
+        "copyContactLink": "Copy contact link",
         "linkCopied": "Link copied",
         "copyError": "Could not copy",
         "noCodeYet": "Your discount code will be generated when your account is active."
@@ -2808,14 +2821,25 @@
         "navAria": "Creator Lounge navigation",
         "mobileNavAria": "Creator Lounge sections",
         "nav": {
-          "home": "Home",
+          "home": "Overview",
+          "chat": "Chat",
           "challenge": "Challenge",
-          "cup": "Creator Cup",
+          "cup": "Leaderboard",
           "battles": "Battles",
-          "studio": "Studio",
-          "achievements": "Achievements",
-          "settings": "Settings"
+          "toolkit": "Partnership kit",
+          "profile": "Profile",
+          "more": "More"
         },
+        "toolkitTitle": "Partnership kit",
+        "toolkitSubtitle": "Marketing links, discount code, and service guide — ready to copy and share.",
+        "toolkitHint": "Share your contact link with the 3% code — clients reach out and you get credit for the deal.",
+        "chatTabTitle": "Creator community",
+        "chatTabSubtitle": "Live chat with the team and creators — {max} characters per message.",
+        "chatAccessPending": "Access is under review. Once approved, you can join the conversation.",
+        "profileTitle": "Your partner profile",
+        "profileSubtitle": "Achievements, status, and ASCEND account settings.",
+        "profileSettingsCta": "Open account settings",
+        "profileStatusBoard": "Status board",
         "weekLabel": "Week {week}",
         "activeCreators": "{count} creators active",
         "activityTitle": "Live activity",
@@ -2893,7 +2917,7 @@
           "profile": "Complete your profile",
           "introduce": "Introduce yourself in chat",
           "challenge": "Submit your post link about the company",
-          "firstShare": "Share your order link with your audience"
+          "firstShare": "Share your contact link with your audience"
         },
         "complete": "Done"
       },
@@ -3318,11 +3342,13 @@
         "navAria": "Growth admin navigation",
         "jumpTo": "Jump to",
         "groupOperations": "Operations",
+        "groupCreatorArena": "Content creators",
         "groupCatalog": "Configuration",
         "groupPrograms": "Programs",
         "overview": "Overview",
         "deals": "Deals",
         "orders": "Client orders",
+        "contactOrders": "Contact requests",
         "payouts": "Payouts",
         "products": "Products",
         "badges": "Badges",
@@ -3403,6 +3429,7 @@
       },
       "creatorsPage": {
         "title": "Content creators program",
+        "contactOrdersLink": "Contact requests",
         "subtitle": "Grant Creator Arena lounge access to any partner — badge holders get access automatically.",
         "accessNote": "Lounge access does not change commissions, XP, or deals. Badge holders cannot be removed from the lounge until the badge is revoked.",
         "statBadge": "Badge holders",
@@ -3675,13 +3702,15 @@
         "closeRequest": "Close requested"
       },
       "orders": {
-        "title": "Client orders",
-        "subtitle": "Requests from /order — packages, features, and discount codes.",
+        "title": "Contact requests",
+        "subtitle": "Requests from the contact page — client, creator, discount code, and service type.",
         "empty": "No orders yet.",
         "review": "Mark reviewed",
         "reject": "Reject",
         "organic": "Direct order",
+        "pricePending": "TBD",
         "discountApplied": "{pct}% off · {code}",
+        "discountCodeOnly": "Code: {code}",
         "colProduct": "Package",
         "colCreator": "Creator",
         "colDate": "Date",

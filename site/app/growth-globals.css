@@ -1971,3 +1971,28 @@
     animation: none !important;
   }
 }
+
+/* Creator Arena V3 shell */
+.creator-arena-shell {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #080a10;
+}
+
+.creator-arena-chat-tab {
+  min-height: min(72dvh, 640px);
+}
+
+.creator-arena-chat-panel {
+  height: min(68dvh, 600px);
+}
+
+@media (max-width: 1023px) {
+  .creator-arena-chat-panel {
+    height: min(62dvh, calc(100dvh - 12rem - env(safe-area-inset-bottom)));
+    min-height: 320px;
+  }
+}
+
+.creator-arena-mobile-nav {
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.45);
+}

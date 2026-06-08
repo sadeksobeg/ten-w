@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { IconCheck } from "@/components/growth/icons/GrowthIcons";
+import type { CreatorLoungeSection } from "./CreatorLoungeLayout";
 
 export type CreatorOnboardingProgress = {
   profile: boolean;
@@ -14,16 +15,15 @@ export type CreatorOnboardingProgress = {
 
 type Props = {
   progress: CreatorOnboardingProgress;
-  onNavigate?: (section: "challenge" | "studio" | "home") => void;
+  onNavigate?: (section: CreatorLoungeSection) => void;
 };
 
-const STEPS: { key: keyof CreatorOnboardingProgress; section?: "challenge" | "studio" | "home" }[] =
-  [
-    { key: "profile" },
-    { key: "introduce", section: "home" },
-    { key: "challenge", section: "challenge" },
-    { key: "firstShare", section: "studio" },
-  ];
+const STEPS: { key: keyof CreatorOnboardingProgress; section?: CreatorLoungeSection }[] = [
+  { key: "profile" },
+  { key: "introduce", section: "chat" },
+  { key: "challenge", section: "challenge" },
+  { key: "firstShare", section: "toolkit" },
+];
 
 export function CreatorOnboardingChecklist({ progress, onNavigate }: Props) {
   const t = useTranslations("Growth.creators.onboarding");

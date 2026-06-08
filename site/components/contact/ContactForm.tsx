@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { LazyTurnstileField as TurnstileField } from "@/components/contact/LazyTurnstileField";
@@ -111,12 +111,23 @@ function buildSystemPrefillMessage(
   return `${prefix}\n${systemDesc}`;
 }
 
+const SERVICE_OPTIONS = [
+  "general",
+  "website",
+  "automation-ai",
+  "mobile-app",
+] as const;
+
+type ServiceOption = (typeof SERVICE_OPTIONS)[number];
+
 function ContactFormInner({ defaultIntent, defaultTopic }: Props) {
   const t = useTranslations("ContactPage.form");
+  const tDiscount = useTranslations("ContactPage.discount");
   const locale = useLocale();
   const searchParams = useSearchParams();
   const systemDesc = searchParams.get("system") ?? "";
   const systemType = searchParams.get("type") ?? "";
+  const initialCode = searchParams.get("code") ?? "";
   const prefillMessage = buildSystemPrefillMessage(locale, systemDesc);
   const resolvedTopic = defaultTopic ?? systemType;
   const [status, setStatus] = useState<
@@ -127,7 +138,46 @@ function ContactFormInner({ defaultIntent, defaultTopic }: Props) {
   );
   const [formKey, setFormKey] = useState(0);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [discountCode, setDiscountCode] = useState(initialCode);
+  const [codeStatus, setCodeStatus] = useState<
+    "idle" | "checking" | "valid" | "invalid"
+  >(initialCode ? "checking" : "idle");
+  const [creatorName, setCreatorName] = useState<string | null>(null);
+  const [serviceInterest, setServiceInterest] = useState<ServiceOption>("general");
   const turnstileRequired = Boolean(TURNSTILE_SITE_KEY);
+
+  const validateCode = useCallback(async (code: string) => {
+    const trimmed = code.trim();
+    if (!trimmed) {
+      setCodeStatus("idle");
+      setCreatorName(null);
+      return;
+    }
+    setCodeStatus("checking");
+    try {
+      const res = await fetch(
+        `/api/contact/validate-code?code=${encodeURIComponent(trimmed)}`,
+      );
+      const data = (await res.json()) as {
+        ok?: boolean;
+        creatorName?: string | null;
+      };
+      if (data.ok) {
+        setCodeStatus("valid");
+        setCreatorName(data.creatorName ?? null);
+      } else {
+        setCodeStatus("invalid");
+        setCreatorName(null);
+      }
+    } catch {
+      setCodeStatus("invalid");
+      setCreatorName(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (initialCode) void validateCode(initialCode);
+  }, [initialCode, validateCode]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -159,6 +209,9 @@ function ContactFormInner({ defaultIntent, defaultTopic }: Props) {
       message,
       intent: intent || undefined,
       topic: topic || undefined,
+      locale,
+      serviceInterest,
+      discountCode: discountCode.trim() || undefined,
       companyWebsite: String(fd.get("companyWebsite") ?? "").trim(),
       turnstileToken: turnstileToken || undefined,
     };
@@ -229,9 +282,23 @@ function ContactFormInner({ defaultIntent, defaultTopic }: Props) {
               transition: { duration: 0.38, ease: [0.4, 0, 0.2, 1] },
             }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="relative space-y-4 rounded-xl border border-white/10 bg-surface-elevated/80 p-6"
+            className="relative space-y-4 rounded-xl border border-white/10 bg-surface-elevated/80 p-4 sm:p-6"
             noValidate
           >
+            {codeStatus === "valid" ? (
+              <div className="rounded-lg border border-gold/30 bg-gold/10 px-4 py-3 text-sm text-gold">
+                {tDiscount("applied", {
+                  pct: 3,
+                  creator: creatorName ?? tDiscount("creatorFallback"),
+                })}
+              </div>
+            ) : null}
+            {codeStatus === "invalid" && discountCode.trim() ? (
+              <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs text-amber-200">
+                {tDiscount("invalidHint")}
+              </p>
+            ) : null}
+
             <input
               type="hidden"
               name="intent"
@@ -290,6 +357,55 @@ function ContactFormInner({ defaultIntent, defaultTopic }: Props) {
                 className="w-full rounded-md border border-white/15 bg-bg px-3 py-2 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-gold"
               />
             </div>
+
+            <div>
+              <label
+                htmlFor="serviceInterest"
+                className="mb-1 block text-sm font-medium"
+              >
+                {tDiscount("serviceLabel")}
+              </label>
+              <select
+                id="serviceInterest"
+                name="serviceInterest"
+                value={serviceInterest}
+                onChange={(e) =>
+                  setServiceInterest(e.target.value as ServiceOption)
+                }
+                className="w-full rounded-md border border-white/15 bg-bg px-3 py-2.5 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              >
+                {SERVICE_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {tDiscount(`services.${opt}`)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="discountCode"
+                className="mb-1 block text-sm font-medium"
+              >
+                {tDiscount("codeLabel")}
+              </label>
+              <input
+                id="discountCode"
+                name="discountCode"
+                value={discountCode}
+                onChange={(e) => {
+                  setDiscountCode(e.target.value.toUpperCase());
+                  void validateCode(e.target.value);
+                }}
+                placeholder={tDiscount("codePlaceholder")}
+                className="w-full rounded-md border border-white/15 bg-bg px-3 py-2 font-mono text-sm uppercase tracking-wider text-foreground outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                autoComplete="off"
+              />
+              <p className="mt-1 text-[11px] text-muted">
+                {tDiscount("codeHint")}
+              </p>
+            </div>
+
             <div>
               <label
                 htmlFor="message"
