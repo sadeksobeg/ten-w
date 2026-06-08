@@ -1,5 +1,10 @@
 import QRCode from "qrcode";
-import { drawWrappedRtlText } from "@/lib/invite/card-text-layout";
+import {
+  CARD_MESSAGE_MAX_WIDTH,
+  CARD_MESSAGE_RIGHT_X,
+  CARD_MESSAGE_START_Y,
+  drawWrappedRtlText,
+} from "@/lib/invite/card-text-layout";
 
 export type InviteCanvasInput = {
   name: string;
@@ -192,28 +197,44 @@ export async function generateInviteCardCanvas(input: InviteCanvasInput): Promis
   ctx.fillStyle = "rgba(201,146,42,0.15)";
   ctx.textAlign = "left";
   ctx.fillText("«", 80, 780);
-  ctx.textAlign = "right";
-  ctx.fillText("»", 1000, 900);
-  ctx.textAlign = "center";
 
   ctx.fillStyle = "rgba(245,240,232,0.85)";
   ctx.font = "26px Cairo, Arial, sans-serif";
-  drawWrappedRtlText(ctx, input.message.slice(0, 200), 540, 740, 800, 44);
+  const messageEndY = drawWrappedRtlText(
+    ctx,
+    input.message,
+    CARD_MESSAGE_RIGHT_X,
+    CARD_MESSAGE_START_Y,
+    CARD_MESSAGE_MAX_WIDTH,
+  );
 
-  const divider = ctx.createLinearGradient(200, 960, 880, 960);
+  ctx.font = "bold 100px Georgia, serif";
+  ctx.fillStyle = "rgba(201,146,42,0.15)";
+  ctx.textAlign = "right";
+  ctx.fillText("»", 1000, Math.max(900, messageEndY + 36));
+  ctx.textAlign = "center";
+
+  const dividerY = Math.max(960, messageEndY + 20);
+  const qrLabelY = dividerY + 80;
+  const qrBoxY = dividerY + 106;
+  const qrImageY = qrBoxY + 4;
+  const urlY = qrBoxY + 315;
+  const footerLineY = urlY + 95;
+
+  const divider = ctx.createLinearGradient(200, dividerY, 880, dividerY);
   divider.addColorStop(0, "transparent");
   divider.addColorStop(0.5, "#C9922A");
   divider.addColorStop(1, "transparent");
   ctx.strokeStyle = divider;
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(200, 960);
-  ctx.lineTo(880, 960);
+  ctx.moveTo(200, dividerY);
+  ctx.lineTo(880, dividerY);
   ctx.stroke();
 
   ctx.fillStyle = "#C9922A";
   ctx.font = "22px Cairo, Arial, sans-serif";
-  ctx.fillText("امسح للانضمام", 540, 1040);
+  ctx.fillText("امسح للانضمام", 540, qrLabelY);
 
   const qrCanvas = document.createElement("canvas");
   await QRCode.toCanvas(qrCanvas, input.inviteUrl, {
@@ -223,8 +244,8 @@ export async function generateInviteCardCanvas(input: InviteCanvasInput): Promis
   });
 
   const qrX = 400;
-  const qrY = 1070;
-  roundRect(ctx, qrX - 4, qrY - 4, 288, 288, 6);
+  const qrY = qrImageY;
+  roundRect(ctx, qrX - 4, qrBoxY - 4, 288, 288, 6);
   ctx.strokeStyle = "rgba(201,146,42,0.6)";
   ctx.lineWidth = 1.5;
   ctx.stroke();
@@ -233,27 +254,27 @@ export async function generateInviteCardCanvas(input: InviteCanvasInput): Promis
   const shortUrl = input.inviteUrl.replace(/^https?:\/\//, "");
   ctx.fillStyle = "rgba(201,146,42,0.6)";
   ctx.font = "18px JetBrains Mono, monospace";
-  ctx.fillText(shortUrl, 540, 1385);
+  ctx.fillText(shortUrl, 540, urlY);
 
   ctx.fillStyle = "rgba(201,146,42,0.5)";
   for (let i = 0; i < 5; i++) {
     const sx = 430 + i * 55;
-    drawStar(ctx, sx, 1450, 6);
+    drawStar(ctx, sx, urlY + 65, 6);
   }
 
   ctx.strokeStyle = "rgba(201,146,42,0.3)";
   ctx.beginPath();
-  ctx.moveTo(300, 1480);
-  ctx.lineTo(780, 1480);
+  ctx.moveTo(300, footerLineY);
+  ctx.lineTo(780, footerLineY);
   ctx.stroke();
 
   ctx.fillStyle = "rgba(201,146,42,0.8)";
   ctx.font = "24px Cairo, Arial, sans-serif";
-  ctx.fillText("tenegta.com", 540, 1540);
+  ctx.fillText("tenegta.com", 540, footerLineY + 60);
 
   ctx.fillStyle = "rgba(201,146,42,0.4)";
   ctx.font = "16px Cairo, Arial, sans-serif";
-  ctx.fillText("ASCEND · PARTNER NETWORK · 2026", 540, 1580);
+  ctx.fillText("ASCEND · PARTNER NETWORK · 2026", 540, footerLineY + 100);
 
   ctx.strokeStyle = "rgba(201,146,42,0.2)";
   ctx.beginPath();

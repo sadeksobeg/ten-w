@@ -1,4 +1,9 @@
-import { wrapTextLinesEstimated } from "@/lib/invite/card-text-layout";
+import {
+  CARD_MESSAGE_MAX_WIDTH,
+  CARD_MESSAGE_RIGHT_X,
+  CARD_MESSAGE_START_Y,
+  layoutCardMessageLines,
+} from "@/lib/invite/card-text-layout";
 
 function escapeXml(value: string): string {
   return value
@@ -25,10 +30,27 @@ export function buildLuxuryCardSvg(input: LuxuryCardInput, qrDataUrl: string): s
   const tier = escapeXml(input.tier.toUpperCase());
   const token = escapeXml(input.token);
   const url = escapeXml(input.inviteUrl.replace(/^https?:\/\//, ""));
-  const rawMessage = (input.message ?? input.scope).slice(0, 200);
-  const messageLines = wrapTextLinesEstimated(rawMessage, 800, 26);
+  const rawMessage = input.message ?? input.scope;
+  const { lines: messageLines, fontSize: messageFontSize, lineHeight } = layoutCardMessageLines(
+    rawMessage,
+    CARD_MESSAGE_MAX_WIDTH,
+  );
+  const messageStartY = CARD_MESSAGE_START_Y;
+  const messageEndY = messageStartY + (messageLines.length - 1) * lineHeight;
+  const closeQuoteY = Math.max(900, messageEndY + 36);
+  const dividerY = Math.max(940, messageEndY + 52);
+  const qrLabelY = dividerY + 80;
+  const qrBoxY = dividerY + 106;
+  const qrImageY = qrBoxY + 4;
+  const urlY = qrBoxY + 315;
+  const footerLineY = urlY + 95;
+  const footerBrandY = urlY + 155;
+  const footerMetaY = urlY + 195;
   const messageSvg = messageLines
-    .map((line, i) => `<tspan x="540" y="${740 + i * 44}">${escapeXml(line)}</tspan>`)
+    .map(
+      (line, i) =>
+        `<tspan x="${CARD_MESSAGE_RIGHT_X}" y="${messageStartY + i * lineHeight}">${escapeXml(line)}</tspan>`,
+    )
     .join("\n    ");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -82,20 +104,20 @@ export function buildLuxuryCardSvg(input: LuxuryCardInput, qrDataUrl: string): s
   <text x="540" y="620" text-anchor="middle" fill="rgba(201,146,42,0.8)" font-family="monospace" font-size="20">◆  ${token}  ◆</text>
 
   <text x="80" y="780" fill="rgba(201,146,42,0.15)" font-family="Georgia, serif" font-size="100" font-weight="700">«</text>
-  <text x="1000" y="900" text-anchor="end" fill="rgba(201,146,42,0.15)" font-family="Georgia, serif" font-size="100" font-weight="700">»</text>
-  <text x="540" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" fill="rgba(245,240,232,0.85)" font-family="Cairo, Arial, sans-serif" font-size="26">
+  <text x="1000" y="${closeQuoteY}" text-anchor="end" fill="rgba(201,146,42,0.15)" font-family="Georgia, serif" font-size="100" font-weight="700">»</text>
+  <text x="${CARD_MESSAGE_RIGHT_X}" text-anchor="end" direction="rtl" unicode-bidi="plaintext" fill="rgba(245,240,232,0.85)" font-family="Cairo, Arial, sans-serif" font-size="${messageFontSize}">
     ${messageSvg}
   </text>
 
-  <line x1="200" y1="960" x2="880" y2="960" stroke="rgba(201,146,42,0.5)" stroke-width="1"/>
-  <text x="540" y="1040" text-anchor="middle" fill="#C9922A" font-family="Cairo, Arial, sans-serif" font-size="22">امسح للانضمام</text>
+  <line x1="200" y1="${dividerY}" x2="880" y2="${dividerY}" stroke="rgba(201,146,42,0.5)" stroke-width="1"/>
+  <text x="540" y="${qrLabelY}" text-anchor="middle" fill="#C9922A" font-family="Cairo, Arial, sans-serif" font-size="22">امسح للانضمام</text>
 
-  <rect x="396" y="1066" width="288" height="288" rx="6" fill="none" stroke="rgba(201,146,42,0.6)" stroke-width="1.5"/>
-  <image href="${qrDataUrl}" x="400" y="1070" width="280" height="280"/>
+  <rect x="396" y="${qrBoxY}" width="288" height="288" rx="6" fill="none" stroke="rgba(201,146,42,0.6)" stroke-width="1.5"/>
+  <image href="${qrDataUrl}" x="400" y="${qrImageY}" width="280" height="280"/>
 
-  <text x="540" y="1385" text-anchor="middle" fill="rgba(201,146,42,0.6)" font-family="monospace" font-size="18">${url}</text>
-  <line x1="300" y1="1480" x2="780" y2="1480" stroke="rgba(201,146,42,0.3)" stroke-width="1"/>
-  <text x="540" y="1540" text-anchor="middle" fill="rgba(201,146,42,0.8)" font-family="Cairo, Arial, sans-serif" font-size="24">tenegta.com</text>
-  <text x="540" y="1580" text-anchor="middle" fill="rgba(201,146,42,0.4)" font-family="Cairo, Arial, sans-serif" font-size="16">ASCEND · PARTNER NETWORK · 2026</text>
+  <text x="540" y="${urlY}" text-anchor="middle" fill="rgba(201,146,42,0.6)" font-family="monospace" font-size="18">${url}</text>
+  <line x1="300" y1="${footerLineY}" x2="780" y2="${footerLineY}" stroke="rgba(201,146,42,0.3)" stroke-width="1"/>
+  <text x="540" y="${footerBrandY}" text-anchor="middle" fill="rgba(201,146,42,0.8)" font-family="Cairo, Arial, sans-serif" font-size="24">tenegta.com</text>
+  <text x="540" y="${footerMetaY}" text-anchor="middle" fill="rgba(201,146,42,0.4)" font-family="Cairo, Arial, sans-serif" font-size="16">ASCEND · PARTNER NETWORK · 2026</text>
 </svg>`;
 }
