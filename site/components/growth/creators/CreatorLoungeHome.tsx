@@ -8,8 +8,8 @@ import { CreatorFeaturedSpotlight, type CreatorFeaturedCreator } from "./Creator
 import { CreatorLoungeChat } from "./CreatorLoungeChat";
 import { CreatorOnboardingChecklist, type CreatorOnboardingProgress } from "./CreatorOnboardingChecklist";
 import { CreatorProfileDrawer } from "./CreatorProfileDrawer";
-import { CreatorSalesGuidePanel } from "./CreatorSalesGuidePanel";
-import type { CreatorPulseStats } from "@/lib/growth/creator-arena";
+import { CreatorWeeklyTracker } from "./CreatorWeeklyTracker";
+import type { CreatorChallengeView, CreatorPulseStats } from "@/lib/growth/creator-arena";
 
 export type CreatorSubmissionPreview = {
   id: string;
@@ -30,19 +30,16 @@ type ChatViewer = {
   avatarPreset?: string | null;
 };
 
-type SalesProduct = { slug: string; name: string; priceCents: number };
-
 type Props = {
   locale: string;
   isRoomMember: boolean;
   viewer: ChatViewer;
   pulse: CreatorPulseStats;
+  challenge: CreatorChallengeView | null;
+  viewerRank?: number | null;
   featuredCreator: CreatorFeaturedCreator | null;
   recentSubmissions: CreatorSubmissionPreview[];
   onboarding: CreatorOnboardingProgress;
-  clientDiscountCode?: string | null;
-  commissionPercent?: string;
-  salesProducts?: SalesProduct[];
   onNavigate?: (section: "challenge" | "studio" | "home") => void;
   onChallengeCreator?: (creator: CreatorFeaturedCreator) => void;
 };
@@ -52,12 +49,11 @@ export function CreatorLoungeHome({
   isRoomMember,
   viewer,
   pulse,
+  challenge,
+  viewerRank,
   featuredCreator,
   recentSubmissions,
   onboarding,
-  clientDiscountCode = null,
-  commissionPercent = "10%",
-  salesProducts = [],
   onNavigate,
   onChallengeCreator,
 }: Props) {
@@ -66,17 +62,15 @@ export function CreatorLoungeHome({
 
   return (
     <div className="space-y-4">
+      <CreatorWeeklyTracker
+        challenge={challenge}
+        viewerRank={viewerRank}
+        onGoChallenge={onNavigate ? () => onNavigate("challenge") : undefined}
+      />
+
       <CreatorOnboardingChecklist progress={onboarding} onNavigate={onNavigate} />
 
-      {salesProducts.length > 0 ? (
-        <CreatorSalesGuidePanel
-          clientDiscountCode={clientDiscountCode}
-          commissionPercent={commissionPercent}
-          products={salesProducts}
-        />
-      ) : null}
-
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <CreatorPulsePanel pulse={pulse} />
         <CreatorFeaturedSpotlight
           creator={featuredCreator}

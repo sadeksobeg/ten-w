@@ -30,7 +30,13 @@ export function CreatorChallengePanel({ challenge }: Props) {
 
       {challenge.hasSubmitted ? (
         <div className="mt-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3">
-          <p className="text-xs font-semibold text-emerald-100">{t("challengeSubmitted")}</p>
+          <p className="text-xs font-semibold text-emerald-100">
+            {challenge.submissionStatus?.toLowerCase() === "approved"
+              ? t("challengeApproved")
+              : challenge.submissionStatus?.toLowerCase() === "rejected"
+                ? t("challengeRejected")
+                : t("challengeSubmitted")}
+          </p>
           {challenge.submissionUrl ? (
             <a
               href={challenge.submissionUrl}

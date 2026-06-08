@@ -9,9 +9,7 @@ export type CreatorOnboardingProgress = {
   profile: boolean;
   introduce: boolean;
   challenge: boolean;
-  studio: boolean;
   firstShare: boolean;
-  orderLink: boolean;
 };
 
 type Props = {
@@ -24,8 +22,6 @@ const STEPS: { key: keyof CreatorOnboardingProgress; section?: "challenge" | "st
     { key: "profile" },
     { key: "introduce", section: "home" },
     { key: "challenge", section: "challenge" },
-    { key: "studio", section: "studio" },
-    { key: "orderLink", section: "studio" },
     { key: "firstShare", section: "studio" },
   ];
 

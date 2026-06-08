@@ -9,7 +9,7 @@ import { StudioFinalCta } from "@/components/creators/StudioFinalCta";
 
 const EXPERIENCES = [
   { key: "order", href: "/order" },
-  { key: "cinema", href: "/demo/cinema?presenter=1" },
+  { key: "lounge", href: "/growth/creators" },
   { key: "ascend", href: "/ascend" },
 ] as const;
 
@@ -38,8 +38,8 @@ export async function CreatorStudioLanding() {
                 className={`group block rounded-2xl border border-white/10 bg-gradient-to-br ${
                   exp.key === "order"
                     ? "from-gold/15"
-                    : exp.key === "cinema"
-                      ? "from-rose-500/20"
+                    : exp.key === "lounge"
+                      ? "from-emerald-500/15"
                       : "from-purple-500/20"
                 } to-transparent p-6 transition hover:border-gold/35`}
               >

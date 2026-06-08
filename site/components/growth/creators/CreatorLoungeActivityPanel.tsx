@@ -137,7 +137,7 @@ export function CreatorLoungeActivityPanel({ pulse, statusCards, className = "" 
           </div>
           <div className="rounded-lg border border-white/10 bg-black/25 px-3 py-2 text-center">
             <p className="text-lg font-black text-white">{pulse.activeChallenges}</p>
-            <p className="text-[9px] uppercase tracking-wide text-white/45">{t("submissionsStat")}</p>
+            <p className="text-[9px] uppercase tracking-wide text-white/45">{t("missionStat")}</p>
           </div>
         </div>
       </GlassCard>

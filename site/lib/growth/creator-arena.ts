@@ -135,24 +135,48 @@ async function notifyCreatorsNewChallenge(weekKey: string) {
   );
 }
 
+const DEFAULT_WEEKLY_CHALLENGE = {
+  titleAr: "انشر محتوى عن ASCEND هذا الأسبوع",
+  titleEn: "Post ASCEND content this week",
+  titleFr: "Publiez du contenu ASCEND cette semaine",
+  bodyAr:
+    "صوّر أو اكتب عن تجربة ASCEND — الترتيب، المعارك، أو غرفة الصنّاع. ارفع رابط المنشور خلال 48 ساعة = +500 XP.",
+  bodyEn:
+    "Film or write about ASCEND — leaderboard, battles, or the creator lounge. Post your link within 48h for +500 XP.",
+  bodyFr:
+    "Filmez ou écrivez sur ASCEND — classement, batailles ou lounge créateurs. Publiez le lien sous 48h pour +500 XP.",
+  xpReward: 500,
+} as const;
+
+const CINEMA_CHALLENGE_MARKERS = /cinema|سينما|تذكرة|ticket/i;
+
+function isStaleCinemaChallenge(row: {
+  titleAr: string;
+  titleEn: string;
+  bodyAr: string;
+  bodyEn: string;
+}) {
+  const blob = `${row.titleAr} ${row.titleEn} ${row.bodyAr} ${row.bodyEn}`;
+  return CINEMA_CHALLENGE_MARKERS.test(blob);
+}
+
 export async function ensureWeeklyChallenge(weekKey = currentWeekKey()) {
   const existing = await prisma.creatorChallenge.findUnique({ where: { weekKey } });
-  if (existing) return existing;
+  if (existing) {
+    if (isStaleCinemaChallenge(existing)) {
+      return prisma.creatorChallenge.update({
+        where: { weekKey },
+        data: { ...DEFAULT_WEEKLY_CHALLENGE, active: true },
+      });
+    }
+    return existing;
+  }
 
   const { startsAt, endsAt } = weekBounds(weekKey);
   const created = await prisma.creatorChallenge.create({
     data: {
       weekKey,
-      titleAr: "انشر محتوى عن ASCEND هذا الأسبوع",
-      titleEn: "Post ASCEND content this week",
-      titleFr: "Publiez du contenu ASCEND cette semaine",
-      bodyAr:
-        "صوّر أو اكتب عن تجربة ASCEND — الترتيب، المعارك، أو غرفة الصنّاع. ارفع رابط المنشور خلال 48 ساعة = +500 XP.",
-      bodyEn:
-        "Film or write about ASCEND — leaderboard, battles, or the creator lounge. Post your link within 48h for +500 XP.",
-      bodyFr:
-        "Filmez ou écrivez sur ASCEND — classement, batailles ou lounge créateurs. Publiez le lien sous 48h pour +500 XP.",
-      xpReward: 500,
+      ...DEFAULT_WEEKLY_CHALLENGE,
       active: true,
       startsAt,
       endsAt,

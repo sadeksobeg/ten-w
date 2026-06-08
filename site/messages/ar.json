@@ -642,9 +642,9 @@
           "title": "صفحة طلب العملاء",
           "body": "اعرض كيف يختار العميل الباقة والميزات — رابطك يحمل كود الحسم."
         },
-        "cinema": {
-          "title": "Cinema OS — وضع المقدّم",
-          "body": "تجربة سينمائية جاهزة للتصوير بدون عناصر تحكم مشتّتة."
+        "lounge": {
+          "title": "غرفة الصنّاع",
+          "body": "تحديات أسبوعية، ترتيب، ومعارك — محتوى حي للتصوير والمشاركة."
         },
         "ascend": {
           "title": "منصة ASCEND",
@@ -2691,18 +2691,15 @@
         "posts": "منشورات هذا الأسبوع"
       },
       "kitTitle": "حقيبة الصانع",
-      "kitSubtitle": "روابط وأدوات مشاركة جاهزة.",
+      "kitSubtitle": "روابط تسويق جاهزة — انسخ وشارك.",
       "kit": {
         "copyError": "تعذّر النسخ",
         "orderPage": "صفحة طلب العملاء",
-        "studio": "استوديو الصنّاع",
-        "invite": "بطاقة دعوتك",
-        "visualizer": "مولّد الهوية",
-        "profile": "بروفايلك العام",
-        "toolLinks": "أدواتك",
-        "hashtags": "#TENEGTA · #Ascend · #صعود",
-        "copyStudioLink": "انسخ رابط الاستوديو مع UTM",
-        "linkCopied": "تم نسخ رابط الاستوديو"
+        "studio": "استوديو الصنّاع العام",
+        "lounge": "غرفة الصنّاع",
+        "profile": "إعدادات حسابك",
+        "toolLinks": "روابط سريعة",
+        "hashtags": "#TENEGTA · #Ascend · #صعود"
       },
       "salesGuide": {
         "eyebrow": "دليل التسويق",
@@ -2733,6 +2730,8 @@
       "challengeEyebrow": "تحدي الأسبوع",
       "challengeReward": "+{xp} XP عند الاعتماد",
       "challengeSubmitted": "تم استلام الرابط — بانتظار مراجعة الإدارة.",
+      "challengeApproved": "منشورك معتمد هذا الأسبوع — أحسنت!",
+      "challengeRejected": "لم يُقبل المنشور — جرّب رابطاً آخر أو تواصل مع الإدارة.",
       "challengeUrlLabel": "رابط المنشور",
       "challengeSubmit": "إرسال التحدي",
       "challengeSubmitting": "جاري الإرسال…",
@@ -2774,7 +2773,20 @@
         "activityOnline": "{count} متصل",
         "weekStats": "هذا الأسبوع",
         "postsStat": "منشورات",
-        "submissionsStat": "مهام",
+        "missionStat": "تحدي نشط",
+        "tracker": {
+          "eyebrow": "مهمتك هذا الأسبوع",
+          "noChallenge": "لا يوجد تحدي نشط حالياً",
+          "hint": "انشر محتوى عن TENEGTA أو ASCEND وأرسل الرابط لتسجّل مشاركتك وتنافس على الترتيب.",
+          "yourRank": "ترتيبك",
+          "cta": "أرسل منشورك الآن",
+          "status": {
+            "none": "لم تنشر بعد",
+            "pending": "بانتظار المراجعة",
+            "approved": "منشور معتمد",
+            "rejected": "يحتاج تعديل"
+          }
+        },
         "activityFeed": {
           "joined": "{name} انضم للغرفة",
           "submitted": "{name} أرسل تحدياً",
@@ -2806,15 +2818,9 @@
           "lost": "خسارة",
           "pending": "جارية"
         },
-        "studioTitle": "أدوات الصانع",
-        "studioSubtitle": "صوّر، شارك، وتتبّع — من الغرفة مباشرة.",
-        "utmTitle": "رابط UTM للتتبع",
-        "resourcesTitle": "مكتبة الموارد",
-        "resources": {
-          "brand": "دليل الهوية",
-          "utm": "دليل UTM",
-          "hashtags": "حزمة الهاشتاغ"
-        },
+        "studioTitle": "أدوات التسويق",
+        "studioSubtitle": "انسخ رابط الطلب وشاركه — كل الروابط تعمل مباشرة.",
+        "studioHint": "استخدم صفحة الطلب مع كود الحسم في محتواك. العمولة تبدأ من 10% وتزداد مع نشاطك.",
         "achievementsTitle": "الإنجازات والمعالم",
         "achievementsSubtitle": "الشارات والمعالم في برنامج الصنّاع.",
         "milestonesTitle": "معالم",
@@ -2837,10 +2843,8 @@
         "steps": {
           "profile": "أكمل ملفك الشخصي",
           "introduce": "قدّم نفسك في الدردشة",
-          "challenge": "اطّلع على تحدي الأسبوع",
-          "studio": "جرّب أدوات الاستوديو (UTM / إطار ستوري)",
-          "orderLink": "انسخ رابط الطلب وكود الحسم",
-          "firstShare": "شارك رابطك الأول"
+          "challenge": "أرسل رابط منشورك عن الشركة",
+          "firstShare": "شارك رابط الطلب مع جمهورك"
         },
         "complete": "تم"
       },

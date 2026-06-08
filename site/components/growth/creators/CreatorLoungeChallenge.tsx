@@ -58,7 +58,7 @@ export function CreatorLoungeChallenge({ challenge, cupPreview, myUserId }: Prop
         <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-rose-300/80">
           {t("challengeHero")}
         </p>
-        <h2 className="mt-2 font-[family-name:var(--font-cairo)] text-xl font-extrabold text-white">
+        <h2 className="mt-2 font-[family-name:var(--font-cairo)] text-lg font-extrabold leading-snug text-white sm:text-xl">
           {challenge.title}
         </h2>
         <p className="mt-2 text-xs text-white/60">

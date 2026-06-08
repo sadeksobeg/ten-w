@@ -99,7 +99,7 @@ export function CreatorLoungeMobileTabs({
 
   return (
     <nav
-      className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden"
+      className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden"
       aria-label={t("mobileNavAria")}
     >
       {NAV_ITEMS.map((item) => {
@@ -116,7 +116,7 @@ export function CreatorLoungeMobileTabs({
             key={item.id}
             type="button"
             onClick={() => onNavigate(item.id)}
-            className={`flex min-h-10 shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-bold transition ${
+            className={`flex min-h-10 shrink-0 snap-start items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-bold transition ${
               isActive
                 ? "bg-gold text-black shadow-[0_0_16px_rgba(228,184,77,0.3)]"
                 : "border border-white/15 text-white/70"

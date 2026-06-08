@@ -622,7 +622,7 @@
       "openExperience": "Ouvrir la page →",
       "experiences": {
         "order": { "title": "Page de commande client", "body": "Montrez comment le client choisit l'offre — votre lien inclut le code." },
-        "cinema": { "title": "Cinema OS — mode présentateur", "body": "Démo cinéma prête à filmer sans contrôles distrayants." },
+        "lounge": { "title": "Creator Lounge", "body": "Défis hebdo, classement et duels — contenu live à filmer et partager." },
         "ascend": { "title": "Plateforme ASCEND", "body": "Découvrez le système partenaire — rangs, duels et commissions." }
       },
       "privateRoomHint": "Les créateurs badge accèdent au salon privé ASCEND.",
@@ -2686,24 +2686,15 @@
       "pulseSubtitle": "Stats live de l'arène.",
       "pulse": { "online": "Dans le salon", "challenges": "Missions actives", "posts": "Posts cette semaine" },
       "kitTitle": "Kit créateur",
-      "kitSubtitle": "Script, liens de tournage, hashtags.",
+      "kitSubtitle": "Liens marketing prêts — copiez et partagez.",
       "kit": {
-        "scriptLabel": "Script 75s",
-        "scriptBody": "0–5s: Carte d'invitation\n5–25s: Cinema OS → billet\n25–40s: Ascend\n40–55s: Creator Lounge\n55–75s: tenegta.com/creators/studio + #TENEGTA",
-        "copyScript": "Copier le script",
-        "scriptCopied": "Copié",
         "copyError": "Échec de copie",
-        "filmLinks": "Filmez ceci",
         "orderPage": "Page de commande client",
-        "studio": "Studio créateur",
-        "cinema": "Cinema OS (mode présentateur)",
-        "invite": "Carte d'invitation",
-        "visualizer": "Visualiseur IA",
-        "profile": "Paramètres du profil",
-        "toolLinks": "Outils rapides",
-        "hashtags": "#TENEGTA #ASCEND #CreatorArena",
-        "copyStudioLink": "Copier le lien studio (UTM)",
-        "linkCopied": "Lien studio copié"
+        "studio": "Studio créateur public",
+        "lounge": "Creator Lounge",
+        "profile": "Paramètres du compte",
+        "toolLinks": "Liens rapides",
+        "hashtags": "#TENEGTA #ASCEND #CreatorArena"
       },
       "salesGuide": {
         "eyebrow": "Guide commercial",
@@ -2734,6 +2725,8 @@
       "challengeEyebrow": "Mission hebdo",
       "challengeReward": "+{xp} XP si approuvé",
       "challengeSubmitted": "Soumission reçue — revue admin.",
+      "challengeApproved": "Votre post est approuvé cette semaine — bravo !",
+      "challengeRejected": "Post non accepté — essayez un autre lien ou contactez l'admin.",
       "challengeUrlLabel": "URL du post",
       "challengeSubmit": "Soumettre",
       "challengeSubmitting": "Envoi…",
@@ -2775,7 +2768,20 @@
         "activityOnline": "{count} en ligne",
         "weekStats": "Cette semaine",
         "postsStat": "Posts",
-        "submissionsStat": "Missions",
+        "missionStat": "Mission active",
+        "tracker": {
+          "eyebrow": "Votre mission cette semaine",
+          "noChallenge": "Pas de défi actif pour le moment",
+          "hint": "Publiez sur TENEGTA ou ASCEND et envoyez le lien pour entrer au classement.",
+          "yourRank": "Votre rang",
+          "cta": "Soumettre votre post",
+          "status": {
+            "none": "Pas encore publié",
+            "pending": "En attente de revue",
+            "approved": "Post approuvé",
+            "rejected": "À corriger"
+          }
+        },
         "activityFeed": {
           "joined": "{name} a rejoint le salon",
           "submitted": "{name} a soumis un défi",
@@ -2807,15 +2813,9 @@
           "lost": "Perdu",
           "pending": "En cours"
         },
-        "studioTitle": "Outils créateur",
-        "studioSubtitle": "Filmez, partagez et suivez — depuis le salon.",
-        "utmTitle": "Lien UTM de suivi",
-        "resourcesTitle": "Bibliothèque de ressources",
-        "resources": {
-          "brand": "Guide de marque",
-          "utm": "Guide UTM",
-          "hashtags": "Kit hashtags"
-        },
+        "studioTitle": "Outils marketing",
+        "studioSubtitle": "Copiez votre lien de commande et partagez — tous les liens fonctionnent.",
+        "studioHint": "Utilisez la page de commande avec votre code dans votre contenu. Commission à partir de 10%, qui augmente avec votre activité.",
         "achievementsTitle": "Succès et jalons",
         "achievementsSubtitle": "Badges et jalons du programme créateurs.",
         "milestonesTitle": "Jalons",
@@ -2838,10 +2838,8 @@
         "steps": {
           "profile": "Complétez votre profil",
           "introduce": "Présentez-vous dans le chat",
-          "challenge": "Consultez le défi de la semaine",
-          "studio": "Essayez les outils studio (UTM / story frame)",
-          "orderLink": "Copiez votre lien de commande et code de réduction",
-          "firstShare": "Partagez votre premier lien"
+          "challenge": "Soumettez le lien de votre post sur l'entreprise",
+          "firstShare": "Partagez votre lien de commande avec votre audience"
         },
         "complete": "Fait"
       },

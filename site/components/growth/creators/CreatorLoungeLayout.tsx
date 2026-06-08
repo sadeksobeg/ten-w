@@ -157,8 +157,6 @@ export function CreatorLoungeLayout({
     profile: Boolean(publicSlug),
     introduce: isRoomMember,
     challenge: Boolean(challenge?.hasSubmitted),
-    studio: Boolean(publicSlug),
-    orderLink: Boolean(clientDiscountCode),
     firstShare: Boolean(challenge?.submissionUrl),
   };
 
@@ -173,12 +171,11 @@ export function CreatorLoungeLayout({
             isRoomMember={isRoomMember}
             viewer={viewer}
             pulse={pulse}
+            challenge={challenge}
+            viewerRank={viewerRank}
             featuredCreator={featuredCreator}
             recentSubmissions={recentSubmissions}
             onboarding={onboarding}
-            clientDiscountCode={clientDiscountCode}
-            commissionPercent={commissionPercent}
-            salesProducts={salesProducts}
             onNavigate={(s) => setSection(s)}
             onChallengeCreator={setChallengeDrawer}
           />
@@ -200,8 +197,6 @@ export function CreatorLoungeLayout({
       case "studio":
         return (
           <CreatorLoungeStudio
-            publicSlug={publicSlug}
-            plannedDays={plannedDays}
             clientDiscountCode={clientDiscountCode}
             commissionPercent={commissionPercent}
             salesProducts={salesProducts}
@@ -270,7 +265,7 @@ export function CreatorLoungeLayout({
         />
         <ParticleEffect className="pointer-events-none absolute inset-0 opacity-30 sm:opacity-40" />
 
-        <div className="relative z-10 px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
+        <div className="relative z-10 mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
           <div className="mb-4 text-center sm:mb-6">
             <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.28em] text-gold/80 sm:text-xs">
               {t("eyebrow")}

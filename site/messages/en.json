@@ -619,9 +619,9 @@
           "title": "Client order page",
           "body": "Show how clients pick packages and features — your link carries the discount code."
         },
-        "cinema": {
-          "title": "Cinema OS — presenter mode",
-          "body": "Cinematic demo ready to film without distracting controls."
+        "lounge": {
+          "title": "Creator Lounge",
+          "body": "Weekly challenges, leaderboard, and battles — live content to film and share."
         },
         "ascend": {
           "title": "ASCEND platform",
@@ -2740,24 +2740,15 @@
         "posts": "Posts this week"
       },
       "kitTitle": "Creator Kit",
-      "kitSubtitle": "Script, film links, hashtags — copy and shoot.",
+      "kitSubtitle": "Ready marketing links — copy and share.",
       "kit": {
-        "scriptLabel": "75s video script",
-        "scriptBody": "0–5s: Invite card — «This is not just an invite, it's a gateway.»\n5–25s: Cinema OS — movies → 3D seats → ticket.\n25–40s: Ascend / Growth — rank, battles, network.\n40–55s: Creator Lounge — challenges, leaderboard, resources.\n55–75s: CTA — tenegta.com/creators/studio + #TENEGTA",
-        "copyScript": "Copy script",
-        "scriptCopied": "Script copied",
         "copyError": "Could not copy",
-        "filmLinks": "Film these",
         "orderPage": "Client order page",
-        "studio": "Creator Studio hub",
-        "cinema": "Cinema OS (presenter mode)",
-        "invite": "Cinematic invite card",
-        "visualizer": "AI system visualizer",
-        "profile": "Partner profile settings",
-        "toolLinks": "Quick tools",
-        "hashtags": "#TENEGTA #ASCEND #CreatorArena",
-        "copyStudioLink": "Copy studio link with UTM",
-        "linkCopied": "Studio link copied"
+        "studio": "Public creator studio",
+        "lounge": "Creator Lounge",
+        "profile": "Account settings",
+        "toolLinks": "Quick links",
+        "hashtags": "#TENEGTA #ASCEND #CreatorArena"
       },
       "salesGuide": {
         "eyebrow": "Sales guide",
@@ -2788,6 +2779,8 @@
       "challengeEyebrow": "Weekly mission",
       "challengeReward": "+{xp} XP when approved",
       "challengeSubmitted": "Submission received — admin review pending.",
+      "challengeApproved": "Your post is approved this week — great job!",
+      "challengeRejected": "Post not accepted — try another link or contact admin.",
       "challengeUrlLabel": "Post URL (Reels / TikTok / Shorts)",
       "challengeSubmit": "Submit challenge",
       "challengeSubmitting": "Submitting…",
@@ -2829,7 +2822,20 @@
         "activityOnline": "{count} online",
         "weekStats": "This week",
         "postsStat": "Posts",
-        "submissionsStat": "Missions",
+        "missionStat": "Active mission",
+        "tracker": {
+          "eyebrow": "Your mission this week",
+          "noChallenge": "No active challenge right now",
+          "hint": "Post about TENEGTA or ASCEND and submit your link to compete on the leaderboard.",
+          "yourRank": "Your rank",
+          "cta": "Submit your post",
+          "status": {
+            "none": "Not posted yet",
+            "pending": "Awaiting review",
+            "approved": "Post approved",
+            "rejected": "Needs revision"
+          }
+        },
         "activityFeed": {
           "joined": "{name} joined the lounge",
           "submitted": "{name} submitted a challenge",
@@ -2861,15 +2867,9 @@
           "lost": "Lost",
           "pending": "Active"
         },
-        "studioTitle": "Creator tools",
-        "studioSubtitle": "Film, share, and track — all from the lounge.",
-        "utmTitle": "UTM tracking link",
-        "resourcesTitle": "Resource library",
-        "resources": {
-          "brand": "Brand guidelines",
-          "utm": "UTM guide",
-          "hashtags": "Hashtag kit"
-        },
+        "studioTitle": "Marketing tools",
+        "studioSubtitle": "Copy your order link and share — every link works directly.",
+        "studioHint": "Use the order page with your discount code in your content. Commission starts at 10% and grows with your activity.",
         "achievementsTitle": "Achievements & milestones",
         "achievementsSubtitle": "Badges and milestones earned in the creator program.",
         "milestonesTitle": "Milestones",
@@ -2892,10 +2892,8 @@
         "steps": {
           "profile": "Complete your profile",
           "introduce": "Introduce yourself in chat",
-          "challenge": "Check this week's challenge",
-          "studio": "Try studio tools (UTM / story frame)",
-          "orderLink": "Copy your order link and discount code",
-          "firstShare": "Share your first link"
+          "challenge": "Submit your post link about the company",
+          "firstShare": "Share your order link with your audience"
         },
         "complete": "Done"
       },

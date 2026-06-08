@@ -67,8 +67,8 @@ export function CreatorSalesGuidePanel({
         </h2>
         <p className="mt-2 text-xs leading-relaxed text-white/60">{t("intro")}</p>
 
-        <div className="mt-4 overflow-hidden rounded-xl border border-white/10">
-          <table className="w-full text-xs">
+        <div className="mt-4 overflow-x-auto rounded-xl border border-white/10">
+          <table className="w-full min-w-[280px] text-xs">
             <thead>
               <tr className="border-b border-white/10 bg-white/[0.04] text-[10px] uppercase tracking-wide text-white/45">
                 <th className="px-3 py-2 text-start font-bold">{t("colProduct")}</th>
