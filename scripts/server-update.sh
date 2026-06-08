@@ -49,6 +49,9 @@ npm run check:env
 
 bash "$REPO/scripts/server-prisma.sh"
 
+echo "==> order flow (migrate + public products + discount codes)"
+bash "$REPO/scripts/server-order-flow-setup.sh" || echo "WARNING: order-flow setup failed — run: bash scripts/server-order-flow-setup.sh"
+
 echo "==> growth schema repair (events, coverImage column, notifications)"
 bash "$REPO/scripts/server-repair-growth-0003.sh" --force || echo "WARNING: growth repair failed — check site/.env DATABASE_URL"
 
