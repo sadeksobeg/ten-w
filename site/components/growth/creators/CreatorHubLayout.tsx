@@ -356,7 +356,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
           </div>
 
           <nav
-            className="creator-arena-mobile-nav fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[var(--creator-surface)]/98 backdrop-blur-xl lg:hidden"
+            className="creator-arena-mobile-nav fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[var(--creator-surface)]/98 backdrop-blur-xl lg:hidden"
             style={{ paddingBottom: "max(env(safe-area-inset-bottom), 4px)" }}
             aria-label={tNav("mobileNav")}
           >

@@ -103,6 +103,8 @@ export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProg
 
   const mobileKeys = showCreatorsProgram ? MOBILE_KEYS_WITH_CREATORS : MOBILE_KEYS_BASE;
   const mobileNav = navItems.filter((n) => (mobileKeys as readonly string[]).includes(n.key));
+  const isCreatorHub =
+    pathname === "/growth/creators" || pathname.endsWith("/growth/creators");
 
   return (
     <>
@@ -127,6 +129,7 @@ export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProg
         })}
       </nav>
       <div className="growth-page-wrap growth-mobile-pad growth-stack">{children}</div>
+      {!isCreatorHub ? (
       <nav className="growth-partner-nav-mobile" aria-label={t("mobileNavAria")}>
         {mobileNav.map((item) => {
           const Icon = GROWTH_MOBILE_NAV_ICONS[item.key as keyof typeof GROWTH_MOBILE_NAV_ICONS];
@@ -154,9 +157,14 @@ export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProg
           );
         })}
       </nav>
+      ) : null}
       <div
         className="md:hidden"
-        style={{ height: "calc(var(--growth-mobile-nav-h) + env(safe-area-inset-bottom, 0px))" }}
+        style={{
+          height: isCreatorHub
+            ? "calc(4.75rem + env(safe-area-inset-bottom, 0px))"
+            : "calc(var(--growth-mobile-nav-h) + env(safe-area-inset-bottom, 0px))",
+        }}
         aria-hidden
       />
     </>

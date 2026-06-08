@@ -2178,6 +2178,11 @@
   background: var(--creator-primary);
 }
 
+.growth-creator-hub-page .growth-chat-bubble-fab,
+.growth-creator-hub-page .growth-chat-bubble-panel {
+  bottom: calc(4.75rem + var(--growth-safe-bottom) + 0.5rem);
+}
+
 @media (max-width: 1023px) {
   .creator-hub-mobile-root {
     margin-inline: -0.75rem;
