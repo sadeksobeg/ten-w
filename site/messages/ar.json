@@ -464,7 +464,53 @@
     "reportError": "تعذر الإرسال. حاول مجدداً أو استخدم صفحة التواصل.",
     "reportRateLimited": "طلبات كثيرة. انتظر ثم أعد المحاولة."
   },
+  "Creators": {
+    "studio": {
+      "metaTitle": "استوديو الصنّاع — صوّر تجارب TENEGTA",
+      "metaDescription": "مركز تصوير عام للصنّاع — Cinema OS، بطاقات الدعوة، Ascend، وروابط جاهزة للمشاركة.",
+      "eyebrow": "ASCEND Creator Arena",
+      "title": "استوديو الصنّاع",
+      "subtitle": "صوّر Reels وTikTok وShorts من تجارب TENEGTA المبهرة — انسخ رابط التصوير وانطلق.",
+      "copyFilmingLink": "انسخ رابط التصوير",
+      "downloadStoryFrame": "تحميل إطار الستوري (9:16)",
+      "linkCopied": "تم نسخ الرابط",
+      "storyDownloaded": "تم تحميل الإطار",
+      "copyError": "تعذّر النسخ",
+      "storyError": "تعذّر إنشاء الإطار",
+      "experiencesTitle": "تجارب جاهزة للتصوير",
+      "experiencesSubtitle": "كل بطاقة تفتح سطحاً بصرياً مصمماً للفيديو العمودي.",
+      "openExperience": "افتح للتصوير ←",
+      "experiences": {
+        "cinema": {
+          "title": "Cinema OS — وضع العرض",
+          "body": "تخطّي الإقلاع، اضغط ابدأ العرض، من الأفلام حتى التذكرة."
+        },
+        "invite": {
+          "title": "بطاقة دعوة سينمائية",
+          "body": "تجربة دعوة فاخرة — مثالية للقطة الافتتاحية."
+        },
+        "ascend": {
+          "title": "صعود في 60 ثانية",
+          "body": "منصة الشركاء — ترتيب، معارك، كوكبة."
+        },
+        "visualizer": {
+          "title": "مولّد الهوية بالذكاء",
+          "body": "System Visualizer من الصفحة الرئيسية — ?demo=ai"
+        }
+      },
+      "scriptTitle": "سكربت 75 ثانية",
+      "scriptBody": "0–5ث: بطاقة الدعوة\n5–25ث: Cinema OS حتى التذكرة\n25–40ث: Ascend Growth\n40–55ث: غرفة الصنّاع\n55–75ث: tenegta.com/ar/creators/studio + #TENEGTA",
+      "privateRoomHint": "حاملي الشارة يدخلون غرفة الصنّاع الخاصة داخل ASCEND.",
+      "ascendCta": "فعّل حساب ASCEND"
+    }
+  },
   "CinemaDemo": {
+    "presenter": {
+      "eyebrow": "وضع عرض الصانع",
+      "title": "جاهز للتصوير؟",
+      "body": "اضغط عند بدء التسجيل — Cinema OS يفتح بدون شاشة الإقلاع.",
+      "start": "ابدأ العرض"
+    },
     "meta": {
       "title": "ديمو نظام سينما — سينما سلمية",
       "description": "عرض تفاعلي لحجز التذاكر، اختيار المقاعد، ولوحة التشغيل — بيانات توضيحية بالتعاون مع T.E.N.E.G.T.A."
@@ -699,6 +745,10 @@
       "roiCta": "احسب العائد على الاستثمار",
       "rate": "قيّم تجربتك",
       "ready": "تذكرتك جاهزة",
+      "share": "شارك التذكرة",
+      "shareCopied": "تم نسخ رابط التذكرة",
+      "shareError": "تعذّر النسخ",
+      "downloadPng": "حفظ صورة التذكرة",
       "share": "مشاركة",
       "download": "تحميل",
       "continue": "متابعة ←",
@@ -1444,6 +1494,7 @@
       "tagline": "بنية نمو تفاعلية للمؤسسات الحديثة.",
       "subtagline": "نظام التشغيل لشبكات الشركاء القائمة على الأداء.",
       "ctaPrimary": "تسجيل الدخول",
+      "ctaStudio": "استوديو الصنّاع (تصوير)",
       "ctaSecondary": "دخول الشريك",
       "note": "الحسابات تُنشأ من الإدارة فقط · للشركاء المدعوين"
     },
@@ -1560,6 +1611,7 @@
     },
     "navShort": {
       "dashboard": "لوحة",
+      "creators": "صنّاع",
       "deals": "صفقات",
       "events": "فعاليات",
       "map": "الأطلس",
@@ -2472,7 +2524,69 @@
       "ctaChat": "افتح المجموعة الخاصة",
       "ctaPending": "سيتم إضافتك للمجموعة من قبل الإدارة قريباً.",
       "ctaEvents": "استكشف الفعاليات",
-      "footer": "T.E.N.E.G.T.A — صناع المحتوى يصنعون المستقبل."
+      "footer": "T.E.N.E.G.T.A — صناع المحتوى يصنعون المستقبل.",
+      "studioLink": "افتح استوديو التصوير العام",
+      "adminGrantedAccess": "لديك وصول للغرفة بموافقة الإدارة — حساب الشريك الأساسي لم يتغيّر.",
+      "tabNavAria": "أقسام Creator Arena",
+      "tabLounge": "الغرفة",
+      "tabKit": "حقيبة الصانع",
+      "tabCup": "كأس الصنّاع",
+      "tabChat": "الدردشة",
+      "pulseTitle": "نبض الصنّاع",
+      "pulseSubtitle": "إحصائيات حية تتحدّث مع كل منشور.",
+      "pulse": {
+        "online": "في الغرفة",
+        "challenges": "تحديات نشطة",
+        "posts": "منشورات هذا الأسبوع"
+      },
+      "kitTitle": "حقيبة الصانع",
+      "kitSubtitle": "سكربت وروابط تصوير وهاشتاغات جاهزة.",
+      "kit": {
+        "scriptLabel": "سكربت 75 ثانية",
+        "scriptBody": "0–5ث: بطاقة الدعوة — «هذا ليس مجرد دعوة، هذا دخول لعالم».\n5–25ث: Cinema OS — أفلام → مقاعد 3D → تذكرة.\n25–40ث: Ascend — ترتيب، معركة، شبكة.\n40–55ث: غرفة الصنّاع — تحديات وترتيب وموارد.\n55–75ث: tenegta.com/ar/creators/studio + #TENEGTA",
+        "copyScript": "انسخ السكربت",
+        "scriptCopied": "تم النسخ",
+        "copyError": "تعذّر النسخ",
+        "filmLinks": "صوّر هذا",
+        "studio": "استوديو الصنّاع",
+        "cinema": "Cinema OS (وضع العرض)",
+        "invite": "بطاقة دعوة سينمائية",
+        "visualizer": "مولّد الهوية",
+        "copyStudioLink": "انسخ رابط الاستوديو مع UTM",
+        "linkCopied": "تم نسخ رابط الاستوديو"
+      },
+      "cupTitle": "كأس الصنّاع",
+      "cupSubtitle": "ترتيب أسبوعي — صنّاع المحتوى المعتمدون فقط.",
+      "cupEmpty": "كن الأول على اللوحة هذا الأسبوع.",
+      "cupAnonymous": "صانع",
+      "cupYou": "أنت",
+      "cupMeta": "{posts} منشور هذا الأسبوع",
+      "cupBattles": "كل المعارك",
+      "challengeEyebrow": "تحدي الأسبوع",
+      "challengeReward": "+{xp} XP عند الاعتماد",
+      "challengeSubmitted": "تم استلام الرابط — بانتظار مراجعة الإدارة.",
+      "challengeUrlLabel": "رابط المنشور",
+      "challengeSubmit": "إرسال التحدي",
+      "challengeSubmitting": "جاري الإرسال…",
+      "challengeError": "تعذّر الإرسال — تحقق من الرابط.",
+      "battlesTitle": "معركة 1v1",
+      "battlesSubtitle": "تحدَّ صانعاً آخر — أول من ينشر يفوز.",
+      "battlesPick": "اختر المنافس",
+      "battlesSelect": "اختر صانعاً",
+      "battlesSend": "إرسال التحدي",
+      "battlesError": "تعذّر إرسال التحدي.",
+      "statusTitle": "لوحة حالات الصنّاع",
+      "statusSubtitle": "تتبّع مراحل التصوير — حدّث بطاقتك بنقرة.",
+      "statusYourCard": "حالتك",
+      "statusUpdate": "تحديث",
+      "statusError": "تعذّر الحفظ",
+      "status": {
+        "INVITED": "مدعو",
+        "JOINED": "انضم",
+        "FILMING": "يصوّر",
+        "SUBMITTED": "أرسل",
+        "FEATURED": "مميز"
+      }
     },
     "chat": {
       "tabCommunity": "المجتمع العام",
@@ -2831,23 +2945,42 @@
       },
       "creatorsPage": {
         "title": "برنامج صناع المحتوى",
-        "subtitle": "منح الشارة من صفحة الشارات — اختر هنا من يُضاف لمجموعة الدردشة الخاصة.",
+        "subtitle": "امنح وصول Creator Arena لأي شريك — حاملي الشارة يدخلون تلقائياً.",
+        "accessNote": "الوصول للغرفة لا يغيّر العمولات أو XP أو الصفقات. لا يمكن سحب وصول حامل الشارة قبل إلغاء الشارة.",
         "statBadge": "حاملي الشارة",
         "statRoom": "في المجموعة",
         "searchPlaceholder": "ابحث بالاسم أو البريد…",
-        "roomTitle": "أعضاء المجموعة الخاصة",
-        "roomHint": "فقط هؤلاء يرون تبويب «صناع المحتوى» في المحادثات.",
+        "roomTitle": "وصول الغرفة (نشط)",
+        "roomHint": "من لديه وصول يرى Creator Arena في القائمة ويستخدم الدردشة والحقيبة والكأس.",
         "emptyRoom": "لا أحد في المجموعة بعد.",
         "badgeTitle": "حاملي شارة صانع المحتوى",
         "badgeHint": "يُمنحون تلقائياً للمجموعة عند منح الشارة — يمكنك إضافة شركاء آخرين يدوياً.",
         "emptyBadge": "لم يُمنح أحد شارة صانع المحتوى بعد.",
         "allPartnersTitle": "كل الشركاء",
         "addToRoom": "إضافة للمجموعة",
+        "grantLounge": "منح وصول الغرفة",
+        "revokeLounge": "سحب الوصول",
+        "hasLoungeAccess": "لديه وصول",
         "removeFromRoom": "إزالة",
         "inRoom": "في المجموعة",
+        "accessBadgeAndLounge": "شارة + غرفة",
+        "accessBadgeOnly": "شارة (وصول تلقائي)",
+        "accessLoungeOnly": "وصول من الإدارة",
+        "accessNone": "بدون وصول",
         "toastAdded": "تمت الإضافة للمجموعة",
-        "toastRemoved": "تمت الإزالة من المجموعة",
-        "toastError": "تعذّر تنفيذ العملية"
+        "toastLoungeGranted": "تم منح وصول الغرفة",
+        "toastRemoved": "تم سحب الوصول",
+        "toastBadgeProtected": "لا يمكن السحب — الشريك يحمل شارة صانع المحتوى",
+        "toastStatusSaved": "تم تحديث حالة الصانع",
+        "toastError": "تعذّر تنفيذ العملية",
+        "statusLabel": "حالة سير العمل",
+        "status": {
+          "INVITED": "مدعو",
+          "JOINED": "انضم",
+          "FILMING": "يصوّر",
+          "SUBMITTED": "أرسل",
+          "FEATURED": "مميز"
+        }
       },
       "partners": {
         "title": "إدارة الشركاء",
@@ -3293,6 +3426,7 @@
       "switchToRegister": "تحتاج حسابًا؟ سجّل",
       "switchToSignIn": "لديك حساب؟ سجّل الدخول",
       "registerIntro": "أنشئ ملفك كشريك وابدأ تتبّع الأرباح والعمولات عند إغلاق الصفقات.",
+      "inviteRegisterHint": "تم قبول دعوتك — سجّل بنفس البريد لتفعيل شارة غرفة الصنّاع تلقائياً.",
       "signInHeroEyebrow": "TENEGTA ASCEND",
       "signInHeroTitle": "مركز قيادتك لأداء الشركاء",
       "signInHeroLine1": "عمولات، مستويات، ونقاط خبرة — في مساحة عمل واحدة مباشرة.",

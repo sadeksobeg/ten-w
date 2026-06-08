@@ -17,6 +17,8 @@ const staticPaths = [
   "/demo/explore",
   "/engagement",
   "/ascend",
+  "/creators/studio",
+  "/demo/cinema",
   "/partners",
   "/careers",
   "/case-studies",

@@ -124,7 +124,7 @@ export async function registerPartnerAction(
   const passwordHash = await bcrypt.hash(parsed.data.password, 10);
   const referralCode = await uniqueReferralCode();
 
-  await prisma.$transaction(async (tx) => {
+  const newUserId = await prisma.$transaction(async (tx) => {
     const cardNumber = await nextPartnerCardNumber(tx);
     const user = await tx.user.create({
       data: {
@@ -144,6 +144,7 @@ export async function registerPartnerAction(
         cardNumber,
       },
     });
+    return user.id;
   });
 
   if (parentUserId) {
@@ -154,6 +155,12 @@ export async function registerPartnerAction(
       headline: `New partner joined: ${parsed.data.name}`,
       metadata: { name: parsed.data.name },
     });
+  }
+
+  const inviteSlug = String(formData.get("inviteSlug") ?? "").trim();
+  if (inviteSlug && newUserId) {
+    const { linkInviteToPartner } = await import("@/lib/growth/creator-arena");
+    await linkInviteToPartner(newUserId, email, inviteSlug);
   }
 
   revalidatePath("/", "layout");
@@ -770,7 +777,8 @@ export async function assignAdminBadgeAction(
   if (!granted) return { ok: false, error: "badge_already_granted" };
 
   if (badge.key === CONTENT_CREATOR_BADGE) {
-    await addUserToCreatorRoom(user.id);
+    const { grantCreatorLoungeAccess } = await import("@/lib/growth/creator-program");
+    await grantCreatorLoungeAccess(user.id, { notify: false });
   }
 
   await createNotification(prisma, {
@@ -825,7 +833,8 @@ export async function assignAdminBadgesBatchAction(
     granted += 1;
 
     if (badge.key === CONTENT_CREATOR_BADGE) {
-      await addUserToCreatorRoom(user.id);
+      const { grantCreatorLoungeAccess } = await import("@/lib/growth/creator-program");
+      await grantCreatorLoungeAccess(user.id, { notify: false });
     }
 
     await createNotification(prisma, {
@@ -909,14 +918,8 @@ export async function adminAddCreatorRoomMemberAction(
   });
   if (!user) return { ok: false, error: "user_not_found" };
 
-  await addUserToCreatorRoom(user.id);
-  await createNotification(prisma, {
-    userId: user.id,
-    type: NotificationType.SYSTEM,
-    title: "مجموعة صناع المحتوى",
-    body: "تمت إضافتك إلى مجموعة الدردشة الخاصة لصناع المحتوى.",
-    link: "/growth/chat?room=content-creators",
-  });
+  const { grantCreatorLoungeAccess } = await import("@/lib/growth/creator-program");
+  await grantCreatorLoungeAccess(user.id);
   revalidateGrowth();
   return { ok: true };
 }
@@ -933,7 +936,11 @@ export async function adminRemoveCreatorRoomMemberAction(
   });
   if (!parsed.success) return { ok: false, error: "invalid_input" };
 
-  await removeUserFromCreatorRoom(parsed.data.userId);
+  const { revokeCreatorLoungeAccess } = await import("@/lib/growth/creator-program");
+  const result = await revokeCreatorLoungeAccess(parsed.data.userId);
+  if (result === "badge_protected") {
+    return { ok: false, error: "badge_holder_protected" };
+  }
   revalidateGrowth();
   return { ok: true };
 }

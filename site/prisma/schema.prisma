@@ -155,6 +155,9 @@ model User {
   weeklyChronicles           WeeklyChronicle[]
   platformMemoryDeliveries   PlatformMemoryDelivery[]
   inviteCardsCreated         InviteCard[]       @relation("InviteCardCreator")
+  inviteLinkedAsPartner      InviteCard[]       @relation("InviteLinkedPartner")
+  creatorArenaProfile        CreatorArenaProfile?
+  creatorSubmissions         CreatorSubmission[]
 }
 
 model PartnerProfile {
@@ -908,22 +911,89 @@ model PlatformMemoryDelivery {
   @@index([userId])
 }
 
+enum CreatorWorkflowStatus {
+  INVITED
+  JOINED
+  FILMING
+  SUBMITTED
+  FEATURED
+}
+
+model CreatorArenaProfile {
+  id          String                @id @default(cuid())
+  userId      String                @unique
+  status      CreatorWorkflowStatus @default(JOINED)
+  updatedAt   DateTime              @updatedAt
+  updatedById String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+}
+
+model CreatorChallenge {
+  id        String   @id @default(cuid())
+  weekKey   String   @unique
+  titleAr   String
+  titleEn   String
+  titleFr   String   @default("")
+  bodyAr    String   @db.Text
+  bodyEn    String   @db.Text
+  bodyFr    String   @default("") @db.Text
+  xpReward  Int      @default(500)
+  active    Boolean  @default(true)
+  startsAt  DateTime
+  endsAt    DateTime
+  createdAt DateTime @default(now())
+}
+
+model CreatorSubmission {
+  id        String   @id @default(cuid())
+  userId    String
+  weekKey   String
+  postUrl   String
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, weekKey])
+  @@index([weekKey])
+  @@index([userId])
+}
+
+model CreatorArenaVisit {
+  id          String   @id @default(cuid())
+  userId      String?
+  utmSource   String?
+  utmCampaign String?
+  path        String
+  createdAt   DateTime @default(now())
+
+  @@index([utmSource, createdAt])
+  @@index([userId])
+}
+
 model InviteCard {
-  id          String    @id @default(cuid())
-  name        String
-  handle      String
-  tier        String    @default("CONTENT CREATOR")
-  scope       String
-  message     String    @db.Text
-  token       String    @unique
-  slug        String    @unique
-  legacySlug  String?   @unique
-  accepted    Boolean   @default(false)
-  acceptedAt  DateTime?
-  createdById String?
-  createdBy   User?     @relation("InviteCardCreator", fields: [createdById], references: [id], onDelete: SetNull)
-  createdAt   DateTime  @default(now())
+  id           String    @id @default(cuid())
+  name         String
+  handle       String
+  tier         String    @default("CONTENT CREATOR")
+  scope        String
+  message      String    @db.Text
+  token        String    @unique
+  slug         String    @unique
+  legacySlug   String?   @unique
+  accepted     Boolean   @default(false)
+  acceptedAt   DateTime?
+  inviteeEmail String?
+  linkedUserId String?
+  createdById  String?
+  createdBy    User?     @relation("InviteCardCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  linkedUser   User?     @relation("InviteLinkedPartner", fields: [linkedUserId], references: [id], onDelete: SetNull)
+  createdAt    DateTime  @default(now())
 
   @@index([accepted])
   @@index([createdAt])
+  @@index([inviteeEmail])
 }

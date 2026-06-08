@@ -25,7 +25,12 @@ function registerErrorText(t: (key: string) => string, code: string) {
   }
 }
 
-export function GrowthRegisterClient() {
+type Props = {
+  inviteSlug?: string | null;
+  defaultName?: string;
+};
+
+export function GrowthRegisterClient({ inviteSlug, defaultName = "" }: Props) {
   const t = useTranslations("Growth.auth");
   const router = useRouter();
   const [state, formAction] = useActionState(registerPartnerAction, undefined);
@@ -50,12 +55,20 @@ export function GrowthRegisterClient() {
         </h1>
         <p className="mt-2 text-sm text-white/60">{t("registerIntro")}</p>
 
+        {inviteSlug ? (
+          <p className="mt-4 rounded-xl border border-gold/25 bg-gold/10 px-4 py-3 text-xs text-gold/95">
+            {t("inviteRegisterHint")}
+          </p>
+        ) : null}
+
         <form action={formAction} className="mt-8 space-y-4">
+          {inviteSlug ? <input type="hidden" name="inviteSlug" value={inviteSlug} /> : null}
           <label className="block">
             <span className="text-xs text-white/55">{t("name")}</span>
             <input
               className="mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-3 text-sm text-white outline-none focus:border-gold/40"
               name="name"
+              defaultValue={defaultName}
               required
             />
           </label>

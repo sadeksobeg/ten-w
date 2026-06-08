@@ -24,6 +24,8 @@ export type GrainIntensity = "boot" | "splash" | "normal" | "dashboard";
 export type ScreenMode = "preMovie" | "playing" | "intermission";
 
 type State = {
+  presenterMode: boolean;
+  presenterReady: boolean;
   phase: CinemaDemoPhase;
   bootStage: number;
   osReady: boolean;
@@ -93,6 +95,8 @@ type Actions = {
   goToRoi: () => void;
   goToClosing: () => void;
   resetDemo: () => void;
+  initPresenterMode: (opts?: { jumpPhase?: CinemaDemoPhase }) => void;
+  startPresenterShow: () => void;
 };
 
 const REVENUE_BY_BRANCH: Record<ActiveBranch, number> = {
@@ -102,6 +106,8 @@ const REVENUE_BY_BRANCH: Record<ActiveBranch, number> = {
 };
 
 const initial: State = {
+  presenterMode: false,
+  presenterReady: false,
   phase: "boot",
   bootStage: 0,
   osReady: false,
@@ -249,4 +255,37 @@ export const useCinemaDemoStore = create<State & Actions>((set, get) => ({
   goToClosing: () => set({ phase: "closing" }),
 
   resetDemo: () => set({ ...initial }),
+
+  initPresenterMode: (opts) => {
+    const jump = opts?.jumpPhase;
+    if (jump === "ticket") {
+      set({
+        presenterMode: true,
+        presenterReady: false,
+        phase: "ticket",
+        bootStage: 4,
+        osReady: true,
+        sessionStartedAt: Date.now(),
+        movieId: "dune-3",
+        showtimeId: "st-1",
+        selectedSeatIds: [],
+        bookingRef: makeBookingRef(),
+        grainIntensity: "normal",
+        transitionClass: "",
+      });
+      return;
+    }
+    set({
+      presenterMode: true,
+      presenterReady: false,
+      phase: "movies",
+      bootStage: 4,
+      osReady: true,
+      sessionStartedAt: Date.now(),
+      grainIntensity: "splash",
+      transitionClass: "",
+    });
+  },
+
+  startPresenterShow: () => set({ presenterReady: true }),
 }));

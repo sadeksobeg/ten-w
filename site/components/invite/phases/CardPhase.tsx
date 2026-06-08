@@ -71,6 +71,9 @@ export function CardPhase({ card, origin }: Props) {
   const { accepting, acceptError, setAccepting, setAcceptError, startAcceptMontage, enterWorld } =
     useInviteExperienceStore();
   const [hideScrollHint, setHideScrollHint] = useState(false);
+  const [ascendRegisterPath, setAscendRegisterPath] = useState<string | null>(
+    card.accepted ? `/ar/growth/register?invite=${encodeURIComponent(card.slug)}` : null,
+  );
   const granted = card.accepted;
   const year = new Date().getFullYear();
   const benefits = benefitsForTier(card.tier);
@@ -111,11 +114,16 @@ export function CardPhase({ card, origin }: Props) {
     }
     try {
       const res = await fetch(`/api/invite/${card.slug}/accept`, { method: "POST" });
-      const data = (await res.json()) as { ok?: boolean; error?: string };
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        ascendRegisterPath?: string;
+      };
       if (!res.ok) {
         setAcceptError(data.error ?? "تعذّر تأكيد الدعوة");
         return;
       }
+      if (data.ascendRegisterPath) setAscendRegisterPath(data.ascendRegisterPath);
       goToWorld();
     } catch {
       setAcceptError("تحقق من الاتصال وحاول مجدداً");
@@ -268,6 +276,14 @@ export function CardPhase({ card, origin }: Props) {
 
             <div className="invite-accept-cta hidden sm:block">
               <AcceptButton granted={granted} accepting={accepting} onAccept={() => void onAccept()} />
+              {granted && ascendRegisterPath ? (
+                <a
+                  href={ascendRegisterPath}
+                  className="invite-ascend-bridge mt-4 inline-flex rounded-full border border-[var(--invite-teal)]/50 bg-[var(--invite-teal)]/10 px-6 py-2.5 text-sm font-semibold text-[var(--invite-teal)]"
+                >
+                  فعّل حسابك في ASCEND ←
+                </a>
+              ) : null}
             </div>
           </div>
         </div>

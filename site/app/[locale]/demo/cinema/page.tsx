@@ -1,10 +1,13 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { CinemaDemoExperience } from "@/components/cinema-demo/CinemaDemoExperience";
+import { CinemaDemoClient } from "@/components/cinema-demo/CinemaDemoClient";
 import type { Locale } from "@/i18n/routing";
 import { buildAlternates } from "@/lib/metadata-helpers";
 
-type Props = { params: Promise<{ locale: string }> };
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ presenter?: string; phase?: string }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -17,9 +20,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function CinemaDemoPage({ params }: Props) {
+export default async function CinemaDemoPage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const { presenter, phase } = await searchParams;
   setRequestLocale(locale);
 
-  return <CinemaDemoExperience />;
+  return <CinemaDemoClient presenter={presenter === "1"} phase={phase} />;
 }

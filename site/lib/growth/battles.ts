@@ -97,6 +97,10 @@ async function progressSince(
     const streak = await prisma.userStreak.findUnique({ where: { userId } });
     return streak?.currentStreak ?? 0;
   }
+  if (metric === "creator_posts") {
+    const { countCreatorPostsSince } = await import("@/lib/growth/creator-arena");
+    return countCreatorPostsSince(userId, since);
+  }
   return 0;
 }
 

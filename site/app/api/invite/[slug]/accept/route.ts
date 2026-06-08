@@ -21,7 +21,12 @@ export async function POST(req: Request, { params }: Params) {
   }
 
   if (card.accepted) {
-    return NextResponse.json({ ok: true, alreadyAccepted: true });
+    return NextResponse.json({
+      ok: true,
+      alreadyAccepted: true,
+      inviteSlug: card.slug,
+      ascendRegisterPath: `/ar/growth/register?invite=${encodeURIComponent(card.slug)}`,
+    });
   }
 
   await prisma.inviteCard.update({
@@ -29,5 +34,10 @@ export async function POST(req: Request, { params }: Params) {
     data: { accepted: true, acceptedAt: new Date() },
   });
 
-  return NextResponse.json({ ok: true, alreadyAccepted: false });
+  return NextResponse.json({
+    ok: true,
+    alreadyAccepted: false,
+    inviteSlug: card.slug,
+    ascendRegisterPath: `/ar/growth/register?invite=${encodeURIComponent(card.slug)}`,
+  });
 }

@@ -32,6 +32,7 @@ export default async function AdminCreatorsPage({ params }: Props) {
         name: true,
         email: true,
         avatarUrl: true,
+        creatorArenaProfile: { select: { status: true } },
       },
     }),
     listContentCreatorPartners(),
@@ -53,7 +54,9 @@ export default async function AdminCreatorsPage({ params }: Props) {
     avatarUrl: u.avatarUrl,
     hasBadge: badgeMap.has(u.id),
     inRoom: roomSet.has(u.id),
+    hasLoungeAccess: badgeMap.has(u.id) || roomSet.has(u.id),
     badgeGrantedAt: badgeMap.get(u.id)?.grantedAt ?? null,
+    workflowStatus: u.creatorArenaProfile?.status ?? null,
   }));
 
   return (

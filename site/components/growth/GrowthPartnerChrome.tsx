@@ -8,7 +8,7 @@ import { GrowthPartnerHeader } from "@/components/growth/GrowthPartnerHeader";
 import { GrowthPartnerShell } from "@/components/growth/GrowthPartnerShell";
 import { PartnerChatBubble } from "@/components/growth/chat/PartnerChatBubble";
 import { CommandPalette } from "@/components/growth/CommandPalette";
-import { userHasContentCreatorBadge } from "@/lib/growth/creator-program";
+import { canAccessCreatorLounge } from "@/lib/growth/creator-program";
 
 type Props = {
   locale: string;
@@ -29,7 +29,7 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
       where: { userId: session.user.id },
       select: { badge: { select: { key: true } } },
     }),
-    userHasContentCreatorBadge(session.user.id),
+    canAccessCreatorLounge(session.user.id),
   ]);
 
   const earnedBadgeKeys = earnedBadgeRows.map((r) => r.badge.key);

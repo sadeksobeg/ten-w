@@ -12,13 +12,31 @@ import { CinemaShowtimePhase } from "@/components/cinema-demo/phases/CinemaShowt
 import { CinemaBootOS } from "@/components/cinema-demo/phases/CinemaBootOS";
 import { CinemaTicketPhase } from "@/components/cinema-demo/phases/CinemaTicketPhase";
 import { CinemaUpsellPhase } from "@/components/cinema-demo/phases/CinemaUpsellPhase";
+import {
+  CinemaPresenterOverlay,
+  CinemaPresenterWatermark,
+} from "@/components/cinema-demo/CinemaPresenterOverlay";
 
-export function CinemaDemoExperience() {
+type Props = {
+  skipBoot?: boolean;
+};
+
+export function CinemaDemoExperience({ skipBoot }: Props) {
   const phase = useCinemaDemoStore((s) => s.phase);
   const transitionClass = useCinemaDemoStore((s) => s.transitionClass);
+  const presenterMode = useCinemaDemoStore((s) => s.presenterMode);
+  const presenterReady = useCinemaDemoStore((s) => s.presenterReady);
 
-  if (phase === "boot") {
+  if (phase === "boot" && !skipBoot && !presenterMode) {
     return <CinemaBootOS />;
+  }
+
+  if (presenterMode && !presenterReady) {
+    return (
+      <div className="cinema-experience">
+        <CinemaPresenterOverlay />
+      </div>
+    );
   }
 
   const center = (() => {
@@ -48,6 +66,7 @@ export function CinemaDemoExperience() {
 
   return (
     <div className={`cinema-experience ${transitionClass}`}>
+      <CinemaPresenterWatermark />
       <CinemaOSDesktop>{center}</CinemaOSDesktop>
     </div>
   );

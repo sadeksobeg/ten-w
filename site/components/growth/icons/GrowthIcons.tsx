@@ -650,6 +650,7 @@ export function IconLightbulb(props: GrowthIconProps) {
 /** Mobile bottom nav mapping */
 export const GROWTH_MOBILE_NAV_ICONS = {
   dashboard: IconDashboard,
+  creators: IconStar,
   deals: IconDeals,
   events: IconEvents,
   map: IconMap,

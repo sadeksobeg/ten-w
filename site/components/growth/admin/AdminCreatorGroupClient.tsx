@@ -11,6 +11,8 @@ import {
   adminAddCreatorRoomMemberAction,
   adminRemoveCreatorRoomMemberAction,
 } from "@/lib/growth/actions";
+import { updateCreatorStatusAction } from "@/lib/growth/creator-arena-actions";
+import type { CreatorWorkflowStatus } from "@prisma/client";
 
 export type CreatorAdminPartner = {
   userId: string;
@@ -19,8 +21,18 @@ export type CreatorAdminPartner = {
   avatarUrl: string | null;
   hasBadge: boolean;
   inRoom: boolean;
+  hasLoungeAccess: boolean;
   badgeGrantedAt: string | null;
+  workflowStatus: CreatorWorkflowStatus | null;
 };
+
+const WORKFLOW_STATUSES: CreatorWorkflowStatus[] = [
+  "INVITED",
+  "JOINED",
+  "FILMING",
+  "SUBMITTED",
+  "FEATURED",
+];
 
 type Props = {
   partners: CreatorAdminPartner[];
@@ -47,6 +59,23 @@ export function AdminCreatorGroupClient({ partners: initial }: Props) {
   const badgeHolders = filtered.filter((p) => p.hasBadge);
   const roomMembers = filtered.filter((p) => p.inRoom);
 
+  async function updateStatus(userId: string, status: CreatorWorkflowStatus) {
+    setPendingId(userId);
+    const fd = new FormData();
+    fd.set("userId", userId);
+    fd.set("status", status);
+    const res = await updateCreatorStatusAction(null, fd);
+    setPendingId(null);
+    if (res.ok) {
+      setPartners((prev) =>
+        prev.map((p) => (p.userId === userId ? { ...p, workflowStatus: status } : p)),
+      );
+      showToast({ type: "success", title: t("toastStatusSaved") });
+    } else {
+      showToast({ type: "error", title: t("toastError") });
+    }
+  }
+
   async function toggleRoom(userId: string, add: boolean) {
     setPendingId(userId);
     const fd = new FormData();
@@ -57,14 +86,22 @@ export function AdminCreatorGroupClient({ partners: initial }: Props) {
     setPendingId(null);
     if (res.ok) {
       setPartners((prev) =>
-        prev.map((p) => (p.userId === userId ? { ...p, inRoom: add } : p)),
+        prev.map((p) =>
+          p.userId === userId
+            ? { ...p, inRoom: add, hasLoungeAccess: add || p.hasBadge }
+            : p,
+        ),
       );
       showToast({
         type: "success",
-        title: add ? t("toastAdded") : t("toastRemoved"),
+        title: add ? t("toastLoungeGranted") : t("toastRemoved"),
       });
     } else {
-      showToast({ type: "error", title: t("toastError") });
+      const err = "error" in res ? res.error : "";
+      showToast({
+        type: "error",
+        title: err === "badge_holder_protected" ? t("toastBadgeProtected") : t("toastError"),
+      });
     }
   }
 
@@ -83,7 +120,8 @@ export function AdminCreatorGroupClient({ partners: initial }: Props) {
                 {t("title")}
               </h1>
             </div>
-            <p className="max-w-xl text-sm text-white/65">{t("subtitle")}</p>
+            <p className="max-w-xl text-sm leading-relaxed text-white/65">{t("subtitle")}</p>
+            <p className="mt-2 max-w-xl text-xs text-white/45">{t("accessNote")}</p>
           </div>
           <div className="flex gap-4 text-center">
             <div>
@@ -111,7 +149,7 @@ export function AdminCreatorGroupClient({ partners: initial }: Props) {
 
       <section>
         <h2 className="mb-3 text-sm font-bold text-gold">{t("roomTitle")}</h2>
-        <p className="mb-4 text-xs text-white/50">{t("roomHint")}</p>
+        <p className="mb-4 text-xs leading-relaxed text-white/50">{t("roomHint")}</p>
         {roomMembers.length === 0 ? (
           <p className="text-sm text-white/45">{t("emptyRoom")}</p>
         ) : (
@@ -123,7 +161,8 @@ export function AdminCreatorGroupClient({ partners: initial }: Props) {
                 locale={locale}
                 pending={pendingId === p.userId}
                 onToggle={() => void toggleRoom(p.userId, false)}
-                actionLabel={t("removeFromRoom")}
+                onStatusChange={(s) => void updateStatus(p.userId, s)}
+                actionLabel={t("revokeLounge")}
                 variant="room"
               />
             ))}
@@ -145,9 +184,10 @@ export function AdminCreatorGroupClient({ partners: initial }: Props) {
                 locale={locale}
                 pending={pendingId === p.userId}
                 onToggle={() => void toggleRoom(p.userId, true)}
-                actionLabel={p.inRoom ? t("inRoom") : t("addToRoom")}
+                onStatusChange={(s) => void updateStatus(p.userId, s)}
+                actionLabel={p.hasLoungeAccess ? t("hasLoungeAccess") : t("grantLounge")}
                 variant="badge"
-                disabled={p.inRoom}
+                disabled={p.hasLoungeAccess}
               />
             ))}
           </ul>
@@ -164,9 +204,9 @@ export function AdminCreatorGroupClient({ partners: initial }: Props) {
               locale={locale}
               pending={pendingId === p.userId}
               onToggle={() => void toggleRoom(p.userId, true)}
-              actionLabel={p.inRoom ? t("inRoom") : t("addToRoom")}
+              actionLabel={p.hasLoungeAccess ? t("hasLoungeAccess") : t("grantLounge")}
               variant="all"
-              disabled={p.inRoom}
+              disabled={p.hasLoungeAccess}
             />
           ))}
         </ul>
@@ -180,6 +220,7 @@ function PartnerRow({
   locale: _locale,
   pending,
   onToggle,
+  onStatusChange,
   actionLabel,
   variant,
   disabled,
@@ -188,10 +229,12 @@ function PartnerRow({
   locale: string;
   pending: boolean;
   onToggle: () => void;
+  onStatusChange?: (status: CreatorWorkflowStatus) => void;
   actionLabel: string;
   variant: "room" | "badge" | "all";
   disabled?: boolean;
 }) {
+  const t = useTranslations("Growth.admin.creatorsPage");
   return (
     <li
       className={`flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3 ${
@@ -211,8 +254,32 @@ function PartnerRow({
           {partner.name ?? partner.email}
         </p>
         <p className="truncate text-[10px] text-white/45">{partner.email}</p>
+        <p className="mt-0.5 text-[10px] text-white/40">
+          {partner.hasBadge && partner.inRoom
+            ? t("accessBadgeAndLounge")
+            : partner.hasBadge
+              ? t("accessBadgeOnly")
+              : partner.inRoom
+                ? t("accessLoungeOnly")
+                : t("accessNone")}
+        </p>
       </div>
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="flex shrink-0 flex-wrap items-center gap-2">
+        {partner.hasBadge && onStatusChange ? (
+          <select
+            value={partner.workflowStatus ?? "JOINED"}
+            disabled={pending}
+            onChange={(e) => onStatusChange(e.target.value as CreatorWorkflowStatus)}
+            className="rounded-lg border border-white/10 bg-black/30 px-2 py-1 text-[10px] text-white"
+            aria-label={t("statusLabel")}
+          >
+            {WORKFLOW_STATUSES.map((s) => (
+              <option key={s} value={s}>
+                {t(`status.${s}`)}
+              </option>
+            ))}
+          </select>
+        ) : null}
         {partner.hasBadge ? (
           <BadgeIcon badgeKey="content_creator" earned chip size="xs" name="" />
         ) : null}

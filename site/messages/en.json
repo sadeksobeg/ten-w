@@ -441,7 +441,53 @@
     "reportError": "Could not send. Try again or use the contact page.",
     "reportRateLimited": "Too many requests. Please wait and try again."
   },
+  "Creators": {
+    "studio": {
+      "metaTitle": "Creator Studio — film TENEGTA experiences",
+      "metaDescription": "Public filming hub for creators — Cinema OS, invite cards, Ascend, and share-ready links.",
+      "eyebrow": "ASCEND Creator Arena",
+      "title": "Creator Studio",
+      "subtitle": "Shoot Reels, TikTok, and Shorts from premium TENEGTA experiences — copy your filming link and go.",
+      "copyFilmingLink": "Copy filming link",
+      "downloadStoryFrame": "Download story frame (9:16)",
+      "linkCopied": "Filming link copied",
+      "storyDownloaded": "Story frame downloaded",
+      "copyError": "Could not copy",
+      "storyError": "Could not generate frame",
+      "experiencesTitle": "Film-ready experiences",
+      "experiencesSubtitle": "Each card opens a cinematic surface designed for vertical video.",
+      "openExperience": "Open for filming →",
+      "experiences": {
+        "cinema": {
+          "title": "Cinema OS — presenter mode",
+          "body": "Skip boot, tap Start Show, walk from movies to the digital ticket."
+        },
+        "invite": {
+          "title": "Cinematic invite card",
+          "body": "Luxury invite flow — perfect opening shot for your video."
+        },
+        "ascend": {
+          "title": "Ascend in 60 seconds",
+          "body": "Partner platform — ranks, battles, constellation."
+        },
+        "visualizer": {
+          "title": "AI identity visualizer",
+          "body": "System visualizer from the homepage — ?demo=ai"
+        }
+      },
+      "scriptTitle": "75-second script",
+      "scriptBody": "0–5s: Invite card\n5–25s: Cinema OS boot → ticket\n25–40s: Ascend Growth\n40–55s: Creator Lounge\n55–75s: tenegta.com/creators/studio + #TENEGTA",
+      "privateRoomHint": "Badge holders get the private Creator Lounge inside ASCEND.",
+      "ascendCta": "Activate ASCEND account"
+    }
+  },
   "CinemaDemo": {
+    "presenter": {
+      "eyebrow": "Creator presenter mode",
+      "title": "Ready to film?",
+      "body": "Tap when recording — Cinema OS opens without the boot sequence.",
+      "start": "Start show"
+    },
     "meta": {
       "title": "Cinema system demo — Salamiya Cinema",
       "description": "Interactive demo for ticketing, seat maps, and operations dashboard — mock data powered by T.E.N.E.G.T.A."
@@ -676,6 +722,10 @@
       "roiCta": "Calculate ROI",
       "rate": "Rate your experience",
       "ready": "Your ticket is ready",
+      "share": "Share ticket",
+      "shareCopied": "Ticket link copied",
+      "shareError": "Could not copy link",
+      "downloadPng": "Save ticket image",
       "share": "Share",
       "download": "Download",
       "continue": "Continue →",
@@ -1449,6 +1499,7 @@
       "tagline": "A Gamified Growth Infrastructure for Modern Organizations.",
       "subtagline": "The Operating System for Performance-Driven Partner Networks.",
       "ctaPrimary": "Sign in",
+      "ctaStudio": "Creator Studio (film)",
       "ctaSecondary": "Partner sign-in",
       "note": "Accounts are admin-created only · For invited partners"
     },
@@ -1592,6 +1643,7 @@
     },
     "navShort": {
       "dashboard": "Home",
+      "creators": "Creators",
       "deals": "Deals",
       "events": "Events",
       "map": "Atlas",
@@ -2521,7 +2573,69 @@
       "ctaChat": "Open private group",
       "ctaPending": "An admin will add you to the group soon.",
       "ctaEvents": "Explore events",
-      "footer": "T.E.N.E.G.T.A — creators build the future."
+      "footer": "T.E.N.E.G.T.A — creators build the future.",
+      "studioLink": "Open public Creator Studio (for filming)",
+      "adminGrantedAccess": "You have lounge access granted by the admin — your partner account is unchanged.",
+      "tabNavAria": "Creator Arena sections",
+      "tabLounge": "Lounge",
+      "tabKit": "Creator Kit",
+      "tabCup": "Creator Cup",
+      "tabChat": "Chat",
+      "pulseTitle": "Creator Pulse",
+      "pulseSubtitle": "Live arena stats — updated as creators ship content.",
+      "pulse": {
+        "online": "In room",
+        "challenges": "Active missions",
+        "posts": "Posts this week"
+      },
+      "kitTitle": "Creator Kit",
+      "kitSubtitle": "Script, film links, hashtags — copy and shoot.",
+      "kit": {
+        "scriptLabel": "75s video script",
+        "scriptBody": "0–5s: Invite card — «This is not just an invite, it's a gateway.»\n5–25s: Cinema OS — movies → 3D seats → ticket.\n25–40s: Ascend / Growth — rank, battles, network.\n40–55s: Creator Lounge — challenges, leaderboard, resources.\n55–75s: CTA — tenegta.com/creators/studio + #TENEGTA",
+        "copyScript": "Copy script",
+        "scriptCopied": "Script copied",
+        "copyError": "Could not copy",
+        "filmLinks": "Film these",
+        "studio": "Creator Studio hub",
+        "cinema": "Cinema OS (presenter mode)",
+        "invite": "Cinematic invite card",
+        "visualizer": "AI system visualizer",
+        "copyStudioLink": "Copy studio link with UTM",
+        "linkCopied": "Studio link copied"
+      },
+      "cupTitle": "Creator Cup",
+      "cupSubtitle": "Weekly rank — creators with the content_creator badge only.",
+      "cupEmpty": "Be the first on the board this week.",
+      "cupAnonymous": "Creator",
+      "cupYou": "you",
+      "cupMeta": "{posts} posts this week",
+      "cupBattles": "All battles",
+      "challengeEyebrow": "Weekly mission",
+      "challengeReward": "+{xp} XP when approved",
+      "challengeSubmitted": "Submission received — admin review pending.",
+      "challengeUrlLabel": "Post URL (Reels / TikTok / Shorts)",
+      "challengeSubmit": "Submit challenge",
+      "challengeSubmitting": "Submitting…",
+      "challengeError": "Could not submit — check the URL.",
+      "battlesTitle": "Creator 1v1",
+      "battlesSubtitle": "Challenge another creator — first to publish wins.",
+      "battlesPick": "Choose rival",
+      "battlesSelect": "Select creator",
+      "battlesSend": "Send challenge",
+      "battlesError": "Could not send challenge.",
+      "statusTitle": "Creator status board",
+      "statusSubtitle": "Track filming pipeline — update your card anytime.",
+      "statusYourCard": "Your status",
+      "statusUpdate": "Update",
+      "statusError": "Could not save",
+      "status": {
+        "INVITED": "Invited",
+        "JOINED": "Joined",
+        "FILMING": "Filming",
+        "SUBMITTED": "Submitted",
+        "FEATURED": "Featured"
+      }
     },
     "chat": {
       "back": "Back to dashboard",
@@ -2897,23 +3011,42 @@
       },
       "creatorsPage": {
         "title": "Content creators program",
-        "subtitle": "Grant the badge from Badges — choose here who joins the private chat group.",
+        "subtitle": "Grant Creator Arena lounge access to any partner — badge holders get access automatically.",
+        "accessNote": "Lounge access does not change commissions, XP, or deals. Badge holders cannot be removed from the lounge until the badge is revoked.",
         "statBadge": "Badge holders",
         "statRoom": "In group",
         "searchPlaceholder": "Search by name or email…",
-        "roomTitle": "Private group members",
-        "roomHint": "Only these partners see the Creators tab in chat.",
+        "roomTitle": "Lounge access (active)",
+        "roomHint": "Partners with lounge access see Creator Arena in navigation and can use chat, kit, and cup.",
         "emptyRoom": "No one in the group yet.",
         "badgeTitle": "Content creator badge holders",
         "badgeHint": "Auto-added when the badge is granted — you can add other partners manually.",
         "emptyBadge": "No content creator badges granted yet.",
         "allPartnersTitle": "All partners",
         "addToRoom": "Add to group",
+        "grantLounge": "Grant lounge access",
+        "revokeLounge": "Revoke lounge",
+        "hasLoungeAccess": "Has access",
         "removeFromRoom": "Remove",
         "inRoom": "In group",
+        "accessBadgeAndLounge": "Badge + lounge",
+        "accessBadgeOnly": "Badge (auto lounge)",
+        "accessLoungeOnly": "Admin lounge access",
+        "accessNone": "No lounge access",
         "toastAdded": "Added to group",
-        "toastRemoved": "Removed from group",
-        "toastError": "Action failed"
+        "toastLoungeGranted": "Lounge access granted",
+        "toastRemoved": "Lounge access revoked",
+        "toastBadgeProtected": "Cannot revoke — partner has content_creator badge",
+        "toastStatusSaved": "Creator status updated",
+        "toastError": "Action failed",
+        "statusLabel": "Creator workflow status",
+        "status": {
+          "INVITED": "Invited",
+          "JOINED": "Joined",
+          "FILMING": "Filming",
+          "SUBMITTED": "Submitted",
+          "FEATURED": "Featured"
+        }
       },
       "partners": {
         "title": "Partner management",
@@ -3358,6 +3491,7 @@
       "switchToRegister": "Need an account? Register",
       "switchToSignIn": "Already have an account? Sign in",
       "registerIntro": "Create your partner profile to start earning when deals close.",
+      "inviteRegisterHint": "Your invite is accepted — register with the same email to unlock the Creator Lounge badge automatically.",
       "signInHeroEyebrow": "TENEGTA ASCEND",
       "signInHeroTitle": "Your command center for partner performance",
       "signInHeroLine1": "Commissions, levels, and XP — unified in one live workspace.",

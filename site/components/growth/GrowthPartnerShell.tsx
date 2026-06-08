@@ -35,11 +35,19 @@ const BASE_NAV = [
 
 const CREATORS_NAV = { href: "/growth/creators", key: "creators" as const };
 
-const MOBILE_KEYS = [
+const MOBILE_KEYS_BASE = [
   "dashboard",
   "deals",
   "events",
   "map",
+  "chat",
+  "settings",
+] as const;
+
+const MOBILE_KEYS_WITH_CREATORS = [
+  "dashboard",
+  "creators",
+  "deals",
   "chat",
   "settings",
 ] as const;
@@ -93,9 +101,8 @@ export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProg
         : "text-white/60 hover:bg-white/[0.06] hover:text-white"
     }`;
 
-  const mobileNav = navItems.filter((n) =>
-    (MOBILE_KEYS as readonly string[]).includes(n.key),
-  );
+  const mobileKeys = showCreatorsProgram ? MOBILE_KEYS_WITH_CREATORS : MOBILE_KEYS_BASE;
+  const mobileNav = navItems.filter((n) => (mobileKeys as readonly string[]).includes(n.key));
 
   return (
     <>

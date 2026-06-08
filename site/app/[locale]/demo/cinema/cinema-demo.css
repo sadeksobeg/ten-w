@@ -2326,3 +2326,60 @@ html.cinema-demo-active main {
 [dir="rtl"] .cinema-closing-card--tilt:hover {
   transform: perspective(800px) rotateX(4deg) rotateY(6deg) translateY(-4px);
 }
+
+/* Creator presenter mode */
+.cinema-presenter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(10, 6, 18, 0.92), rgba(0, 0, 0, 0.98));
+}
+
+.cinema-presenter-overlay__card {
+  max-width: 28rem;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid rgba(228, 184, 77, 0.35);
+  border-radius: 1.25rem;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.cinema-presenter-overlay__eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(228, 184, 77, 0.85);
+}
+
+.cinema-presenter-overlay__title {
+  margin-top: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.cinema-presenter-overlay__body {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.cinema-presenter-watermark {
+  position: fixed;
+  bottom: 1rem;
+  inset-inline-end: 1rem;
+  z-index: 55;
+  pointer-events: none;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(228, 184, 77, 0.45);
+}
+
+.cinema-presenter-watermark--live {
+  opacity: 0.55;
+}
