@@ -241,6 +241,40 @@ export async function adminRateSubmissionAction(
   });
 
   revalidatePath("/growth/admin/creators");
+  revalidatePath("/growth/creators");
+  return { ok: true };
+}
+
+const submissionStatusSchema = z.object({
+  submissionId: z.string().min(1),
+  status: z.enum(["approved", "rejected", "pending"]),
+});
+
+export async function adminSetSubmissionStatusAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin;
+
+  const parsed = submissionStatusSchema.safeParse({
+    submissionId: formData.get("submissionId"),
+    status: formData.get("status"),
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const isFeatured = parsed.data.status === "approved";
+  await prisma.creatorSubmission.update({
+    where: { id: parsed.data.submissionId },
+    data: {
+      status: parsed.data.status,
+      isFeatured,
+      adminRating: parsed.data.status === "approved" ? 5 : parsed.data.status === "rejected" ? 1 : null,
+    },
+  });
+
+  revalidatePath("/growth/admin/creators");
+  revalidatePath("/growth/creators");
   return { ok: true };
 }
 

@@ -28,15 +28,19 @@ import { ensureClientDiscountCode } from "@/lib/growth/ensure-partner-profile";
 import { getPublicProducts } from "@/lib/growth/public-products";
 import { prisma } from "@/lib/prisma";
 
-type Props = { params: Promise<{ locale: string }> };
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ preview?: string }>;
+};
 
-export default async function ContentCreatorsPage({ params }: Props) {
+export default async function ContentCreatorsPage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const { preview } = await searchParams;
   const session = await auth();
   if (!session?.user?.id) {
     redirect(`/${locale}/growth/sign-in`);
   }
-  if (session.user.role === "ADMIN") {
+  if (session.user.role === "ADMIN" && preview !== "lounge") {
     redirect(`/${locale}/growth/admin/creators`);
   }
 

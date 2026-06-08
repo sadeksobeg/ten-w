@@ -20,6 +20,8 @@ import {
   getAdminCreatorStats,
   listAllChallenges,
   listChallengeSubmissions,
+  listCreatorsMissingWeeklySubmission,
+  listPendingCreatorSubmissions,
 } from "@/lib/growth/creator-arena";
 import { resolveChatSenderName } from "@/lib/growth/chat-display";
 import { prisma } from "@/lib/prisma";
@@ -35,7 +37,7 @@ export default async function AdminCreatorsPage({ params }: Props) {
 
   await ensureCreatorRoom();
 
-  const [allPartners, badgeRows, roomMembers, stats, challengeRows, cupLeaderboard] =
+  const [allPartners, badgeRows, roomMembers, stats, challengeRows, cupLeaderboard, pendingRows, missingThisWeek] =
     await Promise.all([
       prisma.user.findMany({
         where: { role: UserRole.PARTNER, partnerProfile: { isNot: null } },
@@ -61,6 +63,8 @@ export default async function AdminCreatorsPage({ params }: Props) {
       getAdminCreatorStats(),
       listAllChallenges(),
       creatorCupLeaderboard(20),
+      listPendingCreatorSubmissions(),
+      listCreatorsMissingWeeklySubmission(),
     ]);
 
   const partnerIds = allPartners.map((u) => u.id);
@@ -116,6 +120,7 @@ export default async function AdminCreatorsPage({ params }: Props) {
       userId: s.userId,
       userName: resolveChatSenderName(s.user),
       userEmail: s.user.email,
+      weekKey: s.weekKey,
       postUrl: s.postUrl,
       platform: s.platform,
       adminRating: s.adminRating,
@@ -166,6 +171,8 @@ export default async function AdminCreatorsPage({ params }: Props) {
         stats={stats}
         challenges={challenges}
         submissionsByWeek={submissionsByWeek}
+        pendingSubmissions={pendingRows}
+        missingThisWeek={missingThisWeek}
         cupLeaderboard={cupLeaderboard}
       />
     </div>

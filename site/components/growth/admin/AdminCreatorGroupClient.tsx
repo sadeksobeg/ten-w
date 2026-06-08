@@ -9,19 +9,23 @@ import {
   adminAddCreatorRoomMemberAction,
   adminRemoveCreatorRoomMemberAction,
 } from "@/lib/growth/actions";
+import { Link } from "@/i18n/navigation";
 import { AdminChallengeManager } from "./AdminChallengeManager";
 import { AdminCreatorCupManager } from "./AdminCreatorCupManager";
 import { AdminCreatorDetailPanel } from "./AdminCreatorDetailPanel";
 import { AdminCreatorList } from "./AdminCreatorList";
 import { AdminCreatorStatsRow } from "./AdminCreatorStatsRow";
+import { AdminSubmissionsQueue } from "./AdminSubmissionsQueue";
 import type {
   CreatorAdminChallenge,
   CreatorAdminChallengeSubmission,
+  CreatorAdminMissingSubmission,
   CreatorAdminPartner,
   CreatorAdminStats,
   CreatorAdminTab,
   CreatorCupRow,
 } from "./creator-admin-types";
+import { currentWeekKey } from "@/lib/growth/creator-arena";
 
 export type { CreatorAdminPartner } from "./creator-admin-types";
 
@@ -30,6 +34,8 @@ type Props = {
   stats: CreatorAdminStats;
   challenges: CreatorAdminChallenge[];
   submissionsByWeek: Record<string, CreatorAdminChallengeSubmission[]>;
+  pendingSubmissions: CreatorAdminChallengeSubmission[];
+  missingThisWeek: CreatorAdminMissingSubmission[];
   cupLeaderboard: CreatorCupRow[];
 };
 
@@ -38,22 +44,31 @@ export function AdminCreatorGroupClient({
   stats,
   challenges: initialChallenges,
   submissionsByWeek: initialSubmissionsByWeek,
+  pendingSubmissions: initialPending,
+  missingThisWeek,
   cupLeaderboard,
 }: Props) {
   const t = useTranslations("Growth.admin.creatorsPage");
   const tAdmin = useTranslations("Growth.creators.admin");
   const { showToast } = useToast();
 
-  const [tab, setTab] = useState<CreatorAdminTab>("creators");
+  const [tab, setTab] = useState<CreatorAdminTab>(
+    stats.pendingSubmissions > 0 ? "submissions" : "creators",
+  );
   const [partners, setPartners] = useState(initialPartners);
   const [challenges, setChallenges] = useState(initialChallenges);
   const [submissionsByWeek, setSubmissionsByWeek] = useState(initialSubmissionsByWeek);
+  const [pendingSubmissions, setPendingSubmissions] = useState(initialPending);
+  const [pendingCount, setPendingCount] = useState(stats.pendingSubmissions);
   const [selectedPartner, setSelectedPartner] = useState<CreatorAdminPartner | null>(null);
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const weekKey = currentWeekKey();
 
   const tabClass = (active: boolean) =>
-    `rounded-lg px-4 py-2 text-xs font-bold transition ${
-      active ? "bg-gold/20 text-gold" : "text-white/55 hover:bg-white/[0.04]"
+    `flex shrink-0 snap-start items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-bold transition ${
+      active
+        ? "bg-gold text-black shadow-[0_0_12px_rgba(228,184,77,0.25)]"
+        : "border border-white/15 text-white/70 hover:border-gold/35"
     }`;
 
   const patchPartner = useCallback(
@@ -151,10 +166,20 @@ export function AdminCreatorGroupClient({
             <p className="max-w-xl text-sm leading-relaxed text-white/65">{t("subtitle")}</p>
             <p className="mt-2 max-w-xl text-xs text-white/45">{t("accessNote")}</p>
           </div>
+          <Link
+            href="/growth/creators?preview=lounge"
+            className="shrink-0 rounded-xl border border-gold/35 bg-gold/10 px-4 py-2.5 text-xs font-bold text-gold hover:border-gold/50"
+          >
+            {tAdmin("previewLounge")}
+          </Link>
         </div>
       </GlassCard>
 
-      <div className="flex flex-wrap gap-2" role="tablist" aria-label={tAdmin("tabsAria")}>
+      <div
+        className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        role="tablist"
+        aria-label={tAdmin("tabsAria")}
+      >
         <button
           type="button"
           role="tab"
@@ -163,6 +188,24 @@ export function AdminCreatorGroupClient({
           onClick={() => setTab("creators")}
         >
           {tAdmin("tabCreators")}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "submissions"}
+          className={tabClass(tab === "submissions")}
+          onClick={() => setTab("submissions")}
+        >
+          {tAdmin("tabSubmissions")}
+          {pendingCount > 0 ? (
+            <span
+              className={`rounded-full px-1.5 py-0.5 text-[9px] ${
+                tab === "submissions" ? "bg-black/20 text-black" : "bg-rose-500/20 text-rose-200"
+              }`}
+            >
+              {pendingCount}
+            </span>
+          ) : null}
         </button>
         <button
           type="button"
@@ -196,6 +239,34 @@ export function AdminCreatorGroupClient({
             pendingId={pendingId}
           />
         </div>
+      ) : null}
+
+      {tab === "submissions" ? (
+        <AdminSubmissionsQueue
+          pending={pendingSubmissions}
+          missingThisWeek={missingThisWeek}
+          weekKey={weekKey}
+          onSubmissionUpdated={(submissionId, patch) => {
+            setPartners((prev) =>
+              prev.map((p) => ({
+                ...p,
+                submissions: p.submissions.map((s) =>
+                  s.id === submissionId ? { ...s, ...patch } : s,
+                ),
+              })),
+            );
+            setSubmissionsByWeek((prev) => {
+              const next = { ...prev };
+              for (const key of Object.keys(next)) {
+                next[key] = next[key]!.map((s) =>
+                  s.id === submissionId ? { ...s, ...patch } : s,
+                );
+              }
+              return next;
+            });
+          }}
+          onSubmissionRemoved={() => setPendingCount((n) => Math.max(0, n - 1))}
+        />
       ) : null}
 
       {tab === "challenges" ? (

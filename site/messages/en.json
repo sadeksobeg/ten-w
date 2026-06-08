@@ -2920,8 +2920,10 @@
       "admin": {
         "tabsAria": "Creator admin sections",
         "tabCreators": "Creators",
+        "tabSubmissions": "Submissions",
         "tabChallenges": "Challenges",
         "tabCup": "Creator Cup",
+        "previewLounge": "Preview lounge",
         "stats": {
           "aria": "Creator program statistics",
           "totalCreators": "Lounge creators",
@@ -2985,6 +2987,22 @@
           "featured": "Featured",
           "rate": "Rate {n} stars",
           "toastCreated": "Challenge saved",
+          "toastRated": "Rating saved",
+          "toastError": "Action failed"
+        },
+        "submissions": {
+          "pendingTitle": "Pending review",
+          "pendingSubtitle": "Review creator posts about the company — approve or reject in one click.",
+          "pendingEmpty": "No pending submissions — all caught up.",
+          "approve": "Approve",
+          "reject": "Reject",
+          "rateLabel": "Rate:",
+          "missingTitle": "Not posted yet ({week})",
+          "missingSubtitle": "Creators with lounge access who have not submitted a link this week.",
+          "missingEmpty": "All active creators submitted this week.",
+          "notPosted": "Not posted",
+          "toastApproved": "Post approved",
+          "toastRejected": "Post rejected",
           "toastRated": "Rating saved",
           "toastError": "Action failed"
         },

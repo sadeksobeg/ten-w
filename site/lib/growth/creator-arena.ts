@@ -661,6 +661,72 @@ export async function listChallengeSubmissions(weekKey: string) {
   });
 }
 
+export async function listPendingCreatorSubmissions(limit = 50) {
+  const rows = await prisma.creatorSubmission.findMany({
+    where: { status: "pending" },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          isVerifiedOfficial: true,
+          officialDisplayName: true,
+        },
+      },
+    },
+  });
+
+  return rows.map((s) => ({
+    id: s.id,
+    userId: s.user.id,
+    userName: resolveChatSenderName(s.user),
+    userEmail: s.user.email,
+    weekKey: s.weekKey,
+    postUrl: s.postUrl,
+    platform: s.platform,
+    adminRating: s.adminRating,
+    status: s.status,
+    isFeatured: s.isFeatured,
+    createdAt: s.createdAt.toISOString(),
+  }));
+}
+
+export async function listCreatorsMissingWeeklySubmission() {
+  const weekKey = currentWeekKey();
+  const { getCreatorLoungeParticipantIds } = await import("@/lib/growth/creator-program");
+  const ids = await getCreatorLoungeParticipantIds();
+  if (ids.length === 0) return [];
+
+  const submitted = await prisma.creatorSubmission.findMany({
+    where: { weekKey, userId: { in: ids } },
+    select: { userId: true },
+  });
+  const submittedSet = new Set(submitted.map((s) => s.userId));
+  const missingIds = ids.filter((id) => !submittedSet.has(id));
+  if (missingIds.length === 0) return [];
+
+  const users = await prisma.user.findMany({
+    where: { id: { in: missingIds } },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      isVerifiedOfficial: true,
+      officialDisplayName: true,
+    },
+    orderBy: { name: "asc" },
+  });
+
+  return users.map((u) => ({
+    userId: u.id,
+    name: resolveChatSenderName(u),
+    email: u.email,
+  }));
+}
+
 export async function getCreatorBattleCandidates(userId: string) {
   const { getCreatorLoungeParticipantIds } = await import("@/lib/growth/creator-program");
   const participantIds = (await getCreatorLoungeParticipantIds()).filter((id) => id !== userId);

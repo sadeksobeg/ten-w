@@ -2866,8 +2866,10 @@
       "admin": {
         "tabsAria": "Sections admin créateurs",
         "tabCreators": "Créateurs",
+        "tabSubmissions": "Soumissions",
         "tabChallenges": "Défis",
         "tabCup": "Creator Cup",
+        "previewLounge": "Aperçu du lounge",
         "stats": {
           "aria": "Statistiques du programme créateurs",
           "totalCreators": "Créateurs lounge",
@@ -2931,6 +2933,22 @@
           "featured": "À la une",
           "rate": "Noter {n} étoiles",
           "toastCreated": "Défi enregistré",
+          "toastRated": "Note enregistrée",
+          "toastError": "Action échouée"
+        },
+        "submissions": {
+          "pendingTitle": "En attente de revue",
+          "pendingSubtitle": "Revoyez les posts des créateurs sur l'entreprise — approuvez ou rejetez en un clic.",
+          "pendingEmpty": "Aucune soumission en attente.",
+          "approve": "Approuver",
+          "reject": "Rejeter",
+          "rateLabel": "Note :",
+          "missingTitle": "Pas encore publié ({week})",
+          "missingSubtitle": "Créateurs avec accès au lounge sans lien soumis cette semaine.",
+          "missingEmpty": "Tous les créateurs actifs ont soumis cette semaine.",
+          "notPosted": "Pas publié",
+          "toastApproved": "Post approuvé",
+          "toastRejected": "Post rejeté",
           "toastRated": "Note enregistrée",
           "toastError": "Action échouée"
         },

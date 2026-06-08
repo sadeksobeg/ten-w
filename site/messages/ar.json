@@ -2871,8 +2871,10 @@
       "admin": {
         "tabsAria": "أقسام إدارة الصنّاع",
         "tabCreators": "الصنّاع",
+        "tabSubmissions": "التسليمات",
         "tabChallenges": "التحديات",
         "tabCup": "كأس الصنّاع",
+        "previewLounge": "معاينة الغرفة",
         "stats": {
           "aria": "إحصائيات برنامج الصنّاع",
           "totalCreators": "صنّاع الغرفة",
@@ -2936,6 +2938,22 @@
           "featured": "مميز",
           "rate": "تقييم {n} نجوم",
           "toastCreated": "تم حفظ التحدي",
+          "toastRated": "تم حفظ التقييم",
+          "toastError": "تعذّر تنفيذ العملية"
+        },
+        "submissions": {
+          "pendingTitle": "بانتظار المراجعة",
+          "pendingSubtitle": "راجع منشورات الصنّاع عن الشركة — اعتماد أو رفض بنقرة.",
+          "pendingEmpty": "لا تسليمات معلّقة — كل شيء محدّث.",
+          "approve": "اعتماد",
+          "reject": "رفض",
+          "rateLabel": "تقييم:",
+          "missingTitle": "لم ينشروا بعد ({week})",
+          "missingSubtitle": "صنّاع لديهم وصول للغرفة لكن لم يرسلوا رابطاً هذا الأسبوع.",
+          "missingEmpty": "جميع الصنّاع النشطين أرسلوا هذا الأسبوع.",
+          "notPosted": "لم ينشر",
+          "toastApproved": "تم اعتماد المنشور",
+          "toastRejected": "تم رفض المنشور",
           "toastRated": "تم حفظ التقييم",
           "toastError": "تعذّر تنفيذ العملية"
         },

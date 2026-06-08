@@ -58,6 +58,7 @@ export type CreatorAdminChallengeSubmission = {
   userId: string;
   userName: string;
   userEmail: string;
+  weekKey: string;
   postUrl: string;
   platform: string | null;
   adminRating: number | null;
@@ -66,6 +67,12 @@ export type CreatorAdminChallengeSubmission = {
   createdAt: string;
 };
 
-export type CreatorAdminTab = "creators" | "challenges" | "cup";
+export type CreatorAdminTab = "creators" | "submissions" | "challenges" | "cup";
+
+export type CreatorAdminMissingSubmission = {
+  userId: string;
+  name: string;
+  email: string;
+};
 
 export type { CreatorCupRow };

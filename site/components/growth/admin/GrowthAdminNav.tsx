@@ -35,6 +35,7 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
       { href: "/growth/admin/orders", labelKey: "orders", Icon: IconEarnings },
       { href: "/growth/admin/payouts", labelKey: "payouts", Icon: IconPayout },
       { href: "/growth/admin/partners", labelKey: "partners", Icon: IconPartners },
+      { href: "/growth/admin/creators", labelKey: "creators", Icon: IconStar },
       { href: "/growth/admin/invites", labelKey: "invites", Icon: IconStar },
       { href: "/growth/admin/chat", labelKey: "chat", Icon: IconChat },
       { href: "/growth/admin/chat/moderators", labelKey: "chatModerators", Icon: IconChat },
@@ -60,7 +61,6 @@ const groups: { titleKey: string; items: NavItem[] }[] = [
   {
     titleKey: "groupPrograms",
     items: [
-      { href: "/growth/admin/creators", labelKey: "creators", Icon: IconStar },
       { href: "/growth/admin/legends", labelKey: "legends", Icon: IconLegends },
       { href: "/growth/admin/events", labelKey: "events", Icon: IconEvent },
       { href: "/growth/admin/event-contacts", labelKey: "eventContacts", Icon: IconPartners },
