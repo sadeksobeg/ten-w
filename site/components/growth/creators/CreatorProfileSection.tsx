@@ -8,6 +8,7 @@ import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { CreatorHubProfileCard } from "./CreatorHubProfileCard";
 import { CreatorLoungeAchievements } from "./CreatorLoungeAchievements";
 import { CreatorStatusBoard } from "./CreatorStatusBoard";
+import { CreatorPlatformReviewTask } from "./CreatorPlatformReviewTask";
 import { saveCreatorProfileAction } from "@/lib/growth/creator-arena-actions";
 import type { BadgeGridItem } from "@/components/growth/badges/BadgeGrid";
 import type { CreatorStatusCard } from "@/lib/growth/creator-arena";
@@ -33,6 +34,7 @@ type Props = {
   hasBadge: boolean;
   consentGiven: boolean;
   viewerRank?: number | null;
+  platformReviewPending: boolean;
 };
 
 export function CreatorProfileSection({
@@ -52,6 +54,7 @@ export function CreatorProfileSection({
   hasBadge,
   consentGiven,
   viewerRank,
+  platformReviewPending,
 }: Props) {
   const t = useTranslations("Creators.profile");
   const tStatus = useTranslations("Creators.status");
@@ -71,6 +74,7 @@ export function CreatorProfileSection({
         consentGiven={consentGiven}
         viewerRank={viewerRank}
       />
+      <CreatorPlatformReviewTask pending={platformReviewPending} />
       <GlassCard className="creator-card p-5">
         <h2 className="font-[family-name:var(--font-cairo)] text-lg font-extrabold text-white">{t("title")}</h2>
         <form action={formAction} className="mt-4 space-y-3">

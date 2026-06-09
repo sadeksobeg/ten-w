@@ -826,7 +826,7 @@
       "nominateSubmit": "Send nomination",
       "nominateSuccess": "Nomination sent"
     },
-    "profile": { "title": "Creator profile", "bio": "Creator bio", "specialtyLabel": "Specialty", "specialty": { "tech": "Tech", "business": "Business", "education": "Education", "entertainment": "Entertainment", "lifestyle": "Lifestyle" }, "save": "Save", "error": "Save failed", "settings": "Account settings", "journey": "Creator journey" },
+    "profile": { "title": "Creator profile", "bio": "Creator bio", "specialtyLabel": "Specialty", "specialty": { "tech": "Tech", "business": "Business", "education": "Education", "entertainment": "Entertainment", "lifestyle": "Lifestyle" }, "save": "Save", "error": "Save failed", "settings": "Account settings", "journey": "Creator journey", "platformReviewTask": { "badge": "One-time mission", "title": "Rate Creator Hub", "subtitle": "Share your experience — your review appears on For Creators and you earn 30 XP.", "ratingLabel": "Your rating (1–5)", "quoteLabel": "Your review", "quotePlaceholder": "What do you like? How did Creator Hub help you? (min 10 characters)", "submit": "Submit review +30 XP", "submitting": "Sending…", "success": "Thank you! You earned {xp} XP — mission complete.", "errors": { "consent_required": "Accept the partnership agreement first.", "already_submitted": "You already submitted your review.", "invalid_input": "Check your rating and review length.", "unknown": "Could not submit — try again." } } },
     "public": {
       "metaTitle": "Creator Network — TENEGTA",
       "metaDescription": "Join TENEGTA content creators — turn followers into real clients.",

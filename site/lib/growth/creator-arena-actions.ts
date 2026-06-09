@@ -25,6 +25,12 @@ import {
   isConsentRequiredError,
   requireCreatorConsent,
 } from "@/lib/growth/creator-consent-guard";
+import {
+  CREATOR_PLATFORM_REVIEW_XP,
+  CREATOR_PLATFORM_REVIEW_XP_REASON,
+  creatorReviewRole,
+} from "@/lib/growth/creator-platform-review-task";
+import { grantXpReward } from "@/lib/growth/mission-rewards";
 
 type ActionResult<T = undefined> =
   | { ok: true; data?: T }
@@ -950,5 +956,102 @@ export async function adminTogglePlatformReviewAction(
   await prisma.creatorPlatformReview.update({ where: { id }, data: { active } });
   revalidatePath("/growth/admin/creators");
   revalidateForCreatorsPages();
+  return { ok: true };
+}
+
+const creatorPlatformReviewSchema = z.object({
+  rating: z.coerce.number().int().min(1).max(5),
+  quote: z.string().trim().min(10).max(2000),
+});
+
+export async function submitCreatorPlatformReviewAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+  if (!(await canAccessCreatorLounge(session.user.id))) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const consentBlock = await guardCreatorConsent(session.user.id);
+  if (consentBlock) return consentBlock;
+
+  const parsed = creatorPlatformReviewSchema.safeParse({
+    rating: formData.get("rating"),
+    quote: formData.get("quote"),
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const userId = session.user.id;
+  const arena = await prisma.creatorArenaProfile.findUnique({ where: { userId } });
+  if (arena?.platformReviewSubmittedAt) {
+    return { ok: false, error: "already_submitted" };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      name: true,
+      email: true,
+      isVerifiedOfficial: true,
+      officialDisplayName: true,
+      creatorArenaProfile: { select: { specialty: true } },
+    },
+  });
+  if (!user) return { ok: false, error: "unauthorized" };
+
+  const displayName = resolveChatSenderName(user);
+  const roles = creatorReviewRole(user.creatorArenaProfile?.specialty ?? []);
+  const quote = parsed.data.quote;
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const locked = await tx.creatorArenaProfile.findUnique({ where: { userId } });
+      if (locked?.platformReviewSubmittedAt) {
+        throw new Error("already_submitted");
+      }
+
+      await tx.creatorArenaProfile.upsert({
+        where: { userId },
+        create: {
+          userId,
+          platformReviewSubmittedAt: new Date(),
+        },
+        update: {
+          platformReviewSubmittedAt: new Date(),
+        },
+      });
+
+      await tx.creatorPlatformReview.create({
+        data: {
+          nameAr: displayName,
+          nameEn: displayName,
+          nameFr: displayName,
+          roleAr: roles.roleAr,
+          roleEn: roles.roleEn,
+          roleFr: roles.roleFr,
+          quoteAr: quote,
+          quoteEn: quote,
+          quoteFr: quote,
+          rating: parsed.data.rating,
+          active: true,
+          sortOrder: 50,
+        },
+      });
+
+      await grantXpReward(tx, userId, CREATOR_PLATFORM_REVIEW_XP, CREATOR_PLATFORM_REVIEW_XP_REASON);
+    });
+  } catch (err) {
+    if (err instanceof Error && err.message === "already_submitted") {
+      return { ok: false, error: "already_submitted" };
+    }
+    throw err;
+  }
+
+  revalidatePath("/growth/creators");
+  revalidateForCreatorsPages();
+  revalidatePartnerSurfaces(userId);
   return { ok: true };
 }

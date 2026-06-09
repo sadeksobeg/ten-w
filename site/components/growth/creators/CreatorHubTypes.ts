@@ -122,6 +122,7 @@ export type CreatorHubProps = {
   needsConsent: boolean;
   consentVersionMismatch: boolean;
   consentGiven: boolean;
+  platformReviewPending: boolean;
 };
 
 export type { CreatorFeaturedCreator, CreatorOnboardingProgress };

@@ -930,7 +930,24 @@
       "save": "حفظ",
       "error": "تعذّر الحفظ",
       "settings": "إعدادات الحساب",
-      "journey": "رحلة الصانع"
+      "journey": "رحلة الصانع",
+      "platformReviewTask": {
+        "badge": "مهمة لمرة واحدة",
+        "title": "قيّم Creator Hub",
+        "subtitle": "شاركنا تجربتك — يظهر تقييمك على صفحة For Creators وتحصل على 30 نقطة XP.",
+        "ratingLabel": "تقييمك (1–5)",
+        "quoteLabel": "رأيك عن المنصة",
+        "quotePlaceholder": "ما الذي أعجبك؟ كيف ساعدك Creator Hub؟ (10 أحرف على الأقل)",
+        "submit": "إرسال التقييم +30 XP",
+        "submitting": "جاري الإرسال…",
+        "success": "شكراً! حصلت على {xp} نقطة XP — اختفت المهمة.",
+        "errors": {
+          "consent_required": "وافق على اتفاقية الشراكة أولاً.",
+          "already_submitted": "أرسلت تقييمك مسبقاً.",
+          "invalid_input": "تحقق من التقييم وطول الرأي.",
+          "unknown": "تعذّر الإرسال — حاول مجدداً."
+        }
+      }
     },
     "public": {
       "metaTitle": "شبكة الصنّاع — TENEGTA",

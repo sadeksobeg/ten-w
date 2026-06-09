@@ -280,6 +280,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
             hasBadge={props.hasBadge}
             consentGiven={consentGiven}
             viewerRank={props.viewerRank}
+            platformReviewPending={props.platformReviewPending}
           />
         );
       default:
@@ -289,6 +290,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
 
   function badgeFor(id: CreatorHubSection): number | undefined {
     if (id === "chat" && chatBadge > 0) return chatBadge;
+    if (id === "profile" && props.platformReviewPending) return 1;
     if (id === "leaderboard" && props.viewerRank) return props.viewerRank;
     if (id === "battles" && props.activeBattles > 0) return props.activeBattles;
     return undefined;

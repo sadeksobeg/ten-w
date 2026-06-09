@@ -257,6 +257,7 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
         needsConsent={needsConsent}
         consentVersionMismatch={consentVersionMismatch}
         consentGiven={!needsConsent}
+        platformReviewPending={!arenaProfile?.platformReviewSubmittedAt}
       />
     </div>
   );
