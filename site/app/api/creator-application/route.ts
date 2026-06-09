@@ -6,9 +6,10 @@ const schema = z.object({
   name: z.string().min(2).max(120),
   email: z.string().email(),
   mainPlatformUrl: z.string().url(),
-  platform: z.string().max(32).optional(),
+  platform: z.enum(["youtube", "instagram", "tiktok", "x", "facebook", "other"]).optional(),
   contentTypes: z.array(z.string()).default([]),
   followersRange: z.string().max(32),
+  applicantNote: z.string().max(200).optional(),
 });
 
 export async function POST(req: Request) {
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
       platform: parsed.data.platform ?? null,
       contentTypes: parsed.data.contentTypes,
       followersRange: parsed.data.followersRange,
+      applicantNote: parsed.data.applicantNote ?? null,
     },
   });
 

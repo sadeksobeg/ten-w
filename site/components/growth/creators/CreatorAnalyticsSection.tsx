@@ -12,9 +12,17 @@ type Props = {
   totalReferrals: number;
   cupPoints: number;
   approvalRate: number;
+  benchmarks: { avgSubmissions: number; avgClicks: number };
 };
 
-export function CreatorAnalyticsSection({ series, totalSubmissions, totalReferrals, cupPoints, approvalRate }: Props) {
+export function CreatorAnalyticsSection({
+  series,
+  totalSubmissions,
+  totalReferrals,
+  cupPoints,
+  approvalRate,
+  benchmarks,
+}: Props) {
   const t = useTranslations("Creators.analytics");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -46,6 +54,11 @@ export function CreatorAnalyticsSection({ series, totalSubmissions, totalReferra
       <GlassCard className="creator-card p-5">
         <h2 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">{t("chartTitle")}</h2>
         <canvas ref={canvasRef} width={640} height={220} className="mt-4 w-full max-w-full rounded-xl bg-black/20" />
+        <p className="mt-3 text-xs text-white/55">
+          {totalSubmissions >= benchmarks.avgSubmissions
+            ? t("aboveAvg", { pct: Math.round(((totalSubmissions - benchmarks.avgSubmissions) / Math.max(benchmarks.avgSubmissions, 1)) * 100) })
+            : t("belowAvg", { pct: Math.round(((benchmarks.avgSubmissions - totalSubmissions) / Math.max(benchmarks.avgSubmissions, 1)) * 100) })}
+        </p>
       </GlassCard>
     </div>
   );

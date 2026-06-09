@@ -2,15 +2,30 @@ import { ChatRoomType, ParticipantStatus, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { CHAT_BADGE_KEYS, sortBadgeKeysForDisplay } from "@/lib/growth/badge-visual";
 import {
+  CREATOR_CHANNEL_SLUGS,
   CREATOR_ROOM_SLUG,
+  canAccessCreatorLounge,
   ensureCreatorRoom,
   userIsCreatorRoomMember,
 } from "@/lib/growth/creator-program";
+import { canPostToCreatorRoom } from "@/lib/growth/creator-chat";
 import { matchChatKeywords } from "@/lib/growth/chat-keywords";
 import { resolveChatSenderName } from "@/lib/growth/chat-display";
 import { touchLastSeen } from "@/lib/growth/presence";
 
 export const COMMUNITY_ROOM_SLUG = "community";
+
+const CREATOR_CHANNEL_SLUG_SET = new Set<string>(CREATOR_CHANNEL_SLUGS.map((c) => c.slug));
+
+export function isCreatorChatSlug(slug: string): boolean {
+  return CREATOR_CHANNEL_SLUG_SET.has(slug) || slug.startsWith("creator-dm-");
+}
+
+export type MessageReactionDTO = {
+  emoji: string;
+  count: number;
+  mine: boolean;
+};
 
 export type ChatRoomMessageDTO = {
   id: string;
@@ -32,6 +47,7 @@ export type ChatRoomMessageDTO = {
   createdAt: string;
   editedAt: string | null;
   isDeleted: boolean;
+  reactions: MessageReactionDTO[];
 };
 
 export type RoomMessagesPage = {
@@ -192,6 +208,7 @@ function mapRowToDto(
     sender: Parameters<typeof mapSender>[0];
   },
   badges: Map<string, string[]>,
+  reactions: MessageReactionDTO[] = [],
 ): ChatRoomMessageDTO {
   return {
     id: m.id,
@@ -207,7 +224,54 @@ function mapRowToDto(
     createdAt: m.createdAt.toISOString(),
     editedAt: m.editedAt?.toISOString() ?? null,
     isDeleted: Boolean(m.deletedAt),
+    reactions,
   };
+}
+
+async function loadReactionsMap(
+  messageIds: string[],
+  viewerUserId: string,
+): Promise<Map<string, MessageReactionDTO[]>> {
+  const map = new Map<string, MessageReactionDTO[]>();
+  if (messageIds.length === 0) return map;
+
+  const rows = await prisma.chatRoomMessageReaction.findMany({
+    where: { messageId: { in: messageIds } },
+    select: { messageId: true, userId: true, emoji: true },
+  });
+
+  const agg = new Map<string, Map<string, { count: number; mine: boolean }>>();
+  for (const row of rows) {
+    const perMsg = agg.get(row.messageId) ?? new Map();
+    const cur = perMsg.get(row.emoji) ?? { count: 0, mine: false };
+    cur.count += 1;
+    if (row.userId === viewerUserId) cur.mine = true;
+    perMsg.set(row.emoji, cur);
+    agg.set(row.messageId, perMsg);
+  }
+
+  for (const [msgId, emojis] of agg) {
+    const list: MessageReactionDTO[] = [];
+    for (const [emoji, data] of emojis) {
+      list.push({ emoji, count: data.count, mine: data.mine });
+    }
+    map.set(msgId, list);
+  }
+  return map;
+}
+
+async function attachReactions(
+  items: ChatRoomMessageDTO[],
+  viewerUserId: string,
+): Promise<ChatRoomMessageDTO[]> {
+  const reactionMap = await loadReactionsMap(
+    items.map((m) => m.id),
+    viewerUserId,
+  );
+  return items.map((m) => ({
+    ...m,
+    reactions: reactionMap.get(m.id) ?? [],
+  }));
 }
 
 const senderInclude = {
@@ -234,7 +298,7 @@ export async function listRoomMessages(
 
 export async function listRoomMessagesPage(
   roomId: string,
-  opts?: { after?: Date; before?: Date; take?: number },
+  opts?: { after?: Date; before?: Date; take?: number; viewerUserId?: string },
 ): Promise<RoomMessagesPage> {
   const take = opts?.take ?? DEFAULT_PAGE_SIZE;
 
@@ -246,8 +310,12 @@ export async function listRoomMessagesPage(
       include: senderInclude,
     });
     const badges = await chatBadgeMap([...new Set(rows.map((m) => m.senderUserId))]);
+    let items = rows.map((m) => mapRowToDto(m, badges));
+    if (opts?.viewerUserId) {
+      items = await attachReactions(items, opts.viewerUserId);
+    }
     return {
-      items: rows.map((m) => mapRowToDto(m, badges)),
+      items,
       hasMore: false,
     };
   }
@@ -263,8 +331,12 @@ export async function listRoomMessagesPage(
     const slice = hasMore ? rows.slice(0, take) : rows;
     const ordered = [...slice].reverse();
     const badges = await chatBadgeMap([...new Set(ordered.map((m) => m.senderUserId))]);
+    let items = ordered.map((m) => mapRowToDto(m, badges));
+    if (opts?.viewerUserId) {
+      items = await attachReactions(items, opts.viewerUserId);
+    }
     return {
-      items: ordered.map((m) => mapRowToDto(m, badges)),
+      items,
       hasMore,
     };
   }
@@ -279,8 +351,12 @@ export async function listRoomMessagesPage(
   const slice = hasMore ? rows.slice(0, take) : rows;
   const ordered = [...slice].reverse();
   const badges = await chatBadgeMap([...new Set(ordered.map((m) => m.senderUserId))]);
+  let items = ordered.map((m) => mapRowToDto(m, badges));
+  if (opts?.viewerUserId) {
+    items = await attachReactions(items, opts.viewerUserId);
+  }
   return {
-    items: ordered.map((m) => mapRowToDto(m, badges)),
+    items,
     hasMore,
   };
 }
@@ -320,7 +396,7 @@ export async function appendRoomMessage(input: {
 
   const badgeList = (await chatBadgeMap([msg.senderUserId])).get(msg.senderUserId) ?? [];
 
-  return mapRowToDto({ ...msg, deletedAt: null }, new Map([[msg.senderUserId, badgeList]]));
+  return mapRowToDto({ ...msg, deletedAt: null }, new Map([[msg.senderUserId, badgeList]]), []);
 }
 
 export async function resolveChatRoomForUser(slug: string, userId: string) {
@@ -333,6 +409,18 @@ export async function resolveChatRoomForUser(slug: string, userId: string) {
     const isMember = await userIsCreatorRoomMember(userId);
     if (!isMember) throw new Error("not_creator_member");
     const room = await ensureCreatorRoom();
+    return { room, kind: "creator" as const };
+  }
+
+  if (isCreatorChatSlug(slug)) {
+    if (!(await canAccessCreatorLounge(userId))) throw new Error("not_creator_member");
+    const room = await prisma.chatRoom.findUnique({ where: { slug } });
+    if (!room) return null;
+    const member = await prisma.chatRoomMember.findFirst({
+      where: { roomId: room.id, userId },
+      select: { roomId: true },
+    });
+    if (!member) throw new Error("not_creator_member");
     return { room, kind: "creator" as const };
   }
 
@@ -396,8 +484,26 @@ export async function postEventRoomMessage(senderUserId: string, roomSlug: strin
 }
 
 export async function postCreatorRoomMessage(senderUserId: string, body: string) {
+  return postCreatorChannelMessage(CREATOR_ROOM_SLUG, senderUserId, body);
+}
+
+export async function postCreatorChannelMessage(
+  roomSlug: string,
+  senderUserId: string,
+  body: string,
+  opts?: {
+    isAdmin?: boolean;
+    kind?: string;
+    metadata?: Record<string, unknown>;
+    skipPostCheck?: boolean;
+  },
+) {
   await touchLastSeen(prisma, senderUserId);
-  const resolved = await resolveChatRoomForUser(CREATOR_ROOM_SLUG, senderUserId);
+  if (!opts?.skipPostCheck) {
+    const canPost = await canPostToCreatorRoom(senderUserId, roomSlug, opts?.isAdmin ?? false);
+    if (!canPost) throw new Error("forbidden");
+  }
+  const resolved = await resolveChatRoomForUser(roomSlug, senderUserId);
   if (!resolved || resolved.kind !== "creator") {
     throw new Error("forbidden");
   }
@@ -406,6 +512,8 @@ export async function postCreatorRoomMessage(senderUserId: string, body: string)
     roomId: resolved.room.id,
     senderUserId,
     body,
+    kind: opts?.kind,
+    metadata: opts?.metadata,
   });
 }
 

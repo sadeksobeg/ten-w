@@ -1,19 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { IconYoutube, IconInstagram, IconTiktok, IconXPlatform, IconFacebook, IconWhatsapp, IconQr, IconExternalLink } from "@/components/growth/icons/GrowthIcons";
 import { CreatorSalesGuidePanel } from "./CreatorSalesGuidePanel";
+import { CreatorReferralProof } from "./CreatorReferralProof";
 import { useToast } from "@/hooks/useToast";
+import { drawLineChart } from "@/lib/growth/canvas-chart";
+import type { CreatorReferralRow } from "@/lib/growth/creator-arena";
 
 type Props = {
   clientDiscountCode: string | null;
   commissionPercent: string;
   salesProducts: Array<{ slug: string; name: string; priceCents: number }>;
   viewerName: string;
+  utmWeeklySeries: Array<{ label: string; clicks: number }>;
+  referralProof: { rows: CreatorReferralRow[]; totalCents: number };
+  utmClicks: number;
+  utmRegistrations: number;
 };
 
 const PLATFORMS = [
@@ -33,12 +40,32 @@ const WEEKLY_IDEAS = [
   { platform: "youtube", titleKey: "idea5" },
 ] as const;
 
-export function CreatorKitSection({ clientDiscountCode, commissionPercent, salesProducts, viewerName }: Props) {
+export function CreatorKitSection({
+  clientDiscountCode,
+  commissionPercent,
+  salesProducts,
+  viewerName,
+  utmWeeklySeries,
+  referralProof,
+  utmClicks,
+  utmRegistrations,
+}: Props) {
   const t = useTranslations("Creators.kit");
   const locale = useLocale();
   const { showToast } = useToast();
   const [platform, setPlatform] = useState("instagram");
+  const chartRef = useRef<HTMLCanvasElement>(null);
   const code = clientDiscountCode ?? "TENEGTA";
+
+  useEffect(() => {
+    const canvas = chartRef.current;
+    if (!canvas || utmWeeklySeries.length < 2) return;
+    drawLineChart(
+      canvas,
+      utmWeeklySeries.map((p) => ({ label: p.label, value: p.clicks })),
+      { strokeColor: "#E11D48" },
+    );
+  }, [utmWeeklySeries]);
 
   const utmUrl = `https://tenegta.com/${locale}/contact?code=${encodeURIComponent(code)}&utm_source=${platform}&utm_medium=creator&utm_campaign=creator-${encodeURIComponent(viewerName.slice(0, 12))}`;
 
@@ -94,6 +121,16 @@ export function CreatorKitSection({ clientDiscountCode, commissionPercent, sales
           ))}
         </ul>
       </GlassCard>
+
+      <GlassCard className="creator-card p-5">
+        <h3 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">{t("utmChartTitle")}</h3>
+        <canvas ref={chartRef} width={640} height={180} className="mt-3 w-full rounded-xl bg-black/20" />
+        <p className="mt-3 text-xs text-white/50">
+          {t("funnel", { clicks: utmClicks, regs: utmRegistrations, deals: Math.max(0, Math.floor(utmRegistrations * 0.15)) })}
+        </p>
+      </GlassCard>
+
+      <CreatorReferralProof rows={referralProof.rows} totalCents={referralProof.totalCents} />
 
       <GlassCard className="creator-card p-5">
         <h3 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">{t("assetsTitle")}</h3>

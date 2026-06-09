@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactUtmTracker } from "@/components/contact/ContactUtmTracker";
 import { ContactPhoneLink } from "@/components/contact/ContactPhoneLink";
 import { Section } from "@/components/ui/Section";
 import type { Locale } from "@/i18n/routing";
@@ -8,7 +9,14 @@ import { buildAlternates } from "@/lib/metadata-helpers";
 
 type Props = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ intent?: string; topic?: string; code?: string }>;
+  searchParams: Promise<{
+    intent?: string;
+    topic?: string;
+    code?: string;
+    utm_source?: string;
+    utm_campaign?: string;
+    utm_medium?: string;
+  }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -42,6 +50,12 @@ export default async function ContactPage({ params, searchParams }: Props) {
 
   return (
     <>
+      <ContactUtmTracker
+        path={`/${locale}/contact`}
+        utmSource={sp.utm_source}
+        utmCampaign={sp.utm_campaign}
+        utmMedium={sp.utm_medium}
+      />
       <Section className="border-b border-white/10 pb-10 pt-8 sm:pb-12 sm:pt-10">
         <h1 className="font-[family-name:var(--font-cairo)] text-2xl font-bold sm:text-3xl md:text-4xl">
           {t("hero.title")}

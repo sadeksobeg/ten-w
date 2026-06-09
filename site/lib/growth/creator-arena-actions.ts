@@ -341,6 +341,24 @@ export async function adminGrantMilestoneAction(
         updatedById: admin.userId,
       },
     });
+
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: parsed.data.userId },
+        select: { name: true, email: true, isVerifiedOfficial: true, officialDisplayName: true },
+      });
+      const { postCreatorChannelMessage } = await import("@/lib/growth/chat-room-service");
+      await postCreatorChannelMessage("content-creators", admin.userId, "·", {
+        kind: "ACHIEVEMENT",
+        metadata: {
+          userName: user ? resolveChatSenderName(user) : "Creator",
+          badgeName: parsed.data.milestoneKey,
+        },
+        skipPostCheck: true,
+      });
+    } catch {
+      /* chat optional */
+    }
   }
 
   revalidatePath("/growth/admin/creators");
@@ -413,9 +431,29 @@ export async function adminGrantCreatorBadgeAction(
   const userId = String(formData.get("userId") ?? "");
   if (!userId) return { ok: false, error: "invalid_input" };
 
-  await grantIfMissingBadge(userId, CONTENT_CREATOR_BADGE);
+  const granted = await grantIfMissingBadge(userId, CONTENT_CREATOR_BADGE);
   const { grantCreatorLoungeAccess } = await import("@/lib/growth/creator-program");
   await grantCreatorLoungeAccess(userId);
+
+  if (granted) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { name: true, email: true, isVerifiedOfficial: true, officialDisplayName: true },
+      });
+      const { postCreatorChannelMessage } = await import("@/lib/growth/chat-room-service");
+      await postCreatorChannelMessage("content-creators", admin.userId, "·", {
+        kind: "ACHIEVEMENT",
+        metadata: {
+          userName: user ? resolveChatSenderName(user) : "Creator",
+          badgeName: "Content Creator",
+        },
+        skipPostCheck: true,
+      });
+    } catch {
+      /* chat optional */
+    }
+  }
 
   revalidatePath("/growth/admin/creators");
   return { ok: true };
@@ -539,9 +577,52 @@ export async function adminReviewApplicationAction(
   } else {
     await prisma.creatorApplication.update({
       where: { id },
-      data: { status: "REJECTED", adminNotes: String(formData.get("notes") ?? "") },
+      data: {
+        status: "REJECTED",
+        adminNotes: String(formData.get("adminNotes") ?? formData.get("notes") ?? ""),
+      },
     });
   }
+  revalidatePath("/growth/admin/creators");
+  return { ok: true };
+}
+
+const nominationSchema = z.object({
+  nomineeUserId: z.string().min(1),
+  reason: z.string().max(200).optional(),
+});
+
+export async function createNominationAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const session = await auth();
+  if (!session?.user?.id || !(await canAccessCreatorLounge(session.user.id))) {
+    return { ok: false, error: "unauthorized" };
+  }
+  const parsed = nominationSchema.safeParse({
+    nomineeUserId: formData.get("nomineeUserId"),
+    reason: formData.get("reason") ?? undefined,
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+  if (parsed.data.nomineeUserId === session.user.id) {
+    return { ok: false, error: "self_nomination" };
+  }
+  await prisma.creatorNomination.upsert({
+    where: {
+      nominatorUserId_nomineeUserId: {
+        nominatorUserId: session.user.id,
+        nomineeUserId: parsed.data.nomineeUserId,
+      },
+    },
+    create: {
+      nominatorUserId: session.user.id,
+      nomineeUserId: parsed.data.nomineeUserId,
+      reason: parsed.data.reason ?? null,
+    },
+    update: { reason: parsed.data.reason ?? null },
+  });
+  revalidatePath("/growth/creators");
   revalidatePath("/growth/admin/creators");
   return { ok: true };
 }

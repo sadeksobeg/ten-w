@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { ContentCreatorHub } from "@/components/growth/creators/ContentCreatorHub";
+import type { CreatorHubProps } from "@/components/growth/creators/CreatorHubTypes";
 import {
   canAccessCreatorLounge,
   ensureCreatorChannels,
@@ -17,6 +18,12 @@ import {
   getCreatorDashboardMetrics,
   getCreatorPulse,
   getCreatorAnalyticsSeries,
+  getCreatorAnalyticsBenchmarks,
+  getCreatorReferralProof,
+  getCreatorUtmStats,
+  getCreatorUtmWeeklySeries,
+  getCreatorWeekStreak,
+  getChallengeSubmissionCount,
   getFeaturedCreator,
   getViewerCreatorProfile,
   listCreatorBattleHistory,
@@ -90,6 +97,12 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
     activeBattle,
     pendingInvites,
     arenaProfile,
+    weekStreak,
+    utmStats,
+    utmWeeklySeries,
+    referralProof,
+    analyticsBenchmarks,
+    challengeSubmitCount,
   ] = await Promise.all([
     userIsCreatorRoomMember(userId),
     getCreatorPulse(),
@@ -125,6 +138,12 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
     getActiveCreatorBattle(userId),
     listPendingBattleInvites(userId),
     prisma.creatorArenaProfile.findUnique({ where: { userId } }),
+    getCreatorWeekStreak(userId),
+    getCreatorUtmStats(userId),
+    getCreatorUtmWeeklySeries(userId),
+    getCreatorReferralProof(userId),
+    getCreatorAnalyticsBenchmarks(),
+    getChallengeSubmissionCount(weekKey),
   ]);
 
   const viewerRank = cupRows.find((r) => r.userId === userId)?.rank ?? null;
@@ -135,7 +154,7 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
   const approvalRate = totalCount > 0 ? Math.round((approvedCount / totalCount) * 100) : 0;
 
   const contentIdeas = Array.isArray(arenaProfile?.contentIdeas)
-    ? (arenaProfile!.contentIdeas as Array<{ id: string; title: string; column: string; platform: string; priority: string }>)
+    ? (arenaProfile!.contentIdeas as CreatorHubProps["contentIdeas"])
     : [];
 
   const badgeItems = badges.map((b) => ({
@@ -202,7 +221,13 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
         chatRooms={chatRooms}
         directory={directory}
         analyticsSeries={analyticsSeries}
-        utmStats={[]}
+        utmStats={utmStats}
+        utmWeeklySeries={utmWeeklySeries}
+        referralProof={referralProof}
+        analyticsBenchmarks={analyticsBenchmarks}
+        weekStreak={weekStreak}
+        challengeSubmitCount={challengeSubmitCount}
+        challengeParticipantCount={Math.max(directory.length, 1)}
         contentIdeas={contentIdeas}
         onboarding={{
           profile: Boolean(user?.publicSlug),

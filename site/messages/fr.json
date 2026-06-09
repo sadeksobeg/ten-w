@@ -519,7 +519,7 @@
     "studio": {
       "metaTitle": "Creator Studio — grandissez avec TENEGTA",
       "metaDescription": "Hub public créateurs — kits marketing, liens trackés, commissions et outils ASCEND.",
-      "eyebrow": "ASCEND Creator Arena",
+      "eyebrow": "ASCEND Creator Hub",
       "title": "Creator Studio",
       "subtitle": "Créez du contenu, partagez des liens trackés et gagnez des commissions sur la plateforme partenaire.",
       "copyFilmingLink": "Copier le lien studio",
@@ -641,7 +641,48 @@
       "posts": "Publications",
       "points": "Points",
       "battles": "Duels",
-      "greeting": { "morning": "Bonjour, {name}", "afternoon": "Bon après-midi, {name}", "evening": "Bonsoir, {name}" },
+      "greeting": {
+        "morning": "Bonjour, {name}",
+        "afternoon": "Bon après-midi, {name}",
+        "evening": "Bonsoir, {name}",
+        "night": "Encore éveillé, {name} ?"
+      },
+      "status": {
+        "urgent": "Le défi se termine dans {hours}h — ne le ratez pas",
+        "streak": "{n} semaines d'affilée — vous êtes en feu",
+        "rankUp": "Vous êtes monté au #{rank} cette semaine",
+        "default": "Nouvelle semaine ? Commencez par une soumission"
+      },
+      "weekGlance": {
+        "title": "Votre semaine en un coup d'œil",
+        "posts": "Posts : {n}/{target}",
+        "points": "Points : {n}/{target}",
+        "chipReferrals": "Parrainages : {n}",
+        "chipBattles": "Duels actifs : {n}",
+        "chipRank": "Rang : #{rank}"
+      },
+      "streak": {
+        "title": "Série d'activité",
+        "weeks": "{n} semaines d'affilée",
+        "m3": "3 semaines",
+        "m7": "7 semaines",
+        "m12": "12 semaines"
+      },
+      "referralProof": {
+        "title": "Parrainages vérifiés",
+        "subtitle": "Deals attribués à votre contenu",
+        "empty": "Partagez votre lien — les commissions apparaissent ici",
+        "commission": "${amount}",
+        "total": "Total contenu : ${amount}"
+      },
+      "celebration": {
+        "badgeTitle": "Nouveau badge",
+        "rankTitle": "Rang amélioré",
+        "battleTitle": "Duel accepté",
+        "continue": "Continuer"
+      },
+      "challengeUrgent": "Dernières {hours}h",
+      "challengeSocial": "{n} sur {total} créateurs ont soumis",
       "weekPoints": "Points cette semaine",
       "weekDelta": "↑ {n} vs semaine dernière",
       "rankLabel": "Rang #{rank}",
@@ -703,9 +744,22 @@
       "placeholder": "Écrire un message...",
       "newMessages": "{n} nouveaux messages",
       "charLimit": "Max {max} caractères",
-      "accessPending": "Accès en attente — vous rejoindrez le chat après approbation."
+      "accessPending": "Accès en attente — vous rejoindrez le chat après approbation.",
+      "channel": {
+        "general": "Pour tous — discutez librement",
+        "challenges": "Partagez votre travail et demandez des conseils",
+        "battles": "Duels et résultats",
+        "announcements": "Annonces officielles uniquement"
+      },
+      "special": {
+        "challengeSubmit": "Nouveau contenu soumis",
+        "viewContent": "Voir le contenu →",
+        "battleResult": "Résultat du duel",
+        "achievement": "Nouvel accomplissement",
+        "achievementBody": "{name} a obtenu {badge}"
+      }
     },
-    "planning": { "ideasTitle": "Tableau d'idées", "column": { "ideas": "Idées", "progress": "En cours", "published": "Publié" }, "ideaPlaceholder": "Nouvelle idée...", "addIdea": "Ajouter", "goalsTitle": "Objectifs hebdo", "goalPlaceholder": "Nouvel objectif...", "addGoal": "Ajouter", "goalsProgress": "{done}/{total} faits" },
+    "planning": { "ideasTitle": "Tableau d'idées", "column": { "ideas": "Idées", "progress": "En cours", "published": "Publié" }, "ideaPlaceholder": "Nouvelle idée...", "addIdea": "Ajouter", "goalsTitle": "Objectifs hebdo", "goalPlaceholder": "Nouvel objectif...", "addGoal": "Ajouter", "goalsProgress": "{done}/{total} faits", "seriesTitle": "Série de contenu", "seriesSubtitle": "Planifiez une série et suivez la progression", "seriesEmpty": "Aucune série — créez-en une ci-dessous.", "seriesProgress": "{done}/{total} épisodes", "seriesNamePlaceholder": "Nom de la série...", "seriesTargetLabel": "Nombre d'épisodes", "addSeries": "Ajouter la série" },
     "challenge": { "empty": "Aucun défi actif.", "active": "Défi actif", "ended": "Terminé", "deadline": "Fin dans {time}", "submit": "Soumettre votre contenu", "submitted": "Soumis ✓", "urlLabel": "URL du post", "descLabel": "Sujet couvert ?", "submitBtn": "Soumettre", "sending": "Envoi...", "error": "Échec", "pickPlatform": "Choisir la plateforme", "backPlatform": "Changer de plateforme", "weekList": "Soumissions de la semaine", "weekEmpty": "Aucune soumission cette semaine.", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X" } },
     "leaderboard": { "season": "Saison {label} — Creator Cup", "competing": "{n} créateurs", "yourRank": "Votre rang", "yourPoints": "{score} pts · {posts} posts", "gapToNext": "{n} pts pour le rang suivant", "howPoints": "Comment gagner des points ?", "rule": { "approved": { "label": "Post approuvé", "pts": "+50" }, "battle": { "label": "Duel gagné", "pts": "+100" }, "featured": { "label": "À la une", "pts": "+200" }, "first": { "label": "Première soumission", "pts": "+30" }, "referral": { "label": "Parrainage", "pts": "+75" } } },
     "battles": { "active": "Duel actif", "you": "Vous", "stakes": "{xp} XP", "invite": "{name} vous défie", "accept": "Accepter", "decline": "Refuser", "history": "Historique", "historyEmpty": "Aucun duel.", "outcome": { "won": "Gagné", "lost": "Perdu", "pending": "En attente" } },
@@ -716,7 +770,35 @@
     "public": {
       "metaTitle": "Réseau créateurs — TENEGTA",
       "metaDescription": "Rejoignez les créateurs TENEGTA — transformez vos abonnés en clients.",
-      "hero": { "title1": "Transformez vos abonnés", "title2": "en vrais clients", "subtitle": "Rejoignez le réseau — générez des revenus avec le contenu tech.", "cta": "Postuler", "secondary": "Comment ça marche" },
+      "hero": {
+        "eyebrow": "T.E.N.E.G.T.A · Creator Network · {year}",
+        "title1": "Transformez votre contenu",
+        "title2": "en partenariat réel",
+        "subtitle": "Rejoignez un réseau sélectionné de créateurs tech. Outils pro. Compétition réelle. Revenus durables.",
+        "cta": "Postuler",
+        "secondary": "Découvrir ↓",
+        "stat1": { "value": "47+ créateurs", "sub": "dans 8 pays" },
+        "stat2": { "value": "2.3M+ vues", "sub": "du contenu créateur" },
+        "stat3": { "value": "moy. 340$/mois", "sub": "pour un créateur actif" }
+      },
+      "proofStats": {
+        "title": "Chiffres réels du réseau",
+        "creators": "créateurs dans le réseau",
+        "approval": "taux d'approbation",
+        "weeksToEarn": "semaines pour commencer",
+        "archetypeRole": "Créateur tech",
+        "archetypeName": "Créateur tech — Syrie",
+        "archetypeName2": "Créateur business — EAU",
+        "archetypeName3": "Créateur éducation — Liban",
+        "cardMeta": "{posts} posts · {refs} parrainages ce mois",
+        "rank": "Rang Cup #{rank}"
+      },
+      "demo": {
+        "title": "Ce que les créateurs filment",
+        "subtitle": "Des outils réels qui impressionnent",
+        "below": "Découvrez ce que vous pouvez montrer",
+        "cta": "Essayer la démo"
+      },
       "proofTitle": "Témoignages",
       "proofFallback": "Ce que vous obtenez",
       "archetype1": "Créateur tech",
@@ -758,7 +840,30 @@
         "a8": "Canaux créateurs et équipe admin dans Creator Hub."
       },
       "finalCta": { "title": "Prêt à créer ?", "body": "Rejoignez le réseau et convertissez votre audience.", "cta": "Postuler" },
-      "apply": { "title": "Postuler", "success": "Merci ! Contact sous 48h.", "name": "Nom complet", "email": "Email", "url": "URL plateforme", "submit": "Envoyer", "followers": { "under1k": "Moins de 1K" } }
+      "apply": {
+        "title": "Postuler",
+        "step1Title": "Qui êtes-vous ?",
+        "step2Title": "Votre contenu",
+        "step3Title": "Vos intérêts",
+        "next": "Suivant →",
+        "back": "Retour",
+        "sending": "Envoi…",
+        "error": "Erreur. Réessayez.",
+        "successTitle": "Candidature reçue",
+        "successBody": "Nous vous contacterons sous 48h à {email}",
+        "successExplore": "Découvrez ce qui vous attend",
+        "successDemo": "Essayer la démo",
+        "name": "Nom complet",
+        "email": "Email",
+        "url": "URL plateforme principale",
+        "followersLabel": "Nombre d'abonnés ?",
+        "nichesLabel": "Type de contenu ?",
+        "notePlaceholder": "En savoir plus (optionnel, 200 car.)",
+        "submit": "Envoyer ✓",
+        "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "x": "X", "other": "Autre" },
+        "followers": { "under1k": "< 1K", "1k-10k": "1K–10K", "10k-100k": "10K–100K", "100k+": "100K+" },
+        "niche": { "tech": "Tech", "business": "Business", "education": "Éducation", "entertainment": "Divertissement", "analysis": "Analyse" }
+      }
     }
   },
   "CinemaDemo": {
@@ -2804,7 +2909,7 @@
       "lost": "Deal stopped — capture the lesson and re-aim."
     },
     "creators": {
-      "eyebrow": "Creator Arena",
+      "eyebrow": "Creator Hub",
       "title": "Hub créateurs partenaires",
       "subtitle": "Espace professionnel pour créateurs approuvés — défis hebdo, communauté live et outils de partenariat.",
       "pillar1Title": "Partenariat réel",
@@ -2823,7 +2928,7 @@
       "ctaEvents": "Explorer les événements",
       "footer": "T.E.N.E.G.T.A — les créateurs construisent l'avenir.",
       "adminGrantedAccess": "Creator Hub activé — bienvenue dans le réseau créateurs.",
-      "tabNavAria": "Sections Creator Arena",
+      "tabNavAria": "Sections Creator Hub",
       "tabLounge": "Salon",
       "tabKit": "Kit créateur",
       "tabCup": "Creator Cup",
@@ -3068,7 +3173,9 @@
           "actionsTitle": "Actions",
           "grantBadge": "Accorder le badge content creator",
           "grantMilestone": "Accorder un jalon",
-          "toastSaved": "Enregistré"
+          "toastSaved": "Enregistré",
+          "hubMember": "Membre actif Creator Hub",
+          "nominationCount": "{count} nominations spotlight"
         },
         "challenges": {
           "title": "Défis hebdomadaires",
@@ -3113,6 +3220,7 @@
           "toastRejected": "Post rejeté",
           "toastRated": "Note enregistrée",
           "toastError": "Action échouée",
+          "rateStars": "{n} étoiles",
           "rejectNoteLabel": "Note de rejet (optionnel)",
           "rejectNotePlaceholder": "Raison du rejet — visible par le créateur"
         },
@@ -3482,13 +3590,13 @@
       "creatorsPage": {
         "title": "Programme créateurs",
         "contactOrdersLink": "Demandes de contact",
-        "subtitle": "Accordez l'accès Creator Arena à tout partenaire — le badge donne l'accès automatiquement.",
+        "subtitle": "Gérez l'accès Creator Hub pour les partenaires — les badge holders rejoignent automatiquement.",
         "accessNote": "L'accès salon ne modifie pas commissions, XP ni deals. Impossible de révoquer un détenteur du badge content_creator.",
         "statBadge": "Badge holders",
         "statRoom": "Dans le groupe",
         "searchPlaceholder": "Rechercher nom ou e-mail…",
         "roomTitle": "Accès salon (actif)",
-        "roomHint": "Ces partenaires voient Creator Arena dans la navigation et utilisent chat, kit et cup.",
+        "roomHint": "Ces partenaires voient Creator Hub dans la navigation et utilisent chat, kit et cup.",
         "emptyRoom": "Personne dans le groupe pour l'instant.",
         "badgeTitle": "Détenteurs du badge créateur",
         "badgeHint": "Ajout auto à l'octroi du badge — vous pouvez ajouter d'autres partenaires.",

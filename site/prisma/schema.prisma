@@ -170,6 +170,8 @@ model User {
   chatRoomMessageReactions   ChatRoomMessageReaction[]
   creatorDirectRoomsA        CreatorDirectRoom[] @relation("CreatorDirectUserA")
   creatorDirectRoomsB        CreatorDirectRoom[] @relation("CreatorDirectUserB")
+  creatorNominationsSent     CreatorNomination[] @relation("CreatorNominationsSent")
+  creatorNominationsReceived CreatorNomination[] @relation("CreatorNominationsReceived")
 }
 
 model PartnerProfile {
@@ -1074,11 +1076,26 @@ model CreatorApplication {
   platform        String?
   contentTypes    Json
   followersRange  String
+  applicantNote   String?  @db.Text
   status          String   @default("PENDING")
   adminNotes      String?  @db.Text
   createdAt       DateTime @default(now())
 
   @@index([status, createdAt])
+}
+
+model CreatorNomination {
+  id              String   @id @default(cuid())
+  nominatorUserId String
+  nomineeUserId   String
+  reason          String?  @db.VarChar(200)
+  createdAt       DateTime @default(now())
+
+  nominator User @relation("CreatorNominationsSent", fields: [nominatorUserId], references: [id], onDelete: Cascade)
+  nominee   User @relation("CreatorNominationsReceived", fields: [nomineeUserId], references: [id], onDelete: Cascade)
+
+  @@unique([nominatorUserId, nomineeUserId])
+  @@index([nomineeUserId])
 }
 
 model CreatorArenaVisit {

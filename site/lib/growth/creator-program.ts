@@ -5,13 +5,17 @@ export const CREATOR_ROOM_SLUG = "content-creators";
 export const CONTENT_CREATOR_BADGE = "content_creator";
 
 export const CREATOR_CHANNEL_SLUGS = [
-  { slug: "content-creators", title: "عام" },
-  { slug: "creator-challenges", title: "تحديات-ونصائح" },
-  { slug: "creator-battles", title: "معارك-وتحديات" },
-  { slug: "creator-announcements", title: "إعلانات" },
+  { slug: "content-creators", title: "عام", accent: "#c9922a", descriptionKey: "general" },
+  { slug: "creator-challenges", title: "تحديات-ونصائح", accent: "#e11d48", descriptionKey: "challenges" },
+  { slug: "creator-battles", title: "معارك-وتحديات", accent: "#7c3aed", descriptionKey: "battles" },
+  { slug: "creator-announcements", title: "إعلانات", accent: "#3b82f6", descriptionKey: "announcements" },
 ] as const;
 
 export const CREATOR_ANNOUNCEMENTS_SLUG = "creator-announcements";
+
+export function getCreatorChannelMeta(slug: string) {
+  return CREATOR_CHANNEL_SLUGS.find((c) => c.slug === slug) ?? CREATOR_CHANNEL_SLUGS[0];
+}
 
 export async function userHasBadge(userId: string, badgeKey: string): Promise<boolean> {
   const row = await prisma.userBadge.findFirst({

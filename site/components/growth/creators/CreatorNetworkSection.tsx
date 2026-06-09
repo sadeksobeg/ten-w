@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
+import { createNominationAction } from "@/lib/growth/creator-arena-actions";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
@@ -24,6 +25,8 @@ export function CreatorNetworkSection({ directory, myUserId, onNavigate, onMessa
   const tStatus = useTranslations("Creators.status");
   const [filter, setFilter] = useState<Filter>("all");
   const [drawer, setDrawer] = useState<CreatorFeaturedCreator | null>(null);
+  const [nomineeId, setNomineeId] = useState(directory[0]?.userId ?? "");
+  const [, nominateAction, nominatePending] = useActionState(createNominationAction, undefined);
 
   const filtered = directory.filter((c) => {
     if (filter === "featured") return c.status === "FEATURED";
@@ -86,6 +89,34 @@ export function CreatorNetworkSection({ directory, myUserId, onNavigate, onMessa
           </GlassCard>
         ))}
       </div>
+
+      <GlassCard className="creator-card p-5">
+        <h3 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">{t("nominateTitle")}</h3>
+        <p className="mt-1 text-xs text-white/50">{t("nominateHint")}</p>
+        <form action={nominateAction} className="mt-4 space-y-3">
+          <select
+            name="nomineeUserId"
+            value={nomineeId}
+            onChange={(e) => setNomineeId(e.target.value)}
+            className="w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white"
+          >
+            {directory.filter((c) => c.userId !== myUserId).map((c) => (
+              <option key={c.userId} value={c.userId}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+          <input
+            name="reason"
+            placeholder={t("nominateReason")}
+            maxLength={100}
+            className="w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white"
+          />
+          <GoldButton type="submit" disabled={nominatePending || !nomineeId} className="text-xs">
+            {t("nominateSubmit")}
+          </GoldButton>
+        </form>
+      </GlassCard>
 
       <CreatorProfileDrawer creator={drawer} onClose={() => setDrawer(null)} onChallenge={() => { setDrawer(null); onNavigate("battles"); }} />
     </div>

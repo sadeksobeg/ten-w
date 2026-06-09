@@ -29,6 +29,14 @@ const WORKFLOW_STATUSES: CreatorWorkflowStatus[] = [
   "FEATURED",
 ];
 
+const STATUS_PILL_STYLES: Record<CreatorWorkflowStatus, string> = {
+  INVITED: "border-sky-500/40 bg-sky-500/15 text-sky-100",
+  JOINED: "border-emerald-500/40 bg-emerald-500/15 text-emerald-100",
+  FILMING: "border-amber-500/40 bg-amber-500/15 text-amber-100",
+  SUBMITTED: "border-violet-500/40 bg-violet-500/15 text-violet-100",
+  FEATURED: "border-gold/40 bg-gold/15 text-gold",
+};
+
 const MILESTONE_PRESETS = [
   "first_submission",
   "five_submissions",
@@ -192,9 +200,17 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
           </h2>
           <p className="text-xs text-white/45">{partner.email}</p>
           {partner.hasBadge ? (
-            <div className="mt-2">
+            <div className="mt-2 flex flex-wrap items-center gap-2">
               <BadgeIcon badgeKey="content_creator" earned chip size="xs" name="" />
+              <span className="rounded-full border border-emerald-500/35 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-100">
+                {t("hubMember")}
+              </span>
             </div>
+          ) : null}
+          {partner.nominationCount > 0 ? (
+            <p className="mt-2 text-xs text-[var(--creator-secondary)]">
+              {t("nominationCount", { count: partner.nominationCount })}
+            </p>
           ) : null}
         </div>
 
@@ -215,19 +231,25 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
             </div>
             <div>
               <dt className="text-white/50">{tPage("statusLabel")}</dt>
-              <dd>
-                <select
-                  value={partner.workflowStatus ?? "JOINED"}
-                  disabled={pending || !partner.hasBadge}
-                  onChange={(e) => void updateStatus(e.target.value as CreatorWorkflowStatus)}
-                  className="mt-0.5 w-full rounded-lg border border-white/10 bg-black/30 px-2 py-1 text-[10px] text-white"
-                >
-                  {WORKFLOW_STATUSES.map((s) => (
-                    <option key={s} value={s}>
+              <dd className="mt-1 flex flex-wrap gap-1.5">
+                {WORKFLOW_STATUSES.map((s) => {
+                  const active = (partner.workflowStatus ?? "JOINED") === s;
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      disabled={pending || !partner.hasBadge}
+                      onClick={() => void updateStatus(s)}
+                      className={`rounded-full border px-2.5 py-1 text-[10px] font-bold transition ${
+                        active
+                          ? STATUS_PILL_STYLES[s]
+                          : "border-white/10 bg-white/5 text-white/45 hover:border-white/20"
+                      }`}
+                    >
                       {tPage(`status.${s}`)}
-                    </option>
-                  ))}
-                </select>
+                    </button>
+                  );
+                })}
               </dd>
             </div>
           </dl>

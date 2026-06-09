@@ -4,6 +4,14 @@ import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
+import {
+  IconYoutube,
+  IconInstagram,
+  IconTiktok,
+  IconXPlatform,
+  IconFacebook,
+  IconStarFilled,
+} from "@/components/growth/icons/GrowthIcons";
 import { useToast } from "@/hooks/useToast";
 import {
   adminRateSubmissionAction,
@@ -13,6 +21,21 @@ import type {
   CreatorAdminChallengeSubmission,
   CreatorAdminMissingSubmission,
 } from "./creator-admin-types";
+
+const PLATFORMS = [
+  { key: "youtube", Icon: IconYoutube },
+  { key: "instagram", Icon: IconInstagram },
+  { key: "tiktok", Icon: IconTiktok },
+  { key: "facebook", Icon: IconFacebook },
+  { key: "x", Icon: IconXPlatform },
+] as const;
+
+function platformIcon(platform: string | null) {
+  const match = PLATFORMS.find((p) => p.key === platform);
+  if (!match) return null;
+  const Icon = match.Icon;
+  return <Icon size={20} className="text-[var(--creator-secondary)]" />;
+}
 
 type Props = {
   pending: CreatorAdminChallengeSubmission[];
@@ -38,6 +61,7 @@ export function AdminSubmissionsQueue({
   const [pending, setPending] = useState(initialPending);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [rejectNotes, setRejectNotes] = useState<Record<string, string>>({});
+  const [flashId, setFlashId] = useState<string | null>(null);
 
   const dateFmt = useMemo(
     () => new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }),
@@ -59,6 +83,10 @@ export function AdminSubmissionsQueue({
         isFeatured: status === "approved",
         adminRating: status === "approved" ? 5 : 1,
       });
+      if (status === "approved") {
+        setFlashId(submissionId);
+        setTimeout(() => setFlashId(null), 600);
+      }
       setPending((rows) => rows.filter((r) => r.id !== submissionId));
       onSubmissionRemoved(submissionId);
       showToast({
@@ -103,7 +131,7 @@ export function AdminSubmissionsQueue({
     <div className="space-y-4">
       <GlassCard className="border border-amber-500/25 bg-gradient-to-br from-amber-500/10 to-transparent p-4 sm:p-5">
         <h2 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white sm:text-lg">
-          {t("pendingTitle")}
+          {t("pendingTitle")} ({pending.length})
         </h2>
         <p className="mt-1 text-xs text-white/55">{t("pendingSubtitle")}</p>
 
@@ -116,10 +144,22 @@ export function AdminSubmissionsQueue({
             {pending.map((s) => (
               <li
                 key={s.id}
-                className="rounded-xl border border-white/10 bg-black/25 p-3 sm:p-4"
+                className={`rounded-xl border bg-black/25 p-3 transition-colors sm:p-4 ${
+                  flashId === s.id
+                    ? "border-emerald-400/60 bg-emerald-500/15"
+                    : "border-white/10"
+                }`}
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="min-w-0 flex-1">
+                  <div className="flex min-w-0 flex-1 gap-3">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black/30">
+                      {platformIcon(s.platform) ?? (
+                        <span className="text-[10px] font-bold uppercase text-white/35">
+                          {s.platform?.slice(0, 2) ?? "?"}
+                        </span>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
                     <p className="font-semibold text-white">{s.userName}</p>
                     <p className="text-[10px] text-white/45">{s.userEmail}</p>
                     <p className="mt-1 text-[10px] text-gold/80">
@@ -137,6 +177,7 @@ export function AdminSubmissionsQueue({
                     <p className="mt-1 text-[10px] text-white/40">
                       {dateFmt.format(new Date(s.createdAt))}
                     </p>
+                    </div>
                   </div>
 
                   <div className="flex shrink-0 flex-wrap gap-2">
@@ -180,13 +221,14 @@ export function AdminSubmissionsQueue({
                       type="button"
                       disabled={busyId === s.id}
                       onClick={() => void rateSubmission(s.id, n)}
-                      className={`rounded-lg px-2 py-1 text-xs font-bold transition ${
-                        s.adminRating === n
-                          ? "bg-gold/30 text-gold"
-                          : "bg-white/5 text-white/50 hover:bg-gold/15 hover:text-gold"
+                      className={`rounded-lg p-1 transition ${
+                        (s.adminRating ?? 0) >= n
+                          ? "text-gold"
+                          : "text-white/25 hover:text-gold/70"
                       }`}
+                      aria-label={t("rateStars", { n })}
                     >
-                      {n}
+                      <IconStarFilled size={16} />
                     </button>
                   ))}
                 </div>

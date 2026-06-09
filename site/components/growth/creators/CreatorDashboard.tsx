@@ -9,7 +9,10 @@ import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { IconEvents, IconTrophy, IconShare, IconBattle, IconKit } from "@/components/growth/icons/GrowthIcons";
 import { CreatorFeaturedSpotlight } from "./CreatorFeaturedSpotlight";
 import { CreatorOnboardingChecklist } from "./CreatorOnboardingChecklist";
+import { CreatorWeekGlance } from "./CreatorWeekGlance";
+import { CreatorStreakCard } from "./CreatorStreakCard";
 import type { CreatorHubProps, CreatorHubSection } from "./CreatorHubTypes";
+import type { CreatorWeekStreakData } from "@/lib/growth/creator-arena";
 
 type Props = Pick<
   CreatorHubProps,
@@ -22,15 +25,37 @@ type Props = Pick<
   | "viewerRank"
   | "clientDiscountCode"
   | "locale"
+  | "activeBattles"
+  | "weekStreak"
+  | "challengeSubmitCount"
+  | "challengeParticipantCount"
 > & {
   onNavigate: (s: CreatorHubSection) => void;
   onChallengeCreator?: (c: NonNullable<CreatorHubProps["featuredCreator"]>) => void;
+  weekStreak: CreatorWeekStreakData;
+  challengeSubmitCount: number;
+  challengeParticipantCount: number;
 };
 
-function greetingKey(hour: number): "morning" | "afternoon" | "evening" {
+function greetingKey(hour: number): "morning" | "afternoon" | "evening" | "night" {
+  if (hour >= 0 && hour < 4) return "night";
   if (hour < 12) return "morning";
   if (hour < 18) return "afternoon";
   return "evening";
+}
+
+function dynamicStatusKey(
+  challenge: CreatorHubProps["challenge"],
+  streakWeeks: number,
+  rankDelta: number,
+): "urgent" | "streak" | "rankUp" | "default" {
+  if (challenge && !challenge.hasSubmitted && challenge.endsAt) {
+    const hrs = (new Date(challenge.endsAt).getTime() - Date.now()) / 3600000;
+    if (hrs > 0 && hrs < 24) return "urgent";
+  }
+  if (streakWeeks > 7) return "streak";
+  if (rankDelta > 0) return "rankUp";
+  return "default";
 }
 
 export function CreatorDashboard({
@@ -44,11 +69,22 @@ export function CreatorDashboard({
   clientDiscountCode,
   onNavigate,
   onChallengeCreator,
+  activeBattles,
+  weekStreak,
+  challengeSubmitCount,
+  challengeParticipantCount,
 }: Props) {
   const t = useTranslations("Creators.hub");
   const tStatus = useTranslations("Creators.status");
   const greet = useMemo(() => greetingKey(new Date().getHours()), []);
+  const statusKey = useMemo(
+    () => dynamicStatusKey(challenge, weekStreak.consecutiveWeeks, metrics.weekPointsDelta > 0 ? 1 : 0),
+    [challenge, weekStreak.consecutiveWeeks, metrics.weekPointsDelta],
+  );
   const name = viewer.displayName ?? viewer.name ?? viewer.email;
+  const hoursLeft = challenge?.endsAt
+    ? Math.max(0, Math.round((new Date(challenge.endsAt).getTime() - Date.now()) / 3600000))
+    : null;
   const contactHref = clientDiscountCode
     ? `/contact?code=${encodeURIComponent(clientDiscountCode)}`
     : "/contact";
@@ -69,6 +105,25 @@ export function CreatorDashboard({
             <GrowthAvatar name={name} email={viewer.email} avatarUrl={viewer.avatarUrl} avatarPreset={viewer.avatarPreset} size="lg" />
             <div>
               <p className="text-sm text-[var(--creator-text-sub)]">{t(`greeting.${greet}`, { name })}</p>
+              <p
+                className={`mt-1 text-xs ${
+                  statusKey === "urgent"
+                    ? "text-rose-300"
+                    : statusKey === "streak"
+                      ? "text-[var(--creator-secondary)]"
+                      : statusKey === "rankUp"
+                        ? "text-emerald-300"
+                        : "text-white/45"
+                }`}
+              >
+                {statusKey === "urgent" && hoursLeft != null
+                  ? t("status.urgent", { hours: hoursLeft })
+                  : statusKey === "streak"
+                    ? t("status.streak", { n: weekStreak.consecutiveWeeks })
+                    : statusKey === "rankUp"
+                      ? t("status.rankUp", { rank: viewerRank ?? "—" })
+                      : t("status.default")}
+              </p>
               <span className="creator-status-pill mt-1 inline-block bg-[var(--status-submitted)]/20 text-emerald-200">
                 {tStatus(viewer.status.toLowerCase())}
               </span>
@@ -108,7 +163,20 @@ export function CreatorDashboard({
         </button>
       </div>
 
-      <div className="creator-metrics-grid grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <CreatorWeekGlance
+        weekSubmissions={metrics.weekSubmissions}
+        weekTarget={3}
+        cupScore={metrics.cupScore}
+        cupTarget={500}
+        referrals={metrics.utmClicks}
+        activeBattles={activeBattles}
+        rank={viewerRank}
+        onNavigate={onNavigate}
+      />
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <CreatorStreakCard streak={weekStreak} />
+        <div className="creator-metrics-grid grid gap-3 sm:grid-cols-2">
         {[
           { key: "submissions", value: metrics.weekSubmissions, sub: t("metricSubHint") },
           { key: "cup", value: metrics.cupScore, sub: viewerRank ? `#${viewerRank}` : "—" },
@@ -121,20 +189,40 @@ export function CreatorDashboard({
             <p className="text-[11px] text-white/50">{m.sub}</p>
           </div>
         ))}
+        </div>
       </div>
 
       {challenge ? (
-        <GlassCard className="creator-card border-[var(--creator-primary)]/30 bg-gradient-to-br from-[var(--creator-primary)]/15 to-transparent p-5">
+        <GlassCard
+          className={`creator-card p-5 ${
+            subState !== "none"
+              ? "border-emerald-500/35 bg-gradient-to-br from-emerald-950/40 to-transparent"
+              : hoursLeft != null && hoursLeft < 24
+                ? "border-rose-500/40 bg-gradient-to-br from-rose-950/50 to-transparent creator-glow-rose"
+                : "border-[var(--creator-secondary)]/30 bg-gradient-to-br from-amber-950/30 to-transparent"
+          }`}
+        >
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/20 px-2 py-0.5 text-[10px] font-bold text-rose-200">
-              <span className="size-1.5 animate-pulse rounded-full bg-rose-400" />
-              {t("challengeLive")}
+              {hoursLeft != null && hoursLeft < 24 && subState === "none" ? (
+                <>
+                  <span className="size-1.5 animate-pulse rounded-full bg-rose-400" />
+                  {t("challengeUrgent", { hours: hoursLeft })}
+                </>
+              ) : (
+                t("challengeLive")
+              )}
             </span>
             {subState !== "none" ? (
               <span className="text-xs text-emerald-200">{t("challengeDone")}</span>
             ) : null}
           </div>
           <h2 className="mt-2 font-[family-name:var(--font-cairo)] text-lg font-extrabold text-white">{challenge.title}</h2>
+          {subState === "none" && challengeParticipantCount > 0 ? (
+            <p className="mt-1 text-xs text-white/55">
+              {t("challengeSocial", { n: challengeSubmitCount, total: challengeParticipantCount })}
+            </p>
+          ) : null}
           {subState === "none" ? (
             <GoldButton type="button" className="mt-3 text-xs" onClick={() => onNavigate("challenge")}>
               {t("challengeCta")}

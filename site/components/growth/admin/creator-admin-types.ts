@@ -28,6 +28,7 @@ export type CreatorAdminPartner = {
   notes: string | null;
   milestones: string[];
   submissions: CreatorAdminSubmission[];
+  nominationCount: number;
 };
 
 export type CreatorAdminStats = {

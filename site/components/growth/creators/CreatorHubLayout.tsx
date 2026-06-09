@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ComponentType } from "react";
+import { useCallback, useEffect, useMemo, useState, type ComponentType } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -40,6 +40,10 @@ import { CreatorLoungeErrorBoundary } from "./CreatorLoungeErrorBoundary";
 import { CreatorProfileDrawer } from "./CreatorProfileDrawer";
 import type { CreatorHubProps, CreatorHubSection } from "./CreatorHubTypes";
 import { ensureCreatorDirectRoomAction } from "@/lib/growth/creator-arena-actions";
+import {
+  CreatorCelebrationOverlay,
+  type CelebrationPayload,
+} from "./CreatorCelebrationOverlay";
 
 type NavItem = { id: CreatorHubSection; labelKey: string; icon: ComponentType<{ size?: number; className?: string }>; badge?: number };
 
@@ -110,7 +114,27 @@ export function CreatorHubLayout(props: CreatorHubProps) {
   const [unreadChat, setUnreadChat] = useState(0);
   const [challengeDrawer, setChallengeDrawer] = useState(props.featuredCreator);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [celebration, setCelebration] = useState<CelebrationPayload | null>(null);
+  const dismissCelebration = useCallback(() => setCelebration(null), []);
   const showWelcome = searchParams.get("welcome") === "1";
+
+  useEffect(() => {
+    if (showWelcome) {
+      setCelebration({ type: "badge", badgeName: t("title") });
+      return;
+    }
+    const kind = searchParams.get("celebrate");
+    if (kind === "rank") {
+      const oldRank = Number(searchParams.get("old") ?? 0);
+      const newRank = Number(searchParams.get("new") ?? 0);
+      if (oldRank > 0 && newRank > 0) {
+        setCelebration({ type: "rank", oldRank, newRank });
+      }
+    } else if (kind === "battle") {
+      const rival = searchParams.get("rival");
+      if (rival) setCelebration({ type: "battle", rivalName: rival });
+    }
+  }, [showWelcome, searchParams, t]);
 
   const viewerName = props.viewer.displayName ?? props.viewer.name ?? props.viewer.email;
   const chatBadge = props.chatRooms.reduce((s, r) => s + r.unread, 0) + unreadChat;
@@ -146,6 +170,10 @@ export function CreatorHubLayout(props: CreatorHubProps) {
             clientDiscountCode={props.clientDiscountCode}
             onNavigate={navigate}
             onChallengeCreator={setChallengeDrawer}
+            activeBattles={props.activeBattles}
+            weekStreak={props.weekStreak}
+            challengeSubmitCount={props.challengeSubmitCount}
+            challengeParticipantCount={props.challengeParticipantCount}
           />
         );
       case "chat":
@@ -188,6 +216,10 @@ export function CreatorHubLayout(props: CreatorHubProps) {
             commissionPercent={props.commissionPercent}
             salesProducts={props.salesProducts}
             viewerName={viewerName}
+            utmWeeklySeries={props.utmWeeklySeries}
+            referralProof={props.referralProof}
+            utmClicks={props.metrics.utmClicks}
+            utmRegistrations={props.metrics.utmRegistrations}
           />
         );
       case "analytics":
@@ -198,6 +230,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
             totalReferrals={props.metrics.utmRegistrations}
             cupPoints={props.metrics.cupScore}
             approvalRate={props.approvalRate}
+            benchmarks={props.analyticsBenchmarks}
           />
         );
       case "network":
@@ -335,13 +368,19 @@ export function CreatorHubLayout(props: CreatorHubProps) {
               <header className="hidden border-b border-white/10 px-4 py-4 sm:px-6 lg:block">
                 <h1 className="font-[family-name:var(--font-cairo)] text-xl font-black text-white sm:text-2xl">{t("subtitle")}</h1>
                 {showWelcome ? <p className="mt-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-100">{t("welcome")}</p> : null}
-                {!props.hasBadge && props.isRoomMember ? <p className="mt-2 rounded-xl border border-sky-500/25 bg-sky-500/8 px-3 py-2 text-[11px] text-sky-100">{t("hubActivated")}</p> : null}
+                {!props.hasBadge && props.isRoomMember ? (
+                  <p className="mt-2 hidden rounded-xl border border-sky-500/25 bg-sky-500/8 px-3 py-2 text-[11px] text-sky-100 lg:block">
+                    {t("hubActivated")}
+                  </p>
+                ) : null}
               </header>
 
               {(showWelcome || (!props.hasBadge && props.isRoomMember)) ? (
                 <div className="space-y-2 px-3 pt-2 lg:hidden">
                   {showWelcome ? <p className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-100">{t("welcome")}</p> : null}
-                  {!props.hasBadge && props.isRoomMember ? <p className="rounded-xl border border-sky-500/25 bg-sky-500/8 px-3 py-2 text-[11px] text-sky-100">{t("hubActivated")}</p> : null}
+                  {!props.hasBadge && props.isRoomMember && !showWelcome ? (
+                    <p className="rounded-xl border border-sky-500/25 bg-sky-500/8 px-3 py-2 text-[11px] text-sky-100">{t("hubActivated")}</p>
+                  ) : null}
                 </div>
               ) : null}
 
@@ -442,6 +481,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
       ) : null}
 
       <CreatorProfileDrawer creator={challengeDrawer} onClose={() => setChallengeDrawer(null)} onChallenge={() => { setChallengeDrawer(null); navigate("battles"); }} />
+      <CreatorCelebrationOverlay payload={celebration} onDismiss={dismissCelebration} />
     </CreatorLoungeErrorBoundary>
   );
 }

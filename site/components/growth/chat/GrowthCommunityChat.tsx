@@ -65,6 +65,7 @@ function optimisticMessage(
     createdAt: now,
     editedAt: null,
     isDeleted: false,
+    reactions: [],
   };
 }
 

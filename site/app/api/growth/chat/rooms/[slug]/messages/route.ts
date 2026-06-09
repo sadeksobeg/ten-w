@@ -3,11 +3,11 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import {
   COMMUNITY_ROOM_SLUG,
-  CREATOR_ROOM_SLUG,
+  isCreatorChatSlug,
   listDeletedRoomMessageIdsSince,
   listRoomMessagesPage,
   postCommunityMessage,
-  postCreatorRoomMessage,
+  postCreatorChannelMessage,
   postEventRoomMessage,
   resolveChatRoomForUser,
   seedOfficialWelcomeIfEmpty,
@@ -64,6 +64,7 @@ export async function GET(req: Request, ctx: RouteContext) {
     after,
     before,
     take: limit && Number.isFinite(limit) ? limit : undefined,
+    viewerUserId: session.user.id,
   });
 
   const deletedSinceRaw = url.searchParams.get("deletedSince");
@@ -100,11 +101,12 @@ export async function POST(req: Request, ctx: RouteContext) {
   }
 
   try {
+    const isAdmin = session.user.role === "ADMIN";
     const message =
       slug === COMMUNITY_ROOM_SLUG
         ? await postCommunityMessage(session.user.id, body.body)
-        : slug === CREATOR_ROOM_SLUG
-          ? await postCreatorRoomMessage(session.user.id, body.body)
+        : isCreatorChatSlug(slug)
+          ? await postCreatorChannelMessage(slug, session.user.id, body.body, { isAdmin })
           : await postEventRoomMessage(session.user.id, slug, body.body);
     return NextResponse.json({ message });
   } catch {

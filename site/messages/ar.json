@@ -524,7 +524,7 @@
     "studio": {
       "metaTitle": "استوديو الصنّاع — انمُ مع TENEGTA",
       "metaDescription": "مركز عام للصنّاع — حزم تسويق، روابط متتبعة، عمولات، وأدوات شركاء ASCEND.",
-      "eyebrow": "ASCEND Creator Arena",
+      "eyebrow": "ASCEND Creator Hub",
       "title": "استوديو الصنّاع",
       "subtitle": "أنشئ محتوى، شارك روابط متتبعة، واكسب عمولات على منصة شركاء TENEGTA.",
       "copyFilmingLink": "انسخ رابط الاستوديو",
@@ -667,7 +667,48 @@
       "posts": "منشورات",
       "points": "نقاط",
       "battles": "معارك",
-      "greeting": { "morning": "صباح الخير، {name}", "afternoon": "مساء الخير، {name}", "evening": "مساء الخير، {name}" },
+      "greeting": {
+        "morning": "صباح الخير، {name}",
+        "afternoon": "مساء الخير، {name}",
+        "evening": "مساء الخير، {name}",
+        "night": "ما زلت مستيقظاً، {name}؟"
+      },
+      "status": {
+        "urgent": "ينتهي التحدي خلال {hours} س — لا تفوّته",
+        "streak": "{n} أسابيع متواصلة — أنت في قمة النشاط",
+        "rankUp": "تسلّقت إلى #{rank} هذا الأسبوع",
+        "default": "أسبوع جديد؟ ابدأ بتسليم محتوى"
+      },
+      "weekGlance": {
+        "title": "أسبوعك حتى الآن",
+        "posts": "منشورات: {n}/{target}",
+        "points": "نقاط: {n}/{target}",
+        "chipReferrals": "إحالات: {n}",
+        "chipBattles": "معارك نشطة: {n}",
+        "chipRank": "ترتيب: #{rank}"
+      },
+      "streak": {
+        "title": "سلسلة النشاط",
+        "weeks": "{n} أسابيع متواصلة",
+        "m3": "3 أسابيع",
+        "m7": "7 أسابيع",
+        "m12": "12 أسبوع"
+      },
+      "referralProof": {
+        "title": "إحالات موثّقة",
+        "subtitle": "صفقات منسوبة لمحتواك",
+        "empty": "شارك رابطك — العمولات تظهر هنا",
+        "commission": "${amount}",
+        "total": "إجمالي من المحتوى: ${amount}"
+      },
+      "celebration": {
+        "badgeTitle": "شارة جديدة",
+        "rankTitle": "تحسّن ترتيبك",
+        "battleTitle": "تم قبول المعركة",
+        "continue": "متابعة"
+      },
+      "challengeUrgent": "آخر {hours} س",
+      "challengeSocial": "{n} من {total} صنّاع سلّموا",
       "weekPoints": "نقاط هذا الأسبوع",
       "weekDelta": "↑ {n} من الأسبوع الماضي",
       "rankLabel": "ترتيبك #{rank}",
@@ -729,7 +770,20 @@
       "placeholder": "اكتب رسالتك...",
       "newMessages": "{n} رسائل جديدة",
       "charLimit": "حد {max} حرفاً",
-      "accessPending": "طلب الوصول قيد المراجعة. عند الموافقة ستتمكن من الانضمام للمحادثة."
+      "accessPending": "طلب الوصول قيد المراجعة. عند الموافقة ستتمكن من الانضمام للمحادثة.",
+      "channel": {
+        "general": "للجميع — تحدّث بحرية",
+        "challenges": "شارك عملك واطلب نصائح",
+        "battles": "تحديات المعارك والنتائج",
+        "announcements": "إعلانات الفريق الرسمية فقط"
+      },
+      "special": {
+        "challengeSubmit": "تسليم محتوى جديد",
+        "viewContent": "عرض المحتوى ←",
+        "battleResult": "نتيجة معركة",
+        "achievement": "إنجاز جديد",
+        "achievementBody": "{name} حصل على {badge}"
+      }
     },
     "planning": {
       "ideasTitle": "لوحة الأفكار",
@@ -739,7 +793,14 @@
       "goalsTitle": "أهداف الأسبوع",
       "goalPlaceholder": "هدف جديد...",
       "addGoal": "إضافة",
-      "goalsProgress": "{done}/{total} مكتمل"
+      "goalsProgress": "{done}/{total} مكتمل",
+      "seriesTitle": "سلسلة محتوى",
+      "seriesSubtitle": "خطّط لسلسلة حلقات وتتبّع التقدّم",
+      "seriesEmpty": "لا سلسلة بعد — ابدأ واحدة أدناه.",
+      "seriesProgress": "{done}/{total} حلقة",
+      "seriesNamePlaceholder": "اسم السلسلة...",
+      "seriesTargetLabel": "عدد الحلقات",
+      "addSeries": "إضافة سلسلة"
     },
     "challenge": {
       "empty": "لا يوجد تحدي نشط.",
@@ -831,7 +892,35 @@
     "public": {
       "metaTitle": "شبكة الصنّاع — TENEGTA",
       "metaDescription": "انضم لشبكة صنّاع المحتوى في T.E.N.E.G.T.A — حوّل متابعيك إلى عملاء حقيقيين.",
-      "hero": { "title1": "حوّل متابعيك", "title2": "إلى عملاء حقيقيين", "subtitle": "انضم لشبكة صنّاع المحتوى — أنشئ محتوى تقنياً مؤثراً وابنِ دخلاً حقيقياً.", "cta": "قدّم طلبك الآن", "secondary": "شاهد كيف يعمل" },
+      "hero": {
+        "eyebrow": "T.E.N.E.G.T.A · Creator Network · {year}",
+        "title1": "حوّل محتواك",
+        "title2": "إلى شراكة حقيقية",
+        "subtitle": "انضم لشبكة مختارة من صنّاع المحتوى التقني. أدوات احترافية. منافسة حقيقية. دخل مستمر.",
+        "cta": "قدّم طلبك الآن",
+        "secondary": "اكتشف أكثر ↓",
+        "stat1": { "value": "47+ صانع محتوى", "sub": "في 8 دول" },
+        "stat2": { "value": "2.3M+ مشاهدة", "sub": "من محتوى الصنّاع" },
+        "stat3": { "value": "متوسط $340/شهر", "sub": "للصانع النشط" }
+      },
+      "proofStats": {
+        "title": "أرقام حقيقية من الشبكة",
+        "creators": "صانع محتوى في الشبكة",
+        "approval": "معدل اعتماد الطلبات",
+        "weeksToEarn": "أسابيع للبدء بالكسب",
+        "archetypeRole": "صانع محتوى تقني",
+        "archetypeName": "صانع محتوى تقني — سوريا",
+        "archetypeName2": "صانع أعمال — الإمارات",
+        "archetypeName3": "صانع تعليمي — لبنان",
+        "cardMeta": "{posts} منشور · {refs} إحالة هذا الشهر",
+        "rank": "ترتيب الكأس #{rank}"
+      },
+      "demo": {
+        "title": "ما يصوّره صنّاع المحتوى",
+        "subtitle": "أدوات حقيقية تُبهر جمهورك",
+        "below": "اكتشف ما يمكنك تصويره",
+        "cta": "جرّب الآن"
+      },
       "proofTitle": "ماذا يقول الصنّاع",
       "proofFallback": "ماذا ستحصل عليه",
       "archetype1": "صانع محتوى تقني",
@@ -875,12 +964,27 @@
       "finalCta": { "title": "جاهز للإبداع؟", "body": "انضم للشبكة وحوّل جمهورك إلى عملاء.", "cta": "قدّم طلبك" },
       "apply": {
         "title": "قدّم طلبك",
-        "success": "شكراً! سنتواصل معك خلال 48 ساعة.",
+        "step1Title": "من أنت؟",
+        "step2Title": "محتواك",
+        "step3Title": "اهتماماتك",
+        "next": "التالي →",
+        "back": "السابق",
+        "sending": "جاري الإرسال…",
+        "error": "حدث خطأ. حاول مرة أخرى.",
+        "successTitle": "تم استلام طلبك",
+        "successBody": "سنتواصل معك خلال 48 ساعة على {email}",
+        "successExplore": "استكشف ما ينتظرك",
+        "successDemo": "جرّب الديمو",
         "name": "الاسم الكامل",
         "email": "البريد الإلكتروني",
-        "url": "رابط أبرز منصة لك",
-        "submit": "إرسال الطلب",
-        "followers": { "under1k": "أقل من 1K" }
+        "url": "رابط منصتك الرئيسية",
+        "followersLabel": "كم متابعاً لديك؟",
+        "nichesLabel": "ما نوع المحتوى الذي تصنعه؟",
+        "notePlaceholder": "اخبرنا أكثر (اختياري، 200 حرف)",
+        "submit": "إرسال الطلب ✓",
+        "platform": { "youtube": "يوتيوب", "instagram": "انستاقرام", "tiktok": "تيك توك", "x": "X", "other": "أخرى" },
+        "followers": { "under1k": "< 1K", "1k-10k": "1K–10K", "10k-100k": "10K–100K", "100k+": "100K+" },
+        "niche": { "tech": "تقنية", "business": "أعمال", "education": "تعليم", "entertainment": "ترفيه", "analysis": "تحليل" }
       }
     }
   },
@@ -2902,7 +3006,7 @@
       "lost": "توقفت الصفقة — دوّن الدرس وانتقل للفرصة التالية."
     },
     "creators": {
-      "eyebrow": "Creator Arena",
+      "eyebrow": "Creator Hub",
       "title": "مركز شركاء المحتوى",
       "subtitle": "منصة احترافية لصنّاع المحتوى المعتمدين — تحديات أسبوعية، مجتمع مباشر، وأدوات شراكة جاهزة.",
       "pillar1Title": "شراكة حقيقية",
@@ -2921,7 +3025,7 @@
       "ctaEvents": "استكشف الفعاليات",
       "footer": "T.E.N.E.G.T.A — صناع المحتوى يصنعون المستقبل.",
       "adminGrantedAccess": "تم تفعيل Creator Hub — مرحباً بك في شبكة الصنّاع.",
-      "tabNavAria": "أقسام Creator Arena",
+      "tabNavAria": "أقسام Creator Hub",
       "tabLounge": "الغرفة",
       "tabKit": "حقيبة الصانع",
       "tabCup": "كأس الصنّاع",
@@ -3170,7 +3274,9 @@
           "actionsTitle": "إجراءات",
           "grantBadge": "منح شارة صانع المحتوى",
           "grantMilestone": "منح معلم",
-          "toastSaved": "تم الحفظ"
+          "toastSaved": "تم الحفظ",
+          "hubMember": "عضو نشط في Creator Hub",
+          "nominationCount": "{count} ترشيح للأضواء"
         },
         "challenges": {
           "title": "التحديات الأسبوعية",
@@ -3215,6 +3321,7 @@
           "toastRejected": "تم رفض المنشور",
           "toastRated": "تم حفظ التقييم",
           "toastError": "تعذّر تنفيذ العملية",
+          "rateStars": "{n} نجوم",
           "rejectNoteLabel": "ملاحظة الرفض (اختياري)",
           "rejectNotePlaceholder": "سبب الرفض — يظهر للصانع"
         },
@@ -3602,13 +3709,13 @@
       "creatorsPage": {
         "title": "برنامج صناع المحتوى",
         "contactOrdersLink": "طلبات التواصل",
-        "subtitle": "امنح وصول Creator Arena لأي شريك — حاملي الشارة يدخلون تلقائياً.",
+        "subtitle": "إدارة وصول Creator Hub للشركاء — حاملي الشارة ينضمون تلقائياً.",
         "accessNote": "الوصول للغرفة لا يغيّر العمولات أو XP أو الصفقات. لا يمكن سحب وصول حامل الشارة قبل إلغاء الشارة.",
         "statBadge": "حاملي الشارة",
         "statRoom": "في المجموعة",
         "searchPlaceholder": "ابحث بالاسم أو البريد…",
         "roomTitle": "وصول الغرفة (نشط)",
-        "roomHint": "من لديه وصول يرى Creator Arena في القائمة ويستخدم الدردشة والحقيبة والكأس.",
+        "roomHint": "من لديه وصول يرى Creator Hub في القائمة ويستخدم الدردشة والحقيبة والكأس.",
         "emptyRoom": "لا أحد في المجموعة بعد.",
         "badgeTitle": "حاملي شارة صانع المحتوى",
         "badgeHint": "يُمنحون تلقائياً للمجموعة عند منح الشارة — يمكنك إضافة شركاء آخرين يدوياً.",

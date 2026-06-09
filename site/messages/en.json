@@ -501,7 +501,7 @@
     "studio": {
       "metaTitle": "Creator Studio — grow with TENEGTA",
       "metaDescription": "Public hub for creators — marketing kits, tracked links, commissions, and ASCEND partner tools.",
-      "eyebrow": "ASCEND Creator Arena",
+      "eyebrow": "ASCEND Creator Hub",
       "title": "Creator Studio",
       "subtitle": "Create content, share tracked links, and earn commissions on the TENEGTA partner platform.",
       "copyFilmingLink": "Copy studio link",
@@ -644,7 +644,48 @@
       "posts": "Posts",
       "points": "Points",
       "battles": "Battles",
-      "greeting": { "morning": "Good morning, {name}", "afternoon": "Good afternoon, {name}", "evening": "Good evening, {name}" },
+      "greeting": {
+        "morning": "Morning creativity, {name}",
+        "afternoon": "Active afternoon, {name}",
+        "evening": "Inspiration evening, {name}",
+        "night": "Still awake, {name}?"
+      },
+      "status": {
+        "urgent": "Challenge ends in {hours}h — don't miss it",
+        "streak": "{n} weeks strong — you're on fire",
+        "rankUp": "You climbed to #{rank} this week",
+        "default": "Ready for a new week? Start with a submission"
+      },
+      "weekGlance": {
+        "title": "Your week at a glance",
+        "posts": "Posts: {n}/{target}",
+        "points": "Points: {n}/{target}",
+        "chipReferrals": "Referrals: {n}",
+        "chipBattles": "Active battles: {n}",
+        "chipRank": "Rank: #{rank}"
+      },
+      "streak": {
+        "title": "Activity streak",
+        "weeks": "{n} weeks in a row",
+        "m3": "3 weeks",
+        "m7": "7 weeks",
+        "m12": "12 weeks"
+      },
+      "referralProof": {
+        "title": "Verified referrals",
+        "subtitle": "Deals attributed to your content",
+        "empty": "Share your link — commissions appear here",
+        "commission": "${amount}",
+        "total": "Total from content: ${amount}"
+      },
+      "celebration": {
+        "badgeTitle": "New badge earned",
+        "rankTitle": "Rank improved",
+        "battleTitle": "Battle accepted",
+        "continue": "Continue"
+      },
+      "challengeUrgent": "Last {hours}h",
+      "challengeSocial": "{n} of {total} creators submitted",
       "weekPoints": "Points this week",
       "weekDelta": "↑ {n} vs last week",
       "rankLabel": "Rank #{rank}",
@@ -700,26 +741,88 @@
     "chat": {
       "rooms": "Channels",
       "direct": "Direct messages",
-      "typing": "{name} is typing...",
+      "typing": "{name} is typing",
       "sending": "Sending...",
       "failed": "Failed to send",
       "placeholder": "Write a message...",
       "newMessages": "{n} new messages",
       "charLimit": "Max {max} characters",
-      "accessPending": "Access pending — you will join the chat once approved."
+      "accessPending": "Access pending — you will join the chat once approved.",
+      "channel": {
+        "general": "For everyone — chat freely",
+        "challenges": "Share your work and ask for tips",
+        "battles": "Battle challenges and results",
+        "announcements": "Official team announcements only"
+      },
+      "special": {
+        "challengeSubmit": "New content submitted",
+        "viewContent": "View content →",
+        "battleResult": "Battle result",
+        "achievement": "New achievement",
+        "achievementBody": "{name} earned {badge}"
+      }
     },
-    "planning": { "ideasTitle": "Ideas board", "column": { "ideas": "Ideas", "progress": "In progress", "published": "Published" }, "ideaPlaceholder": "New idea...", "addIdea": "Add", "goalsTitle": "Weekly goals", "goalPlaceholder": "New goal...", "addGoal": "Add", "goalsProgress": "{done}/{total} done" },
+    "planning": { "ideasTitle": "Ideas board", "column": { "ideas": "Ideas", "progress": "In progress", "published": "Published" }, "ideaPlaceholder": "New idea...", "addIdea": "Add", "goalsTitle": "Weekly goals", "goalPlaceholder": "New goal...", "addGoal": "Add", "goalsProgress": "{done}/{total} done", "seriesTitle": "Content series", "seriesSubtitle": "Plan multi-episode series and track progress", "seriesEmpty": "No series yet — start one below.", "seriesProgress": "{done}/{total} episodes", "seriesNamePlaceholder": "Series name...", "seriesTargetLabel": "Episode target", "addSeries": "Add series" },
     "challenge": { "empty": "No active challenge.", "active": "Active challenge", "ended": "Ended", "deadline": "Ends in {time}", "submit": "Submit your content", "submitted": "Submitted ✓", "urlLabel": "Post URL", "descLabel": "What did you cover?", "submitBtn": "Submit", "sending": "Sending...", "error": "Submit failed", "pickPlatform": "Pick your platform", "backPlatform": "Change platform", "weekList": "This week's submissions", "weekEmpty": "No submissions yet this week.", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X" } },
     "leaderboard": { "season": "Season {label} — Creator Cup", "competing": "{n} creators competing", "yourRank": "Your rank", "yourPoints": "{score} pts · {posts} posts", "gapToNext": "{n} pts to next rank", "howPoints": "How points work?", "rule": { "approved": { "label": "Approved post", "pts": "+50" }, "battle": { "label": "Battle win", "pts": "+100" }, "featured": { "label": "Featured", "pts": "+200" }, "first": { "label": "First submit", "pts": "+30" }, "referral": { "label": "Referral", "pts": "+75" } } },
     "battles": { "active": "Active battle", "you": "You", "stakes": "{xp} XP", "invite": "{name} challenged you", "accept": "Accept", "decline": "Decline", "history": "Battle history", "historyEmpty": "No battles yet.", "outcome": { "won": "Won", "lost": "Lost", "pending": "Pending" } },
-    "kit": { "utmTitle": "Your tracked links", "utmSubtitle": "Every link tracks performance", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X", "whatsapp": "WhatsApp" }, "copyLink": "Copy link", "copied": "Copied", "copyError": "Copy failed", "qr": "QR", "scriptsTitle": "Ready scripts", "scriptInstagram": "Discover TENEGTA tech solutions — use code {code} for 3% off.", "copyScript": "Copy", "ideasTitle": "Content ideas this week", "idea1": "Cinema OS tour", "idea2": "3 reasons for TENEGTA websites", "idea3": "AI automation challenge", "idea4": "Cybersecurity for SMBs", "idea5": "How ASCEND partners work", "assetsTitle": "Brand assets", "assetLogo": "T.E.N.E.G.T.A logo SVG" },
-    "analytics": { "metric": { "submissions": "Posts (30d)", "referrals": "Referrals", "cup": "Cup points", "approval": "Approval rate" }, "chartTitle": "Your activity vs top", "you": "You", "top": "#1" },
-    "network": { "heroes": "Heroes this week", "filter": { "all": "All", "featured": "Featured", "new": "New" }, "challenge": "Challenge", "message": "Message", "profile": "Profile" },
+    "kit": {
+      "utmChartTitle": "UTM performance (4 weeks)",
+      "funnel": "Clicks: {clicks} → signups: {regs} → deals: ~{deals}",
+      "utmTitle": "Your tracked links", "utmSubtitle": "Every link tracks performance", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X", "whatsapp": "WhatsApp" }, "copyLink": "Copy link", "copied": "Copied", "copyError": "Copy failed", "qr": "QR", "scriptsTitle": "Ready scripts", "scriptInstagram": "Discover TENEGTA tech solutions — use code {code} for 3% off.", "copyScript": "Copy", "ideasTitle": "Content ideas this week", "idea1": "Cinema OS tour", "idea2": "3 reasons for TENEGTA websites", "idea3": "AI automation challenge", "idea4": "Cybersecurity for SMBs", "idea5": "How ASCEND partners work", "assetsTitle": "Brand assets", "assetLogo": "T.E.N.E.G.T.A logo SVG" },
+    "analytics": {
+      "metric": { "submissions": "Posts (30d)", "referrals": "Referrals", "cup": "Cup points", "approval": "Approval rate" },
+      "chartTitle": "Your activity vs top",
+      "aboveAvg": "You are {pct}% above network average",
+      "belowAvg": "You are {pct}% below network average — room to grow",
+      "you": "You",
+      "top": "#1"
+    },
+    "network": {
+      "heroes": "Heroes this week",
+      "filter": { "all": "All", "featured": "Featured", "new": "New" },
+      "challenge": "Challenge",
+      "message": "Message",
+      "profile": "Profile",
+      "nominateTitle": "Nominate a creator",
+      "nominateHint": "Suggest someone for featured spotlight",
+      "nominateReason": "Why (optional)",
+      "nominateSubmit": "Send nomination",
+      "nominateSuccess": "Nomination sent"
+    },
     "profile": { "title": "Creator profile", "bio": "Creator bio", "specialtyLabel": "Specialty", "specialty": { "tech": "Tech", "business": "Business", "education": "Education", "entertainment": "Entertainment", "lifestyle": "Lifestyle" }, "save": "Save", "error": "Save failed", "settings": "Account settings", "journey": "Creator journey" },
     "public": {
       "metaTitle": "Creator Network — TENEGTA",
       "metaDescription": "Join TENEGTA content creators — turn followers into real clients.",
-      "hero": { "title1": "Turn followers", "title2": "into real clients", "subtitle": "Join the creator network — build income from tech content.", "cta": "Apply now", "secondary": "See how it works" },
+      "hero": {
+        "eyebrow": "T.E.N.E.G.T.A · Creator Network · {year}",
+        "title1": "Turn your content",
+        "title2": "into real partnership",
+        "subtitle": "Join a curated network of tech creators. Professional tools. Real competition. Steady income.",
+        "cta": "Apply now",
+        "secondary": "Discover more ↓",
+        "stat1": { "value": "47+ creators", "sub": "across 8 countries" },
+        "stat2": { "value": "2.3M+ views", "sub": "from creator content" },
+        "stat3": { "value": "avg $340/mo", "sub": "for active creators" }
+      },
+      "proofStats": {
+        "title": "Real numbers from the network",
+        "creators": "creators in the network",
+        "approval": "application approval rate",
+        "weeksToEarn": "weeks to start earning",
+        "archetypeRole": "Tech creator",
+        "archetypeName": "Tech creator — Syria",
+        "archetypeName2": "Business creator — UAE",
+        "archetypeName3": "Education creator — Lebanon",
+        "cardMeta": "{posts} posts · {refs} referrals this month",
+        "rank": "Cup rank #{rank}"
+      },
+      "demo": {
+        "title": "What creators film",
+        "subtitle": "Real tools that wow your audience",
+        "below": "See what you can showcase",
+        "cta": "Try the demo"
+      },
       "proofTitle": "What creators say",
       "proofFallback": "What you get",
       "archetype1": "Tech creator",
@@ -761,7 +864,30 @@
         "a8": "Creator channels and admin team inside Creator Hub."
       },
       "finalCta": { "title": "Ready to create?", "body": "Join the network and turn your audience into clients.", "cta": "Apply now" },
-      "apply": { "title": "Apply", "success": "Thanks! We will contact you within 48 hours.", "name": "Full name", "email": "Email", "url": "Main platform URL", "submit": "Submit application", "followers": { "under1k": "Under 1K" } }
+      "apply": {
+        "title": "Apply",
+        "step1Title": "Who are you?",
+        "step2Title": "Your content",
+        "step3Title": "Your interests",
+        "next": "Next →",
+        "back": "Back",
+        "sending": "Sending…",
+        "error": "Something went wrong. Try again.",
+        "successTitle": "Application received",
+        "successBody": "We will reach out within 48 hours at {email}",
+        "successExplore": "Explore what awaits you",
+        "successDemo": "Try the demo",
+        "name": "Full name",
+        "email": "Email",
+        "url": "Main platform URL",
+        "followersLabel": "How many followers?",
+        "nichesLabel": "What content do you make?",
+        "notePlaceholder": "Tell us more (optional, 200 chars)",
+        "submit": "Submit application ✓",
+        "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "x": "X", "other": "Other" },
+        "followers": { "under1k": "< 1K", "1k-10k": "1K–10K", "10k-100k": "10K–100K", "100k+": "100K+" },
+        "niche": { "tech": "Tech", "business": "Business", "education": "Education", "entertainment": "Entertainment", "analysis": "Analysis" }
+      }
     }
   },
   "CinemaDemo": {
@@ -2854,7 +2980,7 @@
       "lost": "Deal stopped — capture the lesson and re-aim."
     },
     "creators": {
-      "eyebrow": "Creator Arena",
+      "eyebrow": "Creator Hub",
       "title": "Partner Creator Hub",
       "subtitle": "A professional workspace for approved creators — weekly challenges, live community, and ready partnership tools.",
       "pillar1Title": "Real partnership",
@@ -2873,7 +2999,7 @@
       "ctaEvents": "Explore events",
       "footer": "T.E.N.E.G.T.A — creators build the future.",
       "adminGrantedAccess": "Creator Hub is active — welcome to the creator network.",
-      "tabNavAria": "Creator Arena sections",
+      "tabNavAria": "Creator Hub sections",
       "tabLounge": "Lounge",
       "tabKit": "Creator Kit",
       "tabCup": "Creator Cup",
@@ -3122,7 +3248,9 @@
           "actionsTitle": "Actions",
           "grantBadge": "Grant content creator badge",
           "grantMilestone": "Grant milestone",
-          "toastSaved": "Saved"
+          "toastSaved": "Saved",
+          "hubMember": "Active Creator Hub member",
+          "nominationCount": "{count} spotlight nominations"
         },
         "challenges": {
           "title": "Weekly challenges",
@@ -3167,6 +3295,7 @@
           "toastRejected": "Post rejected",
           "toastRated": "Rating saved",
           "toastError": "Action failed",
+          "rateStars": "{n} stars",
           "rejectNoteLabel": "Rejection note (optional, internal)",
           "rejectNotePlaceholder": "Reason for rejection — visible to creator"
         },
@@ -3570,13 +3699,13 @@
       "creatorsPage": {
         "title": "Content creators program",
         "contactOrdersLink": "Contact requests",
-        "subtitle": "Grant Creator Arena lounge access to any partner — badge holders get access automatically.",
-        "accessNote": "Lounge access does not change commissions, XP, or deals. Badge holders cannot be removed from the lounge until the badge is revoked.",
+        "subtitle": "Manage Creator Hub access for partners — badge holders join automatically.",
+        "accessNote": "Hub access does not change commissions, XP, or deals. Badge holders stay in the hub until the badge is revoked.",
         "statBadge": "Badge holders",
         "statRoom": "In group",
         "searchPlaceholder": "Search by name or email…",
         "roomTitle": "Lounge access (active)",
-        "roomHint": "Partners with lounge access see Creator Arena in navigation and can use chat, kit, and cup.",
+        "roomHint": "Partners with hub access see Creator Hub in navigation and can use chat, kit, and cup.",
         "emptyRoom": "No one in the group yet.",
         "badgeTitle": "Content creator badge holders",
         "badgeHint": "Auto-added when the badge is granted — you can add other partners manually.",

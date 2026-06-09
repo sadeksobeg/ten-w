@@ -184,6 +184,7 @@ export async function ensureWeeklyChallenge(weekKey = currentWeekKey()) {
   });
 
   void notifyCreatorsNewChallenge(weekKey);
+  void notifyCreatorsWeeklyDigest(weekKey);
   return created;
 }
 
@@ -369,6 +370,25 @@ export async function submitCreatorPost(
         metadata: { kind: "creator_cup_overtaken" },
       });
     }
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { name: true, email: true },
+    });
+    const { postCreatorChannelMessage } = await import("@/lib/growth/chat-room-service");
+    await postCreatorChannelMessage("creator-challenges", userId, "·", {
+      kind: "CHALLENGE_SUBMIT",
+      metadata: {
+        platform: resolvedPlatform,
+        url: postUrl,
+        creatorName: user?.name ?? user?.email ?? "Creator",
+      },
+      skipPostCheck: true,
+    });
+  } catch {
+    /* chat optional */
   }
 
   return row;
@@ -814,7 +834,7 @@ export async function linkInviteToPartner(userId: string, email: string, inviteS
     userId,
     type: NotificationType.SYSTEM,
     title: "مرحباً بك في غرفة الصنّاع",
-    body: "تم تفعيل شارة صانع المحتوى — ادخل غرفة ASCEND Creator Arena.",
+    body: "تم تفعيل شارة صانع المحتوى — مرحباً بك في Creator Hub.",
     link: "/growth/creators",
   });
 
@@ -1076,6 +1096,148 @@ export async function listPendingBattleInvites(userId: string) {
     stakesXp: b.stakesXp,
     target: b.target,
   }));
+}
+
+export type CreatorWeekStreakData = {
+  consecutiveWeeks: number;
+  weekSlots: boolean[];
+};
+
+export async function getCreatorWeekStreak(userId: string): Promise<CreatorWeekStreakData> {
+  const slots: boolean[] = [];
+  let consecutive = 0;
+  let counting = true;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date();
+    d.setUTCDate(d.getUTCDate() - i * 7);
+    const wk = currentWeekKey(d);
+    const count = await prisma.creatorSubmission.count({
+      where: { userId, weekKey: wk },
+    });
+    const active = count > 0;
+    slots.unshift(active);
+    if (counting) {
+      if (active) consecutive += 1;
+      else counting = false;
+    }
+  }
+  return { consecutiveWeeks: consecutive, weekSlots: slots };
+}
+
+export async function getChallengeSubmissionCount(weekKey: string): Promise<number> {
+  return prisma.creatorSubmission.count({ where: { weekKey } });
+}
+
+export async function getCreatorUtmWeeklySeries(userId: string) {
+  const points: { label: string; clicks: number }[] = [];
+  for (let i = 3; i >= 0; i--) {
+    const d = new Date();
+    d.setUTCDate(d.getUTCDate() - i * 7);
+    const wk = currentWeekKey(d);
+    const { startsAt, endsAt } = weekBounds(wk);
+    const clicks = await prisma.creatorArenaVisit.count({
+      where: { userId, createdAt: { gte: startsAt, lt: endsAt } },
+    });
+    points.push({ label: wk.slice(5), clicks });
+  }
+  return points;
+}
+
+export type CreatorReferralRow = {
+  id: string;
+  label: string;
+  amountCents: number;
+  createdAt: string;
+};
+
+export async function getCreatorReferralProof(userId: string): Promise<{
+  rows: CreatorReferralRow[];
+  totalCents: number;
+}> {
+  const rows = await prisma.commissionLedger.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    take: 12,
+    include: {
+      deal: {
+        select: {
+          clientLabel: true,
+          product: { select: { name: true } },
+        },
+      },
+    },
+  });
+  const mapped = rows.map((r) => ({
+    id: r.id,
+    label: r.deal?.product?.name ?? r.deal?.clientLabel ?? "Commission",
+    amountCents: r.amountCents,
+    createdAt: r.createdAt.toISOString(),
+  }));
+  const totalCents = rows.reduce((s, r) => s + r.amountCents, 0);
+  return { rows: mapped, totalCents };
+}
+
+export async function getCreatorAnalyticsBenchmarks() {
+  const weekStart = weekBounds(currentWeekKey()).startsAt;
+  const creators = await import("@/lib/growth/creator-program").then((m) =>
+    m.getCreatorLoungeParticipantIds(),
+  );
+  if (creators.length === 0) {
+    return { avgSubmissions: 0, avgClicks: 0 };
+  }
+  const [subs, clicks] = await Promise.all([
+    prisma.creatorSubmission.groupBy({
+      by: ["userId"],
+      where: { createdAt: { gte: weekStart }, userId: { in: creators } },
+      _count: { id: true },
+    }),
+    prisma.creatorArenaVisit.groupBy({
+      by: ["userId"],
+      where: { createdAt: { gte: weekStart }, userId: { in: creators } },
+      _count: { id: true },
+    }),
+  ]);
+  const avgSubmissions =
+    subs.reduce((s, r) => s + r._count.id, 0) / Math.max(creators.length, 1);
+  const avgClicks =
+    clicks.reduce((s, r) => s + r._count.id, 0) / Math.max(creators.length, 1);
+  return { avgSubmissions, avgClicks };
+}
+
+async function notifyCreatorsWeeklyDigest(weekKey: string) {
+  const { getCreatorLoungeParticipantIds } = await import("@/lib/growth/creator-program");
+  const ids = await getCreatorLoungeParticipantIds();
+  const prev = new Date(weekBounds(weekKey).startsAt);
+  prev.setUTCDate(prev.getUTCDate() - 7);
+  const prevWeekKey = currentWeekKey(prev);
+
+  await Promise.all(
+    ids.map(async (userId) => {
+      const subs = await prisma.creatorSubmission.count({
+        where: { userId, weekKey: prevWeekKey },
+      });
+      const rank = (await creatorCupLeaderboard(50)).find((r) => r.userId === userId)?.rank;
+      if (subs > 0) {
+        await createNotification(prisma, {
+          userId,
+          type: NotificationType.SYSTEM,
+          title: "أسبوعك الماضي",
+          body: `${subs} منشور · ترتيب ${rank ? `#${rank}` : "—"}`,
+          link: "/growth/creators",
+          metadata: { kind: "creator_weekly_digest" },
+        });
+      } else {
+        await createNotification(prisma, {
+          userId,
+          type: NotificationType.SYSTEM,
+          title: "نفتقدك",
+          body: "لم نرَك الأسبوع الماضي — التحدي الجديد بانتظارك.",
+          link: "/growth/creators",
+          metadata: { kind: "creator_reengage" },
+        });
+      }
+    }),
+  );
 }
 
 export { WEEK_MS };

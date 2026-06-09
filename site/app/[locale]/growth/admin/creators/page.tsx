@@ -70,7 +70,7 @@ export default async function AdminCreatorsPage({ params }: Props) {
   const partnerIds = allPartners.map((u) => u.id);
   const weekKeys = challengeRows.map((c) => c.weekKey);
 
-  const [submissionRows, ...challengeSubmissionGroups] = await Promise.all([
+  const [submissionRows, nominationGroups, ...challengeSubmissionGroups] = await Promise.all([
     prisma.creatorSubmission.findMany({
       where: { userId: { in: partnerIds } },
       orderBy: { createdAt: "desc" },
@@ -87,6 +87,11 @@ export default async function AdminCreatorsPage({ params }: Props) {
         createdAt: true,
       },
     }),
+    prisma.creatorNomination.groupBy({
+      by: ["nomineeUserId"],
+      _count: { _all: true },
+      where: { nomineeUserId: { in: partnerIds } },
+    }),
     ...weekKeys.map((weekKey) => listChallengeSubmissions(weekKey)),
   ]);
 
@@ -95,6 +100,9 @@ export default async function AdminCreatorsPage({ params }: Props) {
   );
   const roomSet = new Set(roomMembers.map((m) => m.userId));
   const cupScoreMap = new Map(cupLeaderboard.map((r) => [r.userId, r.score]));
+  const nominationMap = new Map(
+    nominationGroups.map((g) => [g.nomineeUserId, g._count._all]),
+  );
 
   const submissionsByUser = new Map<string, CreatorAdminSubmission[]>();
   for (const row of submissionRows) {
@@ -146,6 +154,7 @@ export default async function AdminCreatorsPage({ params }: Props) {
     notes: u.creatorArenaProfile?.notes ?? null,
     milestones: u.creatorArenaProfile?.milestones ?? [],
     submissions: submissionsByUser.get(u.id) ?? [],
+    nominationCount: nominationMap.get(u.id) ?? 0,
   }));
 
   const challenges: CreatorAdminChallenge[] = challengeRows.map((c) => ({
@@ -188,7 +197,9 @@ export default async function AdminCreatorsPage({ params }: Props) {
           email: a.email,
           mainPlatformUrl: a.mainPlatformUrl,
           platform: a.platform,
+          contentTypes: Array.isArray(a.contentTypes) ? (a.contentTypes as string[]) : [],
           followersRange: a.followersRange,
+          applicantNote: a.applicantNote,
           status: a.status,
           createdAt: a.createdAt.toISOString(),
         }))}

@@ -2178,6 +2178,11 @@
   background: var(--creator-primary);
 }
 
+@keyframes creator-typing-dot {
+  0%, 60%, 100% { transform: scale(1); opacity: 0.5; }
+  30% { transform: scale(1.5); opacity: 1; }
+}
+
 .growth-creator-hub-page .growth-chat-bubble-fab,
 .growth-creator-hub-page .growth-chat-bubble-panel {
   bottom: calc(4.75rem + var(--growth-safe-bottom) + 0.5rem);

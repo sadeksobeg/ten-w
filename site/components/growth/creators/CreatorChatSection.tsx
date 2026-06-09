@@ -2,30 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
-import {
-  IconFire,
-  IconStar,
-  IconThumbUp,
-  IconHeart,
-  IconTrophy,
-  IconLightning,
-} from "@/components/growth/icons/GrowthIcons";
 import type { ChatRoomMessageDTO } from "@/lib/growth/chat-room-service";
 import { mergeChatRoomMessages } from "@/lib/growth/chat-display";
+import { getCreatorChannelMeta } from "@/lib/growth/creator-program";
 import type { CreatorChatRoomPreview } from "@/lib/growth/creator-chat";
 import type { CreatorHubViewer } from "./CreatorHubTypes";
+import { CreatorMessageList } from "./CreatorMessageList";
 
 const CHAR_LIMIT = 280;
-const REACTIONS = [
-  { key: "fire", Icon: IconFire },
-  { key: "star", Icon: IconStar },
-  { key: "thumb", Icon: IconThumbUp },
-  { key: "heart", Icon: IconHeart },
-  { key: "trophy", Icon: IconTrophy },
-  { key: "lightning", Icon: IconLightning },
-] as const;
 
 type Props = {
   locale: string;
@@ -35,6 +20,23 @@ type Props = {
   isActive: boolean;
   onUnread?: (n: number) => void;
 };
+
+function TypingDots() {
+  return (
+    <span className="inline-flex items-center gap-0.5 align-middle" aria-hidden>
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="inline-block size-1 rounded-full bg-white/50"
+          style={{
+            animation: "creator-typing-dot 1s ease-in-out infinite",
+            animationDelay: `${i * 150}ms`,
+          }}
+        />
+      ))}
+    </span>
+  );
+}
 
 export function CreatorChatSection({
   locale: _locale,
@@ -57,6 +59,7 @@ export function CreatorChatSection({
   const atBottomRef = useRef(true);
 
   const viewerName = viewer.displayName ?? viewer.name ?? viewer.email;
+  const channelMeta = getCreatorChannelMeta(activeSlug);
 
   const loadMessages = useCallback(async (slug: string) => {
     const res = await fetch(`/api/growth/chat/rooms/${slug}/messages`);
@@ -66,8 +69,15 @@ export function CreatorChatSection({
   }, []);
 
   useEffect(() => {
+    setRooms(initialRooms);
+  }, [initialRooms]);
+
+  useEffect(() => {
     if (!isRoomMember || !isActive) return;
     void loadMessages(activeSlug);
+    setRooms((prev) =>
+      prev.map((r) => (r.slug === activeSlug ? { ...r, unread: 0 } : r)),
+    );
     void fetch(`/api/growth/chat/rooms/${activeSlug}/read`, { method: "POST" }).catch(() => {});
   }, [activeSlug, isRoomMember, isActive, loadMessages]);
 
@@ -132,14 +142,17 @@ export function CreatorChatSection({
       createdAt: new Date().toISOString(),
       editedAt: null,
       isDeleted: false,
+      reactions: [],
     };
     setMessages((prev) => [...prev, optimistic]);
     setBody("");
     setSending(true);
     setFailedId(null);
-    const fd = new FormData();
-    fd.set("body", text);
-    const res = await fetch(`/api/growth/chat/rooms/${activeSlug}/messages`, { method: "POST", body: fd });
+    const res = await fetch(`/api/growth/chat/rooms/${activeSlug}/messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ body: text }),
+    });
     setSending(false);
     if (!res.ok) {
       setFailedId(optimistic.id);
@@ -163,12 +176,36 @@ export function CreatorChatSection({
   }
 
   async function toggleReaction(messageId: string, emoji: string) {
+    setMessages((prev) =>
+      prev.map((m) => {
+        if (m.id !== messageId) return m;
+        const existing = m.reactions.find((r) => r.emoji === emoji);
+        if (existing?.mine) {
+          return {
+            ...m,
+            reactions: m.reactions
+              .map((r) =>
+                r.emoji === emoji ? { ...r, count: r.count - 1, mine: false } : r,
+              )
+              .filter((r) => r.count > 0),
+          };
+        }
+        if (existing) {
+          return {
+            ...m,
+            reactions: m.reactions.map((r) =>
+              r.emoji === emoji ? { ...r, count: r.count + 1, mine: true } : r,
+            ),
+          };
+        }
+        return { ...m, reactions: [...m.reactions, { emoji, count: 1, mine: true }] };
+      }),
+    );
     await fetch(`/api/growth/chat/rooms/${activeSlug}/messages/${messageId}/reactions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ emoji }),
     });
-    void loadMessages(activeSlug);
   }
 
   if (!isRoomMember) {
@@ -179,39 +216,66 @@ export function CreatorChatSection({
     );
   }
 
+  const activeRoom = rooms.find((r) => r.slug === activeSlug);
+
   return (
     <div className="creator-card flex min-h-[min(70dvh,640px)] overflow-hidden">
       <aside className="hidden w-56 shrink-0 flex-col border-e border-white/10 bg-[var(--creator-surface-2)] md:flex">
         <p className="px-3 py-3 text-[10px] font-bold uppercase tracking-wide text-white/45">{t("rooms")}</p>
         <ul className="flex-1 overflow-y-auto">
-          {rooms.map((r) => (
+          {rooms.filter((r) => !r.isDm).map((r) => {
+            const meta = getCreatorChannelMeta(r.slug);
+            return (
+              <li key={r.slug}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveSlug(r.slug);
+                    setNewBelow(0);
+                  }}
+                  className={`flex w-full items-center gap-2 px-3 py-2.5 text-start text-xs ${
+                    activeSlug === r.slug ? "creator-nav-active" : "text-white/65 hover:bg-white/[0.04]"
+                  } ${r.unread > 0 ? "font-bold" : ""}`}
+                >
+                  <span className="font-mono text-white/40">#</span>
+                  <span className="min-w-0 flex-1 truncate">{r.title}</span>
+                  {r.unread > 0 ? (
+                    <span className="rounded-full bg-[var(--creator-primary)] px-1.5 text-[9px] font-bold text-white">
+                      {r.unread}
+                    </span>
+                  ) : null}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        <p className="border-t border-white/10 px-3 py-2 text-[10px] text-white/40">{t("direct")}</p>
+        <ul>
+          {rooms.filter((r) => r.isDm).map((r) => (
             <li key={r.slug}>
               <button
                 type="button"
-                onClick={() => {
-                  setActiveSlug(r.slug);
-                  setNewBelow(0);
-                }}
-                className={`flex w-full items-center gap-2 px-3 py-2.5 text-start text-xs ${
-                  activeSlug === r.slug ? "creator-nav-active" : "text-white/65 hover:bg-white/[0.04]"
-                }`}
+                onClick={() => setActiveSlug(r.slug)}
+                className={`flex w-full px-3 py-2 text-start text-xs ${activeSlug === r.slug ? "creator-nav-active" : "text-white/60"}`}
               >
-                <span className="font-mono text-white/40">#</span>
-                <span className="min-w-0 flex-1 truncate">{r.title}</span>
-                {r.unread > 0 ? (
-                  <span className="rounded-full bg-[var(--creator-primary)] px-1.5 text-[9px] font-bold text-white">{r.unread}</span>
-                ) : null}
+                {r.title}
               </button>
             </li>
           ))}
         </ul>
-        <p className="border-t border-white/10 px-3 py-2 text-[10px] text-white/40">{t("direct")}</p>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="border-b border-white/10 px-4 py-3">
-          <h2 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">#{rooms.find((r) => r.slug === activeSlug)?.title ?? activeSlug}</h2>
-          <p className="text-[11px] text-white/45">{t("charLimit", { max: CHAR_LIMIT })}</p>
+        <header
+          className="border-b border-white/10 px-4 py-3"
+          style={{ borderTopWidth: 3, borderTopColor: channelMeta.accent, borderTopStyle: "solid" }}
+        >
+          <h2 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">
+            #{activeRoom?.title ?? activeSlug}
+          </h2>
+          <p className="text-[11px] text-white/45">
+            {t(`channel.${channelMeta.descriptionKey}`)}
+          </p>
         </header>
 
         <div
@@ -223,40 +287,29 @@ export function CreatorChatSection({
             if (atBottomRef.current) setNewBelow(0);
           }}
         >
-          {messages.map((m) => {
-            const mine = m.senderUserId === viewer.userId;
-            return (
-              <div key={m.id} className={`group mb-3 flex ${mine ? "justify-end" : "justify-start"}`}>
-                {!mine ? (
-                  <GrowthAvatar name={m.senderName} email={m.senderUserId} avatarUrl={m.senderAvatarUrl} size="sm" className="me-2 shrink-0" />
-                ) : null}
-                <div className="max-w-[85%]">
-                  {!mine ? <p className="mb-0.5 text-[10px] font-semibold text-[var(--creator-accent)]">{m.senderName}</p> : null}
-                  <div className={`px-3 py-2 text-sm ${mine ? "creator-bubble-mine" : "creator-bubble-them"}`}>
-                    {m.body}
-                    {failedId === m.id ? <p className="mt-1 text-[10px] text-rose-300">{t("failed")}</p> : null}
-                  </div>
-                  <div className="mt-1 flex gap-1 opacity-0 transition group-hover:opacity-100">
-                    {REACTIONS.map(({ key, Icon }) => (
-                      <button key={key} type="button" className="rounded p-0.5 text-white/50 hover:text-[var(--creator-secondary)]" onClick={() => void toggleReaction(m.id, key)}>
-                        <Icon size={12} />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          <CreatorMessageList
+            messages={messages}
+            viewerUserId={viewer.userId}
+            failedId={failedId}
+            onReaction={(id, emoji) => void toggleReaction(id, emoji)}
+          />
         </div>
 
         {newBelow > 0 ? (
-          <button type="button" className="mx-4 mb-1 rounded-full bg-[var(--creator-primary)]/20 px-3 py-1 text-[11px] font-bold text-rose-200" onClick={() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight })}>
+          <button
+            type="button"
+            className="mx-4 mb-1 rounded-full bg-[var(--creator-primary)]/20 px-3 py-1 text-[11px] font-bold text-rose-200"
+            onClick={() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight })}
+          >
             {t("newMessages", { n: newBelow })}
           </button>
         ) : null}
 
         {typingNames.length > 0 ? (
-          <p className="px-4 pb-1 text-[11px] text-white/45">{t("typing", { name: typingNames[0]! })}</p>
+          <p className="flex items-center gap-1.5 px-4 pb-1 text-[11px] text-white/45 transition-opacity">
+            {t("typing", { name: typingNames[0]! })}
+            <TypingDots />
+          </p>
         ) : null}
 
         <div className="flex gap-2 border-t border-white/10 p-3">

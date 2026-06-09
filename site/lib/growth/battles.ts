@@ -183,6 +183,24 @@ async function completeBattle(
       }),
       link: "/growth/battles",
     });
+
+    try {
+      const [winnerName, loserName] = await Promise.all([
+        userLabel(winnerId),
+        userLabel(loserId),
+      ]);
+      const { postCreatorChannelMessage } = await import("@/lib/growth/chat-room-service");
+      await postCreatorChannelMessage("creator-battles", winnerId, "·", {
+        kind: "BATTLE_RESULT",
+        metadata: {
+          winner: winnerName,
+          score: `${winnerName} vs ${loserName}`,
+        },
+        skipPostCheck: true,
+      });
+    } catch {
+      /* chat optional */
+    }
   }
 }
 

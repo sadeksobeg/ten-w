@@ -8,6 +8,8 @@ import type {
   CreatorPulseStats,
   CreatorStatusCard,
   CreatorAnalyticsPoint,
+  CreatorWeekStreakData,
+  CreatorReferralRow,
 } from "@/lib/growth/creator-arena";
 import type { CreatorChatRoomPreview } from "@/lib/growth/creator-chat";
 import type { CreatorFeaturedCreator } from "./CreatorFeaturedSpotlight";
@@ -79,7 +81,10 @@ export type CreatorHubProps = {
   directory: CreatorDirectoryEntry[];
   analyticsSeries: CreatorAnalyticsPoint[];
   utmStats: Array<{ platform: string; clicks: number; registrations: number; conversionPct: number }>;
-  contentIdeas: Array<{ id: string; title: string; column: string; platform: string; priority: string }>;
+  contentIdeas: Array<
+    | { id: string; title: string; column: string; platform: string; priority: string }
+    | { type: "series"; id: string; name: string; target: number; completed: number; episodes: string[] }
+  >;
   viewerRank: number | null;
   bio: string | null;
   specialty: string[];
@@ -108,6 +113,12 @@ export type CreatorHubProps = {
   } | null;
   pendingInvites: Array<{ id: string; challengerName: string; stakesXp: number; target: number }>;
   approvalRate: number;
+  weekStreak: CreatorWeekStreakData;
+  challengeSubmitCount: number;
+  challengeParticipantCount: number;
+  utmWeeklySeries: Array<{ label: string; clicks: number }>;
+  referralProof: { rows: CreatorReferralRow[]; totalCents: number };
+  analyticsBenchmarks: { avgSubmissions: number; avgClicks: number };
 };
 
 export type { CreatorFeaturedCreator, CreatorOnboardingProgress };

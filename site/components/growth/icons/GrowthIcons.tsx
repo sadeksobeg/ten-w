@@ -381,6 +381,15 @@ export function IconTrophy(props: GrowthIconProps) {
   );
 }
 
+export function IconVideo(props: GrowthIconProps) {
+  return (
+    <GrowthIconBase {...props}>
+      <rect x="4" y="6" width="12" height="12" rx="2" />
+      <path d="M14 10l4-2v8l-4-2" />
+    </GrowthIconBase>
+  );
+}
+
 export function IconCommission(props: GrowthIconProps) {
   return (
     <GrowthIconBase {...props}>
