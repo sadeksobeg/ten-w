@@ -2188,6 +2188,67 @@
   bottom: calc(4.75rem + var(--growth-safe-bottom) + 0.5rem);
 }
 
+/* Immersive Creator Hub app mode */
+body.creator-hub-app-mode {
+  overflow-x: hidden;
+}
+
+body.creator-hub-app-mode .growth-root {
+  min-height: 100dvh;
+}
+
+body.creator-hub-app-mode .growth-layout-shell {
+  max-width: none;
+  padding: 0;
+}
+
+body.creator-hub-app-mode .growth-creator-hub-wrap {
+  padding: 0;
+  margin: 0;
+}
+
+body.creator-hub-app-mode .growth-creator-hub-page {
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+}
+
+body.creator-hub-app-mode .creator-hub-shell.creator-hub-mobile-app {
+  min-height: 100dvh;
+  border-radius: 0;
+}
+
+body.creator-hub-app-mode .creator-hub-mobile-root {
+  margin: 0;
+  width: 100%;
+}
+
+@keyframes creator-podium-rise {
+  from { transform: scaleY(0.2); opacity: 0.4; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+.creator-podium-bar {
+  transform-origin: bottom center;
+  animation: creator-podium-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes creator-battle-pick-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.creator-battle-pick {
+  animation: creator-battle-pick-in 0.35s ease-out backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creator-podium-bar,
+  .creator-battle-pick {
+    animation: none !important;
+  }
+}
+
 @media (max-width: 1023px) {
   .creator-hub-mobile-root {
     margin-inline: -0.75rem;
@@ -2195,7 +2256,7 @@
   }
 
   .creator-hub-shell.creator-hub-mobile-app {
-    min-height: calc(100dvh - 3.5rem);
+    min-height: 100dvh;
     border-radius: 0;
     border-inline: none;
   }

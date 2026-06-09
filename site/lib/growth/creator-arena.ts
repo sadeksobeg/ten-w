@@ -793,11 +793,17 @@ export async function getCreatorBattleCandidates(userId: string) {
       id: true,
       name: true,
       email: true,
+      avatarUrl: true,
       isVerifiedOfficial: true,
       officialDisplayName: true,
       partnerProfile: { select: { currentLevel: { select: { code: true } } } },
+      creatorArenaProfile: {
+        select: { consentGiven: true, consentVersion: true },
+      },
     },
   });
+
+  const { hasActiveCreatorConsent } = await import("@/lib/growth/creator-consent");
 
   return users.map((h) => {
     const name = resolveChatSenderName(h);
@@ -811,6 +817,8 @@ export async function getCreatorBattleCandidates(userId: string) {
       name,
       levelCode: h.partnerProfile?.currentLevel.code ?? "STARTER",
       initials,
+      avatarUrl: h.avatarUrl,
+      consentGiven: hasActiveCreatorConsent(h.creatorArenaProfile),
     };
   });
 }

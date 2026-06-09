@@ -23,6 +23,8 @@ export function PartnerChatBubble({ locale, viewerUserId }: Props) {
   const [summary, setSummary] = useState<PartnerChatSummary | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const isChatPage = pathname === "/growth/chat" || pathname.endsWith("/growth/chat");
+  const isCreatorHub =
+    pathname === "/growth/creators" || pathname.endsWith("/growth/creators");
   const dir = locale === "ar" ? "rtl" : "ltr";
 
   const refreshSummary = useCallback(async () => {
@@ -114,7 +116,7 @@ export function PartnerChatBubble({ locale, viewerUserId }: Props) {
     focusable?.focus();
   }, [open]);
 
-  if (isChatPage || !summary) return null;
+  if (isChatPage || isCreatorHub || !summary) return null;
 
   const unread = summary.unreadCount;
   const sideClass = locale === "ar" ? "left-4" : "right-4";

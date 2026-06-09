@@ -803,7 +803,7 @@
     "kit": {
       "utmChartTitle": "UTM performance (4 weeks)",
       "funnel": "Clicks: {clicks} → signups: {regs} → deals: ~{deals}",
-      "utmTitle": "Your tracked links", "utmSubtitle": "Every link tracks performance", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X", "whatsapp": "WhatsApp" }, "copyLink": "Copy link", "copied": "Copied", "copyError": "Copy failed", "qr": "QR", "scriptsTitle": "Ready scripts", "scriptInstagram": "Discover TENEGTA tech solutions — use code {code} for 3% off.", "copyScript": "Copy", "ideasTitle": "Content ideas this week", "idea1": "Cinema OS tour", "idea2": "3 reasons for TENEGTA websites", "idea3": "AI automation challenge", "idea4": "Cybersecurity for SMBs", "idea5": "How ASCEND partners work", "assetsTitle": "Brand assets", "assetLogo": "T.E.N.E.G.T.A logo SVG" },
+      "utmTitle": "Your tracked links", "utmSubtitle": "Every link tracks performance", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X", "whatsapp": "WhatsApp" }, "copyLink": "Copy link", "copied": "Copied", "copyError": "Copy failed", "qr": "QR", "scriptsTitle": "Ready scripts", "scriptInstagram": "Discover TENEGTA tech solutions — use code {code} for 3% off.", "copyScript": "Copy", "ideasTitle": "Content ideas this week", "idea1": "TENEGTA services tour: AI & cybersecurity", "idea2": "3 reasons for TENEGTA websites", "idea3": "AI automation challenge", "idea4": "Cybersecurity for SMBs", "idea5": "How ASCEND partners work", "assetsTitle": "Brand assets", "assetLogo": "T.E.N.E.G.T.A logo SVG" },
     "analytics": {
       "metric": { "submissions": "Posts (30d)", "referrals": "Referrals", "cup": "Cup points", "approval": "Approval rate" },
       "chartTitle": "Your activity vs top",
@@ -875,9 +875,9 @@
         "kit": { "title": "Marketing kit", "body": "Tracked links, scripts, and brand assets." },
         "earn": { "title": "Commissions", "body": "Earn on every client you refer to TENEGTA." }
       },
-      "demoTitle": "See Cinema OS in action",
-      "demoBody": "Film demos with our interactive cinema showcase — perfect for tech content.",
-      "demoCta": "Open demo",
+      "demoTitle": "Explore company services",
+      "demoBody": "Film interactive showcases of TENEGTA solutions — AI, cybersecurity, and enterprise software.",
+      "demoCta": "Explore solutions",
       "faqTitle": "FAQ",
       "faq": {
         "q1": "Who can join?",
@@ -3674,7 +3674,7 @@
         "overrides": "Partner overrides",
         "bonuses": "Manual bonuses",
         "partnerDashboard": "Partner dashboard",
-        "demo": "Cinematic demo",
+        "demo": "Interactive demo",
         "chat": "Chat",
         "chatModerators": "Chat moderators",
         "partners": "Partners",
@@ -3860,7 +3860,7 @@
       },
       "invites": {
         "title": "Invite cards",
-        "subtitle": "Create cinematic invite links and QR cards for creators — does not auto-create partner accounts.",
+        "subtitle": "Create premium invite links and QR cards for creators — does not auto-create partner accounts.",
         "statsTotal": "Total invites",
         "statsAccepted": "Accepted",
         "statsPending": "Pending",
@@ -3946,7 +3946,7 @@
         "sendSubmit": "Send"
       },
       "demo": {
-        "pageTitle": "Cinematic demo mode",
+        "pageTitle": "Interactive demo mode",
         "pageLead": "Investor-grade walkthrough: scripted revenue beats, network pulse, and intelligence — without touching production data.",
         "launch": "Launch demo experience",
         "close": "Exit demo",

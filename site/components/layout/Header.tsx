@@ -24,6 +24,10 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+  if (pathname.includes("/growth/creators")) {
+    return null;
+  }
+
   return (
     <header className="sticky top-0 z-[100] border-b border-white/10 bg-bg/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">

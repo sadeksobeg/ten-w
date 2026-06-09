@@ -90,7 +90,7 @@ export function ForCreatorsApplyWizard({ locale }: Props) {
           <p className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold text-white">{t("successTitle")}</p>
           <p className="mt-4 text-sm text-white/65">{t("successBody", { email })}</p>
           <p className="mt-6 text-xs text-white/45">{t("successExplore")}</p>
-          <Link href={`/${locale}/demo/cinema`} className="mt-4 inline-block">
+          <Link href={`/${locale}/solutions/intelligent-systems`} className="mt-4 inline-block">
             <GoldButton type="button">{t("successDemo")}</GoldButton>
           </Link>
         </div>

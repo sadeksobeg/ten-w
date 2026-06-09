@@ -134,11 +134,45 @@
   color: #fda4af;
 }
 
+@keyframes fc-service-pulse {
+  0%, 100% { opacity: 0.85; filter: brightness(1); }
+  50% { opacity: 1; filter: brightness(1.15); }
+}
+
+@keyframes fc-service-orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.fc-service-bar {
+  animation: fc-service-pulse 2.4s ease-in-out infinite;
+}
+
+.fc-service-orbit {
+  animation: fc-service-orbit 12s linear infinite;
+}
+
+.fc-service-card {
+  animation: fc-fade-up 0.5s ease-out backwards;
+}
+
+.fc-service-grid {
+  background-image:
+    linear-gradient(rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.fc-demo-browser {
+  box-shadow: 0 0 60px rgba(124, 58, 237, 0.12), 0 0 120px rgba(201, 146, 42, 0.08);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fc-aurora-1, .fc-aurora-2, .fc-aurora-3,
   .fc-shimmer-text, .fc-separator, .fc-fade-up,
   .fc-float-stat, .fc-letter, .fc-mockup-frame,
-  .fc-wizard-slide-enter, .fc-wizard-slide-back {
+  .fc-wizard-slide-enter, .fc-wizard-slide-back,
+  .fc-service-bar, .fc-service-orbit, .fc-service-card {
     animation: none !important;
     opacity: 1 !important;
     width: auto !important;

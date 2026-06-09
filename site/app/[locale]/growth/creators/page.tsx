@@ -195,7 +195,7 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
     : null;
 
   return (
-    <div className="growth-creator-hub-page space-y-6 growth-page-enter">
+    <div className="growth-creator-hub-page growth-page-enter">
       <ContentCreatorHub
         locale={locale}
         hasBadge={hasBadge}

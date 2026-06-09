@@ -6,6 +6,7 @@ import { AnalyticsConsent } from "@/components/analytics/AnalyticsConsent";
 import { AmbientBackground } from "@/components/layout/AmbientBackground";
 import { AsyncGoogleFonts } from "@/components/layout/AsyncGoogleFonts";
 import { Footer } from "@/components/layout/Footer";
+import { FooterGate } from "@/components/layout/FooterGate";
 import { Header } from "@/components/layout/Header";
 import { LazyCustomCursor } from "@/components/layout/LazyCustomCursor";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
@@ -124,7 +125,9 @@ export default async function LocaleLayout({ children, params }: Props) {
                 <main id="main" className="relative flex-1">
                   {children}
                 </main>
-                <Footer />
+                <FooterGate>
+                  <Footer />
+                </FooterGate>
                 <AnalyticsConsent />
               </SmoothScroll>
             </SoundProvider>

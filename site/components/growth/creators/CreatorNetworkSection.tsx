@@ -54,7 +54,10 @@ export function CreatorNetworkSection({ directory, myUserId, onNavigate, onMessa
                 className="max-w-[88px]"
                 nameClassName="truncate text-[10px] text-white/55"
               />
-              <div className={`mt-1 w-12 rounded-t bg-[var(--creator-secondary)]/30 ${i === 0 ? "h-16" : i === 1 ? "h-12" : "h-8"}`} />
+              <div
+                className={`creator-podium-bar mt-2 w-14 rounded-t-lg bg-gradient-to-t from-[var(--creator-secondary)]/15 via-[var(--creator-secondary)]/45 to-amber-200/70 shadow-[0_0_18px_rgba(245,196,81,0.2)] ${i === 0 ? "h-20" : i === 1 ? "h-14" : "h-10"}`}
+                style={{ animationDelay: `${i * 120}ms` }}
+              />
             </div>
           ))}
         </div>
@@ -107,18 +110,33 @@ export function CreatorNetworkSection({ directory, myUserId, onNavigate, onMessa
         <h3 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">{t("nominateTitle")}</h3>
         <p className="mt-1 text-xs text-white/50">{t("nominateHint")}</p>
         <form action={nominateAction} className="mt-4 space-y-3">
-          <select
-            name="nomineeUserId"
-            value={nomineeId}
-            onChange={(e) => setNomineeId(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white"
-          >
-            {directory.filter((c) => c.userId !== myUserId).map((c) => (
-              <option key={c.userId} value={c.userId}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+          <input type="hidden" name="nomineeUserId" value={nomineeId} />
+          <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {directory.filter((c) => c.userId !== myUserId).map((c) => {
+              const active = nomineeId === c.userId;
+              return (
+                <button
+                  key={c.userId}
+                  type="button"
+                  onClick={() => setNomineeId(c.userId)}
+                  className={`creator-battle-pick flex min-w-[140px] shrink-0 flex-col items-center rounded-2xl border px-3 py-3 transition ${
+                    active
+                      ? "creator-battle-pick-active border-[var(--creator-secondary)]/50 bg-gradient-to-br from-amber-500/15 to-rose-500/10"
+                      : "border-white/10 bg-black/25"
+                  }`}
+                >
+                  <GrowthAvatar name={c.name} email={c.userId} avatarUrl={c.avatarUrl} size="md" />
+                  <CreatorNameWithConsentBadge
+                    name={c.name}
+                    verified={c.consentGiven}
+                    label={tConsent("verifiedBadge")}
+                    className="mt-2 max-w-full"
+                    nameClassName="truncate text-[11px] font-bold text-white"
+                  />
+                </button>
+              );
+            })}
+          </div>
           <input
             name="reason"
             placeholder={t("nominateReason")}

@@ -108,6 +108,7 @@ export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProg
 
   return (
     <>
+      {!isCreatorHub ? (
       <nav
         className="growth-partner-nav-desktop growth-nav-scroll mb-4 flex-nowrap border-b border-white/10 pb-3"
         aria-label={t("navAria")}
@@ -128,7 +129,8 @@ export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProg
           );
         })}
       </nav>
-      <div className="growth-page-wrap growth-mobile-pad growth-stack">{children}</div>
+      ) : null}
+      <div className={`growth-page-wrap growth-stack ${isCreatorHub ? "growth-creator-hub-wrap" : "growth-mobile-pad"}`}>{children}</div>
       {!isCreatorHub ? (
       <nav className="growth-partner-nav-mobile" aria-label={t("mobileNavAria")}>
         {mobileNav.map((item) => {
