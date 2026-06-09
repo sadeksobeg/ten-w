@@ -4,6 +4,7 @@ import { CreatorWorkflowStatus, NotificationType, UserRole } from "@prisma/clien
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { auth } from "@/auth";
+import { routing } from "@/i18n/routing";
 import { prisma } from "@/lib/prisma";
 import {
   currentWeekKey,
@@ -859,6 +860,12 @@ export async function createNominationAction(
   return { ok: true };
 }
 
+function revalidateForCreatorsPages() {
+  for (const locale of routing.locales) {
+    revalidatePath(`/${locale}/for-creators`);
+  }
+}
+
 const platformReviewSchema = z.object({
   nameAr: z.string().min(1).max(120),
   nameEn: z.string().max(120).optional(),
@@ -920,7 +927,7 @@ export async function adminUpsertPlatformReviewAction(
   }
 
   revalidatePath("/growth/admin/creators");
-  revalidatePath("/for-creators");
+  revalidateForCreatorsPages();
   return { ok: true };
 }
 
@@ -930,7 +937,7 @@ export async function adminDeletePlatformReviewAction(id: string): Promise<Actio
   if (!id) return { ok: false, error: "invalid_input" };
   await prisma.creatorPlatformReview.delete({ where: { id } });
   revalidatePath("/growth/admin/creators");
-  revalidatePath("/for-creators");
+  revalidateForCreatorsPages();
   return { ok: true };
 }
 
@@ -942,6 +949,6 @@ export async function adminTogglePlatformReviewAction(
   if (!admin.ok) return admin;
   await prisma.creatorPlatformReview.update({ where: { id }, data: { active } });
   revalidatePath("/growth/admin/creators");
-  revalidatePath("/for-creators");
+  revalidateForCreatorsPages();
   return { ok: true };
 }

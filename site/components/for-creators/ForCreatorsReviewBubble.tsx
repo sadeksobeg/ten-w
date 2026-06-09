@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
-import { localizePlatformReview, type CreatorPlatformReviewRow } from "@/lib/growth/creator-platform-reviews";
+import { localizePlatformReview, isAnonymousPlatformReview, type CreatorPlatformReviewRow } from "@/lib/growth/creator-platform-reviews";
 
 const STORAGE_KEY = "tenegta_fc_reviews_v1";
 
@@ -85,7 +85,7 @@ export function ForCreatorsReviewBubble({ reviews }: Props) {
             <div className="fc-review-shimmer pointer-events-none absolute inset-0 opacity-30" aria-hidden />
             <div className="relative flex items-start gap-3">
               <div className="fc-review-avatar flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--creator-secondary)]/40 to-rose-500/30 text-sm font-black text-white">
-                {localized.name.charAt(0).toUpperCase()}
+                {isAnonymousPlatformReview(review.id) ? "✦" : localized.name.charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
                 <p id="fc-review-title" className="font-[family-name:var(--font-cairo)] text-sm font-extrabold text-white">

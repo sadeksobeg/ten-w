@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { ForCreatorsLanding } from "@/components/for-creators/ForCreatorsLanding";
 import { listCreatorDirectory } from "@/lib/growth/creator-arena";
-import { listActivePlatformReviews } from "@/lib/growth/creator-platform-reviews";
+import { listPlatformReviewsForPublic } from "@/lib/growth/creator-platform-reviews";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -23,11 +23,10 @@ export default async function ForCreatorsPage({ params }: Props) {
   let creatorCount = 47;
   let approvalRate = 89;
 
-  let platformReviews: Awaited<ReturnType<typeof listActivePlatformReviews>> = [];
+  let platformReviews: Awaited<ReturnType<typeof listPlatformReviewsForPublic>> = [];
 
   try {
     directory = await listCreatorDirectory();
-    platformReviews = await listActivePlatformReviews();
     creatorCount = Math.max(directory.length, 1);
     const [accepted, total] = await Promise.all([
       prisma.creatorApplication.count({ where: { status: "ACCEPTED" } }),
@@ -39,6 +38,8 @@ export default async function ForCreatorsPage({ params }: Props) {
   } catch {
     /* build / offline */
   }
+
+  platformReviews = await listPlatformReviewsForPublic();
 
   const topCreators = directory
     .filter((c) => c.submissions > 0)

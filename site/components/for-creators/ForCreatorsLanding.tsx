@@ -8,6 +8,7 @@ import { ForCreatorsHero } from "./ForCreatorsHero";
 import { ForCreatorsProof, type CreatorPreview } from "./ForCreatorsProof";
 import { ForCreatorsDemoMockup } from "./ForCreatorsDemoMockup";
 import { ForCreatorsReviewBubble } from "./ForCreatorsReviewBubble";
+import { ForCreatorsTestimonials } from "./ForCreatorsTestimonials";
 import { ForCreatorsApplyWizard } from "./ForCreatorsApplyWizard";
 import type { CreatorPlatformReviewRow } from "@/lib/growth/creator-platform-reviews";
 
@@ -29,6 +30,7 @@ export function ForCreatorsLanding({ locale, topCreators, creatorCount, approval
     <div className="min-h-screen bg-[#03010A] text-white">
       <ForCreatorsHero />
       <ForCreatorsProof topCreators={topCreators} creatorCount={creatorCount} approvalRate={approvalRate} />
+      <ForCreatorsTestimonials reviews={platformReviews} />
       <ForCreatorsDemoMockup locale={locale} />
 
       <section className="mx-auto max-w-5xl px-4 py-16">
