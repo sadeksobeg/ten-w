@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
+import { Link } from "@/i18n/navigation";
 import { localizePlatformReview, isAnonymousPlatformReview, type CreatorPlatformReviewRow } from "@/lib/growth/creator-platform-reviews";
 
 const STORAGE_KEY = "tenegta_fc_reviews_v1";
@@ -119,17 +120,26 @@ export function ForCreatorsReviewBubble({ reviews }: Props) {
                 «{localized.quote}»
               </motion.blockquote>
             </AnimatePresence>
-            <div className="relative mt-4 flex items-center justify-between gap-2">
+            <div className="relative mt-4 flex flex-wrap items-center justify-between gap-2">
               <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--creator-secondary)]/70">
                 {t("label")}
               </p>
-              <button
-                type="button"
-                onClick={dismiss}
-                className="rounded-full bg-gradient-to-r from-[var(--creator-secondary)] to-amber-300 px-4 py-1.5 text-xs font-bold text-black transition active:scale-95"
-              >
-                {t("cta")}
-              </button>
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                <Link
+                  href="/growth/creators"
+                  onClick={dismiss}
+                  className="rounded-full border border-[var(--creator-secondary)]/40 bg-[var(--creator-secondary)]/10 px-3.5 py-1.5 text-xs font-bold text-[var(--creator-secondary)] transition hover:bg-[var(--creator-secondary)]/20 hover:text-white"
+                >
+                  {t("hubCta")}
+                </Link>
+                <button
+                  type="button"
+                  onClick={dismiss}
+                  className="rounded-full bg-gradient-to-r from-[var(--creator-secondary)] to-amber-300 px-4 py-1.5 text-xs font-bold text-black transition active:scale-95"
+                >
+                  {t("cta")}
+                </button>
+              </div>
             </div>
             {reviews.length > 1 ? (
               <div className="relative mt-3 flex justify-center gap-1.5">

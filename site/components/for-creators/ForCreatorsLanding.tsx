@@ -97,9 +97,17 @@ export function ForCreatorsLanding({ locale, topCreators, creatorCount, approval
       <section className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h2 className="font-[family-name:var(--font-cairo)] text-3xl font-extrabold">{t("finalCta.title")}</h2>
         <p className="mx-auto mt-3 max-w-md text-white/60">{t("finalCta.body")}</p>
-        <a href="#apply" className="mt-6 inline-block">
-          <GoldButton type="button">{t("finalCta.cta")}</GoldButton>
-        </a>
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a href="#apply">
+            <GoldButton type="button">{t("finalCta.cta")}</GoldButton>
+          </a>
+          <Link
+            href="/growth/creators"
+            className="rounded-full border border-[var(--creator-secondary)]/45 bg-[var(--creator-secondary)]/10 px-6 py-3 text-sm font-bold text-[var(--creator-secondary)] transition hover:bg-[var(--creator-secondary)]/20 hover:text-white"
+          >
+            {t("finalCta.creatorHub")} →
+          </Link>
+        </div>
       </section>
 
       <ForCreatorsApplyWizard locale={locale} />
@@ -107,7 +115,11 @@ export function ForCreatorsLanding({ locale, topCreators, creatorCount, approval
       <ForCreatorsReviewBubble reviews={platformReviews} />
 
       <footer className="border-t border-white/10 py-8 text-center text-xs text-white/40">
-        <Link href={`/${locale}/growth/sign-in`} className="text-[var(--creator-secondary)] hover:underline">
+        <Link href="/growth/creators" className="text-[var(--creator-secondary)] hover:underline">
+          Creator Hub
+        </Link>
+        <span className="mx-2 text-white/20">·</span>
+        <Link href="/growth/sign-in" className="text-[var(--creator-secondary)] hover:underline">
           ASCEND
         </Link>
       </footer>

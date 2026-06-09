@@ -836,6 +836,7 @@
         "title2": "into global partnership",
         "subtitle": "Join an elite network of tech creators — professional tools, live competition, and steady income at world-class standards.",
         "cta": "Apply now",
+        "creatorHub": "Enter Creator Hub",
         "secondary": "Explore the network ↓",
         "stat1": { "value": "47+", "sub": "creators · 8 countries" },
         "stat2": { "value": "2.3M+", "sub": "network views" },
@@ -844,6 +845,7 @@
       "reviewBubble": {
         "label": "Creator review",
         "cta": "Awesome!",
+        "hubCta": "Enter Creator Hub →",
         "close": "Close"
       },
       "proofStats": {
@@ -905,7 +907,7 @@
         "q8": "Support?",
         "a8": "Creator channels and admin team inside Creator Hub."
       },
-      "finalCta": { "title": "Ready to create?", "body": "Join the network and turn your audience into clients.", "cta": "Apply now" },
+      "finalCta": { "title": "Ready to create?", "body": "Join the network and turn your audience into clients.", "cta": "Apply now", "creatorHub": "Enter Creator Hub" },
       "apply": {
         "title": "Apply",
         "step1Title": "Who are you?",

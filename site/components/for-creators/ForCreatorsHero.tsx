@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { Link } from "@/i18n/navigation";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 
 type Particle = { id: number; left: number; top: number; size: number; delay: number; duration: number };
@@ -146,13 +147,21 @@ export function ForCreatorsHero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 1.3 }}
-        className="relative z-10 mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row"
+        className="relative z-10 mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap"
       >
         <a href="#apply" className="fc-cta-glow">
           <GoldButton type="button" className="!px-8 !py-3.5 text-sm">
             {t("cta")}
           </GoldButton>
         </a>
+        <Link
+          href="/growth/creators"
+          className="fc-hero-hub group rounded-full border border-[var(--creator-secondary)]/45 bg-[var(--creator-secondary)]/10 px-7 py-3.5 text-sm font-bold text-[var(--creator-secondary)] backdrop-blur-sm transition hover:border-[var(--creator-secondary)] hover:bg-[var(--creator-secondary)]/20 hover:text-white"
+        >
+          <span className="inline-block transition group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">
+            {t("creatorHub")} →
+          </span>
+        </Link>
         <a
           href="#demo"
           className="fc-hero-secondary group rounded-full border border-white/20 bg-white/[0.03] px-7 py-3.5 text-sm font-semibold text-white/80 backdrop-blur-sm transition hover:border-[var(--creator-secondary)]/50 hover:text-white"

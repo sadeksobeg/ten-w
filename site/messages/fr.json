@@ -812,6 +812,7 @@
         "title2": "en partenariat mondial",
         "subtitle": "Rejoignez une élite de créateurs tech — outils pro, compétition en direct et revenus durables aux standards internationaux.",
         "cta": "Postuler",
+        "creatorHub": "Creator Hub",
         "secondary": "Explorer le réseau ↓",
         "stat1": { "value": "47+", "sub": "créateurs · 8 pays" },
         "stat2": { "value": "2.3M+", "sub": "vues du réseau" },
@@ -820,6 +821,7 @@
       "reviewBubble": {
         "label": "Avis créateur",
         "cta": "Super !",
+        "hubCta": "Creator Hub →",
         "close": "Fermer"
       },
       "proofStats": {
@@ -881,7 +883,7 @@
         "q8": "Support ?",
         "a8": "Canaux créateurs et équipe admin dans Creator Hub."
       },
-      "finalCta": { "title": "Prêt à créer ?", "body": "Rejoignez le réseau et convertissez votre audience.", "cta": "Postuler" },
+      "finalCta": { "title": "Prêt à créer ?", "body": "Rejoignez le réseau et convertissez votre audience.", "cta": "Postuler", "creatorHub": "Creator Hub" },
       "apply": {
         "title": "Postuler",
         "step1Title": "Qui êtes-vous ?",
