@@ -13,6 +13,7 @@ import { NotificationSoundToggle } from "@/components/growth/settings/Notificati
 import { TerritorySettingsForm } from "@/components/growth/settings/TerritorySettingsForm";
 import { prisma } from "@/lib/prisma";
 import { resolveBadgeCopy } from "@/lib/growth/badge-i18n";
+import { uniquePublicSlug } from "@/lib/growth/public-slug";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -46,7 +47,19 @@ export default async function GrowthSettingsPage({ params }: Props) {
     },
   });
 
-  if (!user?.publicSlug) redirect(`/${locale}/growth`);
+  if (!user) redirect(`/${locale}/growth`);
+
+  let publicSlug = user.publicSlug;
+  if (!publicSlug) {
+    publicSlug = await uniquePublicSlug(
+      prisma,
+      user.name ?? session.user.name ?? user.email ?? session.user.email ?? "partner",
+    );
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { publicSlug },
+    });
+  }
 
   const t = await getTranslations("Growth.settings");
 
@@ -67,7 +80,7 @@ export default async function GrowthSettingsPage({ params }: Props) {
           avatarPreset: user.avatarPreset ?? "",
         }}
       >
-        <ProfileShareExport publicSlug={user.publicSlug!} locale={locale} />
+        <ProfileShareExport publicSlug={publicSlug} locale={locale} />
         <PartnerProfileSettingsForm
           locale={locale}
           social={

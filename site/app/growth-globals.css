@@ -2472,7 +2472,66 @@ body.creator-hub-app-mode .creator-hub-mobile-root {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+/* Creator Hub — instant nav feedback */
+.creator-hub-section-progress {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 20;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--creator-primary, #e11d48) 35%,
+    var(--creator-secondary, #c9922a) 65%,
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: creator-hub-progress 0.85s ease-in-out infinite;
+}
+
+@keyframes creator-hub-progress {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.creator-hub-section-panel--active {
+  animation: creator-hub-section-in 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes creator-hub-section-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.creator-hub-inline-spinner {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--creator-secondary, #c9922a);
+  border-radius: 9999px;
+  animation: creator-hub-spin 0.65s linear infinite;
+}
+
+@keyframes creator-hub-spin {
+  to { transform: rotate(360deg); }
+}
+
+.creator-hub-link-loading {
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .creator-hub-section-panel--active,
+  .creator-hub-section-progress,
+  .creator-hub-inline-spinner,
   .creator-consent-verified-badge,
   .creator-profile-card__glow,
   .creator-profile-card__ring {

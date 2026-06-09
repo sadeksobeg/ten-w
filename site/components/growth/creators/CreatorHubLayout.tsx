@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type ComponentType } from "react";
+import { useCallback, useEffect, useState, useTransition, type ComponentType } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -24,21 +24,12 @@ import {
   IconMenu,
 } from "@/components/growth/icons/GrowthIcons";
 import { CreatorLivePanel } from "./CreatorLivePanel";
-import { CreatorDashboard } from "./CreatorDashboard";
-import { CreatorChatSection } from "./CreatorChatSection";
-import { CreatorPlanningSection } from "./CreatorPlanningSection";
-import { CreatorChallengeSection } from "./CreatorChallengeSection";
-import { CreatorLeaderboardSection } from "./CreatorLeaderboardSection";
-import { CreatorBattlesSection } from "./CreatorBattlesSection";
-import { CreatorKitSection } from "./CreatorKitSection";
-import { CreatorAnalyticsSection } from "./CreatorAnalyticsSection";
-import { CreatorNetworkSection } from "./CreatorNetworkSection";
-import { CreatorProfileSection } from "./CreatorProfileSection";
+import { CreatorHubSectionHost } from "./CreatorHubSectionHost";
+import { CreatorHubSettingsLink } from "./CreatorHubSettingsLink";
 import { CreatorLoungeErrorBoundary } from "./CreatorLoungeErrorBoundary";
 import { CreatorProfileDrawer } from "./CreatorProfileDrawer";
 import type { CreatorHubProps, CreatorHubSection } from "./CreatorHubTypes";
 import {
-  ensureCreatorDirectRoomAction,
   recordCreatorConsentAction,
 } from "@/lib/growth/creator-arena-actions";
 import {
@@ -116,6 +107,8 @@ export function CreatorHubLayout(props: CreatorHubProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [section, setSection] = useState<CreatorHubSection>("dashboard");
+  const [visited, setVisited] = useState<Set<CreatorHubSection>>(() => new Set(["dashboard"]));
+  const [isNavPending, startNavTransition] = useTransition();
   const [rightOpen] = useState(true);
   const [unreadChat, setUnreadChat] = useState(0);
   const [challengeDrawer, setChallengeDrawer] = useState(props.featuredCreator);
@@ -128,6 +121,11 @@ export function CreatorHubLayout(props: CreatorHubProps) {
   const consentLocale = (props.locale === "en" || props.locale === "fr"
     ? props.locale
     : "ar") as ConsentLocale;
+
+  useEffect(() => {
+    router.prefetch("/growth/settings");
+    router.prefetch("/for-creators");
+  }, [router]);
 
   useEffect(() => {
     setConsentOpen(props.needsConsent);
@@ -158,9 +156,18 @@ export function CreatorHubLayout(props: CreatorHubProps) {
 
   function navigate(next: CreatorHubSection) {
     if (consentOpen) return;
+    if (next === section) return;
     if (next === "chat") setUnreadChat(0);
     setMoreOpen(false);
-    setSection(next);
+    startNavTransition(() => {
+      setSection(next);
+      setVisited((prev) => {
+        if (prev.has(next)) return prev;
+        const nextSet = new Set(prev);
+        nextSet.add(next);
+        return nextSet;
+      });
+    });
   }
 
   function handleBack() {
@@ -170,123 +177,6 @@ export function CreatorHubLayout(props: CreatorHubProps) {
     }
     router.push("/growth");
   }
-
-  const main = useMemo(() => {
-    switch (section) {
-      case "dashboard":
-        return (
-          <CreatorDashboard
-            locale={props.locale}
-            viewer={props.viewer}
-            metrics={props.metrics}
-            challenge={props.challenge}
-            featuredCreator={props.featuredCreator}
-            recentSubmissions={props.recentSubmissions}
-            onboarding={props.onboarding}
-            viewerRank={props.viewerRank}
-            clientDiscountCode={props.clientDiscountCode}
-            onNavigate={navigate}
-            onChallengeCreator={setChallengeDrawer}
-            activeBattles={props.activeBattles}
-            weekStreak={props.weekStreak}
-            challengeSubmitCount={props.challengeSubmitCount}
-            challengeParticipantCount={props.challengeParticipantCount}
-          />
-        );
-      case "chat":
-        return (
-          <CreatorChatSection
-            locale={props.locale}
-            isRoomMember={props.isRoomMember}
-            viewer={props.viewer}
-            rooms={props.chatRooms}
-            isActive={section === "chat"}
-            onUnread={(n) => setUnreadChat((c) => c + n)}
-          />
-        );
-      case "planning":
-        return <CreatorPlanningSection userId={props.viewer.userId} contentIdeas={props.contentIdeas} />;
-      case "challenge":
-        return (
-          <CreatorChallengeSection
-            challenge={props.challenge}
-            weekSubmissions={props.weekSubmissions}
-            myUserId={props.viewer.userId}
-          />
-        );
-      case "leaderboard":
-        return <CreatorLeaderboardSection rows={props.cupRows} myUserId={props.viewer.userId} />;
-      case "battles":
-        return (
-          <CreatorBattlesSection
-            myUserId={props.viewer.userId}
-            candidates={props.battleCandidates}
-            history={props.battleHistory}
-            activeBattle={props.activeBattle}
-            pendingInvites={props.pendingInvites}
-          />
-        );
-      case "kit":
-        return (
-          <CreatorKitSection
-            clientDiscountCode={props.clientDiscountCode}
-            commissionPercent={props.commissionPercent}
-            salesProducts={props.salesProducts}
-            viewerName={viewerName}
-            utmWeeklySeries={props.utmWeeklySeries}
-            referralProof={props.referralProof}
-            utmClicks={props.metrics.utmClicks}
-            utmRegistrations={props.metrics.utmRegistrations}
-          />
-        );
-      case "analytics":
-        return (
-          <CreatorAnalyticsSection
-            series={props.analyticsSeries}
-            totalSubmissions={props.metrics.weekSubmissions}
-            totalReferrals={props.metrics.utmRegistrations}
-            cupPoints={props.metrics.cupScore}
-            approvalRate={props.approvalRate}
-            benchmarks={props.analyticsBenchmarks}
-          />
-        );
-      case "network":
-        return (
-          <CreatorNetworkSection
-            directory={props.directory}
-            myUserId={props.viewer.userId}
-            onNavigate={navigate}
-            onMessage={(peerId) => {
-              void ensureCreatorDirectRoomAction(peerId).then(() => navigate("chat"));
-            }}
-          />
-        );
-      case "profile":
-        return (
-          <CreatorProfileSection
-            locale={props.locale}
-            badges={props.badges}
-            milestones={props.milestones}
-            statusCards={props.statusCards}
-            myUserId={props.viewer.userId}
-            bio={props.bio}
-            specialty={props.specialty}
-            status={props.viewer.status}
-            viewerName={viewerName}
-            viewerEmail={props.viewer.email}
-            avatarUrl={props.viewer.avatarUrl}
-            avatarPreset={props.viewer.avatarPreset}
-            levelCode={props.viewer.levelCode}
-            hasBadge={props.hasBadge}
-            consentGiven={consentGiven}
-            viewerRank={props.viewerRank}
-            platformReviewPending={props.platformReviewPending}
-          />
-        );
-      default:
-        return null;
-    }
-  }, [section, props, viewerName]);
 
   function badgeFor(id: CreatorHubSection): number | undefined {
     if (id === "chat" && chatBadge > 0) return chatBadge;
@@ -345,7 +235,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
                           key={item.id}
                           type="button"
                           onClick={() => navigate(item.id)}
-                          className={`mb-0.5 flex w-full min-h-10 items-center gap-2.5 rounded-xl px-3 py-2 text-start text-xs font-semibold ${active ? "creator-nav-active" : "text-white/60 hover:bg-white/[0.04] hover:text-white"}`}
+                          className={`mb-0.5 flex w-full min-h-10 items-center gap-2.5 rounded-xl px-3 py-2 text-start text-xs font-semibold transition active:scale-[0.98] ${active ? "creator-nav-active" : "text-white/60 hover:bg-white/[0.04] hover:text-white"} ${isNavPending && !active ? "opacity-70" : ""}`}
                         >
                           <Icon size={16} className={active ? "text-[var(--creator-primary)]" : ""} />
                           <span className="flex-1">{tNav(item.labelKey)}</span>
@@ -357,10 +247,10 @@ export function CreatorHubLayout(props: CreatorHubProps) {
                 ))}
               </nav>
               <div className="space-y-1 border-t border-white/10 p-3">
-                <Link href="/growth/settings" className="flex min-h-10 items-center gap-2 rounded-xl px-3 text-xs font-semibold text-white/65 hover:bg-white/[0.04]">
+                <CreatorHubSettingsLink className="flex min-h-10 w-full items-center gap-2 rounded-xl px-3 text-start text-xs font-semibold text-white/65 hover:bg-white/[0.04]">
                   <IconSettings size={16} />
                   {tNav("settings")}
-                </Link>
+                </CreatorHubSettingsLink>
                 <Link href="/for-creators" className="flex min-h-10 items-center gap-2 rounded-xl px-3 text-xs font-semibold text-[var(--creator-secondary)] hover:bg-white/[0.04]">
                   <IconShare size={16} />
                   {t("publicPage")}
@@ -411,7 +301,19 @@ export function CreatorHubLayout(props: CreatorHubProps) {
                 </div>
               ) : null}
 
-              <main className="creator-hub-main-scroll flex-1 overflow-y-auto p-4 pb-24 sm:p-6 lg:pb-6">{main}</main>
+              <main className="creator-hub-main-scroll relative flex-1 overflow-y-auto p-4 pb-24 sm:p-6 lg:pb-6">
+                {isNavPending ? <div className="creator-hub-section-progress" aria-hidden /> : null}
+                <CreatorHubSectionHost
+                  section={section}
+                  visited={visited}
+                  props={props}
+                  viewerName={viewerName}
+                  consentGiven={consentGiven}
+                  onNavigate={navigate}
+                  onChallengeCreator={setChallengeDrawer}
+                  onUnread={(n) => setUnreadChat((c) => c + n)}
+                />
+              </main>
             </div>
 
             {rightOpen ? (
@@ -447,7 +349,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
                     key={id}
                     type="button"
                     onClick={() => navigate(id)}
-                    className={`relative flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-1 text-[10px] font-bold transition active:scale-95 ${active ? "text-[var(--creator-primary)]" : "text-white/55"}`}
+                    className={`relative flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-1 text-[10px] font-bold transition active:scale-95 ${active ? "text-[var(--creator-primary)]" : "text-white/55"} ${isNavPending && !active ? "opacity-60" : ""}`}
                   >
                     <span className={`flex size-8 items-center justify-center rounded-xl ${active ? "bg-[var(--creator-primary)]/15" : ""}`}>
                       <Icon size={18} />
@@ -491,10 +393,13 @@ export function CreatorHubLayout(props: CreatorHubProps) {
                 );
               })}
               <li>
-                <Link href="/growth/settings" onClick={() => setMoreOpen(false)} className="flex min-h-12 items-center gap-3 rounded-xl px-3 text-sm font-semibold text-white/85 active:bg-white/[0.06]">
+                <CreatorHubSettingsLink
+                  onBeforeNavigate={() => setMoreOpen(false)}
+                  className="flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-start text-sm font-semibold text-white/85 active:bg-white/[0.06]"
+                >
                   <IconSettings size={18} className="text-[var(--creator-secondary)]" />
                   {tNav("settings")}
-                </Link>
+                </CreatorHubSettingsLink>
               </li>
               <li>
                 <Link href="/for-creators" onClick={() => setMoreOpen(false)} className="flex min-h-12 items-center gap-3 rounded-xl px-3 text-sm font-semibold text-[var(--creator-secondary)] active:bg-white/[0.06]">

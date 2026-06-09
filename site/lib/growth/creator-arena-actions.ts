@@ -1052,6 +1052,5 @@ export async function submitCreatorPlatformReviewAction(
 
   revalidatePath("/growth/creators");
   revalidateForCreatorsPages();
-  revalidatePartnerSurfaces(userId);
   return { ok: true };
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { CreatorHubSettingsLink } from "./CreatorHubSettingsLink";
 import type { CreatorWorkflowStatus } from "@prisma/client";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
@@ -86,13 +86,10 @@ export function CreatorHubProfileCard({
             </div>
           </div>
         </div>
-        <Link
-          href="/growth/settings"
-          className="creator-profile-card__edit mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--creator-secondary)]/35 bg-[var(--creator-secondary)]/8 px-3 py-2.5 text-xs font-bold text-[var(--creator-secondary)] transition hover:border-[var(--creator-secondary)]/60 hover:bg-[var(--creator-secondary)]/15 active:scale-[0.98]"
-        >
+        <CreatorHubSettingsLink className="creator-profile-card__edit mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--creator-secondary)]/35 bg-[var(--creator-secondary)]/8 px-3 py-2.5 text-xs font-bold text-[var(--creator-secondary)] transition hover:border-[var(--creator-secondary)]/60 hover:bg-[var(--creator-secondary)]/15 active:scale-[0.98]">
           <IconSettings size={14} aria-hidden />
           {t("editProfile")}
-        </Link>
+        </CreatorHubSettingsLink>
       </div>
     </div>
   );

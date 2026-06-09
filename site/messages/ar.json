@@ -900,7 +900,9 @@
       "idea4": "منشور X: أمن سيبراني للشركات الصغيرة",
       "idea5": "فيديو: كيف يعمل برنامج الشركاء ASCEND",
       "assetsTitle": "أصول العلامة",
-      "assetLogo": "شعار T.E.N.E.G.T.A — SVG"
+      "assetLogo": "شعار T.E.N.E.G.T.A — SVG",
+      "utmChartTitle": "أداء الروابط (4 أسابيع)",
+      "funnel": "نقرات: {clicks} → تسجيلات: {regs} → صفقات: ~{deals}"
     },
     "analytics": {
       "metric": { "submissions": "منشورات 30 يوم", "referrals": "إحالات", "cup": "نقاط Cup", "approval": "معدل القبول" },
