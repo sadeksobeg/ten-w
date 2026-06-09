@@ -123,6 +123,9 @@ export type CreatorHubProps = {
   consentVersionMismatch: boolean;
   consentGiven: boolean;
   platformReviewPending: boolean;
+  deferredLoading?: boolean;
+  deferredError?: boolean;
+  onRetryDeferred?: () => void;
 };
 
 export type { CreatorFeaturedCreator, CreatorOnboardingProgress };

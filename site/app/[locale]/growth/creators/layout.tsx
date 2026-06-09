@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 type Props = { children: ReactNode };
 
-/** Creator Hub uses immersive app chrome (see CreatorHubAppMode + growth-globals.css). */
+/** Creator Hub shares the unified partner workspace chrome (GrowthWorkspaceNav + GrowthPartnerHeader). */
 export default function GrowthCreatorsLayout({ children }: Props) {
   return children;
 }

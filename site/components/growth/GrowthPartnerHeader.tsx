@@ -32,23 +32,35 @@ export function GrowthPartnerHeader({
   const pathname = usePathname();
   const isCreatorHub =
     pathname === "/growth/creators" || pathname.endsWith("/growth/creators");
-  if (isCreatorHub) return null;
 
   const isCreator = earnedBadgeKeys.includes("content_creator");
   const linkClass =
     "inline-flex min-h-[var(--growth-touch-min)] items-center whitespace-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[11px] font-semibold text-white/80 hover:border-gold/30 hover:text-white sm:text-xs";
 
   return (
-    <header className="growth-partner-header mb-4 flex flex-col gap-3 border-b border-white/10 pb-3 sm:mb-6 sm:pb-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex min-w-0 items-center gap-3">
-        <GrowthAvatar name={name} email={email} avatarUrl={avatarUrl} size="md" />
+    <header
+      className={`growth-partner-header flex flex-col gap-3 border-b border-white/10 sm:flex-row sm:items-center sm:justify-between ${
+        isCreatorHub
+          ? "growth-partner-header--compact mb-2 pb-2 sm:mb-3 sm:pb-3"
+          : "mb-4 pb-3 sm:mb-6 sm:pb-4"
+      }`}
+    >
+      <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+        <GrowthAvatar
+          name={name}
+          email={email}
+          avatarUrl={avatarUrl}
+          size={isCreatorHub ? "sm" : "md"}
+        />
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <p className="truncate font-semibold text-white">{name ?? email}</p>
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <p className={`truncate font-semibold text-white ${isCreatorHub ? "text-sm" : ""}`}>
+              {name ?? email}
+            </p>
             <PartnerNameBadges badgeKeys={earnedBadgeKeys} size="xs" />
             {isCreator ? <BadgeIdentityPill variant="creator" locale={locale} /> : null}
           </div>
-          <LevelBadge levelName={levelName} size="sm" />
+          {!isCreatorHub ? <LevelBadge levelName={levelName} size="sm" /> : null}
         </div>
       </div>
       <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 self-stretch sm:self-auto">

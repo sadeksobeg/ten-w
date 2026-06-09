@@ -633,6 +633,8 @@
       "subtitle": "Votre centre d'opérations",
       "welcome": "Bienvenue dans le réseau créateurs — prêt à créer.",
       "hubActivated": "Creator Hub actif — vous faites partie d'une communauté exclusive.",
+      "deferredLoadError": "Certaines données n'ont pas encore chargé — réessayez.",
+      "deferredRetry": "Réessayer",
       "editProfile": "Modifier le profil",
       "memberChip": "Membre du réseau",
       "cupRankChip": "Cup #{rank}",
@@ -2096,6 +2098,11 @@
       "myProfile": "Mon profil",
       "navAria": "Navigation partenaire",
       "mobileNavAria": "Navigation mobile"
+    },
+    "workspace": {
+      "label": "Espace de travail",
+      "navAria": "Navigation espace de travail",
+      "ascend": "ASCEND"
     },
     "navShort": {
       "dashboard": "Accueil",

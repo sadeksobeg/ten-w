@@ -636,6 +636,8 @@
       "subtitle": "Your operations center",
       "welcome": "Welcome to the creator network — ready to create.",
       "hubActivated": "Creator Hub is active — you are part of an exclusive community.",
+      "deferredLoadError": "Some data is still loading — please retry.",
+      "deferredRetry": "Retry",
       "editProfile": "Edit profile",
       "memberChip": "Network member",
       "cupRankChip": "Cup #{rank}",
@@ -2112,6 +2114,11 @@
       "myProfile": "My profile",
       "navAria": "Partner navigation",
       "mobileNavAria": "Mobile navigation"
+    },
+    "workspace": {
+      "label": "Workspace",
+      "navAria": "Workspace navigation",
+      "ascend": "ASCEND"
     },
     "navShort": {
       "dashboard": "Home",

@@ -659,6 +659,8 @@
       "subtitle": "مركز الإبداع",
       "welcome": "مرحباً بك في شبكة الصنّاع — جاهز للإبداع.",
       "hubActivated": "تم تفعيل Creator Hub — أنت الآن عضو في مجتمع حصري.",
+      "deferredLoadError": "بعض البيانات لم تُحمّل بعد — جرّب مرة أخرى.",
+      "deferredRetry": "إعادة المحاولة",
       "editProfile": "تعديل الملف الشخصي",
       "memberChip": "عضو الشبكة",
       "cupRankChip": "الكأس #{rank}",
@@ -2181,6 +2183,11 @@
       "myProfile": "ملفي الشخصي",
       "navAria": "قائمة الشريك",
       "mobileNavAria": "تنقل سفلي"
+    },
+    "workspace": {
+      "label": "مساحة العمل",
+      "navAria": "تنقل مساحة العمل",
+      "ascend": "ASCEND"
     },
     "navShort": {
       "dashboard": "لوحة",

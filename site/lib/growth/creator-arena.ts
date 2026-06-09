@@ -954,7 +954,10 @@ export type CreatorAnalyticsPoint = {
   topSubmissions: number;
 };
 
-export async function getCreatorDashboardMetrics(userId: string): Promise<CreatorDashboardMetrics> {
+export async function getCreatorDashboardMetrics(
+  userId: string,
+  cupRowsInput?: CreatorCupRow[],
+): Promise<CreatorDashboardMetrics> {
   const weekKey = currentWeekKey();
   const weekStart = weekBounds(weekKey).startsAt;
   const prevWeekStart = new Date(weekStart);
@@ -964,7 +967,7 @@ export async function getCreatorDashboardMetrics(userId: string): Promise<Creato
     prisma.creatorSubmission.count({
       where: { userId, createdAt: { gte: weekStart } },
     }),
-    creatorCupLeaderboard(50),
+    cupRowsInput ? Promise.resolve(cupRowsInput) : creatorCupLeaderboard(50),
     prisma.creatorArenaVisit.count({
       where: { userId, createdAt: { gte: weekStart } },
     }),
@@ -1009,7 +1012,9 @@ export async function getCreatorUtmStats(userId: string) {
   }));
 }
 
-export async function listCreatorDirectory(): Promise<CreatorDirectoryEntry[]> {
+export async function listCreatorDirectory(
+  cupRowsInput?: CreatorCupRow[],
+): Promise<CreatorDirectoryEntry[]> {
   const { getCreatorLoungeParticipantIds } = await import("@/lib/growth/creator-program");
   const ids = await getCreatorLoungeParticipantIds();
   if (ids.length === 0) return [];
@@ -1037,7 +1042,7 @@ export async function listCreatorDirectory(): Promise<CreatorDirectoryEntry[]> {
         partnerProfile: { select: { currentLevel: { select: { code: true } } } },
       },
     }),
-    creatorCupLeaderboard(100),
+    cupRowsInput ? Promise.resolve(cupRowsInput) : creatorCupLeaderboard(100),
   ]);
 
   const { hasActiveCreatorConsent } = await import("@/lib/growth/creator-consent");

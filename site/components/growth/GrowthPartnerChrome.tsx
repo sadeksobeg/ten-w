@@ -40,16 +40,21 @@ export async function GrowthPartnerChrome({ locale, children }: Props) {
       : "—";
 
   return (
-    <GrowthPartnerShell locale={locale} showCreatorsProgram={showCreatorsProgram}>
-      <GrowthPartnerHeader
-        locale={locale}
-        name={user?.name ?? null}
-        email={user?.email ?? session.user.email ?? ""}
-        avatarUrl={user?.avatarUrl ?? session.user.image ?? null}
-        levelName={levelName}
-        publicSlug={user?.publicSlug ?? null}
-        earnedBadgeKeys={earnedBadgeKeys}
-      />
+    <GrowthPartnerShell
+      locale={locale}
+      showCreatorsProgram={showCreatorsProgram}
+      header={
+        <GrowthPartnerHeader
+          locale={locale}
+          name={user?.name ?? null}
+          email={user?.email ?? session.user.email ?? ""}
+          avatarUrl={user?.avatarUrl ?? session.user.image ?? null}
+          levelName={levelName}
+          publicSlug={user?.publicSlug ?? null}
+          earnedBadgeKeys={earnedBadgeKeys}
+        />
+      }
+    >
       {children}
       <CommandPalette />
       <Suspense fallback={null}>

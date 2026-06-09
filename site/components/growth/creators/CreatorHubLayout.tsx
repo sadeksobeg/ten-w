@@ -86,6 +86,27 @@ const MOBILE_MORE_SECTIONS: CreatorHubSection[] = [
   "network",
 ];
 
+const VALID_SECTIONS = new Set<CreatorHubSection>([
+  "dashboard",
+  "chat",
+  "planning",
+  "challenge",
+  "leaderboard",
+  "battles",
+  "kit",
+  "analytics",
+  "network",
+  "profile",
+]);
+
+function sectionFromParams(params: URLSearchParams): CreatorHubSection {
+  const raw = params.get("section");
+  if (raw && VALID_SECTIONS.has(raw as CreatorHubSection)) {
+    return raw as CreatorHubSection;
+  }
+  return "dashboard";
+}
+
 const SECTION_LABEL_KEYS: Record<CreatorHubSection, string> = {
   dashboard: "overview",
   chat: "chat",
@@ -106,8 +127,11 @@ export function CreatorHubLayout(props: CreatorHubProps) {
   const { showToast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [section, setSection] = useState<CreatorHubSection>("dashboard");
-  const [visited, setVisited] = useState<Set<CreatorHubSection>>(() => new Set(["dashboard"]));
+  const [section, setSection] = useState<CreatorHubSection>(() => sectionFromParams(searchParams));
+  const [visited, setVisited] = useState<Set<CreatorHubSection>>(() => {
+    const initial = sectionFromParams(searchParams);
+    return new Set([initial]);
+  });
   const [isNavPending, startNavTransition] = useTransition();
   const [rightOpen] = useState(true);
   const [unreadChat, setUnreadChat] = useState(0);
@@ -126,6 +150,17 @@ export function CreatorHubLayout(props: CreatorHubProps) {
     router.prefetch("/growth/settings");
     router.prefetch("/for-creators");
   }, [router]);
+
+  useEffect(() => {
+    const fromUrl = sectionFromParams(searchParams);
+    setSection(fromUrl);
+    setVisited((prev) => {
+      if (prev.has(fromUrl)) return prev;
+      const nextSet = new Set(prev);
+      nextSet.add(fromUrl);
+      return nextSet;
+    });
+  }, [searchParams]);
 
   useEffect(() => {
     setConsentOpen(props.needsConsent);
@@ -155,7 +190,6 @@ export function CreatorHubLayout(props: CreatorHubProps) {
   const sectionTitle = tNav(SECTION_LABEL_KEYS[section]);
 
   function navigate(next: CreatorHubSection) {
-    if (consentOpen) return;
     if (next === section) return;
     if (next === "chat") setUnreadChat(0);
     setMoreOpen(false);
@@ -167,15 +201,18 @@ export function CreatorHubLayout(props: CreatorHubProps) {
         nextSet.add(next);
         return nextSet;
       });
+      const params = new URLSearchParams(searchParams.toString());
+      if (next === "dashboard") params.delete("section");
+      else params.set("section", next);
+      const qs = params.toString();
+      router.replace(qs ? `/growth/creators?${qs}` : "/growth/creators", { scroll: false });
     });
   }
 
   function handleBack() {
     if (section !== "dashboard") {
       navigate("dashboard");
-      return;
     }
-    router.push("/growth");
   }
 
   function badgeFor(id: CreatorHubSection): number | undefined {
@@ -199,9 +236,22 @@ export function CreatorHubLayout(props: CreatorHubProps) {
 
   return (
     <CreatorLoungeErrorBoundary>
+      {props.deferredLoading ? <div className="creator-hub-deferred-progress" aria-hidden /> : null}
+      {props.deferredError && props.onRetryDeferred ? (
+        <div className="creator-hub-deferred-error mx-3 mt-2 flex items-center justify-between gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100 sm:mx-4">
+          <span>{t("deferredLoadError")}</span>
+          <button
+            type="button"
+            className="shrink-0 rounded-lg border border-amber-400/40 px-2.5 py-1 font-bold text-amber-50 hover:bg-amber-500/20"
+            onClick={() => props.onRetryDeferred?.()}
+          >
+            {t("deferredRetry")}
+          </button>
+        </div>
+      ) : null}
       <div className="creator-hub-mobile-root">
-        <div className={`creator-hub-shell creator-hub-mobile-app creator-arena-shell relative min-h-[70dvh] overflow-hidden rounded-2xl sm:rounded-3xl ${consentOpen ? "pointer-events-none select-none blur-[2px]" : ""}`}>
-          <div className="relative z-10 flex min-h-[70dvh] flex-col lg:min-h-[70dvh] lg:flex-row">
+        <div className={`creator-hub-shell creator-hub-mobile-app creator-arena-shell relative flex min-h-[70dvh] flex-col overflow-hidden rounded-2xl sm:rounded-3xl ${consentOpen ? "creator-hub-shell--consent-pending" : ""}`}>
+          <div className="relative z-10 flex min-h-0 flex-1 flex-col lg:flex-row">
             <aside className="creator-hub-sidebar hidden w-60 shrink-0 flex-col border-e lg:flex">
               <div className="border-b border-white/10 p-4">
                 <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--creator-secondary)]">T.E.N.E.G.T.A</p>
@@ -259,15 +309,19 @@ export function CreatorHubLayout(props: CreatorHubProps) {
             </aside>
 
             <div className="flex min-w-0 flex-1 flex-col">
-              <header className="creator-hub-app-header flex min-h-14 items-center gap-2 px-3 py-2 sm:px-4 lg:hidden">
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/80 active:bg-white/[0.08]"
-                  aria-label={tNav("back")}
-                >
-                  <IconBack size={20} className="rtl:rotate-180" />
-                </button>
+              <header className="creator-hub-app-header flex min-h-12 items-center gap-2 px-3 py-1.5 sm:px-4 lg:hidden">
+                {section !== "dashboard" ? (
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/80 active:bg-white/[0.08]"
+                    aria-label={tNav("back")}
+                  >
+                    <IconBack size={18} className="rtl:rotate-180" />
+                  </button>
+                ) : (
+                  <div className="size-10 shrink-0" aria-hidden />
+                )}
                 <div className="min-w-0 flex-1 text-center">
                   <p className="truncate font-[family-name:var(--font-cairo)] text-sm font-extrabold text-white">{sectionTitle}</p>
                   <p className="truncate text-[10px] text-[var(--creator-secondary)]">{t("title")}</p>
@@ -301,7 +355,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
                 </div>
               ) : null}
 
-              <main className="creator-hub-main-scroll relative flex-1 overflow-y-auto p-4 pb-24 sm:p-6 lg:pb-6">
+              <main className="creator-hub-main-scroll relative flex-1 overflow-y-auto p-4 sm:p-6 lg:pb-6">
                 {isNavPending ? <div className="creator-hub-section-progress" aria-hidden /> : null}
                 <CreatorHubSectionHost
                   section={section}
@@ -324,7 +378,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
           </div>
 
           <nav
-            className="creator-arena-mobile-nav fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[var(--creator-surface)]/98 backdrop-blur-xl lg:hidden"
+            className="creator-arena-mobile-nav sticky bottom-0 z-40 shrink-0 border-t border-white/10 bg-[var(--creator-surface)]/98 backdrop-blur-xl lg:hidden"
             style={{ paddingBottom: "max(env(safe-area-inset-bottom), 4px)" }}
             aria-label={tNav("mobileNav")}
           >

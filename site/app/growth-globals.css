@@ -2188,39 +2188,16 @@
   bottom: calc(4.75rem + var(--growth-safe-bottom) + 0.5rem);
 }
 
-/* Immersive Creator Hub app mode */
-body.creator-hub-app-mode {
-  overflow-x: hidden;
+.growth-creator-hub-wrap {
+  padding-bottom: 0;
 }
 
-body.creator-hub-app-mode .growth-root {
-  min-height: 100dvh;
+.growth-workspace-nav {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
-body.creator-hub-app-mode .growth-layout-shell {
-  max-width: none;
-  padding: 0;
-}
-
-body.creator-hub-app-mode .growth-creator-hub-wrap {
-  padding: 0;
-  margin: 0;
-}
-
-body.creator-hub-app-mode .growth-creator-hub-page {
-  margin: 0;
-  padding: 0;
-  min-height: 100dvh;
-}
-
-body.creator-hub-app-mode .creator-hub-shell.creator-hub-mobile-app {
-  min-height: 100dvh;
-  border-radius: 0;
-}
-
-body.creator-hub-app-mode .creator-hub-mobile-root {
-  margin: 0;
-  width: 100%;
+.growth-partner-header--compact {
+  gap: 0.5rem;
 }
 
 @keyframes creator-podium-rise {
@@ -2251,14 +2228,13 @@ body.creator-hub-app-mode .creator-hub-mobile-root {
 
 @media (max-width: 1023px) {
   .creator-hub-mobile-root {
-    margin-inline: -0.75rem;
-    width: calc(100% + 1.5rem);
+    margin-inline: 0;
+    width: 100%;
   }
 
   .creator-hub-shell.creator-hub-mobile-app {
-    min-height: 100dvh;
-    border-radius: 0;
-    border-inline: none;
+    min-height: min(72dvh, auto);
+    border-radius: 1rem;
   }
 
   .creator-hub-app-header {
@@ -2268,7 +2244,7 @@ body.creator-hub-app-mode .creator-hub-mobile-root {
   }
 
   .creator-hub-main-scroll {
-    padding-bottom: calc(5.75rem + env(safe-area-inset-bottom));
+    padding-bottom: 1.25rem;
     padding-inline: 0.875rem;
   }
 
@@ -2495,8 +2471,48 @@ body.creator-hub-app-mode .creator-hub-mobile-root {
   100% { background-position: -100% 0; }
 }
 
+.creator-hub-section-panel[hidden] {
+  display: none !important;
+}
+
 .creator-hub-section-panel--active {
   animation: creator-hub-section-in 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.creator-hub-shell--consent-pending .creator-hub-main-scroll {
+  pointer-events: none;
+  user-select: none;
+  filter: blur(2px);
+}
+
+.growth-nav-link-loading {
+  cursor: wait;
+}
+
+.creator-hub-deferred-progress {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 80;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--creator-primary, #e11d48),
+    var(--creator-secondary, #c9922a),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: creator-hub-deferred-progress 1.1s linear infinite;
+}
+
+@keyframes creator-hub-deferred-progress {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
 }
 
 @keyframes creator-hub-section-in {

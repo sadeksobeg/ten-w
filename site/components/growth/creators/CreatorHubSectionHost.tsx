@@ -177,7 +177,8 @@ export function CreatorHubSectionHost({
         return (
           <div
             key={id}
-            className={active ? "creator-hub-section-panel creator-hub-section-panel--active" : "creator-hub-section-panel hidden"}
+            className={active ? "creator-hub-section-panel creator-hub-section-panel--active" : "creator-hub-section-panel"}
+            hidden={!active}
             aria-hidden={!active}
           >
             {renderSection(id, hostProps)}

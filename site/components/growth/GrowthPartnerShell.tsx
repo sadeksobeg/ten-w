@@ -1,15 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { Link, usePathname } from "@/i18n/navigation";
+import { usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import {
   GROWTH_DESKTOP_NAV_ICONS,
   GROWTH_MOBILE_NAV_ICONS,
 } from "@/components/growth/icons/GrowthIcons";
+import { GrowthPartnerNavLink } from "@/components/growth/GrowthPartnerNavLink";
+import { GrowthWorkspaceNav } from "@/components/growth/GrowthWorkspaceNav";
 
 type Props = {
   children: ReactNode;
+  header?: ReactNode;
   locale: string;
   showCreatorsProgram?: boolean;
 };
@@ -33,8 +36,6 @@ const BASE_NAV = [
   { href: "/growth/settings", key: "settings" as const },
 ] as const;
 
-const CREATORS_NAV = { href: "/growth/creators", key: "creators" as const };
-
 const MOBILE_KEYS_BASE = [
   "dashboard",
   "deals",
@@ -44,33 +45,22 @@ const MOBILE_KEYS_BASE = [
   "settings",
 ] as const;
 
-const MOBILE_KEYS_WITH_CREATORS = [
-  "dashboard",
-  "creators",
-  "deals",
-  "chat",
-  "settings",
-] as const;
+const WORKSPACE_KEYS = new Set(["dashboard", "creators", "deals", "chat", "settings"]);
 
 function isActive(pathname: string, href: string, exact?: boolean) {
   if (exact) return pathname === href || pathname.endsWith(href);
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProgram = false }: Props) {
+export function GrowthPartnerShell({ children, header, locale: _locale, showCreatorsProgram = false }: Props) {
   const t = useTranslations("Growth.nav");
   const tShort = useTranslations("Growth.navShort");
   const tDesc = useTranslations("Growth.navDesc");
   const pathname = usePathname();
   const [chatUnread, setChatUnread] = useState(0);
 
-  const navItems = showCreatorsProgram
-    ? [
-        ...BASE_NAV.slice(0, 3),
-        CREATORS_NAV,
-        ...BASE_NAV.slice(3),
-      ]
-    : [...BASE_NAV];
+  const isCreatorHub =
+    pathname === "/growth/creators" || pathname.endsWith("/growth/creators");
 
   const refreshUnread = useCallback(async () => {
     try {
@@ -101,74 +91,123 @@ export function GrowthPartnerShell({ children, locale: _locale, showCreatorsProg
         : "text-white/60 hover:bg-white/[0.06] hover:text-white"
     }`;
 
-  const mobileKeys = showCreatorsProgram ? MOBILE_KEYS_WITH_CREATORS : MOBILE_KEYS_BASE;
-  const mobileNav = navItems.filter((n) => (mobileKeys as readonly string[]).includes(n.key));
-  const isCreatorHub =
-    pathname === "/growth/creators" || pathname.endsWith("/growth/creators");
+  const mobileNav = BASE_NAV.filter((n) => (MOBILE_KEYS_BASE as readonly string[]).includes(n.key));
+
+  const pageWrapClass = isCreatorHub
+    ? "growth-page-wrap growth-stack growth-creator-hub-wrap"
+    : "growth-page-wrap growth-stack growth-mobile-pad";
+
+  const bottomSpacer = isCreatorHub
+    ? "calc(4.75rem + env(safe-area-inset-bottom, 0px))"
+    : "calc(var(--growth-mobile-nav-h) + env(safe-area-inset-bottom, 0px))";
 
   return (
     <>
-      {!isCreatorHub ? (
-      <nav
-        className="growth-partner-nav-desktop growth-nav-scroll mb-4 flex-nowrap border-b border-white/10 pb-3"
-        aria-label={t("navAria")}
-      >
-        {navItems.map((item) => {
-          const Icon = GROWTH_DESKTOP_NAV_ICONS[item.key];
-          const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
-          return (
-            <Link key={item.href} href={item.href} className={`${desktopLinkClass(active)} shrink-0`}>
-              {Icon ? <Icon size={18} className="shrink-0" /> : null}
-              {t(item.key)}
-              {item.key === "chat" && chatUnread > 0 ? (
-                <span className="ms-1 flex min-w-[1rem] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-black text-white">
-                  {chatUnread > 99 ? "99+" : chatUnread}
-                </span>
-              ) : null}
-            </Link>
-          );
-        })}
-      </nav>
+      {!showCreatorsProgram ? (
+        <nav
+          className="growth-partner-nav-desktop growth-nav-scroll mb-4 flex-nowrap border-b border-white/10 pb-3"
+          aria-label={t("navAria")}
+        >
+          {BASE_NAV.map((item) => {
+            const Icon = GROWTH_DESKTOP_NAV_ICONS[item.key];
+            const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
+            return (
+              <GrowthPartnerNavLink
+                key={item.href}
+                href={item.href}
+                exact={"exact" in item ? item.exact : false}
+                className={`${desktopLinkClass(active)} shrink-0`}
+                Icon={Icon}
+                badge={
+                  item.key === "chat" && chatUnread > 0 ? (
+                    <span className="ms-1 flex min-w-[1rem] items-center justify-center rounded-full bg-rose-500 px-1 text-[9px] font-black text-white">
+                      {chatUnread > 99 ? "99+" : chatUnread}
+                    </span>
+                  ) : undefined
+                }
+              >
+                {t(item.key)}
+              </GrowthPartnerNavLink>
+            );
+          })}
+        </nav>
       ) : null}
-      <div className={`growth-page-wrap growth-stack ${isCreatorHub ? "growth-creator-hub-wrap" : "growth-mobile-pad"}`}>{children}</div>
-      {!isCreatorHub ? (
-      <nav className="growth-partner-nav-mobile" aria-label={t("mobileNavAria")}>
-        {mobileNav.map((item) => {
-          const Icon = GROWTH_MOBILE_NAV_ICONS[item.key as keyof typeof GROWTH_MOBILE_NAV_ICONS];
-          const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`relative flex min-h-[var(--growth-touch-min)] min-w-0 flex-col items-center justify-center gap-0.5 px-0.5 py-1 text-center text-[9px] font-semibold leading-tight focus-visible:ring-2 focus-visible:ring-gold/40 sm:text-[10px] ${
-                active ? "text-gold" : "text-white/55"
-              }`}
-            >
-              {active ? (
-                <span className="absolute top-0.5 size-1.5 rounded-full bg-gold motion-safe:animate-pulse motion-reduce:animate-none" aria-hidden />
-              ) : null}
-              <Icon size={20} className="shrink-0" />
-              <span className="max-w-full truncate">{tShort(item.key)}</span>
-              <span className="sr-only">{tDesc(item.key)}</span>
-              {item.key === "chat" && chatUnread > 0 ? (
-                <span className="absolute end-1/4 top-0 flex size-4 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white">
-                  {chatUnread > 9 ? "9+" : chatUnread}
-                </span>
-              ) : null}
-            </Link>
-          );
-        })}
-      </nav>
+
+      <div className={pageWrapClass}>
+        {header}
+        {showCreatorsProgram ? (
+          <>
+            <GrowthWorkspaceNav chatUnread={chatUnread} />
+            {!isCreatorHub ? (
+              <nav
+                className="growth-partner-nav-desktop growth-partner-nav-secondary mb-4 flex-nowrap border-b border-white/10 pb-3"
+                aria-label={t("navAria")}
+              >
+                {BASE_NAV.filter((item) => !WORKSPACE_KEYS.has(item.key)).map((item) => {
+                  const Icon = GROWTH_DESKTOP_NAV_ICONS[item.key];
+                  const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
+                  return (
+                    <GrowthPartnerNavLink
+                      key={item.href}
+                      href={item.href}
+                      exact={"exact" in item ? item.exact : false}
+                      className={`${desktopLinkClass(active)} shrink-0`}
+                      Icon={Icon}
+                    >
+                      {t(item.key)}
+                    </GrowthPartnerNavLink>
+                  );
+                })}
+              </nav>
+            ) : null}
+          </>
+        ) : null}
+        {children}
+      </div>
+
+      {!showCreatorsProgram || !isCreatorHub ? (
+        <nav className="growth-partner-nav-mobile" aria-label={t("mobileNavAria")}>
+          {(showCreatorsProgram
+            ? [
+                { href: "/growth", key: "dashboard" as const, exact: true },
+                { href: "/growth/creators", key: "creators" as const },
+                { href: "/growth/deals", key: "deals" as const },
+                { href: "/growth/chat", key: "chat" as const },
+                { href: "/growth/settings", key: "settings" as const },
+              ]
+            : mobileNav
+          ).map((item) => {
+            const Icon = GROWTH_MOBILE_NAV_ICONS[item.key as keyof typeof GROWTH_MOBILE_NAV_ICONS];
+            const active = isActive(pathname, item.href, "exact" in item ? item.exact : false);
+            return (
+              <GrowthPartnerNavLink
+                key={item.href}
+                href={item.href}
+                exact={"exact" in item ? item.exact : false}
+                prefetch={item.key === "creators"}
+                iconSize={20}
+                className={`relative flex min-h-[var(--growth-touch-min)] min-w-0 flex-col items-center justify-center gap-0.5 px-0.5 py-1 text-center text-[9px] font-semibold leading-tight focus-visible:ring-2 focus-visible:ring-gold/40 sm:text-[10px] ${
+                  active ? "text-gold" : "text-white/55"
+                }`}
+                Icon={Icon}
+              >
+                {active ? (
+                  <span className="absolute top-0.5 size-1.5 rounded-full bg-gold motion-safe:animate-pulse motion-reduce:animate-none" aria-hidden />
+                ) : null}
+                <span className="max-w-full truncate">{tShort(item.key)}</span>
+                <span className="sr-only">{tDesc(item.key)}</span>
+                {item.key === "chat" && chatUnread > 0 ? (
+                  <span className="absolute end-1/4 top-0 flex size-4 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white">
+                    {chatUnread > 9 ? "9+" : chatUnread}
+                  </span>
+                ) : null}
+              </GrowthPartnerNavLink>
+            );
+          })}
+        </nav>
       ) : null}
-      <div
-        className="md:hidden"
-        style={{
-          height: isCreatorHub
-            ? "calc(4.75rem + env(safe-area-inset-bottom, 0px))"
-            : "calc(var(--growth-mobile-nav-h) + env(safe-area-inset-bottom, 0px))",
-        }}
-        aria-hidden
-      />
+
+      <div className="md:hidden" style={{ height: bottomSpacer }} aria-hidden />
     </>
   );
 }
