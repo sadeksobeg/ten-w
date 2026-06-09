@@ -34,6 +34,7 @@ export type CreatorCupRow = {
   score: number;
   rank: number;
   submissions: number;
+  consentGiven: boolean;
 };
 
 export type CreatorChallengeView = {
@@ -442,8 +443,21 @@ export async function creatorCupLeaderboard(limit = 10): Promise<CreatorCupRow[]
     };
   });
 
+  const consentRows = await prisma.creatorArenaProfile.findMany({
+    where: { userId: { in: creatorIds } },
+    select: { userId: true, consentGiven: true, consentVersion: true },
+  });
+  const { hasActiveCreatorConsent } = await import("@/lib/growth/creator-consent");
+  const consentMap = new Map(
+    consentRows.map((r) => [r.userId, hasActiveCreatorConsent(r)]),
+  );
+
   scored.sort((a, b) => b.score - a.score);
-  return scored.slice(0, limit).map((row, i) => ({ ...row, rank: i + 1 }));
+  return scored.slice(0, limit).map((row, i) => ({
+    ...row,
+    rank: i + 1,
+    consentGiven: consentMap.get(row.userId) ?? false,
+  }));
 }
 
 export async function trackCreatorArenaVisit(opts: {
@@ -909,6 +923,7 @@ export type CreatorDirectoryEntry = {
   cupRank: number | null;
   cupScore: number;
   specialty: string[];
+  consentGiven: boolean;
 };
 
 export type CreatorAnalyticsPoint = {
@@ -988,27 +1003,38 @@ export async function listCreatorDirectory(): Promise<CreatorDirectoryEntry[]> {
         publicSlug: true,
         isVerifiedOfficial: true,
         officialDisplayName: true,
-        creatorArenaProfile: { select: { status: true, specialty: true, totalSubmissions: true } },
+        creatorArenaProfile: {
+          select: {
+            status: true,
+            specialty: true,
+            totalSubmissions: true,
+            consentGiven: true,
+            consentVersion: true,
+          },
+        },
         partnerProfile: { select: { currentLevel: { select: { code: true } } } },
       },
     }),
     creatorCupLeaderboard(100),
   ]);
 
+  const { hasActiveCreatorConsent } = await import("@/lib/growth/creator-consent");
   const cupMap = new Map(cupRows.map((r) => [r.userId, r]));
   return users.map((u) => {
     const cup = cupMap.get(u.id);
+    const profile = u.creatorArenaProfile;
     return {
       userId: u.id,
       name: resolveChatSenderName(u),
       avatarUrl: u.avatarUrl,
       publicSlug: u.publicSlug,
-      status: u.creatorArenaProfile?.status ?? CreatorWorkflowStatus.JOINED,
+      status: profile?.status ?? CreatorWorkflowStatus.JOINED,
       levelCode: u.partnerProfile?.currentLevel.code ?? "STARTER",
-      submissions: u.creatorArenaProfile?.totalSubmissions ?? 0,
+      submissions: profile?.totalSubmissions ?? 0,
       cupRank: cup?.rank ?? null,
       cupScore: cup?.score ?? 0,
-      specialty: u.creatorArenaProfile?.specialty ?? [],
+      specialty: profile?.specialty ?? [],
+      consentGiven: hasActiveCreatorConsent(profile),
     };
   });
 }

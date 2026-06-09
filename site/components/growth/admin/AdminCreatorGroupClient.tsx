@@ -55,6 +55,7 @@ export function AdminCreatorGroupClient({
 }: Props) {
   const t = useTranslations("Growth.admin.creatorsPage");
   const tAdmin = useTranslations("Growth.creators.admin");
+  const tConsent = useTranslations("Creators.consent");
   const { showToast } = useToast();
 
   const [tab, setTab] = useState<CreatorAdminTab>(
@@ -184,6 +185,12 @@ export function AdminCreatorGroupClient({
             >
               {tAdmin("previewLounge")}
             </Link>
+            <a
+              href="/api/growth/admin/consent-export"
+              className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-xs font-bold text-emerald-200 hover:border-emerald-500/50"
+            >
+              {tConsent("exportButton")}
+            </a>
           </div>
         </div>
       </GlassCard>

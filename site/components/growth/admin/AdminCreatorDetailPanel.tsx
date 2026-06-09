@@ -7,7 +7,7 @@ import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
-import { IconClose } from "@/components/growth/icons/GrowthIcons";
+import { IconClose, IconShield } from "@/components/growth/icons/GrowthIcons";
 import { useToast } from "@/hooks/useToast";
 import {
   adminAddCreatorRoomMemberAction,
@@ -59,6 +59,8 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
   const [notes, setNotes] = useState("");
   const [milestoneKey, setMilestoneKey] = useState(MILESTONE_PRESETS[0] ?? "");
   const [pending, setPending] = useState(false);
+  const [showConsentText, setShowConsentText] = useState(false);
+  const tConsent = useTranslations("Creators.consent");
 
   useEffect(() => {
     if (!partner) return;
@@ -253,6 +255,54 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
               </dd>
             </div>
           </dl>
+        </GlassCard>
+
+        <GlassCard className="mt-4 border border-white/10 bg-white/[0.03] p-4">
+          <h3 className="text-xs font-bold uppercase tracking-wide text-gold">{tConsent("legalRecordTitle")}</h3>
+          {partner.consentGiven ? (
+            <div className="mt-3 space-y-2 text-xs">
+              <p className="flex items-center gap-2 font-semibold text-emerald-200">
+                <IconShield size={16} className="text-emerald-400" />
+                {tConsent("consentedLabel")}
+              </p>
+              <p className="text-white/55">
+                {tConsent("version", { version: partner.consentVersion ?? "—" })}
+              </p>
+              {partner.consentGivenAt ? (
+                <p className="text-white/45">
+                  {tConsent("consentedOn")}: {dateFmt.format(new Date(partner.consentGivenAt))}
+                </p>
+              ) : null}
+              {partner.consentIpAddress ? (
+                <p className="text-white/45">IP: {partner.consentIpAddress}</p>
+              ) : null}
+              {partner.qualificationDetails ? (
+                <div className="rounded-lg border border-white/10 bg-black/25 p-3 text-white/70">
+                  <p className="mb-1 text-[10px] uppercase text-white/40">{tConsent("qualificationTitle")}</p>
+                  {partner.qualificationDetails}
+                </div>
+              ) : null}
+              {partner.consentText ? (
+                <button
+                  type="button"
+                  onClick={() => setShowConsentText((v) => !v)}
+                  className="text-[11px] font-semibold text-gold underline"
+                >
+                  {tConsent("viewFull")}
+                </button>
+              ) : null}
+              {showConsentText && partner.consentText ? (
+                <pre className="max-h-48 overflow-y-auto whitespace-pre-wrap rounded-lg border border-white/10 bg-black/30 p-3 text-[10px] text-white/60">
+                  {partner.consentText}
+                </pre>
+              ) : null}
+            </div>
+          ) : (
+            <p className="mt-3 flex items-center gap-2 text-xs text-amber-200">
+              <IconShield size={16} className="text-amber-400" />
+              {tConsent("notConsented")}
+            </p>
+          )}
         </GlassCard>
 
         <section className="mt-4">

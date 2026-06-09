@@ -119,6 +119,9 @@ export type CreatorHubProps = {
   utmWeeklySeries: Array<{ label: string; clicks: number }>;
   referralProof: { rows: CreatorReferralRow[]; totalCents: number };
   analyticsBenchmarks: { avgSubmissions: number; avgClicks: number };
+  needsConsent: boolean;
+  consentVersionMismatch: boolean;
+  consentGiven: boolean;
 };
 
 export type { CreatorFeaturedCreator, CreatorOnboardingProgress };

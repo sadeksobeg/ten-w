@@ -15,6 +15,10 @@ export type CreatorApplicationRow = {
   contentTypes?: string[];
   followersRange: string;
   applicantNote?: string | null;
+  applicationConsentGiven?: boolean;
+  applicationConsentAt?: string | null;
+  applicationConsentVersion?: string | null;
+  applicationConsentIp?: string | null;
   status: string;
   createdAt: string;
 };
@@ -31,6 +35,7 @@ function relativeTime(iso: string): string {
 
 export function AdminCreatorApplications({ applications: initial }: Props) {
   const t = useTranslations("Growth.creators.admin.applications");
+  const tConsent = useTranslations("Creators.consent");
   const [apps, setApps] = useState(initial);
   const [selectedId, setSelectedId] = useState(initial[0]?.id ?? "");
   const [rejectNote, setRejectNote] = useState("");
@@ -102,6 +107,25 @@ export function AdminCreatorApplications({ applications: initial }: Props) {
               {selected.applicantNote}
             </p>
           ) : null}
+
+          <div className="mt-4 rounded-lg border border-white/10 bg-black/20 p-3 text-xs">
+            {selected.applicationConsentGiven ? (
+              <p className="font-semibold text-emerald-200">
+                ✓ {tConsent("applicationConsented")}
+                {selected.applicationConsentAt
+                  ? ` · ${new Date(selected.applicationConsentAt).toLocaleString()}`
+                  : ""}
+              </p>
+            ) : (
+              <p className="text-amber-200">⚠ {tConsent("notConsented")}</p>
+            )}
+            {selected.applicationConsentVersion ? (
+              <p className="mt-1 text-white/45">
+                {tConsent("version", { version: selected.applicationConsentVersion })}
+                {selected.applicationConsentIp ? ` · IP ${selected.applicationConsentIp}` : ""}
+              </p>
+            ) : null}
+          </div>
 
           {successMsg ? (
             <p className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">

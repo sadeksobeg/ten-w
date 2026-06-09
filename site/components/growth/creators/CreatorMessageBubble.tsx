@@ -12,6 +12,7 @@ import {
   IconLightning,
 } from "@/components/growth/icons/GrowthIcons";
 import { CreatorChatSpecialCard } from "./CreatorChatSpecialCard";
+import { CreatorNameWithConsentBadge } from "./CreatorConsentVerifiedBadge";
 
 import type { ComponentType } from "react";
 
@@ -51,6 +52,7 @@ export function CreatorMessageBubble({
   onReaction,
 }: Props) {
   const t = useTranslations("Creators.chat");
+  const tConsent = useTranslations("Creators.consent");
 
   if (["CHALLENGE_SUBMIT", "BATTLE_RESULT", "ACHIEVEMENT", "SYSTEM"].includes(message.kind)) {
     return <CreatorChatSpecialCard message={message} />;
@@ -71,9 +73,14 @@ export function CreatorMessageBubble({
       ) : null}
       <div className={`max-w-[85%] ${mine ? "items-end" : "items-start"} flex flex-col`}>
         {!mine && showName ? (
-          <p className="mb-0.5 ps-1 text-[10px] font-semibold text-[var(--creator-accent)]">
-            {message.senderName}
-            {showTime ? <span className="ms-2 font-normal text-white/35">{formatTime(message.createdAt)}</span> : null}
+          <p className="mb-0.5 flex items-center gap-2 ps-1 text-[10px] font-semibold text-[var(--creator-accent)]">
+            <CreatorNameWithConsentBadge
+              name={message.senderName}
+              verified={message.senderConsentGiven}
+              label={tConsent("verifiedBadge")}
+              nameClassName="font-semibold"
+            />
+            {showTime ? <span className="font-normal text-white/35">{formatTime(message.createdAt)}</span> : null}
           </p>
         ) : null}
         <div className="relative">

@@ -39,11 +39,21 @@ import { CreatorProfileSection } from "./CreatorProfileSection";
 import { CreatorLoungeErrorBoundary } from "./CreatorLoungeErrorBoundary";
 import { CreatorProfileDrawer } from "./CreatorProfileDrawer";
 import type { CreatorHubProps, CreatorHubSection } from "./CreatorHubTypes";
-import { ensureCreatorDirectRoomAction } from "@/lib/growth/creator-arena-actions";
+import {
+  ensureCreatorDirectRoomAction,
+  recordCreatorConsentAction,
+} from "@/lib/growth/creator-arena-actions";
 import {
   CreatorCelebrationOverlay,
   type CelebrationPayload,
 } from "./CreatorCelebrationOverlay";
+import { CreatorConsentModal } from "./CreatorConsentModal";
+import {
+  CreatorConsentVerifiedBadge,
+  CreatorNameWithConsentBadge,
+} from "./CreatorConsentVerifiedBadge";
+import type { ConsentLocale } from "@/lib/growth/creator-consent";
+import { useToast } from "@/hooks/useToast";
 
 type NavItem = { id: CreatorHubSection; labelKey: string; icon: ComponentType<{ size?: number; className?: string }>; badge?: number };
 
@@ -105,8 +115,10 @@ const SECTION_LABEL_KEYS: Record<CreatorHubSection, string> = {
 
 export function CreatorHubLayout(props: CreatorHubProps) {
   const t = useTranslations("Creators.hub");
+  const tConsent = useTranslations("Creators.consent");
   const tNav = useTranslations("Creators.nav");
   const tStatus = useTranslations("Creators.status");
+  const { showToast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [section, setSection] = useState<CreatorHubSection>("dashboard");
@@ -116,7 +128,17 @@ export function CreatorHubLayout(props: CreatorHubProps) {
   const [moreOpen, setMoreOpen] = useState(false);
   const [celebration, setCelebration] = useState<CelebrationPayload | null>(null);
   const dismissCelebration = useCallback(() => setCelebration(null), []);
+  const [consentOpen, setConsentOpen] = useState(props.needsConsent);
+  const [consentGiven, setConsentGiven] = useState(props.consentGiven);
   const showWelcome = searchParams.get("welcome") === "1";
+  const consentLocale = (props.locale === "en" || props.locale === "fr"
+    ? props.locale
+    : "ar") as ConsentLocale;
+
+  useEffect(() => {
+    setConsentOpen(props.needsConsent);
+    setConsentGiven(props.consentGiven);
+  }, [props.needsConsent, props.consentGiven]);
 
   useEffect(() => {
     if (showWelcome) {
@@ -141,6 +163,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
   const sectionTitle = tNav(SECTION_LABEL_KEYS[section]);
 
   function navigate(next: CreatorHubSection) {
+    if (consentOpen) return;
     if (next === "chat") setUnreadChat(0);
     setMoreOpen(false);
     setSection(next);
@@ -283,7 +306,7 @@ export function CreatorHubLayout(props: CreatorHubProps) {
   return (
     <CreatorLoungeErrorBoundary>
       <div className="creator-hub-mobile-root">
-        <div className="creator-hub-shell creator-hub-mobile-app creator-arena-shell relative min-h-[70dvh] overflow-hidden rounded-2xl sm:rounded-3xl">
+        <div className={`creator-hub-shell creator-hub-mobile-app creator-arena-shell relative min-h-[70dvh] overflow-hidden rounded-2xl sm:rounded-3xl ${consentOpen ? "pointer-events-none select-none blur-[2px]" : ""}`}>
           <div className="relative z-10 flex min-h-[70dvh] flex-col lg:min-h-[70dvh] lg:flex-row">
             <aside className="creator-hub-sidebar hidden w-60 shrink-0 flex-col border-e lg:flex">
               <div className="border-b border-white/10 p-4">
@@ -299,8 +322,20 @@ export function CreatorHubLayout(props: CreatorHubProps) {
                     ) : null}
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-bold text-white">{viewerName}</p>
+                    <CreatorNameWithConsentBadge
+                      name={viewerName}
+                      verified={consentGiven}
+                      label={tConsent("verifiedBadge")}
+                      nameClassName="truncate text-sm font-bold text-white"
+                      badgeSize="md"
+                    />
                     <span className="creator-status-pill bg-[var(--status-joined)]/20 text-sky-200">{tStatus(props.viewer.status.toLowerCase())}</span>
+                    {!consentGiven ? (
+                      <p className="mt-1.5 flex items-center gap-1.5 text-[10px] leading-snug text-amber-200/85">
+                        <CreatorConsentVerifiedBadge label={tConsent("verifiedBadge")} muted />
+                        {tConsent("verifiedBadgeHint")}
+                      </p>
+                    ) : null}
                     <Link href="/growth/settings" className="mt-1 block text-[10px] text-[var(--creator-secondary)] hover:underline">{t("editProfile")}</Link>
                   </div>
                 </div>
@@ -482,6 +517,27 @@ export function CreatorHubLayout(props: CreatorHubProps) {
 
       <CreatorProfileDrawer creator={challengeDrawer} onClose={() => setChallengeDrawer(null)} onChallenge={() => { setChallengeDrawer(null); navigate("battles"); }} />
       <CreatorCelebrationOverlay payload={celebration} onDismiss={dismissCelebration} />
+      <CreatorConsentModal
+        locale={consentLocale}
+        creatorName={viewerName}
+        isOpen={consentOpen}
+        mode="creator-join"
+        versionMismatch={props.consentVersionMismatch}
+        onAccept={async ({ qualificationStatement }) => {
+          const res = await recordCreatorConsentAction(qualificationStatement, consentLocale);
+          if (res.ok) {
+            setConsentOpen(false);
+            setConsentGiven(true);
+            showToast({
+              type: "success",
+              title: tConsent("confirmationTitle"),
+              body: tConsent("confirmationBody"),
+            });
+          } else {
+            showToast({ type: "error", title: tConsent("error") });
+          }
+        }}
+      />
     </CreatorLoungeErrorBoundary>
   );
 }

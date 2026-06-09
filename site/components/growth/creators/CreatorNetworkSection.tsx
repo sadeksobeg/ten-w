@@ -10,6 +10,7 @@ import { CreatorProfileDrawer } from "./CreatorProfileDrawer";
 import type { CreatorDirectoryEntry } from "@/lib/growth/creator-arena";
 import type { CreatorFeaturedCreator } from "./CreatorFeaturedSpotlight";
 import type { CreatorHubSection } from "./CreatorHubTypes";
+import { CreatorNameWithConsentBadge } from "./CreatorConsentVerifiedBadge";
 
 type Props = {
   directory: CreatorDirectoryEntry[];
@@ -23,6 +24,7 @@ type Filter = "all" | "featured" | "new";
 export function CreatorNetworkSection({ directory, myUserId, onNavigate, onMessage }: Props) {
   const t = useTranslations("Creators.network");
   const tStatus = useTranslations("Creators.status");
+  const tConsent = useTranslations("Creators.consent");
   const [filter, setFilter] = useState<Filter>("all");
   const [drawer, setDrawer] = useState<CreatorFeaturedCreator | null>(null);
   const [nomineeId, setNomineeId] = useState(directory[0]?.userId ?? "");
@@ -45,7 +47,13 @@ export function CreatorNetworkSection({ directory, myUserId, onNavigate, onMessa
             <div key={c.userId} className="flex flex-col items-center" style={{ order: i === 0 ? 2 : i === 1 ? 1 : 3 }}>
               <GrowthAvatar name={c.name} email={c.userId} avatarUrl={c.avatarUrl} size={i === 0 ? "lg" : "md"} />
               <p className="mt-1 text-xs font-bold text-white">#{c.cupRank ?? "—"}</p>
-              <p className="max-w-[80px] truncate text-[10px] text-white/55">{c.name}</p>
+              <CreatorNameWithConsentBadge
+                name={c.name}
+                verified={c.consentGiven}
+                label={tConsent("verifiedBadge")}
+                className="max-w-[88px]"
+                nameClassName="truncate text-[10px] text-white/55"
+              />
               <div className={`mt-1 w-12 rounded-t bg-[var(--creator-secondary)]/30 ${i === 0 ? "h-16" : i === 1 ? "h-12" : "h-8"}`} />
             </div>
           ))}
@@ -66,7 +74,12 @@ export function CreatorNetworkSection({ directory, myUserId, onNavigate, onMessa
             <div className="flex items-center gap-3">
               <GrowthAvatar name={c.name} email={c.userId} avatarUrl={c.avatarUrl} size="md" />
               <div className="min-w-0 flex-1">
-                <p className="truncate font-bold text-white">{c.name}</p>
+                <CreatorNameWithConsentBadge
+                  name={c.name}
+                  verified={c.consentGiven}
+                  label={tConsent("verifiedBadge")}
+                  nameClassName="truncate font-bold text-white"
+                />
                 <p className="text-[10px] text-white/45">{tStatus(c.status.toLowerCase())} · #{c.cupRank ?? "—"}</p>
               </div>
             </div>

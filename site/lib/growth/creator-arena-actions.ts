@@ -18,6 +18,12 @@ import { createNotification } from "@/lib/growth/notify";
 import { hasActiveBattle } from "@/lib/growth/battles";
 import { resolveChatSenderName } from "@/lib/growth/chat-display";
 import { revalidatePartnerSurfaces } from "@/lib/growth/revalidate-partner";
+import { CREATOR_CONSENT_TEXT, CREATOR_CONSENT_VERSION } from "@/lib/growth/creator-consent";
+import {
+  getRequestClientMeta,
+  isConsentRequiredError,
+  requireCreatorConsent,
+} from "@/lib/growth/creator-consent-guard";
 
 type ActionResult<T = undefined> =
   | { ok: true; data?: T }
@@ -79,6 +85,113 @@ async function requireAdmin(): Promise<{ ok: true; userId: string } | { ok: fals
   return { ok: true, userId: session.user.id };
 }
 
+async function guardCreatorConsent(userId: string): Promise<ActionResult | null> {
+  try {
+    await requireCreatorConsent(userId);
+    return null;
+  } catch (err) {
+    if (isConsentRequiredError(err)) {
+      return { ok: false, error: "CONSENT_REQUIRED" };
+    }
+    throw err;
+  }
+}
+
+const consentRecordSchema = z.object({
+  qualificationStatement: z.string().min(20).max(200),
+  locale: z.enum(["ar", "en", "fr"]).optional(),
+});
+
+export async function recordCreatorConsentAction(
+  qualificationStatement: string,
+  locale?: string,
+): Promise<ActionResult> {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
+    return { ok: false, error: "unauthorized" };
+  }
+  if (!(await canAccessCreatorLounge(session.user.id))) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  const parsed = consentRecordSchema.safeParse({
+    qualificationStatement,
+    locale: locale === "en" || locale === "fr" ? locale : "ar",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const { ip, userAgent } = await getRequestClientMeta();
+  const consentTextAr = CREATOR_CONSENT_TEXT.ar;
+  const now = new Date();
+
+  const profile = await prisma.creatorArenaProfile.upsert({
+    where: { userId: session.user.id },
+    create: {
+      userId: session.user.id,
+      consentGiven: true,
+      consentGivenAt: now,
+      consentIpAddress: ip,
+      consentUserAgent: userAgent,
+      consentVersion: CREATOR_CONSENT_VERSION,
+      consentText: consentTextAr,
+      qualificationDeclared: true,
+      qualificationDeclaredAt: now,
+      qualificationDetails: parsed.data.qualificationStatement,
+    },
+    update: {
+      consentGiven: true,
+      consentGivenAt: now,
+      consentIpAddress: ip,
+      consentUserAgent: userAgent,
+      consentVersion: CREATOR_CONSENT_VERSION,
+      consentText: consentTextAr,
+      qualificationDeclared: true,
+      qualificationDeclaredAt: now,
+      qualificationDetails: parsed.data.qualificationStatement,
+    },
+  });
+
+  await prisma.adminAuditLog.create({
+    data: {
+      actorId: session.user.id,
+      action: "CREATOR_CONSENT_GIVEN",
+      entity: "CreatorArenaProfile",
+      entityId: profile.id,
+      metadata: {
+        version: CREATOR_CONSENT_VERSION,
+        ip,
+        locale: parsed.data.locale ?? "ar",
+        timestamp: now.toISOString(),
+      },
+    },
+  });
+
+  const loc = parsed.data.locale ?? "ar";
+  const titles: Record<string, string> = {
+    ar: "تم تسجيل موافقتك",
+    en: "Consent Recorded",
+    fr: "Consentement enregistré",
+  };
+  const bodies: Record<string, string> = {
+    ar: "موافقتك القانونية مسجّلة بأمان. مرحباً في Creator Hub.",
+    en: "Your legal consent is securely recorded. Welcome to Creator Hub.",
+    fr: "Votre consentement est enregistré. Bienvenue dans Creator Hub.",
+  };
+
+  await createNotification(prisma, {
+    userId: session.user.id,
+    type: NotificationType.SYSTEM,
+    title: titles[loc] ?? titles.ar,
+    body: bodies[loc] ?? bodies.ar,
+    link: "/growth/creators",
+    metadata: { kind: "creator_consent", version: CREATOR_CONSENT_VERSION },
+  });
+
+  revalidatePath("/growth/creators");
+  revalidatePath("/growth/admin/creators");
+  return { ok: true };
+}
+
 export async function updateCreatorStatusAction(
   _prev: unknown,
   formData: FormData,
@@ -125,6 +238,8 @@ export async function submitCreatorChallengeAction(
   if (!session?.user?.id || !(await canAccessCreatorLounge(session.user.id))) {
     return { ok: false, error: "unauthorized" };
   }
+  const consentBlock = await guardCreatorConsent(session.user.id);
+  if (consentBlock) return consentBlock;
 
   const parsed = submitSchema.safeParse({
     postUrl: formData.get("postUrl"),
@@ -173,6 +288,8 @@ export async function challengeCreatorBattleAction(
   if (!(await canAccessCreatorLounge(session.user.id))) {
     return { ok: false, error: "unauthorized" };
   }
+  const consentBlock = await guardCreatorConsent(session.user.id);
+  if (consentBlock) return consentBlock;
 
   const parsed = battleSchema.safeParse({
     challengedId: formData.get("challengedId"),
@@ -493,6 +610,8 @@ export async function saveContentIdeasAction(
   if (!session?.user?.id || !(await canAccessCreatorLounge(session.user.id))) {
     return { ok: false, error: "unauthorized" };
   }
+  const consentBlock = await guardCreatorConsent(session.user.id);
+  if (consentBlock) return consentBlock;
   const raw = String(formData.get("ideas") ?? "[]");
   let ideas: unknown;
   try {
@@ -600,6 +719,8 @@ export async function createNominationAction(
   if (!session?.user?.id || !(await canAccessCreatorLounge(session.user.id))) {
     return { ok: false, error: "unauthorized" };
   }
+  const consentBlock = await guardCreatorConsent(session.user.id);
+  if (consentBlock) return consentBlock;
   const parsed = nominationSchema.safeParse({
     nomineeUserId: formData.get("nomineeUserId"),
     reason: formData.get("reason") ?? undefined,

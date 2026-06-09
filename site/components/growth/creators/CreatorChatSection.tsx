@@ -134,6 +134,7 @@ export function CreatorChatSection({
       isVerifiedOfficial: false,
       officialDisplayName: null,
       senderChatBadges: [],
+      senderConsentGiven: true,
       body: text,
       kind: "TEXT",
       metadata: null,

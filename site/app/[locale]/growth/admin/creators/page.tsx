@@ -54,6 +54,12 @@ export default async function AdminCreatorsPage({ params }: Props) {
               totalSubmissions: true,
               featuredCount: true,
               milestones: true,
+              consentGiven: true,
+              consentGivenAt: true,
+              consentVersion: true,
+              consentIpAddress: true,
+              qualificationDetails: true,
+              consentText: true,
             },
           },
         },
@@ -155,6 +161,12 @@ export default async function AdminCreatorsPage({ params }: Props) {
     milestones: u.creatorArenaProfile?.milestones ?? [],
     submissions: submissionsByUser.get(u.id) ?? [],
     nominationCount: nominationMap.get(u.id) ?? 0,
+    consentGiven: u.creatorArenaProfile?.consentGiven ?? false,
+    consentGivenAt: u.creatorArenaProfile?.consentGivenAt?.toISOString() ?? null,
+    consentVersion: u.creatorArenaProfile?.consentVersion ?? null,
+    consentIpAddress: u.creatorArenaProfile?.consentIpAddress ?? null,
+    qualificationDetails: u.creatorArenaProfile?.qualificationDetails ?? null,
+    consentText: u.creatorArenaProfile?.consentText ?? null,
   }));
 
   const challenges: CreatorAdminChallenge[] = challengeRows.map((c) => ({
@@ -200,6 +212,10 @@ export default async function AdminCreatorsPage({ params }: Props) {
           contentTypes: Array.isArray(a.contentTypes) ? (a.contentTypes as string[]) : [],
           followersRange: a.followersRange,
           applicantNote: a.applicantNote,
+          applicationConsentGiven: a.applicationConsentGiven,
+          applicationConsentAt: a.applicationConsentAt?.toISOString() ?? null,
+          applicationConsentVersion: a.applicationConsentVersion,
+          applicationConsentIp: a.applicationConsentIp,
           status: a.status,
           createdAt: a.createdAt.toISOString(),
         }))}

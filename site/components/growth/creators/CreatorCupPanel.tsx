@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import type { CreatorCupRow } from "@/lib/growth/creator-arena";
+import { CreatorNameWithConsentBadge } from "./CreatorConsentVerifiedBadge";
 
 type Props = {
   rows: CreatorCupRow[];
@@ -13,6 +14,7 @@ type Props = {
 
 export function CreatorCupPanel({ rows, myUserId }: Props) {
   const t = useTranslations("Growth.creators");
+  const tConsent = useTranslations("Creators.consent");
 
   return (
     <GlassCard className="border border-white/10 bg-white/[0.03] p-5 sm:p-6">
@@ -44,10 +46,12 @@ export function CreatorCupPanel({ rows, myUserId }: Props) {
                 <span className="w-6 text-center text-sm font-black text-gold">#{row.rank}</span>
                 <GrowthAvatar name={row.name ?? "?"} email={row.userId} size="sm" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-white">
-                    {row.name ?? t("cupAnonymous")}
-                    {isMe ? ` (${t("cupYou")})` : ""}
-                  </p>
+                  <CreatorNameWithConsentBadge
+                    name={`${row.name ?? t("cupAnonymous")}${isMe ? ` (${t("cupYou")})` : ""}`}
+                    verified={row.consentGiven}
+                    label={tConsent("verifiedBadge")}
+                    nameClassName="truncate text-sm font-semibold text-white"
+                  />
                   <p className="text-[10px] text-white/45">
                     {t("cupMeta", { posts: row.submissions })}
                   </p>

@@ -29,6 +29,12 @@ export type CreatorAdminPartner = {
   milestones: string[];
   submissions: CreatorAdminSubmission[];
   nominationCount: number;
+  consentGiven: boolean;
+  consentGivenAt: string | null;
+  consentVersion: string | null;
+  consentIpAddress: string | null;
+  qualificationDetails: string | null;
+  consentText: string | null;
 };
 
 export type CreatorAdminStats = {

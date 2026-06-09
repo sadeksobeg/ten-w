@@ -57,6 +57,7 @@ function optimisticMessage(
     isVerifiedOfficial: false,
     officialDisplayName: null,
     senderChatBadges: [],
+    senderConsentGiven: false,
     body,
     kind: "TEXT",
     metadata: null,

@@ -1021,6 +1021,15 @@ model CreatorArenaProfile {
   totalSubmissions        Int                   @default(0)
   featuredCount           Int                   @default(0)
   milestones              String[]              @default([])
+  consentGiven            Boolean               @default(false)
+  consentGivenAt          DateTime?
+  consentIpAddress        String?
+  consentUserAgent        String?               @db.Text
+  consentVersion          String?
+  consentText             String?               @db.Text
+  qualificationDeclared   Boolean               @default(false)
+  qualificationDeclaredAt DateTime?
+  qualificationDetails    String?               @db.Text
   updatedAt               DateTime              @updatedAt
   updatedById             String?
 
@@ -1076,10 +1085,14 @@ model CreatorApplication {
   platform        String?
   contentTypes    Json
   followersRange  String
-  applicantNote   String?  @db.Text
-  status          String   @default("PENDING")
-  adminNotes      String?  @db.Text
-  createdAt       DateTime @default(now())
+  applicantNote           String?  @db.Text
+  applicationConsentGiven Boolean  @default(false)
+  applicationConsentAt    DateTime?
+  applicationConsentVersion String?
+  applicationConsentIp    String?
+  status                  String   @default("PENDING")
+  adminNotes              String?  @db.Text
+  createdAt               DateTime @default(now())
 
   @@index([status, createdAt])
 }

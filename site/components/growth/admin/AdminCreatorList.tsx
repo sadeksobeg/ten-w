@@ -6,6 +6,8 @@ import type { CreatorWorkflowStatus } from "@prisma/client";
 import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
 import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
+import { IconShield } from "@/components/growth/icons/GrowthIcons";
+import { CreatorConsentVerifiedBadge } from "@/components/growth/creators/CreatorConsentVerifiedBadge";
 import type { CreatorAdminPartner } from "./creator-admin-types";
 
 const WORKFLOW_STATUSES: CreatorWorkflowStatus[] = [
@@ -38,6 +40,7 @@ export function AdminCreatorList({
 }: Props) {
   const t = useTranslations("Growth.creators.admin.list");
   const tPage = useTranslations("Growth.admin.creatorsPage");
+  const tConsent = useTranslations("Creators.consent");
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [sortKey, setSortKey] = useState<SortKey>("name");
@@ -137,8 +140,14 @@ export function AdminCreatorList({
                     size="sm"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-white">
-                      {p.name ?? p.email}
+                    <p className="flex min-w-0 items-center gap-1 truncate text-sm font-semibold text-white">
+                      <span className="truncate">{p.name ?? p.email}</span>
+                      {p.consentGiven ? (
+                        <CreatorConsentVerifiedBadge
+                          label={tConsent("verifiedBadge")}
+                          size="sm"
+                        />
+                      ) : null}
                     </p>
                     <p className="truncate text-[10px] text-white/45">{p.email}</p>
                     <div className="mt-1 flex flex-wrap gap-2 text-[10px] text-white/40">
@@ -153,6 +162,16 @@ export function AdminCreatorList({
                   </div>
                 </button>
                 <div className="flex shrink-0 flex-wrap items-center gap-2">
+                  <span
+                    title={p.consentGiven ? tConsent("consentedLabel") : tConsent("notConsented")}
+                    aria-label={p.consentGiven ? tConsent("consentedLabel") : tConsent("notConsented")}
+                  >
+                    <IconShield
+                      size={16}
+                      className={p.consentGiven ? "text-emerald-400" : "text-amber-400"}
+                      aria-hidden
+                    />
+                  </span>
                   {p.hasBadge ? (
                     <BadgeIcon badgeKey="content_creator" earned chip size="xs" name="" />
                   ) : null}

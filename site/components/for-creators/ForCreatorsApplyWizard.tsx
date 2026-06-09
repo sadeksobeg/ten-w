@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { ConfettiCanvas } from "@/components/invite/canvas/ConfettiCanvas";
+import { CreatorConsentModal } from "@/components/growth/creators/CreatorConsentModal";
+import type { ConsentLocale } from "@/lib/growth/creator-consent";
 import {
   IconYoutube,
   IconInstagram,
@@ -28,6 +30,8 @@ type Props = { locale: string };
 
 export function ForCreatorsApplyWizard({ locale }: Props) {
   const t = useTranslations("Creators.public.apply");
+  const tConsent = useTranslations("Creators.consent");
+  const consentLocale = (locale === "en" || locale === "fr" ? locale : "ar") as ConsentLocale;
   const [step, setStep] = useState(1);
   const [dir, setDir] = useState<"fwd" | "back">("fwd");
   const [pending, setPending] = useState(false);
@@ -40,8 +44,15 @@ export function ForCreatorsApplyWizard({ locale }: Props) {
   const [niches, setNiches] = useState<string[]>([]);
   const [note, setNote] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [appCheck1, setAppCheck1] = useState(false);
+  const [appCheck2, setAppCheck2] = useState(false);
+  const [appCheck3, setAppCheck3] = useState(false);
+  const [fullConsentOpen, setFullConsentOpen] = useState(false);
+
+  const consentReady = appCheck1 && appCheck2 && appCheck3;
 
   async function submit() {
+    if (!consentReady) return;
     setPending(true);
     setError(null);
     const res = await fetch("/api/creator-application", {
@@ -55,6 +66,7 @@ export function ForCreatorsApplyWizard({ locale }: Props) {
         contentTypes: niches,
         followersRange: followers,
         applicantNote: note || undefined,
+        applicationConsentGiven: true,
       }),
     });
     setPending(false);
@@ -225,18 +237,60 @@ export function ForCreatorsApplyWizard({ locale }: Props) {
               rows={3}
               className="mt-6 w-full resize-none rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none"
             />
+
+            <div className="mt-6 rounded-xl border border-rose-500/25 bg-rose-950/20 p-4">
+              <p className="text-xs font-bold text-rose-100">{tConsent("applicationIntro")}</p>
+              <div className="mt-3 space-y-2">
+                {[
+                  { checked: appCheck1, set: setAppCheck1, label: tConsent("applicationCheck1") },
+                  { checked: appCheck2, set: setAppCheck2, label: tConsent("applicationCheck2") },
+                  { checked: appCheck3, set: setAppCheck3, label: tConsent("applicationCheck3") },
+                ].map((c) => (
+                  <label key={c.label} className="flex cursor-pointer items-start gap-2 text-xs text-white/80">
+                    <input
+                      type="checkbox"
+                      checked={c.checked}
+                      onChange={(e) => c.set(e.target.checked)}
+                      className="mt-0.5"
+                    />
+                    <span>{c.label}</span>
+                  </label>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => setFullConsentOpen(true)}
+                className="mt-3 text-[11px] font-semibold text-[var(--creator-secondary)] underline"
+              >
+                {tConsent("viewFull")}
+              </button>
+            </div>
+
             {error ? <p className="mt-2 text-xs text-rose-300">{error}</p> : null}
             <div className="mt-8 flex justify-between gap-2">
               <button type="button" className="text-sm text-white/55" onClick={() => go(2)}>
                 {t("back")}
               </button>
-              <GoldButton type="button" disabled={pending || niches.length === 0} onClick={() => void submit()}>
+              <GoldButton
+                type="button"
+                disabled={pending || niches.length === 0 || !consentReady}
+                onClick={() => void submit()}
+              >
                 {pending ? t("sending") : t("submit")}
               </GoldButton>
             </div>
           </div>
         ) : null}
       </div>
+
+      <CreatorConsentModal
+        locale={consentLocale}
+        creatorName={name}
+        isOpen={fullConsentOpen}
+        mode="view-only"
+        onAccept={async () => {}}
+        onDecline={() => setFullConsentOpen(false)}
+      />
     </section>
   );
 }

@@ -11,6 +11,7 @@ import {
 import { canPostToCreatorRoom } from "@/lib/growth/creator-chat";
 import { matchChatKeywords } from "@/lib/growth/chat-keywords";
 import { resolveChatSenderName } from "@/lib/growth/chat-display";
+import { hasActiveCreatorConsent } from "@/lib/growth/creator-consent";
 import { touchLastSeen } from "@/lib/growth/presence";
 
 export const COMMUNITY_ROOM_SLUG = "community";
@@ -39,6 +40,7 @@ export type ChatRoomMessageDTO = {
   isVerifiedOfficial: boolean;
   officialDisplayName: string | null;
   senderChatBadges: string[];
+  senderConsentGiven: boolean;
   body: string;
   kind: string;
   metadata: Record<string, unknown> | null;
@@ -171,6 +173,7 @@ function mapSender(user: {
   isVerifiedOfficial: boolean;
   officialDisplayName: string | null;
   partnerProfile: { currentLevel: { code: string } } | null;
+  creatorArenaProfile: { consentGiven: boolean; consentVersion: string | null } | null;
 }): Pick<
   ChatRoomMessageDTO,
   | "senderName"
@@ -180,6 +183,7 @@ function mapSender(user: {
   | "senderLevelCode"
   | "isVerifiedOfficial"
   | "officialDisplayName"
+  | "senderConsentGiven"
 > {
   return {
     senderName: resolveChatSenderName(user),
@@ -189,6 +193,7 @@ function mapSender(user: {
     senderLevelCode: user.partnerProfile?.currentLevel.code ?? null,
     isVerifiedOfficial: user.isVerifiedOfficial,
     officialDisplayName: user.officialDisplayName,
+    senderConsentGiven: hasActiveCreatorConsent(user.creatorArenaProfile),
   };
 }
 
@@ -284,6 +289,9 @@ const senderInclude = {
       isVerifiedOfficial: true,
       officialDisplayName: true,
       partnerProfile: { select: { currentLevel: { select: { code: true } } } },
+      creatorArenaProfile: {
+        select: { consentGiven: true, consentVersion: true },
+      },
     },
   },
 } as const;

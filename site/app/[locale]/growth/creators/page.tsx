@@ -42,6 +42,7 @@ import {
 import { ensureClientDiscountCode } from "@/lib/growth/ensure-partner-profile";
 import { getPublicProducts } from "@/lib/growth/public-products";
 import { prisma } from "@/lib/prisma";
+import { CREATOR_CONSENT_VERSION, needsCreatorConsent } from "@/lib/growth/creator-consent";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -157,6 +158,19 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
     ? (arenaProfile!.contentIdeas as CreatorHubProps["contentIdeas"])
     : [];
 
+  const needsConsent = needsCreatorConsent(
+    arenaProfile
+      ? {
+          consentGiven: arenaProfile.consentGiven,
+          consentVersion: arenaProfile.consentVersion,
+        }
+      : null,
+  );
+  const consentVersionMismatch = Boolean(
+    arenaProfile?.consentGiven &&
+      arenaProfile.consentVersion !== CREATOR_CONSENT_VERSION,
+  );
+
   const badgeItems = badges.map((b) => ({
     key: b.badge.key,
     name: b.badge.name,
@@ -240,6 +254,9 @@ export default async function ContentCreatorsPage({ params, searchParams }: Prop
         activeBattle={battleMapped}
         pendingInvites={pendingInvites}
         approvalRate={approvalRate}
+        needsConsent={needsConsent}
+        consentVersionMismatch={consentVersionMismatch}
+        consentGiven={!needsConsent}
       />
     </div>
   );

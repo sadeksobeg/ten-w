@@ -15,6 +15,10 @@ import {
 import { getChatModerationStatus } from "@/lib/growth/chat-moderation";
 import { touchLastSeen } from "@/lib/growth/presence";
 import { prisma } from "@/lib/prisma";
+import {
+  isConsentRequiredError,
+  requireCreatorConsent,
+} from "@/lib/growth/creator-consent-guard";
 
 const postSchema = z.object({
   body: z.string().min(1).max(8000),
@@ -102,6 +106,9 @@ export async function POST(req: Request, ctx: RouteContext) {
 
   try {
     const isAdmin = session.user.role === "ADMIN";
+    if (isCreatorChatSlug(slug) && !isAdmin) {
+      await requireCreatorConsent(session.user.id);
+    }
     const message =
       slug === COMMUNITY_ROOM_SLUG
         ? await postCommunityMessage(session.user.id, body.body)
@@ -109,7 +116,10 @@ export async function POST(req: Request, ctx: RouteContext) {
           ? await postCreatorChannelMessage(slug, session.user.id, body.body, { isAdmin })
           : await postEventRoomMessage(session.user.id, slug, body.body);
     return NextResponse.json({ message });
-  } catch {
+  } catch (err) {
+    if (isConsentRequiredError(err)) {
+      return NextResponse.json({ error: "CONSENT_REQUIRED" }, { status: 403 });
+    }
     return NextResponse.json({ error: "forbidden" }, { status: 403 });
   }
 }
