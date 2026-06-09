@@ -817,6 +817,11 @@
         "stat2": { "value": "2.3M+", "sub": "vues du réseau" },
         "stat3": { "value": "340$", "sub": "moy. mensuelle · actifs" }
       },
+      "reviewBubble": {
+        "label": "Avis créateur",
+        "cta": "Super !",
+        "close": "Fermer"
+      },
       "proofStats": {
         "title": "Chiffres réels du réseau",
         "creators": "créateurs dans le réseau",
@@ -3168,6 +3173,7 @@
         "tabChallenges": "Défis",
         "tabCup": "Creator Cup",
         "tabApplications": "Candidatures",
+        "tabReviews": "Avis",
         "previewLounge": "Aperçu du lounge",
         "applications": {
           "empty": "Aucune candidature.",
@@ -3271,6 +3277,34 @@
           "rateStars": "{n} étoiles",
           "rejectNoteLabel": "Note de rejet (optionnel)",
           "rejectNotePlaceholder": "Raison du rejet — visible par le créateur"
+        },
+        "reviews": {
+          "title": "Avis créateurs sur la plateforme",
+          "subtitle": "Affichés une fois en bulle sur For Creators — ajoutez des témoignages réels.",
+          "add": "Ajouter un avis",
+          "empty": "Aucun avis.",
+          "nameAr": "Nom (arabe)",
+          "nameEn": "Nom (anglais)",
+          "nameFr": "Nom (français)",
+          "roleAr": "Rôle (arabe)",
+          "roleEn": "Rôle (anglais)",
+          "roleFr": "Rôle (français)",
+          "quoteAr": "Citation (arabe)",
+          "quoteEn": "Citation (anglais)",
+          "quoteFr": "Citation (français)",
+          "rating": "Note (1–5)",
+          "sortOrder": "Ordre",
+          "save": "Enregistrer",
+          "create": "Créer",
+          "cancel": "Annuler",
+          "edit": "Modifier",
+          "hide": "Masquer",
+          "show": "Afficher",
+          "delete": "Supprimer",
+          "deleteConfirm": "Supprimer cet avis ?",
+          "toastSaved": "Avis enregistré",
+          "toastDeleted": "Supprimé",
+          "toastError": "Échec"
         },
         "cup": {
           "title": "Classement Creator Cup",

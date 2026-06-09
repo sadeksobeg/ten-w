@@ -279,6 +279,88 @@
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35), 0 0 40px rgba(225, 29, 72, 0.08);
 }
 
+/* Arabic titles must stay connected — never split letters */
+.fc-hero-title-line {
+  letter-spacing: 0 !important;
+  word-spacing: normal;
+  display: block;
+}
+
+.for-creators-root h1,
+.for-creators-root .fc-hero-title-line {
+  font-feature-settings: "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+}
+
+.fc-eyebrow-ar {
+  letter-spacing: 0.06em !important;
+}
+
+.fc-hero-beam {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(201, 146, 42, 0.04) 48%,
+    rgba(225, 29, 72, 0.06) 52%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: fc-beam-sweep 12s ease-in-out infinite;
+}
+
+.fc-hero-beam--2 {
+  animation-delay: -6s;
+  opacity: 0.6;
+}
+
+@keyframes fc-beam-sweep {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
+}
+
+.fc-review-bubble__glow {
+  position: absolute;
+  inset: -2px;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, rgba(201, 146, 42, 0.35), rgba(225, 29, 72, 0.2), rgba(124, 58, 237, 0.25));
+  filter: blur(8px);
+  animation: fc-review-glow 3s ease-in-out infinite;
+}
+
+@keyframes fc-review-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+.fc-review-bubble__card {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(201, 146, 42, 0.12);
+}
+
+.fc-review-shimmer {
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: fc-review-shimmer 4s ease-in-out infinite;
+}
+
+@keyframes fc-review-shimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
+}
+
+.fc-star-pop {
+  animation: fc-star-pop 0.5s ease-out backwards;
+}
+
+@keyframes fc-star-pop {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fc-aurora-1, .fc-aurora-2, .fc-aurora-3,
   .fc-shimmer-text, .fc-separator, .fc-fade-up,
@@ -286,7 +368,8 @@
   .fc-wizard-slide-enter, .fc-wizard-slide-back,
   .fc-service-bar, .fc-service-orbit, .fc-service-card,
   .fc-demo-browser--premium, .fc-hero-mesh, .fc-cta-glow,
-  .fc-cyber-scan, .fc-cyber-node, .fc-services-beams, .fc-orbit-dot {
+  .fc-cyber-scan, .fc-cyber-node, .fc-services-beams, .fc-orbit-dot,
+  .fc-hero-beam, .fc-review-glow, .fc-review-shimmer, .fc-star-pop {
     animation: none !important;
     opacity: 1 !important;
     width: auto !important;

@@ -858,3 +858,90 @@ export async function createNominationAction(
   revalidatePath("/growth/admin/creators");
   return { ok: true };
 }
+
+const platformReviewSchema = z.object({
+  nameAr: z.string().min(1).max(120),
+  nameEn: z.string().max(120).optional(),
+  nameFr: z.string().max(120).optional(),
+  roleAr: z.string().max(120).optional(),
+  roleEn: z.string().max(120).optional(),
+  roleFr: z.string().max(120).optional(),
+  quoteAr: z.string().min(10).max(2000),
+  quoteEn: z.string().max(2000).optional(),
+  quoteFr: z.string().max(2000).optional(),
+  rating: z.coerce.number().int().min(1).max(5).optional(),
+  sortOrder: z.coerce.number().int().optional(),
+  active: z.enum(["0", "1"]).optional(),
+});
+
+export async function adminUpsertPlatformReviewAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin;
+
+  const id = String(formData.get("id") ?? "").trim() || undefined;
+  const parsed = platformReviewSchema.safeParse({
+    nameAr: formData.get("nameAr"),
+    nameEn: formData.get("nameEn") ?? "",
+    nameFr: formData.get("nameFr") ?? "",
+    roleAr: formData.get("roleAr") ?? undefined,
+    roleEn: formData.get("roleEn") ?? undefined,
+    roleFr: formData.get("roleFr") ?? undefined,
+    quoteAr: formData.get("quoteAr"),
+    quoteEn: formData.get("quoteEn") ?? "",
+    quoteFr: formData.get("quoteFr") ?? "",
+    rating: formData.get("rating") ?? 5,
+    sortOrder: formData.get("sortOrder") ?? 0,
+    active: formData.get("active") ?? "1",
+  });
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const data = {
+    nameAr: parsed.data.nameAr,
+    nameEn: parsed.data.nameEn ?? "",
+    nameFr: parsed.data.nameFr ?? "",
+    roleAr: parsed.data.roleAr ?? null,
+    roleEn: parsed.data.roleEn ?? null,
+    roleFr: parsed.data.roleFr ?? null,
+    quoteAr: parsed.data.quoteAr,
+    quoteEn: parsed.data.quoteEn ?? "",
+    quoteFr: parsed.data.quoteFr ?? "",
+    rating: parsed.data.rating ?? 5,
+    sortOrder: parsed.data.sortOrder ?? 0,
+    active: parsed.data.active !== "0",
+  };
+
+  if (id) {
+    await prisma.creatorPlatformReview.update({ where: { id }, data });
+  } else {
+    await prisma.creatorPlatformReview.create({ data });
+  }
+
+  revalidatePath("/growth/admin/creators");
+  revalidatePath("/for-creators");
+  return { ok: true };
+}
+
+export async function adminDeletePlatformReviewAction(id: string): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin;
+  if (!id) return { ok: false, error: "invalid_input" };
+  await prisma.creatorPlatformReview.delete({ where: { id } });
+  revalidatePath("/growth/admin/creators");
+  revalidatePath("/for-creators");
+  return { ok: true };
+}
+
+export async function adminTogglePlatformReviewAction(
+  id: string,
+  active: boolean,
+): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin;
+  await prisma.creatorPlatformReview.update({ where: { id }, data: { active } });
+  revalidatePath("/growth/admin/creators");
+  revalidatePath("/for-creators");
+  return { ok: true };
+}

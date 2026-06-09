@@ -76,7 +76,7 @@ export type CreatorAdminChallengeSubmission = {
   createdAt: string;
 };
 
-export type CreatorAdminTab = "creators" | "submissions" | "challenges" | "cup" | "applications";
+export type CreatorAdminTab = "creators" | "submissions" | "challenges" | "cup" | "applications" | "reviews";
 
 export type CreatorAdminMissingSubmission = {
   userId: string;

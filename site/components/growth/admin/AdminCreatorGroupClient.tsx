@@ -13,6 +13,7 @@ import { Link } from "@/i18n/navigation";
 import { AdminChallengeManager } from "./AdminChallengeManager";
 import { AdminCreatorCupManager } from "./AdminCreatorCupManager";
 import { AdminCreatorApplications, type CreatorApplicationRow } from "./AdminCreatorApplications";
+import { AdminCreatorReviewsManager } from "./AdminCreatorReviewsManager";
 import { AdminCreatorDetailPanel } from "./AdminCreatorDetailPanel";
 import { AdminCreatorList } from "./AdminCreatorList";
 import { AdminCreatorStatsRow } from "./AdminCreatorStatsRow";
@@ -26,6 +27,7 @@ import type {
   CreatorAdminTab,
   CreatorCupRow,
 } from "./creator-admin-types";
+import type { CreatorPlatformReviewRow } from "@/lib/growth/creator-platform-reviews";
 import { currentWeekKey } from "@/lib/growth/creator-arena";
 
 export type { CreatorAdminPartner } from "./creator-admin-types";
@@ -40,6 +42,7 @@ type Props = {
   cupLeaderboard: CreatorCupRow[];
   applications?: CreatorApplicationRow[];
   pendingApplications?: number;
+  platformReviews?: CreatorPlatformReviewRow[];
 };
 
 export function AdminCreatorGroupClient({
@@ -52,6 +55,7 @@ export function AdminCreatorGroupClient({
   cupLeaderboard,
   applications = [],
   pendingApplications = 0,
+  platformReviews = [],
 }: Props) {
   const t = useTranslations("Growth.admin.creatorsPage");
   const tAdmin = useTranslations("Growth.creators.admin");
@@ -248,6 +252,15 @@ export function AdminCreatorGroupClient({
         <button
           type="button"
           role="tab"
+          aria-selected={tab === "reviews"}
+          className={tabClass(tab === "reviews")}
+          onClick={() => setTab("reviews")}
+        >
+          {tAdmin("tabReviews")}
+        </button>
+        <button
+          type="button"
+          role="tab"
           aria-selected={tab === "applications"}
           className={tabClass(tab === "applications")}
           onClick={() => setTab("applications")}
@@ -313,6 +326,8 @@ export function AdminCreatorGroupClient({
       {tab === "cup" ? <AdminCreatorCupManager leaderboard={cupLeaderboard} /> : null}
 
       {tab === "applications" ? <AdminCreatorApplications applications={applications} /> : null}
+
+      {tab === "reviews" ? <AdminCreatorReviewsManager reviews={platformReviews} /> : null}
 
       <AdminCreatorDetailPanel
         partner={selectedPartner}

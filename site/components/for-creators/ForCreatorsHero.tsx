@@ -1,40 +1,43 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 
 type Particle = { id: number; left: number; top: number; size: number; delay: number; duration: number };
 
-function LetterReveal({ text, baseDelayMs }: { text: string; baseDelayMs: number }) {
-  const reduce =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce) return <>{text}</>;
+function HeroTitleLine({
+  children,
+  delay,
+  shimmer,
+}: {
+  children: React.ReactNode;
+  delay: number;
+  shimmer?: boolean;
+}) {
   return (
-    <>
-      {[...text].map((ch, i) => (
-        <span
-          key={`${ch}-${i}`}
-          className="fc-letter"
-          style={{ animationDelay: `${baseDelayMs + i * 38}ms` }}
-        >
-          {ch === " " ? "\u00a0" : ch}
-        </span>
-      ))}
-    </>
+    <motion.span
+      initial={{ opacity: 0, y: 36, filter: "blur(14px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={`block fc-hero-title-line ${shimmer ? "fc-shimmer-text" : ""}`}
+    >
+      {children}
+    </motion.span>
   );
 }
 
 export function ForCreatorsHero() {
   const t = useTranslations("Creators.public.hero");
+  const locale = useLocale();
   const year = new Date().getFullYear();
   const [particles, setParticles] = useState<Particle[]>([]);
+  const isAr = locale === "ar";
 
   useEffect(() => {
     const list: Particle[] = [];
-    for (let i = 0; i < 55; i++) {
+    for (let i = 0; i < 65; i++) {
       list.push({
         id: i,
         left: Math.random() * 100,
@@ -62,6 +65,8 @@ export function ForCreatorsHero() {
     <section className="relative flex min-h-[94dvh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center">
       <div className="pointer-events-none absolute inset-0 bg-[#03010A]" aria-hidden />
       <div className="fc-hero-mesh pointer-events-none absolute inset-0 opacity-60" aria-hidden />
+      <div className="fc-hero-beam fc-hero-beam--1 pointer-events-none absolute inset-0" aria-hidden />
+      <div className="fc-hero-beam fc-hero-beam--2 pointer-events-none absolute inset-0" aria-hidden />
       <div
         className="pointer-events-none absolute -top-24 end-0 h-[640px] w-[640px] rounded-full fc-aurora-1"
         style={{
@@ -106,31 +111,33 @@ export function ForCreatorsHero() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="relative z-10 font-mono text-[11px] tracking-[0.38em] text-[var(--creator-secondary)]/65"
+        className={`relative z-10 text-[11px] text-[var(--creator-secondary)]/65 ${isAr ? "fc-eyebrow-ar font-[family-name:var(--font-cairo)]" : "font-mono tracking-[0.32em]"}`}
       >
         {t("eyebrow", { year })}
       </motion.p>
 
-      <h1 className="relative z-10 mt-6 font-[family-name:var(--font-cairo)] text-[clamp(2.25rem,9vw,5.5rem)] font-black leading-[1.08] text-white">
-        <span className="block">
-          <LetterReveal text={t("title1")} baseDelayMs={350} />
-        </span>
-        <span className="mt-2 block fc-shimmer-text">
-          <LetterReveal text={t("title2")} baseDelayMs={350 + t("title1").length * 38} />
+      <h1 className="relative z-10 mt-6 font-[family-name:var(--font-cairo)] text-[clamp(2.25rem,9vw,5.5rem)] font-black leading-[1.12] text-white">
+        <HeroTitleLine delay={0.35}>{t("title1")}</HeroTitleLine>
+        <span className="mt-2 block">
+          <HeroTitleLine delay={0.55} shimmer>
+            {t("title2")}
+          </HeroTitleLine>
         </span>
       </h1>
 
-      <div
-        className="relative z-10 mx-auto mt-6 h-px fc-separator"
-        style={{ background: "linear-gradient(90deg, transparent, #c9922a, transparent)" }}
+      <motion.div
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={{ scaleX: 1, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.9 }}
+        className="relative z-10 mx-auto mt-6 h-px w-32 origin-center bg-gradient-to-r from-transparent via-[#c9922a] to-transparent"
         aria-hidden
       />
 
       <motion.p
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 1.2 }}
-        className="relative z-10 mx-auto mt-6 max-w-2xl text-[clamp(1rem,2.5vw,1.2rem)] leading-[1.75] text-[rgba(248,244,255,0.78)]"
+        transition={{ duration: 0.7, delay: 1.0 }}
+        className="relative z-10 mx-auto mt-6 max-w-2xl text-[clamp(1rem,2.5vw,1.2rem)] leading-[1.85] text-[rgba(248,244,255,0.78)]"
       >
         {t("subtitle")}
       </motion.p>
@@ -138,7 +145,7 @@ export function ForCreatorsHero() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 1.6 }}
+        transition={{ duration: 0.6, delay: 1.3 }}
         className="relative z-10 mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row"
       >
         <a href="#apply" className="fc-cta-glow">
@@ -158,9 +165,9 @@ export function ForCreatorsHero() {
         {mobileStats.map((key, i) => (
           <motion.div
             key={key}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.8 + i * 0.1 }}
+            initial={{ opacity: 0, y: 16, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 1.5 + i * 0.1, type: "spring", stiffness: 260 }}
             className="creator-card fc-mobile-stat px-2 py-3 text-center"
           >
             <p className="text-[11px] font-black leading-tight text-[var(--creator-secondary)]">{t(`${key}.value`)}</p>
@@ -172,9 +179,9 @@ export function ForCreatorsHero() {
       {floatingStats.map((s, i) => (
         <motion.div
           key={s.key}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 2 + i * 0.15, duration: 0.5 }}
+          initial={{ opacity: 0, scale: 0.85, x: i === 1 ? 24 : -24 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ delay: 1.6 + i * 0.12, type: "spring", stiffness: 200 }}
           className={`creator-card fc-float-stat absolute z-10 px-5 py-3.5 text-start ${s.className}`}
           style={{ ["--fc-rot" as string]: s.rot, animationDelay: `${i * 400}ms` }}
         >

@@ -1099,6 +1099,26 @@ model CreatorApplication {
   @@index([status, createdAt])
 }
 
+model CreatorPlatformReview {
+  id        String   @id @default(cuid())
+  nameAr    String
+  nameEn    String   @default("")
+  nameFr    String   @default("")
+  roleAr    String?
+  roleEn    String?
+  roleFr    String?
+  quoteAr   String   @db.Text
+  quoteEn   String   @db.Text
+  quoteFr   String   @default("") @db.Text
+  rating    Int      @default(5)
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
 model CreatorNomination {
   id              String   @id @default(cuid())
   nominatorUserId String

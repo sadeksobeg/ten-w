@@ -7,7 +7,9 @@ import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { ForCreatorsHero } from "./ForCreatorsHero";
 import { ForCreatorsProof, type CreatorPreview } from "./ForCreatorsProof";
 import { ForCreatorsDemoMockup } from "./ForCreatorsDemoMockup";
+import { ForCreatorsReviewBubble } from "./ForCreatorsReviewBubble";
 import { ForCreatorsApplyWizard } from "./ForCreatorsApplyWizard";
+import type { CreatorPlatformReviewRow } from "@/lib/growth/creator-platform-reviews";
 
 const FEATURE_KEYS = ["hub", "chat", "challenge", "cup", "kit", "earn"] as const;
 const FAQ_KEYS = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8"] as const;
@@ -17,9 +19,10 @@ type Props = {
   topCreators: CreatorPreview[];
   creatorCount: number;
   approvalRate: number;
+  platformReviews: CreatorPlatformReviewRow[];
 };
 
-export function ForCreatorsLanding({ locale, topCreators, creatorCount, approvalRate }: Props) {
+export function ForCreatorsLanding({ locale, topCreators, creatorCount, approvalRate, platformReviews }: Props) {
   const t = useTranslations("Creators.public");
 
   return (
@@ -98,6 +101,8 @@ export function ForCreatorsLanding({ locale, topCreators, creatorCount, approval
       </section>
 
       <ForCreatorsApplyWizard locale={locale} />
+
+      <ForCreatorsReviewBubble reviews={platformReviews} />
 
       <footer className="border-t border-white/10 py-8 text-center text-xs text-white/40">
         <Link href={`/${locale}/growth/sign-in`} className="text-[var(--creator-secondary)] hover:underline">

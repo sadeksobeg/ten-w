@@ -841,6 +841,11 @@
         "stat2": { "value": "2.3M+", "sub": "network views" },
         "stat3": { "value": "$340", "sub": "avg monthly · active" }
       },
+      "reviewBubble": {
+        "label": "Creator review",
+        "cta": "Awesome!",
+        "close": "Close"
+      },
       "proofStats": {
         "title": "Real numbers from the network",
         "creators": "creators in the network",
@@ -3243,6 +3248,7 @@
         "tabChallenges": "Challenges",
         "tabCup": "Creator Cup",
         "tabApplications": "Applications",
+        "tabReviews": "Reviews",
         "previewLounge": "Preview lounge",
         "applications": {
           "empty": "No join requests yet.",
@@ -3346,6 +3352,34 @@
           "rateStars": "{n} stars",
           "rejectNoteLabel": "Rejection note (optional, internal)",
           "rejectNotePlaceholder": "Reason for rejection — visible to creator"
+        },
+        "reviews": {
+          "title": "Creator platform reviews",
+          "subtitle": "Shown once in a bubble on For Creators — add real quotes from content creators.",
+          "add": "Add review",
+          "empty": "No reviews yet.",
+          "nameAr": "Name (Arabic)",
+          "nameEn": "Name (English)",
+          "nameFr": "Name (French)",
+          "roleAr": "Role (Arabic)",
+          "roleEn": "Role (English)",
+          "roleFr": "Role (French)",
+          "quoteAr": "Quote (Arabic)",
+          "quoteEn": "Quote (English)",
+          "quoteFr": "Quote (French)",
+          "rating": "Rating (1–5)",
+          "sortOrder": "Sort order",
+          "save": "Save",
+          "create": "Create",
+          "cancel": "Cancel",
+          "edit": "Edit",
+          "hide": "Hide",
+          "show": "Show",
+          "delete": "Delete",
+          "deleteConfirm": "Delete this review?",
+          "toastSaved": "Review saved",
+          "toastDeleted": "Deleted",
+          "toastError": "Could not save"
         },
         "cup": {
           "title": "Creator Cup leaderboard",

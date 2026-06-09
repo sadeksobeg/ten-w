@@ -15,6 +15,7 @@ import {
   listContentCreatorPartners,
   listCreatorRoomMembers,
 } from "@/lib/growth/creator-program";
+import { listAllPlatformReviewsAdmin } from "@/lib/growth/creator-platform-reviews";
 import {
   creatorCupLeaderboard,
   getAdminCreatorStats,
@@ -188,12 +189,13 @@ export default async function AdminCreatorsPage({ params }: Props) {
     endsAt: c.endsAt.toISOString(),
   }));
 
-  const [applications, pendingAppCount] = await Promise.all([
+  const [applications, pendingAppCount, platformReviews] = await Promise.all([
     prisma.creatorApplication.findMany({
       orderBy: { createdAt: "desc" },
       take: 50,
     }),
     prisma.creatorApplication.count({ where: { status: "PENDING" } }),
+    listAllPlatformReviewsAdmin(),
   ]);
 
   return (
@@ -223,6 +225,7 @@ export default async function AdminCreatorsPage({ params }: Props) {
           createdAt: a.createdAt.toISOString(),
         }))}
         pendingApplications={pendingAppCount}
+        platformReviews={platformReviews}
       />
     </div>
   );
