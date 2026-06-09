@@ -420,8 +420,12 @@ export function CreatorHubLayout(props: CreatorHubProps) {
         isOpen={consentOpen}
         mode="creator-join"
         versionMismatch={props.consentVersionMismatch}
-        onAccept={async ({ qualificationStatement }) => {
-          const res = await recordCreatorConsentAction(qualificationStatement, consentLocale);
+        onAccept={async ({ qualificationStatement, attestations }) => {
+          const res = await recordCreatorConsentAction(
+            qualificationStatement,
+            consentLocale,
+            attestations,
+          );
           if (res.ok) {
             setConsentOpen(false);
             setConsentGiven(true);

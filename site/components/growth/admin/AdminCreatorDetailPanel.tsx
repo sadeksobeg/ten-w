@@ -322,6 +322,7 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
 
         <GlassCard className="mt-4 border border-white/10 bg-white/[0.03] p-4">
           <h3 className="text-xs font-bold uppercase tracking-wide text-gold">{tConsent("legalRecordTitle")}</h3>
+          <p className="mt-1 text-[10px] text-white/40">{tConsent("legalStandardsHint")}</p>
           {partner.consentGiven ? (
             <div className="mt-3 space-y-2 text-xs">
               <p className="flex items-center gap-2 font-semibold text-emerald-200">
@@ -338,6 +339,14 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
               ) : null}
               {partner.consentIpAddress ? (
                 <p className="text-white/45">IP: {partner.consentIpAddress}</p>
+              ) : null}
+              {partner.consentLocale ? (
+                <p className="text-white/45">{tConsent("consentLocale")}: {partner.consentLocale}</p>
+              ) : null}
+              {partner.consentTextHash ? (
+                <p className="break-all font-mono text-[10px] text-white/40">
+                  SHA-256: {partner.consentTextHash}
+                </p>
               ) : null}
               {partner.qualificationDetails ? (
                 <div className="rounded-lg border border-white/10 bg-black/25 p-3 text-white/70">

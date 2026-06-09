@@ -19,7 +19,11 @@ import { createNotification } from "@/lib/growth/notify";
 import { hasActiveBattle } from "@/lib/growth/battles";
 import { resolveChatSenderName } from "@/lib/growth/chat-display";
 import { revalidatePartnerSurfaces } from "@/lib/growth/revalidate-partner";
-import { CREATOR_CONSENT_TEXT, CREATOR_CONSENT_VERSION } from "@/lib/growth/creator-consent";
+import { CREATOR_CONSENT_VERSION } from "@/lib/growth/creator-consent";
+import {
+  buildConsentEvidencePayload,
+  type ConsentAttestations,
+} from "@/lib/growth/creator-consent-evidence";
 import {
   getRequestClientMeta,
   isConsentRequiredError,
@@ -107,11 +111,23 @@ async function guardCreatorConsent(userId: string): Promise<ActionResult | null>
 const consentRecordSchema = z.object({
   qualificationStatement: z.string().min(20).max(200),
   locale: z.enum(["ar", "en", "fr"]).optional(),
+  attestations: z
+    .object({
+      scrolledToEnd: z.boolean(),
+      readAndUnderstood: z.boolean(),
+      contentResponsibility: z.boolean(),
+      legalCapacity: z.boolean(),
+    })
+    .refine(
+      (a) => a.scrolledToEnd && a.readAndUnderstood && a.contentResponsibility && a.legalCapacity,
+      { message: "attestations_incomplete" },
+    ),
 });
 
 export async function recordCreatorConsentAction(
   qualificationStatement: string,
   locale?: string,
+  attestations?: ConsentAttestations,
 ): Promise<ActionResult> {
   const session = await auth();
   if (!session?.user?.id || session.user.role !== UserRole.PARTNER) {
@@ -124,56 +140,112 @@ export async function recordCreatorConsentAction(
   const parsed = consentRecordSchema.safeParse({
     qualificationStatement,
     locale: locale === "en" || locale === "fr" ? locale : "ar",
+    attestations,
   });
   if (!parsed.success) return { ok: false, error: "invalid_input" };
 
+  const consentLocale = parsed.data.locale ?? "ar";
   const { ip, userAgent } = await getRequestClientMeta();
-  const consentTextAr = CREATOR_CONSENT_TEXT.ar;
-  const now = new Date();
 
-  const profile = await prisma.creatorArenaProfile.upsert({
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { name: true, email: true, isVerifiedOfficial: true, officialDisplayName: true },
+  });
+  if (!user?.email) return { ok: false, error: "unauthorized" };
+
+  const signerName = resolveChatSenderName(user);
+  const signerEmail = user.email;
+
+  const previous = await prisma.creatorConsentLedger.findFirst({
     where: { userId: session.user.id },
-    create: {
-      userId: session.user.id,
-      consentGiven: true,
-      consentGivenAt: now,
-      consentIpAddress: ip,
-      consentUserAgent: userAgent,
-      consentVersion: CREATOR_CONSENT_VERSION,
-      consentText: consentTextAr,
-      qualificationDeclared: true,
-      qualificationDeclaredAt: now,
-      qualificationDetails: parsed.data.qualificationStatement,
-    },
-    update: {
-      consentGiven: true,
-      consentGivenAt: now,
-      consentIpAddress: ip,
-      consentUserAgent: userAgent,
-      consentVersion: CREATOR_CONSENT_VERSION,
-      consentText: consentTextAr,
-      qualificationDeclared: true,
-      qualificationDeclaredAt: now,
-      qualificationDetails: parsed.data.qualificationStatement,
-    },
+    orderBy: { recordedAt: "desc" },
+    select: { id: true },
+  });
+
+  const evidence = buildConsentEvidencePayload({
+    userId: session.user.id,
+    signerName,
+    signerEmail,
+    locale: consentLocale,
+    qualificationStatement: parsed.data.qualificationStatement,
+    attestations: parsed.data.attestations,
+    ipAddress: ip,
+    userAgent,
+    previousRecordId: previous?.id,
+  });
+
+  const profile = await prisma.$transaction(async (tx) => {
+    const ledger = await tx.creatorConsentLedger.create({
+      data: {
+        userId: session.user.id,
+        consentVersion: evidence.consentVersion,
+        consentLocale: evidence.consentLocale,
+        signerName: evidence.signerName,
+        signerEmail: evidence.signerEmail,
+        consentTextSnapshot: evidence.consentTextSnapshot,
+        consentTextHash: evidence.consentTextHash,
+        qualificationStatement: evidence.qualificationStatement,
+        attestations: evidence.attestations,
+        consentMethod: evidence.consentMethod,
+        ipAddress: evidence.ipAddress,
+        userAgent: evidence.userAgent,
+        recordedAt: evidence.recordedAt,
+        previousRecordId: evidence.previousRecordId,
+      },
+    });
+
+    return tx.creatorArenaProfile.upsert({
+      where: { userId: session.user.id },
+      create: {
+        userId: session.user.id,
+        consentGiven: true,
+        consentGivenAt: evidence.recordedAt,
+        consentIpAddress: ip,
+        consentUserAgent: userAgent,
+        consentVersion: evidence.consentVersion,
+        consentText: evidence.consentTextSnapshot,
+        consentLocale: evidence.consentLocale,
+        consentTextHash: evidence.consentTextHash,
+        qualificationDeclared: true,
+        qualificationDeclaredAt: evidence.recordedAt,
+        qualificationDetails: evidence.qualificationStatement,
+      },
+      update: {
+        consentGiven: true,
+        consentGivenAt: evidence.recordedAt,
+        consentIpAddress: ip,
+        consentUserAgent: userAgent,
+        consentVersion: evidence.consentVersion,
+        consentText: evidence.consentTextSnapshot,
+        consentLocale: evidence.consentLocale,
+        consentTextHash: evidence.consentTextHash,
+        qualificationDeclared: true,
+        qualificationDeclaredAt: evidence.recordedAt,
+        qualificationDetails: evidence.qualificationStatement,
+      },
+      select: { id: true },
+    }).then((p) => ({ profileId: p.id, ledgerId: ledger.id }));
   });
 
   await prisma.adminAuditLog.create({
     data: {
       actorId: session.user.id,
       action: "CREATOR_CONSENT_GIVEN",
-      entity: "CreatorArenaProfile",
-      entityId: profile.id,
+      entity: "CreatorConsentLedger",
+      entityId: profile.ledgerId,
       metadata: {
-        version: CREATOR_CONSENT_VERSION,
+        version: evidence.consentVersion,
+        locale: evidence.consentLocale,
         ip,
-        locale: parsed.data.locale ?? "ar",
-        timestamp: now.toISOString(),
+        consentTextHash: evidence.consentTextHash,
+        consentMethod: evidence.consentMethod,
+        timestamp: evidence.recordedAt.toISOString(),
+        attestations: evidence.attestations,
       },
     },
   });
 
-  const loc = parsed.data.locale ?? "ar";
+  const loc = consentLocale;
   const titles: Record<string, string> = {
     ar: "تم تسجيل موافقتك",
     en: "Consent Recorded",

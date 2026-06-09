@@ -16,6 +16,12 @@ import { CreatorConsentVerifiedBadge } from "./CreatorConsentVerifiedBadge";
 export type ConsentAcceptance = {
   consentVersion: string;
   qualificationStatement: string;
+  attestations: {
+    scrolledToEnd: boolean;
+    readAndUnderstood: boolean;
+    contentResponsibility: boolean;
+    legalCapacity: boolean;
+  };
 };
 
 type Props = {
@@ -100,6 +106,12 @@ export function CreatorConsentModal({
       await onAccept({
         consentVersion: CREATOR_CONSENT_VERSION,
         qualificationStatement: qualification.trim(),
+        attestations: {
+          scrolledToEnd: true,
+          readAndUnderstood: check1,
+          contentResponsibility: check2,
+          legalCapacity: check3,
+        },
       });
     } finally {
       setBusy(false);

@@ -33,6 +33,9 @@ export type CreatorAdminPartner = {
   consentGivenAt: string | null;
   consentVersion: string | null;
   consentIpAddress: string | null;
+  consentUserAgent: string | null;
+  consentLocale: string | null;
+  consentTextHash: string | null;
   qualificationDetails: string | null;
   consentText: string | null;
   cupExcluded: boolean;

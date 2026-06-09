@@ -1,5 +1,15 @@
 export const CREATOR_CONSENT_VERSION = "v1.0-2026-06";
 
+/**
+ * Legal evidence design (GDPR Art. 7, eIDAS-friendly click-wrap, ESIGN):
+ * - Immutable CreatorConsentLedger (append-only)
+ * - Full agreement snapshot in the language read
+ * - SHA-256 document hash + version
+ * - Signer identity snapshot, IP, user agent, UTC timestamp
+ * - Checkbox attestations + qualification statement
+ * - Re-consent chains via previousRecordId
+ */
+
 export const CONSENT_CHANGELOG: Record<string, string> = {
   "v1.0-2026-06": "النص الأصلي للاتفاقية / Original agreement text",
 };

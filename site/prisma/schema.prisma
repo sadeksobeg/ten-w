@@ -172,6 +172,7 @@ model User {
   creatorDirectRoomsB        CreatorDirectRoom[] @relation("CreatorDirectUserB")
   creatorNominationsSent     CreatorNomination[] @relation("CreatorNominationsSent")
   creatorNominationsReceived CreatorNomination[] @relation("CreatorNominationsReceived")
+  creatorConsentLedger       CreatorConsentLedger[]
 }
 
 model PartnerProfile {
@@ -1027,6 +1028,8 @@ model CreatorArenaProfile {
   consentUserAgent        String?               @db.Text
   consentVersion          String?
   consentText             String?               @db.Text
+  consentLocale           String?
+  consentTextHash         String?
   qualificationDeclared   Boolean               @default(false)
   qualificationDeclaredAt DateTime?
   qualificationDetails    String?               @db.Text
@@ -1039,6 +1042,31 @@ model CreatorArenaProfile {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([status])
+}
+
+/** Immutable append-only legal consent ledger (GDPR Art. 7 demonstrability). */
+model CreatorConsentLedger {
+  id                     String   @id @default(cuid())
+  userId                 String
+  consentVersion         String
+  consentLocale          String
+  signerName             String
+  signerEmail            String
+  consentTextSnapshot    String   @db.Text
+  consentTextHash        String
+  qualificationStatement String   @db.Text
+  attestations           Json
+  consentMethod          String   @default("clickwrap_v1")
+  ipAddress              String?
+  userAgent              String?  @db.Text
+  recordedAt             DateTime @default(now())
+  previousRecordId       String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, recordedAt])
+  @@index([consentVersion])
+  @@index([consentTextHash])
 }
 
 model CreatorChallenge {
