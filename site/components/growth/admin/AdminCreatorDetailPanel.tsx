@@ -17,7 +17,9 @@ import {
 import {
   adminGrantCreatorBadgeAction,
   adminGrantMilestoneAction,
+  adminRevokeCreatorBadgeAction,
   adminSaveCreatorNotesAction,
+  adminSetCreatorCupExcludedAction,
   updateCreatorStatusAction,
 } from "@/lib/growth/creator-arena-actions";
 import type { CreatorAdminPartner } from "./creator-admin-types";
@@ -113,7 +115,48 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
         hasBadge: true,
         hasLoungeAccess: true,
         inRoom: true,
+        cupEligible: true,
+        cupExcluded: false,
       });
+    }
+  }
+
+  async function revokeBadge() {
+    if (!window.confirm(t("revokeBadgeConfirm"))) return;
+    const fd = new FormData();
+    fd.set("userId", partner!.userId);
+    const ok = await runAction(() => adminRevokeCreatorBadgeAction(null, fd));
+    if (ok) {
+      onUpdated({
+        userId: partner!.userId,
+        hasBadge: false,
+        inRoom: false,
+        hasLoungeAccess: false,
+        cupEligible: false,
+        cupExcluded: false,
+        cupScore: 0,
+      });
+    }
+  }
+
+  async function toggleCupExcluded(exclude: boolean) {
+    if (exclude && !window.confirm(t("excludeCupConfirm"))) return;
+    setPending(true);
+    const res = await adminSetCreatorCupExcludedAction(partner!.userId, exclude);
+    setPending(false);
+    if (res.ok) {
+      onUpdated({
+        userId: partner!.userId,
+        cupExcluded: exclude,
+        cupEligible: partner!.hasBadge && !exclude,
+        cupScore: exclude ? 0 : partner!.cupScore,
+      });
+      showToast({
+        type: "success",
+        title: exclude ? t("toastCupExcluded") : t("toastCupRestored"),
+      });
+    } else {
+      showToast({ type: "error", title: tPage("toastError") });
     }
   }
 
@@ -205,14 +248,30 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
             />
           </h2>
           <p className="text-xs text-white/45">{partner.email}</p>
-          {partner.hasBadge ? (
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              <BadgeIcon badgeKey="content_creator" earned chip size="xs" name="" />
-              <span className="rounded-full border border-emerald-500/35 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-100">
-                {t("hubMember")}
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            {partner.hasBadge ? (
+              <>
+                <BadgeIcon badgeKey="content_creator" earned chip size="xs" name="" />
+                <span className="rounded-full border border-emerald-500/35 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-100">
+                  {t("hubMember")}
+                </span>
+              </>
+            ) : partner.inRoom ? (
+              <span className="rounded-full border border-sky-500/35 bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold text-sky-100">
+                {t("loungeOnly")}
               </span>
-            </div>
-          ) : null}
+            ) : null}
+            {partner.cupExcluded ? (
+              <span className="rounded-full border border-rose-500/35 bg-rose-500/10 px-2 py-0.5 text-[10px] font-bold text-rose-100">
+                {t("cupExcludedBadge")}
+              </span>
+            ) : null}
+            {partner.hasBadge && !partner.cupExcluded ? (
+              <span className="rounded-full border border-gold/35 bg-gold/10 px-2 py-0.5 text-[10px] font-bold text-gold">
+                {t("cupEligible")}
+              </span>
+            ) : null}
+          </div>
           {partner.nominationCount > 0 ? (
             <p className="mt-2 text-xs text-[var(--creator-secondary)]">
               {t("nominationCount", { count: partner.nominationCount })}
@@ -389,7 +448,41 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
             >
               {t("grantBadge")}
             </GoldButton>
-          ) : null}
+          ) : (
+            <GoldButton
+              type="button"
+              variant="danger"
+              disabled={pending}
+              onClick={() => void revokeBadge()}
+              className="w-full !py-2 text-xs"
+            >
+              {t("revokeBadge")}
+            </GoldButton>
+          )}
+          {partner.hasBadge ? (
+            partner.cupExcluded ? (
+              <GoldButton
+                type="button"
+                disabled={pending}
+                onClick={() => void toggleCupExcluded(false)}
+                className="w-full !py-2 text-xs"
+              >
+                {t("restoreCup")}
+              </GoldButton>
+            ) : (
+              <GoldButton
+                type="button"
+                variant="danger"
+                disabled={pending}
+                onClick={() => void toggleCupExcluded(true)}
+                className="w-full !py-2 text-xs"
+              >
+                {t("excludeCup")}
+              </GoldButton>
+            )
+          ) : (
+            <p className="text-[10px] leading-relaxed text-white/45">{t("cupBadgeOnlyHint")}</p>
+          )}
           {partner.inRoom ? (
             <GoldButton
               type="button"

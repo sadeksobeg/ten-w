@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
+import { CreatorHubProfileCard } from "./CreatorHubProfileCard";
 import { CreatorLoungeAchievements } from "./CreatorLoungeAchievements";
 import { CreatorStatusBoard } from "./CreatorStatusBoard";
 import { saveCreatorProfileAction } from "@/lib/growth/creator-arena-actions";
@@ -24,6 +25,14 @@ type Props = {
   bio: string | null;
   specialty: string[];
   status: CreatorWorkflowStatus;
+  viewerName: string;
+  viewerEmail: string;
+  avatarUrl?: string | null;
+  avatarPreset?: string | null;
+  levelCode: string;
+  hasBadge: boolean;
+  consentGiven: boolean;
+  viewerRank?: number | null;
 };
 
 export function CreatorProfileSection({
@@ -35,6 +44,14 @@ export function CreatorProfileSection({
   bio: initialBio,
   specialty: initialSpecialty,
   status,
+  viewerName,
+  viewerEmail,
+  avatarUrl,
+  avatarPreset,
+  levelCode,
+  hasBadge,
+  consentGiven,
+  viewerRank,
 }: Props) {
   const t = useTranslations("Creators.profile");
   const tStatus = useTranslations("Creators.status");
@@ -42,6 +59,18 @@ export function CreatorProfileSection({
 
   return (
     <div className="space-y-4">
+      <CreatorHubProfileCard
+        name={viewerName}
+        email={viewerEmail}
+        avatarUrl={avatarUrl ?? null}
+        avatarPreset={avatarPreset}
+        levelCode={levelCode}
+        locale={locale}
+        status={status}
+        hasBadge={hasBadge}
+        consentGiven={consentGiven}
+        viewerRank={viewerRank}
+      />
       <GlassCard className="creator-card p-5">
         <h2 className="font-[family-name:var(--font-cairo)] text-lg font-extrabold text-white">{t("title")}</h2>
         <form action={formAction} className="mt-4 space-y-3">
@@ -63,7 +92,6 @@ export function CreatorProfileSection({
           {state && !state.ok ? <p className="text-xs text-rose-300">{t("error")}</p> : null}
           <GoldButton type="submit" disabled={pending}>{t("save")}</GoldButton>
         </form>
-        <Link href="/growth/settings" className="mt-3 inline-flex text-xs font-bold text-[var(--creator-secondary)] hover:underline">{t("settings")}</Link>
       </GlassCard>
 
       <GlassCard className="creator-card p-5">

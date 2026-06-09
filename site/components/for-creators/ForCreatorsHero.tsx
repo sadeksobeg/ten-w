@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 
 type Particle = { id: number; left: number; top: number; size: number; delay: number; duration: number };
@@ -17,7 +18,7 @@ function LetterReveal({ text, baseDelayMs }: { text: string; baseDelayMs: number
         <span
           key={`${ch}-${i}`}
           className="fc-letter"
-          style={{ animationDelay: `${baseDelayMs + i * 40}ms` }}
+          style={{ animationDelay: `${baseDelayMs + i * 38}ms` }}
         >
           {ch === " " ? "\u00a0" : ch}
         </span>
@@ -33,14 +34,14 @@ export function ForCreatorsHero() {
 
   useEffect(() => {
     const list: Particle[] = [];
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 55; i++) {
       list.push({
         id: i,
         left: Math.random() * 100,
         top: Math.random() * 100,
-        size: 1 + Math.random() * 2,
-        delay: Math.random() * 4,
-        duration: 2 + Math.random() * 4,
+        size: 1 + Math.random() * 2.5,
+        delay: Math.random() * 5,
+        duration: 2 + Math.random() * 5,
       });
     }
     setParticles(list);
@@ -48,36 +49,39 @@ export function ForCreatorsHero() {
 
   const floatingStats = useMemo(
     () => [
-      { key: "stat1" as const, rot: "-3deg", className: "top-[18%] start-[6%] hidden lg:block" },
-      { key: "stat2" as const, rot: "2deg", className: "top-[32%] end-[5%] hidden lg:block" },
-      { key: "stat3" as const, rot: "-1deg", className: "bottom-[28%] start-[8%] hidden lg:block" },
+      { key: "stat1" as const, rot: "-4deg", className: "top-[14%] start-[4%] hidden md:block" },
+      { key: "stat2" as const, rot: "3deg", className: "top-[28%] end-[3%] hidden md:block" },
+      { key: "stat3" as const, rot: "-2deg", className: "bottom-[22%] start-[6%] hidden md:block" },
     ],
     [],
   );
 
+  const mobileStats = ["stat1", "stat2", "stat3"] as const;
+
   return (
-    <section className="relative flex min-h-[92dvh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center">
+    <section className="relative flex min-h-[94dvh] flex-col items-center justify-center overflow-hidden px-4 py-20 text-center">
       <div className="pointer-events-none absolute inset-0 bg-[#03010A]" aria-hidden />
+      <div className="fc-hero-mesh pointer-events-none absolute inset-0 opacity-60" aria-hidden />
       <div
-        className="pointer-events-none absolute -top-24 end-0 h-[600px] w-[600px] rounded-full fc-aurora-1"
+        className="pointer-events-none absolute -top-24 end-0 h-[640px] w-[640px] rounded-full fc-aurora-1"
         style={{
-          background: "radial-gradient(ellipse, rgba(225,29,72,0.2) 0%, transparent 70%)",
-          filter: "blur(80px)",
+          background: "radial-gradient(ellipse, rgba(225,29,72,0.22) 0%, transparent 70%)",
+          filter: "blur(90px)",
         }}
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute bottom-0 start-0 h-[600px] w-[800px] rounded-full fc-aurora-2"
+        className="pointer-events-none absolute bottom-0 start-0 h-[640px] w-[840px] rounded-full fc-aurora-2"
         style={{
-          background: "radial-gradient(ellipse, rgba(124,58,237,0.15) 0%, transparent 70%)",
-          filter: "blur(80px)",
+          background: "radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, transparent 70%)",
+          filter: "blur(90px)",
         }}
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full fc-aurora-3"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full fc-aurora-3"
         style={{
-          background: "radial-gradient(ellipse, rgba(201,146,42,0.1) 0%, transparent 60%)",
+          background: "radial-gradient(ellipse, rgba(201,146,42,0.12) 0%, transparent 60%)",
           filter: "blur(80px)",
         }}
         aria-hidden
@@ -91,26 +95,28 @@ export function ForCreatorsHero() {
             top: `${p.top}%`,
             width: p.size,
             height: p.size,
-            opacity: 0.1 + Math.random() * 0.3,
+            opacity: 0.12 + (p.id % 5) * 0.06,
             animation: `fc-twinkle ${p.duration}s ease-in-out ${p.delay}s infinite`,
           }}
           aria-hidden
         />
       ))}
 
-      <p
-        className="relative z-10 font-mono text-[11px] tracking-[0.35em] text-[var(--creator-secondary)]/50 fc-fade-up"
-        style={{ animationDelay: "200ms" }}
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="relative z-10 font-mono text-[11px] tracking-[0.38em] text-[var(--creator-secondary)]/65"
       >
         {t("eyebrow", { year })}
-      </p>
+      </motion.p>
 
-      <h1 className="relative z-10 mt-6 font-[family-name:var(--font-cairo)] text-[clamp(2.5rem,10vw,6rem)] font-black leading-[1.05] text-white">
+      <h1 className="relative z-10 mt-6 font-[family-name:var(--font-cairo)] text-[clamp(2.25rem,9vw,5.5rem)] font-black leading-[1.08] text-white">
         <span className="block">
-          <LetterReveal text={t("title1")} baseDelayMs={400} />
+          <LetterReveal text={t("title1")} baseDelayMs={350} />
         </span>
-        <span className="mt-1 block fc-shimmer-text">
-          <LetterReveal text={t("title2")} baseDelayMs={400 + t("title1").length * 40} />
+        <span className="mt-2 block fc-shimmer-text">
+          <LetterReveal text={t("title2")} baseDelayMs={350 + t("title1").length * 38} />
         </span>
       </h1>
 
@@ -120,37 +126,61 @@ export function ForCreatorsHero() {
         aria-hidden
       />
 
-      <p
-        className="relative z-10 mx-auto mt-6 max-w-xl text-lg leading-relaxed text-[rgba(248,244,255,0.75)] fc-fade-up"
-        style={{ animationDelay: "1.8s" }}
+      <motion.p
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 1.2 }}
+        className="relative z-10 mx-auto mt-6 max-w-2xl text-[clamp(1rem,2.5vw,1.2rem)] leading-[1.75] text-[rgba(248,244,255,0.78)]"
       >
         {t("subtitle")}
-      </p>
+      </motion.p>
 
-      <div
-        className="relative z-10 mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row fc-fade-up"
-        style={{ animationDelay: "2.2s" }}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 1.6 }}
+        className="relative z-10 mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row"
       >
-        <a href="#apply">
-          <GoldButton type="button">{t("cta")}</GoldButton>
+        <a href="#apply" className="fc-cta-glow">
+          <GoldButton type="button" className="!px-8 !py-3.5 text-sm">
+            {t("cta")}
+          </GoldButton>
         </a>
         <a
           href="#demo"
-          className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white/75 transition hover:border-white/35"
+          className="fc-hero-secondary group rounded-full border border-white/20 bg-white/[0.03] px-7 py-3.5 text-sm font-semibold text-white/80 backdrop-blur-sm transition hover:border-[var(--creator-secondary)]/50 hover:text-white"
         >
-          {t("secondary")}
+          <span className="inline-block transition group-hover:translate-y-0.5">{t("secondary")}</span>
         </a>
+      </motion.div>
+
+      <div className="relative z-10 mt-10 grid w-full max-w-lg grid-cols-3 gap-2 md:hidden">
+        {mobileStats.map((key, i) => (
+          <motion.div
+            key={key}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.8 + i * 0.1 }}
+            className="creator-card fc-mobile-stat px-2 py-3 text-center"
+          >
+            <p className="text-[11px] font-black leading-tight text-[var(--creator-secondary)]">{t(`${key}.value`)}</p>
+            <p className="mt-1 text-[8px] leading-snug text-white/45">{t(`${key}.sub`)}</p>
+          </motion.div>
+        ))}
       </div>
 
       {floatingStats.map((s, i) => (
-        <div
+        <motion.div
           key={s.key}
-          className={`creator-card absolute z-10 px-5 py-3 text-start fc-float-stat ${s.className}`}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 2 + i * 0.15, duration: 0.5 }}
+          className={`creator-card fc-float-stat absolute z-10 px-5 py-3.5 text-start ${s.className}`}
           style={{ ["--fc-rot" as string]: s.rot, animationDelay: `${i * 400}ms` }}
         >
-          <p className="text-sm font-bold text-white">{t(`${s.key}.value`)}</p>
-          <p className="text-[10px] text-white/50">{t(`${s.key}.sub`)}</p>
-        </div>
+          <p className="font-[family-name:var(--font-cairo)] text-sm font-black text-white">{t(`${s.key}.value`)}</p>
+          <p className="mt-0.5 text-[10px] text-white/50">{t(`${s.key}.sub`)}</p>
+        </motion.div>
       ))}
     </section>
   );

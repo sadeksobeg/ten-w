@@ -155,8 +155,14 @@ export function AdminCreatorList({
                         <span>{tPage(`status.${p.workflowStatus}`)}</span>
                       ) : null}
                       <span>{t("metaSubmissions", { n: p.totalSubmissions })}</span>
-                      {p.cupScore > 0 ? (
+                      {p.cupEligible && p.cupScore > 0 ? (
                         <span className="text-gold">{t("metaCup", { score: p.cupScore })}</span>
+                      ) : null}
+                      {p.cupExcluded ? (
+                        <span className="text-rose-300">{tPage("cupExcludedShort")}</span>
+                      ) : null}
+                      {!p.hasBadge && p.inRoom ? (
+                        <span className="text-sky-300">{tPage("accessLoungeOnly")}</span>
                       ) : null}
                     </div>
                   </div>

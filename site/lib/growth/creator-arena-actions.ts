@@ -646,6 +646,73 @@ export async function adminResetCreatorCupBonusesAction(): Promise<ActionResult>
   return { ok: true };
 }
 
+export async function adminSetCreatorCupExcludedAction(
+  userId: string,
+  excluded: boolean,
+): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin;
+  if (!userId) return { ok: false, error: "invalid_input" };
+
+  await prisma.creatorArenaProfile.upsert({
+    where: { userId },
+    create: { userId, cupExcluded: excluded, updatedById: admin.userId },
+    update: { cupExcluded: excluded, updatedById: admin.userId },
+  });
+
+  await prisma.adminAuditLog.create({
+    data: {
+      actorId: admin.userId,
+      action: excluded ? "CREATOR_CUP_EXCLUDED" : "CREATOR_CUP_RESTORED",
+      entity: "CreatorArenaProfile",
+      entityId: userId,
+      metadata: { cupExcluded: excluded },
+    },
+  });
+
+  revalidatePath("/growth/admin/creators");
+  revalidatePath("/growth/creators");
+  return { ok: true };
+}
+
+export async function adminRevokeCreatorBadgeAction(
+  _prev: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin;
+
+  const userId = String(formData.get("userId") ?? "");
+  if (!userId) return { ok: false, error: "invalid_input" };
+
+  const badge = await prisma.badgeDefinition.findUnique({
+    where: { key: CONTENT_CREATOR_BADGE },
+    select: { id: true },
+  });
+  if (!badge) return { ok: false, error: "not_found" };
+
+  await prisma.userBadge.deleteMany({ where: { userId, badgeId: badge.id } });
+  const { removeUserFromAllCreatorChannels } = await import("@/lib/growth/creator-program");
+  await removeUserFromAllCreatorChannels(userId);
+  await prisma.creatorArenaProfile.updateMany({
+    where: { userId },
+    data: { cupExcluded: false, updatedById: admin.userId },
+  });
+
+  await prisma.adminAuditLog.create({
+    data: {
+      actorId: admin.userId,
+      action: "CREATOR_BADGE_REVOKED",
+      entity: "User",
+      entityId: userId,
+    },
+  });
+
+  revalidatePath("/growth/admin/creators");
+  revalidatePath("/growth/creators");
+  return { ok: true };
+}
+
 export async function saveContentIdeasAction(
   _prev: unknown,
   formData: FormData,

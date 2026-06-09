@@ -106,7 +106,30 @@ export async function grantCreatorLoungeAccess(
   }
 }
 
-/** Badge holders + admin-granted lounge members (for cup / battles scope). */
+/** Badge holders only, minus admin cup exclusions. Partner leaderboard XP is unaffected. */
+export async function getCreatorCupEligibleIds(): Promise<string[]> {
+  const badge = await prisma.badgeDefinition.findUnique({
+    where: { key: CONTENT_CREATOR_BADGE },
+    select: { id: true },
+  });
+  if (!badge) return [];
+
+  const badgeRows = await prisma.userBadge.findMany({
+    where: { badgeId: badge.id },
+    select: { userId: true },
+  });
+  const badgeIds = badgeRows.map((r) => r.userId);
+  if (badgeIds.length === 0) return [];
+
+  const excluded = await prisma.creatorArenaProfile.findMany({
+    where: { userId: { in: badgeIds }, cupExcluded: true },
+    select: { userId: true },
+  });
+  const excludedSet = new Set(excluded.map((r) => r.userId));
+  return badgeIds.filter((id) => !excludedSet.has(id));
+}
+
+/** Badge holders + admin-granted lounge members (lounge, battles, chat). */
 export async function getCreatorLoungeParticipantIds(): Promise<string[]> {
   const badge = await prisma.badgeDefinition.findUnique({
     where: { key: CONTENT_CREATOR_BADGE },
@@ -137,11 +160,22 @@ export async function getCreatorLoungeParticipantIds(): Promise<string[]> {
   return [...new Set([...badgeIds, ...roomIds])];
 }
 
+export async function removeUserFromAllCreatorChannels(userId: string) {
+  const rooms = await prisma.chatRoom.findMany({
+    where: { slug: { in: CREATOR_CHANNEL_SLUGS.map((c) => c.slug) } },
+    select: { id: true },
+  });
+  if (rooms.length === 0) return;
+  await prisma.chatRoomMember.deleteMany({
+    where: { userId, roomId: { in: rooms.map((r) => r.id) } },
+  });
+}
+
 export async function revokeCreatorLoungeAccess(userId: string): Promise<"ok" | "badge_protected"> {
   if (await userHasContentCreatorBadge(userId)) {
     return "badge_protected";
   }
-  await removeUserFromCreatorRoom(userId);
+  await removeUserFromAllCreatorChannels(userId);
   return "ok";
 }
 

@@ -60,6 +60,7 @@ export default async function AdminCreatorsPage({ params }: Props) {
               consentIpAddress: true,
               qualificationDetails: true,
               consentText: true,
+              cupExcluded: true,
             },
           },
         },
@@ -167,6 +168,8 @@ export default async function AdminCreatorsPage({ params }: Props) {
     consentIpAddress: u.creatorArenaProfile?.consentIpAddress ?? null,
     qualificationDetails: u.creatorArenaProfile?.qualificationDetails ?? null,
     consentText: u.creatorArenaProfile?.consentText ?? null,
+    cupExcluded: u.creatorArenaProfile?.cupExcluded ?? false,
+    cupEligible: badgeMap.has(u.id) && !(u.creatorArenaProfile?.cupExcluded ?? false),
   }));
 
   const challenges: CreatorAdminChallenge[] = challengeRows.map((c) => ({

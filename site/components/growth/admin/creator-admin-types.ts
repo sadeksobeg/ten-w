@@ -35,6 +35,8 @@ export type CreatorAdminPartner = {
   consentIpAddress: string | null;
   qualificationDetails: string | null;
   consentText: string | null;
+  cupExcluded: boolean;
+  cupEligible: boolean;
 };
 
 export type CreatorAdminStats = {

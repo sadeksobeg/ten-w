@@ -23,8 +23,6 @@ import {
   IconBack,
   IconMenu,
 } from "@/components/growth/icons/GrowthIcons";
-import { GrowthAvatar } from "@/components/growth/GrowthAvatar";
-import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { CreatorLivePanel } from "./CreatorLivePanel";
 import { CreatorDashboard } from "./CreatorDashboard";
 import { CreatorChatSection } from "./CreatorChatSection";
@@ -48,10 +46,7 @@ import {
   type CelebrationPayload,
 } from "./CreatorCelebrationOverlay";
 import { CreatorConsentModal } from "./CreatorConsentModal";
-import {
-  CreatorConsentVerifiedBadge,
-  CreatorNameWithConsentBadge,
-} from "./CreatorConsentVerifiedBadge";
+import { CreatorHubProfileCard } from "./CreatorHubProfileCard";
 import type { ConsentLocale } from "@/lib/growth/creator-consent";
 import { useToast } from "@/hooks/useToast";
 
@@ -117,7 +112,6 @@ export function CreatorHubLayout(props: CreatorHubProps) {
   const t = useTranslations("Creators.hub");
   const tConsent = useTranslations("Creators.consent");
   const tNav = useTranslations("Creators.nav");
-  const tStatus = useTranslations("Creators.status");
   const { showToast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -278,6 +272,14 @@ export function CreatorHubLayout(props: CreatorHubProps) {
             bio={props.bio}
             specialty={props.specialty}
             status={props.viewer.status}
+            viewerName={viewerName}
+            viewerEmail={props.viewer.email}
+            avatarUrl={props.viewer.avatarUrl}
+            avatarPreset={props.viewer.avatarPreset}
+            levelCode={props.viewer.levelCode}
+            hasBadge={props.hasBadge}
+            consentGiven={consentGiven}
+            viewerRank={props.viewerRank}
           />
         );
       default:
@@ -313,32 +315,20 @@ export function CreatorHubLayout(props: CreatorHubProps) {
                 <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--creator-secondary)]">T.E.N.E.G.T.A</p>
                 <p className="mt-1 font-[family-name:var(--font-cairo)] text-sm font-extrabold text-white">{t("title")}</p>
               </div>
-              <div className="border-b border-white/10 p-4">
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <GrowthAvatar name={viewerName} email={props.viewer.email} avatarUrl={props.viewer.avatarUrl} avatarPreset={props.viewer.avatarPreset} size="md" />
-                    {props.hasBadge ? (
-                      <span className="absolute -bottom-1 -end-1"><BadgeIcon badgeKey="content_creator" earned size="sm" /></span>
-                    ) : null}
-                  </div>
-                  <div className="min-w-0">
-                    <CreatorNameWithConsentBadge
-                      name={viewerName}
-                      verified={consentGiven}
-                      label={tConsent("verifiedBadge")}
-                      nameClassName="truncate text-sm font-bold text-white"
-                      badgeSize="md"
-                    />
-                    <span className="creator-status-pill bg-[var(--status-joined)]/20 text-sky-200">{tStatus(props.viewer.status.toLowerCase())}</span>
-                    {!consentGiven ? (
-                      <p className="mt-1.5 flex items-center gap-1.5 text-[10px] leading-snug text-amber-200/85">
-                        <CreatorConsentVerifiedBadge label={tConsent("verifiedBadge")} muted />
-                        {tConsent("verifiedBadgeHint")}
-                      </p>
-                    ) : null}
-                    <Link href="/growth/settings" className="mt-1 block text-[10px] text-[var(--creator-secondary)] hover:underline">{t("editProfile")}</Link>
-                  </div>
-                </div>
+              <div className="border-b border-white/10 p-3">
+                <CreatorHubProfileCard
+                  name={viewerName}
+                  email={props.viewer.email}
+                  avatarUrl={props.viewer.avatarUrl ?? null}
+                  avatarPreset={props.viewer.avatarPreset}
+                  levelCode={props.viewer.levelCode}
+                  locale={props.locale}
+                  status={props.viewer.status}
+                  hasBadge={props.hasBadge}
+                  consentGiven={consentGiven}
+                  viewerRank={props.viewerRank}
+                  compact
+                />
               </div>
               <nav className="flex-1 overflow-y-auto p-2">
                 {NAV_GROUPS.map((g) => (

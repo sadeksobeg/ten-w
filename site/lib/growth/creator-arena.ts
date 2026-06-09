@@ -397,8 +397,8 @@ export async function submitCreatorPost(
 }
 
 export async function creatorCupLeaderboard(limit = 10): Promise<CreatorCupRow[]> {
-  const { getCreatorLoungeParticipantIds } = await import("@/lib/growth/creator-program");
-  const creatorIds = await getCreatorLoungeParticipantIds();
+  const { getCreatorCupEligibleIds } = await import("@/lib/growth/creator-program");
+  const creatorIds = await getCreatorCupEligibleIds();
   if (creatorIds.length === 0) return [];
 
   const season = await getActiveLeaderboardSeason();

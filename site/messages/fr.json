@@ -634,6 +634,8 @@
       "welcome": "Bienvenue dans le réseau créateurs — prêt à créer.",
       "hubActivated": "Creator Hub actif — vous faites partie d'une communauté exclusive.",
       "editProfile": "Modifier le profil",
+      "memberChip": "Membre du réseau",
+      "cupRankChip": "Cup #{rank}",
       "publicPage": "Page publique",
       "liveTitle": "Activité en direct",
       "liveOnline": "{count} en ligne",
@@ -805,15 +807,15 @@
       "metaTitle": "Réseau créateurs — TENEGTA",
       "metaDescription": "Rejoignez les créateurs TENEGTA — transformez vos abonnés en clients.",
       "hero": {
-        "eyebrow": "T.E.N.E.G.T.A · Creator Network · {year}",
-        "title1": "Transformez votre contenu",
-        "title2": "en partenariat réel",
-        "subtitle": "Rejoignez un réseau sélectionné de créateurs tech. Outils pro. Compétition réelle. Revenus durables.",
+        "eyebrow": "T.E.N.E.G.T.A · Réseau créateurs mondial · {year}",
+        "title1": "Transformez votre audience",
+        "title2": "en partenariat mondial",
+        "subtitle": "Rejoignez une élite de créateurs tech — outils pro, compétition en direct et revenus durables aux standards internationaux.",
         "cta": "Postuler",
-        "secondary": "Découvrir ↓",
-        "stat1": { "value": "47+ créateurs", "sub": "dans 8 pays" },
-        "stat2": { "value": "2.3M+ vues", "sub": "du contenu créateur" },
-        "stat3": { "value": "moy. 340$/mois", "sub": "pour un créateur actif" }
+        "secondary": "Explorer le réseau ↓",
+        "stat1": { "value": "47+", "sub": "créateurs · 8 pays" },
+        "stat2": { "value": "2.3M+", "sub": "vues du réseau" },
+        "stat3": { "value": "340$", "sub": "moy. mensuelle · actifs" }
       },
       "proofStats": {
         "title": "Chiffres réels du réseau",
@@ -828,10 +830,11 @@
         "rank": "Rang Cup #{rank}"
       },
       "demo": {
-        "title": "Ce que les créateurs filment",
-        "subtitle": "Des outils réels qui impressionnent",
-        "below": "Découvrez ce que vous pouvez montrer",
-        "cta": "Essayer la démo"
+        "eyebrow": "Du contenu qui mérite d'être partagé",
+        "title": "Filmez des solutions qui impressionnent le monde",
+        "subtitle": "Démos interactives des services d'entreprise — IA, cybersécurité et plateformes logicielles prêtes pour la production.",
+        "below": "Découvrez ce que vous pouvez produire cette semaine",
+        "cta": "Explorer les solutions"
       },
       "proofTitle": "Témoignages",
       "proofFallback": "Ce que vous obtenez",
@@ -3209,7 +3212,18 @@
           "grantMilestone": "Accorder un jalon",
           "toastSaved": "Enregistré",
           "hubMember": "Membre actif Creator Hub",
-          "nominationCount": "{count} nominations spotlight"
+          "nominationCount": "{count} nominations spotlight",
+          "loungeOnly": "Accès lounge seulement — pas dans le Creator Cup",
+          "cupEligible": "Éligible Creator Cup",
+          "cupExcludedBadge": "Exclu du cup",
+          "excludeCup": "Exclure du Creator Cup",
+          "restoreCup": "Réintégrer au Creator Cup",
+          "excludeCupConfirm": "Retirer ce créateur du classement Creator Cup ? Son rang partenaire ASCEND reste inchangé.",
+          "revokeBadge": "Révoquer le badge content creator",
+          "revokeBadgeConfirm": "Révoquer le badge et l'accès lounge ? Le classement partenaire ASCEND reste inchangé.",
+          "cupBadgeOnlyHint": "Le Creator Cup est réservé aux détenteurs du badge — l'accès lounge seul ne suffit pas.",
+          "toastCupExcluded": "Exclu du Creator Cup",
+          "toastCupRestored": "Réintégré au Creator Cup"
         },
         "challenges": {
           "title": "Défis hebdomadaires",
@@ -3260,8 +3274,8 @@
         },
         "cup": {
           "title": "Classement Creator Cup",
-          "subtitle": "Classement hebdomadaire — le top 3 reçoit des badges de saison à la clôture.",
-          "bonusHint": "Ajustez des points bonus par créateur (-500 à +500) — appliqués immédiatement.",
+          "subtitle": "Classement hebdomadaire réservé aux détenteurs du badge content creator — l'accès lounge seul n'apparaît pas ici.",
+          "bonusHint": "Points bonus par créateur (-500 à +500). L'exclusion du cup n'affecte pas le classement partenaire ASCEND.",
           "closeSeason": "Clôturer la saison & récompenser le top 3",
           "closeConfirm": "Accorder les badges cup au top 3 et les notifier ?",
           "resetBonuses": "Réinitialiser les bonus",
@@ -3633,7 +3647,7 @@
         "title": "Programme créateurs",
         "contactOrdersLink": "Demandes de contact",
         "subtitle": "Gérez l'accès Creator Hub pour les partenaires — les badge holders rejoignent automatiquement.",
-        "accessNote": "L'accès salon ne modifie pas commissions, XP ni deals. Impossible de révoquer un détenteur du badge content_creator.",
+        "accessNote": "L'accès lounge ne modifie pas commissions, XP ni le classement partenaire ASCEND. Le Creator Cup est réservé aux détenteurs du badge — vous pouvez exclure quelqu'un du cup sans toucher au classement partenaire.",
         "statBadge": "Badge holders",
         "statRoom": "Dans le groupe",
         "searchPlaceholder": "Rechercher nom ou e-mail…",
@@ -3653,6 +3667,7 @@
         "accessBadgeAndLounge": "Badge + salon",
         "accessBadgeOnly": "Badge (accès auto)",
         "accessLoungeOnly": "Accès admin",
+        "cupExcludedShort": "Exclu du cup",
         "accessNone": "Sans accès",
         "toastAdded": "Ajouté au groupe",
         "toastLoungeGranted": "Accès salon accordé",

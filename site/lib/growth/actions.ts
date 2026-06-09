@@ -895,7 +895,8 @@ export async function revokeAdminBadgeAction(formData: FormData): Promise<void> 
     where: { userId: user.id, badgeId: badge.id },
   });
   if (badge.key === CONTENT_CREATOR_BADGE) {
-    await removeUserFromCreatorRoom(user.id);
+    const { removeUserFromAllCreatorChannels } = await import("@/lib/growth/creator-program");
+    await removeUserFromAllCreatorChannels(user.id);
   }
   revalidatePath("/");
 }

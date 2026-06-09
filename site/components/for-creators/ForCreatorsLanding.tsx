@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { ForCreatorsHero } from "./ForCreatorsHero";
@@ -28,13 +29,29 @@ export function ForCreatorsLanding({ locale, topCreators, creatorCount, approval
       <ForCreatorsDemoMockup locale={locale} />
 
       <section className="mx-auto max-w-5xl px-4 py-16">
-        <h2 className="text-center font-[family-name:var(--font-cairo)] text-2xl font-extrabold">{t("featuresTitle")}</h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center font-[family-name:var(--font-cairo)] text-2xl font-extrabold sm:text-3xl"
+        >
+          {t("featuresTitle")}
+        </motion.h2>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURE_KEYS.map((key) => (
-            <div key={key} className="creator-card p-5">
-              <h3 className="font-bold text-[var(--creator-secondary)]">{t(`features.${key}.title`)}</h3>
-              <p className="mt-2 text-sm text-white/60">{t(`features.${key}.body`)}</p>
-            </div>
+          {FEATURE_KEYS.map((key, i) => (
+            <motion.div
+              key={key}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ delay: i * 0.08, duration: 0.5 }}
+              className="creator-card fc-feature-card p-5"
+            >
+              <h3 className="font-[family-name:var(--font-cairo)] font-bold text-[var(--creator-secondary)]">
+                {t(`features.${key}.title`)}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/60">{t(`features.${key}.body`)}</p>
+            </motion.div>
           ))}
         </div>
       </section>

@@ -2390,8 +2390,92 @@ body.creator-hub-app-mode .creator-hub-mobile-root {
   color: #fff;
 }
 
+.creator-profile-card {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+.creator-profile-card__glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--creator-angle, 0deg),
+    rgba(201, 146, 42, 0.35),
+    rgba(225, 29, 72, 0.2),
+    rgba(124, 58, 237, 0.25),
+    rgba(201, 146, 42, 0.35)
+  );
+  animation: creator-border-spin 5s linear infinite;
+  opacity: 0.7;
+}
+
+.creator-profile-card__inner {
+  position: relative;
+  margin: 1px;
+  border-radius: calc(1.25rem - 1px);
+  background: linear-gradient(155deg, rgba(12, 8, 22, 0.98), rgba(20, 12, 32, 0.95));
+  padding: 1rem;
+  backdrop-filter: blur(16px);
+}
+
+.creator-profile-card--compact .creator-profile-card__inner {
+  padding: 0.75rem;
+}
+
+.creator-profile-card__avatar-wrap {
+  padding: 3px;
+}
+
+.creator-profile-card__ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--creator-surface), var(--creator-surface)) padding-box,
+    conic-gradient(from var(--creator-angle), #c9922a, #e11d48, #7c3aed, #c9922a) border-box;
+  animation: creator-border-spin 4s linear infinite;
+  opacity: 0.85;
+}
+
+.creator-profile-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+}
+
+.creator-profile-chip--member {
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(56, 189, 248, 0.1);
+  color: #bae6fd;
+}
+
+.creator-profile-chip--status {
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.1);
+  color: #a7f3d0;
+}
+
+.creator-profile-chip--rank {
+  border: 1px solid rgba(201, 146, 42, 0.35);
+  background: rgba(201, 146, 42, 0.12);
+  color: #fde68a;
+}
+
+.creator-profile-card__edit {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .creator-consent-verified-badge {
+  .creator-consent-verified-badge,
+  .creator-profile-card__glow,
+  .creator-profile-card__ring {
     animation: none;
   }
 }
