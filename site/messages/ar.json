@@ -903,6 +903,8 @@
     "analytics": {
       "metric": { "submissions": "منشورات 30 يوم", "referrals": "إحالات", "cup": "نقاط Cup", "approval": "معدل القبول" },
       "chartTitle": "نشاطك مقارنة بالمتصدر",
+      "aboveAvg": "أنت أعلى من متوسط الشبكة بنسبة {pct}%",
+      "belowAvg": "أنت أدنى من المتوسط بنسبة {pct}% — فرصة للتقدّم",
       "you": "أنت",
       "top": "#1"
     },
@@ -911,7 +913,12 @@
       "filter": { "all": "الكل", "featured": "مميزون", "new": "جدد" },
       "challenge": "تحدَّه",
       "message": "راسله",
-      "profile": "الملف"
+      "profile": "الملف",
+      "nominateTitle": "رشّح صانعاً للأضواء",
+      "nominateHint": "اقترح صانعاً يستحق الظهور في قائمة المميزين",
+      "nominateReason": "لماذا؟ (اختياري)",
+      "nominateSubmit": "إرسال الترشيح",
+      "nominateSuccess": "تم إرسال الترشيح"
     },
     "profile": {
       "title": "ملفك كصانع",
@@ -3362,17 +3369,25 @@
         "cup": {
           "title": "ترتيب كأس الصنّاع",
           "subtitle": "ترتيب أسبوعي — أفضل 3 يحصلون على شارات الموسم عند الإغلاق.",
+          "bonusHint": "يمكنك تعديل نقاط إضافية لأي صانع (من -500 إلى +500) — تُطبَّق فوراً على الترتيب.",
           "closeSeason": "إغلاق الموسم وتكريم أفضل 3",
           "closeConfirm": "منح شارات الكأس لأفضل 3 صنّاع وإرسال إشعار لهم؟",
+          "resetBonuses": "تصفير كل المكافآت",
+          "resetConfirm": "إعادة كل النقاط الإضافية إلى صفر؟",
           "closeHint": "إغلاق الموسم يمنح شارات creator_cup_gold و creator_cup_silver و creator_cup_bronze.",
           "empty": "لا يوجد ترتيب هذا الأسبوع.",
           "colRank": "الترتيب",
           "colCreator": "الصانع",
           "colScore": "النقاط",
           "colPosts": "المنشورات",
+          "colBonus": "مكافأة",
+          "colActions": "إجراء",
+          "saveBonus": "حفظ",
           "anonymous": "صانع",
           "toastClosed": "تم إغلاق الموسم — منحت الشارات",
-          "toastError": "تعذّر إغلاق الموسم"
+          "toastBonusSaved": "تم تحديث النقاط الإضافية",
+          "toastReset": "تم تصفير المكافآت",
+          "toastError": "تعذّر تنفيذ العملية"
         }
       },
       "chat": {

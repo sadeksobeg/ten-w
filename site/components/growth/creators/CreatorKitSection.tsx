@@ -136,10 +136,16 @@ export function CreatorKitSection({
         <h3 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">{t("assetsTitle")}</h3>
         <ul className="mt-3 space-y-2">
           <li>
-            <Link href="/brand/tenegta-logo.svg" className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--creator-secondary)]">
+            <a
+              href="/brand/tenegta-logo.svg"
+              download="tenegta-logo.svg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--creator-secondary)] hover:underline"
+            >
               <IconExternalLink size={14} />
               {t("assetLogo")}
-            </Link>
+            </a>
           </li>
         </ul>
       </GlassCard>

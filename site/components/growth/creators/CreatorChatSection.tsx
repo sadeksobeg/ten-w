@@ -218,57 +218,77 @@ export function CreatorChatSection({
   }
 
   const activeRoom = rooms.find((r) => r.slug === activeSlug);
+  const channelRooms = rooms.filter((r) => !r.isDm);
+  const dmRooms = rooms.filter((r) => r.isDm);
+
+  function selectRoom(slug: string) {
+    setActiveSlug(slug);
+    setNewBelow(0);
+  }
+
+  function roomButton(r: CreatorChatRoomPreview, compact = false) {
+    const meta = getCreatorChannelMeta(r.slug);
+    const active = activeSlug === r.slug;
+    return (
+      <button
+        key={r.slug}
+        type="button"
+        onClick={() => selectRoom(r.slug)}
+        className={`creator-chat-room-pill shrink-0 ${compact ? "px-3 py-2" : "w-full px-3 py-2.5"} text-start text-xs ${
+          active ? "creator-chat-room-pill-active" : "text-white/65"
+        } ${r.unread > 0 ? "font-bold" : ""}`}
+        style={active && !r.isDm ? { borderColor: `${meta.accent}66` } : undefined}
+      >
+        <span className="flex items-center gap-2">
+          <span className="font-mono text-[10px] text-white/40">{r.isDm ? "@" : "#"}</span>
+          <span className="min-w-0 flex-1 truncate">{r.title}</span>
+          {r.unread > 0 ? (
+            <span className="rounded-full bg-[var(--creator-primary)] px-1.5 text-[9px] font-bold text-white">
+              {r.unread > 9 ? "9+" : r.unread}
+            </span>
+          ) : null}
+        </span>
+      </button>
+    );
+  }
 
   return (
-    <div className="creator-card flex min-h-[min(70dvh,640px)] overflow-hidden">
+    <div className="creator-card creator-chat-shell flex min-h-[calc(100dvh-12.5rem)] flex-col overflow-hidden md:min-h-[min(70dvh,640px)] md:flex-row">
       <aside className="hidden w-56 shrink-0 flex-col border-e border-white/10 bg-[var(--creator-surface-2)] md:flex">
         <p className="px-3 py-3 text-[10px] font-bold uppercase tracking-wide text-white/45">{t("rooms")}</p>
         <ul className="flex-1 overflow-y-auto">
-          {rooms.filter((r) => !r.isDm).map((r) => {
-            const meta = getCreatorChannelMeta(r.slug);
-            return (
-              <li key={r.slug}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveSlug(r.slug);
-                    setNewBelow(0);
-                  }}
-                  className={`flex w-full items-center gap-2 px-3 py-2.5 text-start text-xs ${
-                    activeSlug === r.slug ? "creator-nav-active" : "text-white/65 hover:bg-white/[0.04]"
-                  } ${r.unread > 0 ? "font-bold" : ""}`}
-                >
-                  <span className="font-mono text-white/40">#</span>
-                  <span className="min-w-0 flex-1 truncate">{r.title}</span>
-                  {r.unread > 0 ? (
-                    <span className="rounded-full bg-[var(--creator-primary)] px-1.5 text-[9px] font-bold text-white">
-                      {r.unread}
-                    </span>
-                  ) : null}
-                </button>
-              </li>
-            );
-          })}
+          {channelRooms.map((r) => (
+            <li key={r.slug}>{roomButton(r)}</li>
+          ))}
         </ul>
         <p className="border-t border-white/10 px-3 py-2 text-[10px] text-white/40">{t("direct")}</p>
         <ul>
-          {rooms.filter((r) => r.isDm).map((r) => (
-            <li key={r.slug}>
-              <button
-                type="button"
-                onClick={() => setActiveSlug(r.slug)}
-                className={`flex w-full px-3 py-2 text-start text-xs ${activeSlug === r.slug ? "creator-nav-active" : "text-white/60"}`}
-              >
-                {r.title}
-              </button>
-            </li>
+          {dmRooms.map((r) => (
+            <li key={r.slug}>{roomButton(r)}</li>
           ))}
         </ul>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+        <div className="creator-chat-mobile-rail border-b border-white/10 md:hidden">
+          <p className="px-3 pt-2.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--creator-secondary)]/80">
+            {t("rooms")}
+          </p>
+          <div className="flex gap-2 overflow-x-auto px-3 py-2.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {channelRooms.map((r) => roomButton(r, true))}
+          </div>
+          {dmRooms.length > 0 ? (
+            <>
+              <p className="px-3 pb-1 text-[9px] font-bold uppercase tracking-wide text-white/35">{t("direct")}</p>
+              <div className="flex gap-2 overflow-x-auto px-3 pb-2.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {dmRooms.map((r) => roomButton(r, true))}
+              </div>
+            </>
+          ) : null}
+        </div>
+
         <header
-          className="border-b border-white/10 px-4 py-3"
+          className="shrink-0 border-b border-white/10 px-4 py-3"
           style={{ borderTopWidth: 3, borderTopColor: channelMeta.accent, borderTopStyle: "solid" }}
         >
           <h2 className="font-[family-name:var(--font-cairo)] text-base font-extrabold text-white">
@@ -281,7 +301,7 @@ export function CreatorChatSection({
 
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto p-4"
+          className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4"
           onScroll={(e) => {
             const el = e.currentTarget;
             atBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 200;

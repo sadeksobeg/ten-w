@@ -3336,17 +3336,25 @@
         "cup": {
           "title": "Creator Cup leaderboard",
           "subtitle": "Weekly ranked creators — top 3 receive season badges when you close the season.",
+          "bonusHint": "Adjust bonus points per creator (-500 to +500) — applied instantly to the leaderboard.",
           "closeSeason": "Close season & award top 3",
           "closeConfirm": "Award cup badges to the top 3 creators and notify them?",
+          "resetBonuses": "Reset all bonuses",
+          "resetConfirm": "Reset every admin bonus to zero?",
           "closeHint": "Closing the season grants creator_cup_gold, creator_cup_silver, and creator_cup_bronze badges.",
           "empty": "No ranked creators this week.",
           "colRank": "Rank",
           "colCreator": "Creator",
           "colScore": "Score",
           "colPosts": "Posts",
+          "colBonus": "Bonus",
+          "colActions": "Action",
+          "saveBonus": "Save",
           "anonymous": "Creator",
           "toastClosed": "Season closed — badges granted",
-          "toastError": "Could not close season"
+          "toastBonusSaved": "Bonus points updated",
+          "toastReset": "All bonuses reset",
+          "toastError": "Action failed"
         }
       },
       "chat": {

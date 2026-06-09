@@ -1030,6 +1030,7 @@ model CreatorArenaProfile {
   qualificationDeclared   Boolean               @default(false)
   qualificationDeclaredAt DateTime?
   qualificationDetails    String?               @db.Text
+  cupScoreBonus           Int                   @default(0)
   updatedAt               DateTime              @updatedAt
   updatedById             String?
 

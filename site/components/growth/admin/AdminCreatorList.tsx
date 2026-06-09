@@ -150,7 +150,7 @@ export function AdminCreatorList({
                       ) : null}
                     </p>
                     <p className="truncate text-[10px] text-white/45">{p.email}</p>
-                    <div className="mt-1 flex flex-wrap gap-2 text-[10px] text-white/40">
+                    <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] leading-relaxed text-white/40">
                       {p.workflowStatus ? (
                         <span>{tPage(`status.${p.workflowStatus}`)}</span>
                       ) : null}

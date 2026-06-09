@@ -35,6 +35,7 @@ export type CreatorCupRow = {
   rank: number;
   submissions: number;
   consentGiven: boolean;
+  cupScoreBonus: number;
 };
 
 export type CreatorChallengeView = {
@@ -443,20 +444,33 @@ export async function creatorCupLeaderboard(limit = 10): Promise<CreatorCupRow[]
     };
   });
 
-  const consentRows = await prisma.creatorArenaProfile.findMany({
+  const profileRows = await prisma.creatorArenaProfile.findMany({
     where: { userId: { in: creatorIds } },
-    select: { userId: true, consentGiven: true, consentVersion: true },
+    select: {
+      userId: true,
+      consentGiven: true,
+      consentVersion: true,
+      cupScoreBonus: true,
+    },
   });
   const { hasActiveCreatorConsent } = await import("@/lib/growth/creator-consent");
-  const consentMap = new Map(
-    consentRows.map((r) => [r.userId, hasActiveCreatorConsent(r)]),
-  );
+  const profileMap = new Map(profileRows.map((r) => [r.userId, r]));
 
-  scored.sort((a, b) => b.score - a.score);
-  return scored.slice(0, limit).map((row, i) => ({
+  const scoredWithBonus = scored.map((row) => {
+    const profile = profileMap.get(row.userId);
+    const adminBonus = profile?.cupScoreBonus ?? 0;
+    return {
+      ...row,
+      score: Math.round((row.score + adminBonus) * 10) / 10,
+      consentGiven: hasActiveCreatorConsent(profile),
+      cupScoreBonus: adminBonus,
+    };
+  });
+
+  scoredWithBonus.sort((a, b) => b.score - a.score);
+  return scoredWithBonus.slice(0, limit).map((row, i) => ({
     ...row,
     rank: i + 1,
-    consentGiven: consentMap.get(row.userId) ?? false,
   }));
 }
 

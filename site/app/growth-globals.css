@@ -2294,16 +2294,39 @@
 
 .creator-consent-verified-badge {
   animation: creator-verified-glow 2.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(245, 196, 81, 0.45));
 }
 
 @keyframes creator-verified-glow {
   0%,
   100% {
-    box-shadow: 0 0 8px rgba(251, 191, 36, 0.35);
+    filter: drop-shadow(0 0 3px rgba(245, 196, 81, 0.4));
   }
   50% {
-    box-shadow: 0 0 14px rgba(251, 191, 36, 0.55);
+    filter: drop-shadow(0 0 7px rgba(245, 196, 81, 0.75));
   }
+}
+
+.creator-chat-shell {
+  background: linear-gradient(180deg, rgba(10, 6, 18, 0.98) 0%, rgba(8, 5, 14, 1) 100%);
+}
+
+.creator-chat-mobile-rail {
+  background: linear-gradient(180deg, rgba(245, 196, 81, 0.06) 0%, transparent 100%);
+}
+
+.creator-chat-room-pill {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.creator-chat-room-pill-active {
+  border-color: rgba(245, 196, 81, 0.45);
+  background: linear-gradient(135deg, rgba(245, 196, 81, 0.16), rgba(225, 29, 72, 0.08));
+  box-shadow: 0 0 16px rgba(245, 196, 81, 0.12);
+  color: #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {

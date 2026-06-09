@@ -49,7 +49,9 @@ export async function GET() {
   ];
 
   const date = new Date().toISOString().slice(0, 10);
-  return new NextResponse(lines.join("\n"), {
+  // UTF-8 BOM so Excel on Windows detects Arabic/UTF-8 columns correctly.
+  const csv = `\uFEFF${lines.join("\r\n")}`;
+  return new NextResponse(csv, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
       "Content-Disposition": `attachment; filename="creator-consents-${date}.csv"`,

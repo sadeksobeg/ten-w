@@ -1,9 +1,10 @@
-import { IconCheck } from "@/components/growth/icons/GrowthIcons";
+"use client";
+
+import { useId } from "react";
 
 type Size = "sm" | "md" | "lg";
 
-const SIZE_PX: Record<Size, number> = { sm: 14, md: 16, lg: 18 };
-const CHECK_PX: Record<Size, number> = { sm: 8, md: 9, lg: 10 };
+const SIZE_PX: Record<Size, number> = { sm: 16, md: 18, lg: 22 };
 
 type Props = {
   label: string;
@@ -18,18 +19,50 @@ export function CreatorConsentVerifiedBadge({
   className = "",
   muted = false,
 }: Props) {
+  const uid = useId().replace(/:/g, "");
+  const gradId = `cv-grad-${uid}`;
+  const glowId = `cv-glow-${uid}`;
   const dim = SIZE_PX[size];
 
   return (
-    <span
+    <svg
+      width={dim}
+      height={dim}
+      viewBox="0 0 22 22"
       role="img"
       aria-label={label}
-      title={label}
-      className={`creator-consent-verified-badge inline-flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 shadow-[0_0_10px_rgba(251,191,36,0.4)] ring-1 ring-amber-200/40 ${muted ? "opacity-45 grayscale-[0.2]" : ""} ${className}`}
-      style={{ width: dim, height: dim }}
+      className={`creator-consent-verified-badge shrink-0 ${muted ? "opacity-40" : ""} ${className}`}
     >
-      <IconCheck size={CHECK_PX[size]} className="text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]" />
-    </span>
+      <title>{label}</title>
+      <defs>
+        <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFE9A8" />
+          <stop offset="35%" stopColor="#F5C451" />
+          <stop offset="70%" stopColor="#E8A317" />
+          <stop offset="100%" stopColor="#B8860B" />
+        </linearGradient>
+        <filter id={glowId} x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="0" stdDeviation="1.1" floodColor="#F5C451" floodOpacity="0.65" />
+        </filter>
+      </defs>
+      <circle
+        cx="11"
+        cy="11"
+        r="9.8"
+        fill={`url(#${gradId})`}
+        filter={`url(#${glowId})`}
+        stroke="rgba(255,248,225,0.55)"
+        strokeWidth="0.45"
+      />
+      <path
+        d="M6.4 11.1l2.35 2.35 6.85-6.2"
+        fill="none"
+        stroke="#fff"
+        strokeWidth="2.15"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
@@ -51,9 +84,11 @@ export function CreatorNameWithConsentBadge({
   badgeSize = "sm",
 }: NameProps) {
   return (
-    <span className={`inline-flex max-w-full items-center gap-1 ${className}`}>
-      <span className={`truncate ${nameClassName}`}>{name}</span>
-      {verified ? <CreatorConsentVerifiedBadge label={label} size={badgeSize} /> : null}
+    <span className={`inline-flex max-w-full min-w-0 items-center gap-1.5 ${className}`}>
+      <span className={`min-w-0 truncate ${nameClassName}`}>{name}</span>
+      {verified ? (
+        <CreatorConsentVerifiedBadge label={label} size={badgeSize} className="translate-y-px" />
+      ) : null}
     </span>
   );
 }

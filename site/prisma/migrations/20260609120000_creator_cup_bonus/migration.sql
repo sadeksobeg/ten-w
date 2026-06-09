@@ -1,0 +1,2 @@
+ALTER TABLE "CreatorArenaProfile"
+  ADD COLUMN IF NOT EXISTS "cupScoreBonus" INTEGER NOT NULL DEFAULT 0;

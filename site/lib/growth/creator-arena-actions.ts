@@ -599,6 +599,50 @@ export async function adminCloseCreatorCupSeasonAction(): Promise<ActionResult> 
   }
 
   revalidatePath("/growth/admin/creators");
+  revalidatePath("/growth/creators");
+  return { ok: true };
+}
+
+export async function adminSetCreatorCupBonusAction(
+  userId: string,
+  bonus: number,
+): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin;
+
+  const clamped = Math.round(Math.max(-500, Math.min(500, bonus)));
+  await prisma.creatorArenaProfile.upsert({
+    where: { userId },
+    create: { userId, cupScoreBonus: clamped },
+    update: { cupScoreBonus: clamped, updatedById: admin.userId },
+  });
+
+  await prisma.adminAuditLog.create({
+    data: {
+      actorId: admin.userId,
+      action: "CREATOR_CUP_BONUS_SET",
+      entity: "CreatorArenaProfile",
+      entityId: userId,
+      metadata: { bonus: clamped },
+    },
+  });
+
+  revalidatePath("/growth/admin/creators");
+  revalidatePath("/growth/creators");
+  return { ok: true };
+}
+
+export async function adminResetCreatorCupBonusesAction(): Promise<ActionResult> {
+  const admin = await requireAdmin();
+  if (!admin.ok) return admin;
+
+  await prisma.creatorArenaProfile.updateMany({
+    where: { cupScoreBonus: { not: 0 } },
+    data: { cupScoreBonus: 0, updatedById: admin.userId },
+  });
+
+  revalidatePath("/growth/admin/creators");
+  revalidatePath("/growth/creators");
   return { ok: true };
 }
 

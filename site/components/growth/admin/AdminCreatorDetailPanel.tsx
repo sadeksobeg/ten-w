@@ -8,6 +8,7 @@ import { BadgeIcon } from "@/components/growth/badges/BadgeIcon";
 import { GlassCard } from "@/components/growth/ui/GlassCard";
 import { GoldButton } from "@/components/growth/ui/GoldButton";
 import { IconClose, IconShield } from "@/components/growth/icons/GrowthIcons";
+import { CreatorNameWithConsentBadge } from "@/components/growth/creators/CreatorConsentVerifiedBadge";
 import { useToast } from "@/hooks/useToast";
 import {
   adminAddCreatorRoomMemberAction,
@@ -194,11 +195,14 @@ export function AdminCreatorDetailPanel({ partner, onClose, onUpdated }: Props) 
         </div>
 
         <div className="mt-4">
-          <h2
-            id="creator-admin-detail-title"
-            className="font-[family-name:var(--font-cairo)] text-lg font-extrabold text-white"
-          >
-            {partner.name ?? partner.email}
+          <h2 id="creator-admin-detail-title" className="min-w-0">
+            <CreatorNameWithConsentBadge
+              name={partner.name ?? partner.email}
+              verified={partner.consentGiven}
+              label={tConsent("verifiedBadge")}
+              nameClassName="font-[family-name:var(--font-cairo)] text-lg font-extrabold text-white"
+              badgeSize="md"
+            />
           </h2>
           <p className="text-xs text-white/45">{partner.email}</p>
           {partner.hasBadge ? (

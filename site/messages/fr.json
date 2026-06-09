@@ -798,8 +798,8 @@
     "leaderboard": { "season": "Saison {label} — Creator Cup", "competing": "{n} créateurs", "yourRank": "Votre rang", "yourPoints": "{score} pts · {posts} posts", "gapToNext": "{n} pts pour le rang suivant", "howPoints": "Comment gagner des points ?", "rule": { "approved": { "label": "Post approuvé", "pts": "+50" }, "battle": { "label": "Duel gagné", "pts": "+100" }, "featured": { "label": "À la une", "pts": "+200" }, "first": { "label": "Première soumission", "pts": "+30" }, "referral": { "label": "Parrainage", "pts": "+75" } } },
     "battles": { "active": "Duel actif", "you": "Vous", "stakes": "{xp} XP", "invite": "{name} vous défie", "accept": "Accepter", "decline": "Refuser", "history": "Historique", "historyEmpty": "Aucun duel.", "outcome": { "won": "Gagné", "lost": "Perdu", "pending": "En attente" } },
     "kit": { "utmTitle": "Liens trackés", "utmSubtitle": "Chaque lien suit les performances", "platform": { "youtube": "YouTube", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "x": "X", "whatsapp": "WhatsApp" }, "copyLink": "Copier", "copied": "Copié", "copyError": "Échec", "qr": "QR", "scriptsTitle": "Scripts prêts", "scriptInstagram": "Découvrez TENEGTA — code {code} pour -3%.", "copyScript": "Copier", "ideasTitle": "Idées de contenu", "idea1": "Visite Cinema OS", "idea2": "3 raisons pour TENEGTA", "idea3": "Défi automatisation IA", "idea4": "Cybersécurité PME", "idea5": "Partenaires ASCEND", "assetsTitle": "Assets marque", "assetLogo": "Logo T.E.N.E.G.T.A SVG" },
-    "analytics": { "metric": { "submissions": "Posts (30j)", "referrals": "Parrainages", "cup": "Points coupe", "approval": "Taux d'approbation" }, "chartTitle": "Votre activité vs top", "you": "Vous", "top": "#1" },
-    "network": { "heroes": "Héros de la semaine", "filter": { "all": "Tous", "featured": "Vedettes", "new": "Nouveaux" }, "challenge": "Défier", "message": "Message", "profile": "Profil" },
+    "analytics": { "metric": { "submissions": "Posts (30j)", "referrals": "Parrainages", "cup": "Points coupe", "approval": "Taux d'approbation" }, "chartTitle": "Votre activité vs top", "aboveAvg": "Vous êtes {pct}% au-dessus de la moyenne du réseau", "belowAvg": "Vous êtes {pct}% sous la moyenne — marge de progression", "you": "Vous", "top": "#1" },
+    "network": { "heroes": "Héros de la semaine", "filter": { "all": "Tous", "featured": "Vedettes", "new": "Nouveaux" }, "challenge": "Défier", "message": "Message", "profile": "Profil", "nominateTitle": "Nommer un créateur", "nominateHint": "Suggérez quelqu'un pour le spotlight", "nominateReason": "Pourquoi ? (optionnel)", "nominateSubmit": "Envoyer la nomination", "nominateSuccess": "Nomination envoyée" },
     "profile": { "title": "Profil créateur", "bio": "Bio", "specialtyLabel": "Spécialité", "specialty": { "tech": "Tech", "business": "Business", "education": "Éducation", "entertainment": "Divertissement", "lifestyle": "Lifestyle" }, "save": "Enregistrer", "error": "Échec", "settings": "Paramètres compte", "journey": "Parcours créateur" },
     "public": {
       "metaTitle": "Réseau créateurs — TENEGTA",
@@ -3261,17 +3261,25 @@
         "cup": {
           "title": "Classement Creator Cup",
           "subtitle": "Classement hebdomadaire — le top 3 reçoit des badges de saison à la clôture.",
+          "bonusHint": "Ajustez des points bonus par créateur (-500 à +500) — appliqués immédiatement.",
           "closeSeason": "Clôturer la saison & récompenser le top 3",
           "closeConfirm": "Accorder les badges cup au top 3 et les notifier ?",
+          "resetBonuses": "Réinitialiser les bonus",
+          "resetConfirm": "Remettre tous les bonus admin à zéro ?",
           "closeHint": "La clôture accorde les badges creator_cup_gold, creator_cup_silver et creator_cup_bronze.",
           "empty": "Aucun créateur classé cette semaine.",
           "colRank": "Rang",
           "colCreator": "Créateur",
           "colScore": "Score",
           "colPosts": "Posts",
+          "colBonus": "Bonus",
+          "colActions": "Action",
+          "saveBonus": "Enregistrer",
           "anonymous": "Créateur",
           "toastClosed": "Saison clôturée — badges accordés",
-          "toastError": "Impossible de clôturer la saison"
+          "toastBonusSaved": "Bonus mis à jour",
+          "toastReset": "Bonus réinitialisés",
+          "toastError": "Action impossible"
         }
       },
       "chat": {
