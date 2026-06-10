@@ -72,7 +72,7 @@ export function ForCreatorsLanding({ locale, topCreators, creatorCount, approval
           Creator Hub
         </Link>
         <span className="mx-2">·</span>
-        <Link href={`/${locale}/solutions/intelligent-systems`} className="hover:text-white/60">
+        <Link href="/solutions/intelligent-systems" className="hover:text-white/60">
           {t("cinema.ctaSolutions")}
         </Link>
       </footer>

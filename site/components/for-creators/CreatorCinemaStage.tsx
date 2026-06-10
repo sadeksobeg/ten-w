@@ -90,7 +90,7 @@ export function CreatorCinemaStage({ locale }: Props) {
       case "film":
         return <CinemaSceneFilm />;
       case "solutions":
-        return <CinemaSceneSolutions locale={locale} />;
+        return <CinemaSceneSolutions />;
       case "hub":
         return <CinemaSceneHub />;
       case "challenge":
@@ -186,7 +186,7 @@ export function CreatorCinemaStage({ locale }: Props) {
               {t("ctaHub")}
             </GoldButton>
           </Link>
-          <Link href={`/${locale}/solutions/intelligent-systems`}>
+          <Link href="/solutions/intelligent-systems">
             <button
               type="button"
               className="rounded-full border border-white/15 bg-white/[0.04] px-6 py-3 text-sm font-bold text-white/75 transition hover:border-[var(--creator-secondary)]/40 hover:text-white"

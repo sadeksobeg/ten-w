@@ -3,9 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
-type Props = { locale: string };
-
-export function CinemaSceneSolutions({ locale }: Props) {
+export function CinemaSceneSolutions() {
   const t = useTranslations("Creators.public.cinema.scenes.solutions");
   const cards = ["ai", "cyber", "software"] as const;
 
@@ -16,7 +14,7 @@ export function CinemaSceneSolutions({ locale }: Props) {
         {cards.map((key) => (
           <Link
             key={key}
-            href={`/${locale}/solutions/intelligent-systems`}
+            href="/solutions/intelligent-systems"
             className="fc-cinema-solution-card group rounded-xl border border-white/12 bg-black/45 p-3 text-center backdrop-blur-sm transition hover:border-[var(--creator-secondary)]/45 hover:bg-[var(--creator-secondary)]/10"
           >
             <p className="text-[10px] font-bold text-[var(--creator-secondary)] group-hover:text-white">{t(`cards.${key}`)}</p>

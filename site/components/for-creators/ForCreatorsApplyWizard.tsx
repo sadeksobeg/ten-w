@@ -102,9 +102,20 @@ export function ForCreatorsApplyWizard({ locale }: Props) {
           <p className="font-[family-name:var(--font-cairo)] text-2xl font-extrabold text-white">{t("successTitle")}</p>
           <p className="mt-4 text-sm text-white/65">{t("successBody", { email })}</p>
           <p className="mt-6 text-xs text-white/45">{t("successExplore")}</p>
-          <Link href={`/${locale}/solutions/intelligent-systems`} className="mt-4 inline-block">
-            <GoldButton type="button">{t("successDemo")}</GoldButton>
-          </Link>
+          <div className="mt-5 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <a
+              href="#cinema"
+              className="inline-flex min-w-[200px] items-center justify-center rounded-[10px] bg-[linear-gradient(135deg,#B07D2B,#E4B84D)] px-6 py-3 text-sm font-semibold text-black transition-all hover:brightness-110"
+            >
+              {t("successDemo")}
+            </a>
+            <Link
+              href="/growth/creators"
+              className="text-sm font-semibold text-[var(--creator-secondary)] underline-offset-4 hover:underline"
+            >
+              {t("successHub")}
+            </Link>
+          </div>
         </div>
       </section>
     );
