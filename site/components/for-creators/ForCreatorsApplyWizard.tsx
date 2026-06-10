@@ -14,6 +14,7 @@ import {
   IconXPlatform,
   IconFacebook,
 } from "@/components/growth/icons/GrowthIcons";
+import { normalizePlatformUrl } from "@/lib/growth/normalize-platform-url";
 
 const PLATFORMS = [
   { id: "youtube", Icon: IconYoutube },
@@ -55,26 +56,37 @@ export function ForCreatorsApplyWizard({ locale }: Props) {
     if (!consentReady) return;
     setPending(true);
     setError(null);
-    const res = await fetch("/api/creator-application", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        email,
-        mainPlatformUrl: url,
-        platform: platform || "other",
-        contentTypes: niches,
-        followersRange: followers,
-        applicantNote: note || undefined,
-        applicationConsentGiven: true,
-      }),
-    });
-    setPending(false);
-    if (!res.ok) {
+    const normalizedUrl = normalizePlatformUrl(url);
+    try {
+      const res = await fetch("/api/creator-application", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          mainPlatformUrl: normalizedUrl,
+          platform: platform || "other",
+          contentTypes: niches,
+          followersRange: followers,
+          applicantNote: note.trim() || undefined,
+          applicationConsentGiven: true,
+        }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        if (data.error === "invalid") {
+          setError(t("validationError"));
+        } else {
+          setError(t("error"));
+        }
+        return;
+      }
+      setSubmitted(true);
+    } catch {
       setError(t("error"));
-      return;
+    } finally {
+      setPending(false);
     }
-    setSubmitted(true);
   }
 
   function go(next: number) {
@@ -166,11 +178,17 @@ export function ForCreatorsApplyWizard({ locale }: Props) {
             <input
               value={url}
               onChange={(e) => setUrl(e.target.value)}
+              onBlur={() => {
+                const next = normalizePlatformUrl(url);
+                if (next !== url) setUrl(next);
+              }}
               type="url"
+              inputMode="url"
               required
-              placeholder="https://"
+              placeholder={t("urlPlaceholder")}
               className="mt-1 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white outline-none"
             />
+            <p className="mt-1.5 text-[11px] text-white/40">{t("urlHint")}</p>
             <p className="mt-6 text-xs text-white/50">{t("followersLabel")}</p>
             <div className="mt-2 grid grid-cols-2 gap-2">
               {FOLLOWER_KEYS.map((key) => (
