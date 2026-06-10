@@ -37,9 +37,11 @@ export function ForCreatorsTestimonials({ reviews }: Props) {
       >
         {t("proofTitle")}
       </motion.h2>
+      <p className="mx-auto mt-3 max-w-lg text-center text-sm text-white/50">{t("proofSubtitle")}</p>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {reviews.slice(0, 6).map((review, i) => {
           const localized = localizePlatformReview(review, locale);
+          const featured = i === 0;
           return (
             <motion.article
               key={review.id}
@@ -47,7 +49,7 @@ export function ForCreatorsTestimonials({ reviews }: Props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="creator-card fc-feature-card flex flex-col p-5"
+              className={`creator-card fc-feature-card flex flex-col p-5 ${featured ? "fc-testimonial-featured sm:col-span-2 lg:col-span-1" : ""}`}
             >
               <div className="flex items-start gap-3">
                 <div

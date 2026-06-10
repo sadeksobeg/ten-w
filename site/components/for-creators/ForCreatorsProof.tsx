@@ -70,10 +70,11 @@ export function ForCreatorsProof({ topCreators, creatorCount, approvalRate }: Pr
         ];
 
   return (
-    <section className="mx-auto max-w-5xl px-4 py-16">
+    <section className="fc-proof-ribbon mx-auto max-w-5xl px-4 py-16">
       <h2 className="text-center font-[family-name:var(--font-cairo)] text-2xl font-extrabold sm:text-3xl">
         {t("title")}
       </h2>
+      <p className="mx-auto mt-3 max-w-xl text-center text-sm text-white/50">{t("subtitle")}</p>
       <div className="mt-10 grid gap-4 sm:grid-cols-3">
         <StatBlock value={creatorCount} suffix="+" label={t("creators")} />
         <StatBlock value={approvalRate} suffix="%" label={t("approval")} />
@@ -81,7 +82,7 @@ export function ForCreatorsProof({ topCreators, creatorCount, approvalRate }: Pr
       </div>
       <div className="mt-10 grid gap-4 sm:grid-cols-3">
         {cards.map((c, i) => (
-          <div key={i} className="creator-card flex items-start gap-3 p-5">
+          <div key={i} className="creator-card fc-feature-card flex items-start gap-3 p-5">
             <div
               className="flex size-11 shrink-0 items-center justify-center rounded-full text-sm font-black text-white"
               style={{ background: avatarColor(c.name) }}

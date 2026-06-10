@@ -978,8 +978,10 @@
         "hubCta": "دخول Creator Hub →",
         "close": "إغلاق"
       },
+      "proofSubtitle": "تجارب حقيقية من صنّاع نشطين في الشبكة العالمية",
       "proofStats": {
         "title": "أرقام حقيقية من الشبكة",
+        "subtitle": "شبكة حية — أرقام محدّثة من قاعدة البيانات",
         "creators": "صانع محتوى في الشبكة",
         "approval": "معدل اعتماد الطلبات",
         "weeksToEarn": "أسابيع للبدء بالكسب",
@@ -996,6 +998,74 @@
         "subtitle": "عروض تفاعلية لخدمات الشركة — ذكاء اصطناعي، أمن سيبراني، ومنصات برمجية مؤسسية جاهزة للإنتاج.",
         "below": "اكتشف ما يمكنك إنتاجه هذا الأسبوع",
         "cta": "استكشف الحلول"
+      },
+      "cinema": {
+        "eyebrow": "Creator Cinema",
+        "title": "صوّر حلولاً تُبهر العالم",
+        "subtitle": "من الفكرة إلى التصوير إلى Creator Hub — رحلة صانع كاملة في عرض تفاعلي واحد.",
+        "below": "ابدأ بإنتاج محتوى يحوّل المشاهدات إلى عملاء",
+        "ctaHub": "دخول Creator Hub",
+        "ctaSolutions": "استكشف حلول الشركة",
+        "sceneNav": "مشاهد العرض",
+        "swipeHint": "اسحب يميناً/يساراً للتبديل · أو اختر مشهداً",
+        "scenes": {
+          "film": {
+            "pill": "تصوير",
+            "label": "قائمة التصوير",
+            "url": "tenegta.com/for-creators#cinema",
+            "tag": "PRE-PRODUCTION",
+            "title": "خطّط محتواك كالمحترفين",
+            "subtitle": "قائمة جاهزة قبل الضغط على Record",
+            "checklist": { "shot1": "افتتاحية قوية + هوية TENEGTA", "shot2": "عرض حل واحد بوضوح (AI / أمن / برمجيات)", "shot3": "CTA مع رابط التتبع الخاص بك" }
+          },
+          "solutions": {
+            "pill": "حلول",
+            "label": "حلول الشركة",
+            "url": "tenegta.com/solutions/intelligent-systems",
+            "title": "ثلاث خدمات جاهزة للتسويق",
+            "tap": "اضغط للاستكشاف",
+            "cards": { "ai": "ذكاء اصطناعي", "cyber": "أمن سيبراني", "software": "منصات برمجية" }
+          },
+          "hub": { "pill": "Hub", "label": "Creator Hub", "url": "tenegta.com/growth/creators" },
+          "challenge": { "pill": "تحدي", "label": "Creator Cup", "url": "tenegta.com/growth/creators?section=challenge" },
+          "earn": {
+            "pill": "أرباح",
+            "label": "عمولات وتتبع",
+            "url": "tenegta.com/growth/creators?section=kit",
+            "headline": "+$340 متوسط شهري",
+            "sub": "روابط تتبع · عمولات · تحليلات"
+          }
+        }
+      },
+      "bento": {
+        "eyebrow": "Creator Hub",
+        "title": "كل ما تحتاجه في مكان واحد",
+        "subtitle": "لوحة تحكم، مجتمع، تحديات، وأدوات تسويق — مصمّمة للاستخدام المكثف.",
+        "open": "افتح في Hub",
+        "items": {
+          "hub": { "title": "مركز العمليات", "body": "لوحة، تخطيط، وتحليلات في شاشة واحدة." },
+          "chat": { "title": "مجتمع الصنّاع", "body": "قنوات حية ورسائل مع الزملاء." },
+          "challenge": { "title": "تحديات أسبوعية", "body": "مواضيع منظمة وإبراز للمميزين." },
+          "cup": { "title": "كأس الصنّاع", "body": "تصنيف موسمي بمكافآت حقيقية." },
+          "kit": { "title": "حقيبة تسويق", "body": "روابط تتبع ونصوص جاهزة." },
+          "earn": { "title": "عمولات", "body": "اكسب على كل عميل تحضره." }
+        },
+        "hubPreview": {
+          "dashboard": "لوحة التحكم",
+          "metricViews": "مشاهدات",
+          "metricRank": "ترتيب الكأس",
+          "metricEarn": "أرباح",
+          "challenge": "التحدي",
+          "cupTitle": "Creator Cup — هذا الأسبوع",
+          "you": "أنت",
+          "kit": "رابط التتبع",
+          "kitBody": "شارك رابطك في كل منشور",
+          "clicks": "نقرات",
+          "conv": "تحويل"
+        }
+      },
+      "journey": {
+        "challengeHint": "متزامن مع تحديات Creator Hub الأسبوعية"
       },
       "proofTitle": "ماذا يقول الصنّاع",
       "proofFallback": "ماذا ستحصل عليه",
@@ -1040,6 +1110,7 @@
       "finalCta": { "title": "جاهز للإبداع؟", "body": "انضم للشبكة وحوّل جمهورك إلى عملاء.", "cta": "قدّم طلبك", "creatorHub": "دخول Creator Hub" },
       "apply": {
         "title": "قدّم طلبك",
+        "eyebrow": "انضمام الشبكة",
         "step1Title": "من أنت؟",
         "step2Title": "محتواك",
         "step3Title": "اهتماماتك",

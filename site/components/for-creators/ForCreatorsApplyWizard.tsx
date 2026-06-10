@@ -114,7 +114,11 @@ export function ForCreatorsApplyWizard({ locale }: Props) {
 
   return (
     <section id="apply" className="mx-auto max-w-lg px-4 py-20">
-      <div className="creator-card p-6 sm:p-8">
+      <div className="mb-6 text-center">
+        <p className="font-mono text-[10px] tracking-[0.3em] text-[var(--creator-secondary)]/70">{t("eyebrow")}</p>
+        <h2 className="mt-2 font-[family-name:var(--font-cairo)] text-2xl font-extrabold text-white">{t("title")}</h2>
+      </div>
+      <div className="creator-card fc-apply-wizard border-[var(--creator-secondary)]/20 p-6 shadow-[0_0_60px_rgba(201,146,42,0.08)] sm:p-8">
         <div className="mb-8 flex justify-center gap-3">
           {[1, 2, 3].map((n) => (
             <span

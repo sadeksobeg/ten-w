@@ -830,8 +830,10 @@
         "hubCta": "Creator Hub →",
         "close": "Fermer"
       },
+      "proofSubtitle": "Expériences réelles de créateurs actifs du réseau mondial",
       "proofStats": {
         "title": "Chiffres réels du réseau",
+        "subtitle": "Réseau actif — chiffres mis à jour depuis la base",
         "creators": "créateurs dans le réseau",
         "approval": "taux d'approbation",
         "weeksToEarn": "semaines pour commencer",
@@ -848,6 +850,74 @@
         "subtitle": "Démos interactives des services d'entreprise — IA, cybersécurité et plateformes logicielles prêtes pour la production.",
         "below": "Découvrez ce que vous pouvez produire cette semaine",
         "cta": "Explorer les solutions"
+      },
+      "cinema": {
+        "eyebrow": "Creator Cinema",
+        "title": "Filmez des solutions qui impressionnent le monde",
+        "subtitle": "De l'idée au tournage au Creator Hub — le parcours créateur complet en une vitrine interactive.",
+        "below": "Produisez du contenu qui transforme les vues en clients",
+        "ctaHub": "Entrer dans Creator Hub",
+        "ctaSolutions": "Explorer les solutions",
+        "sceneNav": "Scènes de la démo",
+        "swipeHint": "Glissez gauche/droite · ou choisissez une scène",
+        "scenes": {
+          "film": {
+            "pill": "Tournage",
+            "label": "Checklist tournage",
+            "url": "tenegta.com/for-creators#cinema",
+            "tag": "PRÉ-PRODUCTION",
+            "title": "Planifiez comme un pro",
+            "subtitle": "Checklist prête avant d'appuyer sur Record",
+            "checklist": { "shot1": "Intro forte + identité TENEGTA", "shot2": "Une solution claire (IA / sécurité / logiciel)", "shot3": "CTA avec votre lien de suivi" }
+          },
+          "solutions": {
+            "pill": "Solutions",
+            "label": "Solutions entreprise",
+            "url": "tenegta.com/solutions/intelligent-systems",
+            "title": "Trois services prêts à promouvoir",
+            "tap": "Appuyez pour explorer",
+            "cards": { "ai": "Systèmes IA", "cyber": "Cybersécurité", "software": "Plateformes logicielles" }
+          },
+          "hub": { "pill": "Hub", "label": "Creator Hub", "url": "tenegta.com/growth/creators" },
+          "challenge": { "pill": "Défi", "label": "Creator Cup", "url": "tenegta.com/growth/creators?section=challenge" },
+          "earn": {
+            "pill": "Gains",
+            "label": "Commissions & suivi",
+            "url": "tenegta.com/growth/creators?section=kit",
+            "headline": "+340 $ en moyenne / mois",
+            "sub": "Liens trackés · commissions · analytics"
+          }
+        }
+      },
+      "bento": {
+        "eyebrow": "Creator Hub",
+        "title": "Tout ce qu'il vous faut au même endroit",
+        "subtitle": "Tableau de bord, communauté, défis et outils marketing — conçu pour un usage intensif.",
+        "open": "Ouvrir dans le Hub",
+        "items": {
+          "hub": { "title": "Centre opérations", "body": "Dashboard, planning et analytics sur un écran." },
+          "chat": { "title": "Communauté", "body": "Canaux live et messages entre pairs." },
+          "challenge": { "title": "Défis hebdo", "body": "Sujets structurés et mise en avant." },
+          "cup": { "title": "Creator Cup", "body": "Classement saisonnier avec récompenses." },
+          "kit": { "title": "Kit marketing", "body": "Liens trackés et scripts prêts." },
+          "earn": { "title": "Commissions", "body": "Gagnez sur chaque client apporté." }
+        },
+        "hubPreview": {
+          "dashboard": "Tableau de bord",
+          "metricViews": "Vues",
+          "metricRank": "Rang Cup",
+          "metricEarn": "Gains",
+          "challenge": "Défi",
+          "cupTitle": "Creator Cup — cette semaine",
+          "you": "Vous",
+          "kit": "Lien de suivi",
+          "kitBody": "Partagez votre lien dans chaque post",
+          "clicks": "Clics",
+          "conv": "Conv."
+        }
+      },
+      "journey": {
+        "challengeHint": "Synchronisé avec les défis hebdo du Creator Hub"
       },
       "proofTitle": "Témoignages",
       "proofFallback": "Ce que vous obtenez",
@@ -892,6 +962,7 @@
       "finalCta": { "title": "Prêt à créer ?", "body": "Rejoignez le réseau et convertissez votre audience.", "cta": "Postuler", "creatorHub": "Creator Hub" },
       "apply": {
         "title": "Postuler",
+        "eyebrow": "Rejoindre le réseau",
         "step1Title": "Qui êtes-vous ?",
         "step2Title": "Votre contenu",
         "step3Title": "Vos intérêts",
