@@ -871,18 +871,18 @@
       "demo": {
         "eyebrow": "Content worth sharing",
         "title": "Film solutions that wow the world",
-        "subtitle": "Interactive showcases of enterprise services — AI, cybersecurity, and production-ready software platforms.",
+        "subtitle": "Cinematic content for enterprise services — AI, cybersecurity, and production-ready software platforms.",
         "below": "Discover what you can produce this week",
         "cta": "Explore solutions"
       },
       "cinema": {
         "eyebrow": "Creator Cinema",
         "title": "Film solutions that wow the world",
-        "subtitle": "From idea to filming to Creator Hub — the full creator journey in one interactive showcase.",
+        "subtitle": "From idea to filming to Creator Hub — the full creator journey in one cinematic experience.",
         "below": "Start producing content that turns views into clients",
         "ctaHub": "Enter Creator Hub",
         "ctaSolutions": "Explore company solutions",
-        "sceneNav": "Showcase scenes",
+        "sceneNav": "Journey scenes",
         "swipeHint": "Swipe left/right to switch · or pick a scene",
         "scenes": {
           "film": {
@@ -962,7 +962,7 @@
         "earn": { "title": "Commissions", "body": "Earn on every client you refer to TENEGTA." }
       },
       "demoTitle": "Explore company services",
-      "demoBody": "Film interactive showcases of TENEGTA solutions — AI, cybersecurity, and enterprise software.",
+      "demoBody": "Film cinematic content for TENEGTA solutions — AI, cybersecurity, and enterprise software.",
       "demoCta": "Explore solutions",
       "faqTitle": "FAQ",
       "faq": {

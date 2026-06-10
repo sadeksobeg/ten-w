@@ -135,8 +135,11 @@ export function CreatorCinemaStage({ locale }: Props) {
           footerLabel={t(`scenes.${scene}.label`)}
         >
           <CinematicVideoLayer
+            key={scene}
+            reloadKey={scene}
             srcBase={`/videos/for-creators/cinema-${scene}`}
             gradientClass={GRADIENT[scene]}
+            lazy
           />
           <AnimatePresence mode="wait">
             <motion.div

@@ -847,18 +847,18 @@
       "demo": {
         "eyebrow": "Du contenu qui mérite d'être partagé",
         "title": "Filmez des solutions qui impressionnent le monde",
-        "subtitle": "Démos interactives des services d'entreprise — IA, cybersécurité et plateformes logicielles prêtes pour la production.",
+        "subtitle": "Contenu cinématique pour les services d'entreprise — IA, cybersécurité et plateformes logicielles prêtes pour la production.",
         "below": "Découvrez ce que vous pouvez produire cette semaine",
         "cta": "Explorer les solutions"
       },
       "cinema": {
         "eyebrow": "Creator Cinema",
         "title": "Filmez des solutions qui impressionnent le monde",
-        "subtitle": "De l'idée au tournage au Creator Hub — le parcours créateur complet en une vitrine interactive.",
+        "subtitle": "De l'idée au tournage au Creator Hub — le parcours créateur complet en une expérience cinématique.",
         "below": "Produisez du contenu qui transforme les vues en clients",
         "ctaHub": "Entrer dans Creator Hub",
         "ctaSolutions": "Explorer les solutions",
-        "sceneNav": "Scènes de la démo",
+        "sceneNav": "Scènes du parcours",
         "swipeHint": "Glissez gauche/droite · ou choisissez une scène",
         "scenes": {
           "film": {
@@ -938,7 +938,7 @@
         "earn": { "title": "Commissions", "body": "Gagnez sur chaque client référé." }
       },
       "demoTitle": "Découvrez les services de l'entreprise",
-      "demoBody": "Filmez des démos interactives des solutions TENEGTA — IA, cybersécurité et logiciels.",
+      "demoBody": "Filmez du contenu cinématique pour les solutions TENEGTA — IA, cybersécurité et logiciels.",
       "demoCta": "Explorer les solutions",
       "faqTitle": "FAQ",
       "faq": {

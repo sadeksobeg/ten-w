@@ -77,6 +77,7 @@ export function ForCreatorsCinematicHero() {
         gradientClass="fc-cinema-gradient--hero"
         className="!opacity-100"
         overlayClassName="fc-cinema-hero-vignette"
+        priority
       />
       <div className="pointer-events-none absolute inset-0 bg-[#03010A]/75" aria-hidden />
       <div className="fc-hero-mesh pointer-events-none absolute inset-0 opacity-50" aria-hidden />
@@ -115,7 +116,11 @@ export function ForCreatorsCinematicHero() {
       >
         <CreatorBrowserChrome url="tenegta.com/for-creators#cinema" progress={35}>
           <div className="relative h-full min-h-[140px] bg-[#050208]">
-            <CinematicVideoLayer srcBase="/videos/for-creators/cinema-film" gradientClass="fc-cinema-gradient--film" />
+            <CinematicVideoLayer
+              srcBase="/videos/for-creators/cinema-film"
+              gradientClass="fc-cinema-gradient--film"
+              lazy
+            />
             <div className="relative z-10 scale-[0.85] origin-top">
               <CinemaSceneFilm />
             </div>
